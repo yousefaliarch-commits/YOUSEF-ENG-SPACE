@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
     "pretest": "npm run i18n",
     "test": "vitest run",
-    "check": "npm run typecheck && npm test && npm run build"
+    "check": "npm run typecheck && npm test && npm run build",
+    "phone": "node scripts/phone-server.mjs --lan"
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans-arabic": "5.3.0",
