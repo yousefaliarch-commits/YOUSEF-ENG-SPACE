@@ -28,21 +28,21 @@ export const TRACK_EN = { site: "Site / Execution", tech: "Technical Office", de
 
 export const TRACK_DESIGN_EN = { civil: "Structural Design", architecture: "Architectural Design", mechanical: "MEP Design (Mechanical)", electrical: "Electrical Design" };
 
-export const trackL2 = (t, d) => L2(trackLabel(t, d), t === "design" ? TRACK_DESIGN_EN[d] || "Design" : TRACK_EN[t] || t);
+export const trackL2 = (t?: any, d?: any) => L2(trackLabel(t, d), t === "design" ? TRACK_DESIGN_EN[d] || "Design" : TRACK_EN[t] || t);
 
-export const discL2 = (d) => L2(DISC_AR[d] || d, DISC_EN[d] || d);
+export const discL2 = (d?: any) => L2(DISC_AR[d] || d, DISC_EN[d] || d);
 
 export const TITLE_EN = { civil: "Civil Engineer", architecture: "Architect", mechanical: "Mechanical (MEP) Engineer", electrical: "Electrical Engineer", survey: "Survey Engineer" };
 
 export const POS_EN = { fresh: "Fresh graduate", junior: "Junior", mid: "Mid-level", senior: "Senior", lead: "Team leader", section: "Section head", tom: "Technical office manager", cm: "Construction manager", pm: "Project manager", director: "Director" };
 
-export const posL2 = (p) => L2(posShort(p), POS_EN[p] || p);
+export const posL2 = (p?: any) => L2(posShort(p), POS_EN[p] || p);
 
 export const TYPE_EN = { "سكني": "residential", "إداري وتجاري": "commercial / office", "أبراج": "high-rise", "فنادق": "hospitality", "مستشفيات": "healthcare", "تعليمي": "educational", "صناعي": "industrial", "بنية تحتية": "infrastructure", "مياه ومحطات": "water / wastewater", "طاقة": "power", "بترول وغاز": "oil & gas", "حكومي وعمراني": "government" };
 
 
 // ---- codes & standards (finer than the parser's list: a designer is judged on ECP 203 / 201 by number) ----
-export const ENG_CODES = [
+export const ENG_CODES: any = [
   ["ECP 203", /\bECP\s?-?\s?203\b|كود (?:تصميم )?(?:المنشآت )?الخرسان|الكود المصري (?:لتصميم وتنفيذ )?المنشآت الخرسانية/i, "code"],
   ["ECP 201", /\bECP\s?-?\s?201\b|كود الأحمال|الكود المصري لحساب الأحمال/i, "code"],
   ["ECP 202", /\bECP\s?-?\s?202\b|كود (?:ميكانيكا )?التربة|كود الأساسات/i, "code"],
@@ -57,7 +57,7 @@ export const ENG_CODES = [
 ];
 
 // ---- professional credentials ----
-export const ENG_CREDS = [
+export const ENG_CREDS: any = [
   ["PMP", /\bPMP\b/], ["PMI-SP", /\bPMI-?SP\b/], ["PMI-RMP", /\bPMI-?RMP\b/], ["CAPM", /\bCAPM\b/], ["PSP (AACE)", /\bPSP\b|\bAACE\b/i], ["CCP", /\bCCP\b/], ["RICS", /\b(?:M|Assoc|F)?RICS\b/],
   ["LEED AP / GA", /leed (?:ap|green associate|ga)\b/i], ["NEBOSH", /nebosh/i], ["OSHA", /\bosha\b/i], ["IOSH", /\biosh\b/i], ["ISO 9001 Lead Auditor", /lead auditor/i], ["ASQ / CQE", /\bCQE\b|\bASQ\b/], ["Six Sigma", /six sigma|\bsigma (?:green|black) belt/i],
   ["Autodesk Certified", /autodesk certified|revit certified|autocad certified|autodesk certified professional/i], ["Primavera certified", /primavera (?:p6 )?(?:professional|certified)|oracle primavera/i], ["BIM certificate", /bim (?:course|diploma|certificate|specialist|manager certificate)|certified bim/i],
@@ -68,7 +68,7 @@ export const ENG_CREDS = [
 export const SYNDICATE_RE = /(نقابة المهندسين|عضو(?:ية)? (?:ب|في )?النقابة|عضو نقابة|egyptian engineers(?:'|’)? syndicate|engineers syndicate|syndicate (?:member|membership|registration|no|id)|membership[^\n]{0,30}syndicate|saudi council of engineers|\bSCE\b|هيئة المهندسين السعوديين|society of engineers(?:,)? uae)/i;
 
 // ---- engineering terms a screener filters on, by id ----
-export const ETERM = (id, ar, en, re) => ({ id, label: L2(ar, en), re });
+export const ETERM = (id?: any, ar?: any, en?: any, re?: any) => ({ id, label: L2(ar, en), re });
 
 export const ENG_TERMS = [
   ETERM("shop", "لوحات تنفيذية (Shop drawings)", "Shop drawings", /shop[- ]?drawings?|لوحات تنفيذية|رسومات تنفيذية/i), ETERM("asbuilt", "لوحات As-built", "As-built drawings", /as-?built|كما نُ?فذ/i), ETERM("qto", "حصر الكميات / BOQ", "Quantity take-off / BOQ", /quantity take-?offs?|\bQTO\b|\bBOQs?\b|bills? of quantities|حصر(?: الكميات)?|جداول الكميات|المقايسة/i),
@@ -132,7 +132,7 @@ export const KB_DISC = {
   "survey.qa": { core: ["Total Station", "Excel"], adv: ["GNSS / GPS", "Civil 3D"], codes: ["ISO 9001"], contracts: [], terms: ["settingout", "itp", "asbuilt"], dims: ["count", "result", "area"] },
 };
 
-export const kbFor = (disc, track) => { const base = KB[track] || KB.site; const o = KB_DISC[disc + "." + track] || {}; return { ...base, ...o, dims: o.dims || base.dims }; };
+export const kbFor = (disc?: any, track?: any) => { const base = KB[track] || KB.site; const o = KB_DISC[disc + "." + track] || {}; return { ...base, ...o, dims: o.dims || base.dims }; };
 
 
 // ---- what a project line should carry: the dimensions screeners look for ----
@@ -161,14 +161,14 @@ export const SCOPE_RE = {
 };
 
 // returns { dims: Set, hit: { dim: matched text } } — "type" comes from the parser's project-type lexicon
-export function scopeOf(text) {
-  const t = String(text || ""); const dims = new Set(); const hit = {};
-  Object.entries(SCOPE_RE).forEach(([k, re]) => { const m = re.exec(t); if (m) { dims.add(k); hit[k] = m[0].trim(); } });
-  const types = CV_PROJECT_TYPES.filter(([, re]) => re.test(t)).map(([k]) => k); if (types.length) { dims.add("type"); hit.type = types[0]; }
+export function scopeOf(text?: any) {
+  const t = String(text || ""); const dims = new Set(); const hit: any = {};
+  Object.entries(SCOPE_RE).forEach(([k, re]: any) => { const m = re.exec(t); if (m) { dims.add(k); hit[k] = m[0].trim(); } });
+  const types = CV_PROJECT_TYPES.filter(([, re]: any) => re.test(t)).map(([k]: any) => k); if (types.length) { dims.add("type"); hit.type = types[0]; }
   return { dims, hit, types };
 }
 
-export const anyScope = (s) => ["area", "floors", "value", "contract", "system", "capacity", "team", "client", "result", "count"].some((k) => s.dims.has(k));
+export const anyScope = (s?: any) => ["area", "floors", "value", "contract", "system", "capacity", "team", "client", "result", "count"].some((k) => s.dims.has(k));
 
 
 // ---- software depth: listed → applied in experience → advanced (modelling, analysis, coordination evidence) ----
@@ -190,20 +190,20 @@ export const TOOL_ADV = {
 
 export const TOOL_BASIC = /\b(?:basic|beginner|basics|fundamentals?|familiar(?:ity)? with|introductory|elementary)\b|\(basic\)|مبتدئ|أساسيات|اساسيات|مستوى مبدئي/i;
 
-export const toolRe = (name) => { const t = CV_TOOLS.find((x) => x.name === name); return t ? t.re : null; };
+export const toolRe = (name?: any) => { const t = CV_TOOLS.find((x) => x.name === name); return t ? t.re : null; };
 
 export const LEVEL_W = { advanced: 1, applied: 0.85, listed: 0.5, basic: 0.35, missing: 0 };
 
 export const LEVEL_L = { advanced: L2("متقدم — نمذجة / تحليل / تنسيق", "Advanced — modelling / analysis / coordination"), applied: L2("مستخدم في خبرة فعلية", "Applied in real work"), listed: L2("مذكور في القائمة فقط", "Listed only — no proof"), basic: L2("مستوى مبدئي", "Basic level"), missing: L2("غير موجود", "Missing") };
 
-export function toolEvidence(cv, name) {
+export function toolEvidence(cv?: any, name?: any) {
   const re = toolRe(name); if (!re) return { name, level: "missing" };
-  const secs = cv.sections || {}; const L = (id) => (secs[id] ? secs[id].lines : []);
+  const secs = cv.sections || {}; const L = (id?: any) => (secs[id] ? secs[id].lines : []);
   const expLines = cv.experience.flatMap((e) => [...e.headerLines, ...e.bullets.map((b) => b.text)]);
-  const pools = { exp: expLines, proj: [...L("projects"), ...cv.education.filter((e) => e.gradProject).map((e) => e.gradProject)], skills: L("skills"), summary: cv.summaryText ? [cv.summaryText] : [] };
-  const where = Object.fromEntries(Object.entries(pools).map(([k, ls]) => [k, ls.filter((l) => re.test(l))]));
+  const pools: any = { exp: expLines, proj: [...L("projects"), ...cv.education.filter((e) => e.gradProject).map((e) => e.gradProject)], skills: L("skills"), summary: cv.summaryText ? [cv.summaryText] : [] };
+  const where: Record<string, any[]> = Object.fromEntries(Object.entries(pools).map(([k, ls]: any) => [k, ls.filter((l) => re.test(l))]));
   const any = Object.values(where).some((x) => x.length) || re.test(cv.text); if (!any) return { name, level: "missing" };
-  const adv = TOOL_ADV[name]; const withTool = [...where.exp, ...where.proj, ...where.summary, ...where.skills];
+  const adv = TOOL_ADV[name]; const withTool: any = [...where.exp, ...where.proj, ...where.summary, ...where.skills];
   const advLine = adv ? withTool.find((l) => adv.test(l.replace(re, " ")) || (adv.source === "." && (where.exp.includes(l) || where.proj.includes(l)))) : null;
   const advAnywhere = adv && adv.source !== "." && (where.exp.length || where.proj.length) && adv.test([...pools.exp, ...pools.proj].join("\n"));
   // «basic» counts only right next to this tool («Revit MEP (basic)», «basic knowledge of AutoCAD»), not anywhere on a shared skills line
@@ -215,7 +215,7 @@ export function toolEvidence(cv, name) {
 
 
 // ---- track signature: how strongly the CV reads as each track (titles weigh most, the latest role most of all) ----
-export const TRACK_SIG = {
+export const TRACK_SIG: any = {
   site: /site (?:engineer|intern|trainee|manager|supervisor)|execution engineer|construction engineer|superintendent|foreman|installation|erection|pouring|casting|مهندس (?:موقع|تنفيذ)|مدير (?:موقع|تنفيذ)|\bexecution\b|التنفيذ|تركيب|صب الخرسانة/i,
   tech: /technical office|shop[- ]?drawings?|\bQTO\b|\bBOQs?\b|\bIPCs?\b|مكتب فني|مكتب فنى|لوحات تنفيذية|مستخلص|حصر/i,
   design: /design engineer|structural (?:design|engineer)|designer|\bETABS\b|\bSAFE\b|SAP\s?2000|calculation|\bETAP\b|dialux|load flow|short[- ]circuit|single[- ]line|\bSLDs?\b|cable sizing|lighting design|\bHAP\b|load calc|duct sizing|pipe sizing|concept design|design development|sketchup|lumion|مهندس تصميم|مصمم|تصميم|حسابات/i,
@@ -228,13 +228,13 @@ export const TRACK_SIG = {
   pm: /project manager|\bPMP\b|stakeholders?|project management|مدير (?:ال)?مشروع|إدارة المشروعات/i,
 };
 
-export function trackShares(cv, disc) {
-  const allowed = tracksFor(disc).map((t) => t[0]); const s = Object.fromEntries(allowed.map((t) => [t, 0]));
-  const add = (text, w) => allowed.forEach((t) => { const m = String(text || "").match(new RegExp(TRACK_SIG[t].source, "gi")); if (m) s[t] += m.length * w; });
+export function trackShares(cv?: any, disc?: any) {
+  const allowed = tracksFor(disc).map((t) => t[0]); const s: Record<string, number> = Object.fromEntries(allowed.map((t) => [t, 0]));
+  const add = (text?: any, w?: any) => allowed.forEach((t) => { const m = String(text || "").match(new RegExp(TRACK_SIG[t].source, "gi")); if (m) s[t] += m.length * w; });
   const real = cv.experience.filter((e) => !e.intern); const roles = real.length ? real : cv.experience;
   roles.forEach((e, i) => { add(e.title, i === 0 ? 6 : 3); e.bullets.forEach((b) => add(b.text, i === 0 ? 1.2 : 0.8)); });
   add(cv.headline, 5); add(cv.summaryText, 1.5); add((cv.sections.skills ? cv.sections.skills.lines : []).join(" "), 0.6); add((cv.sections.projects ? cv.sections.projects.lines : []).join(" "), 0.8); add(cv.education.map((e) => e.gradProject).filter(Boolean).join(" "), 1.2); add((cv.sections.certs ? cv.sections.certs.lines : []).join(" "), 0.5);
-  const tot = Object.values(s).reduce((a, b) => a + b, 0) || 1; const shares = Object.fromEntries(Object.entries(s).map(([k, v]) => [k, v / tot]));
+  const tot = Object.values(s).reduce((a, b) => a + b, 0) || 1; const shares: Record<string, number> = Object.fromEntries(Object.entries(s).map(([k, v]: any) => [k, v / tot]));
   const ranked = Object.entries(shares).sort((a, b) => b[1] - a[1]); return { shares, ranked, top: ranked[0] && ranked[0][1] > 0 ? ranked[0][0] : null, total: tot };
 }
 
@@ -242,7 +242,7 @@ export function trackShares(cv, disc) {
 // ---- bullet rewriting: the work type sets the verb, the default object, the scope that matters and the result to prove ----
 // Nothing is invented: a figure the CV states for the same role is reused; anything else becomes a [bracket] to fill.
 // A bullet that already opens with an action verb keeps its own words — only the missing scope and result are added.
-export const TK = (id, re, dims, en, ar, extra = {}) => ({ id, re, dims, en, ar, ...extra });
+export const TK = (id?: any, re?: any, dims?: any, en?: any, ar?: any, extra: any = {}) => ({ id, re, dims, en, ar, ...extra });
 
 export const TASKS = [
   TK("ipc", /\bIPCs?\b|interim payments?|payment certificates?|invoic|مستخلص/i, ["value", "contract"], { verb: "Prepared", obj: "monthly interim payment certificates (IPCs)", result: "with zero rejections by the consultant" }, { verb: "أعددت", obj: "المستخلصات الشهرية", result: "دون أي رفض من الاستشاري" }, { count: true }),
@@ -276,10 +276,10 @@ export const DESIGN_BY_DISC = {
 export const TASK_GENERIC = TK("generic", /./, ["type", "area"], { verb: "Delivered", obj: "", result: "[add the measurable result: %, days or EGP]" }, { verb: "أنجزت", obj: "", result: "[أضف النتيجة بالرقم: نسبة أو أيام أو قيمة]" });
 
 // the work types a bullet mentions, in the order it mentions them (what it leads with decides the verb)
-export const tasksOf = (t) => TASKS.map((k) => { const m = k.re.exec(t); return m ? [k, m.index] : null; }).filter(Boolean).sort((a, b) => a[1] - b[1]).map(([k]) => k);
+export const tasksOf = (t?: any) => TASKS.map((k) => { const m = k.re.exec(t); return m ? [k, m.index] : null; }).filter(Boolean).sort((a, b) => a[1] - b[1]).map(([k]: any) => k);
 
 // one dimension as a phrase, from the CV's own figure or as a bracket to fill
-export function dimPhrase(d, v, ar) {
+export function dimPhrase(d?: any, v?: any, ar?: any) {
   if (ar) return { type: `لمشروع ${v || "[سكني / إداري]"}`, floors: v || "[عدد الأدوار] دور", area: v ? `${v}` : "[المساحة] م² مسطحات", value: `بقيمة ${v || "[القيمة] مليون جنيه"}`, contract: `بعقد ${v || "فيديك [الكتاب الأحمر]"}`, system: v || "[النظام الإنشائي]", capacity: v || "[السعة] طن تبريد / ك.ف.أ", client: `لصالح ${v || "[المالك / الاستشاري]"}`, team: `بقيادة ${v || "فريق من [العدد]"}` }[d];
   return { type: `for a ${v ? TYPE_EN[v] || v : "[residential / commercial]"} project`, floors: v || "G+[N]", area: v ? `${v}${/m²|m2|sqm/i.test(v) ? " BUA" : ""}` : "[X] m² BUA", value: `worth ${v || "EGP [X]M"}`, contract: `under a ${v || "FIDIC [Red Book]"} contract`, system: v || "[structural / MEP system]", capacity: v || "[X] TR / kVA", client: `for ${v || "[client / consultant]"}`, team: `leading ${v || "a team of [N]"}` }[d];
 }
@@ -294,14 +294,14 @@ export const EN_WEAK_VERBS = /^(?:followed|helped|assisted|worked|participated|h
 
 export const EN_PAST_SET = new Set(Object.values(EN_GERUND_PAST).map((v) => v.split(" ")[0].toLowerCase()));
 
-export const fixWords = (s) => s.replace(/[A-Za-z]+/g, (w) => { const f = EN_MISSPELL[w.toLowerCase()]; return f && f.toLowerCase() === w.toLowerCase() ? w : f || w; });
+export const fixWords = (s?: any) => s.replace(/[A-Za-z]+/g, (w) => { const f = EN_MISSPELL[w.toLowerCase()]; return f && f.toLowerCase() === w.toLowerCase() ? w : f || w; });
 
 // «… and preparing …» → «… and prepared …» · «… وإعداد …» → «… وأعددت …»
 // (Arabic: only a masdar that opens a new clause — followed by its own object, not «بين الموقع والتصميم» where it is a noun)
-export const conjToPast = (s, ar) => (ar ? s.replace(/(^|\s)و(ال)?([ء-يّ]+)(?=\s+[ء-يA-Za-z])/g, (m0, sp, al, w, off, all) => { if (/بين\s+(?:\S+\s+){0,3}$/.test(all.slice(0, off))) return m0; const p = AR_MASDAR_PAST[(al || "") + w] || AR_MASDAR_PAST[w]; return p ? `${sp}و${p}` : m0; }) : s.replace(/\b(and|&)\s+([a-z]+ing)\b/gi, (m0, c, g) => (EN_GERUND_PAST[g.toLowerCase()] ? `${c} ${EN_GERUND_PAST[g.toLowerCase()].toLowerCase()}` : m0)));
+export const conjToPast = (s?: any, ar?: any) => (ar ? s.replace(/(^|\s)و(ال)?([ء-يّ]+)(?=\s+[ء-يA-Za-z])/g, (m0, sp, al, w, off, all) => { if (/بين\s+(?:\S+\s+){0,3}$/.test(all.slice(0, off))) return m0; const p = AR_MASDAR_PAST[(al || "") + w] || AR_MASDAR_PAST[w]; return p ? `${sp}و${p}` : m0; }) : s.replace(/\b(and|&)\s+([a-z]+ing)\b/gi, (m0, c, g) => (EN_GERUND_PAST[g.toLowerCase()] ? `${c} ${EN_GERUND_PAST[g.toLowerCase()].toLowerCase()}` : m0)));
 
 // the bullet without its weak opener; its own leading verb (past tense) when it had one
-export function splitBullet(text, ar) {
+export function splitBullet(text?: any, ar?: any) {
   let t = String(text || "").trim().replace(/[.。;؛]+$/, ""); let verb = null;
   if (!ar) {
     t = t.replace(EN_WEAK_LEAD, "");
@@ -319,22 +319,22 @@ export function splitBullet(text, ar) {
 }
 
 // an object is reusable when it is a clean noun phrase (no stray gerund, not too long)
-export const cleanObject = (o, ar) => { const w = o.split(/\s+/).filter(Boolean); if (w.length < 2 || w.length > 24) return false; if (ar) return !/^(?:في|مع|من)\s/.test(o); return !w.some((x) => /ing$/i.test(x) && EN_GERUND_PAST[x.toLowerCase()]) && !/^(?:in|with|on|for|of)$/i.test(w[0]); };
+export const cleanObject = (o?: any, ar?: any) => { const w = o.split(/\s+/).filter(Boolean); if (w.length < 2 || w.length > 24) return false; if (ar) return !/^(?:في|مع|من)\s/.test(o); return !w.some((x) => /ing$/i.test(x) && EN_GERUND_PAST[x.toLowerCase()]) && !/^(?:in|with|on|for|of)$/i.test(w[0]); };
 
 // lines that are not work (a skills or languages list that slipped under a role) are never rewritten
-export const notWork = (t) => (t.match(/[·|•]/g) || []).length >= 2 || (CV_LANG_NAMES.some(([, re]) => re.test(t)) && CV_LANG_LEVEL.test(t) && t.split(/\s+/).length <= 12) || t.split(/\s+/).length < 4;
+export const notWork = (t?: any) => (t.match(/[·|•]/g) || []).length >= 2 || (CV_LANG_NAMES.some(([, re]: any) => re.test(t)) && CV_LANG_LEVEL.test(t) && t.split(/\s+/).length <= 12) || t.split(/\s+/).length < 4;
 
-export function rewriteEng(b, role, cvCtx) {
+export function rewriteEng(b?: any, role?: any, cvCtx?: any) {
   const t = String(b.text || "").trim(); if (notWork(t)) return null;
   const ar = (t.match(/[ء-ي]/g) || []).length > (t.match(/[A-Za-z]/g) || []).length * 0.6;
   const own = scopeOf(t); const hits = role.hit || {}; const sp = splitBullet(t, ar); const tasks = tasksOf(t.replace(ar ? AR_WEAK_LEAD : EN_WEAK_LEAD, "") || t); const task = tasks[0] || TASK_GENERIC; const DD = task.id === "design" ? DESIGN_BY_DISC[cvCtx.disc] : null; const L = DD ? { ...(ar ? task.ar : task.en), ...(ar ? DD.ar : DD.en) } : ar ? task.ar : task.en; const tDims = DD ? DD.dims : task.dims;
   const hasVerb = !b.weak && ((b.action || b.strong) || (!ar && sp.verb && !EN_WEAK_VERBS.test(sp.verb)) || (ar && !!sp.verb && CV_ACTION_AR.test(t)));
   const sized = ["area", "floors", "value", "count", "team", "capacity"].some((k) => own.dims.has(k));
-  const tags = []; const clauses = []; let ph = 0; const MAXPH = hasVerb ? (sized ? 0 : 2) : sized ? 1 : 3;
+  const tags: any = []; const clauses: any = []; let ph = 0; const MAXPH = hasVerb ? (sized ? 0 : 2) : sized ? 1 : 3;
   // a figure from elsewhere in the role is reused only when it describes the project (type, BUA, height, value, contract, system,
   // client, capacity) — never a quantity that belongs to another bullet (a pour's m³, a team, a count)
-  const REUSE = { type: 1, floors: 1, value: 1, contract: 1, system: 1, client: 1, capacity: 1, area: /m²|m2|sqm|sq\.?\s?m|م²|م2|مربع|km|كم|feddan|فدان/i };
-  const addDim = (d) => { if (own.dims.has(d)) return null; const hv = hits[d]; const okR = REUSE[d] && (REUSE[d] === 1 || REUSE[d].test(hv || "")); const v = hv && okR && !t.includes(hv) ? hv : null; if (!v && ph >= MAXPH) return null; if (!v) ph++; return { d, v }; };
+  const REUSE: any = { type: 1, floors: 1, value: 1, contract: 1, system: 1, client: 1, capacity: 1, area: /m²|m2|sqm|sq\.?\s?m|م²|م2|مربع|km|كم|feddan|فدان/i };
+  const addDim = (d?: any) => { if (own.dims.has(d)) return null; const hv = hits[d]; const okR = REUSE[d] && (REUSE[d] === 1 || REUSE[d].test(hv || "")); const v = hv && okR && !t.includes(hv) ? hv : null; if (!v && ph >= MAXPH) return null; if (!v) ph++; return { d, v }; };
   let body;
   if (hasVerb) body = t.replace(/[.。;؛]+$/, ""); // a real verb already leads: keep the engineer's own words
   else {
@@ -348,7 +348,7 @@ export function rewriteEng(b, role, cvCtx) {
   if (typeD) clauses.push(dimPhrase("type", typeD.v, ar)); if (paren.length) clauses.push(`(${paren.map((x) => dimPhrase(x.d, x.v, ar)).join(ar ? "، " : ", ")})`); rest.forEach((x) => clauses.push(dimPhrase(x.d, x.v, ar)));
   if (task.team && !own.dims.has("team")) { const x = addDim("team"); if (x) clauses.push((ar ? "، " : ", ") + dimPhrase("team", x.v, ar)); }
   if (ds.length) tags.push("scope");
-  const toolIn = CV_TOOLS.some((x) => x.re.test(t)); const codeIn = ENG_CODES.some(([, re]) => re.test(t)); const tool = cvCtx.tools[task.id === "survey" ? "survey" : "main"];
+  const toolIn = CV_TOOLS.some((x) => x.re.test(t)); const codeIn = ENG_CODES.some(([, re]: any) => re.test(t)); const tool = cvCtx.tools[task.id === "survey" ? "survey" : "main"];
   if (task.tool && !toolIn && tool) { clauses.push(ar ? `باستخدام ${tool}` : `using ${tool}`); tags.push("tool"); }
   if (task.code && !codeIn && cvCtx.codes.length) { clauses.push(ar ? `وفق ${cvCtx.codes.slice(0, 2).join(" و")}` : `per ${cvCtx.codes.slice(0, 2).join(" and ")}`); tags.push("code"); }
   const needResult = !own.dims.has("result"); if (needResult) tags.push("result");
@@ -382,7 +382,7 @@ export const PORTFOLIO_GENERAL = [
   L2("رتّب المشاريع من الأكبر والأقرب للوظيفة، وليس زمنيًا.", "Order projects by size and relevance to the job, not by date."),
 ];
 
-export const projectSheet = (ar) => ar ? ["بطاقة مشروع — [اسم المشروع]", "الموقع: [المدينة] · المدة: [من – إلى]", "المالك: [ ] · الاستشاري: [ ] · المقاول الرئيسي: [ ]", "العقد: [فيديك الكتاب الأحمر / مقطوعية] · القيمة: [القيمة] مليون جنيه", "الحجم: [المساحة] م² مسطحات · [عدد الأدوار] · [النظام الإنشائي / نظام الـ MEP]", "دوري: [المسمّى] — [النطاق الذي كنت مسؤولًا عنه]", "الأدوات والأكواد: [Revit، Navisworks · الكود المصري 203، ACI 318]", "النتيجة: [نتيجة بالرقم: نسبة، أيام، قيمة]"].join("\n")
+export const projectSheet = (ar?: any) => ar ? ["بطاقة مشروع — [اسم المشروع]", "الموقع: [المدينة] · المدة: [من – إلى]", "المالك: [ ] · الاستشاري: [ ] · المقاول الرئيسي: [ ]", "العقد: [فيديك الكتاب الأحمر / مقطوعية] · القيمة: [القيمة] مليون جنيه", "الحجم: [المساحة] م² مسطحات · [عدد الأدوار] · [النظام الإنشائي / نظام الـ MEP]", "دوري: [المسمّى] — [النطاق الذي كنت مسؤولًا عنه]", "الأدوات والأكواد: [Revit، Navisworks · الكود المصري 203، ACI 318]", "النتيجة: [نتيجة بالرقم: نسبة، أيام، قيمة]"].join("\n")
   : ["PROJECT SHEET — [Project name]", "Location: [city] · Duration: [MMM YYYY – MMM YYYY]", "Client: [ ] · Consultant: [ ] · Main contractor: [ ]", "Contract: [FIDIC Red Book / lump sum] · Value: EGP [X]M", "Size: [X] m² BUA · [G+N] · [structural / MEP system]", "My role: [title] — [scope I owned]", "Tools & codes: [Revit, Navisworks · ECP 203, ACI 318]", "Result: [measurable outcome: %, days, EGP]"].join("\n");
 
 export const SHEET_FIELDS = ["type", "area", "floors", "value", "contract", "system", "capacity", "client", "team", "result"];
@@ -394,10 +394,10 @@ export const CRED_PREP = /prep(?:aration|aratory)?\b|تحضير|تحضيري|in 
 
 
 // ---- the engineering summary, drafted from facts in the CV (brackets where a fact is missing) ----
-export const bigOf = (xs) => { let best = null, bv = -1; xs.filter(Boolean).forEach((s) => { const n = parseFloat(String(s).replace(/[,٬\s]/g, "").match(/\d+(?:\.\d+)?/) || [0]); if (n > bv) { bv = n; best = s; } }); return best; };
+export const bigOf = (xs?: any) => { let best = null, bv = -1; xs.filter(Boolean).forEach((s) => { const n = parseFloat(String(String(s).replace(/[,٬\s]/g, "").match(/\d+(?:\.\d+)?/) || [0])); if (n > bv) { bv = n; best = s; } }); return best; };
 
-export function draftEngSummary(cv, a) {
-  const ar = cv.lang === "ar"; const y = Math.floor(cv.years || 0); const types = [...new Set(cv.projectTypes)].slice(0, 2);
+export function draftEngSummary(cv?: any, a?: any) {
+  const ar = cv.lang === "ar"; const y = Math.floor(cv.years || 0); const types = [...new Set(cv.projectTypes as string[])].slice(0, 2);
   const area = bigOf(a.roles.map((r) => r.hit.area)); const value = bigOf(a.roles.map((r) => r.hit.value));
   const advT = a.software.filter((x) => x.level === "advanced").slice(0, 3).map((x) => x.name); const useT = a.software.filter((x) => x.level === "applied").slice(0, Math.max(0, 3 - advT.length)).map((x) => x.name);
   const terms = a.terms.filter((x) => x.present).slice(0, 3).map((x) => (ar ? x.label.ar : x.label.en.replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase())));
@@ -410,9 +410,9 @@ export function draftEngSummary(cv, a) {
 
 
 // ---- the audit ----
-export const r5 = (n) => Math.round(n * 2) / 2;
+export const r5 = (n?: any) => Math.round(n * 2) / 2;
 
-export function auditCV(rawText, ctx = {}) {
+export function auditCV(rawText?: any, ctx: any = {}) {
   const layout = ctx.layout || { pages: 1, images: 0, columns: false, tables: 0, type: "txt", glyphs: 0 };
   const wordsN = wordsOf(String(rawText || "")).length;
   if (ctx.scanned || (!wordsN && layout.images > 0)) return { empty: true, scanned: true, overall: 0, layout, critical: [{ sev: "critical", id: "scanned", title: L2("الملف صورة لا نص", "The file is an image, not text"), why: L2("لا يستطيع أي نظام ATS قراءة سيرة ممسوحة ضوئيًا أو مصدّرة كصورة — ستُرفض آليًا قبل أن يراها أحد.", "No ATS can read a scanned or image-exported CV — it is rejected automatically before a person sees it."), fix: [L2("افتح الملف الأصلي في Word أو Google Docs.", "Open the original file in Word or Google Docs."), L2("احفظ باسم ← PDF (وليس «طباعة» من صورة).", "Save As → PDF (not «print» from an image)."), L2("تأكد أنك تستطيع تحديد النص بالفأرة داخل الـ PDF.", "Check you can select the text with the mouse inside the PDF.")] }], high: [], words: 0 };
@@ -423,14 +423,14 @@ export function auditCV(rawText, ctx = {}) {
   const detected = sig.top && allowed.includes(sig.top) && sig.total >= 1.5 ? sig.top : allowed.includes(cv.track) ? cv.track : sig.top && allowed.includes(sig.top) ? sig.top : allowed[0];
   const target = ctx.track && allowed.includes(ctx.track) ? ctx.track : detected; const kb = kbFor(disc, target);
   const years = cv.years || 0; const realRoles = cv.experience.filter((e) => !e.intern); const fresh = !realRoles.length ? years < 1 : realRoles.every((e) => e.start) && years < 1;
-  const secLines = (id) => (cv.sections[id] ? cv.sections[id].lines : []); const expText = cv.experience.flatMap((e) => [...e.headerLines, ...e.bullets.map((b) => b.text)]).join("\n"); const projText = [...secLines("projects"), ...cv.education.map((e) => e.gradProject).filter(Boolean)].join("\n");
-  const issues = []; const issue = (sev, id, title, why, fix, ex) => issues.push({ sev, id, title, why, fix: fix || [], ex });
-  const P = Object.fromEntries(PILLARS.map(([id, max, label, desc]) => [id, { id, max, label, desc, checks: [] }]));
-  const check = (pid, id, label, pts, max, detail, fix) => { const v = r5(Math.max(0, Math.min(max, pts))); P[pid].checks.push({ id, label, pts: v, max, status: v >= max * 0.85 ? "pass" : v >= max * 0.4 ? "partial" : "fail", detail, fix }); };
+  const secLines = (id?: any) => (cv.sections[id] ? cv.sections[id].lines : []); const expText = cv.experience.flatMap((e) => [...e.headerLines, ...e.bullets.map((b) => b.text)]).join("\n"); const projText = [...secLines("projects"), ...cv.education.map((e) => e.gradProject).filter(Boolean)].join("\n");
+  const issues: any = []; const issue = (sev?: any, id?: any, title?: any, why?: any, fix?: any, ex?: any) => issues.push({ sev, id, title, why, fix: fix || [], ex });
+  const P = Object.fromEntries(PILLARS.map(([id, max, label, desc]: any) => [id, { id, max, label, desc, checks: [] }]));
+  const check = (pid?: any, id?: any, label?: any, pts?: any, max?: any, detail?: any, fix?: any) => { const v = r5(Math.max(0, Math.min(max, pts))); P[pid].checks.push({ id, label, pts: v, max, status: v >= max * 0.85 ? "pass" : v >= max * 0.4 ? "partial" : "fail", detail, fix }); };
   const TL = trackL2(target, disc); const tlA = TL.ar, tlE = TL.en;
 
   // ===== 1 · software & BIM (22) =====
-  const software = [...kb.core.map((n) => ({ ...toolEvidence(cv, n), tier: "core" })), ...kb.adv.map((n) => ({ ...toolEvidence(cv, n), tier: "adv" }))];
+  const software: any = [...kb.core.map((n) => ({ ...toolEvidence(cv, n), tier: "core" })), ...kb.adv.map((n) => ({ ...toolEvidence(cv, n), tier: "adv" }))];
   const core = software.filter((x) => x.tier === "core"); const coreMissing = core.filter((x) => x.level === "missing");
   const coreW = core.length ? core.reduce((a, x) => a + (fresh && x.level === "listed" ? 0.6 : LEVEL_W[x.level]), 0) / core.length : 1;
   check("software", "core", L2(`أدوات ${tlA} الأساسية`, `Core ${tlE} tools`), 10 * coreW, 10, L2(`الموجود ${core.length - coreMissing.length} من ${core.length}: ${core.map((x) => `${x.name} (${LEVEL_L[x.level].ar})`).join("، ")}`, `${core.length - coreMissing.length} of ${core.length}: ${core.map((x) => `${x.name} (${LEVEL_L[x.level].en.toLowerCase()})`).join(", ")}`), coreMissing.length ? L2(`أضف ${coreMissing.map((x) => x.name).join(" و")} إن كنت تستخدمها فعلًا — واذكر كلًا منها داخل بند خبرة، لا في القائمة فقط.`, `Add ${coreMissing.map((x) => x.name).join(" and ")} if you really use them — and name each inside an experience bullet, not only in the list.`) : null);
@@ -449,7 +449,7 @@ export function auditCV(rawText, ctx = {}) {
   const roles = pool.map((e) => { const s = scopeOf([...e.headerLines, ...e.bullets.map((b) => b.text)].join("\n")); return { e, dims: s.dims, hit: s.hit, types: s.types }; });
   if (fresh) cv.education.filter((x) => x.gradProject).forEach((x) => { const s = scopeOf(x.gradProject); roles.push({ e: { title: lang === "ar" ? "مشروع التخرج" : "Graduation project", company: "", headerLines: [x.gradProject], bullets: [], grad: true }, dims: s.dims, hit: s.hit, types: s.types }); });
   const needD = kb.dims; const tgtN = Math.min(fresh ? 3 : 4, needD.length);
-  const cover = (r) => Math.min(1, needD.filter((d) => r.dims.has(d)).length / tgtN);
+  const cover = (r?: any) => Math.min(1, needD.filter((d) => r.dims.has(d)).length / tgtN);
   const wts = roles.map((_, i) => (i === 0 ? 2 : i === 1 ? 1.5 : 1)); const wsum = wts.reduce((a, b) => a + b, 0) || 1;
   const covAvg = roles.length ? roles.reduce((a, r, i) => a + cover(r) * wts[i], 0) / wsum : 0;
   check("scope", "roles", L2("حجم كل مشروع في كل وظيفة", "Project scope in every role"), 12 * covAvg, 12, L2(roles.length ? roles.slice(0, 4).map((r) => `${(r.e.title || "—").slice(0, 34)}: ${needD.filter((d) => r.dims.has(d)).map((d) => DIMS[d].ar.split(" (")[0]).join("، ") || "لا أبعاد"}`).join(" · ") : "لا وظائف قابلة للقراءة", roles.length ? roles.slice(0, 4).map((r) => `${(r.e.title || "—").slice(0, 34)}: ${needD.filter((d) => r.dims.has(d)).map((d) => DIMS[d].en.split(" (")[0].toLowerCase()).join(", ") || "no scope"}`).join(" · ") : "No readable roles"), L2(`لكل وظيفة: ${needD.slice(0, 5).map((d) => DIMS[d].ar.split(" (")[0]).join("، ")} — في أول بند.`, `For every role: ${needD.slice(0, 5).map((d) => DIMS[d].en.split(" (")[0].toLowerCase()).join(", ")} — in the first bullet.`));
@@ -465,7 +465,7 @@ export function auditCV(rawText, ctx = {}) {
   if (bullets.length >= 3 && weakN / bullets.length >= 0.4) issue("high", "weak", L2("بنود تبدأ بـ «مسؤول عن»", "Bullets open with «responsible for»"), L2(`بنود تصف مهام لا إنجازًا: ${weakN} من ${bullets.length} — أول كلمتين في البند هما ما يقرؤه المسؤول.`, `${weakN} of ${bullets.length} bullets describe duties, not achievements — the first two words are what a screener reads.`), [L2("استبدلها بالصياغات المقترحة في قسم «إعادة كتابة البنود».", "Replace them with the rewrites in «Bullet rewrites».")]);
 
   // ===== 3 · career-track alignment (15) =====
-  const share = sig.shares[target] || 0; const adj = (a, b) => (TRACK_ADJ[a] || []).includes(b) || (TRACK_ADJ[b] || []).includes(a);
+  const share = sig.shares[target] || 0; const adj = (a?: any, b?: any) => (TRACK_ADJ[a] || []).includes(b) || (TRACK_ADJ[b] || []).includes(a);
   let clarity; if (target === detected) clarity = share >= 0.5 ? 6 : share >= 0.35 ? 4.5 : 3; else clarity = share >= 0.25 ? 3.5 : adj(target, detected) ? 2 : 0.5;
   const detL = trackL2(detected, disc);
   check("track", "clarity", L2("وضوح المسار", "Track clarity"), clarity, 6, L2(`دلائل السيرة التي تخص ${tlA}: ${Math.round(share * 100)}%${target !== detected ? ` — والأغلب يخص ${detL.ar} (${Math.round((sig.shares[detected] || 0) * 100)}%)` : ""}`, `${Math.round(share * 100)}% of the CV's signals point to ${tlE}${target !== detected ? ` — most point to ${detL.en} (${Math.round((sig.shares[detected] || 0) * 100)}%)` : ""}`), share < 0.5 ? L2(`اجعل عنوانك وملخصك وأول بندين في كل وظيفة عن ${tlA}، وقلّل ما لا يخدمه.`, `Make your headline, summary and the first two bullets of each role about ${tlE}; trim what doesn't serve it.`) : null);
@@ -483,10 +483,10 @@ export function auditCV(rawText, ctx = {}) {
   if (!cv.summaryWords) issue("high", "nosummary", L2("لا ملخص مهني", "No professional summary"), L2("الملخص هو ما يُقرأ في أول 6 ثوانٍ — بدونه يُعتبر أول بند خبرة هو تعريفك.", "The summary is what gets read in the first 6 seconds — without it, your first bullet becomes your introduction."), [L2("3–4 أسطر: التخصص والمسار والسنوات، أكبر مشروع بالرقم، أقوى أداتين، والشهادة أو القيد.", "3–4 lines: discipline, track and years, largest project in figures, two strongest tools, credential or registration.")]);
 
   // ===== 4 · codes, standards & credentials (15) =====
-  const codeState = (name) => { const e = ENG_CODES.find((x) => x[0] === name); if (!e) return "missing"; if (e[1].test(expText) || e[1].test(projText)) return "applied"; return e[1].test(text) ? "listed" : "missing"; };
+  const codeState = (name?: any) => { const e = ENG_CODES.find((x) => x[0] === name); if (!e) return "missing"; if (e[1].test(expText) || e[1].test(projText)) return "applied"; return e[1].test(text) ? "listed" : "missing"; };
   const codes = [...new Set([...kb.codes, ...kb.contracts])].map((n) => ({ name: n, kind: (ENG_CODES.find((x) => x[0] === n) || [])[2] || "code", state: codeState(n), expected: true }));
-  ENG_CODES.forEach(([n, re, kind]) => { if (!codes.some((c) => c.name === n) && re.test(text) && !(n === "Egyptian Code" && codes.some((c) => /^ECP/.test(c.name) && c.state !== "missing"))) codes.push({ name: n, kind, state: codeState(n), expected: false }); });
-  const expCodes = codes.filter((c) => c.expected && c.kind === "code"); const cw = (s) => (s === "applied" ? 1 : s === "listed" ? 0.6 : 0);
+  ENG_CODES.forEach(([n, re, kind]: any) => { if (!codes.some((c) => c.name === n) && re.test(text) && !(n === "Egyptian Code" && codes.some((c) => /^ECP/.test(c.name) && c.state !== "missing"))) codes.push({ name: n, kind, state: codeState(n), expected: false }); });
+  const expCodes = codes.filter((c) => c.expected && c.kind === "code"); const cw = (s?: any) => (s === "applied" ? 1 : s === "listed" ? 0.6 : 0);
   const bestCodes = expCodes.map((c) => cw(c.state)).sort((a, b) => b - a).slice(0, Math.min(3, expCodes.length));
   const codePts = expCodes.length ? 6 * bestCodes.reduce((a, b) => a + b, 0) / Math.min(3, expCodes.length) : 6;
   check("codes", "codes", L2("الأكواد التصميمية والتنفيذية", "Design & construction codes"), codePts, 6, expCodes.length ? L2(expCodes.map((c) => `${c.name}: ${c.state === "applied" ? "مطبّق في الخبرة" : c.state === "listed" ? "مذكور" : "غير موجود"}`).join(" · "), expCodes.map((c) => `${c.name}: ${c.state === "applied" ? "applied in work" : c.state === "listed" ? "listed" : "missing"}`).join(" · ")) : L2("لا أكواد تصميم مطلوبة لهذا المسار", "No design codes required for this track"), expCodes.some((c) => c.state !== "applied") ? L2("اذكر الكود داخل البند الذي طبقته فيه: «صممت البلاطات وفق ECP 203 وACI 318»، لا في قائمة منفصلة فقط.", "Name the code inside the bullet where you applied it: «designed slabs to ECP 203 and ACI 318», not only in a list.") : null);
@@ -494,9 +494,9 @@ export function auditCV(rawText, ctx = {}) {
   const expStd = codes.filter((c) => c.expected && c.kind !== "code");
   check("codes", "contracts", L2("العقود والمعايير (FIDIC، ISO…)", "Contracts & standards (FIDIC, ISO…)"), expStd.length ? 3 * expStd.reduce((a, c) => a + (fresh && c.state === "missing" ? 0.4 : cw(c.state)), 0) / expStd.length : 3, 3, expStd.length ? L2(expStd.map((c) => `${c.name}: ${c.state === "missing" ? "غير موجود" : c.state === "applied" ? "مطبّق" : "مذكور"}`).join(" · "), expStd.map((c) => `${c.name}: ${c.state}`).join(" · ")) : L2("غير مطلوب لهذا المسار", "Not required for this track"), expStd.some((c) => c.state === "missing") ? L2(`اذكر نوع العقد الذي عملت تحته (مثل FIDIC الكتاب الأحمر، مقطوعية) في سطر المشروع.`, `State the contract you worked under (e.g. FIDIC Red Book, lump sum) in the project line.`) : null);
   const credLines = cv.lines.map((l) => l.body || l.t || "").filter(Boolean);
-  const creds = ENG_CREDS.filter(([, re]) => re.test(text)).map(([n, re]) => { const ls = credLines.filter((l) => re.test(l)); const prep = ls.length > 0 && ls.every((l) => CRED_PREP.test(l) && !/certified|certificate(?! course)|معتمد|حاصل/i.test(l.replace(/autodesk certified/i, ""))); return { name: n, relevant: kb.creds.includes(n), prep }; });
+  const creds = ENG_CREDS.filter(([, re]: any) => re.test(text)).map(([n, re]: any) => { const ls = credLines.filter((l) => re.test(l)); const prep = ls.length > 0 && ls.every((l) => CRED_PREP.test(l) && !/certified|certificate(?! course)|معتمد|حاصل/i.test(l.replace(/autodesk certified/i, ""))); return { name: n, relevant: kb.creds.includes(n), prep }; });
   const relC = creds.filter((c) => c.relevant && !c.prep);
-  const credPts = relC.length ? 3 : creds.some((c) => c.relevant && c.prep) ? 2 : creds.length || (cv.sections.certs && secLines("certs").length) ? (fresh ? 2.5 : 1.5) : 0; const credName = (c, ar) => c.name + (c.prep ? (ar ? " (قيد الإعداد)" : " (in preparation)") : "");
+  const credPts = relC.length ? 3 : creds.some((c) => c.relevant && c.prep) ? 2 : creds.length || (cv.sections.certs && secLines("certs").length) ? (fresh ? 2.5 : 1.5) : 0; const credName = (c?: any, ar?: any) => c.name + (c.prep ? (ar ? " (قيد الإعداد)" : " (in preparation)") : "");
   const nCourses = secLines("certs").length; check("codes", "creds", L2("الشهادات المهنية", "Professional certifications"), credPts, 3, L2(creds.length ? `${creds.map((c) => credName(c, true)).join("، ")}${relC.length ? "" : " — لا شهادة مرتبطة مباشرة بالمسار"}` : nCourses ? `دورات أو شهادات تدريبية: ${nCourses} — لا شهادة مهنية معتمدة بعد` : "لا شهادات مهنية", creds.length ? `${creds.map((c) => credName(c, false)).join(", ")}${relC.length ? "" : " — none directly tied to the track"}` : nCourses ? `${nCourses} course(s) or training certificate(s) — no professional certification yet` : "No professional certifications"), !relC.length ? L2(`الأكثر تأثيرًا لمسار ${tlA}: ${kb.creds.slice(0, 3).join(" · ") || "دورة معتمدة في أداة المسار"}.`, `Most valued for ${tlE}: ${kb.creds.slice(0, 3).join(" · ") || "a certified course in the track's main tool"}.`) : null);
   const pmpExpected = (target === "pm" || (target === "planning" && years >= 6)) && !creds.some((c) => /PMP|PMI-SP/.test(c.name) && !c.prep);
   if (pmpExpected) issue("high", "pmp", L2("PMP / PMI-SP غير مذكورة", "No PMP / PMI-SP"), L2(`لوظائف ${tlA} بمستواك تشترط معظم الشركات الدولية والكبرى PMP أو PMI-SP.`, `For ${tlE} roles at your level, most multinationals and top firms require PMP or PMI-SP.`), [L2("إن كنت تحضّر لها اكتب «PMP (قيد الإعداد — [الشهر/السنة])».", "If you're preparing, write «PMP (in progress — [month/year])».")]);
@@ -522,7 +522,7 @@ export function auditCV(rawText, ctx = {}) {
   const skillsT = secLines("skills").join("\n"); const sumTx = cv.summaryText || "";
   const density = kwList.map((x) => { const g = new RegExp(x.re.source, x.re.flags.includes("g") ? x.re.flags : x.re.flags + "g"); const count = (text.match(g) || []).length; return { ...x, count, inSkills: x.re.test(skillsT), inExp: x.re.test(expText) || x.re.test(projText), inSummary: x.re.test(sumTx) }; });
   const must = density.filter((x) => x.must); const covered = must.filter((x) => x.count > 0).length; const strong = must.filter((x) => x.count >= 2 || (x.inSkills && x.inExp)).length; const stuffed = density.filter((x) => x.count > 10);
-  let jd = null; if (ctx.jd && String(ctx.jd).trim().length > 20) { const J = String(ctx.jd); const keys = [...new Set([...CV_TOOLS.filter((x) => x.re.test(J)).map((x) => x.name), ...ENG_CODES.filter(([, re]) => re.test(J)).map(([n]) => n), ...ENG_CREDS.filter(([, re]) => re.test(J)).map(([n]) => n), ...ENG_TERMS.filter((x) => x.re.test(J)).map((x) => x.id)])]; const has = (k) => { const tl = toolRe(k); if (tl) return tl.test(text); const c = ENG_CODES.find((x) => x[0] === k) || ENG_CREDS.find((x) => x[0] === k); if (c) return c[1].test(text); return TERM[k] ? TERM[k].re.test(text) : false; }; const lab = (k) => (TERM[k] ? TERM[k].label : L2(k, k)); const pres = keys.filter(has); const miss = keys.filter((k) => !has(k)); const jy = /(\d{1,2})\s*(?:-|–|to)?\s*(\d{1,2})?\s*\+?\s*(?:years?|yrs?|سنوات|سنة)/i.exec(J); jd = { keys: keys.map(lab), present: pres.map(lab), missing: miss.map(lab), coverage: keys.length ? Math.round((pres.length / keys.length) * 100) : 0, years: jy ? +jy[1] : null }; }
+  let jd = null; if (ctx.jd && String(ctx.jd).trim().length > 20) { const J = String(ctx.jd); const keys: any = [...new Set([...CV_TOOLS.filter((x) => x.re.test(J)).map((x) => x.name), ...ENG_CODES.filter(([, re]: any) => re.test(J)).map(([n]: any) => n), ...ENG_CREDS.filter(([, re]: any) => re.test(J)).map(([n]: any) => n), ...ENG_TERMS.filter((x) => x.re.test(J)).map((x) => x.id)])]; const has = (k?: any) => { const tl = toolRe(k); if (tl) return tl.test(text); const c = ENG_CODES.find((x) => x[0] === k) || ENG_CREDS.find((x) => x[0] === k); if (c) return c[1].test(text); return TERM[k] ? TERM[k].re.test(text) : false; }; const lab = (k?: any) => (TERM[k] ? TERM[k].label : L2(k, k)); const pres = keys.filter(has); const miss = keys.filter((k) => !has(k)); const jy = /(\d{1,2})\s*(?:-|–|to)?\s*(\d{1,2})?\s*\+?\s*(?:years?|yrs?|سنوات|سنة)/i.exec(J); jd = { keys: keys.map(lab), present: pres.map(lab), missing: miss.map(lab), coverage: keys.length ? Math.round((pres.length / keys.length) * 100) : 0, years: jy ? +jy[1] : null }; }
   const kwCov = must.length ? covered / must.length : 1; const kwPts = 4 * (0.7 * (jd ? (kwCov + jd.coverage / 100) / 2 : kwCov) + 0.3 * (must.length ? strong / must.length : 1)) - (stuffed.length ? 0.5 : 0);
   check("ats", "keywords", L2("كثافة الكلمات المفتاحية", "Keyword density"), kwPts, 4, L2(`الكلمات الأساسية لمسار ${tlA}: ${covered} من ${must.length} موجودة، منها ${strong} مكررة في المهارات والخبرات${jd ? ` · مطابقة الوظيفة ${jd.coverage}%` : ""}${stuffed.length ? ` · تكرار مفرط: ${stuffed.map((x) => (typeof x.kw === "string" ? x.kw : x.kw.ar)).join("، ")}` : ""}`, `${covered} of ${must.length} ${tlE} must-have keywords present, ${strong} repeated across skills and experience${jd ? ` · job-ad match ${jd.coverage}%` : ""}${stuffed.length ? ` · over-repeated: ${stuffed.map((x) => (typeof x.kw === "string" ? x.kw : x.kw.en)).join(", ")}` : ""}`), L2("كل كلمة أساسية مرتين: مرة في المهارات ومرة داخل بند خبرة — بالاسم الدقيق كما في الإعلان.", "Every must-have keyword twice: once in Skills and once inside an experience bullet — spelled exactly as in the job ad."));
   if (must.length && kwCov < 0.4) issue("high", "keywords", L2("كلمات مسارك المفتاحية ناقصة", "Your track's keywords are missing"), L2(`الموجود ${covered} فقط من الكلمات التي يفلتر عليها مسؤولو ${tlA} (${must.length}).`, `Only ${covered} of the ${must.length} words ${tlE} screeners filter on.`), [L2("راجع قسم «الفجوات والكلمات المفتاحية» وأضف ما تجيده فعلًا.", "Go through «Gaps & keywords» and add what you genuinely know.")]);
@@ -535,35 +535,35 @@ export function auditCV(rawText, ctx = {}) {
   const personal = cv.personal.filter((k) => k !== "الجنسية"); if (personal.length) issue("high", "personal", L2("بيانات شخصية لا تحتاجها الشركة", "Personal data the employer doesn't need"), L2(`${personal.join("، ")} — تعرّضك للتحيز ولا تفيد في الفرز، والشركات الدولية تتجاهلها أو تطلب حذفها.`, `${personal.map((p) => ({ "تاريخ الميلاد أو السن": "date of birth / age", "الحالة الاجتماعية": "marital status", "الديانة": "religion", "الرقم القومي": "national ID", "النوع": "gender", "العنوان التفصيلي": "full street address" }[p] || p)).join(", ")} — invite bias and add nothing to screening; multinationals ignore or ask you to remove them.`), [L2("احذفها، وأبقِ الموقف من التجنيد للرجال (تسأل عنه الشركات في مصر).", "Remove them; keep military status for men (Egyptian employers ask for it).")]);
 
   // ===== assemble =====
-  const pillars = PILLARS.map(([id, max, label, desc]) => { const p = P[id]; const pts = r5(Math.min(max, p.checks.reduce((a, c) => a + c.pts, 0))); return { id, max, label, desc, pts, pct: Math.round((pts / max) * 100), checks: p.checks }; });
+  const pillars = PILLARS.map(([id, max, label, desc]: any) => { const p = P[id]; const pts = r5(Math.min(max, p.checks.reduce((a, c) => a + c.pts, 0))); return { id, max, label, desc, pts, pct: Math.round((pts / max) * 100), checks: p.checks }; });
   const overall = Math.round(pillars.reduce((a, p) => a + p.pts, 0)); const critical = issues.filter((i) => i.sev === "critical"); const high = issues.filter((i) => i.sev === "high");
   const grade = overall >= 85 && !critical.length ? [L2("جاهزة للمقاولين والاستشاريين الكبار", "Ready for top-tier contractors and consultants"), "good"] : overall >= 70 ? [L2(critical.length ? "قوية — لكن أصلح العوائق أولًا" : "قوية — أغلق الفجوات المحددة", critical.length ? "Strong — but fix the deal-breakers first" : "Strong — close the listed gaps"), "accent"] : overall >= 55 ? [L2("تحتاج عملًا مركّزًا قبل التقديم", "Needs focused work before applying"), "warn"] : [L2("أعد بناءها قبل التقديم", "Rebuild it before applying"), "bad"];
   const terms = kb.terms.map((id) => ({ id, label: TERM[id] ? TERM[id].label : L2(id, id), present: TERM[id] ? TERM[id].re.test(text) : false, inExp: TERM[id] ? TERM[id].re.test(expText) : false }));
-  const credsOut = [...kb.creds.map((n) => { const c = creds.find((x) => x.name === n); return { name: n, relevant: true, present: !!c && !c.prep, prep: !!(c && c.prep) }; }), ...creds.filter((c) => !kb.creds.includes(c.name)).map((c) => ({ name: c.name, relevant: false, present: !c.prep, prep: c.prep }))];
+  const credsOut: any = [...kb.creds.map((n) => { const c = creds.find((x) => x.name === n); return { name: n, relevant: true, present: !!c && !c.prep, prep: !!(c && c.prep) }; }), ...creds.filter((c) => !kb.creds.includes(c.name)).map((c) => ({ name: c.name, relevant: false, present: !c.prep, prep: c.prep }))];
   // rewrites: every bullet that is not already a strong, sized, result line (latest roles first)
-  const cvCtx = { disc, tools: { main: software.filter((x) => x.level !== "missing" && !["Excel", "Microsoft Office"].includes(x.name)).map((x) => x.name)[0] || null, survey: ["Total Station", "GNSS / GPS"].find((n) => toolRe(n) && toolRe(n).test(text)) || null }, codes: codes.filter((c) => c.kind === "code" && c.state !== "missing" && c.name !== "Egyptian Code").map((c) => c.name) };
-  const rewriteGroups = []; let strongCount = 0, budget = 18;
-  roles.forEach((r) => { if (budget <= 0 || !r.e.bullets.length) return; const items = []; r.e.bullets.forEach((b) => { const s = scopeOf(b.text); const good = (b.action || b.strong) && !b.weak && anyScope(s) && s.dims.has("result"); if (good) { strongCount++; return; } if (budget > 0) { const rw = rewriteEng(b, r, cvCtx); if (rw) { items.push(rw); budget--; } } }); if (items.length) rewriteGroups.push({ role: [r.e.title, r.e.company].filter(Boolean).join(" — "), items }); });
-  const aSum = { roles, software, terms, codes, creds: credsOut, syndicate, disc, target, fresh };
-  const summary = { before: cv.summaryText || "", after: draftEngSummary(cv, aSum), ar: cv.lang === "ar" };
+  const cvCtx: any = { disc, tools: { main: software.filter((x) => x.level !== "missing" && !["Excel", "Microsoft Office"].includes(x.name)).map((x) => x.name)[0] || null, survey: ["Total Station", "GNSS / GPS"].find((n) => toolRe(n) && toolRe(n).test(text)) || null }, codes: codes.filter((c) => c.kind === "code" && c.state !== "missing" && c.name !== "Egyptian Code").map((c) => c.name) };
+  const rewriteGroups: any = []; let strongCount = 0, budget = 18;
+  roles.forEach((r) => { if (budget <= 0 || !r.e.bullets.length) return; const items: any = []; r.e.bullets.forEach((b) => { const s = scopeOf(b.text); const good = (b.action || b.strong) && !b.weak && anyScope(s) && s.dims.has("result"); if (good) { strongCount++; return; } if (budget > 0) { const rw = rewriteEng(b, r, cvCtx); if (rw) { items.push(rw); budget--; } } }); if (items.length) rewriteGroups.push({ role: [r.e.title, r.e.company].filter(Boolean).join(" — "), items }); });
+  const aSum: any = { roles, software, terms, codes, creds: credsOut, syndicate, disc, target, fresh };
+  const summary: any = { before: cv.summaryText || "", after: draftEngSummary(cv, aSum), ar: cv.lang === "ar" };
   const sheetProjects = roles.slice(0, 4).map((r) => ({ name: [r.e.title, r.e.company].filter(Boolean).join(" — ") || (lang === "ar" ? "مشروع" : "Project"), known: SHEET_FIELDS.filter((d) => r.dims.has(d)), missing: SHEET_FIELDS.filter((d) => !r.dims.has(d)), hit: r.hit }));
-  const portfolio = { tips: [...(PORTFOLIO_TIPS[target] || PORTFOLIO_TIPS.site)], general: PORTFOLIO_GENERAL, sheet: projectSheet(lang === "ar"), projects: sheetProjects };
-  const missing = { core: software.filter((x) => x.tier === "core" && x.level === "missing").map((x) => x.name), adv: software.filter((x) => x.tier === "adv" && x.level === "missing").map((x) => x.name), codes: codes.filter((c) => c.expected && c.state === "missing").map((c) => c.name), creds: credsOut.filter((c) => c.relevant && !c.present).map((c) => c.name), terms: terms.filter((x) => !x.present).map((x) => x.label), jd: jd ? jd.missing : [] };
+  const portfolio: any = { tips: [...(PORTFOLIO_TIPS[target] || PORTFOLIO_TIPS.site)], general: PORTFOLIO_GENERAL, sheet: projectSheet(lang === "ar"), projects: sheetProjects };
+  const missing: any = { core: software.filter((x) => x.tier === "core" && x.level === "missing").map((x) => x.name), adv: software.filter((x) => x.tier === "adv" && x.level === "missing").map((x) => x.name), codes: codes.filter((c) => c.expected && c.state === "missing").map((c) => c.name), creds: credsOut.filter((c) => c.relevant && !c.present).map((c) => c.name), terms: terms.filter((x) => !x.present).map((x) => x.label), jd: jd ? jd.missing : [] };
   return { empty: false, version: 23, overall, grade, pillars, critical, high, layout, words: cv.words, cv, disc, target, detected, allowed, shares: sig.shares, fresh, years,
     profile: { disc, discLabel: discL2(disc), target: trackL2(target, disc), detected: trackL2(detected, disc), years, pos: cv.seniority, posLabel: posL2(cv.seniority), lang, pages: layout.pages, words: cv.words },
-    software, codes, creds: credsOut, syndicate, terms, density: density.sort((a, b) => (b.must - a.must) || (a.count === 0) - (b.count === 0) || b.count - a.count), coverage: Math.round(kwCov * 100), jd, missing,
+    software, codes, creds: credsOut, syndicate, terms, density: density.sort((a, b) => (b.must - a.must) || Number(a.count === 0) - Number(b.count === 0) || b.count - a.count), coverage: Math.round(kwCov * 100), jd, missing,
     rewrites: rewriteGroups, strongBullets: strongCount, summary, portfolio, writing: wIssues };
 }
 
 // ---- writing quality: spelling (EN), grammar slips (EN), hamza / ta-marbuta / punctuation (AR), tool-name casing ----
-export function writingIssues(cv) {
-  const text = cv.text; const out = []; const seen = new Set(); const push = (kind, wrong, right, where) => { const key = kind + String(wrong).toLowerCase(); if (seen.has(key)) return; seen.add(key); out.push({ kind, wrong, right, where }); };
+export function writingIssues(cv?: any) {
+  const text = cv.text; const out: any = []; const seen = new Set(); const push = (kind?: any, wrong?: any, right?: any, where?: any) => { const key = kind + String(wrong).toLowerCase(); if (seen.has(key)) return; seen.add(key); out.push({ kind, wrong, right, where }); };
   const textNoUrl = text.replace(/\S+@\S+|https?:\/\/\S+|\b[\w.-]+\.(?:com|net|org|io|me|dev|eg)\S*/gi, " ");
   wordsOf(textNoUrl).forEach((w) => { const lw = w.toLowerCase(); if (/^[a-z]/.test(lw)) { const fix = EN_MISSPELL[lw]; if (fix && fix !== w) push(fix.toLowerCase() === lw ? "casing" : "spelling", w, fix, ctxOf(text, w)); } });
-  EN_GRAMMAR.forEach(([re, fix]) => { re.lastIndex = 0; const m = re.exec(text); re.lastIndex = 0; if (m) push("grammar", m[0], m[0].replace(new RegExp(re.source, "i"), fix), ctxOf(text, m[0])); });
+  EN_GRAMMAR.forEach(([re, fix]: any) => { re.lastIndex = 0; const m = re.exec(text); re.lastIndex = 0; if (m) push("grammar", m[0], m[0].replace(new RegExp(re.source, "i"), fix), ctxOf(text, m[0])); });
   if (/(^|[\s(])i(?=[\s,.'])/.test(text)) push("casing", "i", "I", ctxOf(text, " i "));
-  AR_SLIPS.forEach(([re, fix]) => { re.lastIndex = 0; const m = re.exec(text); re.lastIndex = 0; if (m) push("spelling", m[0].trim(), fix, ctxOf(text, m[0].trim())); });
-  AR_PUNCT.forEach(([re, why]) => { re.lastIndex = 0; const m = re.exec(text); re.lastIndex = 0; if (m && m[0].trim()) push("punct", m[0].replace(/\s/g, "␣"), why, ctxOf(text, m[0])); });
+  AR_SLIPS.forEach(([re, fix]: any) => { re.lastIndex = 0; const m = re.exec(text); re.lastIndex = 0; if (m) push("spelling", m[0].trim(), fix, ctxOf(text, m[0].trim())); });
+  AR_PUNCT.forEach(([re, why]: any) => { re.lastIndex = 0; const m = re.exec(text); re.lastIndex = 0; if (m && m[0].trim()) push("punct", m[0].replace(/\s/g, "␣"), why, ctxOf(text, m[0])); });
   const tenses = cv.bulletsAll.map((b) => b.tense).filter(Boolean); if (tenses.filter((t) => t === "ing").length >= 2 && tenses.filter((t) => t === "past").length >= 2) push("tense", "Managing … / Managed …", "Managed … (one tense)", "");
   return out;
 }
@@ -580,7 +580,7 @@ export const AR_PUNCT = [[/\s+[،,؛;:]/g, "لا مسافة قبل علامة ا
 
 export const CV_BAD_EMAIL = /(\d{4,}|cool|boy|girl|love|king|prince|princess|hot|sexy|crazy|angel|baby|sweet|3amel|5ales|zoz|toto|mimi|lolo|batman|xx|_x_|gamer|killer)/;
 
-export const ctxOf = (text, m) => { const i = text.toLowerCase().indexOf(String(m).toLowerCase()); if (i < 0) return ""; const a = Math.max(0, i - 30), b = Math.min(text.length, i + String(m).length + 30); return (a > 0 ? "…" : "") + text.slice(a, b).replace(/\s+/g, " ") + (b < text.length ? "…" : ""); };
+export const ctxOf = (text?: any, m?: any) => { const i = text.toLowerCase().indexOf(String(m).toLowerCase()); if (i < 0) return ""; const a = Math.max(0, i - 30), b = Math.min(text.length, i + String(m).length + 30); return (a > 0 ? "…" : "") + text.slice(a, b).replace(/\s+/g, " ") + (b < text.length ? "…" : ""); };
 
 // ---- sample CVs (the three demo inputs on the intake screen) ----
 export const CV_SAMPLE_AR = `أحمد محمود عبد الرحمن

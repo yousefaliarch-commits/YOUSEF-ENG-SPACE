@@ -24,13 +24,13 @@ import { ArchMark, BTN, Back, Chip, FilterChip, Forward, Num, Primary, Quiet, Se
 //  → الموقع (governorate + city) → الهوية والخصوصية (default identity, optional verification, the written policy, consent).
 //  The same step components edit the profile later (no account step, no consent box).
 // =====================================================================
-export const FieldError = ({ children }) => (children ? <p role="alert" className="mt-1 text-[11.5px] leading-snug text-bad flex items-start gap-1"><CircleAlert size={12} className="shrink-0 mt-0.5" /><span>{children}</span></p> : null);
+export const FieldError = ({ children }: any) => (children ? <p role="alert" className="mt-1 text-[11.5px] leading-snug text-bad flex items-start gap-1"><CircleAlert size={12} className="shrink-0 mt-0.5" /><span>{children}</span></p> : null);
 
-export function FormField({ label, htmlFor, error, hint, children }) {
+export function FormField({ label, htmlFor, error, hint, children }: any) {
   return <div><label htmlFor={htmlFor} className="block text-[12.5px] text-ink mb-1.5">{label}</label>{children}{error ? <FieldError>{error}</FieldError> : hint ? <p className="mt-1 text-[11px] leading-snug text-ink-3">{hint}</p> : null}</div>;
 }
 
-export function PasswordInput({ id, value, onChange, placeholder, autoComplete, invalid }) {
+export function PasswordInput({ id, value, onChange, placeholder, autoComplete, invalid }: any) {
   const [show, setShow] = useState(false);
   return (
     <div dir="ltr" className="relative">
@@ -40,37 +40,37 @@ export function PasswordInput({ id, value, onChange, placeholder, autoComplete, 
   );
 }
 
-export const StrengthMeter = ({ pw }) => { const s = passwordScore(pw); const [l, bar] = PASSWORD_LEVELS[s]; return (
+export const StrengthMeter = ({ pw }: any) => { const s = passwordScore(pw); const [l, bar] = PASSWORD_LEVELS[s]; return (
   <div className="mt-2" aria-live="polite"><div className="flex gap-1">{[1, 2, 3, 4].map((i) => <span key={i} className={`h-1 flex-1 rounded-full transition-colors ${i <= s ? bar : "bg-track"}`} />)}</div>
-    <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]">{passwordChecks(pw).map(([k, t, ok]) => <span key={k} className={`inline-flex items-center gap-1 ${ok ? "text-good" : "text-ink-3"}`}>{ok ? <Check size={11} /> : <span className="w-2.5 h-2.5 rounded-full border border-ink-4" />}{t}</span>)}{l && <span className="ms-auto text-ink-2">القوة: {l}</span>}</div></div>); };
+    <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]">{passwordChecks(pw).map(([k, t, ok]: any) => <span key={k} className={`inline-flex items-center gap-1 ${ok ? "text-good" : "text-ink-3"}`}>{ok ? <Check size={11} /> : <span className="w-2.5 h-2.5 rounded-full border border-ink-4" />}{t}</span>)}{l && <span className="ms-auto text-ink-2">القوة: {l}</span>}</div></div>); };
 
-export const AuthHeader = ({ children }) => <div className="flex items-center justify-between gap-2"><span className="flex items-center gap-2 min-w-0"><ArchMark size={22} /><Wordmark size="text-[17px]" /></span><span className="shrink-0">{children}</span></div>;
+export const AuthHeader = ({ children }: any) => <div className="flex items-center justify-between gap-2"><span className="flex items-center gap-2 min-w-0"><ArchMark size={22} /><Wordmark size="text-[17px]" /></span><span className="shrink-0">{children}</span></div>;
 
 export const REG_STEPS = { account: ["إنشاء حساب", "بريدك وكلمة المرور للدخول فقط — لا يظهران لأي عضو أو شركة"], personal: ["بياناتك", "الاسم والنوع والعمر وسنة التخرج"], career: ["التخصص والمسار", "نوع الحساب، تخصصك الهندسي، ومسارك الحالي"], place: ["الموقع", "المحافظة ثم المدينة أو المركز"], identity: ["الهوية والخصوصية", "كيف تظهر افتراضيًا — والتوثيق اختياري", "كيف تظهرين افتراضيًا — والتوثيق اختياري"] };
 
 
-export function Registration({ app, mode = "signup", initial = null }) {
+export function Registration({ app, mode = "signup", initial = null }: any) {
   const edit = mode === "edit"; const keys = edit ? ["personal", "career", "place", "identity"] : ["account", "personal", "career", "place", "identity"];
-  const [step, setStep] = useState(0); const [tried, setTried] = useState({}); const [attempt, setAttempt] = useState(0); const [busy, setBusy] = useState(false); const [submitErr, setSubmitErr] = useState("");
-  const [f, setF] = useState(() => initial
+  const [step, setStep] = useState(0); const [tried, setTried] = useState<any>({}); const [attempt, setAttempt] = useState(0); const [busy, setBusy] = useState(false); const [submitErr, setSubmitErr] = useState<any>("");
+  const [f, setF] = useState<any>(() => initial
     ? { ...DEFAULT_PERSONA, ...initial, age: initial.age != null ? String(initial.age) : "", gradYear: initial.gradYear != null ? String(initial.gradYear) : "", companyName: initial.companyName || "", password: "", confirm: "", accept: true }
     : { ...DEFAULT_PERSONA, gender: null, age: "", gradYear: "", pos: null, city: null, companyName: "", email: "", password: "", confirm: "", accept: false, identity: "anon", anon: randHex(4), pid: "u-" + randHex(10) });
-  const set = (k, v) => setF((s) => ({ ...s, [k]: v })); const body = useRef(null);
-  const [photoErr, setPhotoErr] = useState(""); const [photoInput, pickPhoto] = useImagePicker(async (file) => { try { const im = await processImage(file, { square: true, size: 256 }); set("photo", im.src); setPhotoErr(""); } catch (e) { setPhotoErr(imageError(e)); } });
+  const set = (k?: any, v?: any) => setF((s) => ({ ...s, [k]: v })); const body = useRef<any>(null);
+  const [photoErr, setPhotoErr] = useState<any>(""); const [photoInput, pickPhoto] = useImagePicker(async (file) => { try { const im = await processImage(file, { square: true, size: 256 }); set("photo", im.src); setPhotoErr(""); } catch (e) { setPhotoErr(imageError(e)); } });
   const key = keys[step]; const isCo = isCompanyRole(f.role); const disc = f.disc; const existing = edit ? null : loadAccount();
   const nameChanged = edit && !!initial && cleanName(f.name) !== cleanName(initial.name); const hadBadge = edit && !!initial && canVerifyRole(initial.role) && (initial.verified || initial.pending);
   const yrs = !ageError(f.age) && !gradError(f.gradYear, f.age) ? Math.max(0, THIS_YEAR - Number(f.gradYear)) : null; const suggested = yrs != null ? posForYears(yrs) : "mid"; const pos = f.pos || suggested;
-  const errs = {
+  const errs: any = {
     account: { email: emailError(f.email) || (existing && existing.email === f.email.trim().toLowerCase() ? "هذا البريد مسجّل بالفعل على هذا الجهاز — سجّل الدخول بدلًا من ذلك" : ""), password: passwordError(f.password), confirm: confirmError(f.password, f.confirm) },
     personal: { name: nameError(f.name), gender: f.gender ? "" : "اختر النوع", age: ageError(f.age), gradYear: gradError(f.gradYear, f.age) },
     career: f.role === "supervisor" ? {} : isCo ? { companyName: cleanName(f.companyName).length >= 2 ? "" : gx(f.gender, "اكتب اسم الشركة التي تمثّلها", "اكتبي اسم الشركة التي تمثّلينها") } : { track: tracksFor(disc).some((t) => t[0] === f.track) ? "" : gx(f.gender, "اختر المسار", "اختاري المسار") },
     place: { gov: f.gov ? "" : gx(f.gender, "اختر المحافظة", "اختاري المحافظة"), city: f.city ? "" : gx(f.gender, "اختر المدينة أو المركز داخل المحافظة", "اختاري المدينة أو المركز داخل المحافظة") },
     identity: { accept: edit || f.accept ? "" : gx(f.gender, "للمتابعة وافق على سياسة الخصوصية وشروط الاستخدام", "للمتابعة وافقي على سياسة الخصوصية وشروط الاستخدام") },
   };
-  const stepErrs = errs[key]; const valid = Object.values(stepErrs).every((x) => !x); const show = (k) => (tried[key] ? stepErrs[k] : "");
+  const stepErrs = errs[key]; const valid = Object.values(stepErrs).every((x) => !x); const show = (k?: any) => (tried[key] ? stepErrs[k] : "");
   useEffect(() => { if (!attempt || !body.current) return; const el = body.current.querySelector('[aria-invalid="true"], [role="alert"]'); if (el) { try { el.scrollIntoView({ block: "center", behavior: reduced() ? "auto" : "smooth" }); if (el.focus && el.matches("input,button,textarea,select")) el.focus({ preventScroll: true }); } catch (e) {} } }, [attempt]);
   useEffect(() => { if (body.current) body.current.scrollTop = 0; }, [step]);
-  const setRole = (id) => setF((s) => ({ ...s, role: id, disc: s.disc, track: s.track, verified: id === s.role ? s.verified : false, pending: id === s.role ? s.pending : false, verifyKind: id === s.role ? s.verifyKind : null, goal: isCompanyRole(id) ? "hire" : s.goal === "hire" || s.goal === "benchmark" ? "learn" : s.goal }));
+  const setRole = (id?: any) => setF((s) => ({ ...s, role: id, disc: s.disc, track: s.track, verified: id === s.role ? s.verified : false, pending: id === s.role ? s.pending : false, verifyKind: id === s.role ? s.verifyKind : null, goal: isCompanyRole(id) ? "hire" : s.goal === "hire" || s.goal === "benchmark" ? "learn" : s.goal }));
   const persona = () => {
     // employer accounts are never verified; renaming a verified (or pending) account drops the badge — the documents carried the old name
     const coName = cleanName(f.companyName); const co = isCo ? COMPANIES.find((c) => c.name === coName) : null; const keepV = !isCo && !nameChanged;
@@ -88,7 +88,7 @@ export function Registration({ app, mode = "signup", initial = null }) {
   };
   const preview = persona();
   const chipRow = "flex flex-wrap gap-1.5";
-  const views = {
+  const views: any = {
     account: <div className="space-y-4">
       <TrustPolicy variant="compact" />
       <FormField label="البريد الإلكتروني" htmlFor="reg-email" error={show("email")} hint="للدخول واسترجاع الحساب فقط — لا يظهر لأي عضو أو صاحب عمل"><TextInput id="reg-email" dir="ltr" type="email" inputMode="email" autoComplete="email" value={f.email} onChange={(v) => set("email", v)} placeholder="name@example.com" aria-invalid={!!show("email") || undefined} /></FormField>
@@ -104,11 +104,11 @@ export function Registration({ app, mode = "signup", initial = null }) {
         {photoErr && <p role="alert" className="mt-1 text-[11.5px] text-bad">{photoErr}</p>}
         <p className="mt-1 text-[11px] text-ink-3 leading-snug">تظهر صغيرة بجانب اسمك في مشاركاتك العلنية فقط — لا تظهر أبدًا في الوضع المجهول، ولا تُكبَّر عند الضغط. تُقص مربعة وتُحذف منها بيانات الموقع على جهازك.</p></div>
       <div><p className="text-[12.5px] text-ink mb-1.5">النوع</p>
-        <div role="radiogroup" aria-label="النوع" className="grid grid-cols-2 gap-2">{[["male", "ذكر", "مهندس"], ["female", "أنثى", "مهندسة"]].map(([id, l, t]) => <button key={id} type="button" role="radio" aria-checked={f.gender === id} aria-invalid={(!!show("gender") && !f.gender) || undefined} onClick={() => setF((s) => ({ ...s, gender: id }))} className={`press flex items-center gap-2.5 p-3 rounded-2xl border text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${f.gender === id ? "bg-wash border-accent/40" : show("gender") ? "bg-surface border-bad/50" : "bg-surface border-line-2 hover:border-line-3"}`}>
+        <div role="radiogroup" aria-label="النوع" className="grid grid-cols-2 gap-2">{[["male", "ذكر", "مهندس"], ["female", "أنثى", "مهندسة"]].map(([id, l, t]: any) => <button key={id} type="button" role="radio" aria-checked={f.gender === id} aria-invalid={(!!show("gender") && !f.gender) || undefined} onClick={() => setF((s) => ({ ...s, gender: id }))} className={`press flex items-center gap-2.5 p-3 rounded-2xl border text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${f.gender === id ? "bg-wash border-accent/40" : show("gender") ? "bg-surface border-bad/50" : "bg-surface border-line-2 hover:border-line-3"}`}>
           <span className="flex -space-x-2 rtl:space-x-reverse shrink-0"><Avatar spec={specOfPersona({ ...f, verified: false })} gender={id} look={f.look} size={32} animate={false} className="ring-2 ring-surface" /></span>
           <span className="min-w-0"><span className="block text-[15px] font-medium leading-tight">{l}</span><span className="block text-[11px] text-ink-2 leading-snug">اللقب: {t}</span></span>{f.gender === id && <Check size={15} className="ms-auto shrink-0 text-accent" />}</button>)}</div>
         <FieldError>{show("gender")}</FieldError>
-        {f.gender === "female" && <div className="mt-3 pop-in"><p className="text-[12px] text-ink-2 mb-1.5">مظهر شخصيتك</p><div role="radiogroup" aria-label="مظهر الشخصية" className="grid grid-cols-2 gap-2">{[["hood", "غطاء رأس تقني"], ["hair", "شعر"]].map(([id, l]) => <button key={id} type="button" role="radio" aria-checked={(f.look === "hair" ? "hair" : "hood") === id} onClick={() => set("look", id)} className={`press flex items-center gap-2.5 p-2.5 rounded-2xl border text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${(f.look === "hair" ? "hair" : "hood") === id ? "bg-wash border-accent/40" : "bg-surface border-line-2 hover:border-line-3"}`}><Avatar spec={specOfPersona({ ...f, verified: false })} gender="female" look={id} size={36} animate={false} /><span className="text-[13px]">{l}</span></button>)}</div></div>}
+        {f.gender === "female" && <div className="mt-3 pop-in"><p className="text-[12px] text-ink-2 mb-1.5">مظهر شخصيتك</p><div role="radiogroup" aria-label="مظهر الشخصية" className="grid grid-cols-2 gap-2">{[["hood", "غطاء رأس تقني"], ["hair", "شعر"]].map(([id, l]: any) => <button key={id} type="button" role="radio" aria-checked={(f.look === "hair" ? "hair" : "hood") === id} onClick={() => set("look", id)} className={`press flex items-center gap-2.5 p-2.5 rounded-2xl border text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${(f.look === "hair" ? "hair" : "hood") === id ? "bg-wash border-accent/40" : "bg-surface border-line-2 hover:border-line-3"}`}><Avatar spec={specOfPersona({ ...f, verified: false })} gender="female" look={id} size={36} animate={false} /><span className="text-[13px]">{l}</span></button>)}</div></div>}
         <p className="mt-1 text-[11px] text-ink-3">يضبط الألقاب (مهندس / مهندسة) وصيغ المخاطبة. أما شخصيتك فيحددها تخصصك — لا تُختار عشوائيًا ولا تتبدّل.</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -123,9 +123,9 @@ export function Registration({ app, mode = "signup", initial = null }) {
         <FormField label="الشركة التي تمثّلها" htmlFor="reg-co" error={show("companyName")} hint={COMPANIES.some((c) => c.name === cleanName(f.companyName)) ? "شركة مسجّلة — ستُربط بصفحتها وشعارها" : "اكتب الاسم أو اختر من القائمة"}><TextInput id="reg-co" value={f.companyName} onChange={(v) => set("companyName", v)} list="reg-co-list" placeholder="اسم الشركة" aria-invalid={!!show("companyName") || undefined} /><datalist id="reg-co-list">{COMPANIES.map((c) => <option key={c.id} value={c.name} />)}</datalist></FormField>
         <p className="p-3 rounded-xl bg-canvas/60 border border-line text-[11.5px] leading-relaxed text-ink-2 flex items-start gap-2"><RoleBadge role={f.role} gender={f.gender} className="shrink-0" /><span>{gx(f.gender, "حسابات جهات العمل لا تحتاج توثيقًا ولا أي مستند — تظهر في كل مكان بشارة دورك.", "حسابات جهات العمل لا تحتاج توثيقًا ولا أي مستند — تظهرين في كل مكان بشارة دورك.")}</span></p>
       </> : f.role === "supervisor" ? <div className="p-3.5 rounded-xl bg-canvas/60 border border-line text-[12.5px] leading-relaxed"><p className="text-ink font-medium inline-flex items-center gap-1.5"><HardHat size={14} className="text-accent" /> المسمّى ثابت: {roleTitle("supervisor", f.gender)}</p><p className="mt-1 text-ink-2">مسمّى واحد لكل مشرفي المواقع — بلا تخصص أو مسار أو مستوى. حسابك للمشاركة في المجتمع: الغرف والمنشورات والردود والرسائل مع الزملاء. الرواتب والوظائف والشركات والأدوات غير متاحة لهذا النوع من الحسابات.</p></div> : <>
-        {<div><p className="text-[12.5px] text-ink mb-1.5">التخصص الهندسي</p><div className={chipRow}>{DISC.map(([id, l]) => <FilterChip key={id} on={f.disc === id} onClick={() => setF((s) => ({ ...s, disc: id, track: tracksFor(id).some((t) => t[0] === s.track) ? s.track : "site" }))}>{l}</FilterChip>)}</div><p className="mt-1 text-[11px] text-ink-3">{(DISC.find((d) => d[0] === f.disc) || DISC[0])[2]}</p></div>}
-        <div><p className="text-[12.5px] text-ink mb-1.5">المسار (التخصص الفرعي)</p><div className={chipRow}>{tracksFor(disc).map(([id]) => <FilterChip key={id} on={f.track === id} onClick={() => set("track", id)}>{trackLabel(id, disc)}</FilterChip>)}</div><FieldError>{show("track")}</FieldError></div>
-        <div><p className="text-[12.5px] text-ink mb-1.5">المستوى الوظيفي</p><div className={chipRow}>{POSITIONS.map(([id]) => <FilterChip key={id} on={pos === id} onClick={() => set("pos", id)}>{posLabelG(id, f.gender)}{id === suggested && yrs != null && <span className="text-[10px] text-accent">· مقترح</span>}</FilterChip>)}</div><p className="mt-1 text-[11px] text-ink-3">{yrs != null ? "اقترحناه من سنة تخرجك — غيّره إن لزم." : "يدخل في مطابقة الوظائف وتقدير السوق."}</p></div>
+        {<div><p className="text-[12.5px] text-ink mb-1.5">التخصص الهندسي</p><div className={chipRow}>{DISC.map(([id, l]: any) => <FilterChip key={id} on={f.disc === id} onClick={() => setF((s) => ({ ...s, disc: id, track: tracksFor(id).some((t) => t[0] === s.track) ? s.track : "site" }))}>{l}</FilterChip>)}</div><p className="mt-1 text-[11px] text-ink-3">{(DISC.find((d) => d[0] === f.disc) || DISC[0])[2]}</p></div>}
+        <div><p className="text-[12.5px] text-ink mb-1.5">المسار (التخصص الفرعي)</p><div className={chipRow}>{tracksFor(disc).map(([id]: any) => <FilterChip key={id} on={f.track === id} onClick={() => set("track", id)}>{trackLabel(id, disc)}</FilterChip>)}</div><FieldError>{show("track")}</FieldError></div>
+        <div><p className="text-[12.5px] text-ink mb-1.5">المستوى الوظيفي</p><div className={chipRow}>{POSITIONS.map(([id]: any) => <FilterChip key={id} on={pos === id} onClick={() => set("pos", id)}>{posLabelG(id, f.gender)}{id === suggested && yrs != null && <span className="text-[10px] text-accent">· مقترح</span>}</FilterChip>)}</div><p className="mt-1 text-[11px] text-ink-3">{yrs != null ? "اقترحناه من سنة تخرجك — غيّره إن لزم." : "يدخل في مطابقة الوظائف وتقدير السوق."}</p></div>
       </>}
     </div>,
     place: <div className="space-y-2"><GovPicker gov={f.gov} city={f.city} onChange={(g, c) => setF((s) => ({ ...s, gov: g, city: c }))} /><FieldError>{show("gov") || show("city")}</FieldError>{f.city && <p className="text-[11.5px] text-good inline-flex items-center gap-1.5"><MapPin size={12} /> {placeName(f.gov, f.city)}</p>}<p className="text-[11px] text-ink-3 leading-snug">المدينة تظهر في ملفك العلني فقط، وتدخل في تقدير السوق ومطابقة الوظائف — ولا تظهر أبدًا في الوضع المجهول.</p></div>,
@@ -163,12 +163,12 @@ export function Registration({ app, mode = "signup", initial = null }) {
 }
 
 
-export function SignIn({ app }) {
-  const acc = loadAccount(); const [email, setEmail] = useState(acc ? acc.email : ""); const [pw, setPw] = useState(""); const [err, setErr] = useState(""); const [busy, setBusy] = useState(false);
+export function SignIn({ app }: any) {
+  const acc = loadAccount(); const [email, setEmail] = useState<any>(acc ? acc.email : ""); const [pw, setPw] = useState<any>(""); const [err, setErr] = useState<any>(""); const [busy, setBusy] = useState(false);
   const [fails, setFails] = useState(0); const [lockUntil, setLockUntil] = useState(0); const [forgot, setForgot] = useState(false); const [confirmWipe, setConfirmWipe] = useState(false); const [, tick] = useState(0);
   useEffect(() => { if (!lockUntil) return; const i = setInterval(() => { tick((t) => t + 1); if (Date.now() >= lockUntil) { setLockUntil(0); setFails(0); setErr(""); } }, 1000); return () => clearInterval(i); }, [lockUntil]);
   const locked = lockUntil > Date.now(); const secs = Math.max(0, Math.ceil((lockUntil - Date.now()) / 1000));
-  const submit = async (e) => {
+  const submit = async (e?: any) => {
     if (e) e.preventDefault(); if (locked) return; const ee = emailError(email); if (ee) { setErr(ee); return; } if (!pw) { setErr("اكتب كلمة المرور"); return; }
     const a = loadAccount(); if (!a || a.email !== email.trim().toLowerCase()) { setErr("لا يوجد حساب بهذا البريد على هذا الجهاز — أنشئ حسابًا جديدًا"); return; }
     setBusy(true); setErr(""); let ok = false; try { ok = await checkPassword(a, pw); } catch (x) { ok = false; } setBusy(false);
@@ -198,11 +198,11 @@ export function SignIn({ app }) {
   );
 }
 
-export const AuthScreen = ({ app }) => (app.authView === "signin" ? <SignIn app={app} /> : <Registration app={app} mode="signup" />);
+export const AuthScreen = ({ app }: any) => (app.authView === "signin" ? <SignIn app={app} /> : <Registration app={app} mode="signup" />);
 
 
 // Shown once, right after the account is created
-export function Welcome({ app }) {
+export function Welcome({ app }: any) {
   const p = app.profile; const first = cleanName(p.name).split(" ")[0] || "";
   return (
     <div className="h-full overflow-y-auto scroll-area px-5 pt-[calc(var(--sat)+1.5rem)] pb-[max(1.25rem,var(--sab))]">

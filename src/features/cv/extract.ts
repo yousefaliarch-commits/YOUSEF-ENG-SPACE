@@ -14,26 +14,26 @@ import { searchNorm, tokenSim } from "../../lib/search";
 //  certifications, languages, projects — is extracted into one structured object that the engineering
 //  audit (_app_3c2_cvaudit) works from. Everything runs in the browser; nothing is uploaded.
 // =====================================================================
-export const isBoldFont = (f) => /bold|black|heavy|semibold|demibold|extrabold|,b$|-b$|bd$/i.test(String(f || ""));
+export const isBoldFont = (f?: any) => /bold|black|heavy|semibold|demibold|extrabold|,b$|-b$|bd$/i.test(String(f || ""));
 
 // ---- extraction: PDF (pdf.js, columns + font sizes), DOCX (mammoth HTML → headings/lists/tables), plain text ----
-export async function extractCV(file) {
-  const name = (file.name || "").toLowerCase(); const ext = name.includes(".") ? name.split(".").pop() : (file.type === "application/pdf" ? "pdf" : "txt"); const layout = { pages: 1, images: 0, columns: false, tables: 0, type: ext, glyphs: 0 };
+export async function extractCV(file?: any) {
+  const name = (file.name || "").toLowerCase(); const ext = name.includes(".") ? name.split(".").pop() : (file.type === "application/pdf" ? "pdf" : "txt"); const layout: any = { pages: 1, images: 0, columns: false, tables: 0, type: ext, glyphs: 0 };
   if (ext === "pdf") {
     const lib = await loadPdf();
-    const doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise; layout.pages = doc.numPages; const lines = []; let colPages = 0;
+    const doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise; layout.pages = doc.numPages; const lines: any = []; let colPages = 0;
     for (let p = 1; p <= Math.min(doc.numPages, 8); p++) {
       const page = await doc.getPage(p); const tc = await page.getTextContent(); const vw = page.getViewport({ scale: 1 }).width;
       const items = tc.items.filter((it) => it.str && it.str.trim()).map((it) => ({ x: it.transform[4], y: it.transform[5], w: it.width || 0, h: Math.abs(it.transform[3]) || it.height || 10, s: it.str, font: it.fontName }));
       if (!items.length) continue; const sizes = items.map((i) => i.h).sort((a, b) => a - b); const med = sizes[Math.floor(sizes.length / 2)] || 10;
       // rows: cluster by baseline
-      items.sort((a, b) => b.y - a.y || a.x - b.x); const rows = []; items.forEach((it) => { const r = rows[rows.length - 1]; if (r && Math.abs(r.y - it.y) <= Math.max(2.5, med * 0.45)) { r.items.push(it); r.y = (r.y + it.y) / 2; } else rows.push({ y: it.y, items: [it] }); });
+      items.sort((a, b) => b.y - a.y || a.x - b.x); const rows: any = []; items.forEach((it) => { const r = rows[rows.length - 1]; if (r && Math.abs(r.y - it.y) <= Math.max(2.5, med * 0.45)) { r.items.push(it); r.y = (r.y + it.y) / 2; } else rows.push({ y: it.y, items: [it] }); });
       // columns: a row whose items split around a wide horizontal gap near the middle, on many rows, means a two-column template
       let split = 0, votes = 0; rows.forEach((r) => { const xs = r.items.sort((a, b) => a.x - b.x); for (let i = 1; i < xs.length; i++) { const gap = xs[i].x - (xs[i - 1].x + xs[i - 1].w); const mid = xs[i - 1].x + xs[i - 1].w + gap / 2; if (gap > vw * 0.08 && mid > vw * 0.28 && mid < vw * 0.72) { votes++; split += mid; break; } } });
       const twoCol = rows.length >= 8 && votes / rows.length >= 0.3; const cut = twoCol ? split / votes : null; if (twoCol) colPages++;
-      const rowText = (its) => its.sort((a, b) => a.x - b.x).map((i) => i.s).join(" ").replace(/\s+/g, " ").trim();
-      const emit = (its, y) => { if (!its.length) return; const h = Math.max(...its.map((i) => i.h)); lines.push({ text: rowText(its), size: +(h / med).toFixed(2), bold: its.filter((i) => isBoldFont(i.font)).length >= its.length / 2, page: p, y, x: Math.round(Math.min(...its.map((i) => i.x))) }); };
-      if (twoCol) { const ar = items.filter((i) => /[ء-ي]/.test(i.s)).length > items.length / 2; const left = [], right = []; rows.forEach((r) => { const L = r.items.filter((i) => i.x + i.w / 2 < cut), R = r.items.filter((i) => i.x + i.w / 2 >= cut); if (L.length) left.push([L, r.y]); if (R.length) right.push([R, r.y]); }); (ar ? [right, left] : [left, right]).forEach((col) => { col.forEach(([its, y]) => emit(its, y)); lines.push({ text: "", size: 1, bold: false, page: p, y: 0 }); }); }
+      const rowText = (its?: any) => its.sort((a, b) => a.x - b.x).map((i) => i.s).join(" ").replace(/\s+/g, " ").trim();
+      const emit = (its?: any, y?: any) => { if (!its.length) return; const h = Math.max(...its.map((i) => i.h)); lines.push({ text: rowText(its), size: +(h / med).toFixed(2), bold: its.filter((i) => isBoldFont(i.font)).length >= its.length / 2, page: p, y, x: Math.round(Math.min(...its.map((i) => i.x))) }); };
+      if (twoCol) { const ar = items.filter((i) => /[ء-ي]/.test(i.s)).length > items.length / 2; const left: any = [], right: any = []; rows.forEach((r) => { const L = r.items.filter((i) => i.x + i.w / 2 < cut), R = r.items.filter((i) => i.x + i.w / 2 >= cut); if (L.length) left.push([L, r.y]); if (R.length) right.push([R, r.y]); }); (ar ? [right, left] : [left, right]).forEach((col) => { col.forEach(([its, y]: any) => emit(its, y)); lines.push({ text: "", size: 1, bold: false, page: p, y: 0 }); }); }
       else rows.forEach((r) => emit(r.items, r.y));
       lines.push({ text: "", size: 1, bold: false, page: p, y: 0 });
       try { const ops = await page.getOperatorList(); layout.images += ops.fnArray.filter((f) => f === lib.OPS.paintImageXObject || f === lib.OPS.paintJpegXObject || f === lib.OPS.paintImageXObjectRepeat).length; } catch (e) {}
@@ -42,11 +42,11 @@ export async function extractCV(file) {
     return { text, lines, layout, scanned: text.replace(/\s/g, "").length < 60 && layout.images > 0 };
   }
   if (ext === "docx") {
-    const mammoth = await loadMammoth(); const buf = await file.arrayBuffer(); const lines = [];
+    const mammoth = await loadMammoth(); const buf = await file.arrayBuffer(); const lines: any = [];
     try {
-      const r = await mammoth.convertToHtml({ arrayBuffer: buf }); const dom = new DOMParser().parseFromString("<div>" + r.value + "</div>", "text/html"); const root = dom.body.firstChild;
+      const r = await mammoth.convertToHtml({ arrayBuffer: buf }); const dom = new DOMParser().parseFromString("<div>" + r.value + "</div>", "text/html"); const root = dom.body.firstChild as HTMLElement;
       layout.images = root.querySelectorAll("img").length; layout.tables = root.querySelectorAll("table").length;
-      const push = (el, extra) => { const text = (el.textContent || "").replace(/\s+/g, " ").trim(); const strong = [...el.querySelectorAll("strong,b")].reduce((a, s) => a + (s.textContent || "").length, 0); lines.push({ text, bold: text.length > 0 && strong >= text.length * 0.7, size: /^H[1-3]$/.test(el.tagName) ? 1.4 : 1, heading: /^H[1-6]$/.test(el.tagName), bullet: el.tagName === "LI", ...extra }); };
+      const push = (el?: any, extra?: any) => { const text = (el.textContent || "").replace(/\s+/g, " ").trim(); const strong = [...el.querySelectorAll("strong,b")].reduce((a, s) => a + (s.textContent || "").length, 0); lines.push({ text, bold: text.length > 0 && strong >= text.length * 0.7, size: /^H[1-3]$/.test(el.tagName) ? 1.4 : 1, heading: /^H[1-6]$/.test(el.tagName), bullet: el.tagName === "LI", ...extra }); };
       root.querySelectorAll("h1,h2,h3,h4,h5,h6,p,li,tr").forEach((el) => { if (el.tagName === "TR") { const cells = [...el.querySelectorAll("td,th")].map((c) => (c.textContent || "").replace(/\s+/g, " ").trim()).filter(Boolean); if (cells.length) lines.push({ text: cells.join(" | "), bold: false, size: 1, table: true }); return; } if (el.closest("tr")) return; push(el, {}); });
       // paragraphs inside list items are already covered by the LI itself
       const text = lines.map((l) => l.text).join("\n"); return { text, lines, layout, scanned: text.replace(/\s/g, "").length < 60 && layout.images > 0 };
@@ -59,15 +59,15 @@ export async function extractCV(file) {
 
 
 // ---- normalisation ----
-export const cvNormalize = (s) => String(s || "").normalize("NFKC").replace(/\r/g, "").replace(/[‏‎﻿­؜]/g, "").replace(/[‐-―−]/g, "–").replace(/[“”„]/g, '"').replace(/[‘’‚]/g, "'").replace(/\t/g, " ").replace(/[  ]+/g, " ").replace(/ﬁ/g, "fi").replace(/ﬂ/g, "fl");
+export const cvNormalize = (s?: any) => String(s || "").normalize("NFKC").replace(/\r/g, "").replace(/[‏‎﻿­؜]/g, "").replace(/[‐-―−]/g, "–").replace(/[“”„]/g, '"').replace(/[‘’‚]/g, "'").replace(/\t/g, " ").replace(/[  ]+/g, " ").replace(/ﬁ/g, "fi").replace(/ﬂ/g, "fl");
 
 export const CV_BULLET = /^\s*(?:[-–•*·▪●■◆►▸➢➤✓✔❖✦◦○]|[-]|o(?=\s)|\d{1,2}[.)]|[a-z][.)])\s+/i;
 
-export const matchNorm = (s) => searchNorm(s);
+export const matchNorm = (s?: any) => searchNorm(s);
 
-export const wordsOf = (s) => (s.match(/[ء-ي]+|[A-Za-z][A-Za-z'’-]*/g) || []);
+export const wordsOf = (s?: any) => (s.match(/[ء-ي]+|[A-Za-z][A-Za-z'’-]*/g) || []);
 
-export const sc = (n) => Math.max(0, Math.min(100, Math.round(n)));
+export const sc = (n?: any) => Math.max(0, Math.min(100, Math.round(n)));
 
 // ---- section lexicon: canonical ids with every heading form we have seen on Egyptian engineers' CVs (EN / AR / FR) ----
 export const CV_HEADS = {
@@ -90,7 +90,7 @@ export const CV_MILITARY_RE = /(military( status| service)?|exempt(ed)?|postpone
 
 // A line is a heading when it is short, has no sentence punctuation, and equals / starts with / fuzzily matches a lexicon entry.
 // Bold or larger lines (from the PDF/DOCX reader) and ALL-CAPS lines lower the bar; a line carrying a date range is never a heading.
-export function headingId(line, meta = {}) {
+export function headingId(line?: any, meta: any = {}) {
   const raw = line.replace(CV_BULLET, "").replace(/[:：\-–—|]+$/, "").replace(/^[\[\(]|[\]\)]$/g, "").trim(); if (!raw || raw.length > 48) return null;
   const n = matchNorm(raw.replace(/&/g, " and ").replace(/\//g, " ")); const words = n.split(" ").filter(Boolean); if (!words.length || words.length > 6) return null;
   if (/[.،؛;!?]/.test(raw) || /\d{4}/.test(raw) && !/^(education|التعليم)/i.test(raw)) return null; if (/\d{3,}|@|www\./.test(raw)) return null;
@@ -121,7 +121,7 @@ export const CV_RANGE_RE = new RegExp(`(${DATE_TOKEN})\\s*(?:[-–—~]+|to|إل
 export const CV_YEAR_RE = /(?:19|20)\d{2}/g;
  export const CV_RANGE_TEST = new RegExp(CV_RANGE_RE.source, "i");
 
-export function parseDateToken(s) {
+export function parseDateToken(s?: any) {
   const t = String(s || "").trim().replace(/[.,]+$/, ""); if (!t) return null; if (CV_PRESENT.test(t)) return { present: true };
   const nowY = new Date().getFullYear(); const lower = t.toLowerCase(); let m;
   if ((m = new RegExp(`^(${MONTH_RE})\\.?,?\\s*((?:19|20)\\d{2})$`, "i").exec(lower))) return { y: +m[2], m: CV_MONTHS[m[1].replace(/\.$/, "")] || 1 };
@@ -131,18 +131,18 @@ export function parseDateToken(s) {
   return null;
 }
 
-export const monthsBetween = (a, b) => { const now = new Date(); const ey = b.present ? now.getFullYear() : b.y, em = b.present ? now.getMonth() + 1 : b.m; return Math.max(1, (ey - a.y) * 12 + (em - a.m)); };
+export const monthsBetween = (a?: any, b?: any) => { const now = new Date(); const ey = b.present ? now.getFullYear() : b.y, em = b.present ? now.getMonth() + 1 : b.m; return Math.max(1, (ey - a.y) * 12 + (em - a.m)); };
 
-export function parseRange(str) {
+export function parseRange(str?: any) {
   CV_RANGE_RE.lastIndex = 0; const m = CV_RANGE_RE.exec(String(str || "")); if (!m) return null; const a = parseDateToken(m[1]), b = parseDateToken(m[2]); if (!a || !b || a.present) return null;
-  const start = { y: a.y, m: a.m }; const end = b.present ? { present: true } : { y: b.y, m: b.m }; if (!b.present && (b.y < a.y || (b.y === a.y && b.m < a.m))) return null;
+  const start: any = { y: a.y, m: a.m }; const end = b.present ? { present: true } : { y: b.y, m: b.m }; if (!b.present && (b.y < a.y || (b.y === a.y && b.m < a.m))) return null;
   return { start, end, present: !!b.present, months: monthsBetween(start, end), text: m[0], index: m.index };
 }
 
-export const fmtYM = (d) => d.present ? "حتى الآن" : (d.yearOnly || !d.m ? String(d.y) : `${String(d.m).padStart(2, "0")}/${d.y}`);
+export const fmtYM = (d?: any) => d.present ? "حتى الآن" : (d.yearOnly || !d.m ? String(d.y) : `${String(d.m).padStart(2, "0")}/${d.y}`);
 
 // ---- dictionaries: tools, codes & standards, certifications, phrases, verbs ----
-export const defTool = (name, re, cat, discs) => ({ name, re: new RegExp("(?<![A-Za-z0-9\\u0621-\\u064A])(?:" + re + ")(?![A-Za-z0-9\\u0621-\\u064A])", "i"), cat, discs });
+export const defTool = (name?: any, re?: any, cat?: any, discs?: any) => ({ name, re: new RegExp("(?<![A-Za-z0-9\\u0621-\\u064A])(?:" + re + ")(?![A-Za-z0-9\\u0621-\\u064A])", "i"), cat, discs });
 
 export const CV_TOOLS = [
   defTool("AutoCAD", "auto\\s?cad|اوتوكاد|أوتوكاد", "cad", ["civil", "architecture", "mechanical", "electrical", "survey"]), defTool("Revit", "revit(?!\\s*mep)|ريفيت", "bim", ["civil", "architecture"]), defTool("Revit MEP", "revit\\s*mep", "bim", ["mechanical", "electrical"]), defTool("Revit Structure", "revit\\s*structure", "bim", ["civil"]), defTool("Navisworks", "navis\\s?works?", "bim", ["civil", "architecture", "mechanical", "electrical"]), defTool("BIM 360 / ACC", "bim\\s?360|autodesk construction cloud|\\bacc\\b", "bim", ["civil", "architecture", "mechanical", "electrical"]), defTool("Dynamo", "dynamo", "bim", ["civil", "architecture", "mechanical", "electrical"]), defTool("Tekla", "tekla( structures)?", "bim", ["civil"]), defTool("ArchiCAD", "archi\\s?cad", "bim", ["architecture"]), defTool("Civil 3D", "civil\\s?3d", "cad", ["civil", "survey"]), defTool("Bluebeam", "bluebeam", "office", ["civil", "architecture", "mechanical", "electrical"]),
@@ -158,7 +158,7 @@ export const CV_TOOLS = [
 
 export const CV_CODES = [["ACI", /\bACI(?:\s?\d{3})?\b/i], ["ECP (الكود المصري)", /\b(ECP|ECCS)\s?\d{3}\b|الكود المصري|الكود المصرى|egyptian code/i], ["Eurocode", /euro\s?codes?|\bEN\s?199\d\b/i], ["ASCE 7", /\bASCE(?:\s?7)?\b/i], ["AISC", /\bAISC\b/i], ["BS 8110", /\bBS\s?8110\b/i], ["BS 5950", /\bBS\s?5950\b/i], ["AASHTO", /aashto/i], ["ASHRAE", /ashrae/i], ["SMACNA", /smacna/i], ["NFPA", /\bNFPA(?:\s?\d{1,3})?\b/i], ["NEC (NFPA 70)", /\bNEC\b|nfpa\s?70\b/i], ["IEC", /\bIEC(?:\s?\d{4,5})?\b/i], ["IEEE", /\bIEEE\b/i], ["BS 7671", /\bBS\s?7671\b/i], ["ASME", /\bASME\b/i], ["API", /\bAPI\s?\d{3}\b/i], ["AWS D1.1", /\bAWS\s?D1\.1\b/i], ["ISO 9001", /iso\s?9001/i], ["ISO 14001", /iso\s?14001/i], ["ISO 45001 / OHSAS", /iso\s?45001|ohsas/i], ["ISO 19650", /iso\s?19650/i], ["FIDIC", /fidic/i], ["LEED", /\bLEED\b/i], ["EDGE", /\bEDGE\b(?! computing)/], ["IBC", /\bIBC\b/], ["UPC / IPC", /\bUPC\b|\bIPC\b/], ["CIBSE", /cibse/i], ["IES", /\bIESNA?\b/], ["الكود المصري للحريق", /الكود المصري (لأسس|لاسس)? ?(الحماية|حماية) من الحريق|egyptian fire code/i], ["SBC (Saudi)", /\bSBC\s?\d{3}\b/i], ["ISO 9001 Lead Auditor", /lead auditor/i]];
 
-export const CV_CERT_LIST = [["PMP", /\bPMP\b/], ["CAPM", /\bCAPM\b/], ["PMI-SP", /\bPMI-?SP\b/], ["PMI-RMP", /\bPMI-?RMP\b/], ["PSP (AACE)", /\bPSP\b|aace/i], ["CCP", /\bCCP\b/], ["LEED AP / GA", /leed (ap|green associate|ga)\b/i], ["NEBOSH IGC", /nebosh/i], ["OSHA", /\bosha\b/i], ["IOSH", /\biosh\b/i], ["Six Sigma", /six sigma|\bsigma (green|black) belt/i], ["Autodesk Certified", /autodesk certified|revit certified|autocad certified/i], ["Primavera certified", /primavera (p6 )?(professional|certified)|oracle primavera/i], ["ETAP certified", /etap certified/i], ["CSWA / CSWP", /\bcsw[ap]\b/i], ["FIDIC training", /fidic (course|training|certified)/i], ["First Aid", /first aid/i], ["Fire Safety", /fire (safety|fighting) (course|training|certificate)/i], ["BIM certificate", /bim (course|diploma|certificate|specialist|manager certificate)/i], ["Structural design diploma", /structural (design )?diploma|دبلومة (تصميم|إنشائي)/i], ["MEP diploma", /mep (design )?diploma|دبلومة (mep|ميكانيكا|كهرباء)/i], ["Chartered / PE", /\bCEng\b|chartered engineer|\bPE\b license|professional engineer license|\bMICE\b|\bMIStructE\b/], ["Cisco / IT", /\bCCNA\b|\bCCNP\b|aws certified|azure certified/i], ["IELTS / TOEFL", /ielts|toefl/i], ["Syndicate membership", /(نقابة المهندسين|عضو نقابة|engineers syndicate|syndicate member|membership: engineers)/i], ["Business / MBA", /\bMBA\b|mini mba/i], ["Value engineering (CVS/AVS)", /value engineering|\bCVS\b|\bAVS\b/i]];
+export const CV_CERT_LIST: any = [["PMP", /\bPMP\b/], ["CAPM", /\bCAPM\b/], ["PMI-SP", /\bPMI-?SP\b/], ["PMI-RMP", /\bPMI-?RMP\b/], ["PSP (AACE)", /\bPSP\b|aace/i], ["CCP", /\bCCP\b/], ["LEED AP / GA", /leed (ap|green associate|ga)\b/i], ["NEBOSH IGC", /nebosh/i], ["OSHA", /\bosha\b/i], ["IOSH", /\biosh\b/i], ["Six Sigma", /six sigma|\bsigma (green|black) belt/i], ["Autodesk Certified", /autodesk certified|revit certified|autocad certified/i], ["Primavera certified", /primavera (p6 )?(professional|certified)|oracle primavera/i], ["ETAP certified", /etap certified/i], ["CSWA / CSWP", /\bcsw[ap]\b/i], ["FIDIC training", /fidic (course|training|certified)/i], ["First Aid", /first aid/i], ["Fire Safety", /fire (safety|fighting) (course|training|certificate)/i], ["BIM certificate", /bim (course|diploma|certificate|specialist|manager certificate)/i], ["Structural design diploma", /structural (design )?diploma|دبلومة (تصميم|إنشائي)/i], ["MEP diploma", /mep (design )?diploma|دبلومة (mep|ميكانيكا|كهرباء)/i], ["Chartered / PE", /\bCEng\b|chartered engineer|\bPE\b license|professional engineer license|\bMICE\b|\bMIStructE\b/], ["Cisco / IT", /\bCCNA\b|\bCCNP\b|aws certified|azure certified/i], ["IELTS / TOEFL", /ielts|toefl/i], ["Syndicate membership", /(نقابة المهندسين|عضو نقابة|engineers syndicate|syndicate member|membership: engineers)/i], ["Business / MBA", /\bMBA\b|mini mba/i], ["Value engineering (CVS/AVS)", /value engineering|\bCVS\b|\bAVS\b/i]];
 
 export const CV_PHRASES = [["shop drawings", /shop drawings?|لوحات تنفيذية|رسومات تنفيذية/i], ["as-built drawings", /as-?built|لوحات كما نفذ|كما هو منفذ/i], ["quantity take-off / BOQ", /quantity take-?offs?|\bQTO\b|\bBOQs?\b|bill of quantities|حصر( الكميات)?|جداول الكميات/i], ["interim payments (مستخلصات)", /interim payments?|payment certificates?|مستخلصات?/i], ["method statements", /method statements?|بيان الطريقة|أسلوب التنفيذ/i], ["RFIs / submittals", /\bRFIs?\b|submittals?|material approvals?|اعتماد المواد/i], ["tendering / cost estimation", /tender(ing)?|cost estimat(e|ion)|pricing|عطاء|مناقصة|تسعير|تقدير التكلفة/i], ["value engineering", /value engineering|هندسة القيمة/i], ["clash detection", /clash detection|clash|تعارضات/i], ["4D / 5D BIM", /\b[45]D\b/], ["cost control / EVM", /cost control|earned value|\bEVM\b|\bS-?curve\b|cash ?flow|مراقبة التكاليف|التدفق النقدي/i], ["baseline / look-ahead schedules", /baseline|look-?ahead|recovery schedule|الجدول الزمني|جدول زمني/i], ["site supervision", /site supervision|supervis(ed|ion) of (site|works)|الإشراف على التنفيذ|إشراف موقع/i], ["QA/QC / ITP / NCR", /\bQA\/?QC\b|\bITPs?\b|\bNCRs?\b|inspection (test|and test) plans?|ضبط الجودة|الجودة/i], ["HSE / risk assessment", /\bHSE\b|risk assessments?|toolbox talks?|السلامة والصحة المهنية/i], ["testing & commissioning", /testing (and|&) commissioning|\bT&C\b|commissioning|التشغيل والاختبار|تشغيل ابتدائي/i], ["load calculations", /load calculations?|cooling load|heating load|أحمال/i], ["single line diagrams (SLD)", /single line diagrams?|\bSLDs?\b/i], ["cable sizing / voltage drop", /cable sizing|voltage drop|short circuit/i], ["lighting design", /lighting design|lux calculation|إضاءة/i], ["duct / pipe sizing", /duct sizing|pipe sizing|hydraulic calculation/i], ["chilled water / VRF", /chilled water|\bVRF\b|\bVRV\b|\bFCU\b|\bAHU\b|تكييف مركزي/i], ["fire fighting / sprinklers", /fire ?fighting|sprinklers?|fire alarm|\bFM-?200\b|مكافحة الحريق|إنذار حريق/i], ["plumbing / drainage", /plumbing|drainage|sanitary|صحي|صرف صحي|تغذية بالمياه/i], ["generators / transformers / MV-LV", /generators?|transformers?|\bMV\b|\bLV\b|switchgear|محولات|مولدات|جهد متوسط/i], ["BMS / ELV / CCTV", /\bBMS\b|\bELV\b|\bCCTV\b|access control|structured cabling|تيار خفيف/i], ["structural analysis & design", /structural (analysis|design)|تحليل إنشائي|تصميم إنشائي|حسابات إنشائية/i], ["reinforcement detailing", /reinforcement detailing|rebar|bar bending schedules?|\bBBS\b|تفريد حديد/i], ["foundation design / soil reports", /foundation design|piles?|pile caps?|soil reports?|geotechnical|أساسات|خوازيق|تقرير التربة/i], ["retaining walls / shoring", /retaining walls?|shoring|sheet piles?|حوائط ساندة/i], ["precast / post-tension", /pre-?cast|post-?tension(ed|ing)?|\bPT\b slabs?|سابق الصب|سابق الإجهاد/i], ["steel structures", /steel structures?|steel connections?|منشآت معدنية|منشآت فولاذية/i], ["bridges / highways / pavement", /bridges?|highways?|pavement|roads? design|كباري|طرق سريعة|رصف/i], ["water / wastewater networks", /water networks?|sewer|wastewater|treatment plants?|شبكات مياه|محطات معالجة/i], ["topographic survey / setting out", /topographic|setting[- ]out|levell?ing|stake-?out|رفع مساحي|توقيع|ميزانية/i], ["GIS mapping", /gis mapping|geodatabase|spatial analysis/i], ["concrete works", /concrete works?|casting|pour(ing)?|صب|أعمال الخرسانة|خرسانة/i], ["finishing works", /finishing works?|fit-?out|تشطيبات/i], ["infrastructure", /infrastructure|بنية تحتية/i], ["contract administration / claims", /contract administration|claims?|variation orders?|\bVOs?\b|مطالبات|أوامر تغيير/i], ["stakeholder coordination", /coordinat(ed|ion) with (the )?(consultant|client|subcontractors?)|التنسيق مع (الاستشاري|المالك|المقاول)/i], ["daily / progress reports", /daily reports?|progress reports?|تقارير (يومية|الإنجاز)/i]];
 
@@ -192,12 +192,12 @@ export const CV_FIELD_RE = /(civil|structural|architectur\w*|mechanical( power| 
 
 export const CV_GRADE_RE = /(gpa\s*[:=]?\s*\d(?:[.,]\d{1,2})?(?:\s*\/\s*4(?:\.0)?)?|\d(?:[.,]\d{1,2})\s*\/\s*4(?:\.0)?|grade\s*[:=]?\s*[a-z][a-z ]*|cumulative[a-z ]*|with honou?rs?|honou?rs?|distinction|excellent|very good|\bgood\b|\bpass\b|\d{2}(?:[.,]\d+)?\s*%|بتقدير\s*[ء-ْ ]+|تقدير\s*[ء-ْ ]+|امتياز|جيد جدًا|جيد جدا|جيد جداً|جيد|مقبول|مرتبة الشرف)/i;
 
-export const CV_LANG_NAMES = [["العربية", /arabic|العربية|العربيه|عربي/i], ["الإنجليزية", /english|الإنجليزية|الانجليزية|الإنجليزيه|الانجليزيه|انجليزي|إنجليزي/i], ["الفرنسية", /french|français|الفرنسية|الفرنسيه|فرنسي/i], ["الألمانية", /german|deutsch|الألمانية|الالمانية|ألماني|الماني/i], ["الإيطالية", /italian|الإيطالية|الايطالية/i], ["الإسبانية", /spanish|الإسبانية|الاسبانية/i], ["التركية", /turkish|التركية/i], ["الصينية", /chinese|mandarin|الصينية/i], ["الروسية", /russian|الروسية/i]];
+export const CV_LANG_NAMES: any = [["العربية", /arabic|العربية|العربيه|عربي/i], ["الإنجليزية", /english|الإنجليزية|الانجليزية|الإنجليزيه|الانجليزيه|انجليزي|إنجليزي/i], ["الفرنسية", /french|français|الفرنسية|الفرنسيه|فرنسي/i], ["الألمانية", /german|deutsch|الألمانية|الالمانية|ألماني|الماني/i], ["الإيطالية", /italian|الإيطالية|الايطالية/i], ["الإسبانية", /spanish|الإسبانية|الاسبانية/i], ["التركية", /turkish|التركية/i], ["الصينية", /chinese|mandarin|الصينية/i], ["الروسية", /russian|الروسية/i]];
 
 export const CV_LANG_LEVEL = /(native|mother tongue|bilingual|fluent|proficient|very good|excellent|good|working knowledge|advanced|upper[- ]intermediate|intermediate|pre-intermediate|elementary|basic|beginner|conversational|professional working|full professional|limited working|\b[abc][12]\b|ielts\s*\d(?:\.\d)?|toefl\s*\d+|اللغة الأم|لغة أم|طلاقة|بطلاقة|ممتاز|جيد جدًا|جيد جدا|جيد جداً|جيد|متوسط|مبتدئ|ضعيف|محادثة)/i;
 
 // ---- discipline detection (extended list → app discipline for market/track logic) ----
-export const CV_DISCS = [
+export const CV_DISCS: any = [
   ["civil", "مهندس مدني", "civil", /civil|structural|إنشائ|مدني|خرسان|concrete|geotechnical|جيوتقن|highway|roads?|طرق|كبار|bridges?|infrastructure|قوى مائية|water resources|إنشاءات|تشييد|construction/i],
   ["architecture", "مهندس معماري", "architecture", /architect|معمار|عمارة|interior design|تصميم داخلي|landscape|urban design|تخطيط عمراني/i],
   ["mechanical", "مهندس ميكانيكا", "mechanical", /mechanical|ميكانيك|hvac|تكييف|plumbing|fire ?fighting|حريق|piping|\bmep\b|power mechanical|قوى ميكانيكية|production engineering|إنتاج|maintenance engineer|مهندس صيانة|automotive|سيارات/i],
@@ -225,11 +225,11 @@ export const CV_EXPECT = {
   survey: { site: { must: ["Total Station", "GNSS / GPS", "AutoCAD", "topographic survey / setting out"], nice: ["Civil 3D", "Leica / Trimble", "Drone / Photogrammetry"] }, gis: { must: ["ArcGIS", "GIS mapping", "GNSS / GPS"], nice: ["QGIS", "Global Mapper", "Python"] }, tech: { must: ["Civil 3D", "AutoCAD", "Excel"], nice: ["Total Station", "topographic survey / setting out"] }, qa: { must: ["Total Station", "Excel", "QA/QC / ITP / NCR"], nice: ["GNSS / GPS"] } },
 };
 
-export const expectedFor = (disc, track) => { const d = CV_EXPECT[disc] || CV_EXPECT.civil; return d[track] || d.site || Object.values(d)[0]; };
+export const expectedFor = (disc?: any, track?: any) => { const d = CV_EXPECT[disc] || CV_EXPECT.civil; return d[track] || d.site || Object.values(d)[0]; };
 
-export const keywordRe = (k) => { const tool = CV_TOOLS.find((x) => x.name === k); if (tool) return tool.re; const code = CV_CODES.find((x) => x[0] === k); if (code) return code[1]; const cert = CV_CERT_LIST.find((x) => x[0] === k); if (cert) return cert[1]; const ph = CV_PHRASES.find((x) => x[0] === k); if (ph) return ph[1]; return new RegExp("(?<![A-Za-z0-9])" + k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s*") + "(?![A-Za-z0-9])", "i"); };
+export const keywordRe: any = (k?: any) => { const tool = CV_TOOLS.find((x) => x.name === k); if (tool) return tool.re; const code = CV_CODES.find((x) => x[0] === k); if (code) return code[1]; const cert = CV_CERT_LIST.find((x) => x[0] === k); if (cert) return cert[1]; const ph = CV_PHRASES.find((x) => x[0] === k); if (ph) return ph[1]; return new RegExp("(?<![A-Za-z0-9])" + k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s*") + "(?![A-Za-z0-9])", "i"); };
 
-export const hasKeyword = (text, k) => keywordRe(k).test(text);
+export const hasKeyword = (text?: any, k?: any) => keywordRe(k).test(text);
 
 export const CV_ROLE_RE = /(engineer|engineering|architect|manager|director|head|chief|lead|leader|supervisor|superintendent|coordinator|planner|scheduler|estimator|surveyor|draftsman|draughtsman|designer|inspector|consultant|specialist|technician|foreman|controller|officer|analyst|intern|trainee|apprentice|assistant|senior|junior|principal|associate|مهندس|مهندسة|مدير|مديرة|رئيس|قائد|مشرف|مشرفة|منسق|مخطط|مقدر|مساح|رسام|مصمم|مفتش|استشاري|أخصائي|فني|مراقب|محلل|متدرب|متدربة|مساعد|أول|مبتدئ)/i;
 
@@ -241,19 +241,19 @@ export const CV_LOC_RE = /(cairo|giza|alexandria|new cairo|6th of october|octobe
 
 export const SEP_RE = /\s*(?:\||—|–|·|•|,|،|\sat\s|\s@\s|\sفي\s|\sبشركة\s|\slدى\s|\slلدى\s|\s-\s)\s*/;
 
-export const cleanPart = (s) => s.replace(/^[\s\-–—|,،·•]+|[\s\-–—|,،·•]+$/g, "").replace(/\(\s*\)/g, "").trim();
+export const cleanPart = (s?: any) => s.replace(/^[\s\-–—|,،·•]+|[\s\-–—|,،·•]+$/g, "").replace(/\(\s*\)/g, "").trim();
 
 // ---- the parser ----
-export function parseCV(rawText, meta = {}) {
+export function parseCV(rawText?: any, meta: any = {}) {
   const text = cvNormalize(rawText); const srcLines = meta.lines && meta.lines.length ? meta.lines.map((l) => ({ ...l, text: cvNormalize(l.text) })) : text.split("\n").map((t2) => ({ text: t2 }));
   const rawLines = srcLines.map((l, i) => { const t2 = l.text.replace(/\s+/g, " ").trim(); const bullet = !!(l.bullet || CV_BULLET.test(t2)); const body = bullet ? t2.replace(CV_BULLET, "").trim() : t2; return { i, t: t2, body, bullet, blank: !t2, bold: !!l.bold, size: l.size || 1, heading: !!l.heading, table: !!l.table, x: l.x, n: matchNorm(body) }; });
-  const lines = []; rawLines.forEach((l) => { const p = lines[lines.length - 1]; const cont = p && !p.blank && !l.blank && !l.bullet && !l.table && !l.heading && !(l.bold && l.size >= 1.15) && !CV_RANGE_TEST.test(l.body) && !headingId(l.t, l) && !/[.!?؟:;]$/.test(p.body) && (p.bullet || p.cont || wordsOf(p.body).length >= 9) && (/^[a-z]/.test(l.body) || (l.x != null && p.x != null && l.x > p.x + 4 && p.bullet) || (p.bullet && wordsOf(l.body).length <= 5 && !CV_ROLE_RE.test(l.body) && !CV_DEGREE_RE.test(l.body) && !/^[A-Z][A-Z\s]{3,}$/.test(l.body)) || (/^[\u0621-\u064A]/.test(l.body) && p.bullet && !CV_ROLE_RE.test(l.body) && wordsOf(l.body).length <= 12)); if (cont) { p.body += " " + l.body; p.t += " " + l.t; p.n = matchNorm(p.body); p.cont = true; } else lines.push(l); });
+  const lines: any = []; rawLines.forEach((l) => { const p = lines[lines.length - 1]; const cont = p && !p.blank && !l.blank && !l.bullet && !l.table && !l.heading && !(l.bold && l.size >= 1.15) && !CV_RANGE_TEST.test(l.body) && !headingId(l.t, l) && !/[.!?؟:;]$/.test(p.body) && (p.bullet || p.cont || wordsOf(p.body).length >= 9) && (/^[a-z]/.test(l.body) || (l.x != null && p.x != null && l.x > p.x + 4 && p.bullet) || (p.bullet && wordsOf(l.body).length <= 5 && !CV_ROLE_RE.test(l.body) && !CV_DEGREE_RE.test(l.body) && !/^[A-Z][A-Z\s]{3,}$/.test(l.body)) || (/^[\u0621-\u064A]/.test(l.body) && p.bullet && !CV_ROLE_RE.test(l.body) && wordsOf(l.body).length <= 12)); if (cont) { p.body += " " + l.body; p.t += " " + l.t; p.n = matchNorm(p.body); p.cont = true; } else lines.push(l); });
   const nonblank = lines.filter((l) => !l.blank); const words = wordsOf(text); const ar = words.filter((w) => /[ء-ي]/.test(w)).length; const lang = words.length ? (ar / words.length > 0.5 ? "ar" : "en") : "en";
   // -- segmentation: headings first --
-  const sections = {}; const order = []; let cur = "header"; sections.header = [];
+  const sections: any = {}; const order: any = []; let cur = "header"; sections.header = [];
   lines.forEach((l) => { if (l.blank) { (sections[cur] = sections[cur] || []).push(l); return; } const h = headingId(l.t, l); if (h) { cur = h; if (!sections[cur]) { sections[cur] = []; order.push(cur); } l.isHeading = true; l.headingId = h; return; } (sections[cur] = sections[cur] || []).push(l); });
   // -- no (or too few) headings: classify line by line from content signals, later lines inheriting the label of the line above --
-  const lineSignal = (l, prev) => { const b = l.body; if (l.bullet) return prev && prev !== "header" ? prev : null;
+  const lineSignal = (l?: any, prev?: any) => { const b = l.body; if (l.bullet) return prev && prev !== "header" ? prev : null;
     if (CV_RANGE_TEST.test(b) && !CV_DEGREE_RE.test(b)) return "experience"; if (CV_DEGREE_RE.test(b) || (/(university|faculty|college|institute|جامعة|كلية|معهد)/i.test(b) && /(19|20)\d{2}/.test(b))) return "education";
     if (/(graduation project|senior project|capstone|مشروع التخرج)/i.test(b)) return "education"; if (/@|linkedin\.com|\b0?1[0125]\d{8}\b|\+20/.test(b.replace(/[\s\-]/g, "")) && wordsOf(b).length <= 12) return "header";
     const langs = CV_LANG_NAMES.filter((ln) => ln[1].test(b)).length; if (langs >= 1 && CV_LANG_LEVEL.test(b) && wordsOf(b).length <= 16) return "languages";
@@ -263,21 +263,21 @@ export function parseCV(rawText, meta = {}) {
     if (/^(project|مشروع)/i.test(b) && wordsOf(b).length <= 20) return "projects"; if (wordsOf(b).length >= 25 && !/@/.test(b) && (!prev || prev === "header")) return "summary";
     if (wordsOf(b).length >= 7 && prev && prev !== "header") return prev; return null; };
   const headerNonRaw = sections.header.filter((l) => !l.blank); const weakSeg = order.filter((o) => o !== "other").length < 2 || headerNonRaw.length > 14;
-  if (weakSeg) { const keep = []; let prev = "header"; sections.header.forEach((l) => { if (l.blank) { keep.push(l); return; } const id = lineSignal(l, prev) || (prev !== "header" && wordsOf(l.body).length <= 12 ? prev : null); if (id && id !== "header") { if (!sections[id]) { sections[id] = []; order.push(id); } sections[id].push(l); l.inferred = id; prev = id; } else { keep.push(l); prev = id === "header" ? "header" : prev; } }); sections.header = keep; }
+  if (weakSeg) { const keep: any = []; let prev = "header"; sections.header.forEach((l) => { if (l.blank) { keep.push(l); return; } const id = lineSignal(l, prev) || (prev !== "header" && wordsOf(l.body).length <= 12 ? prev : null); if (id && id !== "header") { if (!sections[id]) { sections[id] = []; order.push(id); } sections[id].push(l); l.inferred = id; prev = id; } else { keep.push(l); prev = id === "header" ? "header" : prev; } }); sections.header = keep; }
   // inline labelled lines anywhere ("LANGUAGES: Arabic (native)…", "Skills: AutoCAD, …") are lifted into their section
-  nonblank.forEach((l) => { const m = /^([A-Za-zء-ي ]{3,30}):\s*(.{6,})$/.exec(l.body); if (!m) return; const lab = matchNorm(m[1]); const id = (CV_HEAD_NORM.find(([, forms]) => forms.includes(lab)) || [])[0]; /* exact lexicon forms only: «العربية: …» must not read as «الخبرة» */ if (!id || id === "contact" || l.isHeading) return; if (!sections[id]) { sections[id] = []; order.push(id); } if (!sections[id].some((x) => x.i === l.i)) sections[id].push({ ...l, body: m[2], t: m[2], n: matchNorm(m[2]), lifted: true }); });
-  const secLines = (id) => (sections[id] || []).filter((l) => !l.blank); const secText = (id) => secLines(id).map((l) => l.body).join("\n"); const has = (id) => secLines(id).length > 0;
+  nonblank.forEach((l) => { const m = /^([A-Za-zء-ي ]{3,30}):\s*(.{6,})$/.exec(l.body); if (!m) return; const lab = matchNorm(m[1]); const id = (CV_HEAD_NORM.find(([, forms]: any) => forms.includes(lab)) || [])[0]; /* exact lexicon forms only: «العربية: …» must not read as «الخبرة» */ if (!id || id === "contact" || l.isHeading) return; if (!sections[id]) { sections[id] = []; order.push(id); } if (!sections[id].some((x) => x.i === l.i)) sections[id].push({ ...l, body: m[2], t: m[2], n: matchNorm(m[2]), lifted: true }); });
+  const secLines = (id?: any) => (sections[id] || []).filter((l) => !l.blank); const secText = (id?: any) => secLines(id).map((l) => l.body).join("\n"); const has = (id?: any) => secLines(id).length > 0;
   const headerNon = secLines("header"); const headerText = headerNon.map((l) => l.body).join("\n"); const fullText = text;
   // -- contact & identity --
-  const c = detectContact(fullText); const contact = { email: c.email || "", phone: c.phone || "", linkedin: (fullText.match(/linkedin\.com\/in\/[A-Za-z0-9\-_%]+/i) || [""])[0], github: (fullText.match(/github\.com\/[A-Za-z0-9\-_]+/i) || [""])[0], website: (fullText.match(/\b(?:https?:\/\/)?(?:www\.)?[a-z0-9\-]+\.(?:com|net|org|me|io|dev)\/?\S*/i) || []).find((u) => !/linkedin|github|gmail|yahoo|hotmail|outlook|@/.test(u)) || "", location: (fullText.match(CV_LOC_RE) || [""])[0] };
+  const c = detectContact(fullText); const contact: any = { email: c.email || "", phone: c.phone || "", linkedin: (fullText.match(/linkedin\.com\/in\/[A-Za-z0-9\-_%]+/i) || [""])[0], github: (fullText.match(/github\.com\/[A-Za-z0-9\-_]+/i) || [""])[0], website: (fullText.match(/\b(?:https?:\/\/)?(?:www\.)?[a-z0-9\-]+\.(?:com|net|org|me|io|dev)\/?\S*/i) || []).find((u) => !/linkedin|github|gmail|yahoo|hotmail|outlook|@/.test(u)) || "", location: (fullText.match(CV_LOC_RE) || [""])[0] };
   const nameLine = headerNon.find((l) => !/[@\d]/.test(l.body) && wordsOf(l.body).length >= 2 && wordsOf(l.body).length <= 5 && !CV_ROLE_RE.test(l.body) && !CV_DEGREE_RE.test(l.body)); const name = nameLine ? nameLine.body : "";
   const headline = (headerNon.find((l) => l !== nameLine && CV_ROLE_RE.test(l.body) && wordsOf(l.body).length <= 8 && !/[@]/.test(l.body)) || {}).body || "";
-  const personal = Object.entries(CV_PERSONAL).filter(([, re]) => re.test(fullText)).map(([k]) => k); const milLine = nonblank.find((l) => CV_MILITARY_RE.test(l.body)); const milTxt = milLine ? milLine.body : ""; const military = !milLine ? null : /(exempt|معاف)/i.test(milTxt) ? "exempt" : /(postponed|مؤجل)/i.test(milTxt) ? "postponed" : /(completed|served|أدى|أدّى|اتم|أتم|تم تأدية|منتهي|مُنهى)/i.test(milTxt) ? "done" : "mentioned";
+  const personal = Object.entries(CV_PERSONAL).filter(([, re]: any) => re.test(fullText)).map(([k]: any) => k); const milLine = nonblank.find((l) => CV_MILITARY_RE.test(l.body)); const milTxt = milLine ? milLine.body : ""; const military = !milLine ? null : /(exempt|معاف)/i.test(milTxt) ? "exempt" : /(postponed|مؤجل)/i.test(milTxt) ? "postponed" : /(completed|served|أدى|أدّى|اتم|أتم|تم تأدية|منتهي|مُنهى)/i.test(milTxt) ? "done" : "mentioned";
   const references = /(references? (available )?(up)?on request|المراجع عند الطلب)/i.test(fullText); const photoHint = /(photo|صورة شخصية)/i.test(headerText);
   // -- experience entries --
-  const expLines = secLines("experience"); const experience = []; let entry = null;
+  const expLines = secLines("experience"); const experience: any = []; let entry = null;
   const flush = () => { if (entry) { experience.push(entry); entry = null; } };
-  const startEntry = (l, range) => { flush(); entry = { title: "", company: "", location: "", start: range ? range.start : null, end: range ? range.end : null, current: !!(range && range.present), months: range ? range.months : 0, headerLines: [l.body], bullets: [], intern: false, year: null, projectTypes: [] }; };
+  const startEntry = (l?: any, range?: any) => { flush(); entry = { title: "", company: "", location: "", start: range ? range.start : null, end: range ? range.end : null, current: !!(range && range.present), months: range ? range.months : 0, headerLines: [l.body], bullets: [], intern: false, year: null, projectTypes: [] }; };
   for (let k = 0; k < expLines.length; k++) { const l = expLines[k]; const range = l.bullet ? null : parseRange(l.body); const roleish = !l.bullet && CV_ROLE_RE.test(l.body) && !CV_DEGREE_RE.test(l.body) && wordsOf(l.body).length <= 14 && !/[.!؟]$/.test(l.body); const yearOnly = !l.bullet && !range && /\((?:19|20)\d{2}\)|\b(?:19|20)\d{2}\s*$/.test(l.body) && roleish;
     if (range && (!entry || entry.bullets.length || entry.start)) { // a dated line starts an entry; an undated role line just before it belongs to it
       const prev = entry && !entry.start && !entry.bullets.length ? entry : null; startEntry(l, range); if (prev) entry.headerLines.unshift(...prev.headerLines); continue; }
@@ -288,19 +288,19 @@ export function parseCV(rawText, meta = {}) {
     if (!l.bullet && !entry.bullets.length && entry.headerLines.length < 3 && wordsOf(l.body).length <= 12 && !/[.!؟]$/.test(l.body) && (CV_COMPANY_RE.test(l.body) || CV_LOC_RE.test(l.body) || CV_ROLE_RE.test(l.body))) { entry.headerLines.push(l.body); continue; }
     entry.bullets.push({ text: l.body, bullet: l.bullet }); }
   flush();
-  const isRole = (s) => CV_ROLE_RE.test(s) && wordsOf(s).length <= 10; const isCo = (s) => CV_COMPANY_RE.test(s);
+  const isRole = (s?: any) => CV_ROLE_RE.test(s) && wordsOf(s).length <= 10; const isCo = (s?: any) => CV_COMPANY_RE.test(s);
   experience.forEach((e) => { const parts = e.headerLines.flatMap((h) => h.replace(CV_RANGE_RE, " ").split(SEP_RE)).map(cleanPart).filter((p) => p && !/^\(?\s*(?:19|20)\d{2}\s*\)?$/.test(p) && !/^\(?(?:19|20)\d{2}\)$/.test(p));
     e.title = parts.find(isRole) || parts[0] || ""; e.company = parts.find((p) => p !== e.title && isCo(p)) || parts.find((p) => p !== e.title && !CV_LOC_RE.test(p) && wordsOf(p).length <= 6) || ""; e.location = (parts.map((p) => (p.match(CV_LOC_RE) || [])[0]).find(Boolean)) || (e.headerLines.join(" ").match(CV_LOC_RE) || [""])[0];
-    if (e.company === e.title) e.company = ""; e.intern = CV_INTERN_RE.test(e.title) || CV_INTERN_RE.test(e.headerLines.join(" ")); e.bullets = e.bullets.map((b) => analyseBullet(b.text, lang)); e.quantified = e.bullets.filter((b) => b.quantified).length; e.projectTypes = CV_PROJECT_TYPES.filter(([, re]) => re.test(e.headerLines.join(" ") + " " + e.bullets.map((b) => b.text).join(" "))).map(([k]) => k); });
+    if (e.company === e.title) e.company = ""; e.intern = CV_INTERN_RE.test(e.title) || CV_INTERN_RE.test(e.headerLines.join(" ")); e.bullets = e.bullets.map((b) => analyseBullet(b.text, lang)); e.quantified = e.bullets.filter((b) => b.quantified).length; e.projectTypes = CV_PROJECT_TYPES.filter(([, re]: any) => re.test(e.headerLines.join(" ") + " " + e.bullets.map((b) => b.text).join(" "))).map(([k]: any) => k); });
   // total experience (merged intervals, internships excluded), gaps, order
   const dated = experience.filter((e) => e.start && !e.intern).map((e) => ({ s: e.start.y * 12 + e.start.m, e: e.current ? new Date().getFullYear() * 12 + new Date().getMonth() + 1 : e.end.y * 12 + e.end.m, ref: e })).sort((a, b) => a.s - b.s);
-  let totalMonths = 0; const gaps = []; let curS = null, curE = null; dated.forEach((d) => { if (curE === null) { curS = d.s; curE = d.e; return; } if (d.s <= curE) { curE = Math.max(curE, d.e); } else { totalMonths += curE - curS; if (d.s - curE >= 6) gaps.push({ months: d.s - curE, after: dated.find((x) => x.e === curE).ref.title, before: d.ref.title }); curS = d.s; curE = d.e; } }); if (curE !== null) totalMonths += curE - curS;
+  let totalMonths = 0; const gaps: any = []; let curS = null, curE = null; dated.forEach((d) => { if (curE === null) { curS = d.s; curE = d.e; return; } if (d.s <= curE) { curE = Math.max(curE, d.e); } else { totalMonths += curE - curS; if (d.s - curE >= 6) gaps.push({ months: d.s - curE, after: dated.find((x) => x.e === curE).ref.title, before: d.ref.title }); curS = d.s; curE = d.e; } }); if (curE !== null) totalMonths += curE - curS;
   const expWords = /(\d{1,2})\s*\+?\s*(?:years?|yrs?|سنوات|سنة|سنين|عام|أعوام)\s*(?:of\s+)?(?:experience|خبرة|expertise)?/i.exec(headerText + "\n" + secText("summary")); const claimedYears = expWords ? +expWords[1] : null;
   const years = totalMonths ? Math.round((totalMonths / 12) * 10) / 10 : (claimedYears || 0);
   const chronological = dated.length < 2 || experience.filter((e) => e.start && !e.intern).every((e, i, arr) => i === 0 || (e.start.y * 12 + e.start.m) <= (arr[i - 1].start.y * 12 + arr[i - 1].start.m));
   // -- education --
   const eduLines = secLines("education").length ? secLines("education") : nonblank.filter((l) => CV_DEGREE_RE.test(l.body) || (/(university|faculty|جامعة|كلية)/i.test(l.body) && /(19|20)\d{2}/.test(l.body)) || /(graduation project|مشروع التخرج|senior project|capstone)/i.test(l.body));
-  const education = []; let edu = null; const eduFlush = () => { if (edu) { education.push(edu); edu = null; } };
+  const education: any = []; let edu = null; const eduFlush = () => { if (edu) { education.push(edu); edu = null; } };
   const UNI_RE = /((?:[A-Za-z][A-Za-z.&'-]*\s){0,4}(?:University|Institute|College|Academy)(?:\s(?:of|for)\s(?:[A-Za-z][A-Za-z.&'-]*\s?){1,4})?|(?:جامعة|جامعه|معهد|أكاديمية|اكاديمية)\s+[ء-ْ ]{2,30}?(?=[·،,\-–—|(]|$| \d))/i;
   eduLines.forEach((l) => { const b = l.body; const deg = CV_DEGREE_RE.test(b); const uni = /(university|faculty|institute|college|academy|school of|جامعة|جامعه|كلية|كليه|معهد|أكاديمية|اكاديمية)/i.test(b) || CV_UNIS.test(b); const gp = /(graduation project|مشروع التخرج|senior project|capstone)/i.test(b);
     const startsNew = !edu || (deg && (edu.degree || edu.lines.length >= 3)) || (uni && !deg && edu.university && !gp);
@@ -313,21 +313,21 @@ export function parseCV(rawText, meta = {}) {
   eduFlush();
   // -- skills, codes, certs, languages, phrases --
   const tools = CV_TOOLS.filter((tl) => tl.re.test(fullText)).map((tl) => ({ name: tl.name, cat: tl.cat, inSkills: has("skills") && tl.re.test(secText("skills")), inExperience: has("experience") && tl.re.test(secText("experience")) }));
-  const codes = CV_CODES.filter(([, re]) => re.test(fullText)).map(([n]) => n); const certs = CV_CERT_LIST.filter(([, re]) => re.test(fullText)).map(([n]) => n); const phrases = CV_PHRASES.filter(([, re]) => re.test(fullText)).map(([n]) => n);
+  const codes = CV_CODES.filter(([, re]: any) => re.test(fullText)).map(([n]: any) => n); const certs = CV_CERT_LIST.filter(([, re]: any) => re.test(fullText)).map(([n]: any) => n); const phrases = CV_PHRASES.filter(([, re]: any) => re.test(fullText)).map(([n]: any) => n);
   const syndicate = /(نقابة المهندسين|عضو نقابة|engineers syndicate|syndicate member|membership[^\n]{0,30}syndicate)/i.test(fullText);
   const langText = has("languages") ? secText("languages") : (fullText.match(/(?:languages?|اللغات|اللغة)\s*[:：]?\s*([^\n]{5,120})/i) || [])[1] || nonblank.filter((l) => CV_LANG_NAMES.filter((ln) => ln[1].test(l.body)).length >= 1 && CV_LANG_LEVEL.test(l.body) && wordsOf(l.body).length <= 14).map((l) => l.body).join("\n");
-  const languages = CV_LANG_NAMES.filter(([, re]) => re.test(langText)).map(([nm, re]) => { const i = langText.search(re); const after = langText.slice(i, i + 60); const lv = CV_LANG_LEVEL.exec(after); return { name: nm, level: lv ? lv[0] : "" }; });
+  const languages = CV_LANG_NAMES.filter(([, re]: any) => re.test(langText)).map(([nm, re]: any) => { const i = langText.search(re); const after = langText.slice(i, i + 60); const lv = CV_LANG_LEVEL.exec(after); return { name: nm, level: lv ? lv[0] : "" }; });
   const fluff = (fullText.match(CV_FLUFF) || []).map((s) => s.toLowerCase()); const ratingBars = /(★|☆|●●|○○|■■|▮|▯|\b\d{1,3}\s?%\s*(?:autocad|revit|excel|english)|\bexcel(?:lent)?\s*[:\-]\s*\d{1,3}\s?%)/i.test(secText("skills"));
   // -- projects --
-  const projLines = secLines("projects"); const projects = projLines.filter((l) => wordsOf(l.body).length >= 3).map((l) => ({ text: l.body, scale: CV_QUANT.test(l.body), role: /(role|as (a|an)|دوري|كمهندس|مهندس|engineer|مسؤول|responsible)/i.test(l.body), types: CV_PROJECT_TYPES.filter(([, re]) => re.test(l.body)).map(([k]) => k) }));
-  const projectTypes = [...new Set([...projects.flatMap((p) => p.types), ...experience.flatMap((e) => e.projectTypes)])];
+  const projLines = secLines("projects"); const projects = projLines.filter((l) => wordsOf(l.body).length >= 3).map((l) => ({ text: l.body, scale: CV_QUANT.test(l.body), role: /(role|as (a|an)|دوري|كمهندس|مهندس|engineer|مسؤول|responsible)/i.test(l.body), types: CV_PROJECT_TYPES.filter(([, re]: any) => re.test(l.body)).map(([k]: any) => k) }));
+  const projectTypes: any = [...new Set([...projects.flatMap((p) => p.types), ...experience.flatMap((e) => e.projectTypes)])];
   // -- summary --
   const summaryText = has("summary") ? secText("summary") : headerNon.filter((l) => wordsOf(l.body).length >= 25 && !/@/.test(l.body)).map((l) => l.body).join("\n"); const summaryWords = wordsOf(summaryText).length;
   // -- discipline / track / seniority --
-  const weigh = (s, w) => { CV_DISCS.forEach((d) => { d.score = (d.score || 0) + (String(s || "").match(d[3]) || []).length * w; }); };
+  const weigh = (s?: any, w?: any) => { CV_DISCS.forEach((d) => { d.score = (d.score || 0) + (String(s || "").match(d[3]) || []).length * w; }); };
   CV_DISCS.forEach((d) => { d.score = 0; }); weigh(headline, 6); weigh(education.map((e) => e.field + " " + e.degree).join(" "), 5); weigh(experience.map((e) => e.title).join(" "), 4); weigh(summaryText, 2); weigh(fullText, 0.5); tools.forEach((tl) => { const own = CV_TOOLS.find((x) => x.name === tl.name); own.discs.forEach((dd) => { const d = CV_DISCS.find((x) => x[2] === dd && x[0] === dd); if (d) d.score += 0.8; }); });
   const ranked = [...CV_DISCS].sort((a, b) => b.score - a.score); const discEntry = ranked[0].score > 0 ? ranked[0] : (CV_DISCS.find((d) => d[0] === ((meta.profile && meta.profile.disc) || "civil")) || CV_DISCS[0]); const discipline = discEntry[2]; const disciplineKey = discEntry[0]; const disciplineLabel = discEntry[1];
-  const subScore = Object.entries(KW.sub).map(([k, re]) => [k, (fullText.toLowerCase().match(re) || []).length + (CV_TRACK_TOOLS[k] ? CV_TRACK_TOOLS[k].filter((n) => tools.some((tl) => tl.name === n)).length * 1.5 : 0)]).sort((a, b) => b[1] - a[1]); const track = subScore[0][1] > 0 && tracksFor(discipline).some((t2) => t2[0] === subScore[0][0]) ? subScore[0][0] : (meta.profile && meta.profile.track) || "site";
+  const subScore = Object.entries(KW.sub).map(([k, re]: any) => [k, (fullText.toLowerCase().match(re) || []).length + (CV_TRACK_TOOLS[k] ? CV_TRACK_TOOLS[k].filter((n) => tools.some((tl) => tl.name === n)).length * 1.5 : 0)]).sort((a, b) => b[1] - a[1]); const track = subScore[0][1] > 0 && tracksFor(discipline).some((t2) => t2[0] === subScore[0][0]) ? subScore[0][0] : (meta.profile && meta.profile.track) || "site";
   const titleText = [headline, ...experience.filter((e) => !e.intern).map((e) => e.title)].join(" · "); let seniority = null; for (const [k, re] of Object.entries(KW.pos)) if (re.test(titleText)) { seniority = k; break; }
   if (!seniority) seniority = experience.every((e) => e.intern) && years < 1 ? "fresh" : posForYears(years); if (seniority === "fresh" && years >= 2) seniority = posForYears(years);
   const bulletsAll = experience.flatMap((e) => e.bullets); const dateFormats = new Set([...fullText.matchAll(CV_RANGE_RE)].map((m) => (/[\/]/.test(m[1]) ? "num" : /^(?:19|20)\d{2}$/.test(m[1].trim()) ? "year" : "month")));
@@ -336,7 +336,7 @@ export function parseCV(rawText, meta = {}) {
 }
 
 // one bullet → its features: verb strength, quantification, length, tense, first person, weak opener
-export function analyseBullet(text, lang) {
+export function analyseBullet(text?: any, lang?: any) {
   const t = text.trim(); const first = t.split(/\s+/)[0] || ""; const n = wordsOf(t).length;
   const weak = CV_WEAK_START.test(t); const strong = CV_STRONG_EN.test(t) || /^(أشرفت|اشرفت|قدت|خفّضت|خفضت|حققت|أدرت|ادرت|صممت|صمّمت|نفذت|نفّذت|وفّرت|وفرت|سرّعت|سرعت|قلّصت|قلصت|فاوضت|أنجزت|انجزت)/.test(t); const action = !weak && (CV_ACTION_EN.test(t) || CV_ACTION_AR.test(t));
   const tense = /^[A-Za-z]+ing\b/.test(first) ? "ing" : /^[A-Za-z]+ed\b/.test(first) ? "past" : /^[A-Za-z]+s\b/.test(first) && !/ss$/.test(first) ? "present" : null;
@@ -348,7 +348,7 @@ export const EN_GERUND_PAST = { supervising: "Supervised", preparing: "Prepared"
 
 export const AR_MASDAR_PAST = { "متابعة": "تابعت", "إعداد": "أعددت", "اعداد": "أعددت", "تنفيذ": "نفّذت", "مراجعة": "راجعت", "تصميم": "صممت", "إشراف": "أشرفت", "الإشراف": "أشرفت", "اشراف": "أشرفت", "الاشراف": "أشرفت", "حصر": "حصرت", "تنسيق": "نسّقت", "التنسيق": "نسّقت", "إدارة": "أدرت", "ادارة": "أدرت", "تجهيز": "جهّزت", "تسليم": "سلّمت", "فحص": "فحصت", "اختبار": "اختبرت", "تدريب": "درّبت", "تخطيط": "خططت", "التخطيط": "خططت", "جدولة": "جدولت", "عمل": "أنجزت", "تحضير": "حضّرت", "رسم": "رسمت", "استلام": "استلمت", "الاستلام": "استلمت", "توريد": "ورّدت", "تركيب": "ركّبت", "التركيب": "ركّبت", "تشغيل": "شغّلت", "التشغيل": "شغّلت", "صيانة": "صنت", "المتابعة": "تابعت", "المراجعة": "راجعت", "التنفيذ": "نفّذت", "التصميم": "صممت", "الحصر": "حصرت", "الإعداد": "أعددت", "التجهيز": "جهّزت", "التسليم": "سلّمت", "الفحص": "فحصت", "التدريب": "درّبت", "الجدولة": "جدولت", "العمل": "أنجزت", "التحضير": "حضّرت", "الرسم": "رسمت", "التوريد": "ورّدت", "الصيانة": "صنت", "حل": "حللت", "تحليل": "حلّلت", "التحليل": "حلّلت", "تقدير": "قدّرت", "التقدير": "قدّرت", "تسعير": "سعّرت", "التسعير": "سعّرت" };
 
-export function rewriteBullet(text, lang, extra = {}) {
+export function rewriteBullet(text?: any, lang?: any, extra: any = {}) {
   let t = text.trim().replace(/[.。]+$/, ""); const quantified = CV_QUANT.test(t);
   if (lang === "en" || /^[A-Za-z]/.test(t)) {
     t = t.replace(/^(responsible (for|of|about)|in charge of|tasked with|duties (included|include)|involved in|participated in|assisted (with|in)|helped (with|in)?|worked (on|in|with)|dealing with|handling|working on)\s*/i, "");
@@ -364,7 +364,7 @@ export function rewriteBullet(text, lang, extra = {}) {
 }
 
 // ---- an auto-drafted professional summary from the parsed facts ----
-export function draftSummary(cv) {
+export function draftSummary(cv?: any) {
   const y = cv.years >= 1 ? Math.floor(cv.years) : 0; const top = cv.tools.filter((t) => t.cat !== "office").slice(0, 3).map((t) => t.name); const types = cv.projectTypes.slice(0, 2); const cert = cv.certs.filter((c) => !/IELTS|Syndicate|Business/.test(c)).slice(0, 1);
   const tl = trackLabel(cv.track, cv.discipline);
   if (cv.lang === "ar") return `${cv.disciplineLabel}${y ? ` بخبرة ${y}${cv.years > y ? "+" : ""} سنوات` : " حديث التخرج"} في ${tl}${types.length ? ` بمشاريع ${types.join(" و")}` : ""}${top.length ? ` — أتقن ${top.join(" و")}` : ""}${cert.length ? `، حاصل على ${cert[0]}` : ""}${cv.syndicate ? "، وعضو نقابة المهندسين" : ""}. ${cv.bulletsAll.find((b) => b.quantified && b.action) ? "أبرز إنجاز: " + cv.bulletsAll.find((b) => b.quantified && b.action).text.replace(/[.]+$/, "") + "." : "[أضف إنجازًا واحدًا بالرقم]."}`;

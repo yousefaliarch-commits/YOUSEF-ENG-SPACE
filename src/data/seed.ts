@@ -3,7 +3,7 @@
 
 // ---- Jobs v2: mandatory classification (discipline → sub-discipline → years → exact position), no employer salary — the range is estimated by EngSpace ----
 // contact = { email, phone, name } — shown on the ad; the engineer applies from their own e-mail or phone. Demo addresses use example.com.
-export const J = (id, title, co, gov, city, disc, sub, pos, years, mode, type, when, desc, reqs, skills, contact, extra) => ({ id, title, co, gov, city, disc, sub, pos, years, mode, type, when, desc, reqs, skills, contact, ...(extra || {}) });
+export const J = (id?: any, title?: any, co?: any, gov?: any, city?: any, disc?: any, sub?: any, pos?: any, years?: any, mode?: any, type?: any, when?: any, desc?: any, reqs?: any, skills?: any, contact?: any, extra?: any) => ({ id, title, co, gov, city, disc, sub, pos, years, mode, type, when, desc, reqs, skills, contact, ...(extra || {}) });
 
 export const JOBS = [
   J("j1", "مهندس موقع مدني", "redcon", "cairo", "nac", "civil", "site", "mid", [3, 5], "site", "full", "منذ يوم", "الإشراف اليومي على أعمال الخرسانة والتشطيبات في مشروع سكني بالعاصمة الإدارية، ومتابعة مقاولي الباطن وتقارير الإنجاز.", ["بكالوريوس هندسة مدنية", "خبرة 3–5 سنوات في مواقع الإنشاءات", "إجادة AutoCAD وقراءة اللوحات التنفيذية", "الاستعداد للعمل بنظام الورديات"], ["AutoCAD", "Excel"], { email: "careers.redcon@example.com", phone: "01000000101", name: "قسم التوظيف" }),
@@ -22,7 +22,7 @@ export const JOBS = [
   J("j14", "مهندس تصميم إنشائي", "diyar", "cairo", "maadi", "civil", "design", "senior", [5, 9], "hybrid", "full", "منذ يوم", "تصميم إنشائي لمشاريع سكنية وإدارية في المملكة العربية السعودية من مكتب القاهرة، وفق الكود السعودي SBC وACI، بالتنسيق مع فرق الرياض.", ["خبرة 5+ سنوات تصميم إنشائي", "ETABS · SAFE · Revit", "معرفة بـ SBC وACI", "إنجليزية جيدة جدًا"], ["ETABS", "SAFE", "Revit", "ACI"], { email: "egypt.jobs.diyar@example.com", phone: "01000000114", name: "مكتب القاهرة" }, { note: "راتب مرتبط بالريال" }),
 ];
 
-export const R0 = (a = 0, d = 0, u = 0) => ({ agree: a, disagree: d, useful: u });
+export const R0 = (a: any = 0, d: any = 0, u: any = 0) => ({ agree: a, disagree: d, useful: u });
 
 // Two members who chose to post publicly — full name and full profile travel with those items. Everyone else posted anonymously.
 export const PUB_MONA = { as: "public", pid: "u-mona", name: "منى الشريف", gender: "female", userRole: "engineer", verified: true, verifyKind: "certificate", level: 2, age: 31, gradYear: 2017, dm: true, role: "مهندسة مدنية · BIM ونمذجة · مهندسة أولى (Senior) · الشيخ زايد · الجيزة" };

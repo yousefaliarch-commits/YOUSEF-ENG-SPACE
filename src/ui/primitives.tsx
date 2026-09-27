@@ -8,30 +8,30 @@ import { fmt } from "./theme";
 // =====================================================================
 //  Primitives
 // =====================================================================
-export const Num = ({ children, className = "" }) => <bdi dir="ltr" className={`font-grotesk tabular-nums ${className}`}>{children}</bdi>;
+export const Num = ({ children, className = "" }: any) => <bdi dir="ltr" className={`font-grotesk tabular-nums ${className}`}>{children}</bdi>;
 
-export const Forward = ({ size = 16 }) => <ArrowRight size={size} className="rtl:-scale-x-100" />;
+export const Forward = ({ size = 16 }: any) => <ArrowRight size={size} className="rtl:-scale-x-100" />;
 
-export const Back = ({ size = 20 }) => <ArrowLeft size={size} className="rtl:-scale-x-100" />;
+export const Back = ({ size = 20 }: any) => <ArrowLeft size={size} className="rtl:-scale-x-100" />;
 
 
-export const ArchMark = ({ size = 30 }) => (
+export const ArchMark = ({ size = 30 }: any) => (
   <span aria-hidden="true" className="relative inline-block" style={{ width: size, height: size * 1.1 }}>
     <span className="absolute bottom-0 start-0 border-accent" style={{ width: size * 0.7, height: size * 0.97, borderWidth: 3, borderBottom: 0, borderRadius: `${size * 0.47}px ${size * 0.47}px 0 0` }} />
     <span className="absolute bottom-0 border-accent opacity-50" style={{ insetInlineStart: size * 0.3, width: size * 0.7, height: size * 0.77, borderWidth: 3, borderBottom: 0, borderRadius: `${size * 0.47}px ${size * 0.47}px 0 0` }} />
   </span>
 );
 
-export const Wordmark = ({ size = "text-[22px]" }) => (
+export const Wordmark = ({ size = "text-[22px]" }: any) => (
   <span dir="ltr" className={`font-grotesk font-bold tracking-[-0.03em] text-ink ${size}`}>EngSpace<span className="text-accent">.</span></span>
 );
 
-export const Panel = ({ children, className = "", onClick }) => (
+export const Panel = ({ children, className = "", onClick }: any) => (
   <article onClick={onClick} className={`rounded-2xl bg-surface border border-line shadow-card ${className}`}>{children}</article>
 );
 
-export const Chip = ({ children, tone = "default", className = "" }) => {
-  const tones = {
+export const Chip = ({ children, tone = "default", className = "" }: any) => {
+  const tones: any = {
     default: "bg-elevated/80 border-line text-ink-2",
     verified: "bg-good/15 border-good/20 text-good",
     warn: "bg-warn/15 border-warn/20 text-warn",
@@ -44,7 +44,7 @@ export const Chip = ({ children, tone = "default", className = "" }) => {
   return <span dir={tone === "en" ? "ltr" : undefined} className={`inline-flex items-center gap-1.5 h-7 px-3 rounded-full border text-[12px] whitespace-nowrap ${tones[tone]} ${className}`}>{children}</span>;
 };
 
-export const FilterChip = ({ on, children, onClick }) => (
+export const FilterChip = ({ on, children, onClick }: any) => (
   <button type="button" aria-pressed={on} onClick={onClick}
     className={`shrink-0 inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full border text-[12.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
         on ? "bg-wash border-accent/40 text-ink" : "bg-surface border-line-2 text-ink-2 hover:text-ink"}`}>{children}</button>
@@ -52,28 +52,28 @@ export const FilterChip = ({ on, children, onClick }) => (
 
 export const BTN = "inline-flex items-center justify-center gap-2 min-h-11 px-5 rounded-xl text-[14px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas";
 
-export const Primary = ({ children, className = "", ...p }) => <button type="button" {...p} className={`${BTN} btn-primary ${className}`}>{children}</button>;
+export const Primary = ({ children, className = "", ...p }: any) => <button type="button" {...p} className={`${BTN} btn-primary ${className}`}>{children}</button>;
 
-export const Secondary = ({ children, className = "", ...p }) => (
+export const Secondary = ({ children, className = "", ...p }: any) => (
   <button type="button" {...p} className={`${BTN} bg-elevated border border-line-2 text-ink transition-colors hover:bg-track/80 active:translate-y-px disabled:text-ink-3 disabled:border-line ${className}`}>{children}</button>
 );
 
-export const Quiet = ({ children, className = "", ...p }) => <button type="button" {...p} className={`${BTN} px-3 text-ink-2 transition-colors hover:text-ink ${className}`}>{children}</button>;
+export const Quiet = ({ children, className = "", ...p }: any) => <button type="button" {...p} className={`${BTN} px-3 text-ink-2 transition-colors hover:text-ink ${className}`}>{children}</button>;
 
-export const IconButton = ({ label, active, className = "", children, ...p }) => (
+export const IconButton = ({ label, active, className = "", children, ...p }: any) => (
   <button type="button" aria-label={label} {...p}
     className={`grid place-items-center w-11 h-11 rounded-xl border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
         active ? "border-accent/40 text-accent bg-wash" : "border-line-2 text-ink-2 hover:text-ink hover:bg-elevated"} ${className}`}>{children}</button>
 );
 
-export const RoundButton = ({ label, active, className = "", children, ...p }) => (
+export const RoundButton = ({ label, active, className = "", children, ...p }: any) => (
   <button type="button" aria-label={label} {...p}
     className={`grid place-items-center w-11 h-11 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
         active ? "text-accent" : "text-ink-2 hover:text-ink hover:bg-elevated/70"} ${className}`}>{children}</button>
 );
 
 // Switch: iOS pill by default; Material 3 track + check thumb when the app runs inside the Android preview
-export const Toggle = ({ on, onChange, label }) => {
+export const Toggle = ({ on, onChange, label }: any) => {
   if (usePlatform() === "android") return (
     <button type="button" role="switch" aria-checked={on} aria-label={label} onClick={() => onChange(!on)}
       className={`relative shrink-0 w-[52px] h-8 rounded-full border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${on ? "bg-solid border-solid" : "bg-elevated border-ink-4"}`}>
@@ -89,7 +89,7 @@ export const Toggle = ({ on, onChange, label }) => {
 };
 
 
-export function RangeBar({ min, max, median, compact = false, labels = true }) {
+export function RangeBar({ min, max, median, compact = false, labels = true }: any) {
   const pos = 16 + ((median - min) / (max - min)) * 68;
   return (
     <div>

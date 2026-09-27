@@ -18,11 +18,11 @@ export const ACCENTS = {
              light: { accent: "25 105 122", solid: "40 110 123", solidHi: "52 128 142", hover: "32 92 103", wash: "224 242 246" } },
 };
 
-export const labelOf = (list, id) => (list.find((x) => x[0] === id) || list[0])[1];
+export const labelOf = (list?: any, id?: any) => (list.find((x) => x[0] === id) || list[0])[1];
 
-export const THEMES = [["system", "تلقائي", Monitor], ["light", "فاتح", Sun], ["dark", "داكن", Moon]];
+export const THEMES: any = [["system", "تلقائي", Monitor], ["light", "فاتح", Sun], ["dark", "داكن", Moon]];
 
-export const accentHex = (a, mode) => (mode === "light" ? a.colorLight : a.color);
+export const accentHex = (a?: any, mode?: any) => (mode === "light" ? a.colorLight : a.color);
 
 export const NEUTRALS = {
   dark: [["Canvas", "#09090B", "الخلفية · zinc-950"], ["Surface", "#18181B", "البطاقات · zinc-900"], ["Elevated", "#27272A", "الارتفاع · zinc-800"], ["Border", "#FFFFFF0F", "الحدود · white/6"], ["Text", "#F4F4F5", "النص الأساسي"], ["Muted", "#A1A1AA", "النص الثانوي"]],
@@ -35,4 +35,4 @@ export const DISCIPLINES = {
   mechanical:   { label: "مهندس ميكانيكا", median: 28500, min: 21000, max: 37000 },
 };
 
-export const fmt = (n) => new Intl.NumberFormat("en-US").format(n);
+export const fmt = (n?: any) => new Intl.NumberFormat("en-US").format(n);

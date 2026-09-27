@@ -7,10 +7,10 @@ import {
 import { Empty } from "./chrome";
 import { FilterChip } from "./primitives";
 
-export function NotificationsBody({ app }) {
-  const icons = { reply: MessageCircle, job: Briefcase, match: Sparkles, saved: Bookmark, company: Building2, privacy: ShieldCheck, reaction: Lightbulb, ama: Sparkles, data: FileCheck, message: Send, contact: Mail, mod: ShieldAlert, report: Flag, verify: IdCard };
+export function NotificationsBody({ app }: any) {
+  const icons: any = { reply: MessageCircle, job: Briefcase, match: Sparkles, saved: Bookmark, company: Building2, privacy: ShieldCheck, reaction: Lightbulb, ama: Sparkles, data: FileCheck, message: Send, contact: Mail, mod: ShieldAlert, report: Flag, verify: IdCard };
   // a notice may carry its own English (n.en) — then it is shown as written, in the interface language
-  const en = (n) => app.lang === "en" && !!n.en; const title = (n) => (en(n) ? <span translate="no">{n.en.title}</span> : n.title); const body = (n) => (en(n) ? <span translate="no">{n.en.body}</span> : app.moneyNote(n.body));
+  const en = (n?: any) => app.lang === "en" && !!n.en; const title = (n?: any) => (en(n) ? <span translate="no">{n.en.title}</span> : n.title); const body = (n?: any) => (en(n) ? <span translate="no">{n.en.body}</span> : app.moneyNote(n.body));
   const [onlyUnread, setOnlyUnread] = useState(false); const list = app.notifs.filter((n) => !onlyUnread || !n.read);
   return (
     <div className="space-y-2">
@@ -23,4 +23,4 @@ export function NotificationsBody({ app }) {
   );
 }
 
-export function NotificationsScreen({ app }) { return <div className="py-4"><NotificationsBody app={app} /></div>; }
+export function NotificationsScreen({ app }: any) { return <div className="py-4"><NotificationsBody app={app} /></div>; }

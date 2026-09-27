@@ -9,35 +9,35 @@ import { reduced } from "./runtime";
 import { Num } from "../ui/primitives";
 import { fmt } from "../ui/theme";
 
-export const round500 = (n) => Math.round(n / 500) * 500;
+export const round500 = (n?: any) => Math.round(n / 500) * 500;
 
-export const rand = (s) => { const x = Math.sin(s * 9301 + 49297) * 233280; return x - Math.floor(x); };
+export const rand = (s?: any) => { const x = Math.sin(s * 9301 + 49297) * 233280; return x - Math.floor(x); };
 
-export const hex4 = (s) => Math.floor(rand(s) * 65535).toString(16).padStart(4, "0");
+export const hex4 = (s?: any) => Math.floor(rand(s) * 65535).toString(16).padStart(4, "0");
 
-export const seedOf = (str) => [...String(str)].reduce((a, c) => a + c.charCodeAt(0) * 7, 3);
+export const seedOf = (str?: any) => [...String(str)].reduce((a, c) => a + c.charCodeAt(0) * 7, 3);
 
 // Percentiles for a discipline × experience, scaled by place and track. Returns {p10,p25,p50,p75,p90}
-export function marketFor(disc, exp, govKey, track = "site", cityKey) {
+export function marketFor(disc?: any, exp?: any, govKey?: any, track: any = "site", cityKey?: any) {
   const m = placeMult(govKey, cityKey) * (TRACK_MULT[track] || 1); const [p10, p25, p50, p75, p90] = (MARKET[disc] || MARKET.civil)[exp] || MARKET.civil["3-5"];
   return { p10: round500(p10 * m), p25: round500(p25 * m), p50: round500(p50 * m), p75: round500(p75 * m), p90: round500(p90 * m) };
 }
 
-export const medianFor = (...a) => marketFor(...a).p50;
+export const medianFor = (...a: any[]) => marketFor(...a).p50;
 
-export function sampleSize(disc, exp, govKey) { const base = 40 + Math.floor(rand(seedOf(disc + exp + govKey)) * 300); return Math.round(base * Math.min(1, gov(govKey)[3] * 0.9 + 0.2)); }
+export function sampleSize(disc?: any, exp?: any, govKey?: any) { const base = 40 + Math.floor(rand(seedOf(disc + exp + govKey)) * 300); return Math.round(base * Math.min(1, gov(govKey)[3] * 0.9 + 0.2)); }
 
-export const quality = (n) => (n >= 100 ? ["موثّق", "verified"] : n >= 30 ? ["كافٍ", "accent"] : ["أولي", "warn"]);
+export const quality = (n?: any) => (n >= 100 ? ["موثّق", "verified"] : n >= 30 ? ["كافٍ", "accent"] : ["أولي", "warn"]);
 
-export function reportsFor(disc, exp, govKey) {
+export function reportsFor(disc?: any, exp?: any, govKey?: any) {
   const { p25, p75 } = marketFor(disc, exp, govKey); const seed = seedOf(disc + exp + govKey);
-  const whens = ["منذ يومين", "منذ 4 أيام", "منذ أسبوع", "منذ أسبوعين", "منذ 3 أسابيع", "منذ شهر"]; const yrs = { "0-2": [1, 2], "3-5": [3, 5], "5-8": [5, 8], "8-12": [8, 12], "12+": [12, 20] }[exp];
+  const whens: any = ["منذ يومين", "منذ 4 أيام", "منذ أسبوع", "منذ أسبوعين", "منذ 3 أسابيع", "منذ شهر"]; const yrs = { "0-2": [1, 2], "3-5": [3, 5], "5-8": [5, 8], "8-12": [8, 12], "12+": [12, 20] }[exp];
   return Array.from({ length: 6 }, (_, i) => { const r = rand(seed + i * 13), r2 = rand(seed + i * 29); const c = COMPANIES[Math.floor(r2 * COMPANIES.length)];
     return { id: `${seed}-${i}`, anon: hex4(seed + i * 7), title: TITLES[disc][i % TITLES[disc].length], company: c.name, coId: c.id, years: yrs[0] + Math.round(r * (yrs[1] - yrs[0])), salary: round500(p25 + (p75 - p25) * r * 1.15), verified: r2 > 0.3, when: whens[i] }; });
 }
 
 // ---- Expected salary range for a job: market band (discipline × years) × place × sub-discipline × position × employer category. The employer never types a number. ----
-export function estimateFor(job) {
+export function estimateFor(job?: any) {
   const yrs = job.years ? (job.years[0] + Math.min(job.years[1], job.years[0] + 4)) / 2 : 4; const exp = expForYears(yrs); const pos = position(job.pos);
   const m = marketFor(job.disc, exp, job.gov, job.sub, job.city); const c = company(job.co); const cm = companyMult(c); const k = pos[3] * cm;
   const lo = round500(m.p25 * k), mid = round500(m.p50 * k), hi = round500(m.p75 * k); const n = sampleSize(job.disc, exp, job.gov);
@@ -45,9 +45,9 @@ export function estimateFor(job) {
 }
 
 // ---- Smart matching: strict classification → score 0–100 with a breakdown; ≥85 = perfect match → push notification ----
-export function matchJob(job, p) {
+export function matchJob(job?: any, p?: any) {
   if (!p || isCompanyRole(p.role)) return null;
-  const pd = p.disc; const parts = [];
+  const pd = p.disc; const parts: any = [];
   const disc = job.disc === pd ? 40 : 0; parts.push(["التخصّص", disc, 40, ROLE[job.disc]]);
   const sub = job.sub === p.track ? 25 : (TRACK_ADJ[job.sub] || []).includes(p.track) ? 12 : 0; parts.push(["المسار", sub, 25, trackLabel(job.sub, job.disc)]);
   const [ya, yb] = posYears(p.pos); const my = (ya + yb) / 2; const [ja, jb] = job.years || [0, 30]; const inRange = my >= ja && my <= jb; const dist = inRange ? 0 : Math.min(Math.abs(my - ja), Math.abs(my - jb));
@@ -59,7 +59,7 @@ export function matchJob(job, p) {
 }
 
 // Modeled reach of a posting's push notification: members whose profile matches the classification exactly
-export const reachFor = (job) => { const n = sampleSize(job.disc, expForYears((job.years[0] + job.years[1]) / 2), job.gov); return { exact: Math.round(n * 2.6), near: Math.round(n * 6.1) }; };
+export const reachFor = (job?: any) => { const n = sampleSize(job.disc, expForYears((job.years[0] + job.years[1]) / 2), job.gov); return { exact: Math.round(n * 2.6), near: Math.round(n * 6.1) }; };
 
 
 // ---- AI job-description parser (rule-based, on-device): reads free text → discipline, sub-discipline, years, position, place, mode, type, skills; strips any salary the employer typed ----
@@ -72,9 +72,9 @@ export const KW = {
 
 export const ARABIC_NUMS = { "سنة": 1, "سنتين": 2, "سنتان": 2, "ثلاث": 3, "تلات": 3, "أربع": 4, "اربع": 4, "خمس": 5, "ست": 6, "سبع": 7, "ثمان": 8, "تمان": 8, "تسع": 9, "عشر": 10 };
 
-export function parseJobText(raw) {
-  const text = normalizeText(raw); const lower = text.toLowerCase(); const conf = {}; const out = { title: "", disc: null, sub: null, pos: null, years: null, gov: null, city: null, mode: null, type: "full", skills: [], reqs: [], desc: "", salaryStripped: null, contact: detectContact(raw) };
-  const score = (dict) => { const s = Object.entries(dict).map(([k, re]) => [k, (lower.match(re) || []).length]).sort((a, b) => b[1] - a[1]); const tot = s.reduce((a, x) => a + x[1], 0); return { pick: s[0][1] > 0 ? s[0][0] : null, conf: tot ? s[0][1] / tot : 0 }; };
+export function parseJobText(raw?: any) {
+  const text = normalizeText(raw); const lower = text.toLowerCase(); const conf: any = {}; const out: any = { title: "", disc: null, sub: null, pos: null, years: null, gov: null, city: null, mode: null, type: "full", skills: [], reqs: [], desc: "", salaryStripped: null, contact: detectContact(raw) };
+  const score = (dict?: any) => { const s = Object.entries(dict).map(([k, re]: any) => [k, (lower.match(re) || []).length]).sort((a, b) => b[1] - a[1]); const tot = s.reduce((a, x) => a + x[1], 0); return { pick: s[0][1] > 0 ? s[0][0] : null, conf: tot ? s[0][1] / tot : 0 }; };
   const d = score(KW.disc); out.disc = d.pick || "civil"; conf.disc = d.pick ? Math.max(0.35, d.conf) : 0.2;
   const s = score(KW.sub); out.sub = s.pick && tracksFor(out.disc).some((t) => t[0] === s.pick) ? s.pick : "site"; conf.sub = s.pick ? Math.max(0.35, s.conf) : 0.2;
   let y = null; let m;
@@ -88,10 +88,10 @@ export function parseJobText(raw) {
   if (!out.years) { out.years = posYears(out.pos); conf.years = 0.4; }
   if (out.sub === "pm" && !["pm", "cm", "director"].includes(out.pos)) out.pos = "pm";
   if (["pm", "cm", "director"].includes(out.pos) && tracksFor(out.disc).some((t) => t[0] === "pm")) out.sub = "pm";
-  const EN_PLACES = { "new cairo": ["cairo", "newcairo"], "new capital": ["cairo", "nac"], "administrative capital": ["cairo", "nac"], "6th of october": ["giza", "oct"], "6 october": ["giza", "oct"], "sheikh zayed": ["giza", "zayed"], "alamein": ["matrouh", "alamein"], "sokhna": ["suez", "sokhna"], "alexandria": ["alexandria", null], "cairo": ["cairo", null], "giza": ["giza", null], "mansoura": ["dakahlia", "mansoura"], "tanta": ["gharbia", "tanta"], "assiut": ["assiut", "assiut_c"], "hurghada": ["redsea", "hurghada"], "10th of ramadan": ["sharqia", "ramadan"], "maadi": ["cairo", "maadi"], "nasr city": ["cairo", "nasr"], "heliopolis": ["cairo", "heliopolis"], "obour": ["qalyubia", "obour"], "sadat city": ["menoufia", "sadat"], "damietta": ["damietta", null], "port said": ["portsaid", null], "suez": ["suez", null], "ismailia": ["ismailia", null], "luxor": ["luxor", null], "aswan": ["aswan", null], "sharm": ["southsinai", "sharm"], "gouna": ["redsea", "gouna"] };
-  let best = null; const consider = (name, g, c) => { if (name.length >= 3 && text.includes(name) && (!best || name.length > best.n.length)) best = { n: name, g, c }; };
-  GOVS.forEach(([g, name]) => consider(name, g, null)); Object.entries(CITIES).forEach(([g, list]) => list.forEach(([c, name]) => { consider(name.replace(/\s*\(.*\)$/, ""), g, c); }));
-  Object.entries(EN_PLACES).forEach(([k, [g, c]]) => { if (lower.includes(k) && (!best || k.length > best.n.length)) best = { n: k, g, c }; });
+  const EN_PLACES: any = { "new cairo": ["cairo", "newcairo"], "new capital": ["cairo", "nac"], "administrative capital": ["cairo", "nac"], "6th of october": ["giza", "oct"], "6 october": ["giza", "oct"], "sheikh zayed": ["giza", "zayed"], "alamein": ["matrouh", "alamein"], "sokhna": ["suez", "sokhna"], "alexandria": ["alexandria", null], "cairo": ["cairo", null], "giza": ["giza", null], "mansoura": ["dakahlia", "mansoura"], "tanta": ["gharbia", "tanta"], "assiut": ["assiut", "assiut_c"], "hurghada": ["redsea", "hurghada"], "10th of ramadan": ["sharqia", "ramadan"], "maadi": ["cairo", "maadi"], "nasr city": ["cairo", "nasr"], "heliopolis": ["cairo", "heliopolis"], "obour": ["qalyubia", "obour"], "sadat city": ["menoufia", "sadat"], "damietta": ["damietta", null], "port said": ["portsaid", null], "suez": ["suez", null], "ismailia": ["ismailia", null], "luxor": ["luxor", null], "aswan": ["aswan", null], "sharm": ["southsinai", "sharm"], "gouna": ["redsea", "gouna"] };
+  let best = null; const consider = (name?: any, g?: any, c?: any) => { if (name.length >= 3 && text.includes(name) && (!best || name.length > best.n.length)) best = { n: name, g, c }; };
+  GOVS.forEach(([g, name]: any) => consider(name, g, null)); Object.entries(CITIES).forEach(([g, list]: any) => list.forEach(([c, name]: any) => { consider(name.replace(/\s*\(.*\)$/, ""), g, c); }));
+  Object.entries(EN_PLACES).forEach(([k, [g, c]]: any) => { if (lower.includes(k) && (!best || k.length > best.n.length)) best = { n: k, g, c }; });
   if (best) { out.gov = best.g; out.city = best.c; conf.place = 0.85; } else { conf.place = 0; }
   for (const [k, re] of Object.entries(KW.mode)) { if (re.test(text)) { out.mode = k; break; } } if (!out.mode) out.mode = out.sub === "site" ? "site" : "office"; conf.mode = KW.mode[out.mode] && KW.mode[out.mode].test(text) ? 0.8 : 0.4;
   out.type = /عقد مشروع|contract|مؤقت|temporary|بالمشروع/i.test(text) ? "contract" : /دوام جزئي|part[- ]?time/i.test(text) ? "parttime" : "full";
@@ -102,7 +102,7 @@ export function parseJobText(raw) {
   let clean = raw; const sm = sal.exec(normalizeText(raw)); if (sm) { out.salaryStripped = sm[0]; clean = raw.replace(new RegExp("[^\\n.]*" + sm[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "[^\\n.]*[.\\n]?", "i"), "").trim(); }
   // Lines carrying contact details move to the ad's contact card (e-mail / phone) instead of the description
   const lines = clean.split(/\n+/).map((l) => l.trim()).filter((l) => l && !detectContact(l).found);
-  const isReq = (l) => /^[-•*·▪●\d]+[.)]?\s*/.test(l) || /^(?:يشترط|مطلوب|خبرة|إجادة|بكالوريوس|شهادة|معرفة|القدرة|إتقان|required|must|proficien|bachelor|degree|experience in)/i.test(l);
+  const isReq = (l?: any) => /^[-•*·▪●\d]+[.)]?\s*/.test(l) || /^(?:يشترط|مطلوب|خبرة|إجادة|بكالوريوس|شهادة|معرفة|القدرة|إتقان|required|must|proficien|bachelor|degree|experience in)/i.test(l);
   out.reqs = lines.filter(isReq).map((l) => l.replace(/^[-•*·▪●\d]+[.)]?\s*/, "")).slice(0, 8);
   const body = lines.filter((l) => !isReq(l)); const first = body[0] || lines[0] || "";
   out.title = first.length <= 60 && !/[.،:]/.test(first) ? first.replace(/^(?:مطلوب|وظيفة|job title:?|position:?)\s*/i, "") : `${ROLE[out.disc]} ${trackLabel(out.sub, out.disc)}`.replace(/موقع \/ تنفيذ/, "موقع");
@@ -115,21 +115,21 @@ export function parseJobText(raw) {
 // Egypt payroll (approximate): social insurance 11% up to the insurable-wage cap; income tax brackets of Law 175/2023 with the 20,000 personal exemption
 export const TAX = { cap: 16700, ins: 0.11, exempt: 20000, brackets: [[40000, 0], [55000, 0.10], [70000, 0.15], [200000, 0.20], [400000, 0.225], [1200000, 0.25], [Infinity, 0.275]] };
 
-export function egyptNet(gross) {
+export function egyptNet(gross?: any) {
   const ins = Math.min(gross, TAX.cap) * TAX.ins; const annual = Math.max(0, (gross - ins) * 12 - TAX.exempt); let tax = 0, prev = 0;
   for (const [lim, r] of TAX.brackets) { if (annual > prev) tax += (Math.min(annual, lim) - prev) * r; prev = lim; if (annual <= lim) break; }
   return { ins: Math.round(ins), tax: Math.round(tax / 12), net: Math.round(gross - ins - tax / 12) };
 }
 
 // The full professional title everyone sees — never truncated anywhere in the UI
-export const personaTitle = (p) => {
+export const personaTitle = (p?: any) => {
   const g = p.gender; const place = placeName(p.gov, p.city);
   if (isCompanyRole(p.role)) return `${roleTitle(p.role, g)} · ${p.companyName || "شركة"} · ${place}`;
   if (p.role === "supervisor") return `${roleTitle(p.role, g)} · ${place}`; // one fixed title for every site supervisor
   return `${divTitle(p) || discTitle(p.disc, g)} · ${trackLabel(p.track, p.disc)} · ${posLabelG(p.pos, g)} · ${place}`;
 };
 
-export const personaExp = (p) => LEVEL_EXP[p.pos] || "3-5";
+export const personaExp = (p?: any) => LEVEL_EXP[p.pos] || "3-5";
 
 // The account profile. name/email/age are private: they appear only on the member's own screens and, for items the member
 // chooses to post publicly, the name (and full title) travels with that item. `identity` is the default for new actions.
@@ -146,24 +146,24 @@ export const storedRetiredRole = () => { try { const p = JSON.parse(localStorage
 
 export const loadPersona = () => { try { const v = localStorage.getItem(PERSONA_KEY); if (!v) return null; const p = JSON.parse(v); return p && typeof p === "object" && p.name && p.anon && p.pid && !RETIRED_ROLES.includes(p.role) ? { ...DEFAULT_PERSONA, ...p } : null; } catch (e) { return null; } };
 
-export const savePersona = (p) => { try { if (p) localStorage.setItem(PERSONA_KEY, JSON.stringify(p)); else localStorage.removeItem(PERSONA_KEY); } catch (e) {} };
+export const savePersona = (p?: any) => { try { if (p) localStorage.setItem(PERSONA_KEY, JSON.stringify(p)); else localStorage.removeItem(PERSONA_KEY); } catch (e) {} };
 
-export function useCountUp(value, ms = 640) {
-  const [v, setV] = useState(value); const from = useRef(value);
+export function useCountUp(value?: any, ms: any = 640) {
+  const [v, setV] = useState<any>(value); const from = useRef<any>(value);
   useEffect(() => {
     if (reduced() || from.current === value) { setV(value); from.current = value; return; }
     const a = from.current, b = value, t0 = performance.now(); let raf;
-    const tick = (t) => { const k = Math.min(1, (t - t0) / ms); const e = 1 - Math.pow(1 - k, 3); setV(Math.round(a + (b - a) * e)); if (k < 1) raf = requestAnimationFrame(tick); else from.current = b; };
+    const tick = (t?: any) => { const k = Math.min(1, (t - t0) / ms); const e = 1 - Math.pow(1 - k, 3); setV(Math.round(a + (b - a) * e)); if (k < 1) raf = requestAnimationFrame(tick); else from.current = b; };
     raf = requestAnimationFrame(tick); return () => cancelAnimationFrame(raf);
   }, [value]);
   return v;
 }
 
-export const Money = ({ n, size = "text-[32px]", unit = "ج.م / شهر", className = "" }) => { const v = useCountUp(n); return <span className={`inline-flex items-baseline gap-2 flex-wrap ${className}`}><Num className={`${size} font-semibold tracking-[-0.04em] leading-none`}>{fmt(v)}</Num><span className="text-[12px] text-ink-2">{unit}</span></span>; };
+export const Money = ({ n, size = "text-[32px]", unit = "ج.م / شهر", className = "" }: any) => { const v = useCountUp(n); return <span className={`inline-flex items-baseline gap-2 flex-wrap ${className}`}><Num className={`${size} font-semibold tracking-[-0.04em] leading-none`}>{fmt(v)}</Num><span className="text-[12px] text-ink-2">{unit}</span></span>; };
 
 
 // Brand sigil kept for the design board; identities in the app use Avatar
-export function Sigil({ id = "0000", size = 40, className = "", draw = false }) {
+export function Sigil({ id = "0000", size = 40, className = "", draw = false }: any) {
   const d = [...String(id).padEnd(4, "0")].slice(0, 4).map((ch) => parseInt(ch, 16) || 0);
   const arches = [0, 1, 2].slice(0, 2 + (d[0] % 2)).map((i) => { const w = 22 + (d[i] % 8) * 3; const h = 26 + (d[(i + 1) % 4] % 8) * 3; const x = 6 + ((d[(i + 2) % 4] * 3) % Math.max(1, 52 - w)); return { w, h, x, o: [0.95, 0.55, 0.35][i] }; });
   return (
@@ -175,7 +175,7 @@ export function Sigil({ id = "0000", size = 40, className = "", draw = false }) 
   );
 }
 
-export function LevelRing({ pts, size = 72, children }) {
+export function LevelRing({ pts, size = 72, children }: any) {
   const r = repLevel(pts); const R = (size - 4) / 2, C = 2 * Math.PI * R;
   return (
     <span className="relative inline-grid place-items-center" style={{ width: size, height: size }}>

@@ -2,11 +2,11 @@
 // bundled with the app (lib/vendor) and start only when a post image is checked for money figures. Nothing is uploaded.
 import { OCR_ASSETS, loadTesseract } from "./vendor";
 
-export const withTimeout = (p, ms) => new Promise((res, rej) => { const t = setTimeout(() => rej(new Error("timeout")), ms); p.then((v) => { clearTimeout(t); res(v); }, (e) => { clearTimeout(t); rej(e); }); });
+export const withTimeout = <T>(p: Promise<T>, ms: number): Promise<T> => new Promise((res, rej) => { const t = setTimeout(() => rej(new Error("timeout")), ms); p.then((v) => { clearTimeout(t); res(v); }, (e) => { clearTimeout(t); rej(e); }); });
 
-export const loadImageEl = (url): Promise<HTMLImageElement> => new Promise((res, rej) => { const i = new window.Image(); i.onload = () => res(i); i.onerror = () => rej(new Error("decode")); i.src = url; });
+export const loadImageEl = (url?: any): Promise<HTMLImageElement> => new Promise((res, rej) => { const i = new window.Image(); i.onload = () => res(i); i.onerror = () => rej(new Error("decode")); i.src = url; });
 
-const abs = (p) => new URL(p, document.baseURI).href;
+const abs = (p?: any) => new URL(p, document.baseURI).href;
 
 // Runs inside the OCR worker before the engine loads (serialised with toString, so plain ES5 only): Leptonica's internal
 // diagnostics («Error in boxClipToRectangle…», «Estimating resolution…») stay inside the worker instead of the console.
@@ -18,22 +18,22 @@ export function ocrWorkerShim() {
 let OCR_WORKER_URL = null;
 const ocrWorkerUrl = () => OCR_WORKER_URL || (OCR_WORKER_URL = URL.createObjectURL(new Blob(["(" + ocrWorkerShim.toString() + ")();importScripts(" + JSON.stringify(abs(OCR_ASSETS.worker)) + ");"], { type: "application/javascript" })));
 
-export async function ocrOpen(langs, onStep) {
+export async function ocrOpen(langs?: any, onStep?: any) {
   const T = await loadTesseract(); if (!T || !T.createWorker) throw new Error("ocr_unavailable");
-  const opts = { workerPath: ocrWorkerUrl(), workerBlobURL: false, corePath: abs(OCR_ASSETS.core), langPath: abs(OCR_ASSETS.lang), cacheMethod: "none", gzip: true, logger: (m) => { try { if (onStep) onStep(m); } catch (e) {} }, errorHandler: () => {} };
+  const opts: any = { workerPath: ocrWorkerUrl(), workerBlobURL: false, corePath: abs(OCR_ASSETS.core), langPath: abs(OCR_ASSETS.lang), cacheMethod: "none", gzip: true, logger: (m?: any) => { try { if (onStep) onStep(m); } catch (e) {} }, errorHandler: () => {} };
   const w: any = await withTimeout(T.createWorker(langs, 1, opts, { debug_file: "/dev/null" }), 90000);
   await w.setParameters({ preserve_interword_spaces: "1", user_defined_dpi: "300" }); return w;
 }
 
 // grayscale + 2–98 % contrast stretch on a copy scaled for OCR; mode "otsu" = one global threshold, "adaptive" = local-mean
 // (Sauvola-style) threshold, which survives blur, sensor noise and uneven light far better on phone photos. Caller zeroes the canvas.
-export function ocrPrep(src, sx, sy, sw, sh, targetW, mode = "gray") {
+export function ocrPrep(src?: any, sx?: any, sy?: any, sw?: any, sh?: any, targetW?: any, mode: any = "gray") {
   const k = Math.min(3, targetW / Math.max(1, sw)); const W = Math.max(8, Math.round(sw * k)), H = Math.max(8, Math.round(sh * k));
   const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d", { willReadFrequently: true }); x.imageSmoothingQuality = "high"; x.drawImage(src, sx, sy, sw, sh, 0, 0, W, H);
   const im = x.getImageData(0, 0, W, H), d = im.data, n = W * H, g = new Uint8ClampedArray(n), hist = new Uint32Array(256);
   for (let i = 0; i < n; i++) { const v = (d[i * 4] * 299 + d[i * 4 + 1] * 587 + d[i * 4 + 2] * 114) / 1000 | 0; g[i] = v; hist[v]++; }
   let lo = 0, hi = 255, acc = 0; for (let v = 0; v < 256; v++) { acc += hist[v]; if (acc >= n * 0.02) { lo = v; break; } } acc = 0; for (let v = 255; v >= 0; v--) { acc += hist[v]; if (acc >= n * 0.02) { hi = v; break; } }
-  const span = Math.max(1, hi - lo); const st = (v) => { const y = ((v - lo) * 255 / span) | 0; return y < 0 ? 0 : y > 255 ? 255 : y; }; let thr = 128; const binar = mode === "otsu";
+  const span = Math.max(1, hi - lo); const st = (v?: any) => { const y = ((v - lo) * 255 / span) | 0; return y < 0 ? 0 : y > 255 ? 255 : y; }; let thr = 128; const binar = mode === "otsu";
   if (mode === "adaptive") {
     const W1 = W + 1, I = new Float64Array(W1 * (H + 1)), I2 = new Float64Array(W1 * (H + 1));
     for (let y = 0; y < H; y++) { let s = 0, s2 = 0; for (let xx = 0; xx < W; xx++) { const v = st(g[y * W + xx]); g[y * W + xx] = v; s += v; s2 += v * v; I[(y + 1) * W1 + xx + 1] = I[y * W1 + xx + 1] + s; I2[(y + 1) * W1 + xx + 1] = I2[y * W1 + xx + 1] + s2; } }

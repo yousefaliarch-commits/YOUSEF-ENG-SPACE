@@ -9,28 +9,28 @@ import { createContext, useCallback, useContext, useSyncExternalStore } from "re
 //  to the "shared" store, so a tap on the iPhone is a tap on the Pixel.
 // =====================================================================
 export const liveState = () => {
-  const w = typeof window !== "undefined" ? window : {};
+  const w: any = typeof window !== "undefined" ? window : {};
   if (!w.__LIVE) w.__LIVE = { stores: {}, root: null, src: null, draft: null, lastGood: null, updates: 0, log: [], panel: null, auto: true, mirror: true, zoom: "fit", devMode: { ios: "follow", android: "follow" }, design: null, startedAt: Date.now() };
   return w.__LIVE;
 };
 
 export function createStore() {
-  const state = new Map(); const subs = new Set(); let version = 0;
+  const state = new Map(); const subs = new Set<() => void>(); let version = 0;
   const emit = () => { version++; subs.forEach((f) => { try { f(); } catch (e) {} }); };
   return {
-    has: (k) => state.has(k),
-    get: (k, init) => { if (!state.has(k)) state.set(k, typeof init === "function" ? init() : init); return state.get(k); },
-    set: (k, v) => { const prev = state.get(k); const next = typeof v === "function" ? v(prev) : v; if (Object.is(prev, next)) return; state.set(k, next); emit(); },
-    subscribe: (f) => { subs.add(f); return () => subs.delete(f); },
-    snapshot: () => Object.fromEntries(state), load: (obj) => { state.clear(); Object.entries(obj || {}).forEach(([k, v]) => state.set(k, v)); emit(); },
+    has: (k?: any) => state.has(k),
+    get: (k?: any, init?: any) => { if (!state.has(k)) state.set(k, typeof init === "function" ? init() : init); return state.get(k); },
+    set: (k?: any, v?: any) => { const prev = state.get(k); const next = typeof v === "function" ? v(prev) : v; if (Object.is(prev, next)) return; state.set(k, next); emit(); },
+    subscribe: (f?: any) => { subs.add(f); return () => subs.delete(f); },
+    snapshot: () => Object.fromEntries(state), load: (obj?: any) => { state.clear(); Object.entries(obj || {}).forEach(([k, v]: any) => state.set(k, v)); emit(); },
     reset: () => { state.clear(); emit(); }, get version() { return version; }, get size() { return state.size; },
   };
 }
 
-export const storeFor = (id) => { const L = liveState(); if (!L.stores[id]) L.stores[id] = createStore(); return L.stores[id]; };
+export const storeFor = (id?: any) => { const L = liveState(); if (!L.stores[id]) L.stores[id] = createStore(); return L.stores[id]; };
 
 // Drop-in replacement for useState whose value lives in a store (falls back to a private store when none is given)
-export function useStore(store, key, init) {
+export function useStore(store?: any, key?: any, init?: any) {
   const get = () => store.get(key, init);
   const value = useSyncExternalStore(store.subscribe, get, get);
   const set = useCallback((next) => store.set(key, next), [store, key]);
@@ -38,10 +38,10 @@ export function useStore(store, key, init) {
 }
 
 // Which device the app is rendered inside: "ios" | "android" | "web". A few chrome details adapt (back glyph, tab bar, sheets, switches).
-export const PlatformCtx = createContext("web");
+export const PlatformCtx = createContext<any>("web");
 
 // light / dark as the surrounding screen renders it (each phone in the device previews can differ from the page)
-export const ModeCtx = createContext("dark");
+export const ModeCtx = createContext<any>("dark");
 
 export const useMode = () => useContext(ModeCtx) || "dark";
 

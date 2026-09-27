@@ -34,7 +34,7 @@ export const REGIONS = [
   ["gc", "القاهرة الكبرى"], ["alex", "الإسكندرية والساحل الشمالي"], ["delta", "الدلتا"], ["canal", "منطقة القناة"], ["upper", "الصعيد"], ["sinai", "البحر الأحمر وسيناء"], ["west", "الوادي الجديد والصحراء الغربية"],
 ];
 
-export const GOVS = [
+export const GOVS: any = [
   // [key, name, region, multiplier]
   ["cairo", "القاهرة", "gc", 1.00], ["giza", "الجيزة", "gc", 0.98], ["qalyubia", "القليوبية", "gc", 0.92],
   ["alexandria", "الإسكندرية", "alex", 0.93], ["matrouh", "مطروح", "alex", 0.95], ["beheira", "البحيرة", "alex", 0.84],
@@ -78,25 +78,25 @@ export const CITIES = {
   newvalley: [["kharga", "الخارجة", "city"], ["dakhla", "الداخلة", "markaz"], ["farafra", "الفرافرة", "markaz", 0.84], ["paris", "باريس", "markaz", 0.82], ["balat", "بلاط", "markaz", 0.82]],
 };
 
-export const gov = (key) => GOVS.find((g) => g[0] === key) || GOVS[0];
+export const gov = (key?: any) => GOVS.find((g) => g[0] === key) || GOVS[0];
 
-export const govName = (key) => gov(key)[1];
+export const govName = (key?: any) => gov(key)[1];
 
-export const regionName = (key) => (REGIONS.find((r) => r[0] === key) || REGIONS[0])[1];
+export const regionName = (key?: any) => (REGIONS.find((r) => r[0] === key) || REGIONS[0])[1];
 
-export const citiesOf = (govKey) => CITIES[govKey] || [];
+export const citiesOf = (govKey?: any) => CITIES[govKey] || [];
 
-export const cityOf = (govKey, cityKey) => cityKey ? citiesOf(govKey).find((c) => c[0] === cityKey) : null;
+export const cityOf = (govKey?: any, cityKey?: any) => cityKey ? citiesOf(govKey).find((c) => c[0] === cityKey) : null;
 
 export const areaOf = cityOf;
 
-export const cityName = (govKey, cityKey) => { const c = cityOf(govKey, cityKey); return c ? c[1] : ""; };
+export const cityName = (govKey?: any, cityKey?: any) => { const c = cityOf(govKey, cityKey); return c ? c[1] : ""; };
 
-export const placeName = (govKey, cityKey) => { const c = cityOf(govKey, cityKey); return c ? `${c[1]} · ${govName(govKey)}` : govName(govKey); };
+export const placeName = (govKey?: any, cityKey?: any) => { const c = cityOf(govKey, cityKey); return c ? `${c[1]} · ${govName(govKey)}` : govName(govKey); };
 
-export const placeShort = (govKey, cityKey) => { const c = cityOf(govKey, cityKey); return c ? c[1] : govName(govKey); };
+export const placeShort = (govKey?: any, cityKey?: any) => { const c = cityOf(govKey, cityKey); return c ? c[1] : govName(govKey); };
 
-export const placeMult = (govKey, cityKey) => { const c = cityOf(govKey, cityKey); return c && c[3] != null ? c[3] : gov(govKey)[3]; };
+export const placeMult = (govKey?: any, cityKey?: any) => { const c = cityOf(govKey, cityKey); return c && c[3] != null ? c[3] : gov(govKey)[3]; };
 
 export const CITY_COUNT = Object.values(CITIES).reduce((a, l) => a + l.length, 0);
 
@@ -105,4 +105,4 @@ export const RENT = { cairo: 9500, giza: 8500, qalyubia: 5500, alexandria: 7500,
 
 export const RENT_AREA = { nac: 12000, newcairo: 14000, rehab: 13000, madinaty: 13000, zayed: 13000, oct: 11000, heliopolis: 11000, zamalek: 16000, maadi: 12000, alamein: 15000, hekma: 15000, newmansoura: 7000, sokhna: 9000, galala: 9000, ramadan: 5500, sadat: 4500, eastps: 6500, toshka: 0, gouna: 12000, sharm: 9000, smouha: 9000 };
 
-export const rentFor = (g, a) => (a && RENT_AREA[a] != null) ? RENT_AREA[a] : (RENT[g] || 5000);
+export const rentFor = (g?: any, a?: any) => (a && RENT_AREA[a] != null) ? RENT_AREA[a] : (RENT[g] || 5000);

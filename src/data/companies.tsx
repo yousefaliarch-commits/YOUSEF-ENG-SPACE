@@ -20,12 +20,12 @@ export const ROOMS = [
   { id: "ama", name: "اسأل خبير · AMA", desc: "جلسة أسبوعية مع مهندس سينيور", members: 7760, icon: Sparkles },
 ];
 
-export const room = (id) => ROOMS.find((r) => r.id === id);
+export const room = (id?: any) => ROOMS.find((r) => r.id === id);
 
 // Exactly three reactions everywhere — posts, comments and replies
 export const REACTIONS = [["agree", "أوافق", ThumbsUp], ["disagree", "لا أوافق", ThumbsDown], ["useful", "مفيد", Lightbulb]];
 
-export const POST_TYPES = [["question", "سؤال", MessageCircle], ["vote", "عرض ولا لأ", Vote], ["reveal", "كشف راتب", Wallet], ["poll", "استطلاع", ListChecks]];
+export const POST_TYPES: any = [["question", "سؤال", MessageCircle], ["vote", "عرض ولا لأ", Vote], ["reveal", "كشف راتب", Wallet], ["poll", "استطلاع", ListChecks]];
 
 
 // ---- Companies: facts (founded, hq, ownership, category, grade, domain) are public record; stats are modeled ----
@@ -38,11 +38,11 @@ export const CAT_DESC = { backoffice: "شركات سعودية وإماراتي�
 // tile until its HR uploads one. (Before launch: written permission for each logo, or monograms only.)
 const LOGO_URLS = import.meta.glob("../assets/logos/*.png", { eager: true, import: "default", query: "?url" }) as Record<string, string>;
 const logoUrl = (id: string) => LOGO_URLS[`../assets/logos/${id}.png`] || null;
-export const LOGO_FILES: Record<string, string> = Object.fromEntries(Object.entries(LOGO_MANIFEST as Record<string, string>).filter(([id]) => logoUrl(id)));
+export const LOGO_FILES: Record<string, string> = Object.fromEntries(Object.entries(LOGO_MANIFEST as Record<string, string>).filter(([id]: any) => logoUrl(id)));
 
-export const co = (id, name, en, cat, founded, hq, own, size, grade, sector, median, reports, recommend, range, perks, bands, reviews, extra) => ({ id, name, en, cat, founded, hq, own, size, grade, sector, median, reports, recommend, range, perks, bands, reviews: reviews || [], logo: LOGO_FILES[id] ? logoUrl(id) : null, logoSrc: LOGO_FILES[id] || null, origin: "مصر", pay: { basis: "EGP", mult: 1 }, ...(extra || {}) });
+export const co = (id?: any, name?: any, en?: any, cat?: any, founded?: any, hq?: any, own?: any, size?: any, grade?: any, sector?: any, median?: any, reports?: any, recommend?: any, range?: any, perks?: any, bands?: any, reviews?: any, extra?: any) => ({ id, name, en, cat, founded, hq, own, size, grade, sector, median, reports, recommend, range, perks, bands, reviews: reviews || [], logo: LOGO_FILES[id] ? logoUrl(id) : null, logoSrc: LOGO_FILES[id] || null, origin: "مصر", pay: { basis: "EGP", mult: 1 }, ...(extra || {}) });
 
-export const bo = (id, name, en, origin, ccy, hq, sector, size, reports, recommend, perks, bands, extra) => { const base = 30000; const med = Math.round(base * BACKOFFICE_MULT / 500) * 500; return co(id, name, en, "backoffice", extra?.founded || null, hq, `دولي — المقر ${origin}`, size, "—", sector, med, reports, recommend, [Math.round(med * 0.55 / 500) * 500, Math.round(med * 2.2 / 500) * 500], perks, bands, extra?.reviews, { origin, pay: { basis: ccy, mult: BACKOFFICE_MULT } }); };
+export const bo = (id?: any, name?: any, en?: any, origin?: any, ccy?: any, hq?: any, sector?: any, size?: any, reports?: any, recommend?: any, perks?: any, bands?: any, extra?: any) => { const base = 30000; const med = Math.round(base * BACKOFFICE_MULT / 500) * 500; return co(id, name, en, "backoffice", extra?.founded || null, hq, `دولي — المقر ${origin}`, size, "—", sector, med, reports, recommend, [Math.round(med * 0.55 / 500) * 500, Math.round(med * 2.2 / 500) * 500], perks, bands, extra?.reviews, { origin, pay: { basis: ccy, mult: BACKOFFICE_MULT } }); };
 
 export const COMPANIES = [
   // مقاولات عامة
@@ -135,20 +135,20 @@ export const COMPANIES = [
   co("systra", "سيسترا — مصر", "SYSTRA Egypt", "transport", null, "cairo", "دولي", "100–500", "—", "استشاري نقل ومترو", 26000, 14, 79, [15500, 52000], ["تأمين شامل"], [["مهندس تصميم", 26000, 7]]),
 ];
 
-export const company = (id) => COMPANIES.find((c) => c.id === id);
+export const company = (id?: any) => COMPANIES.find((c) => c.id === id);
 
-export const catName = (id) => label(CATS, id);
+export const catName = (id?: any) => label(CATS, id);
 
-export const companyMult = (c) => (c && c.pay && c.pay.mult !== 1 ? c.pay.mult : (c ? CAT_MULT[c.cat] || 1 : 1));
+export const companyMult = (c?: any) => (c && c.pay && c.pay.mult !== 1 ? c.pay.mult : (c ? CAT_MULT[c.cat] || 1 : 1));
 
 export const LOGO_SOURCE = { wikipedia: "ويكيبيديا (شعار الصفحة الرسمية)", site: "الموقع الرسمي للشركة", duckduckgo: "أيقونة الموقع الرسمي", google: "أيقونة الموقع الرسمي" };
 
-export const logoSourceLabel = (c) => c.logoSrc ? (LOGO_SOURCE[c.logoSrc.split(":")[0]] || "الموقع الرسمي") : null;
+export const logoSourceLabel = (c?: any) => c.logoSrc ? (LOGO_SOURCE[c.logoSrc.split(":")[0]] || "الموقع الرسمي") : null;
 
-export const hueOf = (id) => [...id].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) % 360, 7);
+export const hueOf = (id?: any) => [...id].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) % 360, 7);
 
 // Logo tile: real logo on a white plate (brand marks are designed for light backgrounds), an HR-uploaded logo overrides it, and a monogram stands in when neither exists
-export function CompanyLogo({ c, size = 44, logo, className = "" }) {
+export function CompanyLogo({ c, size = 44, logo, className = "" }: any) {
   const [broken, setBroken] = useState(false); const src = logo || (!broken && c.logo) || null;
   const initials = c.en.split(" ").filter((w) => /^[A-Za-z]/.test(w)).map((w) => w[0]).join("").slice(0, 2).toUpperCase() || c.name[0];
   const h = hueOf(c.id);

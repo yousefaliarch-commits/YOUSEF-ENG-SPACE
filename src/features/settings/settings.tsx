@@ -28,10 +28,10 @@ export const LANG_OPTS = [["ar", "العربية", "واجهة من اليمين
 
 export const PICK_LANG = L3("اختر لغة للمتابعة · Pick a language to continue", "اختاري لغة للمتابعة · Pick a language to continue", "اختر لغة للمتابعة · Pick a language to continue");
 
-export function LanguageScreen({ app, onContinue, next = "signup" }) {
-  const [picked, setPicked] = useState(!!app.langChosen); const first = useRef(null); const en = app.lang === "en";
+export function LanguageScreen({ app, onContinue, next = "signup" }: any) {
+  const [picked, setPicked] = useState(!!app.langChosen); const first = useRef<any>(null); const en = app.lang === "en";
   useEffect(() => { try { if (first.current) first.current.focus({ preventScroll: true }); } catch (e) {} }, []);
-  const choose = (id) => { setPicked(true); app.setLang(id); };
+  const choose = (id?: any) => { setPicked(true); app.setLang(id); };
   const NEXT = { signup: L3("التالي: إنشاء الحساب", null, "Next: create your account"), signin: L3("التالي: تسجيل الدخول", null, "Next: sign in"), home: L3("التالي: الصفحة الرئيسية", null, "Next: Home") }[next] || null;
   return (
     <div translate="no" className="relative h-full flex flex-col overflow-y-auto scroll-area bg-canvas text-ink" data-screen="language">
@@ -40,7 +40,7 @@ export function LanguageScreen({ app, onContinue, next = "signup" }) {
         <div className="rise flex items-center justify-center gap-2.5"><ArchMark size={30} /><Wordmark size="text-[24px]" /></div>
         <h1 id="lang-title" className="rise mt-8 text-center" style={{ animationDelay: "60ms" }}><span dir="rtl" lang="ar" className="block text-[22px] font-medium">اختر لغتك</span><span dir="ltr" lang="en" className="block mt-1 font-grotesk text-[15px] text-ink-2">Choose your language</span></h1>
         <div role="radiogroup" aria-labelledby="lang-title" className="mt-6 space-y-3">
-          {LANG_OPTS.map(([id, name, sub, hello, d, glyph], i) => { const on = picked && app.lang === id; return (
+          {LANG_OPTS.map(([id, name, sub, hello, d, glyph]: any, i) => { const on = picked && app.lang === id; return (
             <button key={id} ref={i === 0 ? first : undefined} type="button" role="radio" aria-checked={on} onClick={() => choose(id)} dir={d} lang={id} style={{ animationDelay: `${140 + i * 90}ms` }}
               className={`rise press w-full flex items-center gap-4 p-4 rounded-2xl border text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${on ? "bg-wash border-accent/50" : "bg-surface border-line-2 hover:border-accent/40"}`}>
               <span className={`grid place-items-center w-12 h-12 rounded-2xl text-[18px] font-semibold transition-colors ${id === "en" ? "font-grotesk" : ""} ${on ? "bg-solid text-white" : "bg-elevated text-accent"}`}>{glyph}</span>
@@ -59,7 +59,7 @@ export function LanguageScreen({ app, onContinue, next = "signup" }) {
 }
 
 
-export const SettingsLink = ({ icon: I, title, sub, onClick }) => (
+export const SettingsLink = ({ icon: I, title, sub, onClick }: any) => (
   <button type="button" onClick={onClick} className="press w-full flex items-center gap-3 py-3 text-start border-t border-line first:border-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
     <span className="grid place-items-center w-9 h-9 rounded-xl bg-wash text-accent shrink-0"><I size={16} /></span>
     <span className="min-w-0 flex-1"><span className="block text-[13.5px] text-ink leading-snug">{title}</span>{sub && <span className="block mt-0.5 text-[11px] text-ink-3 leading-snug">{sub}</span>}</span>
@@ -67,17 +67,17 @@ export const SettingsLink = ({ icon: I, title, sub, onClick }) => (
   </button>
 );
 
-export const SETTINGS_TOGGLES = (app) => { const p = app.profile; return [["notify", "إشعارات الردود والوظائف المطابقة"], ["dm", "السماح بالرسائل الخاصة من الزملاء"], ...(p.photo ? [["showPhoto", "إظهار صورتي مع اسمي في المشاركات العلنية"]] : []), ...(app.isCo || app.moneyAccess === "none" ? [] : [["openToRecruiters", "متاح لرسائل الشركات عند مطابقة وظيفة"]]), ...(app.moneyAccess === "none" ? [] : [["hide", "إخفاء نشاطي عن الشركات التي أتابعها"]]), ["rotate", "تجديد المعرّف المجهول تلقائيًا كل 90 يومًا"]]; };
+export const SETTINGS_TOGGLES = (app?: any) => { const p = app.profile; return [["notify", "إشعارات الردود والوظائف المطابقة"], ["dm", "السماح بالرسائل الخاصة من الزملاء"], ...(p.photo ? [["showPhoto", "إظهار صورتي مع اسمي في المشاركات العلنية"]] : []), ...(app.isCo || app.moneyAccess === "none" ? [] : [["openToRecruiters", "متاح لرسائل الشركات عند مطابقة وظيفة"]]), ...(app.moneyAccess === "none" ? [] : [["hide", "إخفاء نشاطي عن الشركات التي أتابعها"]]), ["rotate", "تجديد المعرّف المجهول تلقائيًا كل 90 يومًا"]]; };
 
 
-export function SettingsScreen({ app }) {
-  const p = app.profile; const persist = (patch) => app.updateProfile(patch);
+export function SettingsScreen({ app }: any) {
+  const p = app.profile; const persist = (patch?: any) => app.updateProfile(patch);
   return (
     <div className="py-4 space-y-3">
       <Panel className="p-4">
         <h2 className="text-[13px] font-medium inline-flex items-center gap-1.5"><Languages size={15} className="text-accent" /> اللغة</h2>
         <div role="radiogroup" aria-label="اللغة" className="mt-3 grid grid-cols-2 gap-2">
-          {[["ar", "العربية", "ع"], ["en", "English", "En"]].map(([id, name, glyph]) => (
+          {[["ar", "العربية", "ع"], ["en", "English", "En"]].map(([id, name, glyph]: any) => (
             <button key={id} type="button" role="radio" aria-checked={app.lang === id} translate="no" lang={id} onClick={() => app.setLang(id)}
               className={`press flex items-center gap-2.5 h-14 px-3 rounded-2xl border text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${app.lang === id ? "bg-wash border-accent/50 text-ink" : "bg-canvas border-line-2 text-ink-2 hover:text-ink"}`}>
               <span className={`grid place-items-center w-9 h-9 rounded-xl text-[14px] font-semibold ${id === "en" ? "font-grotesk" : ""} ${app.lang === id ? "bg-solid text-white" : "bg-elevated text-accent"}`}>{glyph}</span>
@@ -88,11 +88,11 @@ export function SettingsScreen({ app }) {
         <p className="mt-2 text-[11px] leading-snug text-ink-3">{gx(p.gender, "تتبدّل الواجهة واتجاهها فورًا دون أن تفقد مكانك. اللغة تخص الواجهة فقط — المنشورات والتعليقات والرسائل تظهر دائمًا كما كتبها أصحابها.", "تتبدّل الواجهة واتجاهها فورًا دون أن تفقدي مكانك. اللغة تخص الواجهة فقط — المنشورات والتعليقات والرسائل تظهر دائمًا كما كتبها أصحابها.")}</p>
       </Panel>
       <Panel className="p-4"><h2 className="text-[13px] font-medium mb-2 inline-flex items-center gap-1.5"><Sun size={15} className="text-accent" /> المظهر</h2>
-        <div role="radiogroup" aria-label="المظهر" className="flex p-1 rounded-full bg-canvas border border-line-2">{THEMES.map(([id, l, I]) => <button key={id} type="button" role="radio" aria-checked={app.theme === id} onClick={() => { app.setTheme(id); app.toast(id === "system" ? "المظهر يتبع جهازك" : id === "light" ? "الوضع الفاتح" : "الوضع الداكن"); }} className={`press flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-full text-[12.5px] transition-colors ${app.theme === id ? "bg-elevated text-ink" : "text-ink-2"}`}><I size={14} className={app.theme === id ? "text-accent" : ""} />{l}</button>)}</div>
+        <div role="radiogroup" aria-label="المظهر" className="flex p-1 rounded-full bg-canvas border border-line-2">{THEMES.map(([id, l, I]: any) => <button key={id} type="button" role="radio" aria-checked={app.theme === id} onClick={() => { app.setTheme(id); app.toast(id === "system" ? "المظهر يتبع جهازك" : id === "light" ? "الوضع الفاتح" : "الوضع الداكن"); }} className={`press flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-full text-[12.5px] transition-colors ${app.theme === id ? "bg-elevated text-ink" : "text-ink-2"}`}><I size={14} className={app.theme === id ? "text-accent" : ""} />{l}</button>)}</div>
         <p className="mt-2 text-[10.5px] text-ink-3 leading-snug">الآن: {app.mode === "light" ? "فاتح" : "داكن"} · يُحفظ اختيارك على هذا الجهاز ويبقى بعد إعادة التحميل. تبديل سريع من زر الشمس والقمر أعلى الرئيسية.</p>
       </Panel>
       <Panel className="p-4"><h2 className="text-[13px] font-medium mb-1 inline-flex items-center gap-1.5"><Bell size={15} className="text-accent" /> الإشعارات والخصوصية</h2>
-        {SETTINGS_TOGGLES(app).map(([k, l]) => <div key={k} className="py-2.5 flex items-center justify-between gap-3 border-t border-line first:border-0"><span className="text-[13px] text-ink leading-snug">{l}</span><Toggle on={!!p[k]} onChange={(v) => { persist({ [k]: v }); app.toast(v ? "تم التفعيل" : "تم الإيقاف"); }} label={l} /></div>)}
+        {SETTINGS_TOGGLES(app).map(([k, l]: any) => <div key={k} className="py-2.5 flex items-center justify-between gap-3 border-t border-line first:border-0"><span className="text-[13px] text-ink leading-snug">{l}</span><Toggle on={!!p[k]} onChange={(v) => { persist({ [k]: v }); app.toast(v ? "تم التفعيل" : "تم الإيقاف"); }} label={l} /></div>)}
       </Panel>
       <Panel className="px-4 py-2"><h2 className="pt-2 pb-1 text-[13px] font-medium inline-flex items-center gap-1.5"><CircleHelp size={15} className="text-accent" /> المساعدة</h2>
         <SettingsLink icon={Compass} title="جولة تعريفية في التطبيق" sub={gx(p.gender, "جولة تفاعلية قصيرة على أهم الأقسام — أعدها متى شئت", "جولة تفاعلية قصيرة على أهم الأقسام — أعيديها متى شئتِ")} onClick={app.startTour} />
@@ -109,8 +109,8 @@ export function SettingsScreen({ app }) {
 // ---- the feature guide: one section per area of the app, shaped by what this account can actually use ----
 export const GUIDE_PULL = L3("اسحب الشاشة لأسفل للتحديث.", "اسحبي الشاشة لأسفل للتحديث.", "Pull down to refresh.");
 
-export function guideSections(app) {
-  const co = app.isCo, sup = app.moneyAccess === "none", eng = !co && !sup; const S = [];
+export function guideSections(app?: any) {
+  const co = app.isCo, sup = app.moneyAccess === "none", eng = !co && !sup; const S: any = [];
   S.push({ id: "start", icon: VenetianMask, title: L3("البداية: هويتان منفصلتان", null, "Getting started: two separate identities"), points: [
     L3("لك هويتان: علنية باسمك وصورتك، ومجهولة بمعرّف مثل ‎#a3f9 وشخصية تمثّل تخصصك. لا يستطيع أي عضو أو صاحب عمل الربط بينهما.", null, "You have two identities: a public one with your name and photo, and an anonymous one with an ID like #a3f9 and a character that represents your discipline. No member or employer can link one to the other."),
     L3("قبل كل منشور أو رد أو تقييم أو مشاركة راتب تختار الهوية لتلك المشاركة وحدها.", "قبل كل منشور أو رد أو تقييم أو مشاركة راتب تختارين الهوية لتلك المشاركة وحدها.", "Before every post, reply, review or salary share, you choose the identity for that contribution alone."),
@@ -200,8 +200,8 @@ export const GUIDE_HEAD = {
   tour: L3("ابدأ الجولة التفاعلية", "ابدئي الجولة التفاعلية", "Start the interactive tour"),
 };
 
-export function GuideScreen({ app }) {
-  const sections = guideSections(app); const [open, setOpen] = useState(sections[0].id); const t = (x) => say(app, x);
+export function GuideScreen({ app }: any) {
+  const sections = guideSections(app); const [open, setOpen] = useState<any>(sections[0].id); const t = (x?: any) => say(app, x);
   return (
     <div translate="no" lang={app.lang} className="py-4 space-y-3">
       <Panel className="p-4 overflow-hidden relative">
@@ -232,9 +232,9 @@ export function GuideScreen({ app }) {
 
 
 // ---- the interactive tour: a spotlight that walks across the real interface, switching tabs as it explains them ----
-export function tourSteps(app) {
+export function tourSteps(app?: any) {
   const co = app.isCo, sup = app.moneyAccess === "none";
-  const TAB = {
+  const TAB: any = {
     home: [L3("الرئيسية", null, "Home"), co ? L3("ملخّص حساب شركتك: إعلاناتك النشطة ومدى وصولها، ونبض السوق في التخصصات التي توظّف لها.", "ملخّص حساب شركتك: إعلاناتك النشطة ومدى وصولها، ونبض السوق في التخصصات التي توظّفين لها.", "A summary of your company account: your active ads and their reach, and the market pulse in the disciplines you hire for.")
       : L3("ملخّص مرتّب حسب تخصصك ومكانك وهدفك: نطاق راتبك المتوقع، والوظائف المطابقة لك، والنقاشات الأنشط في مجالك.", null, "A summary arranged around your discipline, location and goal: your expected salary range, jobs matching you, and the most active discussions in your field.")],
     community: [L3("المجتمع", null, "Community"), sup ? L3("اسأل زملاءك وشارك خبرة الموقع باسمك أو بمعرّف مجهول. الغرف تجمع كل موضوع، و«مفيد» يرفع أفضل الردود.", "اسألي زملاءك وشاركي خبرة الموقع باسمك أو بمعرّف مجهول. الغرف تجمع كل موضوع، و«مفيد» يرفع أفضل الردود.", "Ask colleagues and share site experience under your name or an anonymous ID. Rooms group every topic, and “Helpful” lifts the best replies.")
@@ -246,7 +246,7 @@ export function tourSteps(app) {
     tools: [L3("الأدوات", null, "Tools"), L3("حاسبة الصافي، ومقارن العروض، وسكريبت التفاوض، وتوقيت الزيادة، وغيرها — قرارات مبنية على أرقام.", null, "Net calculator, offer comparer, negotiation script, raise timing and more — decisions built on numbers.")],
     inbox: [L3("الرسائل", null, "Messages"), L3("رسائل خاصة ضمن قواعد واضحة تحمي الطرفين، وإشعارات الردود والوظائف المطابقة. الهوية التي تبدأ بها المحادثة تثبت بعد أول رسالة.", "رسائل خاصة ضمن قواعد واضحة تحمي الطرفين، وإشعارات الردود والوظائف المطابقة. الهوية التي تبدئين بها المحادثة تثبت بعد أول رسالة.", "Direct messages under clear rules that protect both sides, plus notifications for replies and matching jobs. The identity you start a chat with is fixed after the first message.")],
   };
-  const steps = [{ id: "hello", icon: Compass, title: L3("أهلًا بك في EngSpace", "أهلًا بكِ في EngSpace", "Welcome to EngSpace"), body: L3("جولة قصيرة على أهم الأقسام — أقل من دقيقة. يمكنك تخطيها الآن وإعادتها في أي وقت من الإعدادات.", "جولة قصيرة على أهم الأقسام — أقل من دقيقة. يمكنكِ تخطيها الآن وإعادتها في أي وقت من الإعدادات.", "A short tour of the main sections — under a minute. You can skip it now and replay it anytime from Settings.") }];
+  const steps: any = [{ id: "hello", icon: Compass, title: L3("أهلًا بك في EngSpace", "أهلًا بكِ في EngSpace", "Welcome to EngSpace"), body: L3("جولة قصيرة على أهم الأقسام — أقل من دقيقة. يمكنك تخطيها الآن وإعادتها في أي وقت من الإعدادات.", "جولة قصيرة على أهم الأقسام — أقل من دقيقة. يمكنكِ تخطيها الآن وإعادتها في أي وقت من الإعدادات.", "A short tour of the main sections — under a minute. You can skip it now and replay it anytime from Settings.") }];
   steps.push({ id: "tabbar", target: "tabbar", icon: Layers, title: L3("التنقل الرئيسي", null, "Main navigation"), body: sup ? L3("حساب مشرف الموقع فيه قسمان: المجتمع والرسائل. لا رواتب ولا أرقام مالية في أي مكان.", null, "A Site Supervisor account has two sections: Community and Messages. No salaries and no financial figures anywhere.")
     : L3("كل أقسام التطبيق في هذا الشريط. القسم المفتوح مضيء، والرقم على «الرسائل» يعني أن جديدًا في انتظارك.", null, "Every section of the app is in this bar. The open section is highlighted, and a number on “Messages” means something new is waiting.") });
   app.tabs.forEach((t) => { const d = TAB[t.id]; if (d) steps.push({ id: "tab-" + t.id, target: "tab-" + t.id, tab: t.id, icon: t.icon, title: d[0], body: d[1] }); });
@@ -262,12 +262,12 @@ export const TOUR_UI = {
   start: L3("ابدأ الجولة", "ابدئي الجولة", "Start the tour"), next: L3("التالي", null, "Next"), finish: L3("ابدأ استخدام EngSpace", "ابدئي استخدام EngSpace", "Start using EngSpace"),
 };
 
-export function Tour({ app, onClose }) {
-  const steps = tourSteps(app); const [i, setI] = useState(0); const [geo, setGeo] = useState(null); const box = useRef(null); const nextBtn = useRef(null); const home = useRef(app.tab);
-  const s = steps[Math.min(i, steps.length - 1)]; const last = i >= steps.length - 1; const rtl = app.lang !== "en"; const t = (x) => say(app, x);
+export function Tour({ app, onClose }: any) {
+  const steps = tourSteps(app); const [i, setI] = useState(0); const [geo, setGeo] = useState<any>(null); const box = useRef<any>(null); const nextBtn = useRef<any>(null); const home = useRef<any>(app.tab);
+  const s = steps[Math.min(i, steps.length - 1)]; const last = i >= steps.length - 1; const rtl = app.lang !== "en"; const t = (x?: any) => say(app, x);
   const measure = () => { const b = box.current; if (!b) return; const B = b.getBoundingClientRect(); const el = s.target && b.parentElement ? b.parentElement.querySelector(`[data-tour="${s.target}"]`) : null; const R = el ? el.getBoundingClientRect() : null; setGeo({ W: B.width, H: B.height, r: R && R.width ? { x: R.left - B.left, y: R.top - B.top, w: R.width, h: R.height } : null }); };
-  const mRef = useRef(measure); mRef.current = measure;
-  const finish = (then) => { markTourSeen(); if (app.tab !== home.current && app.tabs.some((x) => x.id === home.current)) app.setTab(home.current); onClose(); if (then) then(); };
+  const mRef = useRef<any>(measure); mRef.current = measure;
+  const finish = (then?: any) => { markTourSeen(); if (app.tab !== home.current && app.tabs.some((x) => x.id === home.current)) app.setTab(home.current); onClose(); if (then) then(); };
   const next = () => (last ? finish() : setI((k) => k + 1)); const back = () => setI((k) => Math.max(0, k - 1));
   useEffect(() => {
     if (s.tab && app.tab !== s.tab) app.setTab(s.tab);
@@ -276,8 +276,8 @@ export function Tour({ app, onClose }) {
     return () => { cancelAnimationFrame(raf); clearTimeout(t1); clearTimeout(t2); };
   }, [i]);
   useEffect(() => { const b = box.current; if (!b || typeof ResizeObserver === "undefined") return; const ro = new ResizeObserver(() => mRef.current()); ro.observe(b); return () => ro.disconnect(); }, []);
-  const keys = useRef(null); keys.current = (e) => { if (e.key === "Escape") finish(); else if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) next(); else if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) back(); };
-  useEffect(() => { const onKey = (e) => keys.current(e); window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
+  const keys = useRef<any>(null); keys.current = (e) => { if (e.key === "Escape") finish(); else if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) next(); else if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) back(); };
+  useEffect(() => { const onKey = (e?: any) => keys.current(e); window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
   const pad = 6; const W = geo ? geo.W : 390, H = geo ? geo.H : 800; const r = geo && geo.r;
   const hole = r ? { left: r.x - pad, top: r.y - pad, width: r.w + pad * 2, height: r.h + pad * 2 } : { left: W / 2, top: H / 2, width: 0, height: 0 };
   const below = r && hole.top + hole.height + 250 < H; const I = s.icon;

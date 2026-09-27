@@ -23,10 +23,10 @@ import { NotificationsBody } from "../../ui/notifications";
 import { Chip, FilterChip, Forward, Num, Panel, Primary, RangeBar, RoundButton, Secondary } from "../../ui/primitives";
 import { fmt } from "../../ui/theme";
 
-export const engagement = (p) => (p.reactions.agree || 0) + (p.reactions.disagree || 0) + (p.reactions.useful || 0) + countComments(p.comments) * 3;
+export const engagement = (p?: any) => (p.reactions.agree || 0) + (p.reactions.disagree || 0) + (p.reactions.useful || 0) + countComments(p.comments) * 3;
 
 
-export function HomeScreen({ app }) {
+export function HomeScreen({ app }: any) {
   const p = app.profile; const co = app.isCo; const exp = personaExp(p); const m = co ? null : marketFor(p.disc, exp, p.gov, p.track, p.city); const n = co ? 0 : sampleSize(p.disc, exp, p.gov);
   const hour = new Date().getHours(); const greet = hour < 12 ? "صباح الخير" : "مساء الخير";
   const goal = (co ? GOALS_CO : GOALS).find((g) => g[0] === p.goal) || GOALS[4]; const tool = TOOLS.find((t) => t.id === GOAL_TOOL[p.goal]) || TOOLS[0];
@@ -50,7 +50,7 @@ export function HomeScreen({ app }) {
 
       {co && <section>
         <SectionTitle action="إدارة الوظائف" onAction={() => app.setTab("jobs")}>لوحة التوظيف — {p.companyName || "شركتك"}</SectionTitle>
-        <Panel className="p-4"><div className="grid grid-cols-3 gap-2 text-center">{[["وظائف منشورة", myJobs.length], ["مشاهدات", stats.views], ["فتحوا بيانات التواصل", stats.contacts]].map(([k, v]) => <div key={k} className="px-2 py-2.5 rounded-xl bg-canvas/60 border border-line"><Num className="block text-[20px] font-semibold">{fmt(v)}</Num><span className="text-[10.5px] text-ink-2 leading-tight block">{k}</span></div>)}</div>
+        <Panel className="p-4"><div className="grid grid-cols-3 gap-2 text-center">{[["وظائف منشورة", myJobs.length], ["مشاهدات", stats.views], ["فتحوا بيانات التواصل", stats.contacts]].map(([k, v]: any) => <div key={k} className="px-2 py-2.5 rounded-xl bg-canvas/60 border border-line"><Num className="block text-[20px] font-semibold">{fmt(v)}</Num><span className="text-[10.5px] text-ink-2 leading-tight block">{k}</span></div>)}</div>
           <div className="mt-3 flex gap-2"><Primary onClick={() => app.push({ type: "postjob" })} className="flex-1 h-11 press"><Plus size={15} /> نشر وظيفة</Primary><Secondary onClick={() => app.setTab("jobs")} className="flex-1 h-11 press"><Briefcase size={15} /> وظائفي</Secondary></div>
           <p className="mt-2 text-[10.5px] text-ink-3 leading-relaxed">الإعلان بدون رقم راتب — يعرض EngSpace النطاق المتوقع من السوق. التقديم يصلك مباشرة على بريدك أو هاتفك المكتوبين في الإعلان، ويصل إشعار فوري للمطابقين تمامًا فقط.</p></Panel>
       </section>}
@@ -101,7 +101,7 @@ export function HomeScreen({ app }) {
 export const POST_SORTS = [["new", "الأحدث", Clock], ["hot", "الأكثر تفاعلًا", TrendingUp], ["open", "بلا إجابة", MessageCircleWarning]];
 
 // Search result: the matched post with its coverage and the query tokens it was found by (also what was matched for each)
-export function SearchHit({ r, app }) {
+export function SearchHit({ r, app }: any) {
   return (
     <div className="space-y-1">
       <div className="px-1 flex items-center gap-1.5 flex-wrap text-[10.5px]"><Chip tone={r.score >= SEARCH_THRESHOLD ? "verified" : "warn"} className="h-5 px-1.5 text-[10px]"><Num>{Math.round(r.score * 100)}%</Num> تطابق</Chip>{r.hits.slice(0, 4).map((h) => <span key={h.q} className="inline-flex items-center gap-1 h-5 px-1.5 rounded-full bg-elevated text-ink-2"><span translate="no">{h.q}</span>{h.t && h.t !== h.q && <span translate="no" className="text-ink-3">≈ {h.t}</span>}</span>)}</div>
@@ -110,7 +110,7 @@ export function SearchHit({ r, app }) {
   );
 }
 
-export function CommunitySearch({ app, q, setQ, results }) {
+export function CommunitySearch({ app, q, setQ, results }: any) {
   return (
     <div className="space-y-3">
       <label className="relative block"><Search size={16} className="absolute top-1/2 -translate-y-1/2 start-3.5 text-ink-3 pointer-events-none" /><input value={q} onChange={(e) => setQ(e.target.value)} type="search" inputMode="search" enterKeyHint="search" placeholder={app.moneyAccess === "none" ? "ابحث في المجتمع — بالمعنى لا بالحرف: صبّة، استلام، سلامة…" : "ابحث في المجتمع — بالمعنى لا بالحرف: مرتب، انترفيو، بريمافيرا…"} aria-label="بحث في المجتمع" className="w-full h-12 ps-11 pe-11 rounded-2xl bg-surface border border-line-2 text-[14px] placeholder:text-ink-4 focus:outline-none focus:ring-2 focus:ring-accent" />{q && <button type="button" aria-label="مسح البحث" onClick={() => setQ("")} className="absolute top-1/2 -translate-y-1/2 end-2 grid place-items-center w-8 h-8 rounded-full text-ink-3 hover:text-ink hover:bg-elevated"><X size={16} /></button>}</label>
@@ -124,10 +124,10 @@ export function CommunitySearch({ app, q, setQ, results }) {
   );
 }
 
-export function CommunityScreen({ app }) {
-  const p = app.profile; const [roomF, setRoomF] = useState("all"); const [sort, setSort] = useState("new"); const followed = app.rooms.filter((r) => app.roomFollows[r.id]); const sup = app.moneyAccess === "none";
-  const [q, setQ] = useState(""); const [live, setLive] = useState(""); useEffect(() => { const t = setTimeout(() => setLive(q), 140); return () => clearTimeout(t); }, [q]);
-  const index = useMemo(() => buildSearchIndex(app.posts), [app.posts, app.lang]); const results = useMemo(() => (live.trim().length >= 2 ? searchPosts(app.posts, live, { index }) : null), [live, app.posts, index]);
+export function CommunityScreen({ app }: any) {
+  const p = app.profile; const [roomF, setRoomF] = useState<any>("all"); const [sort, setSort] = useState<any>("new"); const followed = app.rooms.filter((r) => app.roomFollows[r.id]); const sup = app.moneyAccess === "none";
+  const [q, setQ] = useState<any>(""); const [live, setLive] = useState<any>(""); useEffect(() => { const t = setTimeout(() => setLive(q), 140); return () => clearTimeout(t); }, [q]);
+  const index = useMemo<any>(() => buildSearchIndex(app.posts), [app.posts, app.lang]); const results = useMemo<any>(() => (live.trim().length >= 2 ? searchPosts(app.posts, live, { index }) : null), [live, app.posts, index]);
   const feed = app.posts.filter((x) => roomF === "all" ? true : roomF === "employers-any" ? (x.userRole === "hr" || x.userRole === "owner") : roomF === "verified" ? ((x.userRole || "engineer") === "engineer" && x.verified !== false) : x.room === roomF)
     .filter((x) => sort !== "open" || (x.type === "question" && !x.best))
     .sort((a, b) => sort === "hot" ? engagement(b) - engagement(a) || byNewest(a, b) : byNewest(a, b));
@@ -138,13 +138,13 @@ export function CommunityScreen({ app }) {
       {!results && <>
       <section>
         <SectionTitle action="كل الغرف" onAction={() => app.push({ type: "rooms" })}>الغرف</SectionTitle>
-        <div className="-mx-4 px-4 flex gap-2.5 overflow-x-auto no-scrollbar snap-x scroll-ps-4">{[...app.rooms].sort((a, b) => (!!app.roomFollows[b.id]) - (!!app.roomFollows[a.id]) || b.members - a.members).map((r) => <RoomCard key={r.id} r={r} app={app} compact />)}</div>
+        <div className="-mx-4 px-4 flex gap-2.5 overflow-x-auto no-scrollbar snap-x scroll-ps-4">{[...app.rooms].sort((a, b) => Number(!!app.roomFollows[b.id]) - Number(!!app.roomFollows[a.id]) || b.members - a.members).map((r) => <RoomCard key={r.id} r={r} app={app} compact />)}</div>
       </section>
       <button type="button" onClick={() => app.openSheet("compose")} className="press w-full flex items-center gap-3 p-3.5 rounded-2xl bg-surface border border-dashed border-line-3 text-start hover:border-accent/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
         <IdentityFace a={authorOf(p, p.identity)} size={40} /><span className="min-w-0"><span className="block text-[14px] font-medium">{sup ? gx(p.gender, "اسأل زملاءك، أو شارك تجربة من الموقع", "اسألي زملاءك، أو شاركي تجربة من الموقع") : gx(p.gender, "اسأل، أو اعرض رقمك، أو خلّي الناس تصوّت", "اسألي، أو اعرضي رقمك، أو خلّي الناس تصوّت")}</span><span className="block text-[11.5px] text-ink-2 leading-snug">علنًا باسمك أو مجهولًا — {gx(p.gender, "تختار", "تختارين")} في كل منشور.</span></span>
       </button>
       <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={roomF === "all"} onClick={() => setRoomF("all")}>الكل</FilterChip><FilterChip on={roomF === "verified"} onClick={() => setRoomF("verified")}><BadgeCheck size={12} />مهندسون موثّقون</FilterChip><FilterChip on={roomF === "employers-any"} onClick={() => setRoomF("employers-any")}><Building2 size={12} />جهات العمل</FilterChip>{followed.map((r) => <FilterChip key={r.id} on={roomF === r.id} onClick={() => setRoomF(r.id)}><r.icon size={12} />{r.name}</FilterChip>)}</div>
-      <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{POST_SORTS.map(([id, l, I]) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}><I size={12} />{l}</FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{POST_SORTS.map(([id, l, I]: any) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}><I size={12} />{l}</FilterChip>)}</div>
       <div key={roomF + sort} className="space-y-3 stagger">{feed.length === 0 ? <Empty icon={MessageCircle} title={sort === "open" ? "لا أسئلة بلا إجابة" : "الغرفة هادية"} body={sort === "open" ? "كل سؤال هنا له إجابة معتمدة — جرّب ترتيبًا آخر." : "كن أول من يفتح النقاش هنا."} action="اكتب منشورًا" onAction={() => app.openSheet("compose", { room: roomF })} /> : feed.map((x) => <PostCard key={x.id} p={x} app={app} compact />)}</div>
       </>}
       <p className="pb-2 text-center text-[10px] text-ink-4">{sup ? "حساب مشرف موقع · المجتمع فقط — الأرقام المالية مخفية" : "جميع الرواتب بيانات توضيحية"}</p>
@@ -157,24 +157,24 @@ export function CommunityScreen({ app }) {
 // «لك» opens ordered by match score and the other scopes by newest — every sort chip works in every scope. Sub-discipline chips use the generic track name until a discipline is picked.
 export const JOB_SORTS = [["best", "الأنسب لي", Sparkles], ["new", "الأحدث", Clock], ["pay", "الأعلى نطاقًا", TrendingUp]];
 
-export function JobsScreen({ app }) {
-  const p = app.profile; const co = app.isCo; const [f, setF] = useState(co ? "company" : "match"); const [disc, setDisc] = useState("all"); const [sub, setSub] = useState("all"); const [pos, setPos] = useState("all"); const [region, setRegion] = useState("all"); const [sort, setSort] = useState(co ? "new" : "best");
+export function JobsScreen({ app }: any) {
+  const p = app.profile; const co = app.isCo; const [f, setF] = useState<any>(co ? "company" : "match"); const [disc, setDisc] = useState<any>("all"); const [sub, setSub] = useState<any>("all"); const [pos, setPos] = useState<any>("all"); const [region, setRegion] = useState<any>("all"); const [sort, setSort] = useState<any>(co ? "new" : "best");
   const scored = app.jobs.map((j) => ({ j, m: matchJob(j, p), e: estimateFor(j) }));
   const myJobs = app.jobs.filter((j) => j.co === p.companyId || j.mine);
   const scope = f === "match" ? scored.filter((x) => x.m && x.m.score >= 40) : f === "saved" ? scored.filter((x) => app.saved["job:" + x.j.id]) : f === "company" ? scored.filter((x) => myJobs.includes(x.j)) : scored;
   const list = scope.filter(({ j }) => (disc === "all" || j.disc === disc) && (sub === "all" || j.sub === sub) && (pos === "all" || j.pos === pos) && (region === "all" || gov(j.gov)[2] === region))
     .sort((a, b) => sort === "best" && a.m && b.m ? (b.m.score - a.m.score || byNewest(a.j, b.j)) : sort === "pay" ? (b.e.mid - a.e.mid || byNewest(a.j, b.j)) : byNewest(a.j, b.j)).map((x) => x.j);
-  const perfect = scored.filter((x) => x.m && x.m.perfect).length; const active = (disc !== "all") + (sub !== "all") + (pos !== "all") + (region !== "all");
+  const perfect = scored.filter((x) => x.m && x.m.perfect).length; const active = Number(disc !== "all") + Number(sub !== "all") + Number(pos !== "all") + Number(region !== "all");
   const reset = () => { setDisc("all"); setSub("all"); setPos("all"); setRegion("all"); };
   return (
     <div className="py-4 space-y-3">
       <div className="px-1 flex items-end justify-between gap-3"><div><h1 className="text-[22px] font-medium">الوظائف</h1><p className="text-[12px] text-ink-2 leading-snug">{co ? "تصنيف إلزامي، نطاق راتب يحسبه EngSpace، والتقديم يصلك مباشرة على بريدك." : perfect ? `${perfect} وظيفة مطابقة تمامًا لتصنيفك — وصلتك إشعاراتها. التقديم مباشرة مع الشركة.` : "كل إعلان مصنّف بدقة ومقارن بسوقك — والتقديم مباشرة مع الشركة."}</p></div>{co && <Primary onClick={() => app.push({ type: "postjob" })} className="h-10 px-4 text-[13px] press shrink-0"><Plus size={15} /> نشر وظيفة</Primary>}</div>
       <Seg value={f} onChange={(v) => { setF(v); if (v === "match") setSort("best"); }} items={co ? [["company", `وظائف شركتي (${myJobs.length})`], ["all", "السوق كله"]] : [["match", "لك"], ["all", "الكل"], ["saved", `المحفوظة${Object.keys(app.saved).filter((k) => k.startsWith("job:") && app.saved[k]).length ? ` (${Object.keys(app.saved).filter((k) => k.startsWith("job:") && app.saved[k]).length})` : ""}`]]} />
-      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={disc === "all"} onClick={() => { setDisc("all"); setSub("all"); }}>كل التخصّصات</FilterChip>{DISC.map(([id, l]) => <FilterChip key={id} on={disc === id} onClick={() => { setDisc(id); setSub("all"); }}>{l} <Num className="text-[10px] text-ink-3">{scope.filter((x) => x.j.disc === id).length}</Num></FilterChip>)}</div>
-      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={sub === "all"} onClick={() => setSub("all")}>كل المسارات</FilterChip>{(disc === "all" ? TRACKS : tracksFor(disc)).map(([id, generic]) => <FilterChip key={id} on={sub === id} onClick={() => setSub(id)}>{disc === "all" ? generic : trackLabel(id, disc)}</FilterChip>)}</div>
-      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={pos === "all"} onClick={() => setPos("all")}>كل المسميات</FilterChip>{POSITIONS.map(([id]) => <FilterChip key={id} on={pos === id} onClick={() => setPos(id)}>{posShort(id)}</FilterChip>)}</div>
-      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={region === "all"} onClick={() => setRegion("all")}>كل المناطق</FilterChip>{REGIONS.map(([id, l]) => <FilterChip key={id} on={region === id} onClick={() => setRegion(id)}><MapPin size={12} />{l}</FilterChip>)}</div>
-      <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{JOB_SORTS.filter(([id]) => !(co && id === "best")).map(([id, l, I]) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}><I size={12} />{l}</FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={disc === "all"} onClick={() => { setDisc("all"); setSub("all"); }}>كل التخصّصات</FilterChip>{DISC.map(([id, l]: any) => <FilterChip key={id} on={disc === id} onClick={() => { setDisc(id); setSub("all"); }}>{l} <Num className="text-[10px] text-ink-3">{scope.filter((x) => x.j.disc === id).length}</Num></FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={sub === "all"} onClick={() => setSub("all")}>كل المسارات</FilterChip>{(disc === "all" ? TRACKS : tracksFor(disc)).map(([id, generic]: any) => <FilterChip key={id} on={sub === id} onClick={() => setSub(id)}>{disc === "all" ? generic : trackLabel(id, disc)}</FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={pos === "all"} onClick={() => setPos("all")}>كل المسميات</FilterChip>{POSITIONS.map(([id]: any) => <FilterChip key={id} on={pos === id} onClick={() => setPos(id)}>{posShort(id)}</FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={region === "all"} onClick={() => setRegion("all")}>كل المناطق</FilterChip>{REGIONS.map(([id, l]: any) => <FilterChip key={id} on={region === id} onClick={() => setRegion(id)}><MapPin size={12} />{l}</FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{JOB_SORTS.filter(([id]: any) => !(co && id === "best")).map(([id, l, I]: any) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}><I size={12} />{l}</FilterChip>)}</div>
       <div className="px-1 flex items-center justify-between text-[11px] text-ink-3"><span><Num>{list.length}</Num> وظيفة{active ? ` · ${active} مرشح${active > 1 ? "ات" : ""}` : ""}</span>{active > 0 && <button type="button" onClick={reset} className="text-accent hover:underline underline-offset-4">إعادة الضبط</button>}</div>
       <div key={f + disc + sub + pos + region + sort} className="space-y-3 stagger">{list.length === 0 ? <Empty icon={f === "saved" ? Bookmark : Briefcase} title={f === "match" ? "لا وظائف مطابقة بعد" : f === "company" ? "لم تنشر وظائف بعد" : f === "saved" ? "لا وظائف محفوظة" : "لا وظائف هنا"} body={f === "match" ? "نُخطرك فور نشر وظيفة تطابق تخصّصك ومسارك ومسمّاك ومكانك." : f === "company" ? "انشر إعلانك الأول — الصق الوصف ونصنّفه لك." : f === "saved" ? "احفظ الوظائف التي تنوي التقديم عليها لتعود إليها هنا." : "جرّب مرشحات أوسع."} action={f === "company" ? "نشر وظيفة" : "عرض الكل"} onAction={() => f === "company" ? app.push({ type: "postjob" }) : (setF("all"), reset())} /> : list.map((j) => <JobCard key={j.id} job={j} app={app} />)}</div>
       {!co && list.length > 0 && <p className="pb-2 text-center text-[10px] text-ink-4">التقديم يتم مباشرة مع الشركة عبر بريدك أو هاتفك — EngSpace لا يتوسط ولا يحتفظ بطلبك</p>}
@@ -183,7 +183,7 @@ export function JobsScreen({ app }) {
 }
 
 
-export function MarketScreen({ app }) {
+export function MarketScreen({ app }: any) {
   const sub = app.market === "tools" ? "salaries" : app.market;
   return (
     <div className="py-4 space-y-3">
@@ -196,8 +196,8 @@ export function MarketScreen({ app }) {
 
 
 // Companies filters (audit): SEARCH → CATEGORY → REGION → SORT, with deterministic tie-breakers (reports, then median) and nulls last.
-export function CompaniesBody({ app }) {
-  const [q, setQ] = useState(""); const [sort, setSort] = useState("reports"); const [cat, setCat] = useState("all"); const [region, setRegion] = useState("all");
+export function CompaniesBody({ app }: any) {
+  const [q, setQ] = useState<any>(""); const [sort, setSort] = useState<any>("reports"); const [cat, setCat] = useState<any>("all"); const [region, setRegion] = useState<any>("all");
   const qq = q.trim().toLowerCase();
   const list = COMPANIES.filter((c) => (cat === "all" || c.cat === cat) && (region === "all" || gov(c.hq)[2] === region) && (!qq || c.name.includes(q.trim()) || c.en.toLowerCase().includes(qq) || c.sector.includes(q.trim()) || govName(c.hq).includes(q.trim())))
     .sort((x, y) => sort === "reports" ? (y.reports - x.reports || y.median - x.median) : sort === "median" ? (y.median - x.median || y.reports - x.reports) : sort === "founded" ? ((x.founded || 9999) - (y.founded || 9999) || y.reports - x.reports) : (y.recommend - x.recommend || y.reports - x.reports));
@@ -205,9 +205,9 @@ export function CompaniesBody({ app }) {
   return (
     <div className="space-y-3">
       <label className="flex items-center gap-2.5 h-12 px-4 rounded-2xl bg-surface border border-line-2 focus-within:ring-2 focus-within:ring-accent"><Search size={17} className="text-ink-3 shrink-0" /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث باسم الشركة أو القطاع أو المحافظة" aria-label="بحث عن شركة" className="w-full min-w-0 bg-transparent text-[14px] placeholder:text-ink-4 focus:outline-none" />{q && <button type="button" aria-label="مسح البحث" onClick={() => setQ("")} className="grid place-items-center w-8 h-8 rounded-full text-ink-2 hover:text-ink"><X size={15} /></button>}</label>
-      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={cat === "all"} onClick={() => setCat("all")}>كل الفئات</FilterChip>{CATS.map(([id, l]) => <FilterChip key={id} on={cat === id} onClick={() => setCat(id)}>{l} <Num className="text-[10px] text-ink-3">{COMPANIES.filter((c) => c.cat === id).length}</Num></FilterChip>)}</div>
-      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={region === "all"} onClick={() => setRegion("all")}>كل المناطق</FilterChip>{REGIONS.map(([id, l]) => <FilterChip key={id} on={region === id} onClick={() => setRegion(id)}><MapPin size={12} />{l}</FilterChip>)}</div>
-      <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{[["reports", "الأكثر تقارير"], ["median", "الأعلى راتبًا"], ["recommend", "الأعلى توصية"], ["founded", "الأقدم"]].map(([id, l]) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}>{l}</FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={cat === "all"} onClick={() => setCat("all")}>كل الفئات</FilterChip>{CATS.map(([id, l]: any) => <FilterChip key={id} on={cat === id} onClick={() => setCat(id)}>{l} <Num className="text-[10px] text-ink-3">{COMPANIES.filter((c) => c.cat === id).length}</Num></FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={region === "all"} onClick={() => setRegion("all")}>كل المناطق</FilterChip>{REGIONS.map(([id, l]: any) => <FilterChip key={id} on={region === id} onClick={() => setRegion(id)}><MapPin size={12} />{l}</FilterChip>)}</div>
+      <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{[["reports", "الأكثر تقارير"], ["median", "الأعلى راتبًا"], ["recommend", "الأعلى توصية"], ["founded", "الأقدم"]].map(([id, l]: any) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}>{l}</FilterChip>)}</div>
       {CAT_DESC[cat] && <div className="p-3.5 rounded-2xl border border-info/20 bg-info/10 text-[12.5px] leading-[1.8]"><span className="inline-flex items-center gap-1.5 font-medium text-info"><Coins size={14} /> {catName(cat)}</span><p className="mt-1 text-ink-2">{CAT_DESC[cat]}</p>{cat === "backoffice" && <p className="mt-1 text-[11px] text-ink-3">أسعار مرجعية: <Num>1</Num> USD ≈ <Num>{FX.USD}</Num> ج.م · <Num>1</Num> SAR ≈ <Num>{FX.SAR}</Num> · <Num>1</Num> AED ≈ <Num>{FX.AED}</Num> · <Num>1</Num> EUR ≈ <Num>{FX.EUR}</Num> — تقريبية، تُحدَّث شهريًا.</p>}</div>}
       <div key={sort + q + cat + region} className="space-y-3 stagger">{list.length === 0 ? <Empty icon={Search} title="لا نتائج" body="لا شركة تطابق هذا المزيج. وسّع الفئة أو المنطقة." action="إعادة الضبط" onAction={() => { setQ(""); setCat("all"); setRegion("all"); }} /> : list.map((c) => <CompanyRow key={c.id} c={c} app={app} />)}</div>
       <p className="pb-2 text-center text-[10px] text-ink-4 leading-relaxed"><Num>{list.length}</Num> من <Num>{COMPANIES.length}</Num> جهة · <Num>{withLogo}</Num> شعارًا حقيقيًا من المواقع الرسمية وويكيبيديا · الحقائق من السجل العام والأرقام نموذجية</p>
@@ -217,8 +217,8 @@ export function CompaniesBody({ app }) {
 
 
 // Salaries filters (audit): discipline → sub-discipline → years → place — the same order as the market model's factors.
-export function SalariesBody({ app }) {
-  const pr = app.profile; const d0 = (app.isCo ? "civil" : pr.disc); const [disc, setDisc] = useState(d0); const [exp, setExp] = useState(app.isCo ? "3-5" : personaExp(pr)); const [g, setG] = useState(pr.gov); const [city, setCity] = useState(pr.city || null); const [track, setTrack] = useState(app.isCo ? "site" : pr.track); const [showPlace, setShowPlace] = useState(false);
+export function SalariesBody({ app }: any) {
+  const pr = app.profile; const d0 = (app.isCo ? "civil" : pr.disc); const [disc, setDisc] = useState<any>(d0); const [exp, setExp] = useState<any>(app.isCo ? "3-5" : personaExp(pr)); const [g, setG] = useState<any>(pr.gov); const [city, setCity] = useState(pr.city || null); const [track, setTrack] = useState<any>(app.isCo ? "site" : pr.track); const [showPlace, setShowPlace] = useState(false);
   const m = marketFor(disc, exp, g, track, city); const n = sampleSize(disc, exp, g); const q = quality(n); const reports = reportsFor(disc, exp, g); const net = egyptNet(m.p50);
   const thin = app.isCo && n < COMPANY_MIN_SAMPLE; // company accounts: a cell with too few reports could point at individuals
   return (
@@ -226,9 +226,9 @@ export function SalariesBody({ app }) {
       {app.isCo && <div className="p-3.5 rounded-2xl border border-accent/20 bg-wash text-[12px] leading-relaxed"><p className="font-medium inline-flex items-center gap-1.5"><Scale size={14} className="text-accent" /> حدود اطلاع حسابات الشركات</p><p className="mt-1 text-ink-2">متوسطات ونطاقات السوق فقط — لتعرض أرقامًا عادلة. لا أرقام فردية، ولا تفاصيل مسميات لشركات غير شركتك.</p></div>}
       <div className="px-1 flex items-start justify-between gap-3"><p className="text-[12px] text-ink-2 leading-snug">إجمالي شهري بالجنيه قبل الضرائب · نموذج {DATASET.version}</p>{can(pr, "reveal") && <Primary onClick={() => app.openSheet("contribute", { disc, exp, gov: g, city })} className="h-10 px-4 text-[13px] press shrink-0">شارك راتبك</Primary>}</div>
       <div className="space-y-2">
-        <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{DISC.map(([id, l]) => <FilterChip key={id} on={disc === id} onClick={() => { setDisc(id); if (!tracksFor(id).some((t) => t[0] === track)) setTrack("site"); }}>{l}</FilterChip>)}</div>
-        <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{tracksFor(disc).map(([id]) => <FilterChip key={id} on={track === id} onClick={() => setTrack(id)}>{trackLabel(id, disc)}</FilterChip>)}</div>
-        <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{EXP.map(([id, l]) => <FilterChip key={id} on={exp === id} onClick={() => setExp(id)}>{l}</FilterChip>)}</div>
+        <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{DISC.map(([id, l]: any) => <FilterChip key={id} on={disc === id} onClick={() => { setDisc(id); if (!tracksFor(id).some((t) => t[0] === track)) setTrack("site"); }}>{l}</FilterChip>)}</div>
+        <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{tracksFor(disc).map(([id]: any) => <FilterChip key={id} on={track === id} onClick={() => setTrack(id)}>{trackLabel(id, disc)}</FilterChip>)}</div>
+        <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{EXP.map(([id, l]: any) => <FilterChip key={id} on={exp === id} onClick={() => setExp(id)}>{l}</FilterChip>)}</div>
         <button type="button" onClick={() => setShowPlace((v) => !v)} aria-expanded={showPlace} className="press w-full flex items-center justify-between gap-2 min-h-11 px-4 py-2 rounded-2xl bg-surface border border-line-2 text-[13px] text-start"><span className="inline-flex items-center gap-2 flex-wrap"><MapPin size={14} className="text-accent shrink-0" />{placeName(g, city)} <span className="text-[11px] text-ink-3">· {regionName(gov(g)[2])} · معامل <Num>{placeMult(g, city).toFixed(2)}</Num></span></span><ChevronDown size={16} className={`shrink-0 text-ink-2 transition-transform ${showPlace ? "rotate-180" : ""}`} /></button>
         {showPlace && <div className="screen-tab p-4 rounded-2xl bg-surface border border-line-2 -mx-1"><GovPicker gov={g} city={city} onChange={(gg, cc) => { setG(gg); setCity(cc); }} /></div>}
       </div>
@@ -239,9 +239,9 @@ export function SalariesBody({ app }) {
         <p className="mt-3 text-[11px] text-ink-2">التوزيع من P10 إلى P90 — النطاق الغامق هو الربعان الأوسطان</p><div className="mt-1"><Percentiles m={m} /></div></>}
         <div className="mt-3 pt-3 border-t border-line grid grid-cols-2 gap-2 text-[11.5px]"><div className="text-ink-2">صافي المتوسط تقريبًا <Num className="text-ink">{fmt(net.net)}</Num> ج.م</div><button type="button" onClick={() => app.openSheet("methodology")} className="inline-block py-1 -my-1 text-accent text-end hover:underline underline-offset-4">المنهجية والمصادر</button></div>
       </Panel>
-      <Panel className="p-4"><h3 className="text-[13px] font-medium">حسب المسمّى الدقيق</h3><ul className="mt-2 divide-y divide-line">{POSITIONS.map(([id, l, e, k]) => { const mm = marketFor(disc, e, g, track, city); return <li key={id} className={`py-2.5 flex items-center justify-between gap-3 text-[13px] ${id === pr.pos && !app.isCo ? "-mx-2 px-2 rounded-lg bg-wash" : ""}`}><span className="text-ink-2 leading-snug">{l}</span><span className="shrink-0"><Num className="font-semibold">{fmt(round500(mm.p50 * k))}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></li>; })}</ul></Panel>
-      <Panel className="p-4"><h3 className="text-[13px] font-medium">حسب نوع الجهة</h3><ul className="mt-2 divide-y divide-line">{EMPLOYERS.map(([id, l, k]) => <li key={id} className={`py-2.5 flex items-center justify-between gap-3 text-[13px] ${id === "backoffice" ? "-mx-2 px-2 rounded-lg bg-info/10" : ""}`}><span className={id === "backoffice" ? "text-info inline-flex items-center gap-1.5 leading-snug" : "text-ink-2 leading-snug"}>{id === "backoffice" && <Coins size={13} className="shrink-0" />}{l}</span><span className="shrink-0"><Num className="font-semibold">{fmt(round500(m.p50 * k))}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></li>)}</ul><p className="mt-2 text-[10.5px] text-ink-3">المكاتب الخلفية تسعّر بالعملة الأجنبية — راجع فئة «مكاتب خلفية» في الشركات.</p></Panel>
-      <Panel className="p-4"><h3 className="text-[13px] font-medium">بدلات نموذجية فوق الأساسي</h3><ul className="mt-2 divide-y divide-line">{ALLOWANCES.map(([l, lo, hi, note]) => <li key={l} className="py-2.5 flex items-center justify-between gap-3 text-[12.5px]"><span><span className="text-ink">{l}</span><span className="block text-[10.5px] text-ink-3">{note}</span></span><span className="shrink-0 text-ink">{hi <= 2 ? <><Num>{lo}–{hi}</Num> راتب</> : <><Num>{fmt(lo)}–{fmt(hi)}</Num> <span className="text-[10.5px] text-ink-3">ج.م</span></>}</span></li>)}</ul></Panel>
+      <Panel className="p-4"><h3 className="text-[13px] font-medium">حسب المسمّى الدقيق</h3><ul className="mt-2 divide-y divide-line">{POSITIONS.map(([id, l, e, k]: any) => { const mm = marketFor(disc, e, g, track, city); return <li key={id} className={`py-2.5 flex items-center justify-between gap-3 text-[13px] ${id === pr.pos && !app.isCo ? "-mx-2 px-2 rounded-lg bg-wash" : ""}`}><span className="text-ink-2 leading-snug">{l}</span><span className="shrink-0"><Num className="font-semibold">{fmt(round500(mm.p50 * k))}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></li>; })}</ul></Panel>
+      <Panel className="p-4"><h3 className="text-[13px] font-medium">حسب نوع الجهة</h3><ul className="mt-2 divide-y divide-line">{EMPLOYERS.map(([id, l, k]: any) => <li key={id} className={`py-2.5 flex items-center justify-between gap-3 text-[13px] ${id === "backoffice" ? "-mx-2 px-2 rounded-lg bg-info/10" : ""}`}><span className={id === "backoffice" ? "text-info inline-flex items-center gap-1.5 leading-snug" : "text-ink-2 leading-snug"}>{id === "backoffice" && <Coins size={13} className="shrink-0" />}{l}</span><span className="shrink-0"><Num className="font-semibold">{fmt(round500(m.p50 * k))}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></li>)}</ul><p className="mt-2 text-[10.5px] text-ink-3">المكاتب الخلفية تسعّر بالعملة الأجنبية — راجع فئة «مكاتب خلفية» في الشركات.</p></Panel>
+      <Panel className="p-4"><h3 className="text-[13px] font-medium">بدلات نموذجية فوق الأساسي</h3><ul className="mt-2 divide-y divide-line">{ALLOWANCES.map(([l, lo, hi, note]: any) => <li key={l} className="py-2.5 flex items-center justify-between gap-3 text-[12.5px]"><span><span className="text-ink">{l}</span><span className="block text-[10.5px] text-ink-3">{note}</span></span><span className="shrink-0 text-ink">{hi <= 2 ? <><Num>{lo}–{hi}</Num> راتب</> : <><Num>{fmt(lo)}–{fmt(hi)}</Num> <span className="text-[10.5px] text-ink-3">ج.م</span></>}</span></li>)}</ul></Panel>
       {app.isCo ? <CompanyLimits /> : <>
       <section>
         <SectionTitle>{can(pr, "bands") ? "أحدث التقارير" : "أحدث التقارير · مقفلة"}</SectionTitle>
@@ -261,13 +261,13 @@ export function SalariesBody({ app }) {
 // What a company account can and cannot see of pay — shown where engineers see individual reports
 export const CompanyLimits = () => (
   <Panel className="p-4"><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><LockKeyhole size={14} className="text-accent" /> التقارير الفردية لا تظهر لحسابات الشركات</h3>
-    <ul className="mt-2 space-y-1.5 text-[12px] leading-relaxed text-ink-2">{[["متاح", "المتوسط والنطاق (P10–P90) لكل تخصص وخبرة ومكان، وحسب المسمّى ونوع الجهة", true], ["متاح", "تفاصيل المسميات لشركتك فقط", true], ["غير متاح", "رقم أي مهندس بعينه: التقارير الفردية، منشورات كشف الراتب، الردود بالأرقام، والمبالغ المكتوبة في المنشورات والتقييمات", false], ["غير متاح", `أي خلية فيها أقل من ${COMPANY_MIN_SAMPLE} تقريرًا`, false], ["غير متاح", "مشاركة رواتب أو تقييم الشركات", false]].map(([k, t, ok]) => <li key={t} className="flex items-start gap-2"><span className={`shrink-0 mt-0.5 inline-flex items-center h-5 px-1.5 rounded-full text-[10px] ${ok ? "bg-good/15 text-good" : "bg-elevated text-ink-3"}`}>{k}</span><span>{t}</span></li>)}</ul>
+    <ul className="mt-2 space-y-1.5 text-[12px] leading-relaxed text-ink-2">{[["متاح", "المتوسط والنطاق (P10–P90) لكل تخصص وخبرة ومكان، وحسب المسمّى ونوع الجهة", true], ["متاح", "تفاصيل المسميات لشركتك فقط", true], ["غير متاح", "رقم أي مهندس بعينه: التقارير الفردية، منشورات كشف الراتب، الردود بالأرقام، والمبالغ المكتوبة في المنشورات والتقييمات", false], ["غير متاح", `أي خلية فيها أقل من ${COMPANY_MIN_SAMPLE} تقريرًا`, false], ["غير متاح", "مشاركة رواتب أو تقييم الشركات", false]].map(([k, t, ok]: any) => <li key={t} className="flex items-start gap-2"><span className={`shrink-0 mt-0.5 inline-flex items-center h-5 px-1.5 rounded-full text-[10px] ${ok ? "bg-good/15 text-good" : "bg-elevated text-ink-3"}`}>{k}</span><span>{t}</span></li>)}</ul>
     <p className="mt-2 text-[10.5px] text-ink-3">الهدف: أن تبني عروضك على السوق الحقيقي — دون أن ترى ما يكسبه مهندس بعينه.</p></Panel>
 );
 
 
 // Tools tab — back in the main navigation. The CV reviewer sits on top; the eight calculators keep their goal-based highlight.
-export function ToolsScreen({ app }) {
+export function ToolsScreen({ app }: any) {
   const p = app.profile; const fav = GOAL_TOOL[p.goal];
   return (
     <div className="py-4 space-y-3">
@@ -290,9 +290,9 @@ export function ToolsScreen({ app }) {
 export const ToolsBody = ToolsScreen;
 
 
-export function InboxScreen({ app }) {
-  const [sub, setSub] = useState("threads"); const unreadT = app.threads.reduce((a, t) => a + (t.unread || 0), 0);
-  const threads = [...app.threads].sort((a, b) => (b.unread > 0) - (a.unread > 0));
+export function InboxScreen({ app }: any) {
+  const [sub, setSub] = useState<any>("threads"); const unreadT = app.threads.reduce((a, t) => a + (t.unread || 0), 0);
+  const threads = [...app.threads].sort((a, b) => Number(b.unread > 0) - Number(a.unread > 0));
   return (
     <div className="py-4 space-y-3">
       <div className="px-1"><h1 className="text-[22px] font-medium">الرسائل</h1><p className="text-[12px] text-ink-2 leading-snug">رسائل خاصة باسمك أو بمعرّفك المجهول — تُثبَّت الهوية مع أول رسالة. شارك رقمك أو بريدك متى شئت؛ القيد الوحيد لغة محترمة.</p></div>

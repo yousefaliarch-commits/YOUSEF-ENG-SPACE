@@ -17,12 +17,12 @@ import { Num } from "./primitives";
 export const MONO_BG = ["#334155", "#3f3f46", "#44403c", "#1e3a5f", "#3b2f4a", "#1f3b33", "#4a3728"];
 
 // initials skip the Arabic article: «منى الشريف» → «م ش», not «م ا»
-export const initialsOf = (name) => cleanName(name).split(" ").filter(Boolean).slice(0, 2).map((w) => (/^ال./.test(w) && w.length > 3 ? w[2] : w[0])).join(" ");
+export const initialsOf = (name?: any) => cleanName(name).split(" ").filter(Boolean).slice(0, 2).map((w) => (/^ال./.test(w) && w.length > 3 ? w[2] : w[0])).join(" ");
 
 // employers' public monogram: role colour (gold owner, orange HR) with a framed edge — engineers keep the muted palette
 export const MONO_ROLE = { owner: "#6f5310", hr: "#8a3a12" };
 
-export function Monogram({ name, size = 40, className = "", role = null, photo = null }) {
+export function Monogram({ name, size = 40, className = "", role = null, photo = null }: any) {
   const co = role === "owner" || role === "hr"; const bg = co ? MONO_ROLE[role] : MONO_BG[seedOf(cleanName(name) || "x") % MONO_BG.length];
   // a chosen profile photo stands in for the initials — never bigger than PHOTO_MAX, never clickable or expandable
   if (photo) { const s = Math.min(size, PHOTO_MAX); return <span aria-hidden="true" className={`photo-mark relative shrink-0 inline-block overflow-hidden rounded-[30%] select-none ${className}`} style={{ width: s, height: s, margin: size > s ? (size - s) / 2 : undefined }}><img src={photo} alt="" draggable={false} className="w-full h-full object-cover pointer-events-none" />{co && <span className="absolute inset-0 rounded-[30%] pointer-events-none" style={{ boxShadow: `inset 0 0 0 ${Math.max(2, Math.round(s * 0.07))}px rgb(var(--${role}))` }} />}</span>; }
@@ -30,31 +30,31 @@ export function Monogram({ name, size = 40, className = "", role = null, photo =
 }
 
 // an author snapshot keeps the role in userRole; a thread's "with" keeps it in role (and the title in title)
-export const faceRole = (a) => (!a ? null : a.userRole || (ROLES.some((r) => r.id === a.role) ? a.role : null));
+export const faceRole = (a?: any) => (!a ? null : a.userRole || (ROLES.some((r) => r.id === a.role) ? a.role : null));
 
-export const IdentityFace = ({ a, size = 40, className = "" }) => (a && a.as === "public" ? <Monogram name={a.name} role={faceRole(a)} photo={a.photo} size={size} className={className} /> : <Avatar spec={specOf(a)} role={faceRole(a)} gender={a ? a.gender : "male"} look={a ? a.look : undefined} size={size} className={className} />);
+export const IdentityFace = ({ a, size = 40, className = "" }: any) => (a && a.as === "public" ? <Monogram name={a.name} role={faceRole(a)} photo={a.photo} size={size} className={className} /> : <Avatar spec={specOf(a)} role={faceRole(a)} gender={a ? a.gender : "male"} look={a ? a.look : undefined} size={size} className={className} />);
 
-export const openProps = (onOpen) => (onOpen ? { role: "button", tabIndex: 0, onClick: (e) => { e.stopPropagation(); onOpen(); }, onKeyDown: (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); onOpen(); } } } : {});
+export const openProps = (onOpen?: any) => (onOpen ? { role: "button", tabIndex: 0, onClick: (e?: any) => { e.stopPropagation(); onOpen(); }, onKeyDown: (e?: any) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); onOpen(); } } } : {});
 
-export const PublicChip = ({ a, onOpen, className = "" }) => (
+export const PublicChip = ({ a, onOpen, className = "" }: any) => (
   <span {...openProps(onOpen)} title={`ملف علني · ${displayName(a)}`} className={`inline-flex items-center gap-1.5 h-7 ps-0.5 pe-2 rounded-full bg-info/10 border border-info/25 text-[11.5px] text-ink font-medium ${onOpen ? "cursor-pointer hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" : ""} ${className}`}>
     <Monogram name={a.name} role={a.userRole} photo={a.photo} size={22} />{displayName(a)}{a.verified && canVerifyRole(a.userRole || "engineer") && <BadgeCheck size={12} className="text-accent" />}
   </span>
 );
 
-export const WhoChip = ({ a, onOpen, className = "" }) => (a && a.as === "public" ? <PublicChip a={a} onOpen={onOpen} className={className} /> : <AnonChip id={a.anon} avatar={a.avatar} gender={a.gender} spec={specOf(a)} look={a.look} level={a.level} expert={a.expert} role={a.userRole || "engineer"} verified={a.verified !== false && canVerifyRole(a.userRole || "engineer")} onOpen={onOpen} className={className} />);
+export const WhoChip = ({ a, onOpen, className = "" }: any) => (a && a.as === "public" ? <PublicChip a={a} onOpen={onOpen} className={className} /> : <AnonChip id={a.anon} avatar={a.avatar} gender={a.gender} spec={specOf(a)} look={a.look} level={a.level} expert={a.expert} role={a.userRole || "engineer"} verified={a.verified !== false && canVerifyRole(a.userRole || "engineer")} onOpen={onOpen} className={className} />);
 
-export const IdentityTag = ({ as, className = "" }) => { const m = IDENTITY[as === "public" ? "public" : "anon"]; return <span className={`inline-flex items-center gap-1 h-5 px-1.5 rounded-full text-[10px] ${as === "public" ? "bg-info/15 text-info" : "bg-elevated text-ink-3"} ${className}`}><m.icon size={10} />{m.label}</span>; };
+export const IdentityTag = ({ as, className = "" }: any) => { const m = IDENTITY[as === "public" ? "public" : "anon"]; return <span className={`inline-flex items-center gap-1 h-5 px-1.5 rounded-full text-[10px] ${as === "public" ? "bg-info/15 text-info" : "bg-elevated text-ink-3"} ${className}`}><m.icon size={10} />{m.label}</span>; };
 
 
 // ---- the per-action choice: full switch (compose, review, salary) and a one-tap toggle (replies, votes) ----
-export function IdentitySwitch({ app, value, onChange, what = "هذه المشاركة", className = "" }) {
-  const p = app.profile; const lv = repLevel(app.pts).i; const opts = [["anon", authorOf(p, "anon", lv)], ["public", authorOf(p, "public", lv)]]; const cur = value === "public" ? opts[1][1] : opts[0][1];
+export function IdentitySwitch({ app, value, onChange, what = "هذه المشاركة", className = "" }: any) {
+  const p = app.profile; const lv = repLevel(app.pts).i; const opts: any = [["anon", authorOf(p, "anon", lv)], ["public", authorOf(p, "public", lv)]]; const cur = value === "public" ? opts[1][1] : opts[0][1];
   return (
     <div className={`rounded-2xl border border-line bg-canvas/50 p-2 ${className}`}>
       <div className="flex items-center justify-between gap-2 px-1 pb-1.5"><span className="text-[11.5px] text-ink-2">كيف {gx(p.gender, "تظهر", "تظهرين")} في {what}؟</span><span className="text-[10.5px] text-ink-3">{gx(p.gender, "تختار", "تختارين")} في كل مرة</span></div>
       <div role="radiogroup" aria-label={`هويتك في ${what}`} className="grid grid-cols-2 gap-1.5">
-        {opts.map(([id, a]) => { const on = value === id; const M = IDENTITY[id]; return (
+        {opts.map(([id, a]: any) => { const on = value === id; const M = IDENTITY[id]; return (
           <button key={id} type="button" role="radio" aria-checked={on} onClick={() => onChange(id)} className={`press min-h-12 flex items-center gap-2 px-2.5 py-2 rounded-xl border text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${on ? (id === "public" ? "bg-info/10 border-info/40" : "bg-wash border-accent/40") : "bg-surface border-line-2 hover:border-line-3"}`}>
             <IdentityFace a={a} size={28} />
             <span className="min-w-0 flex-1"><span className="flex items-center gap-1 text-[12.5px] font-medium leading-tight"><M.icon size={12} className={on ? (id === "public" ? "text-info" : "text-accent") : "text-ink-3"} />{M.label}</span><span className="block text-[11px] text-ink-2 leading-tight break-words">{id === "public" ? displayName(a) : <Num>#{a.anon}</Num>}</span></span>
@@ -66,7 +66,7 @@ export function IdentitySwitch({ app, value, onChange, what = "هذه المشا
   );
 }
 
-export function IdentityToggle({ app, value, onChange, className = "" }) {
+export function IdentityToggle({ app, value, onChange, className = "" }: any) {
   const pub = value === "public"; const a = authorOf(app.profile, pub ? "public" : "anon"); const M = IDENTITY[pub ? "public" : "anon"]; const other = IDENTITY[pub ? "anon" : "public"];
   return (
     <button type="button" role="switch" aria-checked={pub} aria-label={`تظهر ${pub ? "علنًا باسمك" : "مجهولًا"} — اضغط للتبديل إلى ${other.label}`} title={`${gx(app.profile.gender, "اضغط لتظهر", "اضغطي لتظهري")} ${pub ? "مجهولًا" : "علنًا باسمك"}`} onClick={() => onChange(pub ? "anon" : "public")}
@@ -81,7 +81,7 @@ export const SHOWS = { public: ["اسمك الكامل", "لقبك الكامل:
 
 export const HIDES = { public: ["بريدك وكلمة المرور", "مشاركاتك المجهولة — لا تُربط بك"], anon: ["اسمك وعمرك", "مدينتك وجهة عملك", "بريدك وأي بيانات تواصل", "أي رابط بملفك العلني"] };
 
-export function IdentityCard({ p, as, on = false, onClick, className = "" }) {
+export function IdentityCard({ p, as, on = false, onClick, className = "" }: any) {
   const a = authorOf(p, as); const M = IDENTITY[as]; const pub = as === "public";
   const inner = (<>
     <span className="flex items-center gap-2.5"><IdentityFace a={a} size={40} /><span className="min-w-0 flex-1"><span className="flex items-center gap-1.5 text-[13.5px] font-medium"><M.icon size={14} className={on ? (pub ? "text-info" : "text-accent") : "text-ink-3"} />{pub ? "علني — باسمك" : "مجهول — وضع الشبح"}</span><span className="block text-[12px] text-ink leading-snug">{pub ? (cleanName(a.name) ? displayName(a) : "اسمك الكامل") : <Num>#{a.anon || "····"}</Num>}</span></span>{on && <CircleCheck size={18} className={`shrink-0 ${pub ? "text-info" : "text-accent"}`} />}</span>
@@ -94,8 +94,8 @@ export function IdentityCard({ p, as, on = false, onClick, className = "" }) {
 
 
 // ---- the three written commitments. `focus` puts one first (the document one on upload screens). ----
-export function TrustPolicy({ variant = "full", focus = null, className = "" }) {
-  const items = focus ? [...TRUST_POLICY].sort((a, b) => (b.id === focus) - (a.id === focus)) : TRUST_POLICY;
+export function TrustPolicy({ variant = "full", focus = null, className = "" }: any) {
+  const items = focus ? [...TRUST_POLICY].sort((a, b) => Number(b.id === focus) - Number(a.id === focus)) : TRUST_POLICY;
   if (variant === "compact") return (
     <section aria-label="سياسة الخصوصية والأمان" className={`rounded-2xl border border-good/25 bg-good/[0.06] p-3 ${className}`}>
       <p className="flex items-center gap-1.5 text-[12px] font-medium text-good"><ShieldCheck size={14} /> التزاماتنا لك — مكتوبة ونافذة</p>
@@ -113,4 +113,4 @@ export function TrustPolicy({ variant = "full", focus = null, className = "" }) 
 
 
 // ---- clipboard that never leaves an unhandled rejection (unfocused documents reject writeText) ----
-export const copyText = (v) => { v = isEn() ? String(v).split("\n").map((l) => tr(l)).join("\n") : v; try { const r = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(String(v)) : null; if (r && r.catch) r.catch(() => { try { const t = document.createElement("textarea"); t.value = String(v); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); } catch (e) {} }); } catch (e) {} };
+export const copyText = (v?: any) => { v = isEn() ? String(v).split("\n").map((l) => tr(l)).join("\n") : v; try { const r = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(String(v)) : null; if (r && r.catch) r.catch(() => { try { const t = document.createElement("textarea"); t.value = String(v); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); } catch (e) {} }); } catch (e) {} };

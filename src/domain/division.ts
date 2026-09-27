@@ -16,17 +16,17 @@ export const DIVISIONS = [
   { id: "textile", label: "شعبة الغزل والنسيج", short: "غزل ونسيج", app: null, m: "مهندس غزل ونسيج", f: "مهندسة غزل ونسيج", note: "هندسة الغزل والنسيج والتريكو" },
 ];
 
-export const divOf = (id) => DIVISIONS.find((d) => d.id === id) || null;
+export const divOf = (id?: any) => DIVISIONS.find((d) => d.id === id) || null;
 
-export const divisionForDisc = (disc) => (disc === "survey" ? "civil" : divOf(disc) ? disc : null);
+export const divisionForDisc = (disc?: any) => (disc === "survey" ? "civil" : divOf(disc) ? disc : null);
 
-export const discName = (id) => (DISC.find((d) => d[0] === id) || [null, "—"])[1];
+export const discName = (id?: any) => (DISC.find((d) => d[0] === id) || [null, "—"])[1];
 
 // A verified division with no market discipline of its own (chemical, mining & petroleum, textile) names the engineer's title
-export const divTitle = (p) => { const d = p && p.verified && p.division ? divOf(p.division) : null; return d && !d.app ? (genderOf(p.gender) === "female" ? d.f : d.m) : null; };
+export const divTitle = (p?: any) => { const d = p && p.verified && p.division ? divOf(p.division) : null; return d && !d.app ? (genderOf(p.gender) === "female" ? d.f : d.m) : null; };
 
 // The market discipline a division maps to: civil stays survey for surveying engineers (same division); chemical, mining and textile
 // have none (the registered specialty keeps the market data)
-export const discForDivision = (div, prior) => { const d = divOf(div); if (!d || !d.app) return null; if (div === "civil" && prior === "survey") return "survey"; return d.app; };
+export const discForDivision = (div?: any, prior?: any) => { const d = divOf(div); if (!d || !d.app) return null; if (div === "civil" && prior === "survey") return "survey"; return d.app; };
 
-export const divConflict = (div, prior) => { const mapped = discForDivision(div, prior); return { mapped, conflict: !!mapped && !!prior && mapped !== prior }; };
+export const divConflict = (div?: any, prior?: any) => { const mapped = discForDivision(div, prior); return { mapped, conflict: !!mapped && !!prior && mapped !== prior }; };

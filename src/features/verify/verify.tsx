@@ -35,7 +35,7 @@ export const DOC_SLOTS = {
   letter: { icon: ScrollText, pdf: true, title: L2("شهادة أو إفادة خبرة", "Certificate or experience letter"), short: L2("شهادة / إفادة خبرة", "Certificate / experience letter"), hint: L2("صورة أو PDF: الاسم والمسمّى وجهة العمل مقروءة", "A photo or PDF, with the name, job title and employer legible") },
 };
 
-export const docSlots = (role) => (role === "supervisor" ? ["letter"] : ["card", "cert"]);
+export const docSlots = (role?: any) => (role === "supervisor" ? ["letter"] : ["card", "cert"]);
 
 export const DOC_ERRORS = {
   big: L2("الملف أكبر من 15 ميجابايت — صوّر المستند من جديد أو اختر ملفًا أصغر", "The file is over 15 MB — take a new photo or choose a smaller file"),
@@ -43,7 +43,7 @@ export const DOC_ERRORS = {
   decode: L2("تعذّر فتح الملف — استخدم صورة JPG أو PNG أو ملف PDF", "The file couldn't be opened — use a JPG or PNG photo, or a PDF"),
 };
 
-export const VERIFY_REJECT = [
+export const VERIFY_REJECT: any = [
   ["unclear", L2("الصورة غير واضحة أو مقصوصة", "The photo is unclear or cropped")],
   ["mismatch", L2("الاسم في المستند لا يطابق اسم الحساب", "The name on the document doesn't match the account name")],
   ["wrongdoc", L2("المستند ليس كارنيه نقابة ولا شهادة تخرج", "The document isn't a Syndicate card or a graduation certificate")],
@@ -52,16 +52,16 @@ export const VERIFY_REJECT = [
   ["other", L2("سبب آخر", "Another reason")],
 ];
 
-export const rejectOf = (id) => (VERIFY_REJECT.find((r) => r[0] === id) || VERIFY_REJECT[VERIFY_REJECT.length - 1])[1];
+export const rejectOf = (id?: any) => (VERIFY_REJECT.find((r) => r[0] === id) || VERIFY_REJECT[VERIFY_REJECT.length - 1])[1];
 
 // What the badge says, per the document the reviewer accepted
-export const credentialL2 = (role, kind) => (role === "supervisor" ? L2("مؤهل موثّق", "Verified qualification") : kind === "certificate" ? L2("شهادة هندسية موثّقة", "Verified engineering degree") : L2("عضوية نقابة موثّقة", "Verified Syndicate membership"));
+export const credentialL2 = (role?: any, kind?: any) => (role === "supervisor" ? L2("مؤهل موثّق", "Verified qualification") : kind === "certificate" ? L2("شهادة هندسية موثّقة", "Verified engineering degree") : L2("عضوية نقابة موثّقة", "Verified Syndicate membership"));
 
 export const DEPT_AR = { civil: "الهندسة المدنية", architecture: "الهندسة المعمارية", mechanical: "هندسة القوى الميكانيكية", electrical: "هندسة القوى والآلات الكهربية", chemical: "الهندسة الكيميائية", mining: "هندسة التعدين والبترول", textile: "هندسة الغزل والنسيج" };
 
 
 // ---- one document → a re-encoded JPEG; a PDF → its first page, drawn on this device ----
-export async function prepDoc(file) {
+export async function prepDoc(file?: any) {
   if (!file) throw new Error("decode"); if (file.size > 15e6) throw new Error("big");
   const pdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name || "");
   if (!pdf) { const im = await processImage(file, { max: 1600, quality: 0.85 }); if (Math.min(im.w, im.h) < 500) throw new Error("small"); return { src: im.src, w: im.w, h: im.h }; }
@@ -71,20 +71,20 @@ export async function prepDoc(file) {
     doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise; const page = await doc.getPage(1);
     const vp = page.getViewport({ scale: 1 }); const v2 = page.getViewport({ scale: Math.min(4, 1600 / Math.max(vp.width, vp.height)) });
     const c = document.createElement("canvas"); c.width = Math.round(v2.width); c.height = Math.round(v2.height); const x = c.getContext("2d"); x.fillStyle = "#ffffff"; x.fillRect(0, 0, c.width, c.height);
-    await page.render({ canvasContext: x, viewport: v2 }).promise; const out = { src: c.toDataURL("image/jpeg", 0.85), w: c.width, h: c.height, pdf: true }; c.width = 0; c.height = 0; return out;
+    await page.render({ canvasContext: x, viewport: v2 }).promise; const out: any = { src: c.toDataURL("image/jpeg", 0.85), w: c.width, h: c.height, pdf: true }; c.width = 0; c.height = 0; return out;
   } catch (e) { throw new Error(e && e.message === "big" ? "big" : "decode"); }
   finally { if (doc) { try { await doc.destroy(); } catch (e) {} } }
 }
 
 
 // ---- demo documents: invented data, clearly marked, drawn on this device — never a real person's card ----
-export function drawDemoDoc(kind, { name = "—", division = "civil", year = 2018, gender = "male", blur = false, nameOnDoc = null } = {}) {
+export function drawDemoDoc(kind?: any, { name = "—", division = "civil", year = 2018, gender = "male", blur = false, nameOnDoc = null }: any = {}) {
   const dv = divOf(division) || DIVISIONS[0]; const nm = nameOnDoc || name; const W = kind === "card" ? 1000 : 1400, H = kind === "card" ? 630 : 990;
-  const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"); const font = (w, s) => `${w} ${s}px 'IBM Plex Sans Arabic', sans-serif`; x.direction = "rtl";
-  const center = (text, y, f, color) => { x.textAlign = "center"; x.font = f; x.fillStyle = color; x.fillText(text, W / 2, y); };
+  const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"); const font = (w?: any, s?: any) => `${w} ${s}px 'IBM Plex Sans Arabic', sans-serif`; x.direction = "rtl";
+  const center = (text?: any, y?: any, f?: any, color?: any) => { x.textAlign = "center"; x.font = f; x.fillStyle = color; x.fillText(text, W / 2, y); };
   if (kind === "card") {
     x.fillStyle = "#f3efe4"; x.fillRect(0, 0, W, H); x.fillStyle = "#b8973f"; x.fillRect(0, 0, W, 96); center("نقابة المهندسين", 64, font("bold", 44), "#ffffff");
-    [["الاسم", nm], ["الشعبة", dv.short], ["التخرج", String(year)], ["العضوية", `سارية حتى ${THIS_YEAR + 1}`], ["الرقم القومي", "•••• •••• •••• ••"]].forEach(([l, v], i) => {
+    [["الاسم", nm], ["الشعبة", dv.short], ["التخرج", String(year)], ["العضوية", `سارية حتى ${THIS_YEAR + 1}`], ["الرقم القومي", "•••• •••• •••• ••"]].forEach(([l, v]: any, i) => {
       const y = 172 + i * 68; x.textAlign = "right"; x.font = font("bold", 27); x.fillStyle = "#2f6b3a"; x.fillText(l + " :", 960, y); x.font = font("bold", 29); x.fillStyle = "#1f1f1f"; x.fillText(v, 760, y); });
     x.fillStyle = "#cfcabb"; x.fillRect(70, 150, 210, 270); x.textAlign = "center"; x.font = font("", 20); x.fillStyle = "#8a8578"; x.fillText("صورة", 175, 292);
     center("نموذج تجريبي — بيانات وهمية", 596, font("bold", 20), "#8a2b2b");
@@ -113,36 +113,36 @@ export function drawDemoDoc(kind, { name = "—", division = "civil", year = 201
 export const DEMO_DOCS = new Map();
 
 // a document's image: an uploaded one, or a seeded demo drawn once on first view (and dropped with the request's purge)
-export const docSrc = (r, i) => { const d = r && r.docs && r.docs[i]; if (!d) return null; if (d.src) return d.src; const k = r.id + ":" + i; if (!DEMO_DOCS.has(k)) DEMO_DOCS.set(k, drawDemoDoc(d.kind, d.demo || {})); return DEMO_DOCS.get(k); };
+export const docSrc = (r?: any, i?: any) => { const d = r && r.docs && r.docs[i]; if (!d) return null; if (d.src) return d.src; const k = r.id + ":" + i; if (!DEMO_DOCS.has(k)) DEMO_DOCS.set(k, drawDemoDoc(d.kind, d.demo || {})); return DEMO_DOCS.get(k); };
 
 
 // ---- requests ----
 export const verifyId = () => "V-" + randHex(6).toUpperCase();
 
-export function newVerifyRequest(p, docs, now = Date.now()) {
+export function newVerifyRequest(p?: any, docs?: any, now: any = Date.now()) {
   return { id: verifyId(), acc: memberAccId(p), pid: p.pid || null, mine: true, name: cleanName(p.name) || "—", gender: p.gender, role: p.role, disc: p.disc, gradYear: p.gradYear ? Number(p.gradYear) : null, gov: p.gov, city: p.city || null,
     docs: docs.map((d) => ({ kind: d.kind, src: d.src, w: d.w, h: d.h, pdf: !!d.pdf, sample: !!d.sample })), kinds: docs.map((d) => d.kind), at: now, status: "pending", decision: null, purged: 0, purgedAt: null };
 }
 
 // The purge: every image leaves the request for good (and the demo cache); what remains is the decision record
-export const purgeRequest = (r, status, extra = {}, now = Date.now()) => { (r.docs || []).forEach((d, i) => DEMO_DOCS.delete(r.id + ":" + i)); const n = (r.docs || []).length; return { ...r, ...extra, status, docs: [], purged: (r.purged || 0) + n, purgedAt: n ? now : r.purgedAt || null }; };
+export const purgeRequest = (r?: any, status?: any, extra: any = {}, now: any = Date.now()) => { (r.docs || []).forEach((d, i) => DEMO_DOCS.delete(r.id + ":" + i)); const n = (r.docs || []).length; return { ...r, ...extra, status, docs: [], purged: (r.purged || 0) + n, purgedAt: n ? now : r.purgedAt || null }; };
 
 // What the member's profile remembers about the request — never an image
-export const verifySummary = (r, extra = {}) => ({ id: r.id, at: r.at, kinds: r.kinds || [], status: r.status, purged: r.purged || 0, purgedAt: r.purgedAt || null, decidedAt: r.decision ? r.decision.at : null, ...extra });
+export const verifySummary = (r?: any, extra: any = {}) => ({ id: r.id, at: r.at, kinds: r.kinds || [], status: r.status, purged: r.purged || 0, purgedAt: r.purgedAt || null, decidedAt: r.decision ? r.decision.at : null, ...extra });
 
 // this browser's copy of the member's own pending request — written on submit, erased the moment it is decided or withdrawn
-export const saveOwnRequest = (r) => { if (!hasSession()) return false; try { localStorage.setItem(VERIFY_KEY, JSON.stringify(r)); return true; } catch (e) { return false; } };
+export const saveOwnRequest = (r?: any) => { if (!hasSession()) return false; try { localStorage.setItem(VERIFY_KEY, JSON.stringify(r)); return true; } catch (e) { return false; } };
 
 export const loadOwnRequest = () => { try { const r = JSON.parse(localStorage.getItem(VERIFY_KEY) || "null"); return r && r.id && r.status === "pending" && Array.isArray(r.docs) ? r : null; } catch (e) { return null; } };
 
 export const dropOwnRequest = () => { try { localStorage.removeItem(VERIFY_KEY); } catch (e) {} };
 
 // Requests from other members waiting in the queue — demo documents with invented names, drawn when a reviewer opens them
-export function seedVerifs(now = Date.now()) {
+export function seedVerifs(now: any = Date.now()) {
   const H = 3600e3;
-  const mk = (id, name, gender, role, disc, gradYear, gov, ago, docs) => ({ id, acc: accIdOf("verify:" + id), pid: null, mine: false, name, gender, role, disc, gradYear, gov, city: null,
-    docs: docs.map(([kind, demo]) => ({ kind, demo: { name, gender, division: divisionForDisc(disc) || "civil", year: gradYear, ...demo } })), kinds: docs.map((d) => d[0]), at: now - ago * H, status: "pending", decision: null, purged: 0, purgedAt: null });
-  const done = (r, status, decision, kinds, agoDecided) => ({ ...r, status, docs: [], kinds, purged: kinds.length, purgedAt: now - agoDecided * H, decision: { by: "team", at: now - agoDecided * H, ...decision } });
+  const mk = (id?: any, name?: any, gender?: any, role?: any, disc?: any, gradYear?: any, gov?: any, ago?: any, docs?: any) => ({ id, acc: accIdOf("verify:" + id), pid: null, mine: false, name, gender, role, disc, gradYear, gov, city: null,
+    docs: docs.map(([kind, demo]: any) => ({ kind, demo: { name, gender, division: divisionForDisc(disc) || "civil", year: gradYear, ...demo } })), kinds: docs.map((d) => d[0]), at: now - ago * H, status: "pending", decision: null, purged: 0, purgedAt: null });
+  const done = (r?: any, status?: any, decision?: any, kinds?: any, agoDecided?: any) => ({ ...r, status, docs: [], kinds, purged: kinds.length, purgedAt: now - agoDecided * H, decision: { by: "team", at: now - agoDecided * H, ...decision } });
   return [
     mk("V-7A21C3", "عمر حسين عبد الله", "male", "engineer", "civil", 2016, "cairo", 3, [["card", {}], ["cert", {}]]),
     mk("V-5E90B4", "سارة ماهر فتحي", "female", "engineer", "architecture", 2019, "giza", 9, [["cert", { nameOnDoc: "سلمى ماهر فتحي" }]]),
@@ -154,7 +154,7 @@ export function seedVerifs(now = Date.now()) {
 }
 
 // The queue as it starts: the seeded requests + this member's own pending one, unless it expired or no longer matches the account
-export function verifs0(now = Date.now()) {
+export function verifs0(now: any = Date.now()) {
   const out = seedVerifs(now); const own = loadOwnRequest(); if (!own) return out;
   const p = hasSession() ? loadPersona() : null;
   if (!p || own.pid !== p.pid || !p.pending || p.verifyRef !== own.id) { dropOwnRequest(); return out; } // a stale copy: not this account's open request
@@ -194,7 +194,7 @@ export const VX = {
   okSub: L2("راجع فريق الإدارة مستنداتك واعتمدها. الشارة ظاهرة الآن في هويتيك العلنية والمجهولة.", "Our administration team reviewed and approved your documents. The badge now shows on both your public and anonymous identities."),
   noTitle: L2("لم يُعتمد طلب التوثيق", "Your verification request wasn't approved"), reason: L2("السبب", "Reason"), note: L2("ملاحظة المراجِع", "Reviewer's note"),
   again: L2("تقديم طلب جديد", "Submit a new request"),
-  purged: (n, when, lang) => (lang === "en" ? `${n === 1 ? "The document was" : `All ${n} documents were`} permanently deleted right after the review — ${when}.` : `حُذفت المستندات (${n}) نهائيًا فور المراجعة — ${when}.`),
+  purged: (n?: any, when?: any, lang?: any) => (lang === "en" ? `${n === 1 ? "The document was" : `All ${n} documents were`} permanently deleted right after the review — ${when}.` : `حُذفت المستندات (${n}) نهائيًا فور المراجعة — ${when}.`),
   withdrawn: L2("سحبت طلبك السابق — وحُذفت مستنداته نهائيًا.", "You withdrew your previous request — its documents were permanently deleted."),
   expired: L2("لم يُراجَع طلبك السابق خلال 7 أيام — فحُذفت مستنداته نهائيًا. يمكنك التقديم من جديد.", "Your previous request wasn't reviewed within 7 days, so its documents were permanently deleted. You can submit again."),
   employer: L2("حسابات جهات العمل لا تحتاج توثيقًا", "Employer accounts don't need verification"),
@@ -203,27 +203,27 @@ export const VX = {
 
 export const toneBox = { good: "bg-good/15 text-good", bad: "bg-bad/15 text-bad", warn: "bg-warn/15 text-warn", accent: "bg-wash text-accent" };
 
-export const StatusHead = ({ icon: I, tone = "accent", title, sub }) => (
+export const StatusHead = ({ icon: I, tone = "accent", title, sub }: any) => (
   <div className="flex items-start gap-3"><span className={`grid place-items-center w-11 h-11 shrink-0 rounded-xl ${toneBox[tone]}`}><I size={20} /></span><div className="min-w-0"><h4 className="text-[16px] font-medium leading-snug">{title}</h4>{sub && <p className="mt-0.5 text-[12.5px] leading-relaxed text-ink-2">{sub}</p>}</div></div>
 );
 
-export const Facts = ({ rows }) => <dl className="grid grid-cols-2 gap-x-3 text-[11.5px]">{rows.filter(Boolean).map(([k, v]) => <div key={k} className="flex justify-between gap-2 border-b border-line py-1.5"><dt className="text-ink-3 shrink-0">{k}</dt><dd className="text-ink text-end leading-snug">{v}</dd></div>)}</dl>;
+export const Facts = ({ rows }: any) => <dl className="grid grid-cols-2 gap-x-3 text-[11.5px]">{rows.filter(Boolean).map(([k, v]: any) => <div key={k} className="flex justify-between gap-2 border-b border-line py-1.5"><dt className="text-ink-3 shrink-0">{k}</dt><dd className="text-ink text-end leading-snug">{v}</dd></div>)}</dl>;
 
 // The written guarantee, first thing on the submission screen
-export function PrivacyPromise({ app, compact = false }) {
-  const t = (x) => say(app, x);
+export function PrivacyPromise({ app, compact = false }: any) {
+  const t = (x?: any) => say(app, x);
   return (
     <section aria-label={t(VX.promiseTitle)} className="rounded-2xl border border-good/25 bg-good/[0.06] p-3.5">
       <p className="flex items-center gap-1.5 text-[12.5px] font-medium text-good"><ShieldCheck size={15} className="shrink-0" /> {t(VX.promiseTitle)}</p>
       <p className="mt-1.5 text-[13px] leading-relaxed text-ink">{t(VX.promise)}</p>
-      {!compact && <ul className="mt-2.5 space-y-1.5">{[[UserCog, VX.p1], [Trash2, VX.p2], [EyeOff, VX.p3], [FileCheck, VX.p4]].map(([I, x], i) => <li key={i} className="flex items-start gap-2 text-[11.5px] leading-relaxed text-ink-2"><I size={13} className="shrink-0 mt-[3px] text-good" /><span>{t(x)}</span></li>)}</ul>}
+      {!compact && <ul className="mt-2.5 space-y-1.5">{[[UserCog, VX.p1], [Trash2, VX.p2], [EyeOff, VX.p3], [FileCheck, VX.p4]].map(([I, x]: any, i) => <li key={i} className="flex items-start gap-2 text-[11.5px] leading-relaxed text-ink-2"><I size={13} className="shrink-0 mt-[3px] text-good" /><span>{t(x)}</span></li>)}</ul>}
     </section>
   );
 }
 
-export function DocSlot({ app, kind, doc, busy, err, onFile, onRemove }) {
-  const t = (x) => say(app, x); const S = DOC_SLOTS[kind]; const I = S.icon; const camRef = useRef(null), fileRef = useRef(null);
-  const pick = (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (f) onFile(f); };
+export function DocSlot({ app, kind, doc, busy, err, onFile, onRemove }: any) {
+  const t = (x?: any) => say(app, x); const S = DOC_SLOTS[kind]; const I = S.icon; const camRef = useRef<any>(null), fileRef = useRef<any>(null);
+  const pick = (e?: any) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (f) onFile(f); };
   return (
     <div className={`rounded-2xl border p-3 transition-colors ${doc ? "border-good/30 bg-good/[0.04]" : err ? "border-bad/40 bg-surface" : "border-dashed border-line-3 bg-surface"}`}>
       <input ref={camRef} type="file" accept="image/*" capture="environment" onChange={pick} tabIndex={-1} aria-label={`${t(S.title)} — ${t(VX.take)}`} className="sr-only" />
@@ -242,24 +242,24 @@ export function DocSlot({ app, kind, doc, busy, err, onFile, onRemove }) {
   );
 }
 
-export function VerifyIntake({ app, info, onSubmit }) {
-  const p = app.profile; const t = (x) => say(app, x); const slots = docSlots(p.role);
-  const [docs, setDocs] = useState({}); const [busy, setBusy] = useState({}); const [errs, setErrs] = useState({}); const [tried, setTried] = useState(false);
+export function VerifyIntake({ app, info, onSubmit }: any) {
+  const p = app.profile; const t = (x?: any) => say(app, x); const slots = docSlots(p.role);
+  const [docs, setDocs] = useState<any>({}); const [busy, setBusy] = useState<any>({}); const [errs, setErrs] = useState<any>({}); const [tried, setTried] = useState(false);
   const alive = useRef(true); useEffect(() => () => { alive.current = false; }, []);
-  const attach = async (kind, file) => {
+  const attach = async (kind?: any, file?: any) => {
     setBusy((b) => ({ ...b, [kind]: true })); setErrs((e) => ({ ...e, [kind]: null }));
     try { const d = await prepDoc(file); if (alive.current) setDocs((s) => ({ ...s, [kind]: { kind, ...d } })); }
     catch (e) { if (alive.current) setErrs((x) => ({ ...x, [kind]: DOC_ERRORS[e && e.message] || DOC_ERRORS.decode })); }
     finally { if (alive.current) setBusy((b) => ({ ...b, [kind]: false })); }
   };
-  const sample = () => { const demo = { name: cleanName(p.name) || "—", gender: p.gender, division: divisionForDisc(p.disc) || "civil", year: Number(p.gradYear) || THIS_YEAR - 5 }; setDocs(Object.fromEntries(slots.map((k) => [k, { kind: k, src: drawDemoDoc(k, demo), w: k === "card" ? 1000 : 1400, h: k === "card" ? 630 : 990, sample: true }]))); setErrs({}); };
+  const sample = () => { const demo: any = { name: cleanName(p.name) || "—", gender: p.gender, division: divisionForDisc(p.disc) || "civil", year: Number(p.gradYear) || THIS_YEAR - 5 }; setDocs(Object.fromEntries(slots.map((k) => [k, { kind: k, src: drawDemoDoc(k, demo), w: k === "card" ? 1000 : 1400, h: k === "card" ? 630 : 990, sample: true }]))); setErrs({}); };
   const list = slots.map((k) => docs[k]).filter(Boolean); const working = slots.some((k) => busy[k]);
   return (
     <div className="space-y-3">
       {info && <p role="status" className="p-3 rounded-xl bg-elevated/70 border border-line text-[12px] leading-relaxed text-ink-2 flex items-start gap-2"><Trash2 size={14} className="shrink-0 mt-0.5 text-good" /><span>{t(info)}</span></p>}
       <PrivacyPromise app={app} />
       <div className="pt-1"><h4 className="text-[15px] font-medium">{t(VX.introTitle)}</h4><p className="mt-0.5 text-[12.5px] leading-relaxed text-ink-2">{t(p.role === "supervisor" ? VX.introSup : VX.introEng)}</p></div>
-      {slots.map((k) => <DocSlot key={k} app={app} kind={k} doc={docs[k]} busy={!!busy[k]} err={errs[k]} onFile={(f) => attach(k, f)} onRemove={() => setDocs((s) => { const n = { ...s }; delete n[k]; return n; })} />)}
+      {slots.map((k) => <DocSlot key={k} app={app} kind={k} doc={docs[k]} busy={!!busy[k]} err={errs[k]} onFile={(f) => attach(k, f)} onRemove={() => setDocs((s) => { const n: any = { ...s }; delete n[k]; return n; })} />)}
       <button type="button" onClick={sample} className="w-full min-h-10 text-[12px] text-accent hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-lg">{t(VX.sample)}</button>
       {tried && !list.length && <p role="alert" className="text-[12px] text-bad flex items-center gap-1.5"><CircleAlert size={13} /> {t(VX.needOne)}</p>}
       <Primary disabled={working} onClick={() => { setTried(true); if (list.length) onSubmit(list); }} className="w-full h-12 press"><Send size={16} className="rtl:-scale-x-100" /> {t(VX.send)}</Primary>
@@ -269,19 +269,19 @@ export function VerifyIntake({ app, info, onSubmit }) {
 }
 
 // One sheet for the whole life of a request. The member only ever sees plain states — never how the documents are handled inside.
-export function VerifyCenter({ app }) {
-  const p = app.profile; const t = (x) => say(app, x); const en = app.lang === "en"; const trx = (s) => trIn(app.lang, s);
+export function VerifyCenter({ app }: any) {
+  const p = app.profile; const t = (x?: any) => say(app, x); const en = app.lang === "en"; const trx = (s?: any) => trIn(app.lang, s);
   const [fresh, setFresh] = useState(false); const [sending, setSending] = useState(false); const [sent, setSent] = useState(false); const [sure, setSure] = useState(false);
-  const timer = useRef(null); useEffect(() => () => clearTimeout(timer.current), []);
-  const req = p.verifyReq || null; const when = (ms) => whenIn(app.lang, ms);
-  const kinds = (ks) => (ks || []).map((k) => t((DOC_SLOTS[k] || DOC_SLOTS.cert).short)).join(en ? " + " : " + ");
-  const wrap = (node) => <div translate="no" lang={app.lang} className="space-y-3">{node}</div>;
+  const timer = useRef<any>(null); useEffect(() => () => clearTimeout(timer.current), []);
+  const req = p.verifyReq || null; const when = (ms?: any) => whenIn(app.lang, ms);
+  const kinds = (ks?: any) => (ks || []).map((k) => t((DOC_SLOTS[k] || DOC_SLOTS.cert).short)).join(en ? " + " : " + ");
+  const wrap = (node?: any) => <div translate="no" lang={app.lang} className="space-y-3">{node}</div>;
   if (!canVerifyRole(p.role)) return wrap(<>
     <StatusHead icon={Building2} tone="accent" title={t(VX.employer)} sub={t(VX.employerBody)} />
     <p className="flex items-center gap-2 text-[12px] text-ink-2"><Chip tone={p.role === "owner" ? "owner" : "hr"}>{p.role === "owner" ? <Briefcase size={12} /> : <Building2 size={12} />}{trx(roleTitle(p.role, p.gender))}</Chip></p>
     <Secondary onClick={app.closeSheet} className="w-full h-11">{t(VX.close)}</Secondary>
   </>);
-  const submit = (docs) => { app.submitVerification(docs); setSending(true); setSent(false); timer.current = setTimeout(() => { setSending(false); setSent(true); setFresh(false); }, reduced() ? 250 : 1300); };
+  const submit = (docs?: any) => { app.submitVerification(docs); setSending(true); setSent(false); timer.current = setTimeout(() => { setSending(false); setSent(true); setFresh(false); }, reduced() ? 250 : 1300); };
   if (sending) return wrap(<div role="status" aria-live="polite" className="py-10 flex flex-col items-center text-center gap-3"><LoaderCircle size={34} className="spin text-accent" /><p className="text-[15px] font-medium">{t(VX.reading)}</p><p className="text-[12.5px] text-ink-2 max-w-[32ch] leading-relaxed">{t(VX.readingSub)}</p></div>);
   if (p.verified) {
     const { mapped, conflict } = divConflict(p.division, p.disc); const d = divOf(p.division);

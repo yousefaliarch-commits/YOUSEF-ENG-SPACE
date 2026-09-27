@@ -1,5 +1,5 @@
 // One-off migration step: adds explicit gradual types to the JavaScript-era code so `tsc` can check it without rewriting it.
-//  · destructured parameters (component props, option objects) → `: any`
+//  · destructured parameters (component props, option objects, [id, label, Icon] tuples in callbacks) → `: any`
 //  · untyped parameters of named functions → optional `?: any` (JavaScript callers often pass fewer arguments)
 //  · rest parameters → `: any[]`
 //  · useState / useRef / useMemo seeded with {}, [], null or an object literal → `<any>`
@@ -20,7 +20,7 @@ for (const file of walk(process.argv[2])) {
       for (const p of n.parameters) {
         if (p.type) continue;
         if (p.dotDotDotToken) { if (!cb) edits.push([p.name.getEnd(), ": any[]"]); continue; }
-        if (ts.isObjectBindingPattern(p.name) || ts.isArrayBindingPattern(p.name)) { if (!cb || ts.isObjectBindingPattern(p.name) && !ts.isCallExpression(n.parent)) edits.push([p.name.getEnd(), ": any"]); continue; }
+        if (ts.isObjectBindingPattern(p.name) || ts.isArrayBindingPattern(p.name)) { if (!cb || ts.isArrayBindingPattern(p.name) || ts.isObjectBindingPattern(p.name) && !ts.isCallExpression(n.parent)) edits.push([p.name.getEnd(), ": any"]); continue; }
         if (ts.isIdentifier(p.name) && !cb) {
           if (p.initializer) edits.push([p.name.getEnd(), ": any"]);
           else if (!p.questionToken) edits.push([p.name.getEnd(), "?: any"]);

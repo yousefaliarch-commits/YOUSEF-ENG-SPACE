@@ -16,14 +16,14 @@ export const loadTheme = () => { try { return localStorage.getItem("engspace.the
 export const systemMode = () => { try { const host = document.documentElement.dataset.theme; if (host === "light" || host === "dark") return host; return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } catch (e) { return "dark"; } };
 
 export function App() {
-  const [init] = useState(parseHash); const [view, setView] = useState(init.view); const [accent, setAccent] = useState("indigo"); const [toastMsg, setToastMsg] = useState("");
-  const [theme, setThemeRaw] = useState(loadTheme); const [sys, setSys] = useState(systemMode);
+  const [init] = useState<any>(parseHash); const [view, setView] = useState<any>(init.view); const [accent, setAccent] = useState<any>("indigo"); const [toastMsg, setToastMsg] = useState<any>("");
+  const [theme, setThemeRaw] = useState<any>(loadTheme); const [sys, setSys] = useState<any>(systemMode);
   // Language: chosen on the app's first screen (before the e-mail / registration screen), saved, switchable any time from
   // Settings. The swap runs in a layout effect, so the first paint is already in the chosen language; a switch cross-fades as a
   // View Transition and keeps all state. `lang` stays null until a choice is made (Arabic shows meanwhile).
-  const [lang, setLangRaw] = useState(loadLang); const L = lang || "ar";
+  const [lang, setLangRaw] = useState<any>(loadLang); const L = lang || "ar";
   useLayoutEffect(() => { i18nApply(L); }, [L]);
-  const setLang = (l) => {
+  const setLang = (l?: any) => {
     l = l === "en" ? "en" : "ar"; const apply = () => { setLangRaw(l); saveLang(l); }; if (l === L) { if (lang == null) apply(); return; }
     const root = document.documentElement; const S = liveState();
     if (typeof document.startViewTransition !== "function" || reducedMotion() || S.vtBusy) { apply(); return; }
@@ -31,7 +31,7 @@ export function App() {
     let t = null; try { t = document.startViewTransition(() => { ReactDOM.flushSync(apply); }); } catch (e) { done(); apply(); return; }
     [t.ready, t.updateCallbackDone].forEach((p) => p && p.catch(() => {})); t.finished.then(done, done);
   };
-  const setTheme = (t) => {
+  const setTheme = (t?: any) => {
     const apply = () => { setThemeRaw(t); try { localStorage.setItem("engspace.theme", t); } catch (e) {} };
     const root = document.documentElement; const L = liveState();
     if (typeof document.startViewTransition !== "function" || reducedMotion() || L.vtBusy) { apply(); return; }
@@ -42,10 +42,10 @@ export function App() {
   };
   const mode = theme === "system" ? sys : theme;
   useEffect(() => { try { const mq = matchMedia("(prefers-color-scheme: dark)"); const on = () => setSys(systemMode()); mq.addEventListener("change", on); const mo = new MutationObserver(on); mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }); return () => { mq.removeEventListener("change", on); mo.disconnect(); }; } catch (e) {} }, []);
-  useEffect(() => { try { document.documentElement.dataset.mode = mode; document.documentElement.style.colorScheme = mode; const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = mode === "light" ? "#fafafa" : "#09090b"; } catch (e) {} }, [mode]);
+  useEffect(() => { try { document.documentElement.dataset.mode = mode; document.documentElement.style.colorScheme = mode; const m = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null; if (m) m.content = mode === "light" ? "#fafafa" : "#09090b"; } catch (e) {} }, [mode]);
   const a = mode === "light" ? ACCENTS[accent].light : ACCENTS[accent].rgb;
   useEffect(() => { if (!toastMsg) return; const t = setTimeout(() => setToastMsg(""), 2600); return () => clearTimeout(t); }, [toastMsg]);
-  const vars = { "--accent": a.accent, "--solid": a.solid, "--solid-hi": a.solidHi, "--hover": a.hover, "--wash": a.wash };
+  const vars: any = { "--accent": a.accent, "--solid": a.solid, "--solid-hi": a.solidHi, "--hover": a.hover, "--wash": a.wash };
   return (
     <ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
       <div className={view === "app" ? "hidden sm:block" : ""}><TopBar view={view} setView={setView} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
@@ -59,8 +59,8 @@ export function App() {
 // A render error shows a plain recovery screen instead of a blank page
 export class ErrorBoundary extends React.Component<{ children?: React.ReactNode }, { err: unknown }> {
   state = { err: null };
-  static getDerivedStateFromError(err) { return { err }; }
-  componentDidCatch(err, info) { console.error("EngSpace crashed:", err, info && info.componentStack); }
+  static getDerivedStateFromError(err?: any) { return { err }; }
+  componentDidCatch(err?: any, info?: any) { console.error("EngSpace crashed:", err, info && info.componentStack); }
   render() {
     if (!this.state.err) return this.props.children;
     return (
@@ -81,7 +81,7 @@ export const PRESS_SEL = "button:not(:disabled), [role=button], [role=tab], [rol
 
 export function installPressFeedback() {
   const L = liveState(); if (L.pressFx || typeof document === "undefined") return; L.pressFx = true; let cur = null;
-  const target = (e) => { const el = e.target && e.target.closest ? e.target.closest(PRESS_SEL) : null; return el && !el.closest("[data-no-press]") && typeof el.animate === "function" ? el : null; };
+  const target = (e?: any) => { const el = e.target && e.target.closest ? e.target.closest(PRESS_SEL) : null; return el && !el.closest("[data-no-press]") && typeof el.animate === "function" ? el : null; };
   document.addEventListener("pointerdown", (e) => {
     L.lastTap = { x: e.clientX, y: e.clientY }; if (e.button > 0 || reducedMotion()) return; const el = target(e); if (!el) return; const r = el.getBoundingClientRect(); if (r.width > 460 || r.height > 220) return;
     const k = r.width * r.height > 14000 ? 0.985 : r.width < 60 ? 0.9 : 0.955; cur = { el, k };
