@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_4c_moderation
 import { COMPANIES, ROOMS, company, room } from "../data/companies";
 import { GOVS } from "../data/geo";
 import { JOBS, POSTS0, THREADS0 } from "../data/seed";

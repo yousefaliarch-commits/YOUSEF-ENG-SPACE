@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_2c_identity_ui
 import {
   ArrowLeftRight, BadgeCheck, Check, CircleCheck, KeyRound, ShieldCheck
 } from "lucide-react";

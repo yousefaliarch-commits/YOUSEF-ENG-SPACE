@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_4c_moderation
 import { useEffect, useMemo, useState } from "react";
 import {
   Activity, BadgeCheck, Ban, Briefcase, ChartColumn, CheckCheck, CircleCheck, Copy, ExternalLink, Eye, EyeOff, 

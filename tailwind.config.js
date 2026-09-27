@@ -1,6 +1,7 @@
 /** Tailwind theme: every colour is a CSS variable set per theme ([data-mode]), so opacity modifiers work. */
 export default {
-  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  // relative: paths resolve from this file, not the working directory, so a build started from any folder finds the classes
+  content: { relative: true, files: ["./index.html", "./src/**/*.{ts,tsx}"] },
   future: { hoverOnlyWhenSupported: true },
   theme: {
     extend: {

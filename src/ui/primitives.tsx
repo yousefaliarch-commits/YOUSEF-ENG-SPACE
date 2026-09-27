@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): brand_part
 import {
   ArrowLeft, ArrowRight, Check
 } from "lucide-react";

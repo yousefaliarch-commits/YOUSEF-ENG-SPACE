@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1e_helpers
 import { createContext, useCallback, useContext, useSyncExternalStore } from "react";
 
 // =====================================================================

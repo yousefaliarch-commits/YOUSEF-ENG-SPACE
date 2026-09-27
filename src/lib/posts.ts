@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_2b_onboarding, app_3b_stack
 
 
 // =====================================================================

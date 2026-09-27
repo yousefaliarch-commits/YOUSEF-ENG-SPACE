@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_3d_cvui
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BadgeCheck, Check, ChevronDown, CircleAlert, CircleCheck, CircleX, Clock, Copy, FileSearch, FileText, FileUp, 

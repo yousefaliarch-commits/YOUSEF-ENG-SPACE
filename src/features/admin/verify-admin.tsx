@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_4d_verify_admin
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import {

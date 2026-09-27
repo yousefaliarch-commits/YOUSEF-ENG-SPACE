@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1d_jobs
 
 
 // ---- Jobs v2: mandatory classification (discipline → sub-discipline → years → exact position), no employer salary — the range is estimated by EngSpace ----

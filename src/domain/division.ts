@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1h_division
 import { DISC, genderOf } from "./taxonomy";
 
 // =====================================================================

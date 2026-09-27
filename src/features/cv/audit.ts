@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_3c2_cvaudit
 import { TRACK_ADJ, posShort, posYears, trackLabel, tracksFor } from "../../domain/taxonomy";
 import { AR_MASDAR_PAST, CV_ACTION_AR, CV_ACTION_EN, CV_LANG_LEVEL, CV_LANG_NAMES, CV_PROJECT_TYPES, CV_TOOLS, EN_GERUND_PAST, parseCV, wordsOf } from "./extract";
 import { L2 } from "../../i18n/i18n";

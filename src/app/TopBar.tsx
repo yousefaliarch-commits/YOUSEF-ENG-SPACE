@@ -13,7 +13,9 @@ export function TopBar({ view, setView, accent, setAccent, theme, setTheme, mode
   return (
     <header className="sticky top-0 z-30 backdrop-blur-md bg-canvas/80 border-b border-line">
       <div className="max-w-6xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between gap-3">
-        <a href="#app" aria-label="EngSpace" className="flex items-center gap-2.5 shrink-0" onClick={(e) => { e.preventDefault(); setView("app"); }}><ArchMark size={26} /><span className="hidden md:block"><Wordmark size="text-[20px]" /></span></a>
+        {/* the logo leads back to the app from the admin console; in the app it is only the mark */}
+        {view === "app" ? <div className="flex items-center gap-2.5 shrink-0"><ArchMark size={26} /><span className="hidden md:block"><Wordmark size="text-[20px]" /></span></div>
+          : <a href="#app" aria-label="EngSpace" className="flex items-center gap-2.5 shrink-0 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" onClick={(e) => { e.preventDefault(); setView("app"); }}><ArchMark size={26} /><span className="hidden md:block"><Wordmark size="text-[20px]" /></span></a>}
         <div role="tablist" aria-label="طريقة العرض" className="flex p-1 rounded-full bg-surface border border-line">
           {[["app", "معاينة التطبيق", "التطبيق"], ["admin", "لوحة الإدارة", "الإدارة"]].map(([id, label, short]: any) => (
             <button key={id} role="tab" aria-selected={view === id} onClick={() => setView(id)}

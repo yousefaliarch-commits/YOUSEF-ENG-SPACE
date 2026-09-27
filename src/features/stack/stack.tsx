@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_3b_stack
 import React, { useEffect, useRef, useState } from "react";
 import {
   Award, BadgeCheck, Ban, Bookmark, Briefcase, Building2, Camera, Check, CircleAlert, CircleCheck, Clock, Coins, 

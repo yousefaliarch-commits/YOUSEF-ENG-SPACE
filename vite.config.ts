@@ -7,9 +7,12 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: "es2022",
-    chunkSizeWarningLimit: 1600,
+    // the main chunk is React + the member app + the English dictionary; the admin console, the CV review, pdf.js,
+    // mammoth and Tesseract are separate chunks loaded on first use
+    chunkSizeWarningLimit: 1200,
     rolldownOptions: {
       // pdf.js keeps a Node-only `eval("require")` fallback that never runs in the browser
+      checks: { pluginTimings: false },
       onwarn(warning, next) { if (warning.code === "EVAL" && /pdfjs-dist/.test(String(warning.id || ""))) return; next(warning); },
     },
   },

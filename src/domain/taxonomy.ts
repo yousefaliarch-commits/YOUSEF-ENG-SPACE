@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1b_taxonomy, app_1e_helpers, app_2e_verify
 import {
   BadgeCheck, Briefcase, Building2, Coins, Eye, GraduationCap, HardHat, ImagePlus, Lightbulb, LockKeyhole, Mail, 
   MapPin, MessageCircle, Reply, Scale, Send, ShieldCheck, Star, TrendingUp, Wallet

@@ -5,12 +5,14 @@
   "description": "EngSpace — the anonymous career and salary network for Egyptian engineers (web app, packaged for iOS and Android with Capacitor).",
   "type": "module",
   "scripts": {
-    "predev": "node scripts/copy-vendor.mjs",
+    "i18n": "node scripts/i18n/extract.mjs && node scripts/i18n/build.mjs",
+    "predev": "node scripts/copy-vendor.mjs && npm run i18n",
     "dev": "vite",
-    "prebuild": "node scripts/copy-vendor.mjs",
+    "prebuild": "node scripts/copy-vendor.mjs && npm run i18n",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
+    "pretest": "npm run i18n",
     "test": "vitest run",
     "check": "npm run typecheck && npm test && npm run build"
   },
@@ -18,7 +20,7 @@
     "@fontsource/ibm-plex-sans-arabic": "5.3.0",
     "@fontsource/space-grotesk": "5.3.0",
     "lucide-react": "0.468.0",
-    "mammoth": "1.8.0",
+    "mammoth": "1.13.0",
     "pdfjs-dist": "3.11.174",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -28,6 +30,8 @@
   "devDependencies": {
     "@babel/parser": "^8.0.6",
     "@babel/traverse": "^8.0.6",
+    "@babel/types": "^8.0.6",
+    "@types/node": "^24.19.0",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^6.1.1",
@@ -37,5 +41,8 @@
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
     "vitest": "^5.0.2"
+  },
+  "overrides": {
+    "tar": "^7.5.22"
   }
 }

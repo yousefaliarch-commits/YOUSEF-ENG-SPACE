@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_4c_moderation
 import { useSyncExternalStore } from "react";
 import {
   Minus, Plus, Search

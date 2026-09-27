@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1e_helpers
 import { useEffect, useRef, useState } from "react";
 import { COMPANIES, catName, company, companyMult } from "../data/companies";
 import { CITIES, GOVS, gov, placeMult, placeName } from "../data/geo";

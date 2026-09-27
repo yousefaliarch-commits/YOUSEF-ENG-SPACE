@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_3e_settings
 import { useEffect, useRef, useState } from "react";
 import {
   Award, Bell, BookOpen, Briefcase, Building2, Calculator, Check, ChevronDown, CircleHelp, Compass, Home, 

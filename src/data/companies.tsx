@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1c_companies
 import LOGO_MANIFEST from "./logo-manifest.json";
 import { useState } from "react";
 import {

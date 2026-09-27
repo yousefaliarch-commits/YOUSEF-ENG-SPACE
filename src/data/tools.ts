@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_4_sheets
 import {
   Calculator, FileCheck, Map as MapIcon, MessageSquare, Percent, Route, Scale, Timer
 } from "lucide-react";

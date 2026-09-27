@@ -11,4 +11,11 @@ import "./styles/app.css";
 import { App, ErrorBoundary, installPressFeedback } from "./app/App";
 
 installPressFeedback();
-createRoot(document.getElementById("root")!).render(<ErrorBoundary><App /></ErrorBoundary>);
+const el = document.getElementById("root")!;
+let root = null;
+const mount = () => { root = createRoot(el); root.render(<ErrorBoundary><App /></ErrorBoundary>); };
+mount();
+
+// Development only (compiled out of production builds): lets the in-page UI crawler (tools/crawl-ui.js) restart the app from a
+// clean state on a new deep link without reloading the page
+if (import.meta.env.DEV) window.__engspaceDev = { mount, unmount: () => { if (root) root.unmount(); root = null; } };

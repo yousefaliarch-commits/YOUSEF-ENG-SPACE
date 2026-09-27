@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1i_media, app_2b_onboarding
 import { useEffect, useRef, useState } from "react";
 import {
   Image as ImageIcon, LockKeyhole, X

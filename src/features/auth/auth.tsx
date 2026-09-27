@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_2d_auth
 import { useEffect, useRef, useState } from "react";
 import {
   BadgeCheck, Camera, Check, CircleAlert, CircleCheck, Clock, Eye, EyeOff, HardHat, Languages, LoaderCircle, 

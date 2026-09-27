@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_2_chrome, app_3e_settings
 import { useEffect, useRef, useState } from "react";
 import {
   BadgeCheck, Bell, ChevronLeft, Eye, Flag, MapPin, Moon, Search, Settings, Share2, ShieldAlert, Star, Sun, X
@@ -72,7 +71,7 @@ export function ContactHint({ text, as = "anon", className = "" }: any) {
 }
 
 
-export function AppHeader({ app, onBrand }: any) {
+export function AppHeader({ app }: any) {
   const top = app.stack[app.stack.length - 1]; const pf = usePlatform();
   const glass = `shrink-0 pt-[var(--sat)] backdrop-blur-md bg-canvas/80 border-b z-10 transition-shadow duration-300 ${app.scrolled ? "header-lift border-line-2" : "border-line"}`;
   if (top) {
@@ -92,7 +91,7 @@ export function AppHeader({ app, onBrand }: any) {
   }
   return (
     <header className={glass}><div className="h-14 ps-4 pe-2 flex items-center justify-between">
-      <button type="button" onClick={onBrand} aria-label="العودة إلى نظام الهوية" className="flex items-center gap-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><ArchMark size={22} /><Wordmark size="text-[17px]" /></button>
+      <div className="flex items-center gap-2"><ArchMark size={22} /><Wordmark size="text-[17px]" /></div>
       <div className="flex items-center">
         <ThemeQuick app={app} />
         <RoundButton label="الإعدادات" data-tour="settings" onClick={() => app.push({ type: "settings" })} className="press w-10"><Settings size={19} /></RoundButton>

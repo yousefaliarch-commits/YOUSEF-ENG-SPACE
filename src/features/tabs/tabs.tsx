@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_3_screens
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowUpDown, BadgeCheck, Bookmark, Briefcase, Building2, ChevronDown, CircleCheck, Clock, Coins, FileCheck, 

@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1b_taxonomy
 
 
 // ---- Contact details are ALLOWED everywhere. detectContact() only recognises them: the job parser lifts them into the ad's contact card,

@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_3c_cv
 import { loadMammoth, loadPdf } from "../../lib/vendor";
 import { posForYears, trackLabel, tracksFor } from "../../domain/taxonomy";
 import { detectContact } from "../../domain/text-guard";
@@ -21,7 +20,9 @@ export async function extractCV(file?: any) {
   const name = (file.name || "").toLowerCase(); const ext = name.includes(".") ? name.split(".").pop() : (file.type === "application/pdf" ? "pdf" : "txt"); const layout: any = { pages: 1, images: 0, columns: false, tables: 0, type: ext, glyphs: 0 };
   if (ext === "pdf") {
     const lib = await loadPdf();
-    const doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise; layout.pages = doc.numPages; const lines: any = []; let colPages = 0;
+    // isEvalSupported: false — pdf.js 3.x would otherwise compile font programs with eval, which lets a crafted PDF run script
+    // (CVE-2024-4367); text extraction does not need it
+    const doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()), isEvalSupported: false }).promise; layout.pages = doc.numPages; const lines: any = []; let colPages = 0;
     for (let p = 1; p <= Math.min(doc.numPages, 8); p++) {
       const page = await doc.getPage(p); const tc = await page.getTextContent(); const vw = page.getViewport({ scale: 1 }).width;
       const items = tc.items.filter((it) => it.str && it.str.trim()).map((it) => ({ x: it.transform[4], y: it.transform[5], w: it.width || 0, h: Math.abs(it.transform[3]) || it.height || 10, s: it.str, font: it.fontName }));

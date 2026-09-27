@@ -1,0 +1,6 @@
+{
+  // Build config, tests and scripts: run by Node, so they see Node's types as well as Vite's.
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "types": ["vite/client", "node"] },
+  "include": ["tests", "vite.config.ts", "vitest.config.ts"]
+}

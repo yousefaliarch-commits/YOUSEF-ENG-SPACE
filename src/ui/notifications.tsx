@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_3b_stack
 import { useState } from "react";
 import {
   Bell, Bookmark, Briefcase, Building2, FileCheck, Flag, IdCard, Lightbulb, Mail, MessageCircle, Send, 

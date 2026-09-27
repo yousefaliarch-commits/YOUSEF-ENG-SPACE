@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): brand_part
 import {
   Monitor, Moon, Sun
 } from "lucide-react";

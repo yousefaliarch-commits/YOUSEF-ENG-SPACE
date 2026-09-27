@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1a_geo
 import {
   Briefcase, Calculator, Home, MessageCircle, Users, Wallet
 } from "lucide-react";

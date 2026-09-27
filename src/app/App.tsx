@@ -1,15 +1,18 @@
 // The root: theme (system / light / dark), language (Arabic / English) and the two views — the member app and, until Phase 3
 // moves it to its own web app, the admin console. Both views share the app's stores (lib/runtime).
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useLayoutEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Bug, CircleCheck } from "lucide-react";
 import { AppView, parseHash } from "./AppView";
+import { ScreenLoading } from "./ScreenLoading";
 import { TopBar } from "./TopBar";
-import { AdminView } from "../features/admin/AdminView";
 import { I18N, LANGS, LangCtx, i18nApply, loadLang, saveLang } from "../i18n/i18n";
 import { ModeCtx, liveState, reducedMotion } from "../lib/runtime";
 import { Primary } from "../ui/primitives";
 import { ACCENTS } from "../ui/theme";
+
+// The admin console is its own chunk: members never download it (Phase 3 moves it to a separate web app)
+const AdminView = lazy(() => import("../features/admin/AdminView").then((m) => ({ default: m.AdminView })));
 
 export const loadTheme = () => { try { return localStorage.getItem("engspace.theme") || "system"; } catch (e) { return "system"; } };
 
@@ -49,8 +52,8 @@ export function App() {
   return (
     <ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
       <div className={view === "app" ? "hidden sm:block" : ""}><TopBar view={view} setView={setView} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
-      {view === "admin" ? <AdminView init={init} openApp={() => setView("app")} />
-        : <AppView onBrand={() => {}} onAdmin={() => setView("admin")} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
+      {view === "admin" ? <Suspense fallback={<ScreenLoading />}><AdminView init={init} openApp={() => setView("app")} /></Suspense>
+        : <AppView onAdmin={() => setView("admin")} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
       <div role="status" aria-live="polite" className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-elevated border border-line-2 text-[13px] shadow-float transition-all ${toastMsg ? "opacity-100" : "opacity-0 translate-y-3 pointer-events-none"}`}>{toastMsg && <><CircleCheck size={17} className="text-accent" /><span>{toastMsg}</span></>}</div>
     </div></LangCtx.Provider></ModeCtx.Provider>
   );

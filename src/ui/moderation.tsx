@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_4c_moderation
 import { useState } from "react";
 import {
   CircleAlert, CircleCheck, EyeOff, Flag, LockKeyhole, ShieldAlert

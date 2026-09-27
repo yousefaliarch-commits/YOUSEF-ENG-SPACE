@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_2b_onboarding
 import { useState } from "react";
 import {
   Award, Bookmark, Check, Coins, Mail, MessageCircle, Phone, ShieldCheck, Sparkles

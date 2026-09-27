@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_2e_verify
 import { useEffect, useRef, useState } from "react";
 import {
   BadgeCheck, Briefcase, Building2, Camera, CircleAlert, CircleCheck, EyeOff, FileCheck, FileUp, Hourglass, 
@@ -68,7 +67,8 @@ export async function prepDoc(file?: any) {
   let doc = null;
   try {
     const lib = await loadPdf();
-    doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise; const page = await doc.getPage(1);
+    // isEvalSupported: false — no eval of font programs from an uploaded PDF (CVE-2024-4367)
+    doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()), isEvalSupported: false }).promise; const page = await doc.getPage(1);
     const vp = page.getViewport({ scale: 1 }); const v2 = page.getViewport({ scale: Math.min(4, 1600 / Math.max(vp.width, vp.height)) });
     const c = document.createElement("canvas"); c.width = Math.round(v2.width); c.height = Math.round(v2.height); const x = c.getContext("2d"); x.fillStyle = "#ffffff"; x.fillRect(0, 0, c.width, c.height);
     await page.render({ canvasContext: x, viewport: v2 }).promise; const out: any = { src: c.toDataURL("image/jpeg", 0.85), w: c.width, h: c.height, pdf: true }; c.width = 0; c.height = 0; return out;

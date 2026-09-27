@@ -1,5 +1,4 @@
-// Migrated from the prototype part(s): app_5_root
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   CircleCheck, LockKeyhole, ShieldAlert
@@ -13,7 +12,6 @@ import { AUDIT0, MOD0, MOD_CONFIG0, REPORT_KINDS, actGate, ckey, fileReport, job
 import { SUPERVISOR_DENY, SUPERVISOR_NOTIFS, blockedFor, dmRule, isCompanyRole, maskMoney, moneyAccess, repLevel, roleTitle, tabsFor } from "../domain/taxonomy";
 import { screenLanguage } from "../domain/text-guard";
 import { AuthScreen, Registration, Welcome } from "../features/auth/auth";
-import { CVReviewScreen } from "../features/cv/CVReviewScreen";
 import { GuideScreen, LanguageScreen, SettingsScreen, Tour, tourSeen } from "../features/settings/settings";
 import { ComposeSheet, ContributeSheet, LogoSheet, MethodologySheet, PrivacyBody, ReviewSheet, TOOL_VIEWS, UserSheet, VerifySheet } from "../features/sheets/sheets";
 import { ChatScreen, CompanyScreen, JobScreen, PermissionsScreen, PostJobScreen, PostScreen, ProfileScreen, RoomScreen, RoomsScreen } from "../features/stack/stack";
@@ -29,6 +27,11 @@ import { ReportSheet } from "../ui/moderation";
 import { NotificationsScreen } from "../ui/notifications";
 import { ArchMark } from "../ui/primitives";
 import { fmt } from "../ui/theme";
+import { ScreenLoading } from "./ScreenLoading";
+
+// The CV review (parser, engineering knowledge base, audit, report) is the largest feature; it loads on first open, and
+// pdf.js / mammoth only when a file is picked
+const CVReviewScreen = lazy(() => import("../features/cv/CVReviewScreen").then((m) => ({ default: m.CVReviewScreen })));
 
 // =====================================================================
 //  App view — state, routing, gestures
@@ -39,7 +42,7 @@ export const PLAIN_TYPES = ["notifications", "profile", "rooms", "permissions", 
 
 export function parseHash() {
   const parts = (location.hash || "").replace(/^#/, "").split("/").filter(Boolean);
-  const view = parts[0] === "app" ? "app" : parts[0] === "devices" ? "devices" : parts[0] === "admin" ? "admin" : "brand"; let tab = "home", stack: any = [], market = "salaries";
+  const view = parts[0] === "admin" ? "admin" : "app"; let tab = "home", stack: any = [], market = "salaries";
   if (TABS.some((t) => t.id === parts[1])) { tab = parts[1]; if (tab === "market" && ["salaries", "companies"].includes(parts[2])) market = parts[2]; if (tab === "market" && parts[2] === "tools") tab = "tools"; }
   else if (STACK_TYPES.includes(parts[1]) && parts[2]) stack = [{ type: parts[1], id: parts[2] }];
   else if (PLAIN_TYPES.includes(parts[1])) stack = [{ type: parts[1] }];
@@ -52,7 +55,7 @@ export const isWorker = (p?: any) => !isCompanyRole(p.role);
 
 // `store`: external state store (see liveState) — the device previews pass a shared one so both phones mirror each other, and
 // every store outlives hot code updates. `embed`: { platform, hash } when rendered inside a device mockup (no outer frame, no caption).
-export function AppView({ onBrand, onAdmin = null, init, theme, setTheme, mode, lang = "ar", setLang = () => {}, langChosen = true, store: storeProp = null, embed = null }: any) {
+export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "ar", setLang = () => {}, langChosen = true, store: storeProp = null, embed = null }: any) {
   const store = storeProp || storeFor("app"); const S = (key?: any, initial?: any) => useStore(store, key, initial);
   // The signed-in member: a stored session → its account profile. Deep links and the device previews fall back to a demo member,
   // unless this page has signed out or deleted the account (then the auth screens show).
@@ -243,7 +246,7 @@ export function AppView({ onBrand, onAdmin = null, init, theme, setTheme, mode, 
   const top = stack[stack.length - 1];
   const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title="غير متاح لحساب مشرف الموقع" body={SUPERVISOR_DENY} action="رجوع" onAction={app.pop} /></div>
     : top
-    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <CVReviewScreen app={app} /> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
+    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : curTab === "home" ? <HomeScreen app={app} /> : curTab === "community" ? <CommunityScreen app={app} /> : curTab === "jobs" ? <JobsScreen app={app} /> : curTab === "market" ? <MarketScreen app={app} /> : curTab === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;
   const sheets: any = {
@@ -261,7 +264,7 @@ export function AppView({ onBrand, onAdmin = null, init, theme, setTheme, mode, 
       <div className={frameCls} style={frameStyle} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/* while a sheet is open everything behind it is inert: no focus, no clicks, hidden from assistive tech */}
         <div className="contents" {...(sheet || viewer || tourOn ? { inert: "" } : {})}>
-        <AppHeader app={app} onBrand={onBrand} />
+        <AppHeader app={app} />
         {!gate.ok && <div role="status" className="shrink-0 px-4 py-2 flex items-start gap-2 text-[11.5px] leading-snug bg-warn/10 text-warn border-b border-warn/20"><ShieldAlert size={14} className="shrink-0 mt-px" /><span>{gate.why}</span></div>}
         <div className="relative flex-1 min-h-0">
           <div aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] flex justify-center pointer-events-none" style={{ transform: `translateY(${(refreshing ? 56 : pull) - 44}px)`, opacity: refreshing ? 1 : pull / 70, transition: pull ? "none" : "transform .3s cubic-bezier(.2,.7,.2,1), opacity .3s" }}><span className={`grid place-items-center w-9 h-9 rounded-full bg-surface border border-line-2 shadow-float ${refreshing ? "spin" : ""}`} style={{ transform: refreshing ? undefined : `rotate(${pull * 3}deg)` }}><ArchMark size={16} /></span></div>

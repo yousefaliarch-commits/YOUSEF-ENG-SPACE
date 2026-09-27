@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1g_identity, app_4c_moderation
 import {
   EyeOff, FileCheck, ShieldCheck, UserRound, VenetianMask
 } from "lucide-react";

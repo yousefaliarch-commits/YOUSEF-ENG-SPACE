@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1e_helpers, app_1e2_characters
 import React, { useState } from "react";
 import {
   Award, BadgeCheck

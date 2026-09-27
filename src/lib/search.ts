@@ -1,4 +1,3 @@
-// Migrated from the prototype part(s): app_1f_search
 import { POST_TYPES, room } from "../data/companies";
 import { isEn, tr } from "../i18n/i18n";
 import { byNewest } from "./time";
