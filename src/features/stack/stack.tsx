@@ -1,0 +1,427 @@
+// Migrated from the prototype part(s): app_3b_stack
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Award, BadgeCheck, Ban, Bookmark, Briefcase, Building2, Camera, Check, CircleAlert, CircleCheck, Clock, Coins, 
+  Copy, FileSearch, Flag, Handshake, ImagePlus, Layers, LayoutDashboard, Lock, LockKeyhole, LogOut, Mail, 
+  MessageCircle, PenLine, Phone, Plus, RefreshCw, Reply, Send, Settings, ShieldAlert, ShieldCheck, Sparkles, 
+  Star, Trash2, Wallet
+} from "lucide-react";
+import { CompanyLogo, catName, company, logoSourceLabel, room } from "../../data/companies";
+import { govName, placeName } from "../../data/geo";
+import { divOf } from "../../domain/division";
+import { authorOf, credentialOf, displayName, expYears, gx, normalizeAuthor, pickAuthor, randHex, yearsText } from "../../domain/identity";
+import { ckey, daysText } from "../../domain/moderation";
+import { CAPS, DISC, FX, FX_NAMES, GOALS, GOALS_CO, JOB_TYPES, PERMS, POSITIONS, REP_LEVELS, ROLE, ROLES, SKILLS, TITLES, WORK_MODES, can, canVerifyRole, discTitle, dmRule, genderOf, isCompanyRole, label, permNote, posLabel, posLabelG, repLevel, roleOf, roleTitle, trackLabel, tracksFor, yearsLabel } from "../../domain/taxonomy";
+import { detectContact, screenLanguage } from "../../domain/text-guard";
+import { UGC } from "../../i18n/i18n";
+import { LevelRing, Money, estimateFor, hex4, matchJob, medianFor, parseJobText, quality, reachFor, round500, seedOf } from "../../lib/helpers";
+import { HiddenFigure, imageError, processImage, useImagePicker } from "../../lib/media";
+import { countComments, flatten } from "../../lib/posts";
+import { AnonChip, Avatar, CharacterGallery, characterName, specOf, specOfPersona } from "../../ui/characters";
+import { Author, ContactHint, Empty, EstimateBar, Field, GovPicker, LanguageGuard, RoleBadge, Seg, Stars, TextInput } from "../../ui/chrome";
+import { ExpReply, JobCard, NumberReply, PostCard, Reactions, RoomCard } from "../../ui/feed";
+import { IdentityCard, IdentityFace, IdentityTag, IdentityToggle, Monogram, TrustPolicy, WhoChip, copyText } from "../../ui/identity";
+import { HiddenByMe, Removed, RemovedMine } from "../../ui/moderation";
+import { BTN, Back, Chip, FilterChip, Forward, Num, Panel, Primary, Quiet, RangeBar, RoundButton, Secondary } from "../../ui/primitives";
+import { fmt } from "../../ui/theme";
+
+// =====================================================================
+//  Screens — stack
+// =====================================================================
+export function RoomsScreen({ app }) {
+  return (<div className="py-4 space-y-3"><div className="px-1"><p className="text-[12px] text-ink-2">تابع الغرف اللي تخصّك — منشوراتها تظهر في رئيسيتك.</p></div><div className="space-y-3 stagger">{[...app.rooms].sort((a, b) => (!!app.roomFollows[b.id]) - (!!app.roomFollows[a.id]) || b.members - a.members).map((r) => <RoomCard key={r.id} r={r} app={app} />)}</div></div>);
+}
+
+export function RoomScreen({ app, id }) {
+  const r = room(id); if (!r) return <Empty icon={Layers} title="الغرفة غير موجودة" body="ربما تغيّر الرابط." action="رجوع" onAction={app.pop} />;
+  const on = !!app.roomFollows[r.id]; const posts = app.posts.filter((p) => p.room === r.id); const closed = !!(app.config.closedRooms || {})[r.id];
+  return (
+    <div className="py-4 space-y-3">
+      <Panel className="p-4"><div className="flex items-start gap-3"><span className="grid place-items-center w-12 h-12 shrink-0 rounded-2xl bg-wash text-accent"><r.icon size={22} /></span><div className="min-w-0 flex-1"><h1 className="text-[18px] font-medium leading-snug">{r.name}</h1><p className="text-[12px] text-ink-2 leading-snug">{r.desc} · <Num>{fmt(r.members)}</Num> عضو</p></div></div>
+        <div className="mt-3 flex gap-2"><button type="button" aria-pressed={on} onClick={() => { app.toggleRoom(r.id); app.toast(on ? `ألغيت متابعة ${r.name}` : `تتابع ${r.name} الآن`); }} className={`press flex-1 h-11 rounded-xl border text-[13.5px] transition-colors ${on ? "bg-wash border-accent/40 text-accent" : "bg-elevated border-line-2 text-ink"}`}>{on ? "تتابعها ✓" : "متابعة"}</button><Primary disabled={closed} onClick={() => app.openSheet("compose", { room: r.id })} className="flex-1 h-11 press">{closed ? "مغلقة للنشر مؤقتًا" : "اكتب في الغرفة"}</Primary></div>{closed && <p className="mt-2 text-[11px] text-ink-3">أغلق فريق المجتمع فتح نقاشات جديدة هنا مؤقتًا — القراءة والردود متاحة.</p>}</Panel>
+      {r.id === "ama" && <div className="p-4 rounded-2xl border border-good/20 bg-good/10"><div className="flex items-center gap-2 text-[12px] text-good"><span className="w-2 h-2 rounded-full bg-good glow-pulse" /> جلسة الليلة · 8 مساءً بتوقيت القاهرة</div><p className="mt-1.5 text-[13.5px] leading-relaxed">مدير مكتب فني بخبرة 14 سنة يجيب عن أسئلتكم عن الزيادات والانتقال للتصميم. الأسبوع القادم: مديرة موارد بشرية سابقة في مقاولات كبرى.</p></div>}
+      <div className="space-y-3 stagger">{posts.length === 0 ? <Empty icon={MessageCircle} title="الغرفة هادية" body="افتح أول نقاش." action={closed ? undefined : "اكتب منشورًا"} onAction={() => app.openSheet("compose", { room: r.id })} /> : posts.map((p) => <PostCard key={p.id} p={p} app={app} compact />)}</div>
+    </div>
+  );
+}
+
+
+export function Comment({ c, app, post, depth = 0 }) {
+  const [open, setOpen] = useState(false); const isBest = post.best === c.id; const them = { ...pickAuthor(c), role: c.userRole || "engineer", title: c.role, dm: c.dm, openToRecruiters: true };
+  const rule = dmRule(app.profile, them, { post: post.id }); const k = ckey("comment", c.id); const gone = app.removed(k);
+  return (
+    <div className={depth ? "ms-5 ps-3 border-s border-line-2" : ""}>
+      {gone && !c.mine ? <Removed what="هذا الرد" info={app.removedInfo(k)} /> : app.hidden[k] ? <HiddenByMe what="الرد" onUndo={() => app.unhide(k)} /> :
+      <Panel className={`p-3.5 ${isBest ? "border-good/30" : ""}`}>
+        {gone && <RemovedMine what="ردك" info={app.removedInfo(k)} />}
+        <Author a={c} app={app} when={c.when} mine={c.mine} />
+        {isBest && <div className="mt-2 inline-flex items-center gap-1.5 h-6 px-2 rounded-full bg-good/15 text-good text-[11px]"><Award size={12} /> الإجابة المعتمدة من صاحب السؤال</div>}
+        {c.type === "number" && (app.moneyAccess === "full" ? <NumberReply d={c.data} /> : <HiddenFigure app={app} what="رد بالرقم" />)}{c.type === "exp" && <ExpReply d={c.data} />}
+        <p {...UGC} className="mt-2 text-[14px] leading-[1.8] text-ink text-start">{app.money(c.text).split(/(@[0-9a-f]{4})/g).map((s, i) => /^@[0-9a-f]{4}$/.test(s) ? <Num key={i} className="text-accent">{s}</Num> : s)}</p>
+        <div className="mt-2.5 flex items-center gap-2 flex-wrap"><Reactions id={c.id} counts={c.reactions} app={app} compact />
+          <div className="ms-auto flex items-center gap-0.5">
+            {depth < 1 && <button type="button" onClick={() => setOpen((o) => !o)} className="press inline-flex items-center gap-1 h-8 px-2 rounded-full text-[11.5px] text-ink-2 hover:text-ink"><Reply size={13} className="rtl:-scale-x-100" /> رد</button>}
+            {!c.mine && rule.ok && <button type="button" onClick={() => app.startThread(them, { type: "post", id: post.id, label: "من نقاش في المجتمع" })} className="press inline-flex items-center gap-1 h-8 px-2 rounded-full text-[11.5px] text-ink-2 hover:text-accent"><Send size={12} className="rtl:-scale-x-100" /> خاص</button>}
+            {post.mine && !isBest && depth === 0 && <button type="button" onClick={() => { app.setBest(post.id, c.id); app.toast("اعتمدت الإجابة — شكرًا لمن ساعدك"); }} className="press inline-flex items-center gap-1 h-8 px-2 rounded-full text-[11.5px] text-ink-2 hover:text-good"><Award size={13} /> اعتماد</button>}
+            {!c.mine && <button type="button" aria-label="إبلاغ عن الرد" onClick={() => app.openSheet("report", { kind: "comment", id: c.id })} className="press grid place-items-center w-8 h-8 rounded-full text-ink-3 hover:text-bad focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><Flag size={13} /></button>}
+          </div></div>
+        {open && <ReplyBox app={app} post={post} parent={c} onDone={() => setOpen(false)} />}
+      </Panel>}
+      {(c.replies || []).length > 0 && <div className="mt-2 space-y-2 stagger">{c.replies.map((r) => <Comment key={r.id} c={r} app={app} post={post} depth={depth + 1} />)}</div>}
+    </div>
+  );
+}
+
+export function ReplyBox({ app, post, parent, onDone, sticky = false, inputRef = null }) {
+  const [as, setAs] = useState(app.profile.identity === "public" ? "public" : "anon"); const me = authorOf(app.profile, as);
+  const [type, setType] = useState("text"); const [text, setText] = useState(parent && parent.as !== "public" && parent.anon ? `@${parent.anon} ` : ""); const [d, setD] = useState({ title: TITLES[app.profile.disc][0], years: "", salary: "", outcome: "قبلت", note: "" });
+  const participants = [...new Set([post, ...flatten(post.comments)].filter((x) => x.as !== "public" && x.anon).map((x) => x.anon))].filter((a) => a !== app.profile.anon);
+  // answering your own item under the OTHER identity would tie the two together — say so before it is sent
+  const crossing = (post.mine && (post.as === "public") !== (as === "public")) || (parent && parent.mine && (parent.as === "public") !== (as === "public"));
+  const showMentions = /@[0-9a-f]{0,3}$/.test(text); const guard = screenLanguage(text);
+  if (!app.canAct.ok) return <p className={`${sticky ? "" : "mt-3"} p-3 rounded-xl bg-warn/10 border border-warn/20 text-[12px] leading-relaxed text-warn flex items-start gap-1.5`}><ShieldAlert size={14} className="shrink-0 mt-0.5" />{app.canAct.why}</p>;
+  const submit = (e) => { e && e.preventDefault(); if (!text.trim() || guard.blocked) return; if (type === "number" && !(Number(d.salary) > 0)) { app.toast("اكتب الراتب بالرقم"); return; }
+    app.addComment(post.id, { type, text: text.trim(), data: type === "number" ? { title: d.title, years: Number(d.years) || 0, salary: Number(d.salary), company: "شركتي الحالية" } : type === "exp" ? { outcome: d.outcome, note: d.note } : undefined }, parent ? parent.id : null, as);
+    setText(""); onDone && onDone(); app.toast(`نُشر ردّك${type === "number" ? " بالرقم" : ""} ${as === "public" ? "باسمك" : "بمعرّفك المجهول"} — +10 نقاط`); };
+  return (
+    <form onSubmit={submit} className={`${sticky ? "" : "mt-3 pt-3 border-t border-line"} space-y-2`}>
+      <div className="flex gap-1.5 flex-wrap">{[["text", "رد", MessageCircle], ...(can(app.profile, "reveal") ? [["number", "رد بالرقم", Wallet]] : []), ...(app.moneyAccess === "none" ? [] : [["exp", "رد بتجربة", Handshake]])].map(([id, l, I]) => <button key={id} type="button" aria-pressed={type === id} onClick={() => setType(id)} className={`press inline-flex items-center gap-1 h-8 px-2.5 rounded-full border text-[11.5px] transition-colors ${type === id ? "bg-wash border-accent/40 text-accent" : "border-line-2 text-ink-2"}`}><I size={12} />{l}</button>)}<IdentityToggle app={app} value={as} onChange={setAs} className="ms-auto" /></div>
+      {crossing && <p className="text-[11px] leading-snug text-warn flex items-start gap-1.5"><CircleAlert size={12} className="shrink-0 mt-0.5" />هذه {parent && parent.mine ? "مشاركتك" : "منشورك"} {(parent && parent.mine ? parent.as : post.as) === "public" ? "العلنية" : "المجهولة"} — الرد هنا {as === "public" ? "باسمك" : "مجهولًا"} قد يربط هويتيك. الأسلم أن ترد بنفس الهوية.</p>}
+      {type === "number" && <div className="grid grid-cols-2 gap-2"><input value={d.title} onChange={(e) => setD({ ...d, title: e.target.value })} placeholder="المسمّى" className="h-10 px-3 rounded-xl bg-canvas border border-line-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-accent" /><input dir="ltr" inputMode="decimal" type="number" value={d.years} onChange={(e) => setD({ ...d, years: e.target.value })} placeholder="سنوات" className="h-10 px-3 rounded-xl bg-canvas border border-line-2 font-grotesk text-[13px] focus:outline-none focus:ring-2 focus:ring-accent" /><label className="col-span-2 flex items-center gap-2 h-11 px-3 rounded-xl bg-canvas border border-line-2 focus-within:ring-2 focus-within:ring-accent"><input dir="ltr" inputMode="decimal" type="number" value={d.salary} onChange={(e) => setD({ ...d, salary: e.target.value })} placeholder="الراتب الشهري" className="w-full bg-transparent font-grotesk text-[15px] focus:outline-none" /><span className="text-[11px] text-ink-2">ج.م</span></label></div>}
+      {type === "exp" && <div className="flex gap-2 flex-wrap">{["قبلت", "رفضت", "فاوضت"].map((o) => <FilterChip key={o} on={d.outcome === o} onClick={() => setD({ ...d, outcome: o })}>{o}</FilterChip>)}</div>}
+      <div className="relative flex items-center gap-2">
+        <label className="flex-1 flex items-center min-h-11 px-4 rounded-full bg-canvas border border-line-2 focus-within:ring-2 focus-within:ring-accent"><input ref={inputRef} value={text} onChange={(e) => setText(e.target.value)} placeholder={parent ? (parent.as === "public" ? `رد على ${displayName(parent)}` : `رد على #${parent.anon}`) : as === "public" ? `${gx(app.profile.gender, "أجب", "أجيبي")} باسمك — ${displayName(me)}` : `${gx(app.profile.gender, "أجب", "أجيبي")} كـ #${me.anon} — ${gx(app.profile.gender, "اكتب", "اكتبي")} @ لذكر أحد`} aria-label="اكتب ردًا" className="w-full min-w-0 bg-transparent text-[14px] placeholder:text-ink-4 focus:outline-none" /></label>
+        <button type="submit" aria-label="إرسال" disabled={!text.trim() || guard.blocked} className={`${BTN} btn-primary w-11 h-11 px-0 rounded-full press shrink-0`}><Send size={17} className="rtl:-scale-x-100" /></button>
+        {showMentions && participants.length > 0 && <div className="pop-in absolute bottom-full mb-2 inset-x-0 p-2 rounded-2xl bg-elevated border border-line-2 shadow-float flex flex-wrap gap-1.5">{participants.slice(0, 6).map((a) => { const who = flatten(post.comments).find((c) => c.anon === a) || (post.anon === a ? post : null); return <button key={a} type="button" onClick={() => setText((t) => t.replace(/@[0-9a-f]{0,3}$/, `@${a} `))} className="press"><AnonChip id={a} gender={who ? who.gender : undefined} spec={who ? specOf(who) : undefined} look={who ? who.look : undefined} /></button>; })}</div>}
+      </div>
+      <LanguageGuard text={text} /><ContactHint text={text} as={as} />
+    </form>
+  );
+}
+
+
+export function PostScreen({ app, id }) {
+  const p = app.posts.find((x) => x.id === id); const [sort, setSort] = useState("best"); const replyRef = useRef(null);
+  if (!p) return <Empty icon={MessageCircle} title="المنشور غير موجود" body="ربما حُذف أو انتهت صلاحية الرابط." action="رجوع" onAction={app.pop} />;
+  if (app.removed(ckey("post", p.id)) && !p.mine) return <div className="pt-4"><Empty icon={ShieldAlert} title={(app.removedInfo(ckey("post", p.id)) || {}).by === "auto" ? "أُخفي هذا المنشور مؤقتًا" : "أُزيل هذا المنشور"} body={(app.removedInfo(ckey("post", p.id)) || {}).by === "auto" ? "أبلغ عنه عدة أعضاء، وينتظر مراجعة المشرفين." : "أُزيل بقرار من فريق المجتمع لمخالفته إرشادات المجتمع."} action="رجوع" onAction={app.pop} /></div>;
+  const nums = flatten(p.comments).filter((c) => c.type === "number");
+  const comments = p.comments.map((c, i) => ({ c, i })).sort((a, b) => sort === "best" ? (((p.best === b.c.id) - (p.best === a.c.id)) || ((b.c.reactions.useful || 0) - (a.c.reactions.useful || 0)) || (a.i - b.i)) : (b.i - a.i)).map((x) => x.c);
+  const med = nums.length ? nums.map((c) => c.data.salary).sort((a, b) => a - b)[Math.floor(nums.length / 2)] : null;
+  return (
+    <div className="flex-1 flex flex-col gap-3 pt-4">
+      <PostCard p={p} app={app} onComments={() => { if (!app.canAct.ok) { app.toast(app.canAct.why); return; } const el = replyRef.current; if (el) { el.focus(); try { el.scrollIntoView({ block: "center" }); } catch (e) {} } }} />
+      {med && app.moneyAccess === "full" && <Panel className="p-3.5 flex items-center justify-between gap-2 flex-wrap border-accent/20"><span className="text-[12.5px] text-ink-2">متوسط الأرقام في الردود (<Num>{nums.length}</Num>)</span><Money n={med} size="text-[22px]" unit="ج.م" /></Panel>}
+      <div className="flex items-center justify-between px-1"><h2 className="text-[12px] text-ink-2"><Num>{countComments(p.comments)}</Num> رد</h2><div className="flex gap-1">{[["best", "الأكثر فائدة"], ["new", "الأحدث"]].map(([k, l]) => <button key={k} type="button" aria-pressed={sort === k} onClick={() => setSort(k)} className={`h-7 px-2.5 rounded-full text-[11px] ${sort === k ? "bg-elevated text-ink" : "text-ink-3"}`}>{l}</button>)}</div></div>
+      {comments.length === 0 && <Empty icon={MessageCircle} title="كن أول من يجيب" body="ردّك يظهر باسمك أو بمعرّفك المجهول — تختار قبل الإرسال." />}
+      <div key={sort} className="space-y-3 stagger">{comments.map((c) => <Comment key={c.id} c={c} app={app} post={p} />)}</div>
+      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-3 pt-2 pb-2 backdrop-blur-md bg-canvas/85 border-t border-line"><ReplyBox app={app} post={p} sticky inputRef={replyRef} /></div>
+    </div>
+  );
+}
+
+
+export function CompanyScreen({ app, id }) {
+  const c = company(id); const [tab, setTab] = useState("overview"); if (!c) return <Empty icon={Building2} title="الشركة غير موجودة" body="ربما تغيّر الرابط." action="رجوع" onAction={app.pop} />;
+  const following = !!app.follows[c.id]; const jobs = app.jobs.filter((j) => j.co === c.id); const bandsOk = app.isCo ? !!app.profile.companyId && app.profile.companyId === c.id : can(app.profile, "bands"); const reviews = [...(app.reviews[c.id] || []), ...c.reviews.map((r, i) => ({ ...r, id: r.id || `${c.id}#${i}` }))]; const mineCo = app.isCo && app.profile.companyId === c.id;
+  return (
+    <div className="py-4 space-y-3">
+      <Panel className="p-4">
+        <div className="flex items-start gap-3"><CompanyLogo c={c} size={64} logo={app.logos[c.id]} className="rounded-2xl" /><div className="min-w-0 flex-1"><h1 className="text-[18px] font-medium leading-tight">{c.name}</h1><Num className="block text-[11px] text-ink-3">{c.en}</Num><p className="mt-1 text-[12px] text-ink-2 leading-snug">{c.sector}</p>{c.cat === "backoffice" && <div className="mt-1.5"><Chip tone="info" className="h-6 px-2 text-[10.5px]"><Coins size={11} /> مكتب خلفي · {c.origin} · الأجر مرتبط بـ{FX_NAMES[c.pay.basis]}</Chip></div>}</div></div>
+        <p className="mt-2 text-[10.5px] text-ink-3">{app.logos[c.id] ? "الشعار: رفعته الشركة من حسابها الموثّق" : c.logo ? `الشعار الحقيقي — المصدر: ${logoSourceLabel(c)}` : "لا شعار رسمي متاح بعد — يظهر حرفا الاسم حتى ترفعه الشركة من حسابها"}</p>
+        {mineCo && can(app.profile, "logo") && <button type="button" onClick={() => app.openSheet("logo", { company: c.id })} className="mt-2 w-full h-10 rounded-xl border border-dashed border-line-3 text-[12.5px] text-ink-2 hover:border-accent/40 inline-flex items-center justify-center gap-2"><ImagePlus size={15} className="text-accent" /> {app.logos[c.id] ? "تغيير شعار الشركة" : "ارفع الشعار الرسمي"}</button>}
+        <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11.5px]">{[["الفئة", catName(c.cat)], ["المقر الرئيسي", c.origin || "مصر"], ["مكتب مصر", govName(c.hq)], ["التأسيس", c.founded ? <Num>{c.founded}</Num> : "—"], ["الملكية", c.own], ["الحجم", <><Num>{c.size}</Num> موظف</>], ["تصنيف الاتحاد", c.grade === "—" ? "لا ينطبق" : `الدرجة ${c.grade}`]].map(([k, v]) => <div key={k} className="flex justify-between gap-2 border-b border-line py-1"><dt className="text-ink-3">{k}</dt><dd className="text-ink text-end">{v}</dd></div>)}</dl>
+        <p className="mt-2 text-[10px] text-ink-3">الحقائق من السجل العام للشركة · الأرقام أدناه نموذجية من التقارير ({quality(c.reports)[0]})</p>
+        <div className="mt-4 grid grid-cols-3 gap-2">{[["متوسط المهندسين", <Money n={c.median} size="text-[17px]" unit="ج.م" />], ["تقارير", <Num className="text-[17px] font-semibold">{c.reports}</Num>], ["ينصحون بها", <Num className="text-[17px] font-semibold">{c.recommend}%</Num>]].map(([k, v]) => <div key={k} className="px-2.5 py-2 rounded-xl bg-canvas/60 border border-line"><div className="text-[10.5px] text-ink-3 leading-snug">{k}</div><div className="mt-1">{v}</div></div>)}</div>
+        <div className="mt-3"><p className="text-[11px] text-ink-2 mb-1">نطاق الرواتب المسجّل</p><RangeBar min={c.range[0]} max={c.range[1]} median={c.median} compact /></div>
+        <div className="mt-3 flex gap-2"><button type="button" aria-pressed={following} onClick={() => { app.toggleFollow(c.id); app.toast(following ? `ألغيت متابعة ${c.name}` : `تتابع ${c.name} الآن — سنخبرك بالتقارير الجديدة`); }} className={`${BTN} press flex-1 h-11 border transition-colors ${following ? "bg-wash border-accent/40 text-accent" : "bg-elevated border-line-2 text-ink hover:bg-track/80"}`}>{following ? <><Check size={16} /> تتابعها</> : <><Plus size={16} /> متابعة</>}</button>{can(app.profile, "reveal") && <Primary onClick={() => app.openSheet("contribute", { company: c.id })} className="flex-1 h-11 press">شارك راتبك هنا</Primary>}{mineCo && <Primary onClick={() => app.push({ type: "postjob" })} className="flex-1 h-11 press"><Plus size={15} /> نشر وظيفة</Primary>}</div>
+      </Panel>
+      <Seg value={tab} onChange={setTab} items={[["overview", "الرواتب"], ["reviews", `التقييمات (${reviews.length})`], ["jobs", `الوظائف (${jobs.length})`]]} />
+      <div key={tab} className="screen-tab space-y-3">
+        {tab === "overview" && c.cat === "backoffice" && (() => { const pr = app.profile; const d = pr.disc === "survey" || app.isCo ? "civil" : pr.disc; const local = medianFor(d, "5-8", "cairo", "design"); const here = round500(local * c.pay.mult); const ccy = c.pay.basis; return (
+          <Panel className="p-4 border-info/20"><div className="flex items-center justify-between gap-2"><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><Coins size={14} className="text-info" /> لماذا الرواتب هنا أعلى؟</h3><Num className="text-[10.5px] text-ink-3">1 {ccy} ≈ {FX[ccy]} EGP</Num></div>
+            <p className="mt-1.5 text-[12.5px] leading-[1.8] text-ink-2">الراتب يُسعّر بـ{FX_NAMES[ccy]} ويُصرف بالجنيه بسعر الشهر. مع كل تحرك في سعر الصرف يتحرك الرقم معه — فالتضخم لا يأكل الزيادة.</p>
+            <div className="mt-3 grid grid-cols-2 gap-2"><div className="p-3 rounded-xl bg-canvas/60 border border-line"><div className="text-[10.5px] text-ink-3 leading-snug">{ROLE[d]} تصميم · 5–8 سنوات · محليًا</div><Num className="block mt-1 text-[18px] font-semibold">{fmt(local)}</Num><span className="text-[10.5px] text-ink-3">ج.م / شهر</span></div><div className="p-3 rounded-xl bg-info/10 border border-info/20"><div className="text-[10.5px] text-info leading-snug">نفس الوظيفة هنا (≈{c.pay.mult}×)</div><Num className="block mt-1 text-[18px] font-semibold">{fmt(here)}</Num><span className="text-[10.5px] text-ink-3">ج.م ≈ <Num>{fmt(Math.round(here / FX[ccy]))}</Num> {ccy}</span></div></div>
+            <p className="mt-2 text-[10.5px] text-ink-3">المضاعف نموذجي من تقارير المجتمع (1.6–2.4×) — يختلف بالمسار والخبرة. الأسعار مرجعية وتُحدَّث شهريًا.</p></Panel>); })()}
+        {tab === "overview" && <Panel className="p-4 relative overflow-hidden"><h3 className="text-[13px] font-medium">متوسط الراتب حسب المسمى</h3>
+          <ul className={`mt-2 divide-y divide-line ${bandsOk ? "" : "blur-[6px] select-none"}`} aria-hidden={!bandsOk}>{c.bands.map(([role, med, n]) => <li key={role} className="py-2.5 flex items-center justify-between gap-3 text-[13px]"><span className="text-ink-2">{role} <span className="text-[11px] text-ink-3">· <Num>{n}</Num> تقرير</span></span><span className="shrink-0"><Num className="font-semibold">{fmt(med)}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></li>)}</ul>
+          {!bandsOk && <div className="absolute inset-x-0 bottom-0 top-10 flex flex-col items-center justify-center gap-2 text-center p-4"><LockKeyhole size={18} className="text-accent" /><p className="text-[12.5px] leading-relaxed">{app.isCo ? "تفاصيل المسميات تظهر لشركتك فقط — حسابات الشركات لا ترى تفاصيل شركات أخرى" : "تفاصيل المسميات تُفتح بعد مشاركة راتبك"}</p>{app.isCo ? null : <Secondary onClick={() => app.openSheet("contribute", { company: c.id })} className="h-10">شارك راتبك</Secondary>}</div>}
+          <div className="mt-3 pt-3 border-t border-line"><p className="text-[11px] text-ink-3 mb-1.5">مزايا ذكرها الموظفون</p><div className="flex flex-wrap gap-1.5">{c.perks.map((x) => <Chip key={x}>{x}</Chip>)}</div></div></Panel>}
+        {tab === "reviews" && <>{can(app.profile, "review") && <Secondary onClick={() => app.openSheet("review", { company: c.id })} className="w-full h-11 press"><Star size={16} /> اكتب تقييمًا — باسمك أو مجهولًا</Secondary>}{reviews.map((r0) => { const r = normalizeAuthor(r0); const k = ckey("review", r.id); const gone = app.removed(k); if (gone && !r.mine) return <Removed key={r.id} what="هذا التقييم" info={app.removedInfo(k)} />; if (app.hidden[k]) return <HiddenByMe key={r.id} what="التقييم" onUndo={() => app.unhide(k)} />; return <Panel key={r.id} className="p-3.5">{gone && <RemovedMine what="تقييمك" info={app.removedInfo(k)} />}<div className="flex items-center gap-2 flex-wrap text-[11.5px] text-ink-2"><WhoChip a={r} onOpen={() => app.openSheet("user", pickAuthor(r))} />{r.as === "public" && <IdentityTag as="public" />}{r.mine && <Chip tone="accent" className="h-5 px-1.5 text-[10px]">أنت</Chip>}<span className="ms-auto shrink-0 text-ink-3">{r.when}</span>{!r.mine && <button type="button" aria-label="إبلاغ عن التقييم" onClick={() => app.openSheet("report", { kind: "review", id: r.id })} className="press grid place-items-center w-8 h-8 -my-1 rounded-full text-ink-3 hover:text-bad focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><Flag size={13} /></button>}</div><p className="mt-1 text-[11.5px] text-ink-2 leading-snug">{r.role}</p><div className="mt-1.5"><Stars n={r.stars} /></div><p {...UGC} className="mt-1.5 text-[13.5px] leading-[1.8] text-ink text-start">{app.money(r.text)}</p></Panel>; })}</>}
+        {tab === "jobs" && (jobs.length ? jobs.map((j) => <JobCard key={j.id} job={j} app={app} />) : <Empty icon={Briefcase} title="لا وظائف منشورة حاليًا" body="تابع الشركة لنخبرك عند نشر وظيفة تطابق ملفك." action={following ? undefined : "متابعة"} onAction={() => app.toggleFollow(c.id)} />)}
+      </div>
+    </div>
+  );
+}
+
+
+export const MatchBreakdown = ({ m }) => (
+  <ul className="space-y-1.5">{m.parts.map(([k, v, max, val]) => <li key={k} className="text-[12px]"><div className="flex items-center justify-between gap-2"><span className="text-ink-2">{k} <span className="text-ink-3">· {val}</span></span><Num className={v === max ? "text-good" : v > 0 ? "text-warn" : "text-ink-3"}>{v}/{max}</Num></div><div className="mt-1 h-1 rounded-full bg-elevated overflow-hidden"><span className={`block h-full rounded-full ${v === max ? "bg-good" : v > 0 ? "bg-warn" : "bg-track"}`} style={{ width: `${(v / max) * 100}%`, transition: "width .6s cubic-bezier(.2,.7,.2,1)" }} /></div></li>)}</ul>
+);
+
+
+export const fmtPhone = (p) => String(p || "").replace(/^(\+?2?0?1\d{2})(\d{3})(\d{4})$/, "$1 $2 $3");
+
+// Contact card: how to apply. The employer's e-mail / phone sit on the ad; the engineer applies from their own mailbox or phone.
+export function ContactCard({ job, app, co, own = false }) {
+  const ct = job.contact || {}; const contacted = !!app.contacted[job.id];
+  const subject = encodeURIComponent(`التقديم على وظيفة «${job.title}» — عبر EngSpace`); const body = encodeURIComponent(`تحية طيبة،\n\nأتقدم لوظيفة «${job.title}» المعلنة عبر EngSpace (${placeName(job.gov, job.city)}).\nمرفق سيرتي الذاتية.\n\nمع التحية،`);
+  const mailto = ct.email ? `mailto:${ct.email}?subject=${subject}&body=${body}` : null; const tel = ct.phone ? `tel:${/^0/.test(ct.phone) ? "+2" + ct.phone : ct.phone}` : null;
+  const copy = (v, what) => { try { copyText(v); } catch (e) {} app.toast(`نُسخ ${what}`); }; const touch = () => app.markContacted(job.id);
+  if (!ct.email && !ct.phone) return <Panel className="p-4 border-warn/25"><p className="text-[12.5px] text-warn inline-flex items-center gap-1.5"><CircleAlert size={14} /> الإعلان بلا بيانات تواصل — لا يمكن التقديم عليه.</p></Panel>;
+  return (
+    <Panel className={`p-4 ${own ? "" : "border-good/25"}`}>
+      <div className="flex items-center justify-between gap-2"><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><Send size={14} className={`${own ? "text-accent" : "text-good"} rtl:-scale-x-100`} /> {own ? "بيانات التقديم كما يراها المهندس" : `التقديم مباشرة مع ${co.name}`}</h3>{contacted && !own && <Chip tone="verified" className="h-6 px-2 text-[10.5px]"><Check size={11} /> تواصلت</Chip>}</div>
+      <p className="mt-1 text-[11.5px] leading-relaxed text-ink-2">{own ? "لا نماذج ولا متقدمين داخل التطبيق: السير الذاتية تصلك على هذا البريد أو الهاتف مباشرة." : "لا نماذج داخل التطبيق. أرسل سيرتك الذاتية من بريدك الشخصي أو اتصل بالشركة — EngSpace لا يتوسط ولا يحتفظ بأي طلب."}</p>
+      <div className="mt-3 space-y-2">
+        {ct.email && <div className="flex items-center gap-2.5 p-3 rounded-xl bg-canvas/60 border border-line"><Mail size={16} className="text-accent shrink-0" /><div className="min-w-0 flex-1"><div className="text-[10.5px] text-ink-3">البريد الإلكتروني{ct.name ? ` · ${ct.name}` : ""}</div><Num className="block text-[13.5px] break-all leading-snug">{ct.email}</Num></div><RoundButton label="نسخ البريد" onClick={() => copy(ct.email, "البريد")} className="w-9 h-9 shrink-0"><Copy size={15} /></RoundButton></div>}
+        {ct.phone && <div className="flex items-center gap-2.5 p-3 rounded-xl bg-canvas/60 border border-line"><Phone size={16} className="text-accent shrink-0" /><div className="min-w-0 flex-1"><div className="text-[10.5px] text-ink-3">الهاتف{ct.name && !ct.email ? ` · ${ct.name}` : ""}</div><Num className="block text-[15px] leading-snug">{fmtPhone(ct.phone)}</Num></div><RoundButton label="نسخ الرقم" onClick={() => copy(ct.phone, "الرقم")} className="w-9 h-9 shrink-0"><Copy size={15} /></RoundButton></div>}
+      </div>
+      {!own && <div className="mt-3 flex gap-2">{mailto && <a href={mailto} onClick={touch} className={`${BTN} btn-primary flex-1 h-11 press`}><Mail size={16} /> أرسل سيرتك بالبريد</a>}{tel && <a href={tel} onClick={touch} className={`${BTN} ${mailto ? "" : "btn-primary"} flex-1 h-11 press ${mailto ? "border border-line-2 bg-elevated text-ink" : ""}`}><Phone size={16} /> اتصل بالشركة</a>}</div>}
+      {!own && <p className="mt-2 text-[10.5px] text-ink-3 leading-relaxed">{ct.email ? "عنوان الرسالة يُملأ تلقائيًا بذكر الوظيفة وEngSpace. " : ""}دقّق سيرتك أولًا بـ <button type="button" onClick={() => app.push({ type: "cvreview" })} className="inline-block py-1 -my-1 text-accent hover:underline underline-offset-4">مدقق السيرة الهندسية</button>.</p>}
+      {own && <button type="button" onClick={() => app.push({ type: "postjob", like: job.id })} className="mt-3 w-full h-10 rounded-xl border border-dashed border-line-3 text-[12.5px] text-ink-2 hover:border-accent/40 inline-flex items-center justify-center gap-2"><PenLine size={14} className="text-accent" /> تعديل بيانات التواصل أو الإعلان</button>}
+    </Panel>
+  );
+}
+
+
+export function JobScreen({ app, id }) {
+  const job = app.jobs.find((j) => j.id === id); if (!job) return <Empty icon={Briefcase} title="الوظيفة غير موجودة" body="ربما أُغلق الإعلان." action="رجوع" onAction={app.pop} />;
+  const e = estimateFor(job), co = company(job.co) || { id: null, name: job.coName || "شركة", en: "Company" }, saved = !!app.saved["job:" + job.id]; const pr = app.profile; const mt = matchJob(job, pr); const reach = reachFor(job); const ct = job.contact || {};
+  const mineCo = app.isCo && (job.co === pr.companyId || job.mine); const stats = app.jobStats[job.id] || { views: 0, contacts: 0 }; const hrUser = { as: "anon", anon: hex4(seedOf(job.co)), role: "hr", dm: true, companyId: job.co, title: `موارد بشرية · ${co.name}`, verified: false, level: 1 }; const askRule = dmRule(pr, hrUser, { job: job.id });
+  const subject = encodeURIComponent(`التقديم على وظيفة «${job.title}» — عبر EngSpace`); const mailto = ct.email ? `mailto:${ct.email}?subject=${subject}` : null; const tel = ct.phone ? `tel:${/^0/.test(ct.phone) ? "+2" + ct.phone : ct.phone}` : null;
+  return (
+    <div className="flex-1 flex flex-col gap-3 pt-4">
+      <Panel className="p-4"><div className="flex items-start gap-3">{co.en && <CompanyLogo c={co} size={48} logo={app.logos[co.id]} />}<div className="min-w-0 flex-1"><h1 className="text-[19px] font-medium leading-snug">{job.title}</h1><button type="button" onClick={() => co.id && app.push({ type: "company", id: co.id })} className="mt-0.5 py-1 -my-1 text-[13px] text-accent hover:underline underline-offset-4 text-start">{co.name}{job.mine && <span className="text-ink-3"> · منشور بواسطتك</span>}</button><p className="text-[12px] text-ink-2 leading-snug">{placeName(job.gov, job.city)} · {label(WORK_MODES, job.mode)} · {label(JOB_TYPES, job.type)} · {job.when}</p></div><RoundButton label={saved ? "إلغاء الحفظ" : "حفظ"} aria-pressed={saved} active={saved} onClick={() => { app.toggleSaved("job:" + job.id); app.toast(saved ? "أُزيلت من المحفوظات" : "حُفظت الوظيفة"); }} className="press shrink-0"><Bookmark size={19} fill={saved ? "currentColor" : "none"} /></RoundButton></div>
+        <div className="mt-3 grid grid-cols-2 gap-2">{[["التخصّص الرئيسي", label(DISC, job.disc)], ["التخصّص الفرعي", trackLabel(job.sub, job.disc)], ["سنوات الخبرة", yearsLabel(job.years)], ["المسمّى الدقيق", posLabel(job.pos)]].map(([k, v]) => <div key={k} className="px-3 py-2 rounded-xl bg-canvas/60 border border-line"><div className="text-[10px] text-ink-3">{k}</div><div className="mt-0.5 text-[12.5px] leading-snug text-ink">{v}</div></div>)}</div>
+        {job.note && <p className="mt-2 text-[12px] text-info inline-flex items-center gap-1.5"><Coins size={13} /> {job.note}</p>}</Panel>
+
+      {!app.isCo && <ContactCard job={job} app={app} co={co} />}
+      {mineCo && <ContactCard job={job} app={app} co={co} own />}
+
+      <Panel className="p-4 border-accent/20">
+        <div className="flex items-center justify-between gap-2"><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><Sparkles size={14} className="text-accent" /> النطاق المتوقع — تقدير EngSpace</h3><Chip tone={e.q[1]} className="h-6 px-2 text-[10.5px] shrink-0">{e.q[0]} · <Num>{e.n}</Num></Chip></div>
+        <div className="mt-2"><EstimateBar e={e} /></div>
+        <p className="mt-1 text-[11.5px] leading-relaxed text-ink-2">لم تكتب الشركة رقمًا — والمنصة لا تسمح بذلك. النطاق محسوب من بيانات السوق للتصنيف نفسه، والوسط <Num className="text-ink">{fmt(e.mid)}</Num> ج.م ±15%.</p>
+        <ul className="mt-2 divide-y divide-line text-[11.5px]">{e.parts.map(([k, v, f]) => <li key={k} className="py-1.5 flex items-center justify-between gap-2"><span className="text-ink-3">{k} <span className="text-ink-2">· {v}</span></span><Num className="shrink-0 text-ink-2">{f}</Num></li>)}</ul>
+        <div className="mt-3 flex gap-2 flex-wrap"><Secondary onClick={() => app.openSheet("tool", { id: "net", gross: e.mid })} className="flex-1 h-10 text-[12.5px]">الصافي من الوسط</Secondary>{!app.isCo && <Secondary onClick={() => app.openSheet("tool", { id: "script", offer: e.lo, median: e.mid })} className="flex-1 h-10 text-[12.5px]">سكريبت التفاوض</Secondary>}<button type="button" onClick={() => app.openSheet("methodology")} className="w-full py-1.5 -my-1.5 text-[11px] text-accent hover:underline underline-offset-4">كيف نحسب النطاق؟</button></div>
+      </Panel>
+
+      {mt && <Panel className="p-4"><div className="flex items-center justify-between gap-2"><h3 className="text-[13px] font-medium">مطابقتك لهذه الوظيفة</h3><Chip tone={mt.tone} className="pop-in"><Num>{mt.score}%</Num> {mt.tier}</Chip></div><div className="mt-3"><MatchBreakdown m={mt} /></div>{mt.gaps.length > 0 && <p className="mt-2 text-[11.5px] text-ink-2 leading-relaxed">الفجوة في: {mt.gaps.join("، ")}. {mt.score >= 65 ? "ما زالت مطابقة قوية — تواصل مع الشركة واذكر في بريدك ما يعوّض الفجوة." : "تواصل لو تملك ما يعوّضها، أو تابع الشركة لوظائف أقرب."}</p>}{mt.perfect && <p className="mt-2 text-[11.5px] text-good inline-flex items-center gap-1.5"><BadgeCheck size={13} /> مطابقة تامة — وصلك إشعار فوري بهذه الوظيفة عند نشرها</p>}</Panel>}
+      {app.isCo && <Panel className="p-4"><h3 className="text-[13px] font-medium">وصول الإعلان</h3><div className="mt-2 grid grid-cols-2 gap-2"><div className="px-3 py-2 rounded-xl bg-wash border border-accent/20"><Num className="block text-[20px] font-semibold">{fmt(reach.exact)}</Num><span className="text-[10.5px] text-ink-2">مطابق تمامًا — وصلهم إشعار فوري</span></div><div className="px-3 py-2 rounded-xl bg-canvas/60 border border-line"><Num className="block text-[20px] font-semibold">{fmt(reach.near)}</Num><span className="text-[10.5px] text-ink-2">مطابقة قريبة — يرونها في «لك»</span></div>{mineCo && <><div className="px-3 py-2 rounded-xl bg-canvas/60 border border-line"><Num className="block text-[20px] font-semibold">{fmt(stats.views)}</Num><span className="text-[10.5px] text-ink-2">مشاهدة للإعلان</span></div><div className="px-3 py-2 rounded-xl bg-good/10 border border-good/20"><Num className="block text-[20px] font-semibold">{fmt(stats.contacts)}</Num><span className="text-[10.5px] text-ink-2">فتحوا بيانات التواصل</span></div></>}</div>{mineCo && <p className="mt-2 text-[10.5px] text-ink-3">الطلبات نفسها تصلك على بريدك وهاتفك — لا تمرّ عبر التطبيق.</p>}</Panel>}
+
+      <Panel className="p-4"><h3 className="text-[13px] font-medium">عن الوظيفة</h3><p className="mt-2 text-[14px] leading-[1.85] text-ink">{job.desc}</p><h3 className="mt-4 text-[13px] font-medium">المتطلبات</h3><ul className="mt-2 space-y-1.5">{job.reqs.map((r) => <li key={r} className="flex gap-2 text-[13.5px] text-ink-2 leading-relaxed"><span className="mt-2.5 w-1 h-1 rounded-full bg-accent shrink-0" />{r}</li>)}</ul>{job.skills && job.skills.length > 0 && <><h3 className="mt-4 text-[13px] font-medium">المهارات والبرامج</h3><div className="mt-2 flex flex-wrap gap-1.5">{job.skills.map((s) => <Chip key={s} tone="en" className="h-6 px-2 text-[10.5px]">{s}</Chip>)}</div></>}</Panel>
+
+      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-4 pt-3 pb-3 backdrop-blur-md bg-canvas/85 border-t border-line flex gap-2">
+        {app.isCo ? (mineCo ? <Primary onClick={() => app.push({ type: "postjob", like: job.id })} className="flex-1 h-12 press"><PenLine size={16} /> تعديل الإعلان</Primary> : <div className="flex-1 flex items-center gap-2 min-h-12 px-3 py-2 rounded-xl bg-elevated text-[12px] text-ink-2 leading-snug"><Building2 size={15} className="text-accent shrink-0" /> حساب شركة — التقديم غير متاح. <button type="button" onClick={() => app.push({ type: "postjob", like: job.id })} className="text-accent hover:underline underline-offset-4">انشر وظيفة مشابهة</button></div>)
+          : mailto ? <a href={mailto} onClick={() => app.markContacted(job.id)} className={`${BTN} btn-primary flex-1 h-12 press`}><Mail size={16} /> أرسل سيرتك إلى {co.name}</a> : tel ? <a href={tel} onClick={() => app.markContacted(job.id)} className={`${BTN} btn-primary flex-1 h-12 press`}><Phone size={16} /> اتصل بـ{co.name}</a> : <div className="flex-1 flex items-center min-h-12 px-3 rounded-xl bg-elevated text-[12px] text-ink-2">لا بيانات تواصل في هذا الإعلان</div>}
+        {!app.isCo && <Secondary onClick={() => askRule.ok ? app.startThread(hrUser, { type: "job", id: job.id, label: `سؤال عن إعلان «${job.title}»` }) : app.toast(askRule.why)} className="h-12 px-4 press" aria-label="اسأل الشركة"><MessageCircle size={17} /></Secondary>}
+      </div>
+    </div>
+  );
+}
+
+
+export function ChatScreen({ app, id }) {
+  const t = app.threads.find((x) => x.id === id); const [text, setText] = useState(""); const [typing, setTyping] = useState(false); const endRef = useRef(null);
+  useEffect(() => { if (t && t.unread) app.readThread(t.id); }, [id]);
+  useEffect(() => { if (endRef.current) endRef.current.scrollIntoView({ block: "end" }); }, [t && t.messages.length, typing]);
+  useEffect(() => { if (!t) return; const last = t.messages[t.messages.length - 1]; if (!last || last.from !== "me") return; setTyping(true); const h = setTimeout(() => { setTyping(false); app.simulateReply(t.id); }, 1500); return () => clearTimeout(h); }, [t && t.messages.length]);
+  if (!t) return <Empty icon={MessageCircle} title="المحادثة غير موجودة" body={`ربما مُسحت بعد ${daysText(app.config.dmDays)}.`} action="رجوع" onAction={app.pop} />;
+  const guard = screenLanguage(text); const rule = dmRule(app.profile, t.with, t.ctx.type === "job" ? { job: t.ctx.id } : {});
+  const meAs = t.meAs === "public" ? "public" : "anon"; const meA = authorOf(app.profile, meAs); const sentByMe = t.messages.some((m) => m.from === "me"); const withA = { ...t.with, userRole: t.with.role, role: t.with.title };
+  const send = (e) => { e.preventDefault(); if (!text.trim() || guard.blocked) return; app.sendMessage(t.id, text.trim()); setText(""); };
+  // e-mails and phone numbers inside a bubble become tappable — sharing them here is allowed by design
+  const rich = (s) => String(s).split(/([\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[a-z]{2,}|\+?\d[\d\s-]{8,}\d|https?:\/\/\S+)/gi).map((part, i) => /@/.test(part) && /\.[a-z]{2,}$/i.test(part) ? <a key={i} href={`mailto:${part}`} className="py-1 underline underline-offset-2 break-all"><Num>{part}</Num></a> : /^https?:\/\//i.test(part) ? <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="py-1 underline underline-offset-2 break-all"><Num>{part}</Num></a> : /^\+?\d[\d\s-]{8,}\d$/.test(part) ? <a key={i} href={`tel:${part.replace(/[\s-]/g, "")}`} className="py-1 underline underline-offset-2"><Num>{part}</Num></a> : part);
+  return (
+    <div className="flex flex-col h-full -mx-4">
+      <div className="px-4 py-3 border-b border-line bg-surface/60">
+        <div className="flex items-start gap-2.5"><button type="button" aria-label="ملف العضو" onClick={() => app.openSheet("user", pickAuthor(withA))} className="press shrink-0 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><IdentityFace a={t.with} size={40} /></button><div className="min-w-0 flex-1"><div className="flex items-center gap-1.5 flex-wrap">{t.with.as === "public" ? <span className="text-[13px] font-medium">{displayName(t.with)}</span> : <Num className="text-[13px] font-medium">#{t.with.anon}</Num>}<RoleBadge role={t.with.role} verified={t.with.verified} gender={t.with.gender} compact />{t.with.as === "public" && <IdentityTag as="public" />}</div><p className="mt-0.5 text-[11px] leading-snug text-ink-2">{t.with.title}</p></div><RoundButton label="إبلاغ عن المحادثة" onClick={() => app.openSheet("report", { kind: "message", id: t.id })} className="w-9 h-9 shrink-0 -me-1 hover:text-bad"><Flag size={16} /></RoundButton></div>
+        <div className="mt-2 flex items-center gap-2 flex-wrap text-[11px]"><span className="text-ink-3">تظهر له:</span>{sentByMe ? <span className="inline-flex items-center gap-1.5 h-7 ps-1 pe-2.5 rounded-full bg-elevated border border-line text-ink-2"><IdentityFace a={meA} size={20} />{meAs === "public" ? displayName(meA) : <Num>#{meA.anon}</Num>}<Lock size={11} className="text-ink-3" /></span> : <IdentityToggle app={app} value={meAs} onChange={(v) => app.setThreadIdentity(t.id, v)} />}<span className="text-ink-3 leading-snug">{sentByMe ? "ثابتة في هذه المحادثة حتى لا تُربط هويتاك" : "اختر قبل أول رسالة — ثم تُثبَّت"}</span></div>
+        <div className="mt-2 flex flex-wrap gap-1.5 text-[10.5px]"><span className="inline-flex items-center gap-1 h-6 px-2 rounded-full bg-elevated text-ink-2">{t.ctx.type === "job" ? <Briefcase size={11} /> : <MessageCircle size={11} />}{t.ctx.label}</span><span className="inline-flex items-center gap-1 h-6 px-2 rounded-full bg-good/15 text-good"><ShieldCheck size={11} /> مسموح: {t.rule}</span><span className="inline-flex items-center gap-1 h-6 px-2 rounded-full bg-elevated text-ink-3"><Clock size={11} /> تُمسح بعد {daysText(app.config.dmDays)}</span>{t.blocked && <span className="inline-flex items-center gap-1 h-6 px-2 rounded-full bg-bad/15 text-bad"><Ban size={11} /> محظور</span>}</div>
+      </div>
+      <div className="scroll-area flex-1 px-4 py-3 space-y-2">
+        <p className="text-center text-[11px] text-ink-3 leading-relaxed px-4">رسالة خاصة {meAs === "public" ? "باسمك" : "بمعرّفك المجهول"}. يمكنك مشاركة رقمك أو بريدك أو أي رابط — القيد الوحيد للطرفين هو اللغة: لا سباب ولا إهانة ولا تهديد ولا تحرّش.</p>
+        {t.messages.map((m, i) => m.blocked ? (
+          <div key={i} className="mx-auto max-w-[92%] p-2.5 rounded-xl bg-bad/10 border border-bad/20 text-[11.5px] leading-relaxed text-ink-2"><span className="inline-flex items-center gap-1.5 text-bad font-medium"><ShieldAlert size={13} /> حُجبت رسالة من {m.from === "me" ? "طرفك" : t.with.as === "public" ? displayName(t.with) : `#${t.with.anon}`}</span> — احتوت على {m.hits.join(" و")}. لم تُسلَّم، وسُجّلت المحاولة لفريق المجتمع. <span className="text-ink-3">{m.at}</span></div>
+        ) : (
+          <div key={i} className={`pop-in max-w-[85%] ${m.from === "me" ? "ms-auto" : "me-auto"}`}><div {...UGC} className={`px-3.5 py-2.5 rounded-2xl text-[13.5px] leading-[1.7] text-start ${m.from === "me" ? "bg-solid text-white rounded-ee-md" : "bg-elevated text-ink rounded-es-md"}`}>{rich(app.moneyDM(m.text))}</div><div className={`mt-0.5 text-[10px] text-ink-3 ${m.from === "me" ? "text-end" : ""}`}>{m.at}</div></div>
+        ))}
+        {typing && <div className="typing me-auto inline-flex gap-1 px-3.5 py-3 rounded-2xl bg-elevated"><span className="w-1.5 h-1.5 rounded-full bg-ink-2" /><span className="w-1.5 h-1.5 rounded-full bg-ink-2" /><span className="w-1.5 h-1.5 rounded-full bg-ink-2" /></div>}
+        <div ref={endRef} />
+      </div>
+      <form onSubmit={send} className="px-4 pt-2 pb-[max(0.75rem,var(--sab))] border-t border-line bg-canvas/85 backdrop-blur-md space-y-2">
+        {t.blocked ? <div className="flex items-center justify-between gap-2 p-3 rounded-xl bg-bad/10 border border-bad/20 text-[12px] text-ink-2"><span className="inline-flex items-center gap-1.5"><Ban size={14} className="text-bad" /> حظرت هذا العضو — لا تصلك رسائله ولا يصله ردّك.</span><button type="button" onClick={() => { app.blockThread(t.id, false); app.toast("أُلغي الحظر"); }} className="shrink-0 text-accent hover:underline underline-offset-4">إلغاء الحظر</button></div>
+          : !app.canAct.ok ? <p className="text-[12px] text-warn p-3 rounded-xl bg-warn/10 border border-warn/20">{app.canAct.why}</p>
+          : !rule.ok ? <p className="text-[12px] text-warn p-3 rounded-xl bg-warn/10 border border-warn/20">{rule.why}</p> : (
+          <div className="flex items-center gap-2"><label className="flex-1 flex items-center min-h-11 px-4 rounded-full bg-canvas border border-line-2 focus-within:ring-2 focus-within:ring-accent"><input value={text} onChange={(e) => setText(e.target.value)} placeholder="اكتب رسالتك — رقمك وبريدك مسموح بهما" aria-label="رسالة خاصة" className="w-full min-w-0 bg-transparent text-[14px] placeholder:text-ink-4 focus:outline-none" /></label><button type="submit" aria-label="إرسال" disabled={!text.trim() || guard.blocked} className={`${BTN} btn-primary w-11 h-11 px-0 rounded-full press shrink-0`}><Send size={17} className="rtl:-scale-x-100" /></button></div>
+        )}
+        <LanguageGuard text={text} />
+      </form>
+    </div>
+  );
+}
+
+
+// The member's own account: private details, both identities (the selected one is the default for new actions), level, settings,
+// the written privacy policy, sign-out and permanent deletion.
+export function ProfileScreen({ app }) {
+  const p = app.profile; const lv = repLevel(app.pts); const mySpec = specOfPersona(p); const [confirmDel, setConfirmDel] = useState(false); const [photoErr, setPhotoErr] = useState("");
+  const [photoInput, pickPhoto] = useImagePicker(async (file) => { try { const im = await processImage(file, { square: true, size: 256 }); app.updateProfile({ photo: im.src }); setPhotoErr(""); app.toast("حُدّثت صورة حسابك — تظهر في مشاركاتك العلنية فقط"); } catch (e) { setPhotoErr(imageError(e)); } });
+  const pubA = authorOf(p, "public", lv.i), anonA = authorOf(p, "anon", lv.i); const persist = (patch) => app.updateProfile(patch);
+  const savedJobs = Object.keys(app.saved).filter((k) => k.startsWith("job:") && app.saved[k]).length; const mine = app.posts.filter((x) => x.mine); const myReplies = app.posts.flatMap((x) => flatten(x.comments).filter((c) => c.mine));
+  const count = (list, as) => list.filter((x) => (x.as === "public") === (as === "public")).length;
+  const setDefault = (id) => { persist({ identity: id }); app.toast(id === "public" ? "الافتراضي الآن: علني باسمك — وتختار من جديد في كل مشاركة" : "الافتراضي الآن: مجهول — وتختار من جديد في كل مشاركة"); };
+  const facts = [["النوع", genderOf(p.gender) === "female" ? "أنثى" : "ذكر"], ["العمر", p.age ? <><Num>{p.age}</Num> سنة</> : "—"], ["سنة التخرج", p.gradYear ? <Num>{p.gradYear}</Num> : "—"], ["الخبرة", yearsText(expYears(p), p.gender)],
+    ...(isCompanyRole(p.role) ? [["الشركة", p.companyName || "—"]] : p.role === "supervisor" ? [["المسمّى", roleTitle(p.role, p.gender) + " — ثابت"]] : [["التخصص", p.role === "engineer" ? discTitle(p.disc, p.gender) : roleTitle(p.role, p.gender)], ["المسار", trackLabel(p.track, p.disc)], ["المستوى", posLabelG(p.pos, p.gender)]]), ["المكان", placeName(p.gov, p.city)]];
+  return (
+    <div className="py-4 space-y-3">
+      <Panel className="p-4">
+        <div className="flex items-center gap-3"><Monogram name={p.name} role={p.role} photo={p.photo} size={54} /><div className="min-w-0 flex-1"><h2 className="text-[17px] font-medium leading-snug">{displayName(pubA)}</h2><Num className="block text-[12px] text-ink-2 break-all">{p.email}</Num><div className="mt-1.5 flex flex-wrap gap-1.5"><RoleBadge role={p.role} verified={p.verified} gender={p.gender} />{p.pending && <Chip tone="warn"><Clock size={12} /> توثيق قيد المراجعة</Chip>}</div></div></div>
+        <dl className="mt-3 grid grid-cols-2 gap-x-3 text-[11.5px]">{facts.map(([k, v]) => <div key={k} className="flex justify-between gap-2 border-b border-line py-1.5"><dt className="text-ink-3 shrink-0">{k}</dt><dd className="text-ink text-end leading-snug">{v}</dd></div>)}</dl>
+        <p className="mt-2 text-[10.5px] leading-snug text-ink-3 flex items-start gap-1.5"><LockKeyhole size={11} className="shrink-0 mt-0.5" /> بريدك خاص دائمًا. اسمك وعمرك ومدينتك تظهر فقط فيما تنشره علنًا — ولا تظهر أبدًا في الوضع المجهول.</p>
+        <div className="mt-3 flex items-center gap-2 flex-wrap">{photoInput}<Secondary onClick={pickPhoto} className="h-10 px-3 text-[12.5px] press"><Camera size={15} /> {p.photo ? "تغيير صورة الحساب" : "إضافة صورة للحساب"}</Secondary>{p.photo && <Quiet onClick={() => { app.updateProfile({ photo: null }); app.toast("أُزيلت صورتك — تظهر حروف اسمك بدلها"); }} className="h-10 px-2 text-[12.5px] text-bad/80 hover:text-bad">إزالة الصورة</Quiet>}<span className="basis-full text-[10.5px] text-ink-3 leading-snug">{p.photo ? (p.showPhoto !== false ? "تظهر صغيرة بجانب اسمك في مشاركاتك العلنية — لا تُكبَّر ولا تظهر في الوضع المجهول." : "مخفية الآن — مشاركاتك العلنية تظهر بحروف اسمك.") : "بدون صورة تظهر حروف اسمك في مشاركاتك العلنية."}</span></div>
+        {photoErr && <p role="alert" className="mt-1 text-[11.5px] text-bad">{photoErr}</p>}
+        {p.verified && canVerifyRole(p.role) && <p className="mt-2 text-[11.5px] text-good flex items-center gap-1.5 flex-wrap"><BadgeCheck size={13} /> {credentialOf(p)}{p.division && divOf(p.division) && <span> · {divOf(p.division).label}</span>}{p.verifyRef && <Num className="text-[10px] text-ink-3"> · {p.verifyRef}</Num>}</p>}
+        <div className="mt-3 flex gap-2"><Secondary onClick={app.editPersona} className="flex-1 h-11 press"><PenLine size={15} /> تعديل البيانات</Secondary>{can(p, "verify") && !p.verified && (p.pending ? <Secondary onClick={() => app.openSheet("verify")} className="flex-1 h-11 press"><Clock size={15} /> حالة التوثيق</Secondary> : <Primary onClick={() => app.openSheet("verify")} className="flex-1 h-11 press"><ShieldCheck size={15} /> {gx(p.gender, "وثّق — اختياري", "وثّقي — اختياري")}</Primary>)}</div>
+      </Panel>
+      <Panel className="p-4">
+        <div className="flex items-center justify-between gap-2"><h3 className="text-[13px] font-medium">هويتاك على المنصة</h3><span className="text-[10.5px] text-ink-3">المحدَّدة هي الافتراضية</span></div>
+        <p className="mt-0.5 text-[11.5px] text-ink-2 leading-snug">منفصلتان تمامًا — لا يستطيع أي عضو أو صاحب عمل ربط إحداهما بالأخرى.</p>
+        <div role="radiogroup" aria-label="الهوية الافتراضية" className="mt-3 space-y-2"><IdentityCard p={p} as="anon" on={p.identity !== "public"} onClick={() => setDefault("anon")} /><IdentityCard p={p} as="public" on={p.identity === "public"} onClick={() => setDefault("public")} /></div>
+        <p className="mt-2 text-[11px] text-ink-3 leading-snug">في كل منشور ورد وتقييم شركة وتصويت ومشاركة راتب يظهر مفتاح لاختيار الهوية لتلك المشاركة وحدها.</p>
+        <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">{[["public", pubA], ["anon", anonA]].map(([id, a]) => <button key={id} type="button" onClick={() => app.openSheet("user", a)} className="press p-2.5 rounded-xl bg-canvas/60 border border-line text-start hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><span className="flex items-center gap-1.5"><IdentityTag as={id} /><span className="text-ink-2">{id === "public" ? "ملفك العلني" : "ملفك المجهول"}</span></span><span className="block mt-1 text-ink"><Num>{count(mine, id)}</Num> منشور · <Num>{count(myReplies, id)}</Num> رد · <Num>{app.shares.filter((x) => x.as === id).length}</Num> راتب</span><span className="block mt-0.5 text-accent">كما يراه الآخرون</span></button>)}</div>
+      </Panel>
+      <Panel className="p-4">
+        <div className="flex items-center gap-3"><LevelRing pts={app.pts} size={60}><Avatar spec={mySpec} gender={p.gender} look={p.look} size={48} /></LevelRing><div className="min-w-0 flex-1"><p className="text-[13px] font-medium">{lv.name} · <Num>{app.pts}</Num> نقطة</p><p className="text-[11px] text-ink-3 leading-snug">{lv.next ? <>بقي <Num>{REP_LEVELS[lv.i + 1][1] - app.pts}</Num> نقطة لمستوى {lv.next}. الردود بالأرقام والإجابات المعتمدة تعلّي مستواك.</> : "أعلى مستوى في المجتمع."}</p></div></div>
+        <div className={`mt-3 grid ${app.moneyAccess === "none" ? "grid-cols-2" : "grid-cols-4"} gap-2 text-[10.5px] text-ink-2 text-center`}>{(app.moneyAccess === "none" ? [["منشورات", mine.length], ["ردود", myReplies.length]] : [["رواتب", p.contributions || 0], ["منشورات", mine.length], ["ردود", myReplies.length], [app.isCo ? "وظائف" : "محفوظة", app.isCo ? app.jobs.filter((j) => j.co === p.companyId || j.mine).length : savedJobs]]).map(([k, v]) => <div key={k} className="px-1 py-2 rounded-xl bg-canvas/60 border border-line"><Num className="block text-[17px] font-semibold text-ink">{v}</Num>{k}</div>)}</div>
+      </Panel>
+      <Panel className="p-4 overflow-hidden"><div className="flex items-center gap-4"><Avatar spec={mySpec} gender={p.gender} look={p.look} size={92} /><div className="min-w-0 flex-1"><p className="text-[11px] text-ink-3">شخصيتك</p><h3 className="text-[15px] font-medium leading-snug">{characterName(mySpec, p.gender)}</h3><p className="mt-1 text-[11.5px] leading-relaxed text-ink-2">مرتبطة بتخصصك دائمًا — لا تُختار عشوائيًا ولا تتبدّل. تتغير تلقائيًا فقط إذا تغيّر {isCompanyRole(p.role) || p.role === "supervisor" ? "دورك" : "تخصصك أو شعبتك الموثّقة"}. تظهر مع معرّفك المجهول؛ ملفك العلني يظهر بحروف اسمك.</p></div></div>
+        {genderOf(p.gender) === "female" && <div className="mt-3 pt-3 border-t border-line"><p className="text-[11.5px] text-ink-2 mb-1.5">مظهر الشخصية</p><div role="radiogroup" aria-label="مظهر الشخصية" className="flex gap-1.5">{[["hood", "غطاء رأس تقني"], ["hair", "شعر"]].map(([id, l]) => <button key={id} type="button" role="radio" aria-checked={(p.look === "hair" ? "hair" : "hood") === id} onClick={() => { persist({ look: id }); app.toast(id === "hair" ? "مظهر شخصيتك: شعر" : "مظهر شخصيتك: غطاء رأس تقني"); }} className={`press inline-flex items-center gap-2 h-11 ps-1.5 pe-3 rounded-full border text-[12.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${(p.look === "hair" ? "hair" : "hood") === id ? "bg-wash border-accent/40 text-ink" : "bg-surface border-line-2 text-ink-2"}`}><Avatar spec={mySpec} gender="female" look={id} size={32} animate={false} />{l}</button>)}</div></div>}</Panel>
+      <div className="grid grid-cols-2 gap-2">{(app.isCo ? [["postjob", "نشر وظيفة", Plus], ["permissions", "صلاحياتي", ShieldCheck]] : app.moneyAccess === "none" ? [["rooms", "الغرف", Layers], ["permissions", "صلاحياتي", ShieldCheck]] : [["cvreview", "مراجعة سيرتي", FileSearch], ["permissions", "صلاحياتي", ShieldCheck]]).map(([t, l, I]) => <button key={t} type="button" onClick={() => app.push({ type: t })} className="press flex items-center gap-2.5 p-3.5 rounded-2xl bg-surface border border-line text-start"><span className="grid place-items-center w-9 h-9 rounded-xl bg-wash text-accent"><I size={16} /></span><span className="text-[13px]">{l}</span></button>)}</div>
+      {app.moneyAccess !== "none" && <Panel className="p-4"><h3 className="text-[13px] font-medium">هدفك الحالي</h3><p className="mt-0.5 text-[11px] text-ink-2">نرتّب الرئيسية والأدوات على أساسه.</p><div className="mt-2 flex flex-wrap gap-1.5">{(app.isCo ? GOALS_CO : GOALS).map(([id, l, I]) => <FilterChip key={id} on={p.goal === id} onClick={() => { persist({ goal: id }); app.toast(`رتّبنا الرئيسية على هدف: ${l}`); }}><I size={12} />{l}</FilterChip>)}</div></Panel>}
+      <button type="button" onClick={() => app.push({ type: "settings" })} className="press w-full flex items-center gap-3 p-4 rounded-2xl bg-surface border border-line shadow-card text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+        <span className="grid place-items-center w-10 h-10 rounded-xl bg-wash text-accent shrink-0"><Settings size={18} /></span>
+        <span className="min-w-0 flex-1"><span className="block text-[13.5px] font-medium">الإعدادات</span><span className="block mt-0.5 text-[11px] text-ink-3 leading-snug">اللغة، والمظهر، والإشعارات والخصوصية، والجولة التعريفية ودليل الاستخدام</span></span>
+        <span translate="no" className="shrink-0 h-6 px-2 grid place-items-center rounded-full bg-elevated border border-line text-[10.5px] font-grotesk text-ink-2">{app.lang === "en" ? "EN" : "ع"}</span><Forward size={15} />
+      </button>
+      {(app.standing.warnings > 0 || app.standing.suspended) && <Panel className={`p-4 ${app.standing.suspended ? "border-bad/30" : "border-warn/30"}`}><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><ShieldAlert size={15} className={app.standing.suspended ? "text-bad" : "text-warn"} /> حالة حسابك: {app.standing.suspended ? "موقوف" : "عليه تحذير"}</h3><p className="mt-1 text-[12px] leading-relaxed text-ink-2">{app.standing.suspended ? app.canAct.why : <>وصلك <Num>{app.standing.warnings}</Num> {app.standing.warnings === 1 ? "تحذير" : "تحذيرات"} من فريق المجتمع.</>}{app.standing.lastWarning && <> آخر تحذير: «{app.standing.lastWarning}»</>}</p><p className="mt-1 text-[11px] text-ink-3">المخالفات المؤكدة: <Num>{app.standing.strikes}</Num>{app.config.strikeLimit > 0 && <> — الإيقاف التلقائي 7 أيام عند <Num>{app.config.strikeLimit}</Num></>}.</p></Panel>}
+      <TrustPolicy />
+      <Secondary onClick={() => { const next = randHex(4); persist({ anon: next }); app.toast(`معرّفك المجهول الجديد #${next} — نشاطك السابق لا يرتبط به`); }} className="w-full h-11 press"><RefreshCw size={16} /> تجديد المعرّف المجهول الآن</Secondary>
+      <Secondary onClick={() => app.openSheet("privacy")} className="w-full h-11 press"><ShieldCheck size={16} /> كيف نحمي هويتك؟</Secondary>
+      {app.openAdmin && <Secondary onClick={app.openAdmin} className="w-full h-11 press"><LayoutDashboard size={16} /> لوحة الإدارة — معاينة فريق المنصة</Secondary>}
+      <Secondary onClick={app.signOut} className="w-full h-11 press"><LogOut size={16} /> تسجيل الخروج</Secondary>
+      {!confirmDel ? <Quiet onClick={() => setConfirmDel(true)} className="w-full h-11 text-bad/80 hover:text-bad"><Trash2 size={16} /> حذف الحساب وكل بياناتي</Quiet>
+        : <Panel className="p-4 border-bad/30"><p className="text-[13px] font-medium text-bad flex items-center gap-1.5"><Trash2 size={15} /> حذف نهائي</p><p className="mt-1 text-[12px] leading-relaxed text-ink-2">يُحذف حسابك وملفك ومشاركاتك وتفاعلاتك من هذا الجهاز نهائيًا، ولا يمكن التراجع.</p><div className="mt-3 flex gap-2"><Primary onClick={app.deleteAccount} className="flex-1 h-11 !bg-bad !text-white"><Trash2 size={15} /> احذف نهائيًا</Primary><Secondary onClick={() => setConfirmDel(false)} className="h-11 px-4">تراجع</Secondary></div></Panel>}
+    </div>
+  );
+}
+
+
+// The relationship map: capabilities per role, who may message whom, how applications work, and the language filter — all live from the same rules the UI enforces
+export function PermissionsScreen({ app }) {
+  const [role, setRole] = useState(app.profile.role); const [probe, setProbe] = useState(""); const r = roleOf(role);
+  const WHO = [["engineer", "مهندس"], ["supervisor", "مشرف موقع"], ["company", "جهة عمل"]];
+  // mirrors dmRule(): peers by consent; engineers → companies from a job ad; companies → engineers who opted in; supervisors ↔ companies never
+  const cell = (a, b) => a === "company" && b === "company" ? ["بإذن المستقبل", "verified"] : a === "company" ? (b === "engineer" ? ["من فعّل «متاح للشركات» فقط", "accent"] : ["غير متاح", "none"]) : b === "company" ? (a === "engineer" ? ["من صفحة إعلان وظيفة فقط", "accent"] : ["غير متاح", "none"]) : ["بإذن المستقبل", "verified"];
+  const pr = screenLanguage(probe); const pc = detectContact(probe);
+  return (
+    <div className="py-4 space-y-3">
+      <p className="px-1 text-[12px] text-ink-2 leading-relaxed">الخريطة الكاملة للعلاقات: ما يستطيعه كل دور، ومن يراسل من، وكيف يتم التقديم، وما يُحجب من النص. هذه القواعد نفسها هي التي تُنفَّذ في كل شاشة.</p>
+      <Panel className="p-4"><h3 className="text-[13px] font-medium">شخصيات المنصة — شخصية لكل تخصص</h3><p className="mt-0.5 mb-3 text-[11px] text-ink-2 leading-relaxed">تحددها المهنة وحدها: التخصص الهندسي أو الشعبة الموثّقة، مشرف الموقع، الموارد البشرية، وصاحب العمل. جهات العمل بإطار دافئ وشارة — لا تختلط بوجوه المهندسين.</p><CharacterGallery gender={app.profile.gender} />
+        <div className="mt-3 pt-3 border-t border-line flex items-center gap-2.5 text-[11px] leading-snug text-ink-2"><Monogram name="صاحب عمل" role="owner" size={26} /><Monogram name="موارد بشرية" role="hr" size={26} /><span>الملف العلني يظهر بحروف الاسم — بإطار ذهبي لصاحب العمل وبرتقالي للموارد البشرية. حسابات جهات العمل لا توثَّق: شارة الدور تكفي.</span></div></Panel>
+      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{ROLES.map((x) => <FilterChip key={x.id} on={role === x.id} onClick={() => setRole(x.id)}><x.icon size={12} />{roleTitle(x.id, app.profile.gender)}</FilterChip>)}</div>
+      <Panel className="p-4"><div className="flex items-center gap-2"><span className="grid place-items-center w-9 h-9 rounded-xl bg-wash text-accent"><r.icon size={16} /></span><div><h3 className="text-[13.5px] font-medium">{roleTitle(role, app.profile.gender)}</h3><p className="text-[11px] text-ink-2 leading-snug">{r.desc}</p></div></div>
+        <ul className="mt-3 divide-y divide-line">{CAPS.map(([id, l, I]) => { const v = PERMS[role][id]; const note = permNote(role, id); return <li key={id} className="py-2.5 flex items-start gap-2.5 text-[12.5px]"><I size={14} className={`shrink-0 mt-0.5 ${v === 0 ? "text-ink-4" : "text-accent"}`} /><span className={`min-w-0 flex-1 leading-snug ${v === 0 ? "text-ink-3 line-through decoration-ink-4" : "text-ink"}`}>{l}{v === 2 && note && <span className="block text-[11px] text-ink-2 no-underline">{note}</span>}</span><span className={`shrink-0 text-[11px] ${v === 1 ? "text-good" : v === 2 ? "text-warn" : "text-ink-3"}`}>{v === 1 ? "نعم" : v === 2 ? "بشرط" : "لا"}</span></li>; })}</ul></Panel>
+      <Panel className="p-4"><h3 className="text-[13px] font-medium">من يراسل من؟</h3><p className="mt-0.5 text-[11px] text-ink-2">القاعدة تُطبَّق قبل فتح أي محادثة — وداخل المحادثة يمكن للطرفين تبادل الهاتف والبريد بحرية.</p>
+        <div className="mt-3 grid grid-cols-[auto_1fr_1fr_1fr] gap-1.5 text-[11px]"><span />{WHO.map(([b, bl]) => <span key={b} className="text-center text-ink-3 leading-tight">← إلى {bl}</span>)}
+          {WHO.map(([a, al]) => <React.Fragment key={a}><span className="self-center text-ink-2 leading-tight pe-1">من {al}</span>{WHO.map(([b]) => { const [txt, tone] = cell(a, b); return <span key={b} className={`p-2 rounded-lg border text-center leading-snug ${tone === "verified" ? "bg-good/10 border-good/20 text-good" : tone === "none" ? "bg-elevated border-line text-ink-3" : "bg-wash border-accent/20 text-accent"}`}>{txt}</span>; })}</React.Fragment>)}</div>
+        <p className="mt-2 text-[11px] text-ink-3 leading-relaxed">لا تصل رسالة إلى مهندس من شركة لم يفتح لها الباب — هذا ما يمنع التواصل التسويقي. ولا تُراسَل الشركات إلا من إعلان وظيفة، حتى لا يصلها ما لا علاقة له بالتوظيف. حساب مشرف الموقع للمجتمع فقط: يراسل الزملاء، ولا يراسل جهات العمل ولا تراسله.</p></Panel>
+      <Panel className="p-4"><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><Send size={14} className="text-accent rtl:-scale-x-100" /> كيف يتم التقديم على الوظائف؟</h3>
+        <ol className="mt-2 space-y-1.5 text-[12.5px] text-ink-2">{["كل إعلان يعرض بريد الشركة أو هاتفها — بيانات حقيقية تكتبها الموارد البشرية عند النشر.", "المهندس يرسل سيرته الذاتية من بريده الشخصي أو يتصل بالرقم مباشرة.", "لا نماذج تقديم ولا تتبّع طلبات داخل التطبيق — EngSpace يعرض الفرصة والنطاق المتوقع فقط.", "الشركة ترى عدد من فتحوا بيانات التواصل، لا هوياتهم."].map((t, i) => <li key={i} className="flex gap-2"><Num className="shrink-0 text-ink-3">{i + 1}.</Num><span className="leading-relaxed">{t}</span></li>)}</ol></Panel>
+      <Panel className="p-4"><h3 className="text-[13px] font-medium">فلتر اللغة — القيد الوحيد على النص</h3>
+        <p className="mt-1 text-[11.5px] text-ink-2 leading-relaxed">الهاتف والبريد والروابط والحسابات الخارجية <span className="text-good">مسموح بها</span> في المنشورات والردود والرسائل الخاصة وإعلانات الوظائف. ما يُحجب فقط:</p>
+        <ul className="mt-2 space-y-1.5 text-[12.5px] text-ink-2">{[["سباب وألفاظ نابية", "بالعربية والفرانكو والإنجليزية — حتى لو كُتبت بنقاط أو مسافات أو أرقام بدل الحروف أو بحروف مكررة"], ["إهانة موجّهة لشخص", "«يا غبي» · «انت حمار» · idiot — وصف الفعل مسموح، إهانة الشخص لا"], ["تهديد", "«هقتلك» · «هفضحك» · «هنشر بياناتك»"], ["تمييز وكراهية", "ألفاظ عنصرية أو طائفية، أو مخاطبة شخص بدينه أو أصله"], ["تحرّش أو إيحاء", "«ابعتي صورتك» · «يا قمر» · sexy — الشبكة مهنية"]].map(([k, v]) => <li key={k} className="flex gap-2"><span className="shrink-0 text-ink">{k}:</span><span className="leading-snug">{v}</span></li>)}</ul>
+        <p className="mt-2 text-[11px] text-ink-3">اللهجة الحادّة («زفت»، «الشركة دي زبالة») تعطي تنبيهًا لا حجبًا. المخالفات المتكررة تُراجع من فريق المجتمع.</p>
+        <label className="block mt-3"><span className="block text-[12px] text-ink-2 mb-1.5">جرّب الفلتر الآن</span><TextInput value={probe} onChange={setProbe} placeholder="اكتب أي نص… مثلًا: رقمي 01001234567 — أو جرّب كلمة نابية" /></label><LanguageGuard text={probe} className="mt-2" />
+        {probe && !pr.blocked && !pr.warnings.length && <p className="mt-2 text-[12px] text-good inline-flex items-center gap-1.5"><CircleCheck size={13} /> نص نظيف — يمكن إرساله{pc.found ? ` (يتضمن ${pc.hits.map((h) => h.label).join(" و")} — مسموح)` : ""}</p>}</Panel>
+    </div>
+  );
+}
+
+
+// Post a job: paste → parse → confirm the mandatory classification + contact details for applying → preview with the EngSpace range and notification reach → publish.
+// The parser lifts any e-mail / phone it finds into the contact card and strips any salary figure. Editing an own ad reuses the same screen.
+export const SAMPLE_JD = "مطلوب مهندس مدني مكتب فني لمشروع إداري في القاهرة الجديدة\nخبرة من 3 إلى 5 سنوات في المكتب الفني بشركات المقاولات\n- إجادة Revit وAutoCAD وExcel\n- إعداد الحصر والمستخلصات ومراجعة اللوحات التنفيذية مع الاستشاري\n- يفضل خبرة سابقة في المشاريع الإدارية\nالراتب 18,000 – 22,000 جنيه حسب الخبرة\nللتقديم ارسل السيرة الذاتية على jobs.company@example.com او اتصل 01000000555";
+
+export const emailOk = (v) => /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(v || "").trim());
+ export const phoneOk = (v) => /^(?:\+?20|0)?1[0125]\d{8}$/.test(String(v || "").replace(/[\s\-()]/g, ""));
+
+export function PostJobScreen({ app, like }) {
+  const pr = app.profile; const base = like ? app.jobs.find((j) => j.id === like) : null; const editing = !!(base && (base.mine || base.co === pr.companyId));
+  const [step, setStep] = useState(base ? 1 : 0); const [raw, setRaw] = useState(""); const [parsed, setParsed] = useState(null);
+  const [f, setF] = useState(() => base ? { title: base.title, disc: base.disc, sub: base.sub, pos: base.pos, years: [...base.years], gov: base.gov, city: base.city, mode: base.mode, type: base.type, desc: base.desc, reqs: [...base.reqs], skills: [...(base.skills || [])], contact: { email: editing ? (base.contact?.email || "") : "", phone: editing ? (base.contact?.phone || "") : "", name: editing ? (base.contact?.name || "") : "" } } : { title: "", disc: "civil", sub: "tech", pos: "mid", years: [3, 5], gov: pr.gov, city: pr.city, mode: "office", type: "full", desc: "", reqs: [], skills: [], contact: { email: "", phone: "", name: "" } });
+  const up = (k, v) => setF((s) => ({ ...s, [k]: v })); const upC = (k, v) => setF((s) => ({ ...s, contact: { ...s.contact, [k]: v } }));
+  if (!can(pr, "postjob")) return <Empty icon={LockKeyhole} title="نشر الوظائف لحسابات الشركات" body="سجّل كموارد بشرية أو صاحب عمل لنشر إعلان." action="تعديل البيانات" onAction={app.editPersona} />;
+  const analyze = () => { const p = parseJobText(raw); setParsed(p); setF((s) => ({ ...s, title: p.title || s.title, disc: p.disc, sub: p.sub, pos: p.pos, years: p.years, gov: p.gov || s.gov, city: p.gov ? p.city : s.city, mode: p.mode, type: p.type, desc: p.desc, reqs: p.reqs, skills: p.skills, contact: { ...s.contact, email: p.contact.email || s.contact.email, phone: p.contact.phone || s.contact.phone } })); };
+  const guardDesc = screenLanguage(f.desc + "\n" + f.reqs.join("\n") + "\n" + f.title); const yearsOk = f.years[0] >= 0 && f.years[1] >= f.years[0] && f.years[1] <= 30;
+  const cEmail = f.contact.email.trim(), cPhone = f.contact.phone.replace(/[\s\-()]/g, ""); const contactOk = (cEmail ? emailOk(cEmail) : false) || (cPhone ? phoneOk(cPhone) : false); const contactBad = (cEmail && !emailOk(cEmail)) || (cPhone && !phoneOk(cPhone));
+  const valid = f.title.trim().length >= 4 && f.desc.trim().length >= 20 && yearsOk && !guardDesc.blocked && tracksFor(f.disc).some((t) => t[0] === f.sub) && contactOk && !contactBad;
+  const preview = { id: base && editing ? base.id : "preview", ...f, contact: { email: emailOk(cEmail) ? cEmail : null, phone: phoneOk(cPhone) ? cPhone : null, name: f.contact.name.trim() || null }, co: pr.companyId || "orascom", coName: pr.companyName, when: "الآن" }; const e = valid ? estimateFor(preview) : null; const reach = valid ? reachFor(preview) : null;
+  const conf = (k) => parsed ? parsed.confLabel(k) : null; const ConfChip = ({ k }) => { const c = conf(k); return c ? <Chip tone={c[1]} className="h-5 px-1.5 text-[10px]">{c[0]}</Chip> : null; };
+  const steps = ["الوصف", "التصنيف والتواصل", "المعاينة"];
+  return (
+    <div className="flex-1 flex flex-col gap-3 pt-4">
+      <div className="flex items-center gap-2 text-[12px] text-ink-2"><Building2 size={14} className="text-accent" /><span>{editing ? "تعديل إعلان منشور" : `تُنشر باسم ${pr.companyName || "شركتك"}`} — بدون رقم راتب، بتصنيف إلزامي، وببريد أو هاتف يصلك عليه التقديم مباشرة</span></div>
+      <ol className="flex items-center gap-2" aria-label="الخطوات">{steps.map((s, i) => <li key={s} className="flex items-center gap-1.5 text-[11px]"><span className={`grid place-items-center w-6 h-6 rounded-full font-grotesk transition-colors ${i <= step ? "bg-accent text-on-accent" : "bg-elevated text-ink-3"}`}>{i < step ? <Check size={12} strokeWidth={3} /> : i + 1}</span><span className={i === step ? "text-ink" : "text-ink-3"}>{s}</span>{i < 2 && <span className="w-3 h-px bg-line-2" />}</li>)}</ol>
+      <div key={step} className="screen-push space-y-3">
+        {step === 0 && <Panel className="p-4"><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><Sparkles size={14} className="text-accent" /> الصق إعلان الوظيفة كما هو</h3><p className="mt-1 text-[11.5px] text-ink-2 leading-relaxed">محلّل EngSpace يقرأ النص ويستخرج التخصّص والمسار وسنوات الخبرة والمسمّى والمكان والمهارات، وينقل بريد أو هاتف التقديم إلى بطاقة التواصل — ويحذف أي رقم راتب كتبته.</p>
+          <textarea value={raw} onChange={(e2) => setRaw(e2.target.value)} rows={9} placeholder="مطلوب مهندس … خبرة من … إلى … سنوات في … بمدينة … — للتقديم على بريد …" className="mt-3 w-full p-4 rounded-xl bg-canvas border border-line-2 text-[13.5px] leading-[1.8] placeholder:text-ink-4 focus:outline-none focus:ring-2 focus:ring-accent resize-none" />
+          <div className="mt-2 flex gap-2"><Primary disabled={raw.trim().length < 20} onClick={analyze} className="flex-1 h-11 press"><Sparkles size={15} /> حلّل الوصف</Primary><Secondary onClick={() => setRaw(SAMPLE_JD)} className="h-11 px-3 text-[12.5px]">مثال</Secondary></div>
+          {parsed && <div className="mt-3 pt-3 border-t border-line space-y-2 pop-in">
+            <p className="text-[12px] text-ink-2">ما استخرجه المحلّل — راجعه في الخطوة التالية:</p>
+            <ul className="space-y-1.5 text-[12.5px]">{[["المسمّى", parsed.title, "title"], ["التخصّص", label(DISC, parsed.disc), "disc"], ["المسار", trackLabel(parsed.sub, parsed.disc), "sub"], ["الخبرة", yearsLabel(parsed.years), "years"], ["المستوى", posLabel(parsed.pos), "pos"], ["المكان", parsed.gov ? placeName(parsed.gov, parsed.city) : "لم يُذكر — سيُستخدم مكان الشركة", "place"], ["نمط العمل", label(WORK_MODES, parsed.mode), "mode"]].map(([k, v, ck]) => <li key={k} className="flex items-start justify-between gap-2"><span className="text-ink-3 shrink-0">{k}</span><span className="min-w-0 text-end leading-snug inline-flex items-center gap-1.5 flex-wrap justify-end"><span className="text-ink">{v}</span><ConfChip k={ck} /></span></li>)}</ul>
+            {parsed.skills.length > 0 && <div className="flex flex-wrap gap-1">{parsed.skills.map((s) => <Chip key={s} tone="en" className="h-5 px-1.5 text-[10px]">{s}</Chip>)}</div>}
+            {parsed.salaryStripped && <p className="p-2.5 rounded-lg bg-warn/10 border border-warn/20 text-[11.5px] text-warn leading-relaxed"><Coins size={12} className="inline" /> حُذف نطاق الراتب «<Num>{parsed.salaryStripped}</Num>» من الإعلان — سيرى المهندسون النطاق المتوقع من السوق بدلًا منه.</p>}
+            {parsed.contact.found && <p className="p-2.5 rounded-lg bg-good/10 border border-good/20 text-[11.5px] text-good leading-relaxed"><Mail size={12} className="inline" /> نُقلت بيانات التقديم إلى بطاقة التواصل: {[parsed.contact.email, parsed.contact.phone ? fmtPhone(parsed.contact.phone) : null].filter(Boolean).map((x, i) => <Num key={i} className="text-ink"> {x}</Num>)}</p>}
+          </div>}
+        </Panel>}
+        {step === 1 && <>
+          <Panel className="p-4 space-y-3"><h3 className="text-[13px] font-medium">التصنيف الإلزامي</h3>
+            <div><div className="flex items-center gap-2 mb-1.5"><p className="text-[12px] text-ink-2">التخصّص الرئيسي</p><ConfChip k="disc" /></div><div className="flex flex-wrap gap-1.5">{DISC.map(([id, l]) => <FilterChip key={id} on={f.disc === id} onClick={() => setF((s) => ({ ...s, disc: id, sub: tracksFor(id).some((t) => t[0] === s.sub) ? s.sub : "site" }))}>{l}</FilterChip>)}</div></div>
+            <div><div className="flex items-center gap-2 mb-1.5"><p className="text-[12px] text-ink-2">التخصّص الفرعي</p><ConfChip k="sub" /></div><div className="flex flex-wrap gap-1.5">{tracksFor(f.disc).map(([id]) => <FilterChip key={id} on={f.sub === id} onClick={() => up("sub", id)}>{trackLabel(id, f.disc)}</FilterChip>)}</div></div>
+            <div><div className="flex items-center gap-2 mb-1.5"><p className="text-[12px] text-ink-2">سنوات الخبرة</p><ConfChip k="years" /></div><div className="grid grid-cols-2 gap-2"><Field label="من" value={String(f.years[0])} onChange={(v) => up("years", [Number(v) || 0, f.years[1]])} unit="سنة" /><Field label="إلى" value={String(f.years[1])} onChange={(v) => up("years", [f.years[0], Number(v) || 0])} unit="سنة" /></div>{!yearsOk && <p className="mt-1 text-[11px] text-bad">النطاق غير منطقي.</p>}</div>
+            <div><div className="flex items-center gap-2 mb-1.5"><p className="text-[12px] text-ink-2">المسمّى / المستوى الدقيق</p><ConfChip k="pos" /></div><div className="flex flex-wrap gap-1.5">{POSITIONS.map(([id, l]) => <FilterChip key={id} on={f.pos === id} onClick={() => up("pos", id)}>{l}</FilterChip>)}</div></div>
+          </Panel>
+          <Panel className="p-4 space-y-3 border-accent/25"><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><Send size={14} className="text-accent rtl:-scale-x-100" /> بيانات التواصل للتقديم <span className="text-[10.5px] text-bad">إلزامي — بريد أو هاتف</span></h3>
+            <p className="text-[11.5px] text-ink-2 leading-relaxed">تُعرض في الإعلان كما هي. المهندس يرسل سيرته الذاتية من بريده أو يتصل بالرقم — لا تمرّ الطلبات عبر التطبيق.</p>
+            <div><label className="block text-[12px] text-ink-2 mb-1.5">بريد استقبال السير الذاتية</label><TextInput dir="ltr" type="email" value={f.contact.email} onChange={(v) => upC("email", v)} placeholder="jobs@company.com" />{cEmail && !emailOk(cEmail) && <p className="mt-1 text-[11px] text-bad">صيغة البريد غير صحيحة.</p>}</div>
+            <div><label className="block text-[12px] text-ink-2 mb-1.5">هاتف التوظيف (اختياري إذا كُتب البريد)</label><TextInput dir="ltr" type="tel" inputMode="tel" value={f.contact.phone} onChange={(v) => upC("phone", v)} placeholder="01xxxxxxxxx" />{cPhone && !phoneOk(cPhone) && <p className="mt-1 text-[11px] text-bad">اكتب رقم محمول مصري صحيح (11 رقمًا يبدأ بـ 01).</p>}</div>
+            <div><label className="block text-[12px] text-ink-2 mb-1.5">جهة الاتصال (اختياري) — كما تظهر للمهندس</label><TextInput value={f.contact.name} onChange={(v) => upC("name", v)} placeholder="مثال: الموارد البشرية · أو م. أحمد" /></div>
+            {!contactOk && <p className="text-[11px] text-warn inline-flex items-center gap-1.5"><CircleAlert size={13} /> لا يمكن نشر الإعلان بدون بريد أو هاتف صحيح.</p>}
+          </Panel>
+          <Panel className="p-4 space-y-3"><div className="flex items-center gap-2"><h3 className="text-[13px] font-medium">المكان ونمط العمل</h3><ConfChip k="place" /></div><GovPicker gov={f.gov} city={f.city} onChange={(g, c) => setF((s) => ({ ...s, gov: g, city: c }))} />
+            <div className="flex flex-wrap gap-1.5">{WORK_MODES.map(([id, l]) => <FilterChip key={id} on={f.mode === id} onClick={() => up("mode", id)}>{l}</FilterChip>)}</div><div className="flex flex-wrap gap-1.5">{JOB_TYPES.map(([id, l]) => <FilterChip key={id} on={f.type === id} onClick={() => up("type", id)}>{l}</FilterChip>)}</div></Panel>
+          <Panel className="p-4 space-y-3"><h3 className="text-[13px] font-medium">الإعلان</h3><div><div className="flex items-center gap-2 mb-1.5"><p className="text-[12px] text-ink-2">المسمّى الوظيفي المعلن</p><ConfChip k="title" /></div><TextInput value={f.title} onChange={(v) => up("title", v)} list="title-list" placeholder="المسمّى الوظيفي" /><datalist id="title-list">{TITLES[f.disc].map((t) => <option key={t} value={t} />)}</datalist></div>
+            <textarea value={f.desc} onChange={(e2) => up("desc", e2.target.value)} rows={4} placeholder="وصف الدور: المشروع، المهام، والبدلات المكتوبة — بلا أرقام راتب." className="w-full p-4 rounded-xl bg-canvas border border-line-2 text-[14px] leading-[1.8] placeholder:text-ink-4 focus:outline-none focus:ring-2 focus:ring-accent resize-none" />
+            <div><p className="text-[12px] text-ink-2 mb-1.5">المتطلبات (سطر لكل بند)</p><textarea value={f.reqs.join("\n")} onChange={(e2) => up("reqs", e2.target.value.split("\n"))} rows={3} className="w-full p-3 rounded-xl bg-canvas border border-line-2 text-[13px] leading-[1.8] focus:outline-none focus:ring-2 focus:ring-accent resize-none" /></div>
+            <LanguageGuard text={f.desc + "\n" + f.reqs.join("\n")} />
+            <div><p className="text-[12px] text-ink-2 mb-1.5">المهارات والبرامج</p><div className="flex flex-wrap gap-1.5">{[...new Set([...f.skills, ...SKILLS])].slice(0, 30).map((s) => <button key={s} type="button" aria-pressed={f.skills.includes(s)} onClick={() => up("skills", f.skills.includes(s) ? f.skills.filter((x) => x !== s) : [...f.skills, s])} className={`h-8 px-2.5 rounded-full border font-grotesk text-[11px] transition-colors ${f.skills.includes(s) ? "bg-wash border-accent/40 text-ink" : "bg-surface border-line-2 text-ink-2"}`}>{s}</button>)}</div></div>
+          </Panel>
+        </>}
+        {step === 2 && valid && <>
+          <p className="px-1 text-[12px] text-ink-2">هكذا يراه المهندس المطابق:</p><JobCard job={preview} app={app} />
+          <ContactCard job={preview} app={app} co={company(preview.co) || { name: pr.companyName || "شركتك" }} own />
+          <Panel className="p-4 border-accent/20"><h3 className="text-[13px] font-medium inline-flex items-center gap-1.5"><Sparkles size={14} className="text-accent" /> النطاق المتوقع الذي سيُعرض</h3><div className="mt-2"><EstimateBar e={e} /></div><ul className="mt-2 divide-y divide-line text-[11.5px]">{e.parts.map(([k, v, ff]) => <li key={k} className="py-1.5 flex items-center justify-between gap-2"><span className="text-ink-3">{k} <span className="text-ink-2">· {v}</span></span><Num className="shrink-0 text-ink-2">{ff}</Num></li>)}</ul><p className="mt-2 text-[11px] text-ink-3 leading-relaxed">تفاوض داخل هذا النطاق في المقابلة. لو عرضك أعلى منه فعلًا، اذكر البدلات المكتوبة في الوصف — لا الرقم.</p></Panel>
+          <Panel className="p-4"><h3 className="text-[13px] font-medium">وصول الإشعار الفوري</h3><div className="mt-2 grid grid-cols-2 gap-2"><div className="px-3 py-2 rounded-xl bg-wash border border-accent/20"><Num className="block text-[22px] font-semibold">{fmt(reach.exact)}</Num><span className="text-[10.5px] text-ink-2 leading-snug">عضوًا مطابقًا تمامًا للتصنيف — يصلهم إشعار فوري</span></div><div className="px-3 py-2 rounded-xl bg-canvas/60 border border-line"><Num className="block text-[22px] font-semibold">{fmt(reach.near)}</Num><span className="text-[10.5px] text-ink-2 leading-snug">مطابقة قريبة — يرونها في «لك» دون إشعار</span></div></div><p className="mt-2 text-[11px] text-ink-3 leading-relaxed">لا يُرسل الإشعار لغير المطابقين — هذا ما يجعل الوصول عالي الجودة بدل الإزعاج.</p></Panel>
+        </>}
+        {step === 2 && !valid && <Empty icon={CircleAlert} title="أكمل الإعلان أولًا" body={guardDesc.blocked ? "الوصف يحتوي لغة غير لائقة — عدّلها." : !contactOk || contactBad ? "بريد أو هاتف صحيح للتقديم مطلوب." : "المسمّى ووصف من 20 حرفًا على الأقل ونطاق خبرة منطقي."} action="رجوع للتصنيف" onAction={() => setStep(1)} />}
+      </div>
+      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-4 pt-3 pb-3 backdrop-blur-md bg-canvas/85 border-t border-line flex gap-2">
+        {step > 0 && <Secondary onClick={() => setStep(step - 1)} className="h-12 px-4"><Back size={16} /></Secondary>}
+        {step === 0 && <Primary disabled={!parsed && !raw.trim()} onClick={() => { if (!parsed) analyze(); setStep(1); }} className="flex-1 h-12 press">{parsed ? "راجع التصنيف" : "حلّل وتابع"} <Forward /></Primary>}
+        {step === 1 && <Primary disabled={!valid} onClick={() => setStep(2)} className="flex-1 h-12 press">معاينة النطاق والوصول <Forward /></Primary>}
+        {step === 2 && <Primary disabled={!valid} onClick={() => { const id = app.postJob({ ...f, contact: preview.contact, reqs: f.reqs.filter((r) => r.trim()) }, editing ? base.id : null); app.pop(); if (!editing) app.push({ type: "job", id }); }} className="flex-1 h-12 press">{editing ? "حفظ التعديلات" : "نشر وإرسال الإشعارات"} <Send size={16} className="rtl:-scale-x-100" /></Primary>}
+      </div>
+    </div>
+  );
+}

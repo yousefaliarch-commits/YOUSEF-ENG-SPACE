@@ -1,0 +1,199 @@
+# _app_1b_taxonomy — disciplines, tracks, levels, goals, titles, sectors, roles, permissions, messaging rules, language filter
+be853c77	Civil
+69018808	Includes structural, geotechnical, roads and public health
+ac78fa7d	Architecture
+054f3227	Design, finishing works, interior design
+ccf387a6	Mechanical
+d91de4d3	MEP · HVAC · Fire fighting · Plumbing
+dc0448c7	Electrical
+05b8793f	Power · Low current · BMS
+8adc0ffd	Surveying
+ab67d30c	Surveying, geomatics and GIS
+08ff045f	Site / Execution
+bcda07dc	Design
+020a463d	Consultant supervision
+e003de8c	Planning & Control
+dbc0fc9f	Contracts & QS
+008344ad	Quality & Safety (QA/QC · HSE)
+df7c899e	BIM & Modelling
+f4a48563	GIS & Geomatics
+45addf5b	Project Management
+031715d6	Structural design
+2e0d2731	Architectural design
+a9c04c4a	MEP design
+414e6615	Electrical design
+f6c2f3b7	Fresh Graduate Engineer
+d5f0f7f2	Junior Engineer
+1563d542	Engineer (Mid-level)
+02b827da	Senior Engineer
+0a319dde	Team Leader
+075c9663	Section Head
+34b26a36	Technical Office Manager
+4be3bd05	Construction Manager
+d8dafa8d	Project Manager
+7572b993	Director
+e4e05b66	A raise where I am
+cd64b4d4	Switching companies
+a485e003	First job
+0c1a4b7d	Remote project (New Capital / Alamein / North Coast)
+29781a78	Understand the market first
+31b52f0f	0–2 years
+ee6bd2e1	3–5 years
+f3927b73	5–8 years
+26582aac	8–12 years
+dbc903ff	12+ years
+489cea6d	{0}+ years
+9b0d05cf	{0} years
+bc622ee6	{0}–{1} years
+d8926734	Site / work-nature allowance
+14ae9f99	Sites inside the city
+001407d2	Away-from-home allowance
+fd61eec5	Remote sites (Alamein, North Coast, Toshka) — usually with accommodation
+7e49f37b	Transport allowance
+88dee00a	or a company car / bus
+98c4a1ab	Private medical insurance
+1eadae6a	Estimated value per person
+33aff2f2	Annual bonus
+0916f03f	From zero to two months’ salary, depending on the company and project
+f23f4f64	Electrical Engineer
+5d5aa0f8	Survey Engineer
+24e92db4	Site Engineer
+f6202b68	Technical Office Engineer
+e405d956	Structural Design Engineer
+c0e96bfa	Planning Engineer
+f73b21c1	QS & Invoicing Engineer
+d728ca64	QA/QC Engineer
+83bdcc41	BIM Engineer
+7b89e82f	Architectural Design Engineer
+53a52b64	Finishing Engineer
+38e38e06	Interior Design Engineer
+f21bfd31	Architectural BIM Engineer
+e6f20dd2	Mechanical Site Engineer
+d16e4fe4	HVAC Engineer
+e8405aaa	Mechanical Technical Office Engineer
+d2a0fa27	Fire Fighting & Plumbing Engineer
+1711c1be	MEP Design Engineer
+312de741	Electrical Site Engineer
+6ed24ebe	Electrical Design Engineer
+347bb523	Low Current Engineer
+8929fb32	BMS Engineer
+f5c49ccd	Substation Engineer
+06957eb9	Site Surveyor
+e693c129	Survey Design Engineer
+2cf88968	GIS Engineer
+a4ab313b	Roads Survey Engineer
+38b50edc	Egyptian Code
+e2306447	General Contracting
+bd79059e	Specialist Contracting (MEP / Finishing)
+68ea287a	Design / Supervision Consultant
+000da2cd	Real Estate Development
+1db60100	Industry & Energy
+568b083c	Oil & Gas
+80a41d67	Government / Authorities
+cd70cae7	International firm — projects in Egypt
+71b9bf93	Back office of a foreign firm — pegged to its currency
+23163ab2	US dollar
+a2623ac8	Saudi riyal
+983cb0a0	UAE dirham
+41503f39	Euro
+14ea6c1d	Pound sterling
+5be27643	Site
+5599e8c1	Office
+800c4a31	Hybrid
+72b86efb	Remote
+9a72fcf6	Project contract
+15275e90	Part-time
+7aa976a6	Engineer
+4df28968	Male characters — helmet, beard, short hair
+15514f10	Engineer
+cb7fa2a7	Female characters — head covering or long hair, clearly distinct
+f0a10870	Engineers Syndicate member — verified with a photo of the ID card, and the photo is never stored
+4cc2c3d1	HR
+8928f19c	Represents a company: every feature, plus posting jobs with contact details for applicants
+615bd8aa	Business Owner
+e43bae76	Business Owner
+24cf7408	Owner or partner of an engineering or contracting firm
+a7d55983	Site Supervisor
+aae2435f	Site Supervisor
+c4299d34	One fixed title · community only — never sees salaries or any financial figures
+c595695b	Civil Engineer
+cf3567a9	Architect
+034056c0	Mechanical Engineer
+0c1b493a	Electrical Engineer
+12b69e6f	Survey Engineer
+a6f60d5e	Fresh Graduate Engineer
+d7b95ef5	Junior Engineer
+e1702433	Engineer (Mid-level)
+82b8da20	Senior Engineer
+666d0bc5	Team Leader
+292fae04	Section Head
+919ef1b3	Technical Office Manager
+60988325	Construction Manager
+523a93b2	Project Manager
+54bac3d9	Director
+6bd94c9c	Verified Engineer
+d6b95f1f	Verified Engineer
+d5ad3ad9	Hiring engineers
+fefb2fd2	Benchmarking our pay against the market
+724f44f5	Understanding the market
+a42d5d2f	Verification status (verified / not verified)
+4c90fdbc	Document type (ID card or certificate)
+bd0633f2	Division and graduation year
+968326f6	An anonymous reference number for the check
+0a203781	The document image itself, or any copy of it
+d360688a	Your name as it appears on the document
+2e2e9038	National ID number
+04f9efef	Membership or registration number
+f12c79bc	Your photo, signatures and stamps
+d7ef0837	Beginner
+b36f900b	Contributor
+4f9ffd09	Expert
+7efb1ed4	Authority
+a19bf254	Browse the community and rooms
+79501426	Post and reply in rooms
+e06d96ef	Aggregated salaries and market data (medians and ranges)
+899491a4	Individual figures: salary reveals, number replies, individual reports
+11236551	Jobs, companies and tools
+a7d159ea	Salary reveals and sharing salary data
+2c668b41	Unlock individual reports (give to get)
+72c830fb	See the company’s email and phone on an ad and apply directly
+987439b9	Post jobs with mandatory classification and contact details for applicants
+8dbd9a9c	Review companies anonymously
+bfee9df4	Manage the company page and logo
+8f4a5cfe	Message colleagues
+10a190be	Message a company
+995ab62a	Message an engineer
+1e29ca4e	“Verified” badge — optional
+9a19faae	Medians and ranges only, and only in cells with at least 30 reports — never an individual’s figure
+9439c50a	Once you’ve shared your salary
+7c189259	Your own company only — aggregated by job title, no individual figures
+766571a5	For the company linked to your work email
+929e766e	If the colleague accepts messages
+6038befc	Between company accounts, with the recipient’s permission
+1a058fa7	From a job ad page only
+8b602149	If they accept messages
+d9c2fed8	Only members who turned on “Open to companies”
+ea306474	Optional — Syndicate ID card or engineering certificate; the document is deleted right after the check
+906de67c	Site Supervisor accounts are community-only — salaries, jobs, companies and tools aren’t available
+246880d6	That’s you
+7ce54187	Site Supervisor accounts are community-only — no messaging with employers
+cf168ca8	Site Supervisors don’t receive messages from employers — their accounts are community-only
+71263b24	A colleague who accepts messages — anonymous in-app contact
+5f56369e	This member doesn’t accept direct messages
+45f110b6	A question about a job ad — the company sees only your anonymous ID
+f852b632	Companies can only be messaged from a job ad page, so you never get marketing messages
+0733b5e1	Turn on “Open to companies”
+6222efbf	You can only message members who turned on “Open to companies”
+7d65a2d1	Between company accounts — with the recipient’s permission
+ea3621e6	This account doesn’t accept messages
+5bf492e6	phone number
+3edea93e	email address
+d66ae834	link
+c2be5fe0	Swearing or profanity
+b03752e6	An insult aimed at a person
+dcdf69b3	Threat
+4d1524c8	Discrimination or hate
+00515919	Harassment or sexual innuendo
+059da980	Harsh tone
+feab0788	{0}: “{1}” — soften the tone, or make it about the action, not the person
+39bba78e	EngSpace doesn’t restrict the contact details you share — your number, email and links are yours. The only rule is language: no swearing, no insults aimed at a person, no threats, no discrimination, no harassment — in Arabic, Franco-Arabic or English, however it’s spelled.

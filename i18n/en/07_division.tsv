@@ -1,0 +1,147 @@
+# _app_1h_division — Engineers Syndicate divisions (labels, descriptions, aliases the reader matches), reading steps and results
+61b9adf5	Civil Division
+486770e6	Covers structural, roads, irrigation, public health and surveying
+930093be	Civil Engineering
+6c4d4c9d	Structural Engineering
+834c62cc	Structural
+6f790f6d	Structural
+656ccde6	Construction
+283e65b3	Construction Engineering
+fe9a6d38	Construction
+e538d1d8	Roads & Airports
+aed619f8	Highway Engineering
+e7d94325	Irrigation & Hydraulics
+f384a5cf	Irrigation Engineering
+f779c184	Hydraulics
+e0d7659f	Public Works
+0279924d	Public Health Engineering
+c119e616	Environmental Engineering
+5986cd06	Surveying Engineering
+04f824de	Surveying & Geodesy
+a596bdcb	Geodesy
+3db9894a	Architectural Division
+08b7fdb9	Covers architecture, planning and urban design
+2138429d	Architectural Engineering
+4beb67c9	Architecture
+6424da2e	Urban Planning
+3d7cd27b	Urban planning
+548e29f4	Urban design
+0fc15621	Interior architecture
+5350c003	Mechanical Division
+d8c8c638	Covers power, production, automotive, aerospace, marine and mechatronics
+4233ce78	Mechanical Engineering
+f0ae3dc2	Mechanical
+3adae265	Mechanical Power
+a116bf02	Mechanical power
+d2af2326	Power mechanics
+5bc7575d	Production mechanics
+cf1e9f01	Production Engineering
+bb0da123	Production & Design
+3b5e8e77	Mechanical design
+8fc95b61	Automotive Engineering
+129221fb	Aerospace Engineering
+a11b7c80	Aeronautics & Astronautics
+1be138f7	Marine Engineering
+3bd7190d	Naval Architecture
+bd8c1d96	Shipbuilding
+96c634bb	Refrigeration & Air Conditioning
+daca57e4	Mechatronics
+680ecc8a	Mechatronics
+27e557d7	Industrial Engineering
+4a3c4207	Electrical Division
+d8d8b907	Covers power, electronics, communications, computers and biomedical
+37df81ed	Electrical Engineering
+06a7ad8e	Electrical Engineering
+147fdb44	Electrical
+dd3eab6a	Electrical
+14b97104	Electrical Power & Machines
+4342bff6	Electrical Power
+f332a233	Electrical power
+718535b3	Electrical machines
+d27e5401	Electronics & Communications
+293fcdb7	Communications & Electronics
+d4f5527e	Electronics
+fce29013	Electronic
+cd526c7d	Communications
+53942865	Computers & Control
+35d2aff2	Computer Engineering
+ddd2def0	Computers & Systems
+56d4c4b1	Computers
+8c5fdf7a	Automatic control
+32249837	Biomedical Engineering
+3a245e86	Biomedical
+e3174d46	Chemical Division
+cb352b2c	Chemical
+58fdab81	Chemical Engineer
+1c17521c	Chemical Engineer
+13d21b27	Covers chemical engineering and petrochemicals
+d44b4d27	Chemical Engineering
+2b51b32b	Chemical Engineering
+45428f89	Chemical
+d18fc134	Chemical
+5449ee67	Chemical
+3021745a	Chemistry
+1efaeda3	Petrochemicals
+99631f03	Mining & Petroleum Division
+b3e18dbf	Mining & Petroleum Engineer
+30fc7140	Mining & Petroleum Engineer
+860c50a8	Covers mining, petroleum and metallurgy
+db6fdd6f	Petroleum & Mining
+c88e1624	Mining Engineering
+3b73e6b8	Petroleum Engineering
+57b9f420	Mining
+507dbbb6	Petroleum
+3943ad09	Metallurgy
+eb41be14	Textile Division
+901ec945	Textile Engineer
+d21cbd4f	Textile Engineer
+5a6cab4b	Spinning, Weaving & Knitting Engineering
+a64f9d3f	Spinning & Weaving
+41c77bf2	Textile Engineering
+c5aa4a1e	Textiles
+aaf193a6	Spinning
+6c02407e	Textiles
+84be511c	-
+5cff1093	min
+7a59c9d3	-
+499cc95f	h
+928a192e	-
+67dd1cf4	-
+80add0b9	-
+ac78b839	-
+0056c963	-
+eee8c371	-
+82f0fa8d	-
+09935d91	Loading the reading engine
+ee3c94e7	Initialising the engine
+834dfbed	Loading the language model
+56f91f15	Preparing to read
+fe42bd94	Reading the text
+a8490fb2	High confidence
+ae15e991	Medium confidence — please check
+e8d441f1	Uncertain reading — please check
+b5f86b28	— on your device
+b5087f80	Division as shown on the card
+b543b011	Division based on the certificate’s specialisation
+3242118c	Automatic reading didn’t work on this device just now — choose the division manually.
+13a8ef54	Read automatically from
+b9757bea	Read automatically ({0}): “{1}” → {2} · {3}
+20ac8d6d	Card
+1ae05fa4	File text
+1085e06a	Certificate
+329a5a6d	You changed it manually — the automatic reading was “
+6efeea91	You changed it manually — the automatic reading was “{0}”{1}.
+303772f9	We couldn’t find the division clearly written in the
+60dfaea2	— choose it manually
+a1c2b43e	We couldn’t find the division clearly written in the {0} — choose it manually{1}.
+80e8bb66	Photo
+a8af7080	Document
+3f2c7791	; we’ve preselected the division of your registered discipline
+fd7228ac	· Department read: “{0}”
+91752d33	Your verified title becomes “
+6ea58016	”, and market estimates stay based on your discipline, “
+4e295a88	Your verified title becomes “{0}”, and market estimates stay based on your discipline, “{1}”.
+39f7b4fa	Update my registered discipline from “
+4b88c24f	” to “
+1383c5c5	” to match the division
+889b6e78	Update my registered discipline from “{0}” to “{1}” to match the division

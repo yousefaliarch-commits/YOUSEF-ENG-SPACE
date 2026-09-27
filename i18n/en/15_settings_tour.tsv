@@ -1,0 +1,132 @@
+# _app_3e_settings — language gate (bilingual by design, never swapped), Settings, User guide, interactive tour
+1c239792	-
+58f7c3d9	Welcome to EngSpace
+11a613e5	Choose your language
+7f272eba	Language
+3f45da62	You can change it anytime in Settings
+3675e553	Switch to light mode
+bdca7855	Switch to dark mode
+a1b45d23	Notifications for replies and matching jobs
+18f660e7	Allow direct messages from colleagues
+0cc1debd	Show my photo with my name on public contributions
+d60b5876	Open to company messages when I match a job
+1b44d992	Hide my activity from companies I follow
+7f91318e	Renew my anonymous ID automatically every 90 days
+1fb94adc	The interface and its direction switch instantly, without losing your place. What you write always stays exactly as you wrote it.
+583f0b73	Appearance
+c788ab06	Appearance follows your device
+33e2e075	Light mode
+3318a3c3	Dark mode
+196e0bcb	Now:
+6a46cc54	· Your choice is saved on this device and stays after reloading. Switch quickly with the sun & moon button at the top of Home.
+292e7d38	Now: {0} · Your choice is saved on this device and stays after reloading. Switch quickly with the sun & moon button at the top of Home.
+82a9a306	Notifications & privacy
+fd85c447	Turned on
+8035228f	Turned off
+a6459496	Help
+9bb66da8	App tour
+ce955ac4	A short interactive tour of the main sections — replay it anytime
+1284cd89	A detailed explanation of every feature, and how to read and use salary figures
+03687426	What your account can and can’t see, and who can message whom
+6418b3f2	· Version
+a5156d1c	· A preview that runs entirely on your device
+5593f6fa	{0} · Version {1} · A preview that runs entirely on your device
+9aa2893d	Getting started: two separate identities
+dbceeca1	You have two identities: a public one with your name and photo, and an anonymous one with an ID like #a3f9 and a character that represents your discipline. No member or employer can link one to the other.
+54e8a95f	Before every post, reply, review or salary share, you choose the identity for that contribution alone.
+f6027852	Change your default identity from “Your account”, and renew your anonymous ID at any time.
+1cf9b9bb	Open your account
+5bc0bf45	A summary for your company account: your active ads and their reach, and the market pulse in the disciplines you hire for.
+ec9847af	Pull down to refresh.
+849684dd	Arranged around your discipline, location and current goal: your expected salary range, matching jobs, and the most active discussions in your field.
+b5ee759b	Change “Your current goal” in your account to change what Home and Tools prioritise.
+a8876739	Open Home
+0deb712a	Community: how to ask and get value
+31f09885	Tap + to create a post: a question or a poll.
+d9c16c03	Tap + to create a post: a question, “Take the offer?” to get colleagues’ views on an offer, a salary reveal, or a poll.
+9a834aef	Rooms group discussions by discipline and topic (Technical Office, Site, Structural Design, MEP…) — follow what matters to you.
+e76de5ae	Reactions: “Agree” and “Disagree” can’t be combined, and “Helpful” lifts a reply up the ranking. The question’s author marks the accepted answer.
+5f1bc556	In salary discussions use “Number reply”: your figure feeds the replies’ average without being linked to your name.
+cfaf5eed	Attach an image to your post — location and camera data are removed automatically before posting.
+3d63be43	Report any content that breaks the rules with the flag icon; the community team reviews it.
+a2e93908	Open Community
+e36fb407	Salaries: how to read the figures and use them
+4bf89bb6	The bar starts at the 10th percentile and ends at the 90th, and the glowing dot is the median: half of comparable engineers are above it and half below.
+59f10658	Filter by discipline and track (execution, technical office, design, consultancy…), level and governorate — every city has a factor that reflects its market.
+0b449a55	The sample size shows next to every figure: the bigger it is, the more accurate the figure.
+76449c37	Share your salary anonymously (+50 points) to unlock the full details. Your individual figure is never shown to any company.
+162777dd	Before negotiating: place your offer on the bar, then use “Offer comparer” and “Negotiation script” from Tools.
+35d5dea3	Open Salaries
+4f93ca7d	Salary visibility for company accounts
+8d047017	HR and employer accounts see aggregated market ranges only — no individual salary is ever shown.
+18178b65	Ranges for your company’s job titles appear once there are at least 30 contributions, to protect employees’ identities.
+0f25ba88	Companies & reviews
+48decb41	Every company has a page: reviews, salary ranges, open jobs and its public details.
+387cb5c9	You see your employees’ reviews exactly as everyone does — with nothing that reveals who wrote them.
+2c36d2cf	Review your company anonymously — the review is published without your name and helps colleagues choose.
+eabc393c	Open Companies
+64edb090	Jobs & applying
+4510bcd0	Post a job with precise classification (discipline, track, level and governorate are mandatory) and exact matches get an instant notification.
+21c638a0	Track views and how many opened the contact details for each ad.
+5e87778e	Applications happen off the platform: engineers contact you directly by email or phone.
+f4d95bff	Filter jobs by discipline, level and governorate; every ad has an estimated salary range from EngSpace.
+607b0486	Apply off the platform: open the contact details and send your CV directly to the employer.
+681bc136	Save jobs to come back to, and check your CV with the automatic reviewer before applying.
+51543a3c	Open Jobs
+01ee2a92	Net calculator: from gross to what reaches your account after tax and social insurance.
+aac4152c	Offer comparer, negotiation script and raise timing: decisions built on numbers.
+58522532	Career path map, contract checker, relocation cost, and raise vs inflation.
+8cfa27a7	Open Tools
+c00d0f54	Direct messages
+7bdf37e9	Companies message engineers about a matching job, or if they turned on “Open to company messages”.
+c0595497	Message fellow engineers and supervisors; messaging companies isn’t available to Site Supervisor accounts.
+46563b3b	Message colleagues freely; companies can message you only about a matching job, or if you turned on “Open to company messages”.
+0f3101ef	The identity you start a conversation with is fixed after the first message, so your two identities never meet.
+b60e0702	You can block or report any conversation from the top of the chat.
+953c3465	Open Messages
+dcd64154	Roles & permissions
+1fe2281f	Engineer: every section and every figure.
+291bfdcd	HR and employers: aggregated market ranges only, with no individual salaries.
+8711c213	Site Supervisor: community and messages only — no salaries and no financial figures.
+a6b7ff1e	Permissions map
+730af712	Verification & privacy
+9c1a3bd8	Verification is optional: a photo of your Syndicate ID card or graduation certificate is read on your device, then deleted immediately and permanently — we never keep an ID image.
+70e1f825	Your email and password are for signing in only, and are never shown to any member or company.
+3252719b	Level & points
+b038cc2c	You earn points for every contribution: a post (+5), a reply (+10), a company review (+15) and a salary share (+50).
+1bcb104c	Your level shows around your photo at the top and gives your replies more weight: Beginner → Contributor → Expert → Authority.
+3559bb33	Language & appearance
+46da2ed2	Switch between Arabic and English in Settings — the interface and its direction change instantly, without losing your place.
+be60dcd4	Switch between light and dark with the sun & moon button at the top of Home, or choose “Auto” to follow your device.
+a1105ce0	Open Settings
+356cf07c	Everything you need to get value from EngSpace: the sections, your two identities, and how to read salary figures and negotiate with them.
+20210613	Start the interactive tour
+682d8378	A summary of your company account: your active ads and their reach, and the market pulse in the disciplines you hire for.
+1fdb74cf	A summary arranged around your discipline, location and goal: your expected salary range, jobs matching you, and the most active discussions in your field.
+9a9f6669	Ask colleagues and share site experience under your name or an anonymous ID. Rooms group every topic, and “Helpful” lifts the best replies.
+fc304054	Ask and share your experience under your name or an anonymous ID — you choose before every post. Rooms group each discipline, “Helpful” lifts the best replies, and the question’s author marks the accepted answer.
+c4de7889	Post a job with precise classification so exact matches get an instant notification, and track views and who opened your contact details.
+ceaeafec	Ads classified by discipline, track, level and governorate, each with an estimated salary range. You apply directly with the employer.
+6166ad0e	Market — aggregated view
+894e753c	Aggregated market ranges only — no individual salary is ever shown — plus ranges for your company’s job titles once there are at least 30 contributions.
+0bb36f4e	Market: salaries & companies
+049c6e5d	The bar runs from the 10th to the 90th percentile and the dot is the median. Filter by your discipline, track, level and governorate, and share your salary anonymously to unlock the details.
+67286b81	Net calculator, offer comparer, negotiation script, raise timing and more — decisions built on numbers.
+cc3a5610	Direct messages under clear rules that protect both sides, plus notifications for replies and matching jobs. The identity you start a chat with is fixed after the first message.
+18fd6913	A short tour of the main sections — under a minute. You can skip it now and replay it anytime from Settings.
+1dd5a652	A Site Supervisor account has two sections: Community and Messages. No salaries and no financial figures anywhere.
+adae8bdc	Every section of the app is in this bar. The open section is highlighted, and a number on “Messages” means something new is waiting.
+e0629dac	Light & dark
+bb488581	Switch the appearance with one tap here. Your choice is saved and stays after reloading.
+0f9e684b	Language (Arabic / English), appearance, notifications and privacy — and from here you can replay this tour or open the user guide.
+4bc6e518	Your public and anonymous identities, your level and points, optional verification and your account photo.
+60367f88	Ready to go
+e2a55284	For the full details of every feature — and how to read salary figures and negotiate with them — open the “User guide” in Settings.
+54aaef8e	Step
+54518681	Step {0} of {1}
+2781998d	Skip tour
+f533ebab	Back
+5112b968	Start using EngSpace
+b8e89c3a	Start the tour
+2fa61978	Next
+dcb0eedb	Use the ranges to make fair, competitive offers that attract the right candidates.

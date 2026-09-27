@@ -1,0 +1,354 @@
+# _app_3b_stack — rooms, post detail, replies, company, job, chat, notifications, profile, permissions map, posting a job
+bbb8c0d4	Follow the rooms that matter to you — their posts show on your home screen.
+6d6b2293	Room not found
+45a780e5	The link may have changed.
+b36de51d	{0} · {1} {1|member|members}
+f2a2af3e	You’re now following {0}
+cef1b14d	Temporarily closed to new posts
+2941a86e	Post in the room
+22e410d5	The community team has temporarily closed new discussions here — reading and replying are still open.
+5a8c4be7	Tonight’s session · 8 PM Cairo time
+6f9fdcf3	{0} Tonight’s session · 8 PM Cairo time
+2dbaf5c2	A technical office manager with 14 years’ experience answers your questions on raises and moving into design. Next week: a former HR manager at a major contractor.
+27f1bea2	Start the first discussion.
+a12b102b	This reply
+7936bd09	the reply
+d8ce8565	Your reply
+26b79e2e	Accepted answer from the question’s author
+c6ec14d6	Number reply
+a86cfeaa	Reply
+a4d09ea9	From a community discussion
+f8ad8d23	Accept
+8cf12c31	Answer accepted — thanks to whoever helped you
+2e7855e3	Report reply
+850b5937	Enter the salary as a number
+f46e9b5a	My current company
+e1a50285	Your reply{0} was posted {1} — +10 points
+5c68a8bb	 with a number
+82c4b121	Reply with an experience
+f60d1f66	This is your
+b3036cbf	— replying here
+52ea22a4	could link your two identities. It’s safer to reply with the same identity.
+bc63a3ef	contribution
+9f8ed9ef	public
+a9ee6fd2	anonymous
+4d9040d4	Monthly salary
+92b57a71	Negotiated
+03ec755e	Reply to {0}
+f0705089	Reply to #{0}
+9000881e	Reply under your name — {1}
+7c86b023	Reply
+a91216bb	Reply
+32bb4bc9	Reply as #{1} — type @ to mention someone
+dc0be808	Write
+f5a0f137	Write
+90cf87a4	Send
+e9930c77	Post not found
+dc61b242	It may have been deleted, or the link has expired.
+5267a368	This post has been temporarily hidden
+28d6b2f6	This post was removed
+3d1bd7f4	Several members reported it, and it’s awaiting moderator review.
+bb49a4d2	Removed by the community team for breaking the community guidelines.
+99d87067	Average of the numbers in the replies (
+d8d22918	Average of the numbers in the replies ({0})
+e1dc1a1d	{0} {0|reply|replies}
+6ad73290	Most helpful
+acf085b0	Be the first to answer
+695ae241	Your reply appears under your name or your anonymous ID — you choose before sending.
+a0b240a7	Company not found
+46b6c229	Back office ·
+e020da36	· pay pegged to
+ab277b60	Logo: uploaded by the company from its verified account
+f2793549	Real logo — source: {0}
+83ac30fd	No official logo available yet — the name’s initials show until the company uploads one from its account
+5ae6f43b	Change company logo
+1f8b22e3	Upload the official logo
+59de6a8f	Category
+e149f9e8	Headquarters
+fb7f1a9b	Egypt office
+68791537	Founded
+970498dc	Ownership
+be45eacd	Size
+6edce689	Federation grade
+6e76dc79	N/A
+2467c561	Grade {0}
+5c62a6c5	Facts come from the company’s public record · the figures below are modelled from reports (
+44f34a94	Facts come from the company’s public record · the figures below are modelled from reports ({0})
+ca4b67eb	Reports
+ec653fbf	Reported salary range
+acabc870	You’re now following {0} — we’ll tell you about new reports
+846f2676	Share your salary here
+eb5d1b05	Reviews ({0})
+ea97b3bb	Jobs ({0})
+df43bbfe	Why are salaries higher here?
+72d3db09	Pay is priced in
+7a7af371	and paid in EGP at the month’s rate. Every move in the exchange rate moves the number with it — so inflation doesn’t eat the raise.
+7e61999f	Pay is priced in {0} and paid in EGP at the month’s rate. Every move in the exchange rate moves the number with it — so inflation doesn’t eat the raise.
+f0d9ef30	Design · 5–8 years · locally
+c7dfdba6	{0} Design · 5–8 years · locally
+bbb098f6	The same job here (≈
+da09de13	The same job here (≈{0}×)
+8641130a	EGP ≈
+9df239eb	EGP ≈ {0} {1}
+13ac89d9	The multiplier is modelled from community reports (1.6–2.4×) — it varies by track and experience. Rates are for reference and updated monthly.
+6bf77e27	Median salary by job title
+687fcf17	· {0} {0|report|reports}
+12305a03	Job-title details are shown for your own company only — company accounts can’t see other companies’ details
+c35cc577	Job-title details unlock after you share your salary
+3057df38	Perks mentioned by employees
+1241a53d	Write a review — under your name or anonymously
+304d53dc	This review
+1e5bdf64	the review
+395bd590	Your review
+a82d8c10	Report review
+9dc44544	No jobs posted right now
+b60d7cd1	Follow the company and we’ll tell you when a job matching your profile is posted.
+566d63fa	Application for “{0}” — via EngSpace
+49983219	Hello, I’m applying for the “{0}” role advertised on EngSpace ({1}). Please find my CV attached. Kind regards,
+1e0ff7af	Copied {0}
+8d32dd86	This ad has no contact details — you can’t apply to it.
+dbaa3925	Application details as engineers see them
+885349fc	Apply directly with {0}
+5cc0ffdb	No forms and no applicants inside the app: CVs reach you directly at this email or phone.
+00864c02	No forms inside the app. Send your CV from your personal email or call the company — EngSpace doesn’t act as a middleman or keep any application.
+523cbe60	Email{0}
+cd79d21e	Copy email
+8e70d27f	the email
+760c65a1	Phone
+065f9a94	Phone{0}
+a2760d9d	Copy number
+3a4ffd08	the number
+c7236c7e	Email your CV
+ba8a75f1	Call the company
+f957ef52	Review your CV first with
+752eb0dc	The email subject is filled in automatically with the job and EngSpace.
+5a9b6d98	Edit contact details or the ad
+0b5216c0	Job not found
+f7f8ace9	The ad may have closed.
+9cff8925	HR · {0}
+dfc56868	· posted by you
+56ee6e0d	Save
+00ebaee7	Main discipline
+f628a8a0	Sub-discipline
+e03a2f88	Exact title
+dae080cb	The company didn’t write a number — the platform doesn’t allow it. The range is calculated from market data for the same classification, with a midpoint of
+be46b570	EGP ±15%.
+56f1b8b1	The company didn’t write a number — the platform doesn’t allow it. The range is calculated from market data for the same classification, with a midpoint of {0} EGP ±15%.
+5b561e22	Net from the midpoint
+832a0798	Negotiation script
+f481a6f3	How do we calculate the range?
+8b9c7d86	How well you match this job
+c19bbb26	The gap is in:
+cbfa69e8	The gap is in: {0}. {1}
+8fe12672	Still a strong match — contact the company and mention in your email what makes up for the gap.
+8193668f	Reach out if you have something that makes up for it, or follow the company for closer jobs.
+b13c6e00	Exact match — you got an instant notification when this job was posted
+0a81e351	Ad reach
+7d642ff0	Exact matches — got an instant notification
+4fe86958	Close matches — see it under “For you”
+b545c2f9	ad views
+ed163933	The applications themselves reach your email and phone — they don’t pass through the app.
+d906eba4	About the job
+10f4968a	Requirements
+175be993	Skills & software
+f0baa118	Company account — applying isn’t available.
+6bff8f74	Post a similar job
+a85db58d	Send your CV to
+1c38f9a6	Call
+41b3f591	No contact details in this ad
+5e89a0f8	Question about the “{0}” ad
+c05093f2	Ask the company
+d1eb0644	Conversation not found
+82facfb7	It may have been cleared after {0}.
+ae473c1b	Member profile
+cf3b8471	Report conversation
+b20e4c04	They see:
+14de07e9	Fixed for this conversation so your two identities are never linked
+b90b321a	Choose before the first message — then it’s fixed
+78d863c5	Allowed:
+4a1f43fe	Cleared after
+bd3a43ab	Blocked
+770c627e	. You can share your number, email or any link — the only rule for both sides is language: no swearing, insults, threats or harassment.
+e67c0441	Direct message {0}. You can share your number, email or any link — the only rule for both sides is language: no swearing, insults, threats or harassment.
+797e19cb	— it contained
+ab785465	. It wasn’t delivered, and the attempt was logged for the community team.
+b1b61be8	{0} — it contained {1}. It wasn’t delivered, and the attempt was logged for the community team. {2}
+181e9a18	A message was blocked from
+88467e07	your side
+ff8dbcd4	You blocked this member — you won’t get their messages and they won’t get your replies.
+858cf219	Unblock
+fef3ca81	Unblocked
+a8d0a57f	Write your message — your number and email are allowed
+984c0565	{0} unread
+1ae81b6a	All read
+de3b9a5a	Unread only
+9e866730	Mark all as read
+c7c7f55f	No notifications here
+f0e03c1b	All caught up.
+a95afc58	Your account photo was updated — it shows on your public contributions only
+9461c76b	Default is now: public, under your name — and you choose again on every contribution
+edebb732	Default is now: anonymous — and you choose again on every contribution
+2e56ab91	Experience
+c1c6feb8	Company
+11a01f1b	— fixed
+17463b8d	Discipline
+6ffd81e2	Level
+3a39c681	Verification under review
+b9ac5b07	Your email is always private. Your name, age and city show only on what you post publicly — never in anonymous mode.
+4f8655ea	Change account photo
+1e84f521	Add an account photo
+b6e93e6c	Remove photo
+6eeacb7a	Your photo was removed — your initials show instead
+474e7353	Shown small next to your name on your public contributions — it doesn’t enlarge and never shows in anonymous mode.
+d6a0544e	Hidden now — your public contributions show your initials.
+22cc1927	Without a photo, your initials show on your public contributions.
+aa23441e	Verify again
+930f1add	Verify again
+e47768c0	Verify — optional
+6eb33616	Verify — optional
+a1dbe54a	Your identities on the platform
+b29dfb6c	The selected one is the default
+226dad8e	Completely separate — no member or employer can link one to the other.
+52cb9d68	On every post, reply, company review, vote and salary share, a switch lets you pick the identity for that contribution alone.
+6959db00	Your public profile
+ab20c16a	Your anonymous profile
+beac32e1	posts ·
+7098d2f5	replies ·
+9fd5328b	{0} {0|post|posts} · {1} {1|reply|replies} · {2} {2|salary|salaries}
+0b7e4100	As others see it
+e0982182	points
+48746ae5	{0} · {1} points
+438acdb9	The highest level in the community.
+f1707ae8	Posts
+110bcbc8	Replies
+18005e23	Jobs
+7e6f5d7e	Saved
+d65b5925	Your character
+2ea685d5	Always tied to your discipline — never chosen at random and never swapped. It changes automatically only if your
+bfb27ff4	changes. It appears with your anonymous ID; your public profile shows your initials.
+5c63c4c1	Always tied to your discipline — never chosen at random and never swapped. It changes automatically only if your {0} changes. It appears with your anonymous ID; your public profile shows your initials.
+2e8157de	role
+a4557153	discipline or verified division
+420fb743	Your character’s look: hair
+0e9b83de	Your character’s look: techwear hood
+170750bb	My permissions
+beb773dd	Review my CV
+71f7dacd	Your current goal
+1e219ddb	We arrange your home screen and tools around it.
+5f157f05	Home screen arranged for your goal: {0}
+b169e0f0	Language, appearance, notifications & privacy, the app tour and the user guide
+9b18d9f1	Your account status:
+499473f3	suspended
+2e4f9cfb	has a warning
+8835d57f	warning
+6ccccc23	warnings
+49dca293	Confirmed violations:
+18a272e7	Confirmed violations: {0}{1}.
+88179851	Renew my anonymous ID now
+1430d58e	Your new anonymous ID is #{0} — your past activity isn’t linked to it
+2826d0b4	Admin console — platform team preview
+8710d64f	Sign out
+9f7f71de	Delete my account and all my data
+ec954e56	Permanent deletion
+c0f1a908	Your account, profile, contributions and interactions are permanently deleted from this device, and this can’t be undone.
+4cac277b	Delete permanently
+716fa33f	Employer
+1cad2ffe	With the recipient’s permission
+b3db1bf8	The full relationship map: what each role can do, who can message whom, how applications work, and what gets blocked in text. These are the same rules every screen enforces.
+d78c5f2c	Platform characters — one for every discipline
+420e03bb	Set by profession alone: the engineering discipline or verified division, site supervisor, HR and employer. Employers get a warm frame and a badge — never mixed up with engineers’ faces.
+f39f87ec	A public profile shows the name’s initials — with a gold frame for employers and orange for HR.
+d045bef8	Yes
+b313dfea	Conditional
+5c528d9f	No
+7a31bb0a	Who can message whom?
+1fa6bad9	The rule is applied before any conversation opens — and inside a conversation both sides can exchange phone numbers and emails freely.
+a342eddd	→ to
+bbdfdacb	→ to {0}
+3a3d365d	From {0}
+ea2e70c9	No message reaches an engineer from a company they haven’t opened the door to — that’s what stops marketing messages. And companies can only be messaged from a job ad, so they don’t get anything unrelated to hiring. Site Supervisor accounts are community-only: they message colleagues, and don’t message or get messages from employers.
+8436b089	How do job applications work?
+10a655e3	Every ad shows the company’s email or phone — real details that HR enters when posting.
+bb5087ee	The engineer sends a CV from their personal email or calls the number directly.
+1204a39c	No application forms and no application tracking inside the app — EngSpace shows the opportunity and the expected range only.
+03668e19	The company sees how many opened the contact details, not who they are.
+00cf1b17	The language filter — the only restriction on text
+4974988a	Phone numbers, emails, links and external accounts
+fe64d85f	in posts, replies, direct messages and job ads. Only this is blocked:
+f73ef880	Phone numbers, emails, links and external accounts {0} in posts, replies, direct messages and job ads. Only this is blocked:
+26f4992e	are allowed
+aeb08151	Swearing and profanity
+d1b87c8a	In Arabic, Franco-Arabic and English — even when written with dots, spaces, numbers in place of letters, or repeated letters
+9907b425	“you idiot” · “you donkey” · idiot — describing an action is fine, insulting the person isn’t
+881ed7d6	“I’ll kill you” · “I’ll expose you” · “I’ll publish your details”
+0a58b40b	Discrimination and hate
+cfcf358a	Racist or sectarian slurs, or addressing someone by their religion or origin
+6b990d79	Harassment or innuendo
+efe74cce	“send me your photo” · “hey gorgeous” · sexy — this is a professional network
+b8847c9f	A harsh tone (“rubbish”, “this company is garbage”) gets a warning, not a block. Repeated violations are reviewed by the community team.
+ac833126	Try the filter now
+3d59b663	Type any text… e.g. my number is 01001234567 — or try a swear word
+be111f54	Clean text — can be sent
+1fe486ad	(contains {0} — allowed)
+d814a3c0	-
+95aea839	Posting jobs is for company accounts
+22678c93	Register as HR or a business owner to post an ad.
+7b94973f	Now
+a9965b94	Description
+30e7f707	Classification & contact
+94b4f709	Preview
+9b849e1e	— no salary figure, mandatory classification, and an email or phone where applications reach you directly
+bd662310	{0} — no salary figure, mandatory classification, and an email or phone where applications reach you directly
+2baf11ec	Editing a published ad
+ad901c80	Published as {0}
+165ce781	Steps
+104d13e4	Paste the job ad as it is
+0a6b58c6	The EngSpace parser reads the text and extracts the discipline, track, years of experience, title, location and skills, moves the application email or phone to the contact card — and removes any salary figure you wrote.
+fc232741	Wanted: … engineer, … to … years of experience in … in … — apply by email to …
+4f535f5a	Analyse the description
+b40d4b44	Example
+9c27f534	What the parser extracted — review it in the next step:
+1c9eebfd	Not mentioned — the company’s location will be used
+6f97a537	Work mode
+1e261af9	The salary range “
+3a92a51f	” was removed from the ad — engineers will see the expected market range instead.
+fc0c8c13	{0} The salary range “{1}” was removed from the ad — engineers will see the expected market range instead.
+e8f72473	Application details moved to the contact card:
+bca96355	Mandatory classification
+f91a7c98	years
+c87f516c	The range doesn’t make sense.
+f9841e86	Exact title / level
+f0bc1995	Contact details for applications
+f24acbb7	{0} Contact details for applications {1}
+d95b0919	Required — email or phone
+5eefc16e	Shown in the ad as they are. Engineers send their CV from their email or call the number — applications don’t pass through the app.
+9d4c99fc	Email for receiving CVs
+ceda6ba6	That email doesn’t look right.
+f0d22927	Recruitment phone (optional if an email is given)
+e9aac8e8	Enter a valid Egyptian mobile number (11 digits starting with 01).
+b2444725	Contact person (optional) — as engineers will see it
+a8d45f3b	e.g. Human Resources · or Eng. Ahmed
+7d41fb0f	The ad can’t be published without a valid email or phone.
+cb867db2	Location & work mode
+e3bacacd	The ad
+93cf2c0a	Advertised job title
+f69e3d11	Job title
+35745cb5	Role description: the project, the duties and any allowances — no salary figures.
+c3657616	Requirements (one per line)
+dc0a3305	This is how a matching engineer sees it:
+546fddce	The expected range that will be shown
+d0c452d7	Negotiate within this range in the interview. If your offer really is higher, mention the allowances in the description — not the number.
+3dbe4df3	Instant-notification reach
+ca9bd3ea	members exactly matching the classification — they get an instant notification
+51673ecf	close matches — they see it under “For you”, without a notification
+b62e6baf	Non-matching members get no notification — that’s what keeps the reach high-quality instead of spammy.
+93fa8f6b	Complete the ad first
+75936f6b	The description contains inappropriate language — please edit it.
+77af837f	A valid email or phone for applications is required.
+e7c59780	A title, a description of at least 20 characters and a sensible experience range.
+ef2f967f	Back to classification
+5cb84ee5	Review the classification
+40d6f91f	Analyse and continue
+8354b984	Preview the range and reach
+41097c7f	Save changes
+94ecd85b	Publish and send notifications

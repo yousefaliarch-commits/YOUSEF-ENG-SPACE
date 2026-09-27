@@ -1,0 +1,72 @@
+# strings found inside JSX fragments («<>…</>») across parts
+beac9768	public, under the name
+3dd441f9	public, under the name {0}
+f55ef092	anonymous, as
+0c556cae	— not linked to your name
+48c47228	anonymous, as {0} — not linked to your name
+b289f11c	Registered email on the domain
+aa2048de	— verifies your link to the company automatically (simulated).
+3dadd435	Registered email on the domain {0} — verifies your link to the company automatically (simulated).
+16c3c3d3	Under review
+ce87d0d5	Creating…
+a40a6e99	Create account
+13ec7407	Checking…
+c9cbc8b2	Sign in
+b18e26f3	close
+aa81cb65	· {0} close
+499addae	{0} salary
+510d610e	employees
+a7013f5e	{0} employees
+ded3f6c6	{0} {0|year|years}
+4675f4f5	Only
+58e5f051	points to reach
+cbe8c8bd	. Number replies and accepted answers raise your level.
+544e4d54	Only {0} points to reach {1}. Number replies and accepted answers raise your level.
+bb9ad2f4	You’ve received
+fe7c56cf	from the community team.
+e4479ad6	You’ve received {0} {0|warning|warnings} from the community team.
+db54b56f	— automatic 7-day suspension at
+28e03b4d	— automatic 7-day suspension at {0}
+3d933d94	· {0} {0|month|months}
+f9c3a7f5	asks for
+2e52c1d4	asks for {0} years{1}.
+b92db8b8	Posted under your name and public profile
+b5c6ab00	Posted with your anonymous ID — not linked to your name
+e3a681a4	Live design
+f93d5c3c	Live code
+e97122ce	this week
+9a164111	+{0} this week
+367b3290	vs the weekly average
+5567871b	{0} vs the weekly average
+848dae22	urgent ·
+3231f3e6	past
+7e97ffd7	{0} urgent · {1} past {2} hours
+17423c35	closed cases ·
+df648dcc	suspended accounts
+17cd2338	{0} closed {0|case|cases} · {1} suspended {1|account|accounts}
+1ede5d8e	{0} opened the contact details
+7096cc1c	Open {0}
+c0ff3ee1	Accepted {0}
+73bbc14d	Rejected
+72ccbc9a	Rejected {0}
+797a5fbd	Reports (
+3cd4cb1e	Reports ({0})
+35938864	Email:
+61139fd9	— partially hidden.
+c9e85c5f	Email: {0} — partially hidden.
+870781fc	Suspended until
+d87d11fc	Suspended until {0}.
+ffbcfb25	Reports on this account (
+bf00d196	Reports on this account ({0})
+cc2dc6cb	{0} {0|post|posts} · {1} {1|reply|replies}
+2c2cfd52	Activity
+3ced69c2	vs
+223cc538	in the previous period ·
+13f4d8f6	Activity {0} vs {1} in the previous period · {2} {2|job|jobs}
+d215c452	contacts ·
+a932444d	{0} contacts · {1}
+9bdd765c	Showing now: “
+f399bc4b	Showing now: “{0}”
+78179fef	Saving
+7906620d	Saved · undo
+9eaf51d2	Save preferences

@@ -1,0 +1,70 @@
+# v24 — manual verification, employer roles without verification (the new parts _app_2e_verify / _app_4d_verify_admin carry their own English)
+fd41b40d	Engineers Syndicate member — verification is optional and reviewed by hand by our administration
+4ad205d9	Represents a company: posts jobs with contact details for applying — no verification; shown with the “HR” badge
+2aa1d55b	Employer
+01759401	Employer
+80bbeaee	Owner or partner in an engineering or contracting firm — no verification; shown with the “Employer” badge
+69e04b13	“Verified” badge — optional, reviewed by hand
+bbaafae6	For the company linked to your account
+781eacb9	Optional — reviewed by hand by our administration; the documents are permanently deleted right after review
+11c10476	Not needed — employer accounts show their role badge
+0539aab5	Employer · Consultancy · 40 engineers · Maadi · Cairo
+540d581d	Verified qualification
+4cc1efeb	Verification documents are reviewed by hand by the EngSpace administration team, and no one else sees them. As soon as the review ends — approved or rejected — the images are deleted automatically and permanently; we keep no copy, and they are never shared with anyone.
+93de0d4b	Changing your name cancels the “Verified” badge or any open verification request — the documents carried your previous name, so you'll need to verify again.
+38e0ff84	Employer accounts need no verification and no documents — you appear everywhere with your role badge.
+893fd6b5	Employer accounts need no verification and no documents — you appear everywhere with your role badge.
+728f39e2	Your Engineers Syndicate card and graduation certificate, reviewed by hand by our administration.
+bcc50332	Your certificate or experience letter, reviewed by hand by our administration.
+f39d0615	You manage verification from “Your account”.
+0f311b36	You manage verification from “Your account”.
+c960b9fe	You upload the documents after creating your account.
+9da71209	You upload the documents after creating your account.
+d1431578	The documents are permanently deleted right after review and never shared with anyone.
+85b33fbc	Our administration reviews the documents by hand and deletes them permanently right after the review.
+5586d405	Credentials under review
+99babeae	Verification request not approved
+35de95d4	Our administration reviews them by hand — we'll let you know as soon as there's a decision.
+f198a9a6	See why, and submit a new request whenever you like.
+50d4ddc3	See why, and submit a new request whenever you like.
+d3d5b027	Syndicate card and graduation certificate — reviewed by hand; the documents are deleted right after review.
+697539d2	Verification status
+613320b1	Public profiles show the name's initials — with a gold frame for employers and orange for HR. Employer accounts aren't verified: the role badge is enough.
+de412c3d	Sign up as HR or as an employer to post a job.
+0b3add55	That its holder — an engineer or a site supervisor — chose to upload their Syndicate card or graduation certificate, our administration reviewed and approved them by hand, and the documents were then permanently deleted. It doesn't mean a salary was audited or that every claim is guaranteed. Signing up and every feature of the app work without it.
+1e8a3175	Employer accounts aren't verified: they show their role badge, “Employer” or “HR”.
+2fe23201	This is an interactive preview: your account and profile are stored on your device only, and verification requests are reviewed in the admin console inside the same preview.
+6fd75d36	Verification approved
+2dffd735	Verification rejected
+fd7fcfb4	Documents deleted
+6563bf71	Verification request closed
+15aa5b74	Verification requests
+fb13a024	Class of
+7744e4cc	{0} document(s) permanently deleted on decision
+ba15a02e	Your account is verified
+de1b5246	Our administration team reviewed and approved your documents: {0}. The documents were permanently deleted right after the review.
+2c76a228	Reason: {0}.{1} The documents were permanently deleted right after the review — you can apply again any time.
+81510891	Reviewer's note:
+ac2369bc	Verification approved — {0} document(s) permanently deleted
+9beccdd4	Request rejected — {0} document(s) permanently deleted
+23f138bb	You can apply again from “Your account” — our administration reviews the documents by hand, then deletes them permanently right after the review.
+6c9e39f6	The platform team's console: reports, verification requests, members, analytics, content and settings. It runs on the app's own data — every report you send from the app shows up here instantly, and every decision here shows up in the app.
+09de626c	Verification requests awaiting review
+681b4c1f	Oldest:
+3a633f0e	Oldest: {0}
+6713c3d8	of engineers and supervisors are verified
+d57e6b08	{0} of engineers and supervisors are verified
+8d1bd302	Not verified — role badge
+a43b3c04	Remove badge
+23c95933	Employer accounts aren't verified and upload no documents — they show their role badge, “Employer” or “HR”.
+b55c591e	This account isn't verified. The badge is granted only after the documents are reviewed by hand in “Verification requests”.
+998ec77b	No document image is kept after review: it is permanently deleted the moment a decision is made; only the status, division, graduation year and request number remain.
+fcbf60e2	A verification request is awaiting review — open it
+857764b2	The role sets the permissions in the app: engineers share salaries and review companies; site supervisors use the community only; HR and employers post jobs, don't review companies and aren't verified.
+eddf8b79	The role sets the permissions in the app: engineers share salaries and review companies; site supervisors use the community only; HR and employers post jobs, don't review companies and aren't verified.{0}
+02e6a339	Member
+a9c8b6ba	{0} — {1} document(s) permanently deleted
+754cbfb4	Request timed out (7 days)
+e5703d9a	The member withdrew the request
+4d8399aa	Verification request expired
+b941a540	Your request wasn't reviewed within 7 days, so its documents were permanently deleted. You can apply again any time.

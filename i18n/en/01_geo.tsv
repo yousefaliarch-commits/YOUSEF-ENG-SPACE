@@ -1,0 +1,367 @@
+# _app_1a_geo — sources, tabs, regions, governorates, cities / markaz / districts
+2c1105a6	Gross monthly (basic + fixed allowances) · private sector · Greater Cairo = 1.00
+94350a9e	Minimum wage — private sector
+860ae021	EGP 7,000/month
+3166bdc9	National Wages Council, 2025
+3f194461	Maximum insurable wage 2026
+c1dfb8b4	≈ EGP 16,700/month (+15% a year)
+b05e64d6	Social Insurance Law 148/2019
+b098bd3c	Employee social-insurance share
+31de7544	11% of the insurable wage
+9f25bbc3	Law 148/2019
+01ecdee8	Income tax brackets
+68cf3675	0% up to 40k … 27.5% above 1.2 million a year · personal exemption 20,000
+9cf37fa3	Law 175/2023
+e5cdca13	Annual inflation (urban)
+b2e3bb6b	≈ 12% · updated monthly
+e0572b61	Central Bank / CAPMAS
+ef2fcfb4	Contractor classification
+f33bf4a3	Grade 1 → Grade 7 by volume of work
+fcf3847d	Egyptian Federation for Construction and Building Contractors (EFCBC)
+29fbf1ba	Licence to practise
+b209c181	Engineers Syndicate membership is required to practise · indicative minimum engineer pay
+b8fb0edf	Engineers Syndicate
+39910b51	Administrative divisions
+4e126132	27 governorates → cities, markaz and districts
+dd0a7765	General Organization for Physical Planning / Ministry of Local Development
+724dd7fd	Medians and quartiles are modelled from public job ads (2025–2026) and community reports, calibrated to the minimum wage and the insurable-wage cap. Governorate/city, track and title factors are estimates. Every figure you share replaces an estimate with a real number.
+b986d8fb	Home
+a38221d3	Community
+1075954c	Jobs
+d8b2c7d3	Market
+69cf47bd	Tools
+ed3d29d9	Messages
+2b26ede4	Greater Cairo
+fdfc7e91	Alexandria & North Coast
+60092cfc	Delta
+20454d4b	Canal Zone
+a61b2faa	Upper Egypt
+cae0514e	Red Sea & Sinai
+1a990419	New Valley & Western Desert
+93019aa0	Cairo
+593d7ba1	Giza
+c73ccf99	Qalyubia
+a26da63f	Alexandria
+86efc3bd	Matrouh
+b7530320	Beheira
+c4e48a82	Dakahlia
+12aecc71	Gharbia
+79462a79	Monufia
+bedf550d	Kafr El Sheikh
+360ab3de	Damietta
+70eaaa7f	Sharqia
+611cd8e7	Port Said
+20c0f2ee	Ismailia
+60149e9a	Suez
+f146e6e2	Beni Suef
+18e31eca	Fayoum
+09694927	Minya
+d9089b01	Assiut
+e75dcae5	Sohag
+b9f26db1	Qena
+a4cbb0e4	Luxor
+1899aed2	Aswan
+9de5f6b0	Red Sea
+6dc0b04f	South Sinai
+66b4a741	North Sinai
+c5dd6573	New Valley
+83e38a40	new city
+f6eec62a	city
+15f13135	markaz
+12b8ea24	district
+783898c9	project zone
+1cf9d3f4	New Administrative Capital
+7af4b34f	New Cairo (Fifth Settlement)
+6a19f39b	El Rehab
+be6c7294	Madinaty
+28e263c5	El Shorouk
+d09a5835	Badr
+18083545	15th of May
+79a40caa	Nasr City
+aa8f351d	Heliopolis
+3472e9cc	El Nozha
+c3ad8886	Maadi
+a0e49b9f	Mokattam
+fba1974c	Zamalek
+c44751ba	Downtown
+3f4356d7	Abdeen
+a7bed77a	Bulaq
+835384ad	Shubra
+196abec3	El Sahel
+d2983be3	Rod El Farag
+8e940aeb	El Sharabiya
+f4f09e13	El Waili
+fa2329f9	Hadayek El Kobba
+d6f65b61	El Zeitoun
+6796e2b9	Ain Shams
+e01275b8	El Matareya
+8aecd37d	El Marg
+7cb56720	El Salam
+8ba92baa	Old Cairo
+9ed1df66	Sayeda Zeinab
+4c8d6da9	El Khalifa
+258722e9	El Basatin
+1d839e00	Dar El Salam
+ddf14dd8	Tura
+48abff72	El Maasara
+311dd99f	Helwan
+71029ccf	El Tebbin
+fb65f0da	Sheikh Zayed
+ff0fb7e9	6th of October
+e55f72ca	October Gardens
+f1246a21	Hadayek El Ahram
+1124a0e5	Mohandessin
+35d20653	Dokki
+ca7efaf4	Agouza
+2ec677e5	Giza (city)
+67238672	Imbaba
+7b46bf51	Bulaq El Dakrour
+27cf08a6	Haram
+aac917cc	Faisal
+070ff975	Omraniya
+500666dc	El Warraq
+4d85109c	Awsim
+be4fcdfe	Kerdasa
+140f58b4	Abu El Nomros
+cfb9445f	El Hawamdeya
+93a8abae	El Badrashein
+0d4af8f5	Monshaat El Qanater
+f655005f	El Ayat
+a2528a9e	El Saff
+d2453515	Atfih
+d5dab7a5	Bahariya Oasis
+3a5f8cca	El Obour
+3534cb6a	Banha
+d2433ebc	Shubra El Kheima
+f681dbd5	El Khosous
+5055a0c1	Qalyub
+b5a50de8	El Khanka
+6a708e70	El Qanater El Khayreya
+f5734d64	Qaha
+37f67de5	Toukh
+e9f6c9ac	Shebin El Qanater
+91cfc20d	Kafr Shokr
+f64de31f	Smouha & San Stefano
+6b3b313e	East (Sidi Gaber)
+78b2a47c	Montaza
+88d536cb	Sidi Bishr
+e2d02786	Miami
+7435c4cd	Central
+78da0125	West
+04046e1f	El Gomrok
+d88a4824	Abu Qir
+ac5e2dc3	Agami
+5ce5c787	El Dekheila
+a90280b2	El Amreya
+8f5eacfb	New Borg El Arab
+3a8f7804	Borg El Arab
+1fdd6cc1	New Alamein
+74a45b7e	Ras El Hekma
+04fa0524	El Dabaa
+8ecdd59b	El Alamein
+e191aef7	El Hammam
+bc367ecd	Marsa Matrouh
+db7d1743	Sidi Barrani
+e68bfae9	El Negaila
+76e1ae6d	El Salloum
+4b397c45	Siwa
+ade1a2f2	Damanhour
+7437c783	New Nubaria
+22e3915e	Wadi El Natrun
+a5526b67	Kafr El Dawar
+b235f42c	Rashid (Rosetta)
+46330fa7	Edku
+145c7351	Abu Hommos
+cdfdc3ca	El Delengat
+ec5aa7c5	El Mahmoudiya
+27525b06	El Rahmaniya
+a871b640	Itay El Barud
+977702ec	Hosh Issa
+2b1fb096	Shubrakhit
+865040c0	Kom Hamada
+e1f6c78a	Abu El Matamir
+e5e36737	Mansoura
+cd53245d	New Mansoura
+fbc70f2f	Gamasa
+45f2ac3f	Talkha
+7c81bfe1	Mit Ghamr
+448cc353	Dikirnis
+84899b6d	Aga
+7d286b05	El Senbellawein
+746fbb02	Belqas
+e58ee45d	Sherbin
+a792eec1	Minyet El Nasr
+e67d1f8e	El Manzala
+88156df4	Tamai El Amdid
+81e0abb4	El Gamaliya
+f69a111b	Bani Ebeid
+e70265c9	Nabaroh
+206dd65d	Mit Salsil
+df772616	Tanta
+17728432	El Mahalla El Kubra
+a64fde24	Kafr El Zayat
+252731b4	Zefta
+8247fe18	El Santa
+eaa8cf4c	Qutur
+ae6d6edd	Basyoun
+10df7267	Samanoud
+01546f95	Shebin El Kom
+7f6a6891	Sadat City
+32ff1dc9	Menouf
+d79434d2	Ashmoun
+5e2f4492	El Bagour
+9514a511	Quesna
+fb138bc7	Berket El Sabaa
+4d5921c5	Tala
+0a2fcf37	El Shohada
+b2578bce	Sers El Layan
+a9a168ad	Desouk
+90a01c5a	Baltim
+b8d149ee	Fuwwah
+e385391e	Metoubes
+81d98cc4	El Hamoul
+67d7de8b	Bila
+ec7f247f	El Reyad
+9f0213bf	Sidi Salem
+0cf16f47	Qallin
+f9223adc	New Damietta
+d4713a47	Damietta Port
+1d944555	Ras El Bar
+72f2f2b5	Ezbet El Borg
+76505cc8	Faraskur
+a23abece	El Zarqa
+075d2bc2	Kafr Saad
+af86b523	Kafr El Battikh
+27a01ccd	10th of Ramadan
+f1f626b2	New Salhia
+a0e063d7	Zagazig
+0d0a3873	Belbeis
+b93a45b8	Minya El Qamh
+3af2d06a	Abu Hammad
+eef11efe	Abu Kebir
+5995264f	Faqous
+71332b24	Hehya
+1c3e3641	El Ibrahimiya
+b63394bc	El Qurein
+59152d7d	Mashtul El Souq
+0a6ee9f3	El Qanayat
+859ea914	Diyarb Negm
+43367801	Kafr Saqr
+09566894	Awlad Saqr
+85839cc4	El Husseiniya
+4e72b7e1	San El Hagar
+204c3e44	East Port Said (SCZone)
+987ad869	El Sharq district
+c5e622b1	El Arab district
+4f548b6b	El Manakh district
+4c5ad994	El Zohour district
+38eeed2c	El Dawahi district
+8daccbf0	Port Fouad
+050fd6f9	New Ismailia
+407dcbdc	El Qantara East
+403efdbd	Fayed
+806facd7	El Qantara West
+69fd0894	El Tal El Kebir
+cba0de04	Abu Suweir
+6bdf279b	El Qassasin
+a10b57f2	Ain Sokhna
+63914da0	El Galala
+2f915493	Ataqa
+5ced4fa5	El Arbaeen
+3079c35d	El Ganayen
+15c0959c	El Arish
+d5d3c98c	Bir El Abd
+cc3250fa	Sheikh Zuweid
+34ea7a27	Rafah
+569ccb08	El Hasana
+76ad2267	Nakhl
+791a2fe8	Sharm El Sheikh
+76aa4d29	Dahab
+0b420fbd	Ras Sedr
+d3851f27	Abu Rudeis
+ee57bc98	El Tor
+8d119ac5	Nuweiba
+44fdd994	Taba
+3e65b50f	Abu Zenima
+80d639f4	Saint Catherine
+5444d790	El Gouna
+e751d30e	Hurghada
+9818f526	Ras Gharib
+9296e31f	Safaga
+1ced59f3	Marsa Alam
+83c15af8	El Quseir
+ec6c59b8	Shalateen
+88a90a1f	Halaib
+7109966c	New Fayoum
+832d095e	Sinnuris
+8eee64d9	Itsa
+8e713dad	Tamiya
+bcdd4e17	Ibshaway
+d7764213	Youssef El Seddik
+7ceaa7b3	New Beni Suef
+0b1c3025	El Wasta
+da6af020	Nasser
+41e2a576	Ihnasya
+82283659	Beba
+2bd1bfdf	El Fashn
+f6e77d6a	Somosta
+8b37d141	New Minya
+12628c50	Maghagha
+88fd257f	Bani Mazar
+01356270	Samalut
+cf4645f2	Mallawi
+4f478226	El Edwa
+55be3c59	Matay
+33f84f4b	Abu Qurqas
+6b5732e0	Deir Mawas
+d11ac5bb	New Assiut
+d0e2bacc	Dairut
+3e1b6478	El Qusiya
+bf9d2440	Manfalut
+46dd0694	Abnub
+6e42597a	El Fath
+f9170597	Abu Tig
+670d2169	Sahel Selim
+e46154c1	El Badari
+688012b4	Sidfa
+c29b780d	El Ghanayem
+83ef98ef	New Sohag
+8f3297aa	Akhmim
+4dbabf25	Girga
+b6c4c030	Tahta
+f6838c6b	El Balyana
+4444d77b	El Maragha
+beefa17d	El Monshaa
+980c1f5a	Tima
+8df79f72	Juhayna
+0994ddc4	Saqulta
+d3214696	El Oseirat
+6e2acd24	New Qena
+4c014bd3	Nag Hammadi
+4baaa550	Qus
+a9313098	Abu Tesht
+b889a5bf	Farshout
+24e1ca59	Deshna
+cf3a92e6	El Waqf
+5fb3e6a6	Qift
+e3a11eb9	Naqada
+b00ce4cd	New Tiba
+c878b2ab	El Toud
+c39f6164	Esna
+96d8e21c	Armant
+853c3e04	El Qurna
+2e37617f	El Bayadiya
+5f7cb636	El Zeiniya
+2bbaef8f	New Aswan
+5e4b04ba	Toshka
+ec51eea2	Abu Simbel
+66c696b1	Kom Ombo
+4e59883d	Edfu
+edd36fda	Daraw
+f3b6a120	Nasr El Nuba
+0a2c462d	Kalabsha
+21c36d19	El Kharga
+0ed859ca	El Dakhla
+856c654a	El Farafra
+0ec5a45c	Baris
+d18d3231	Balat

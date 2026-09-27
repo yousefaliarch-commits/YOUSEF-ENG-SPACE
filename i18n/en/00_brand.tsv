@@ -1,0 +1,156 @@
+# _brand_part — shell top bar + design-system board
+23f16ed1	Indigo
+676c6afe	Emerald
+567fd777	Cyan
+bbf6d1eb	Auto
+1dccac85	Light
+7766dcbe	Dark
+3f23d09b	Background · zinc-950
+e1e3b1ba	Cards · zinc-900
+4c83cd0a	Elevation · zinc-800
+9bd4fcc2	Borders · white/6
+6f261ea9	Primary text
+78cfca4d	Secondary text
+d21d0421	Background · zinc-50
+9c9b02f9	Cards · white
+11d5dd97	Elevation · zinc-100
+ac4e50f3	Borders · black/8
+b51447de	Civil Engineer
+8ffd7625	Architect
+0f991c84	Mechanical Engineer
+9adcb1ea	Range from {0} to {1} EGP, median {2}
+5c54bb48	EGP
+b585b7fe	View
+c71991aa	Design system
+a4c4fed3	Identity
+c78a6f59	App preview
+6d0ff9f6	App
+c77ae4df	Devices
+b641e1e7	Admin console
+b95f941f	Admin
+d1b18738	Brand colour
+2aaf2c72	Switch to Arabic
+9970632f	Arabic
+815d7e8f	Appearance: {0} — tap to switch
+93f9a15b	Appearance: {0}
+27658801	An architectural arch of translucent glass layers, standing for clear knowledge and a protected identity
+ef3f4d32	Verified experience
+cf39ea02	An identity others never see
+c5401473	A space for engineers. Built on trust.
+324d394f	A clearer space.
+40000c47	For your next move.
+99634c3c	Knowledge you deserve, privacy you can trust.
+33fca74c	A new identity for a clearer career path.
+8fbbc082	Knowledge you deserve, privacy you can trust.{0}A new identity for a clearer career path.
+e5ed00ae	Explore the experience
+0872d8f9	The idea behind the brand
+90a806ac	Privacy first
+40de6a21	Clarity without clutter
+7a4dad84	A spectrum of trust
+15fd7e56	Tap to copy the colour
+c897f884	Core colour
+589371eb	Copy core colour {0}
+30d8fa0b	Dark mode: {0} — a glow on black
+edbac5f1	Light mode: {0} — deeper, to read on white
+73b363f5	Copy {0} {1}
+664c9d50	Try the brand tone · Appearance:
+6ef20b72	Try the brand tone · Appearance: {0}
+1cefe060	One clear voice, two languages
+45883aec	-
+61c8e60b	Your ambition deserves
+8947b732	more room.
+bb314670	Your ambition deserves{0}more room.
+70c88b19	Arabic · interface and experience
+83acb434	Precise numbers, calm rhythm
+78585d14	Headline
+e5863c88	Section title
+8fe7d173	Calm you can see. Trust you can feel.
+65ee3315	Card title
+4ddc2135	Body
+171a27a1	Details
+d75bcf07	Cairo, Egypt · 3–5 years of experience
+debd1ee6	Numbers
+cae12fe9	English tags
+a4bfe11d	Type scale
+8fd2cf74	Loading sample salary data
+b71ff702	Couldn’t load the data
+64319993	Not enough data yet
+162956e5	Try again to show the example.
+4643f44c	We show comparisons once there’s a big enough sample.
+2e47b5f2	Retry
+325538ce	Back to the example
+34e963ec	Unsave card
+c16a384d	Save card
+27212b9e	Full-time
+12e080b3	Private sector
+08894880	Verified
+69c972c5	Median gross salary ·
+f8b0fcce	Median gross salary · {0}
+497e7eb7	per month
+b13de451	per year
+978fa63c	Salary period
+564ef224	Monthly
+019ca74a	Yearly
+7ac7e223	Salary range in this example
+cbf80e3f	No names or employers
+883509b7	Design sample
+d0f106c7	Salary card
+d477d2d8	/ illustrative data
+7a4d89b5	Salary card state
+439f7dbb	Complete
+20f73a4e	Loading
+cb05a8eb	Empty
+6a2ef816	Error
+9f16a514	Card saved for this session
+9cc272f8	Card unsaved for this session
+cf1f59d4	Card discipline
+cb15c783	Civil Engineering
+c4894e1c	Architecture
+b1b9bb20	Mechanical Engineering
+4971e8d4	A clear signal for every step
+b00f3b20	Measured contrast. Soft edges. Instant response.
+10e883d6	Primary
+be7ee07e	Share your salary
+3fb4cb04	Secondary
+c17213fb	How do we protect your identity?
+f6e98ae6	Try loading
+6fcdf0ed	In progress
+2eb748dc	Success
+f9f47bbc	Quiet
+08a5ff1e	Skip for now
+28e697f2	Skipped — you can come back later
+e0578dbd	Unavailable
+b1f6bc26	Continue
+763d5c06	Quiet tags, clear meaning
+2f7a1360	Fully rounded pills. Green is for verification only, amber for a gentle warning, and the brand colour to set things apart.
+09338ae4	3–5 years of experience
+e428a8d1	Technical Office
+f7f23949	Below market
+fcd8b54d	Above market
+0131fc7a	Top this week
+e8a305eb	Experience, visible.
+9ee03778	Identity, kept private.
+96389789	Experience, visible.{0}Identity, kept private.
+cadf532f	The verification badge stands for one specific check,
+bc7be53e	without showing the data that proves who you are.
+cd3ca0c5	The verification badge stands for one specific check,{0}without showing the data that proves who you are.
+cb9b6ec1	What does verification mean?
+d8fc48ff	Room to breathe
+7da9a2c6	A 4-point rhythm, soft edges, and spacing that puts content first.
+45b9a2ae	Depth only where needed
+fe49216a	Frosted glass for identity, solid surfaces for reading numbers clearly — the same tokens by night and by day.
+fd6fa1be	Motion that reassures
+691302f7	Short transitions and calm feedback, respecting the reduce-motion preference.
+fe61630c	Brand direction
+0b1c226e	Architectural elegance · financial-grade trust · human comfort
+21c5e8a4	Brand direction {0} Architectural elegance · financial-grade trust · human comfort
+1e1d41e3	A dark identity with a touch of light
+f87568b6	Copied {0}
+d88b22ee	Colour: {0} — you can select and copy it
+cf870296	Details build confidence.
+779581ec	Live components you can try
+1d8e528e	Interactive brand board · all salaries are illustrative data
+b7be6983	{0} EGP
+2edaaa49	{0}A space for engineers. Built on trust.
+8a047041	A clearer space.{0}{1}
+0d3020fe	Salary card {0}

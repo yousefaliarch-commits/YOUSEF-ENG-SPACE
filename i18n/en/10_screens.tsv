@@ -1,0 +1,187 @@
+# _app_3_screens — Home, Community, Jobs, Market (salaries / companies), Tools, Inbox
+5561c391	Good morning
+7b3a098f	Good evening
+e0781587	-
+858f7c5f	Posting by default as:
+eab7431f	An announcement from the EngSpace team
+fa7051d0	Your verification is under review
+838640b5	Add a “Verified” badge — optional
+8451f79c	Add a “Verified” badge — optional
+92301d0a	The badge appears automatically within 24 hours.
+5208b553	Syndicate ID card or your engineering certificate — the document is deleted right after the check.
+a0b3c534	Hide the verification suggestion
+850bd622	You can verify later from “Your account”
+287b7b6a	Your market now
+d5eef2b0	More details
+91fa23bd	Median
+2f192d5e	Median {0} · {1} · {2} · {3}
+b7523863	this month
+f4df9405	{0}{1} this month
+e9e726b3	reports ·
+74e00d68	{0} {0|report|reports} · {1}
+35d07d6e	Model
+9fa98be9	Model {0} ±15%
+baeddd3b	Hiring board —
+47d727d9	Hiring board — {0}
+1085e594	Manage jobs
+abb8e6f8	Your company
+c8ba2556	Jobs posted
+80edf876	Views
+6cfaf4da	Opened contact details
+2d4eb0a1	My jobs
+e78a688a	Ads carry no salary figure — EngSpace shows the expected market range. Applications reach you directly at the email or phone in the ad, and an instant notification goes only to exact matches.
+97725ee0	Jobs matching your profile
+2e1d0737	All jobs
+a239b54b	For your goal:
+d8ca255d	For your goal: {0}
+4e3bc795	All tools
+1dace5d1	Review your CV before applying
+3aa40da0	A full score for every section, an ATS compatibility check and a step-by-step list of improvements — on your device
+180fb5ae	This week’s cards
+c0f1451c	New Cairo · 5–8 years of experience · Consultant
+6a46b0a7	Share your salary to unlock the market
+692f1304	One verified share unlocks
+f9497a33	cards. No names, no employers.
+2889e32e	One verified share unlocks {0} cards. No names, no employers.
+392c7e93	The market is open to you
+72b208a5	Browse
+2a1dc8c7	cards
+4bbe8168	Browse {0} cards
+a894c0d2	From your rooms
+99d9b5ad	The whole community
+832026c9	Follow a room to see it here
+16978bd2	The rooms you follow feed your home screen.
+9a87ac95	Browse rooms
+34bb4d41	All salaries and contact details are illustrative data
+36299595	Newest
+1fcc0173	Most active
+8e4cd6c9	Unanswered
+f2c85ead	match
+b0cbb892	{0} match
+8ed6bdb8	Search the community — by meaning, not spelling: pour, handover, safety…
+6db4a644	Search the community — by meaning, not spelling: salary, interview, Primavera…
+60730462	Search the community
+2d8ed610	Clear search
+830e0929	results
+2c31192c	{0} {0|result|results}{1}
+9dba3528	Fuzzy search · match ≥
+44a7ac51	{0} Fuzzy search · match ≥ {1}
+83a1952e	No close results
+44b784dc	No post is at least 60% similar to “{0}” — try a shorter word or a synonym (salary/pay, interview/offer).
+1b49cdcd	Post this question
+26789529	Close results (60–80%)
+106135cb	Under your name or without it — your choice. In respectful language.
+1851c030	Under your name or without it — your choice. With numbers, in respectful language.
+b642dd5a	Rules
+a9a48fcb	All rooms
+a3a3c84d	Ask your colleagues, or share an experience from site
+d2cfe277	Ask your colleagues, or share an experience from site
+09928cc9	Ask, share your number, or let people vote
+24bc9d58	Ask, share your number, or let people vote
+b754de33	Publicly under your name or anonymously —
+e61c8d34	on every post.
+68a867f9	Publicly under your name or anonymously — you choose on every post.
+11fdef2d	All
+2113e77b	Verified engineers
+2e2fb13b	Employers
+577a3c68	Sort
+4f9332b3	No unanswered questions
+3ff7b506	The room is quiet
+a6713f24	Every question here has an accepted answer — try another sort.
+495b0210	Be the first to start a discussion here.
+a15b2aa0	Write a post
+37b5495c	Site Supervisor account · community only — money figures are hidden
+c8844e6e	All salaries are illustrative data
+550ea4c0	Best for me
+364d55d6	Highest range
+62a1dcf4	Mandatory classification, a salary range calculated by EngSpace, and applications straight to your email.
+d58a517c	{0} {0|job matches|jobs match} your classification exactly — you’ve been notified. Apply directly with the company.
+95937d2f	Every ad is precisely classified and compared with your market — and you apply directly with the company.
+d5f0e894	My company’s jobs ({0})
+b9e8ad81	The whole market
+e0c50d6b	For you
+9d5f4b41	Saved{0}
+165c07bf	All disciplines
+812b041d	All tracks
+cd3c33f9	All titles
+3f37fa5a	All regions
+eccecf82	jobs
+9f38f289	{0} {0|job|jobs}{1}
+ebc5ee46	· {0} {0|filter|filters}
+b8bcb17d	Reset
+674c6a6d	No matching jobs yet
+9047b4d6	You haven’t posted any jobs yet
+5b3a5f73	No saved jobs
+96cf9145	No jobs here
+b918a60d	We’ll notify you as soon as a job matching your discipline, track, title and location is posted.
+917cc253	Post your first ad — paste the description and we’ll classify it for you.
+2a361057	Save the jobs you plan to apply for so you can come back to them here.
+9cc48590	Try broader filters.
+d36294e5	Show all
+d3204f8a	You apply directly with the company by email or phone — EngSpace doesn’t act as a middleman or keep your application
+9812eef2	Salaries & companies — model
+eaa9c646	Salaries & companies — model {0}.
+7b3da2e1	Salaries
+019bc0b6	Companies
+71b51793	Search by company name, sector or governorate
+6c7573ec	Search companies
+36140379	All categories
+2228774b	Most reports
+1328aa57	Highest paying
+f2f09845	Most recommended
+e69ddb8f	Oldest
+22fcabf1	Reference rates:
+f1d10ba4	— approximate, updated monthly.
+6f424d7e	No company matches this combination. Widen the category or region.
+7508b867	employers ·
+22fd41d4	real logos from official sites and Wikipedia · facts from the public record, figures modelled
+22571974	{0} of {1} employers · {2} real logos from official sites and Wikipedia · facts from the public record, figures modelled
+0ae8f02f	What company accounts can see
+441b9644	Market medians and ranges only — so you can make fair offers. No individual figures, and no title details for companies other than yours.
+32b1d3a1	Gross monthly in EGP before tax · model
+871327d8	Gross monthly in EGP before tax · model {0}
+8e4ac0c0	· factor
+c45eb2e3	· {0} · factor {1}
+4f5b6c0a	Small sample (
+8e796c2b	reports) — hidden from company accounts until
+beceae7a	reports, to protect individuals. Widen the location or experience.
+f4dcccf9	{0}Small sample ({1} {1|report|reports}) — hidden from company accounts until it reaches {2} reports, to protect individuals. Widen the location or experience.
+44ee9b97	Distribution from P10 to P90 — the dark band is the middle two quartiles
+8ce47107	Approximate net median
+4342fad2	Approximate net median {0} EGP
+33bf8cbd	By exact job title
+cf4f0571	By employer type
+7eb70aa4	Back offices price in foreign currency — see the “Back offices” category under Companies.
+084d62a5	Typical allowances on top of basic
+3e9ddf02	Latest reports
+3bbac2de	Latest reports · locked
+6557967d	{0} · {1} years
+090530ba	Individual reports unlock after you post your first job
+aa70707b	Individual reports unlock after you share your salary
+4276ce6d	Post a job
+4cfb0c41	Individual reports aren’t shown to company accounts
+39338ec0	Available
+7a963243	Median and range (P10–P90) for every discipline, experience and location, and by job title and employer type
+6f54bb76	Job-title details for your own company only
+cf0edb17	Any individual engineer’s figure: individual reports, salary-reveal posts, number replies, and amounts written in posts and reviews
+364b8f51	Any cell with fewer than {0} reports
+c84dfd26	Sharing salaries or reviewing companies
+8f16b687	The goal: build your offers on the real market — without seeing what any individual engineer earns.
+1d9699bb	Egyptian calculations with real market numbers, and a smart CV reviewer — all on your device.
+98272e9b	CV reviewer for engineers
+d336a65c	Reads any layout (PDF · Word · text), extracts your experience, tools and codes, scores every section, checks ATS and flags mistakes, writes a summary and bullet points from your own words — then an in-depth AI review
+89465c43	New
+24c86101	For your goal
+ca5151c8	Methodology & sources ·
+dc28d8d4	Methodology & sources · {0}
+857a94a4	Minimum wage, the insurance cap, tax brackets, how we build the models, and how lists are ranked
+5f0aaa5f	Tax and social insurance under current law · updated
+5dd405a8	Tax and social insurance under current law · updated {0}
+ba522e95	Direct messages under your name or your anonymous ID — the identity is fixed with the first message. Share your number or email whenever you like; the only rule is respectful language.
+e19d63b7	Conversations{0}
+71efd0a7	Phone numbers, emails and links are allowed in direct messages. Only swearing, insults, threats and harassment are blocked.
+881113b8	Who can message whom?
+d05e6bf9	No conversations yet
+847362ee	Start from a member’s profile or a job page — within the relationship rules.
+49ebac77	You:
+86d5fe2f	⛔ Message blocked —

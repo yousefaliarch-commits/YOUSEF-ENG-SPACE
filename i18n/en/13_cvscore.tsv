@@ -1,0 +1,324 @@
+# _app_3c2_cvscore — CV scoring advice. Arabic spelling corrections, the AI prompt and the sample CV are internal ('-').
+6ca31c19	Formatting & length
+1a57d006	Language & spelling
+24dcc748	-
+12de2cd7	-
+8a1d0b74	-
+f53b2f47	-
+1481d8bd	-
+9118f5a6	-
+025b481e	-
+42362819	-
+075246bb	-
+7601e075	-
+640a26e1	-
+93510787	-
+123f1dce	-
+95b17b05	-
+fb85e131	-
+bcb4dfbc	-
+60d1dd43	-
+cd32d8ff	-
+26175668	-
+960b1f68	-
+3ab126ef	-
+3dd64344	-
+37acba0d	-
+e9999bef	-
+106bde6c	-
+ec278d60	-
+3332cda9	-
+e55fe1f0	-
+d1625c21	-
+bb4b5a7c	-
+11e230d6	No space before a punctuation mark
+4ce5d09d	A space after a punctuation mark
+efe4ad2a	Repeated letters
+e1eb1dfc	Two spaces in a row
+39db59da	The file is an image or a scanned PDF — no ATS can read it, and neither can we.
+a188d519	Export your CV as text, not as an image
+e233d2d2	Open the original file in Word or Google Docs.
+d43c6582	Save As → PDF (not “print to PDF” from an image).
+0e8b3c7b	Make sure you can select the text with the mouse inside the PDF.
+d50ae7e5	The text is too short — paste the full CV or upload the file.
+79f5efc0	The email “{0}” looks unprofessional — recruiters judge how serious you are before they read.
+be26d324	Create an email in the firstname.lastname format
+fcc2195d	A professional email
+62398691	Create an email in the firstname.lastname format on Gmail or Outlook.
+0685d697	Use it on your CV, on LinkedIn and when applying.
+1a7ad77c	Clear email: {0}
+688df667	No email — companies reach out by email first.
+a2919b07	Add a professional email
+9adc61dd	Put the email on the second line, right under your name.
+f7b63690	In the firstname.lastname format — no birth years or nicknames.
+f9b0343d	Valid Egyptian phone: {0}
+778ea575	The number “{0}” isn’t in a standard Egyptian format — write it as +20 1x xxxx xxxx or 01xxxxxxxxx.
+d726a748	No machine-readable phone number.
+8d2c2cbe	Add a phone number in a clear format
+1ddd9c98	One number you actually answer, in international or local format, without symbols.
+88e4678d	If your WhatsApp is on a different number, say so clearly.
+aec53548	City mentioned ({0}) — it’s used in recruiters’ filters.
+2b208688	State your city and governorate (not your full address).
+0433efcc	Add your city only
+10c56b35	City and governorate next to your contact details — no street or building.
+c1a8d433	New Cairo, Cairo
+a86c3c6b	LinkedIn link present.
+a28a1241	No LinkedIn link — 7 in 10 recruiters open it before calling.
+e87e66d6	Add a short LinkedIn link
+5efd6db8	Customise the link in LinkedIn settings so it becomes linkedin.com/in/yourname.
+04d635b6	Make your profile headline match your CV.
+6223daae	Nationality
+bc23f317	Personal details the company doesn’t need: {0} — they expose you to bias and the ATS doesn’t read them.
+14a8148f	Remove unnecessary personal details
+fa82fae0	Remove “{0}”.
+a333bcb6	Keep: name, phone, email, city, LinkedIn — and military service status for men, because companies in Egypt ask about it.
+84de4d93	Military service status isn’t mentioned — most companies in Egypt ask about it (for men): one line is enough.
+fa6b4d37	“References available upon request” adds nothing — remove it.
+d668c642	A good length ({0} words).
+c989a178	Short ({0} words) — 3 to 5 lines is enough.
+083403b9	Long ({0} words) — cut it to 3–5 lines.
+c0e2107f	Adjust the summary length
+9554b144	3 to 5 lines: who you are, how many years, which track, what kind of projects, your strongest tool, and one achievement with a number.
+bc3ff39a	States your discipline and years of experience.
+988c1789	The summary doesn’t clearly state your discipline and years of experience in the first line.
+17df3d5a	Open the summary with a complete introduction
+c5c9286d	First line: “[Discipline] Engineer with [N] years in [track] on [type] projects”.
+cb076f2e	Second line: your strongest tool or certification.
+c7c1f037	Third line: one achievement with a number.
+d21359e9	Recruiters read the summary in 6 seconds and decide whether to go on.
+74cee50e	Generic phrases or first person (looking for an opportunity, team player, I am…) — replace them with facts.
+ad829f2d	Replace generic phrases with facts
+8e9e2034	Remove “looking for an opportunity / seeking a challenging position / hard worker / works well under pressure”.
+ce280845	No first person — each sentence starts with the title or a verb.
+2d0a7aff	Put the type and size of your projects and your strongest tool in their place.
+eba13e76	No professional summary under your name — it’s the first thing a recruiter reads.
+63c168ce	Add a 3–5 line professional summary under your name
+3951e94f	Heading: “Professional Summary”.
+e5fa3280	Include: discipline, years of experience, track, type of projects, your strongest tool or certification, and one achievement with a number.
+43a65665	The suggested version below is written from your CV’s own details — edit it.
+28d483a2	The summary is the first human filter; without it, your first experience bullet is read as your introduction.
+995221d3	Your experience is there but without a clear section heading — add a “Work Experience” heading so the ATS can find it.
+24fded27	{0} {0|role|roles}, all with a title, employer and dates.
+98bd169b	{0} of {1} roles are missing {2}: “{3}”.
+0184c6f1	dates
+7dc817f3	employer
+5fabcc75	Complete every role’s header: title — company — city — from/to
+b73e7eb5	First line: the exact title as in your contract.
+551e34a3	Second line: company, city and dates in one format (Mar 2022 – Present).
+0e2b4c9f	Never leave a role without an end date — “Present” if it’s current.
+53bbea5a	{0} — {1} — Cairo · 03/2022 – Present
+a0ba70c5	Company …
+6388242f	The order isn’t newest to oldest.
+534ac48c	Order your roles from newest to oldest
+46c6cbd9	Your current job first, then the earlier ones in descending order.
+bb95bd68	An average of {0} bullets per role — about right.
+24e8b5d6	Too many bullets ({0} per role) — 4 to 6 for the main job, 2 to 3 for older ones.
+4b409029	Too few bullets ({0} per role) — 3 to 6 bullets for each main job.
+125ae6d1	Add 3–6 bullets per job
+22b0129b	Each bullet: verb + what you did + for whom / on which project + the result as a number.
+654df2d7	Name the project, its type and size in the first bullet.
+9240679e	Reviewed shop drawings for a 32,000 m² office tower and closed 180 consultant comments within 3 months.
+5e0cdaf3	{0} of {1} bullets start with an achievement verb.
+0d9408ff	{0}{1} bullets don’t start with an achievement verb.
+a16192b7	bullets start with “responsible for / I did”, and
+6a4ce129	Start every bullet with an achievement verb, not a description of duties
+af30c7af	Remove “Responsible for”, “Worked on” and “Helped”.
+72d81151	Start with a past-tense verb: Managed / Prepared / Reviewed / Reduced.
+8d8ce3d0	One bullet = verb + what + the result as a number.
+0c3a4da3	Before: {0} After: {1}
+7f78fdcd	Screening systems and recruiters read the first two words of every bullet.
+8d011f58	{0} bullets with numbers (size, value, percentage, time).
+05ad324e	Only {0} of {1} bullets contain numbers — numbers are what set your CV apart from 200 similar ones.
+66bead54	Add a number to every bullet you can
+c22d1f84	Project area (m²), number of floors, contract value, number of engineers or subcontractors, savings or time as a percentage.
+9501506e	If you don’t have an exact number, write a reasonable estimate (“about 25,000 m²”).
+b61d4460	One number in a bullet raises the chance of a call more than any adjective.
+e2e4554c	Projects and their type are mentioned in {0} {0|role|roles} ({1}).
+fdbb65eb	Most roles don’t name the project, its type and size — “Site Engineer” without a project says nothing.
+abcfca56	Name the project in the first bullet of every job
+67c9477c	Name or type — size or value — your role — the owner or consultant.
+7496578d	Capital Towers project — Administrative — 32,000 m² — Technical Office Engineer — Owner: New Urban Communities Authority
+7d6d99a6	Gap of {0} — without an explanation it reads as a negative.
+726359da	{0} months between “{1}” and “{2}”
+e3bb6666	;
+5bf0fe50	Explain employment gaps in one line
+c547cce5	One line: military service / study / freelance / travel — with dates.
+b495ca2e	Or fold the period into a freelance role if that’s what it was.
+23f62401	{0}{1}{2} — a bullet is one or two lines, without “I”.
+a5f4db7f	bullets in the first person
+84a4e399	long bullets (>32 words)
+2a6d2cca	Shorten the bullets and drop the first person
+8cdb582e	12–25 words per bullet.
+646bc38a	Start straight with the verb.
+8ef6e63c	The summary says {0} years while the dates give ≈ {1} — make them match.
+3a41999e	{0} {0|employer|employers} known in the EngSpace database.
+f76bd0dc	No readable work experience — the most important and heaviest-weighted section of a CV.
+33ec5c98	Add an experience section that includes summer training and your graduation project
+2b8602f4	Add a “Work Experience” section with a standard heading
+e6780079	Heading: “Work Experience” — in exactly those words so the ATS reads it.
+a28fbfae	For every job or internship: title, company, city, dates, then 3–6 bullets that start with a verb and end with a number.
+63ccd9f6	Engineering Intern — The Arab Contractors — Cairo · 07/2023 – 09/2023 - Followed the pouring of 2,400 m³ of concrete for two residential buildings and prepared daily reports approved by the site engineer.
+756e6f44	{0} of {1} projects with a size or value.
+802516c4	Most projects have no size or value — “residential tower” isn’t enough.
+fe9a6529	Add the size and your role for every project
+8550daba	Name — type — area or value — your exact role — the owner or consultant.
+8a91212a	Capital Gate project — Administrative — 32,000 m² — Technical Office Engineer (QS & IPCs) — Owner: New Urban Communities Authority
+c2571ba0	Make your role in every project clear.
+ef70e7fd	{0} projects — pick the biggest 4–6 and the ones closest to your goal.
+5077faf9	Projects are mentioned inside your roles — a separate section makes things clearer for the interviewer.
+ae514d13	Add a “Key Projects” section
+b8493555	3 to 6 projects only — the biggest and the closest to your goal.
+a7a5a9f7	For each project: type, size or value, your role and the main tool.
+c10e3a2c	Graduation project mentioned — the most important item for fresh graduates.
+1d95f97c	No graduation project and no training projects — in engineering, that’s what interviewers ask about first.
+fd9e2644	No projects section — in engineering, that’s what interviewers ask about first.
+d93f68fc	Add your graduation project in detail
+71503ebd	Project name and type, your role in the team, the tool (Revit/ETABS…), and the grade or result.
+5b778b20	3 to 6 projects — the biggest and the closest to your goal.
+20773172	Graduation project: design of a 15-storey residential tower — structural analysis and design in ETABS and SAFE — grade: Excellent
+33f60bd3	The degree or department isn’t clear — “B.Sc. in … Engineering”.
+1691fe99	State your degree and department explicitly
+7f82a31c	“B.Sc. in Civil Engineering” — in exactly those words so the ATS matches it.
+bd000d2e	Give the full names of the university and faculty.
+96529933	Graduation year not mentioned — it’s used to estimate experience.
+1cc8072a	Add your graduation year
+c9150aee	One year is enough (2019) — or the period (2014 – 2019).
+07635ddb	Grade mentioned — after 5 years’ experience you can drop it unless it’s Excellent.
+1bc5d246	Grade not mentioned — most companies ask about it for under 3 years’ experience (include it if it’s Good or higher).
+e4ddd3c4	Add your overall grade
+ac558c47	Very Good / Excellent / GPA — if it’s Good or higher; otherwise leave it out.
+01e97f9c	Fresh graduates: add your graduation project (name, tool, your role, grade).
+3c02b865	Education has no separate section heading — add “Education”.
+cbe6797b	No readable qualification.
+bbf4f4b6	Add an “Education” section
+62f64f52	Education: degree, department, faculty, university, graduation year, and grade if it’s Good or higher.
+7a4071f8	B.Sc. in Civil Engineering — Cairo University · 2021 · Grade: Very Good
+879a1024	Education before experience — after your first two years of experience, experience comes first.
+2d3f25a7	Fresh graduates: put education before experience.
+4f5bbbdf	Skills section ({0} known {0|tool|tools} in it).
+25d8c5e1	No separate skills section — the ATS looks for keywords there first.
+93cbca80	Add a “Skills & Software” section with the exact tool names
+06fd34b7	Heading: Skills.
+b7e23da9	Write each tool’s commercial name: AutoCAD, Revit, ETABS — not “design software”.
+37be5fcd	Group them: software · codes & standards · management.
+0711baeb	Software: {0} Codes: {1}
+a87ca658	Group your skills (software / codes / management) instead of one long list.
+db93f3c9	Tools that fit your discipline: {0}{1}
+93f743c6	No engineering tools for your discipline are named.
+92604427	For the {0} track, recruiters filter on: {1} — not mentioned.
+d47e329b	Add the keywords the {0} track is filtered on
+8ade3bb7	Core ones missing: {0}.
+b2bbbec5	These also count: {0}.
+d8caab66	Name them exactly in your skills section and in at least one experience bullet — the ATS counts repetition.
+fc0b877a	“{0}” is there — add {1} next to it.
+039370ac	Screening systems match the ad’s words literally; a tool not written by name doesn’t count.
+ebd43cc4	All the core keywords for your track are present.
+56196143	Codes & standards: {0}.
+45d373cc	No codes or standards (ECP, ACI, ASHRAE, NFPA, IEC…) — they set an engineer apart from a draughtsman.
+560269ec	Add the codes and standards you work with
+2ffba4dc	Egyptian Code ECP 201/203 · ACI 318 · Eurocode 2
+f24f1989	ASHRAE · NFPA 13/14/20 · SMACNA · Egyptian Fire Code
+4f84e158	Egyptian Code · IBC · LEED / EDGE
+d1129562	Survey standards and GNSS
+e4c6bfb1	{0} generic soft-skill phrases ({1}) — the ATS doesn’t count them and they don’t convince recruiters.
+3321bae5	Cut down generic soft skills
+1ca821ee	Keep one or two with examples, and remove the rest.
+2fe2f2d7	Soft skills are proven in your experience bullets, not in a list.
+449f370f	Rating bars, stars or percentages for skills — the ATS can’t read them and they look subjective.
+8e8dbe4a	Replace rating bars with words
+be9a7f2a	Advanced / Working knowledge — or just name the tool.
+667b5889	The tool list is too long — 10 to 15 tools, most important first.
+a0187780	Certifications with market weight: {0}.
+6b2a66c4	{0} {0|course|courses} listed — add the provider and year.
+d3047378	No certifications or courses — even a short course in a tool counts.
+8ab152d4	Add a “Certifications & Courses” section
+9522acf2	Course, provider, year — newest first.
+90064240	Most impactful for your track: {0}
+dd85212f	Revit · Primavera P6 · Egyptian Code · PMP
+c7d2e45f	Engineers Syndicate membership mentioned.
+ad2fb02a	Engineers Syndicate membership isn’t mentioned — it’s required to practise in Egypt, and one line proves it.
+4a7a0a6b	Languages with a clear level: {0}.
+cd893861	Give the level of each language (Very good / Fluent / B2).
+50b1b88c	No languages — English is required at consultancies and international firms.
+25663556	Add your languages with their level
+be23a264	Arabic: native · English: Very good (B2) — and mention IELTS/TOEFL if you have it.
+832a553d	Short ({0} words) — add detail to your experience and projects.
+eec6c195	Long ({0} words) — {1}.
+750ff7c6	two to three pages at most
+fe32a2f8	two pages at most
+c5353625	one page is enough for under 3 years
+e9b846a2	Cut it to the standard length
+a104829e	Two pages (three for management roles).
+82b8e003	Two pages at most.
+878e2258	One page for under 3 years’ experience.
+74b54053	Remove jobs older than 10 years or cut them to one line.
+1a617f8a	Remove hobbies and references.
+da70dcfa	A good length ({0} words{1}).
+6c73ef19	· {0} {0|page|pages}
+37b13941	{0} pages — more than needed.
+48022116	Bullet symbols from special fonts (Wingdings/Symbol) — they show up as boxes in the ATS. Use • or -.
+e608914c	Replace special bullet symbols
+a9bf7b4a	Use the standard bullet • or the keyboard hyphen -.
+8ba92fdf	{0} different bullet styles — use one.
+a637580f	Mixed date formats (03/2022, Jan 2022 and 2022) — one format across the whole CV.
+31112867	Use one date format
+6ea1c5c4	Mar 2022 – Present or 03/2022 – Present — just one.
+afe72452	Many lines in full capitals — hard to read.
+c2c11039	Two-column layout — most ATS read it scrambled and mix up the sections.
+a99ab9cf	{0} {0|table|tables} in the file — tables are read row by row and get mixed up in the ATS.
+3f836990	{0} {0|image|images} / graphics in the file — a personal photo isn’t expected in Egypt unless requested, and it confuses the ATS.
+45a7a52d	Single-column layout with no images or tables — ideal for the ATS.
+65c468f9	One tense per bullet: past for previous jobs, present for your current one
+354d0f1d	١٢٣ vs 123
+6385cf5e	One style of numerals across the whole CV
+05c30315	Arabic and English in one sentence
+9fd83a2f	One language per sentence — only software names in English
+0f495f49	{0} language {0|note|notes} — details in the “Language & spelling” section.
+61f0e3b6	Fix the spelling and grammar mistakes found
+4c04ce09	and {0} more in the list.
+51383656	A single typo in a software name drops the word from ATS matching — and drops the recruiter’s impression.
+6290f2e2	No spelling or grammar mistakes from the known list.
+8d87d252	Match the target job’s keywords
+267d72b3	The ad asks for {0} keywords; your CV mentions {1} ({2}%).
+d8e580e3	Add, if you’re proficient: {0}{1}.
+733f9329	Put each word in your skills and in an experience bullet.
+6b4939d0	Automatic screening for this job starts by matching these words.
+5e191da3	The ad asks for {0}{1} years and your CV shows ≈ {2} — mention training and projects to close the gap, or target a closer level.
+605ffece	Machine-readable text (not an image)
+e1462302	Standard section headings ({0} of 4)
+45250ff2	One column with no tables or text boxes
+d30536b2	No images, icons or personal photo
+4ced06cf	Email and phone in the text (not in an image or page header)
+e2173fcf	Readable dates for every role ({0}%)
+2fd032fa	Keywords for your track ({0}%)
+d91927d2	Match with the target job’s keywords ({0}%)
+8dc3c96e	Core tools for the {0} track ({1}%)
+3651ed1c	PDF or DOCX file type
+24387a23	Standard bullet symbols and one font
+b5d8e5a3	A good length (≤ two pages)
+470ff311	Use standard section headings
+2eec5d45	Professional Summary · Work Experience · Education · Skills · Projects · Certifications — in Arabic CVs: الملخص المهني · الخبرات العملية · التعليم · المهارات · المشاريع · الشهادات.
+2c188245	Each heading on its own line in a slightly heavier weight — no icons or columns.
+ee66728e	The ATS looks for these words to know where to read your experience and where to read your education.
+171fc3fa	Switch the design to one column with no tables
+424062a6	Columns and tables are read scrambled in the ATS.
+5651d1d1	A simple template: headings, then bullets, top to bottom.
+72a0a24c	Remove the personal photo and icons
+a26cedd2	A photo isn’t required in Egypt and confuses automatic screening — unless the company explicitly asks for one.
+f511a2e3	Excellent — ready to send
+0462ead7	Very good — final touches
+b32268fd	Good — needs focused work
+93f77025	Needs rebuilding
+c5da50ee	-
+dd442f9f	-
+ff692998	-
+514e5d20	-
+a4e9b767	-
+c7651a4e	-
+a818fcb4	-
+e22428f8	-
+6467610b	-
+697dc0e0	-
+4ee7840a	-
+2ec6f14f	-
+32fa781d	-

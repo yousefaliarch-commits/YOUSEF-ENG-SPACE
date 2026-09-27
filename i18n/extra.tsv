@@ -1,0 +1,297 @@
+# hand-written entries: Arabic<TAB>English (typed placeholders: {t} = time, {n} = number)
+{t} م	{t} PM
+{t} ص	{t} AM
+رقم هاتف وبريد إلكتروني	phone number and email address
+رقم هاتف ورابط	phone number and link
+بريد إلكتروني ورابط	email address and link
+رقم هاتف وبريد إلكتروني ورابط	phone number, email address and link
+لم نجد الشعبة مكتوبة بوضوح في الصورة — اخترها يدويًا.	We couldn’t find the division clearly written in the photo — choose it manually.
+لم نجد الشعبة مكتوبة بوضوح في الصورة — اخترها يدويًا؛ اخترنا مبدئيًا شعبة تخصصك المسجّل.	We couldn’t find the division clearly written in the photo — choose it manually; we’ve preselected the division of your registered discipline.
+لم نجد الشعبة مكتوبة بوضوح في المستند — اخترها يدويًا.	We couldn’t find the division clearly written in the document — choose it manually.
+لم نجد الشعبة مكتوبة بوضوح في المستند — اخترها يدويًا؛ اخترنا مبدئيًا شعبة تخصصك المسجّل.	We couldn’t find the division clearly written in the document — choose it manually; we’ve preselected the division of your registered discipline.
+قُرئت آليًا من البطاقة: «{1}» ← {2} · {3}	Read automatically from the card: “{1}” → {2} · {3}
+قُرئت آليًا من نص الملف: «{1}» ← {2} · {3}	Read automatically from the file text: “{1}” → {2} · {3}
+قُرئت آليًا من الشهادة: «{1}» ← {2} · {3}	Read automatically from the certificate: “{1}” → {2} · {3}
+نُشر ردّك باسمك — +10 نقاط	Your reply was posted under your name — +10 points
+نُشر ردّك بمعرّفك المجهول — +10 نقاط	Your reply was posted with your anonymous ID — +10 points
+نُشر ردّك بالرقم باسمك — +10 نقاط	Your number reply was posted under your name — +10 points
+نُشر ردّك بالرقم بمعرّفك المجهول — +10 نقاط	Your number reply was posted with your anonymous ID — +10 points
+{0}هذه منشورك العلنية — الرد هنا مجهولًا قد يربط هويتيك. الأسلم أن ترد بنفس الهوية.	{0}This is your public post — replying here anonymously could link your two identities. It’s safer to reply with the same identity.
+{0}هذه منشورك المجهولة — الرد هنا باسمك قد يربط هويتيك. الأسلم أن ترد بنفس الهوية.	{0}This is your anonymous post — replying here under your name could link your two identities. It’s safer to reply with the same identity.
+{0}هذه مشاركتك العلنية — الرد هنا مجهولًا قد يربط هويتيك. الأسلم أن ترد بنفس الهوية.	{0}This is your public contribution — replying here anonymously could link your two identities. It’s safer to reply with the same identity.
+{0}هذه مشاركتك المجهولة — الرد هنا باسمك قد يربط هويتيك. الأسلم أن ترد بنفس الهوية.	{0}This is your anonymous contribution — replying here under your name could link your two identities. It’s safer to reply with the same identity.
+{n} بندًا بضمير المتكلم — البند سطر أو سطران بلا «أنا / I».	{n} bullets in the first person — a bullet is one or two lines, without “I”.
+{n} بندًا طويلًا (>32 كلمة) — البند سطر أو سطران بلا «أنا / I».	{n} long bullets (>32 words) — a bullet is one or two lines, without “I”.
+{0} بندًا بضمير المتكلم و{1} بندًا طويلًا (>32 كلمة) — البند سطر أو سطران بلا «أنا / I».	{0} bullets in the first person and {1} long bullets (>32 words) — a bullet is one or two lines, without “I”.
+{n} بندًا بلا فعل إنجاز في أوله.	{n} bullets don’t start with an achievement verb.
+{0} بندًا يبدأ بـ «مسؤول عن / قمت بـ / responsible for» و{1} بندًا بلا فعل إنجاز في أوله.	{0} bullets start with “responsible for / I did”, and {1} don’t start with an achievement verb.
+التواريخ وجهة العمل	dates and employer
+التواريخ والمسمّى	dates and title
+جهة العمل والمسمّى	employer and title
+التواريخ وجهة العمل والمسمّى	dates, employer and title
+العرض الأول أفضل بـ {1}% لكل ساعة، رغم فرق الأساسي.	The first offer is {1}% better per hour, despite the difference in basic.
+العرض الثاني أفضل بـ {1}% لكل ساعة، رغم فرق الأساسي.	The second offer is {1}% better per hour, despite the difference in basic.
+مهندس مبتدئ	Junior Engineer
+مهندس أول	Senior Engineer
+قائد فريق	Team Leader
+رئيس قسم	Section Head
+مدير تنفيذ	Construction Manager
+مدير مشروع	Project Manager
+مدير إدارة	Director
+مهندسة مبتدئة	Junior Engineer
+مهندسة أولى	Senior Engineer
+قائدة فريق	Team Leader
+رئيسة قسم	Section Head
+مديرة تنفيذ	Construction Manager
+مديرة مشروع	Project Manager
+مديرة إدارة	Director
+م. {0}	Eng. {0}
+المحفوظة	Saved
+مكتب استشاري	Consultancy
+أنت: {0}	You: {0}
+دخول	Sign in
++{0} موظف	{0}+ employees
+{0} موظف	{0} employees
+بدل انتقال {n}	Transport allowance {n}
+بدل سكن {n}	Housing allowance {n}
+بدل موقع {n}	Site allowance {n}
+اضغط لتظهر علنًا باسمك	Tap to appear publicly under your name
+اضغطي لتظهري علنًا باسمك	Tap to appear publicly under your name
+اضغط لتظهر مجهولًا	Tap to appear anonymously
+اضغطي لتظهري مجهولًا	Tap to appear anonymously
+{0} صوتك مجهول بمعرّف {1} — لا يرتبط باسمك	{0} Your vote: anonymous, as {1} — not linked to your name
+{0} صوتك علني باسم {1}	{0} Your vote: public, under the name {1}
+صوتك مجهول بمعرّف {0} — لا يرتبط باسمك	Your vote: anonymous, as {0} — not linked to your name
+صوتك علني باسم {0}	Your vote: public, under the name {0}
+كباري	Bridges
+أنفاق	Tunnels
+قطاع عام	Public sector
+صباح الخير، {0}	Good morning, {0}
+مساء الخير، {0}	Good evening, {0}
+منشور في {0}	Post in {0}
+رد على: {0}	Reply to: {0}
+على: {0}	On: {0}
+ثابت	fixed
+الإشراف	Moderation
+يحتوي {0} — مسموح عادةً على المنصة	Contains {0} — normally allowed on the platform
+يحتوي {0} — يدعم بلاغ كشف الهوية	Contains {0} — supports a doxxing report
+# admin demo members: exact «first last» combinations only (member-typed names are never partially transliterated)
+عمر حسين	Omar Hussein
+عمر عبد الرحمن	Omar Abdelrahman
+عمر ماهر	Omar Maher
+عمر نبيل	Omar Nabil
+عمر رمضان	Omar Ramadan
+عمر جمال	Omar Gamal
+عمر فتحي	Omar Fathy
+عمر عبد الله	Omar Abdallah
+عمر سعيد	Omar Saeed
+عمر فؤاد	Omar Fouad
+محمد حسين	Mohamed Hussein
+محمد عبد الرحمن	Mohamed Abdelrahman
+محمد ماهر	Mohamed Maher
+محمد نبيل	Mohamed Nabil
+محمد رمضان	Mohamed Ramadan
+محمد جمال	Mohamed Gamal
+محمد فتحي	Mohamed Fathy
+محمد عبد الله	Mohamed Abdallah
+محمد سعيد	Mohamed Saeed
+محمد فؤاد	Mohamed Fouad
+إسلام حسين	Islam Hussein
+إسلام عبد الرحمن	Islam Abdelrahman
+إسلام ماهر	Islam Maher
+إسلام نبيل	Islam Nabil
+إسلام رمضان	Islam Ramadan
+إسلام جمال	Islam Gamal
+إسلام فتحي	Islam Fathy
+إسلام عبد الله	Islam Abdallah
+إسلام سعيد	Islam Saeed
+إسلام فؤاد	Islam Fouad
+خالد حسين	Khaled Hussein
+خالد عبد الرحمن	Khaled Abdelrahman
+خالد ماهر	Khaled Maher
+خالد نبيل	Khaled Nabil
+خالد رمضان	Khaled Ramadan
+خالد جمال	Khaled Gamal
+خالد فتحي	Khaled Fathy
+خالد عبد الله	Khaled Abdallah
+خالد سعيد	Khaled Saeed
+خالد فؤاد	Khaled Fouad
+مصطفى حسين	Mostafa Hussein
+مصطفى عبد الرحمن	Mostafa Abdelrahman
+مصطفى ماهر	Mostafa Maher
+مصطفى نبيل	Mostafa Nabil
+مصطفى رمضان	Mostafa Ramadan
+مصطفى جمال	Mostafa Gamal
+مصطفى فتحي	Mostafa Fathy
+مصطفى عبد الله	Mostafa Abdallah
+مصطفى سعيد	Mostafa Saeed
+مصطفى فؤاد	Mostafa Fouad
+أحمد حسين	Ahmed Hussein
+أحمد عبد الرحمن	Ahmed Abdelrahman
+أحمد ماهر	Ahmed Maher
+أحمد نبيل	Ahmed Nabil
+أحمد رمضان	Ahmed Ramadan
+أحمد جمال	Ahmed Gamal
+أحمد فتحي	Ahmed Fathy
+أحمد عبد الله	Ahmed Abdallah
+أحمد سعيد	Ahmed Saeed
+أحمد فؤاد	Ahmed Fouad
+حازم حسين	Hazem Hussein
+حازم عبد الرحمن	Hazem Abdelrahman
+حازم ماهر	Hazem Maher
+حازم نبيل	Hazem Nabil
+حازم رمضان	Hazem Ramadan
+حازم جمال	Hazem Gamal
+حازم فتحي	Hazem Fathy
+حازم عبد الله	Hazem Abdallah
+حازم سعيد	Hazem Saeed
+حازم فؤاد	Hazem Fouad
+شريف حسين	Sherif Hussein
+شريف عبد الرحمن	Sherif Abdelrahman
+شريف ماهر	Sherif Maher
+شريف نبيل	Sherif Nabil
+شريف رمضان	Sherif Ramadan
+شريف جمال	Sherif Gamal
+شريف فتحي	Sherif Fathy
+شريف عبد الله	Sherif Abdallah
+شريف سعيد	Sherif Saeed
+شريف فؤاد	Sherif Fouad
+ياسر حسين	Yasser Hussein
+ياسر عبد الرحمن	Yasser Abdelrahman
+ياسر ماهر	Yasser Maher
+ياسر نبيل	Yasser Nabil
+ياسر رمضان	Yasser Ramadan
+ياسر جمال	Yasser Gamal
+ياسر فتحي	Yasser Fathy
+ياسر عبد الله	Yasser Abdallah
+ياسر سعيد	Yasser Saeed
+ياسر فؤاد	Yasser Fouad
+بلال حسين	Bilal Hussein
+بلال عبد الرحمن	Bilal Abdelrahman
+بلال ماهر	Bilal Maher
+بلال نبيل	Bilal Nabil
+بلال رمضان	Bilal Ramadan
+بلال جمال	Bilal Gamal
+بلال فتحي	Bilal Fathy
+بلال عبد الله	Bilal Abdallah
+بلال سعيد	Bilal Saeed
+بلال فؤاد	Bilal Fouad
+سارة حسين	Sara Hussein
+سارة عبد الرحمن	Sara Abdelrahman
+سارة ماهر	Sara Maher
+سارة نبيل	Sara Nabil
+سارة رمضان	Sara Ramadan
+سارة جمال	Sara Gamal
+سارة فتحي	Sara Fathy
+سارة عبد الله	Sara Abdallah
+سارة سعيد	Sara Saeed
+سارة فؤاد	Sara Fouad
+نورهان حسين	Nourhan Hussein
+نورهان عبد الرحمن	Nourhan Abdelrahman
+نورهان ماهر	Nourhan Maher
+نورهان نبيل	Nourhan Nabil
+نورهان رمضان	Nourhan Ramadan
+نورهان جمال	Nourhan Gamal
+نورهان فتحي	Nourhan Fathy
+نورهان عبد الله	Nourhan Abdallah
+نورهان سعيد	Nourhan Saeed
+نورهان فؤاد	Nourhan Fouad
+ريم حسين	Reem Hussein
+ريم عبد الرحمن	Reem Abdelrahman
+ريم ماهر	Reem Maher
+ريم نبيل	Reem Nabil
+ريم رمضان	Reem Ramadan
+ريم جمال	Reem Gamal
+ريم فتحي	Reem Fathy
+ريم عبد الله	Reem Abdallah
+ريم سعيد	Reem Saeed
+ريم فؤاد	Reem Fouad
+دينا حسين	Dina Hussein
+دينا عبد الرحمن	Dina Abdelrahman
+دينا ماهر	Dina Maher
+دينا نبيل	Dina Nabil
+دينا رمضان	Dina Ramadan
+دينا جمال	Dina Gamal
+دينا فتحي	Dina Fathy
+دينا عبد الله	Dina Abdallah
+دينا سعيد	Dina Saeed
+دينا فؤاد	Dina Fouad
+هبة حسين	Heba Hussein
+هبة عبد الرحمن	Heba Abdelrahman
+هبة ماهر	Heba Maher
+هبة نبيل	Heba Nabil
+هبة رمضان	Heba Ramadan
+هبة جمال	Heba Gamal
+هبة فتحي	Heba Fathy
+هبة عبد الله	Heba Abdallah
+هبة سعيد	Heba Saeed
+هبة فؤاد	Heba Fouad
+مريم حسين	Mariam Hussein
+مريم عبد الرحمن	Mariam Abdelrahman
+مريم ماهر	Mariam Maher
+مريم نبيل	Mariam Nabil
+مريم رمضان	Mariam Ramadan
+مريم جمال	Mariam Gamal
+مريم فتحي	Mariam Fathy
+مريم عبد الله	Mariam Abdallah
+مريم سعيد	Mariam Saeed
+مريم فؤاد	Mariam Fouad
+ياسمين حسين	Yasmine Hussein
+ياسمين عبد الرحمن	Yasmine Abdelrahman
+ياسمين ماهر	Yasmine Maher
+ياسمين نبيل	Yasmine Nabil
+ياسمين رمضان	Yasmine Ramadan
+ياسمين جمال	Yasmine Gamal
+ياسمين فتحي	Yasmine Fathy
+ياسمين عبد الله	Yasmine Abdallah
+ياسمين سعيد	Yasmine Saeed
+ياسمين فؤاد	Yasmine Fouad
+آية حسين	Aya Hussein
+آية عبد الرحمن	Aya Abdelrahman
+آية ماهر	Aya Maher
+آية نبيل	Aya Nabil
+آية رمضان	Aya Ramadan
+آية جمال	Aya Gamal
+آية فتحي	Aya Fathy
+آية عبد الله	Aya Abdallah
+آية سعيد	Aya Saeed
+آية فؤاد	Aya Fouad
+رنا حسين	Rana Hussein
+رنا عبد الرحمن	Rana Abdelrahman
+رنا ماهر	Rana Maher
+رنا نبيل	Rana Nabil
+رنا رمضان	Rana Ramadan
+رنا جمال	Rana Gamal
+رنا فتحي	Rana Fathy
+رنا عبد الله	Rana Abdallah
+رنا سعيد	Rana Saeed
+رنا فؤاد	Rana Fouad
+شيماء حسين	Shaimaa Hussein
+شيماء عبد الرحمن	Shaimaa Abdelrahman
+شيماء ماهر	Shaimaa Maher
+شيماء نبيل	Shaimaa Nabil
+شيماء رمضان	Shaimaa Ramadan
+شيماء جمال	Shaimaa Gamal
+شيماء فتحي	Shaimaa Fathy
+شيماء عبد الله	Shaimaa Abdallah
+شيماء سعيد	Shaimaa Saeed
+شيماء فؤاد	Shaimaa Fouad
+# v22 — language note (the interface only; community content stays as written) and feminine forms in Settings
+تتبدّل الواجهة واتجاهها فورًا دون أن تفقد مكانك. اللغة تخص الواجهة فقط — المنشورات والتعليقات والرسائل تظهر دائمًا كما كتبها أصحابها.	The interface and its direction switch instantly, without losing your place. The language applies to the interface only — posts, comments and messages always appear exactly as their authors wrote them.
+تتبدّل الواجهة واتجاهها فورًا دون أن تفقدي مكانك. اللغة تخص الواجهة فقط — المنشورات والتعليقات والرسائل تظهر دائمًا كما كتبها أصحابها.	The interface and its direction switch instantly, without losing your place. The language applies to the interface only — posts, comments and messages always appear exactly as their authors wrote them.
+جولة تفاعلية قصيرة على أهم الأقسام — أعيديها متى شئتِ	A short interactive tour of the main sections — replay it anytime
+شرح مفصّل لكل ميزة، وكيف تقرئين أرقام الرواتب وتستفيدين منها	A detailed explanation of every feature, and how to read and use salary figures
+رجوع إلى اختيار اللغة	Back to language selection
+تغيير اللغة	Change language
+اللغة	Language
+رد على منشور:	Reply to a post:
+على:	On:
+# v23 — the engineering CV audit's entry points (the audit itself is written bilingually in its own parts)
+تدقيق السيرة الهندسية	Engineering CV audit
+دقّق سيرتك الذاتية قبل التقديم	Audit your CV before you apply
+تدقيق هندسي للبرامج وحجم المشاريع والمسار والأكواد وATS — مع إعادة كتابة بنودك، على جهازك	An engineering audit of your software, project scope, track, codes and ATS — with your bullets rewritten, on your device
+تدقيق السيرة الذاتية الهندسية	Engineering CV audit
+تدقيق واحد بمعايير المقاولين والاستشاريين والشركات الدولية: عمق البرامج، حجم المشاريع بالأرقام، المسار، الأكواد والشهادات، وATS — مع إعادة كتابة بنودك سطرًا بسطر	One audit to the standard of top contractors, consultants and multinationals: software depth, project scope in figures, track, codes and credentials, and ATS — with your bullets rewritten line by line
+دقّق سيرتك أولًا بـ	Check your CV first with the
+مدقق السيرة الهندسية	engineering CV audit
+دفعة {n}	class of {n}

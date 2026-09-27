@@ -1,0 +1,139 @@
+# _app_1e_helpers · _app_1e2_characters · _app_1g_identity · _app_1i_media · _app_1j_i18n
+3e8b1877	Sufficient
+6adb7aca	Early
+a0c4bf4a	A month ago
+194c73ed	Experience & discipline
+27c66513	Track
+ab283ecb	Location
+544c0d30	Job title
+b0c8a3d8	Employer type
+e531714f	Discipline
+d772c392	Years of experience
+84dd2663	Exact match
+7a468c77	Strong match
+2462d65d	Partial match
+edbcce96	Not a match
+54086f8c	-
+2e1a34c3	,
+44048fac	Confirmed
+d747487b	Likely
+22e0c4c7	A guess — please check
+1454010c	Company
+9d51e155	Ahmed Samy
+af3cd6e8	The file is larger than 15 MB
+8b3e1e8a	Low resolution — move the camera closer
+6b2c8dfc	Poor lighting — avoid full shadow or glare
+39398e44	No Syndicate card detected in the image — it looks like a screenshot or a different picture
+0d9ca88d	The Syndicate card’s gold header band wasn’t detected — photograph the full front side in good light
+e68692f3	The header band doesn’t match the card template
+a933f413	The card is small in the frame — move the camera closer
+ef9fc7fd	The card is cut off at the bottom — fit it fully in the frame
+0f124e8c	The card body isn’t visible or is in shadow
+8eebbd4b	The green field labels weren’t detected — it may be the back side, or the photo is faded
+869e96e9	The image is blurry — hold the camera steady
+b696adfd	-
+f2bbaf23	-
+54224263	-
+fa8c7cb6	Mining & Petroleum
+2b924883	Spinning & Textile
+7494b45c	-
+fc3d5281	-
+a7a31317	-
+82d06d8c	-
+d4b7b24e	-
+563515f5	-
+a541fa88	-
+52706fa3	-
+02d2a77e	-
+959647a5	-
+5ad3280c	-
+b9419568	-
+81340872	-
+70a9400b	EGP / month
+0bcf5982	Verified
+02948b73	Not verified
+619c1210	Not verified
+f9d5bf56	The Civil Engineer
+6a0c959c	The Civil Engineer
+37664491	The Architect
+a4445d73	The Architect
+630bafb2	The Mechanical Engineer
+9169fffa	The Mechanical Engineer
+225c4b07	The Electrical Engineer
+5d3443f3	The Electrical Engineer
+73a99e1f	The Survey Engineer
+6dcbf34a	The Survey Engineer
+4ad96734	The Chemical Engineer
+0ae0f544	The Chemical Engineer
+40cf1edb	The Petroleum & Mining Engineer
+de5786f1	The Petroleum & Mining Engineer
+994cfcec	The Textile Engineer
+c197557b	The Textile Engineer
+380b94e6	The Site Supervisor
+5b7fa7a4	The Site Supervisor
+0830939c	The HR Officer
+e89efd49	The HR Officer
+3fcba43f	The Employer
+64bdd0a5	The Employer
+4ec65bc5	Character: {0}
+8a3cfe5c	Each character is tied to one discipline — never assigned at random.
+44e2b760	Men
+689deb59	Women
+373bbbaf	Enter your email
+6d168a39	That email doesn’t look right — e.g. name@example.com
+d4714f84	At least 8 characters
+92f5faa2	A letter
+23c6902b	A number
+67958fa0	A symbol, or 12 characters
+19ac077a	Weak
+3eccce58	Fair
+f23522a7	Strong
+026ca58f	Choose a password
+b7af69ca	Your password needs:
+abf93797	Re-enter your password
+3c26da10	The passwords don’t match
+1970adeb	Enter your full name
+5dac4d7a	Letters only — no numbers or symbols
+1460538d	The name is longer than 60 characters
+26a38371	Enter at least your first and last name
+9f17a56f	Enter your age
+b01c1af8	Age must be a whole number of years
+5b500e47	Age must be between 18 and 75
+caeccf12	Enter your graduation year
+a0eaf5bf	Enter a year between 1965 and {0}
+9992bf15	Your graduation year doesn’t fit your age — check both numbers
+77681f0b	Fresh graduate
+ddb0fad5	1 year of experience
+3b09cdd5	2 years of experience
+313dfc2b	{0} years of experience
+10b980f0	{0} years of experience
+9e2b675c	Verified engineering degree
+02a34d8b	Verified employer
+6437d4e2	Verified Syndicate membership
+9940fd9c	Eng.
+0ded3785	Anonymous
+32dc9c7e	with your anonymous ID
+0d34baca	Public
+3131cd39	under your name
+daf1e12c	No-sharing guarantee
+c69e9bad	Your profile, verification documents and private data will never be shared, never be sold and never be available to any employer, government body, recruiter or any third party — under any circumstances.
+3011ccd7	Safe handling of documents
+80ac0d12	Any document you upload for verification is used only to grant your badge and stays fully protected: it’s checked, then deleted automatically and permanently as soon as the check is complete. We never keep the image or any copy of it.
+60ea2ec7	Absolute identity protection
+2bff0333	In anonymous mode no member or employer can trace your real identity: no name, no age, no contact details — and your anonymous ID is completely separate from your public profile and never linked to it.
+558b2db6	Your password is stored encrypted (PBKDF2) and no one can see it — not even us. In this preview, all your data stays on your device.
+7f30c4b2	The image is larger than 15 MB
+4fe822cf	The image is too small — at least 120 pixels each way
+da4b158c	Couldn’t read the image — use JPG, PNG or WebP
+d3a32ad5	No image selected
+43bd518f	An image with money figures
+2a7b9d7f	An image whose check didn’t finish
+58061e39	View the full image: {0}
+7323540f	View the full image
+0f5ec733	Full image
+941a0561	Image view
+a69cc1f1	Image from the post
+5bf826c5	Close
+174d32d1	Close image
+d1e54360	Location and camera data were removed from this image before it was posted
+dcd197f4	-

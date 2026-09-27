@@ -1,0 +1,171 @@
+# _app_3d_cvui — CV reviewer screen and the in-depth AI review
+d04df959	This page wasn’t allowed to use Claude from your account — the in-depth review isn’t available in this session.
+c18459bb	Claude isn’t available for this account.
+2573e4e5	Too many requests on your account right now — try again in a few minutes.
+aec48283	The CV text is over the limit — paste the main text only.
+e519677a	The reply didn’t finish in a valid format — tap “Try again”.
+6513cf98	The model declined to review this text as it is.
+a35114fa	No reply arrived — please try again.
+c8d15db8	Your claude.ai session has ended — sign in, then try again.
+8514c103	A temporary service error — please try again.
+429f896f	In-depth review complete
+b8450650	Formatting
+7ffca91c	In-depth review — {0}/100
+1df19d4e	Strengths:
+dbb9a103	Gaps:
+ab13b6ff	Rewrites:
+639cd002	Suggested summary:
+58ce56fa	Steps:
+dff7a2e6	In-depth review copied
+c908954b	In-depth AI review
+ef4ee4f3	A virtual engineering hiring manager reads your whole CV alongside the automatic analysis, rewrites your weakest bullets in your own words, and pinpoints what you’ll be asked in the interview. It can take up to two minutes — accuracy matters more than speed.
+45188371	Checking whether Claude is available to this page…
+cdbfbfe6	The in-depth review runs on the Claude account of whoever opens the page; the automatic analysis above is complete and works everywhere.
+3dc95878	{0}{1}The in-depth review runs on the Claude account of whoever opens the page; the automatic analysis above is complete and works everywhere.
+c752b12c	Available when the preview is opened inside claude.ai
+df5b1145	Start the in-depth review
+cde6b2a1	Your CV text is sent to Claude for this review only, from your account, and isn’t stored by EngSpace. The first time, claude.ai asks your permission.
+ef09209a	Writing the report… {0} characters
+5448d6f4	Reading the CV and thinking…
+0cba5027	Long thinking is normal for detailed CVs — the limit is about two minutes.
+a25a2eef	The first step is silent: the model reads and compares before it writes.
+0a390cb7	Stop
+073fd0b5	Reviewer’s score
+50cbfbda	Convincing level:
+ae037423	Strengths
+3a5d1b31	Gaps — in order
+bd80da68	The reviewer’s view of each section
+813db141	Rewrites of the weakest bullets
+46e6841e	Copy
+c04e319c	Bullet copied
+249171d3	Suggested professional summary
+f43d8c39	Summary copied
+e15f9296	Missing keywords recruiters filter on
+6e0793b6	What you’ll be asked in the interview because of your CV
+e51abbbc	More language notes
+7fe8ed45	More ATS notes
+7fa263b2	Your steps — in order
+ecd72b07	Copy the review
+8ead182c	Re-analyse
+089b8142	New review (uses your account)
+6b0484dc	A language model’s opinion based on your CV text — it can get details wrong; check every rewrite before you use it.
+a080bfa3	Drafting
+3d0ee9f0	Geotechnical
+6c1732f8	Analysis
+9cfdd796	Design & presentation
+00b798d1	Planning
+e0ac9792	Data
+1ac8ec22	Office
+07cbed9b	QS & cost
+7831ea58	Water
+02175b6e	What we understood from your CV — whatever its layout
+115a26a3	If something here is wrong, the ATS will get it wrong too — and that’s the first thing to fix.
+0a92494e	Name
+c0e43588	≈ {0} years
+91b4a510	Arabic
+b75ef3c0	Sections
+12e6e30d	Experience (
+6ecba1d1	Experience ({0})
+5dc12369	No clear title
+07c8467a	bullets ·
+a40c1d62	with numbers
+6d3d1435	{0}{1} · {2} bullets · {3} with numbers{4}{5}
+853b164d	No dates
+f373fec2	· internship
+a6542f68	Gaps:
+c412d4a1	Gaps: {0}
+b41e7943	{0} months
+496770f2	Tools (
+2a1e2139	Tools ({0})
+3625eff8	{0} · {1} — analysed in your browser, not uploaded
+15774f7a	Reading the PDF: {0} {0|page|pages} · {1} {1|image|images} · {2}
+d15b5e6f	two columns — reordered
+6e5a785f	one column
+586d24b8	Reading the Word file: {0} {0|table|tables} · {1} {1|image|images} · headings and lists preserved
+9e846541	Couldn’t analyse:
+3c2a8f9c	Splitting sections: {0}
+9f65e84e	no headings — content classified line by line
+07d4826b	Extracted: {0} {0|role|roles} · {1} {1|qualification|qualifications} · {2} {2|tool|tools} · {3} {3|code|codes} · {4} {4|certification|certifications} · {5} {5|language|languages}
+663ecce6	Classification: {0} · {1} · {2} · ≈ {3} years
+d11db098	Score: {0}/100 · ATS {1}/100 · {2} language {2|note|notes} · {3} improvement {3|step|steps}
+845d9d27	Not enough text found
+48c2561b	The file is larger than 12 MB
+66ed9737	Received {0} in browser memory — nothing uploaded
+8c18d5d0	Couldn’t read the file — try PDF or DOCX, or paste the text
+66238404	Pasted text
+5e578e9e	Sample CV (Arabic · 5 years)
+12ad6ec3	CV review — EngSpace · score {0}/100 ({1}) · ATS {2}/100
+0633b51e	{0} · {1} · {2} · ≈ {3} years
+5f5c5cc2	Sections:
+7a1f1256	Improvement steps:
+64306cc2	Example:
+39b0d709	Language:
+2c08c2ee	Report copied
+b280a88d	High priority
+4167c04a	Medium
+81bceec2	Low
+99ecfa00	Spelling
+b798d67c	Grammar
+040ec2ef	Names
+c8207b57	Punctuation
+000838e1	Repetition
+9abac840	Verb tense
+ddf79cd9	Consistency
+789403b3	Reads any layout — two columns, tables, no headings — and extracts your experience, tools, codes and certifications, then scores each section against engineering hiring criteria in Egypt, checks ATS compatibility, catches language mistakes, writes a suggested summary and bullets from your own words, and ranks improvements by impact. Then an optional in-depth AI review.
+da4e78d3	Automatic analysis inside your browser — no upload
+ae60dfa1	PDF · Word (.docx) · text — any layout
+180ca399	Engineering dictionary: 75 tools · 30 codes · 25 certifications
+5d24155f	In-depth AI review (up to two minutes)
+4e5ef9a4	Upload your CV
+6be2700d	Paste text
+be718842	Paste your full CV text here…
+3b87ed86	Review the text
+e60cccb0	Target job (optional) — for keyword matching
+efa389ac	Selected
+28b73cc7	Pick a job from the platform
+1abc1d11	Pick an ad from EngSpace jobs…
+532a0713	Or paste the text of the job ad you’re applying for…
+af6477ad	Arabic sample · 5 years
+89c97247	What’s measured?
+fa0fac62	{0} points
+aa653ddc	The weights reflect what recruiters at Egyptian engineering firms look at: experience with numbers first, then tools and codes by name, then education. ATS compatibility is a separate score out of 100 from eleven checks.
+149e348a	Reviewing…
+321f8f4d	Reading, splitting, extracting and scoring all happen on your device
+c4482e80	The file is an image, not text
+98481598	Not enough text
+3c6c1160	Review another file
+c2b9d4e7	out of 100
+bb909b69	CV
+69520571	language notes
+50e32e64	{0} {1} language {1|note|notes}
+9e8680a6	Job
+be34098a	{0} Job {1}
+481c5701	Length
+427fe25d	{0} words{1}
+76521791	· {0} pages
+ed09b610	Expected score after what you’ve done:
+ee94e674	{0} Expected score after what you’ve done: {1}
+af3bb80b	Section scores
+99cfcee9	Missing
+3a0f9991	· weight
+39794821	{0} · weight {1}
+86d0bf1c	Drafts written from your CV
+f962c57d	From the data we extracted — edit what’s in brackets.
+c292dd5a	Suggested professional summary
+e0843d5e	Match with the target job
+9f9506f6	The ad asks for
+2c7a6940	keywords — your CV mentions
+4ece5de6	The ad asks for {0} keywords — your CV mentions {1}.{2}
+5c696213	— less than your experience as read
+b4f47356	Compatibility with applicant tracking systems (ATS)
+b125d819	The ATS reads the text, not the look: one column, standard headings, tool names as sold, and clear dates — then it searches for the job’s keywords.
+7e4a0c83	No mistakes from the known list — check proper names by hand.
+95f2d888	The list covers common mistakes in Egyptian engineers’ CVs (hamzas, taa marbuta, “responsible of”, software names) — the in-depth review catches the rest.
+cb72c100	Improvement steps — in order
+56b6ec4b	steps
+67282925	{0} {0|step|steps}
+a953c575	Each step with its approximate effect on the score. Tick what you’ve done to see the expected score.
+0273c4b3	+{0} points
+10bdc3d5	Why:
+144114c0	Copy the report
+bd194efc	The automatic analysis is expert rules on your device — the file isn’t uploaded or stored. Check the final file yourself before sending it.

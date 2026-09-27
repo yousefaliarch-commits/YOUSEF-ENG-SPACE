@@ -1,0 +1,467 @@
+# _app_4c_moderation — reporting (member side) and the admin console
+9232f42c	Post
+458c4e40	Company review
+a04ed43f	Job ad
+7b8db8c7	Member account
+11711a3d	the job ad
+cdcff8f4	the direct message
+0fd1ce3a	the account
+c9d912bf	Reveals someone’s identity or private details
+95c8f708	Threat or blackmail
+de3ba4cc	Fraud, or asking for money or fees
+17c39b37	Swearing, insults or hate
+25f3b064	Fake job or non-existent employer
+db3802a2	Discrimination in the ad (age, gender, religion…)
+28d4abb0	Fake review, or written from inside the company
+87c98897	Impersonating an engineer or a company
+5aa16c1c	Misleading numbers or information
+281f1b0e	Advertising or spam
+bfc77cc5	Another reason — write it for the moderators
+a78a0bf7	Normal
+3a004200	Important
+0fac5b49	Urgent
+5ab52a9d	Hide the content
+62a4880c	Warn the author
+c48e6dbc	Suspend the account
+08b4456a	Automatic 7-day suspension (violation limit reached)
+690f2222	Restore the content
+1ed891b4	permanently
+bef1af51	24 hours
+efc446ef	1 day
+f0e89286	2 days
+ff2afef6	{0} days
+cc8873cc	{0} days
+337c713c	A minute ago
+b19eaa0a	2 minutes ago
+a2bddd3d	{0} minutes ago
+49c23f34	{0} minutes ago
+2e5e8150	{0} hours ago
+07bd6b6c	{0} hours ago
+7090322c	{0} days ago
+ef133d68	{0} days ago
+baee980c	Post in
+788e8639	Reply to:
+064ed5da	Job ad ·
+0027e86d	(The other side hasn’t sent anything yet)
+517173e3	Direct message ·
+ef2866d5	A report about the account itself — not about a specific piece of content.
+68d33981	Member profile
+e75e22c0	The platform is temporarily read-only for maintenance — posting, replies and messages are paused; browsing is available.
+b1e0e58a	Your account has been permanently suspended by the community team — you can only browse and read.
+b16cb14b	Your account is suspended until {0} by the community team — you can only browse and read.
+da732be1	We know who wrote this review, and if it isn’t deleted today we’ll take legal action and he’ll never work in the market again.
+9d014efc	Business Owner · General Contracting · Verified employer
+d0c04da1	Reply to a company review
+f5f53a14	Send me your photo first and then we’ll carry on talking about the job.
+9627ae1b	HR · Contracting company
+e90f8baf	Direct message · question about a job ad
+80944dcd	That’s Eng. H. S., site engineer no. 4 on the Settlement project, and his number is 01000000444 — ask him how much he makes.
+56225d3d	Civil Engineer · 3 years of experience
+fd1cc875	Reply to: Does anyone know civil engineer salaries at Orascom…
+83396310	Fresh civil engineers wanted for immediate hiring on a 25,000 salary — a training and insurance fee of EGP 1,500 must be sent before starting via Vodafone Cash 01000000999.
+b4853e1e	HR · “Al Nour Contracting” — unverified employer
+833dcee9	Job ad · Al Nour Contracting
+f94d810b	Messages engineers in the name of Hassan Allam HR, asking for CVs and ID photos to a personal email.
+77de777d	HR · claims to represent Hassan Allam
+df3c71f4	Primavera and Revit courses at 70% off for room members — message me on WhatsApp and I’ll send the details.
+bdadd0ff	Civil Engineer · 2 years of experience
+d929f5a9	Post in the Technical room
+09e4a7f4	If you won’t answer me, I’ll find a way to reach you.
+01387dfc	Mechanical Engineer · 4 years of experience
+015a7f3e	A business owner threatening the reviewer in the replies
+ff25f7a2	I got this after asking about the job details
+b658945c	They asked me to transfer 1,500 before the interview
+b76d9a26	This figure is far above the market
+dfb41382	He messaged me from a gmail address and said he’s from Hassan Allam
+5f3b81b9	Lots of positive reviews posted on the same day
+f14c5b6d	Repeated commercial promotion
+5bdb3d55	An explicit threat in a direct message — 7-day suspension
+19988cf9	A normal question — no violation
+34ee7fea	The live-on-site requirement
+98f54764	Living on site is a work requirement of the project, not discrimination
+6559432d	Commercial promotion isn’t allowed in rooms.
+3e0802a3	Threats in direct messages are a serious violation.
+1a543a3a	System
+b622380c	3 reports from different accounts — the reply was hidden pending review
+f3d7391f	3 reports from different accounts — the ad was hidden pending review
+ff44d03d	Eng. Salma (moderator)
+96e7f41f	Hide the content · warn the author — repeated commercial promotion
+35870569	Eng. Tarek (moderator)
+9253c1da	Warn the author · 7-day account suspension — an explicit threat in a direct message
+558f2d0a	Report accepted
+9f12a7d8	Report rejected
+6069e4ea	Auto-hidden
+2ca42890	Reopened
+30e12eb8	Hidden manually
+1953a548	Content restored
+05637b97	Account suspended
+37c58ff3	Suspension lifted
+733407a6	Verification granted
+50d20a1f	Verification revoked
+5d553bb5	Role changed
+179e00b1	Setting changed
+24b98559	Announcement
+94caa7d7	Room management
+000bc07c	Reset
+6a1596af	You posted details that reveal a colleague’s identity. Privacy is the foundation of the platform — doing it again means suspension.
+c0e04e7a	Threatening or pressuring anyone who writes a review or an opinion is strictly forbidden on the platform.
+5e3345d2	Suggestive or harassing messages are forbidden — this is a professional network.
+b30d07e1	Asking applicants for money or fees is fraud and is removed immediately.
+ce0533ea	Swearing and insults break the community guidelines — discuss the idea, not the person.
+cce99397	Impersonating a company or an engineer is a serious violation.
+b3453186	Figures you post must be real — review what you wrote.
+405dddc6	A review must be a real experience, not an advertisement for the company.
+a2c9e405	An ad must be for a real job at a real employer.
+021fd5c4	Discrimination by age, gender or religion is forbidden in ads.
+a3a5d44b	Please review the community guidelines — the content broke them.
+f4f5ba57	Field staff
+30096e94	Omar
+4ce95911	Mohamed
+19059984	Islam
+ef465afa	Khaled
+78576e56	Mostafa
+c4826971	Ahmed
+409b56a1	Hazem
+40b39430	Sherif
+9ee3c077	Yasser
+8b925934	Bilal
+dd6f5ac0	Sara
+e596c778	Nourhan
+f9030adb	Reem
+c1691129	Dina
+fc82f3ac	Heba
+ee98a55a	Mariam
+c7eca324	Yasmine
+6ffa08a0	Aya
+34d91c4d	Rana
+fae4805b	Shaimaa
+6f057b78	Hussein
+fc0ccf7b	Abdelrahman
+4f6a807f	Maher
+cac12242	Nabil
+8b6c945c	Ramadan
+05b3897a	Gamal
+17f561c9	Fathy
+cab33c7d	Abdallah
+e7b1cbf3	Saeed
+10c4a220	Fouad
+f569385d	{0} was temporarily hidden after reports from several members — it’s awaiting moderator review.
+03c32fc1	{0} was removed by the community team for breaking the guidelines.
+5b859b35	You hid
+4a29216d	after your report
+a82701fe	{0} is temporarily hidden from members — it reached the report limit and is awaiting a moderator’s decision.
+abcfe1c6	{0} was removed from members’ view by the community team{1}. Only you can see it.
+3d4749a9	— reason: {0}
+755edaeb	Hide the post from me now
+b0eed9ac	Hide the reply from me now
+9220fd78	Hide the review from me now
+0ee52c05	Hide the ad from my lists
+0de63fe7	Block this member in this conversation
+0e43dc07	We couldn’t find this content
+6082c706	It may already have been deleted or hidden.
+be2b1998	Report received
+4bb7bc56	The community team reviews it within
+c4f96053	hours, and you’ll get the result in your notifications. The author won’t know who reported it.
+767232f1	The community team reviews it within {0} hours, and you’ll get the result in your notifications. The author won’t know who reported it.
+1bfa3792	The number of reporters reached the auto-hide limit — it’s hidden from everyone until a moderator decides.
+940efd24	Done
+3ce5e1e5	You already reported
+371de73d	before (
+071d4004	) — the report is under review, no need to repeat it.
+f41a7678	You already reported {0} before ({1}) — the report is under review, no need to repeat it.
+9dcdd969	Reason for the report
+c91adf46	Details for the moderators
+1b7297e5	Details for the moderators {0}
+f7d6e1e2	(required)
+9a814441	(optional)
+4064d8ca	What happened? Don’t include your personal details.
+1c242a20	Your report is anonymous: the author doesn’t know who reported it, and moderators only see your trust level. Repeated malicious reports lower your trust.
+c58a1e96	Send report
+90a91c96	Overview
+49ef2f37	Reports
+8beec99c	Members
+e2609473	Analytics
+1711387d	Content
+6ff0f0da	Audit log
+41b05461	Active
+9f0afd49	{0}: lower quartile {1}, median {2}, upper quartile {3}
+cf5a2596	Decrease {0}
+9c46e0c5	Increase {0}
+fa9836fa	You (moderator)
+ebc944c4	No violation · restore the content
+ac6a41e6	No violation
+2425598f	Automatic 7-day suspension — {0} confirmed violations
+2532b086	We took action on your report
+d464dfcc	Your report about {0} (“{1}”) was accepted: {2}. Thank you for protecting the community.
+b99da198	We reviewed your report
+5096b9d6	We found no breach of the community guidelines in {0} you reported.{1}
+9e055f2b	Moderator’s note:
+2834b8ee	Your account has been temporarily suspended
+93e61ee8	A warning from the community team
+4e73d494	Content you posted was removed
+56b580cd	{0} was hidden because of: {1}.
+8d445919	While suspended, you can only browse and read.
+8b671e40	Decision carried out: {0}
+382c5fbf	Report rejected — the reporters were told the outcome
+87669b52	The case was returned to the reports queue
+f3262b74	The case was reopened
+fb4a06fa	Moderator decision
+a283e8fd	The content was hidden from everyone
+f456e7d6	The content was restored
+80a031d0	Warning sent to {0}
+a3072f12	Suspension {0}
+32fa27f2	Your account was suspended
+76ca64c6	Your account was suspended {0} by the community team — until {1}. You can only browse and read.
+1d85a743	Your account was permanently suspended by the community team. You can only browse and read.
+6ec4d83e	{0}’s account was suspended
+9f4704f8	Suspension lifted
+82db2528	Your account’s suspension was lifted
+d48b9ac8	You can post, reply and message again.
+ca3540ce	Suspension lifted for {0}
+c894691c	“Verified” badge granted
+15875abb	“Verified” badge revoked
+264e51b6	A “Verified” badge was added to your account
+fc85f5ba	The “Verified” badge was removed from your account
+9dbc161c	The badge shows on both your public and anonymous identities.
+8f420131	You can verify again from “Your account” at any time — the document is deleted right after the check.
+1d6ca93a	{0} was granted the “Verified” badge
+b672ce9e	The badge was revoked from {0}
+3f7462e5	Role is now: {0}
+9665c3e0	Setting saved — it takes effect in the app immediately
+2d6aa4ce	The sample moderation data was restored
+92f71dd3	The platform team’s console: reports, members, analytics, content and settings. It runs on the app’s own data — every report you send from the app shows up here instantly, and every decision here shows in the app.
+d85d92f8	Moderators only · two-factor authentication in production
+ff8f97a9	Open the app
+506cd179	Admin console sections
+4ceb9e01	Registered members
+e8a0dacf	Active today
+b86704b6	Open reports
+fc80acaa	Average time to resolve
+40add5d3	h
+25c71287	Verification rate
+dd6f5d96	Document images are never stored — they’re deleted right after the check
+98143ede	Salary transparency coverage
+0ed79c91	Cells (discipline × experience × governorate) at “Verified” quality: 100 reports or more
+0587977c	Active job ads
+ab8b0950	Company contact rate
+18f67b63	From viewing an ad to opening the email or phone
+30f498ad	Daily active — last 30 days
+211721fe	All analytics
+790516fb	Daily active over 30 days
+d485efe1	Fridays and Saturdays are quieter — the weekend in Egypt. A modelled series, fixed for each day.
+9bb48520	Needs your decision now
+cef0adfb	All reports
+02464881	No open reports — the queue is clean.
+c22c8a51	reporters
+f77cf17d	· {0} {0|reporter|reporters}
+a2b9ca67	Latest decisions
+681b653b	Report status
+d7dbbe51	All types
+139d4aef	Nothing here
+02c67f7b	No reports match this filter.
+e41adf5d	Accepted
+850ec021	Rejected
+d4c5fa05	Hidden
+45fdd7a2	Your report
+3e66b87a	reporters
+31c61f28	Pick a report to see the content and automatic signals, and to decide.
+b2fbb546	No suspension
+17eb7e3e	7 days
+c2b33534	30 days
+8c05f2fb	Permanent
+d4b7c377	The language filter blocks this text: {0}
+259b6dc1	Tone warning: {0}
+383046be	Contains {0}{1}
+d1a13b12	— supports a doxxing report
+5e44aef5	— normally allowed on the platform
+f1ac8486	{0} reporters from different accounts · average trust: {1}
+ecda2a2d	Auto-hidden {0} — reached the hide limit ({1} reporters)
+c777d118	Hidden by a moderator’s decision
+8700f4d9	A report on this content was rejected before — its auto-hide limit is doubled
+b97e28d7	Account record: {0} {0|warning|warnings} · {1} confirmed {1|violation|violations}{2}
+9fb6db03	· currently suspended
+e3667755	No previous violations for this account
+f2f7b211	The author is a company account — complaints against employers are reviewed by the same standards, without favouritism
+2f018e87	First report
+2cb5998c	First report {0}
+8934194e	Image of the reported content
+60309c9e	Open it in the app
+751b6166	Automatic signals
+1966ab54	Signals help, they don’t decide — the decision is always human and logged under the moderator’s name.
+598e1279	Anonymous reporter · trust:
+263d5c27	Anonymous reporter · trust: {0}{1}{2}
+093a3f6a	· your report from the app
+e24e6871	Reporters’ identities aren’t shown to moderators or to the author — only their trust level.
+f71413f6	Decision
+08042201	Hide
+69791214	from everyone
+83f44c2a	Hide {0} from everyone{1}
+8de952da	“Removed by the community team” shows in its place, and the author is told why.
+728b6516	Warn the author
+e2a7bfe7	Warn the author{0}
+4d4d0d46	They get a notification with the warning text.
+81a8e903	Warning text
+6bc0d7bd	Suspension length
+9b145cd8	Internal note — logged in the audit log, and sent to the reporter on rejection
+7a608396	Moderator’s note
+4301217e	Accepting records confirmed violation no.
+b274a8f8	for this account
+0840d7bb	Accepting records confirmed violation no. {0} for this account{1}.
+a872ed1a	Accept the report and take action
+91ce70e4	Reject — no violation
+a42170df	Reject — no violation{0}
+79fd6176	 and restore the content
+e5d2a875	Decision taken
+17091bbc	Report accepted: {0}
+ea0a9b2a	Violation recorded
+d07f873b	Report rejected — no violation{0}
+f41a620f	· content restored
+a00f126a	Reopen the case
+5d06a8ed	Search by account number, public name or anonymous ID
+b2b02f17	Account status
+8029f660	All statuses
+309128b7	Verification
+3b0cabd0	accounts
+26454d8d	{0} {0|account|accounts}
+d9708f2a	Show more (
+f7a20e8a	Show more ({0})
+b72bc010	Pick an account to manage verification, role, warnings and suspension.
+d249c7b6	Account number
+23ebfaca	Identity shown
+2dc6d4f2	Public, by name
+a4340cc9	Anonymous only
+c46562fd	Role
+5d195071	Governorate
+aa9ef566	Joined
+126eeb88	Last active
+19395173	Contributions
+ec8a769f	Confirmed violations
+9d8a8b66	All members
+484e195c	Your account in the app
+0a2386cd	· permanent
+45352817	Until {0}
+394fa293	Last warning: “
+b335eacd	Last warning: “{0}”
+dfc1306b	This profile doesn’t show the name or email behind an anonymous identity, and doesn’t link the two identities — suspension is applied to the account automatically without revealing it.
+40a1c79f	Verified badge
+eca1f21b	No document image is stored for any account: the document is checked on the device, then permanently deleted as soon as the check is complete — only the status, division, graduation year and a reference number remain.
+8112f1f8	{0} No document image is stored for any account: the document is checked on the device, then permanently deleted as soon as the check is complete — only the status, division, graduation year and a reference number remain.
+8df23261	· class of
+49606fb8	The account isn’t verified.
+480a0687	The role sets permissions in the app: engineers and site supervisors share salaries and review companies; HR and business owners post jobs and don’t review.
+81ce88d1	The role sets permissions in the app: engineers and site supervisors share salaries and review companies; HR and business owners post jobs and don’t review.{0}
+c6974ffc	Changing your own account’s role shows in the app immediately.
+11e562b9	The warning text as the member will receive it
+af5c358b	Template: language
+5c2ca282	Template: promotion
+dca89d3f	Send warning
+84649704	Suspension
+57bd471a	Can only browse and read.
+63f8020e	{0} Can only browse and read.
+807885c7	Permanently suspended.
+c4e622e1	Lift suspension
+75028b46	Blocks posting, replies, reviews and messages — browsing stays available.
+f352a649	No reports.
+85e181e2	Open
+42cd7d14	Period
+d7ed2e28	90 days
+08b3e247	Time series are modelled and fixed for each day; posts, jobs and reports are live from the app.
+be6dd617	Active members
+c873c533	Average daily active
+0e39cbdc	Monthly active (estimate)
+e149aff9	Stickiness (daily ÷ monthly)
+7652fc95	New sign-ups
+ed082270	Daily active over {0} days
+ef6ec354	Replies per post
+73a73685	Posts that got a reply
+102ce6c7	Questions with an accepted answer
+d55f215c	Reactions per post
+36b99c37	Number replies
+00532da8	Salaries shared by members in the period
+e4ba7b66	Posts and replies by room
+7625bfda	Fastest-rising disciplines
+6be2eebe	Fastest-growing tracks
+26c45ec8	Reference salary distribution
+a1f2d0ba	Box: lower to upper quartile · line: median · whiskers: P10–P90 — in EGP a month, from the same model members see.
+8e1de9fa	All reports in this cell (
+b4624721	reports, all disciplines)
+0fbaa839	All reports in this cell ({0} reports, all disciplines)
+2121ea36	Salary report distribution
+da0f6b54	Ad reach (notification or “For you”)
+5e1f7871	Ad views
+646f4501	Contact rate
+c0acd755	By discipline
+8b2b7de2	{0} · {1} {1|ad|ads}
+0fd1950c	Ads with the highest contact rate
+4b0bf305	views
+2dc5a4de	{0} · {1} {1|view|views}
+95ad34cd	Applying itself happens off the platform (the company’s email or phone): we measure only opening the contact details, and we neither know nor store who applied.
+5d49ccf4	On:
+2465310c	Replies
+d0965246	Reviews
+ea856882	Rooms & announcements
+e677353e	Search the text
+cc719ac2	items ·
+1576b168	{0} {0|item|items} · {1} hidden
+b9807df2	Auto-hidden
+51d200a6	Removed by a moderator
+054e1707	Visible
+5626d83c	Show again
+6c98b3fa	Hide from everyone
+f4f17097	Announcement on the app’s home screen
+4c3fda59	Turn on the announcement
+4265abe9	Turn off the announcement
+3cb660ca	Show announcement
+f649ee82	e.g. The Q3 salary data update is now live — share your figure so it counts in the medians.
+9dace827	Announcement text
+87fff68e	Announcement type
+abeb5f85	Info
+2d058991	Good news
+a4485906	Alert
+eb4c8340	Publish in the app
+3f097f33	Announcement published:
+da632fe7	No announcement showing right now.
+fededc70	Rooms — posting
+3730a83d	members ·
+343e5f12	{0} {0|member|members} · {1}
+b0933f7b	Closed to new posts
+a036c9df	Open
+32c3e546	{0} posting in {1}
+f8a9e7d0	Open
+324902d7	Posting in {0}
+addf514c	A closed room stays readable and replies are allowed — only new discussions stop.
+c6d787f3	Auto-hide limit
+1d271dd3	The number of different reporters that hides content until a moderator decides. Zero = auto-hide off. After a report on the same content is rejected, the limit doubles.
+62af871c	Auto-hide limit: {0}
+912e1d7d	Violation limit for automatic suspension
+00746e3b	When confirmed violations reach this limit, the account is suspended for 7 days automatically. Zero = rule off.
+32da35e1	Violation limit
+71c7f057	violations
+852a3259	Violation limit: {0}
+a48c4739	Report review deadline
+085a7147	The promise shown to reporters in the app, and the “overdue” indicator on the overview.
+7e69e808	Review deadline
+54ebc2d7	Review deadline: {0} {0|hour|hours}
+e3609cd1	12 hours
+b91bbb18	48 hours
+789f1271	Platform
+d8931dc8	Direct message retention
+793def7b	Conversations are cleared automatically after this period. It’s shown at the top of every conversation.
+153bbf92	Retention period
+2c79e101	Message retention: {0}
+2fcbe13f	3 days
+3788bb0e	14 days
+4804ccc7	Read-only mode
+7874ea1c	For maintenance or emergencies: posting, replies, reviews and messages stop for all members, and an explanatory banner shows in the app.
+40dd42bb	Turn on read-only mode
+651757f9	Turn off read-only mode
+4731aa26	Preview data
+4061baf4	Resets reports, decisions and settings to the original sample data. It doesn’t touch your account or posts.
+f655cb93	Reset moderation data
+6c538f22	Confirm reset
+2a992a3d	Nothing in the log.
+299b1f41	Copy the log
+0517fa4a	Log copied
+56f33ed4	Action type
+9cdbfe0d	Report decisions
+ce343f64	Every action in the console is logged here with the moderator’s name and time, and can’t be deleted from the console.

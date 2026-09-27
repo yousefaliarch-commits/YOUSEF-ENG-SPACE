@@ -1,0 +1,269 @@
+# _app_4_sheets — share salary, compose, review, verify, member sheet, logo, privacy, tools, methodology
+3a85f803	Enter your job title as it appears in your contract.
+dfb368d1	Enter a monthly salary greater than zero.
+3b5d4e29	Confirm that the value is a test value to continue.
+325448fb	Done. The market is open to you now.
+9c90d43c	Your salary
+04f83985	for this experience.
+6d4ccde2	The simulation completed locally and nothing was sent.
+0bb24d12	Your salary {0} EGP {1} for this experience. {2} The simulation completed locally and nothing was sent.
+e305abd4	is within the market range
+f30f72e7	is above the market’s upper quartile
+0816734a	is below the market’s lower quartile
+ca7c801e	+50 points.
+6ecd2978	The figure was attributed to your public profile as {0}
+f8754ef6	The figure was attributed to your anonymous ID #{0} — not linked to your name
+f18ebab2	Browse salaries
+2f11de43	Browse salaries
+f541dca4	Employer
+d6f737f4	Salary
+53ae17c2	Your discipline
+8d855084	We use this to put your figure in the right comparison. In the last step you choose: publicly under your name, or anonymously.
+5b973fc4	Governorate & city
+48c67665	The figure will be linked to
+3d50f4d1	as the company, with no details that identify you.
+cf074c2b	The figure will be linked to {0} as the company, with no details that identify you.
+3303e9bc	Gross monthly salary
+5469efd5	Before tax and deductions, excluding annual bonuses. The median for your experience in
+6250f71c	EGP.
+f2b43f78	Before tax and deductions, excluding annual bonuses. The median for your experience in {0}: {1} EGP.
+38da2211	Share salary
+ae0bf2a5	Public: the figure and its title show on your public profile under your name, and feed the medians.
+0382cc71	Anonymous: it feeds the medians and is attributed to your anonymous ID only — no name, age or city.
+033e3e27	I’m using a test value and understand it won’t be sent.
+173219c1	Confirm and share
+33821c32	Ends in 24 hours
+d32ef148	What do you think?
+6bb6b918	Your figure was posted
+07cb71d1	Your post was published
+4bc62991	+15 points
+0d4d2ab1	+5 points
+a8fb76d0	Room
+65f74e4d	Company (optional)
+932e2f66	Poll question
+d9cff2ca	Option {0}
+ddd3359e	+ Option
+f1237f22	Write the offer in numbers and people vote: take it or turn it down?
+95d22bd6	Why are you sharing your number? What made the difference in your last raise?
+0e354153	Ask colleagues about site work: execution, safety, handovers, schedules…
+6e1e8f30	Ask colleagues about site work: execution, safety, handovers, schedules…
+05d1f7ed	Ask about a salary, an offer, a company or a career decision. Numbers help people answer you.
+7029a65d	Ask about a salary, an offer, a company or a career decision. Numbers help people answer you.
+9521c438	Add an image — optional
+58a6685c	A short description of the image — for screen-reader users (optional)
+444c0800	Image description
+1d98fd01	Checking the image on your device for money figures…
+dfd1f919	It contains money figures — hidden from site supervisors, and shown to company accounts as a notice instead of the image.
+8942f7a1	Couldn’t check the image — it will be treated as containing money figures.
+13c71dea	No money figures in the image · location and camera data removed.
+5bc24bcd	Anonymous post: make sure the image doesn’t show your face, your name, your company’s signage or a place that identifies you.
+52658fb8	Looks like you’re writing a name in an anonymous post — remove it, or post publicly.
+ee7d126a	Post under your name
+eafbec83	Post anonymously
+8d0d7a3a	One moment — checking the image before posting.
+5787b0bd	Fix the inappropriate language first.
+ed5fd66e	Write at least 10 characters.
+f9903e0b	Enter the salary as a number.
+55317b09	Add at least two options to the poll.
+e449a56d	Review {0}
+9937637c	{0} {0|star|stars}
+5eeadb1b	What should an engineer know before accepting an offer here? Pay, raises, hours, respect.
+4de9479c	Thanks — your review was posted {0} · +15 points
+b5bd8ab5	Post the review under your name
+7bf7f2bf	Post the review anonymously
+2e156c11	Company accounts are verified by email domain
+8e6412d6	The “Verified employer” badge appears automatically when you register with an email on the company’s domain.
+9c24fd7c	“Verified” badge added — it shows on both your public and anonymous identities
+65eafdcd	Under manual review — we’ll let you know within 24 hours
+bd977187	Verification didn’t complete — and the document was deleted. Try again later with a clearer photo
+f632d6e4	Character:
+37ea1b82	Character: {0}
+d653ff94	Community expert
+58cab7a5	— without revealing the name or membership number
+97c4b9f5	Public posts
+9127616f	Posts under the ID
+3f56919c	Public replies
+69eb6ea3	Replies under the ID
+1d34beb4	Salaries shared
+63652f69	Salaries shared {0}
+ffb214e9	publicly
+95598e57	under this ID
+e4cf0069	This is your
+5f397d16	profile as others see it.
+01961add	This is your {0} profile as others see it.{1}
+dcd2ceb2	public
+c3bed372	anonymous
+06bd1fc6	 Your anonymous contributions don’t appear here.
+414aa8ca	 It doesn’t show your name, age or city.
+30f31e2b	From a member profile
+37ccd634	Report this account
+6af0a0d7	Public profile: the owner chose to appear under their name on these contributions only. Their anonymous contributions — if any — don’t appear here and can’t be linked to this name.
+f7ed4199	Public profile: the owner chose to appear under her name on these contributions only. Her anonymous contributions — if any — don’t appear here and can’t be linked to this name.
+ebcab0e5	Anonymous identity: no name, age, city or contact details — and no member or employer can link it to a public profile.
+843412dd	The logo is larger than 2 MB
+37feeb12	Square, PNG or SVG, up to 2 MB. Shown on the company and job cards.
+fc2bc7f8	{0}Square, PNG or SVG, up to 2 MB. Shown on the company and job cards.
+d8f9636d	Current: the real logo from {0}.
+32d82729	Choose an image
+e7b09b24	Company logo updated
+8ce23f38	The registered official logo was restored
+4f5cee1b	In this preview the logo is saved on your device. In production it’s uploaded after checking that the account belongs to the company.
+ec6f3673	Two completely separate identities
+2f6c72a5	Your full name and full title (discipline, track, level and city), graduation year, age and verification badge — only on contributions you choose to post publicly.
+f97658cf	{0} Your full name and full title (discipline, track, level and city), graduation year, age and verification badge — only on contributions you choose to post publicly.
+0ef6f32a	Public:
+eb510e02	An ID like
+cc82d63f	and a cartoon character, with your general role, years of experience and verification badge — e.g. “Civil Engineer · 5 years of experience · Verified Syndicate membership”. No name, age, city or contact details.
+79e626e4	{0} An ID like {1} and a cartoon character, with your general role, years of experience and verification badge — e.g. “Civil Engineer · 5 years of experience · Verified Syndicate membership”. No name, age, city or contact details.
+70448f7a	Anonymous:
+75129a04	You choose the identity on every post, reply, company review, vote and salary share. The identity inside a direct conversation is fixed with the first message so the two are never linked.
+3c1b496a	The anonymous identity has a round cartoon image and the public one shows initials in a square — the two can’t be matched by picture, and neither’s contributions show on the other’s profile.
+62673a7d	Your anonymous ID can be renewed at any time, and your old activity isn’t linked to the new one.
+c7dc5bdc	What does the “Verified” badge mean?
+5992ea9e	That its owner — optionally — uploaded a Syndicate ID card or an engineering certificate, the document was accepted and then deleted. It doesn’t mean the salary is audited or that every claim is guaranteed. Signing up and every feature of the app work without it.
+2d2f0368	This is an interactive preview: the account and profile are saved on your device only, and no real server-side check takes place.
+bcd3dbb8	Net calculator
+882c05a2	From gross to what reaches your account
+06f5f155	Offer comparer
+3b6e8189	Two offers at the true value of your hour
+1a15af03	Ready-made words, with numbers
+e35cda30	Raise timing
+11931392	Ask now or a little later?
+f4a0cd99	Career path map
+1e23dc83	Your next step and its number
+1edfcdbd	Contract checker
+7b032bca	Before you sign
+4235193f	Relocation cost
+bacc3371	Cairo ↔ New Capital ↔ Alamein
+d76ed15b	Raise vs inflation
+a0edcc7a	Is your raise really a raise?
+3cb27f43	Roughly reaches your account
+dae1bc79	Net
+8bc1737d	Tax
+106bb9f6	Social insurance (11% up to the cap)
+1219ec5c	Monthly income tax
+5f9330f4	Effective deduction rate
+08431ed4	An estimate: the brackets of Law 175 of 2023, a personal exemption of EGP 20,000 a year, and an insurable-wage cap of EGP 16,700. Excludes exempt allowances and private medical insurance.
+dc98ed19	Share the result anonymously
+57b61372	Basic
+f1e47007	Commute (min / one way)
+01f6e302	Hours / week
+2ed9490f	First offer
+0c94a46c	Second offer
+cb70a5aa	The true value of an hour of your life (including the commute)
+e7af6ad9	First
+39321e81	Second
+ba6e154d	Offer
+48549a97	{0} {1} offer {2}
+4bd3d7ce	h/week
+6076e83c	· {0} h/week
+67356311	EGP/hour
+0ae0194c	The {0} offer is {1}% better per hour, despite the difference in basic.
+9db8a047	The two offers are practically equal — decide by career path, not by the number.
+5d3907db	Thank you for the offer — I’m excited about the role. Before we settle the number, I’d like to share what I’ve seen in the market.
+8871e971	The expected range for a {0} ({1}) with my experience in {2} is currently around EGP {3}, based on verified reports from engineers on the same track.
+6d972d26	The current offer is {0}. If we can get to {1}, I’m ready to sign this week.
+8a575136	And if the basic is fixed for now, let’s agree on a transport allowance or a written review after 6 months at a set percentage.
+96d9c847	I appreciate your time, and I’d like us to start on a basis that’s clear for both sides.
+b1298242	Market midpoint
+786d8db0	Ask for
+91f61aad	— 5% above the midpoint, a number you can defend
+4e338d63	Ask for {0} — 5% above the midpoint, a number you can defend
+0141e6ff	Script copied
+d554789a	Ask the Negotiation room
+d174b521	Your current salary
+1b4e6016	Months since your last raise
+492a5598	months
+3890f763	Last raise
+30985d23	Ask now
+1dfc42f9	Wait {0} {0|month|months} — or build up a documented achievement
+2ec99ebd	months
+46e0c5e7	months
+b567197c	Your gap to the market midpoint
+ab068238	The number to ask for
+17ae661a	The minimum you’d accept
+7e4a1acd	The gap is large: open the topic with numbers, not feelings, and ask for a set meeting — not a chat in the corridor.
+9e20e78f	A whole year without a review — asking is normal and expected.
+244c0d73	Raises at contractors are settled at the end of the financial year or at a phase handover. Prepare a sheet of your achievements.
+12e4ac7b	Prepare the script with these numbers
+703d2244	Usually senior + PMP
+0691a1aa	ETABS/Revit and a consultancy
+f6d4973b	QS & IPCs
+c0e0ea88	Supervision consultant
+b238703c	Execution & sites
+45f15ece	FIDIC & quantity surveying
+c5ce5f1f	You now:
+58f6ee5a	— your midpoint
+59e2d07f	You now: {0} — your midpoint {1} EGP.
+f0f75609	Same track, over time (by exact title)
+e448d9a8	You’re at the top of the track — the next step is management or independent consultancy.
+ba403702	Switching tracks, with the same experience
+4bd52ee2	Ask someone who did it before you
+c9228a41	Probation is written with a duration (usually 3 months) and on full pay
+2b58067d	If it isn’t written, it can be extended indefinitely.
+847e77e9	Allowances are in the contract, not just verbal
+326eb71e	A site allowance that isn’t written disappears when the project changes.
+73bb1015	The annual raise percentage or review date is written
+df2f427e	“Based on performance” means nothing.
+42ff14ef	Working hours and overtime are defined
+91798f2d	12 hours on site with no written overtime = volunteering.
+3fd8319a	The notice period is the same for both sides
+38c8c774	Two months for you and one week for them is a big difference.
+9fc104bd	Social insurance on your real salary, not the minimum
+a15bb7e2	It affects your pension and any compensation.
+9c14def8	A non-compete clause limited to a reasonable period and scope
+7771bafe	Two years across all of Egypt is an impossible condition.
+167981d4	No unlisted deductions (training, custody, fines)
+3161e533	Ask about them before signing, not after.
+5065e89d	A sound contract — sign it
+160a0e3d	It has gaps — negotiate the rest
+bf6766ea	Don’t sign before you ask
+e4a3b38e	The offer there
+5d074dec	Company accommodation
+d164914b	We’ll move as a family
+2117a6b2	Monthly difference after rent and travel
+356f390c	Rent
+0abdebc0	Rent in {0} now
+865bb4e7	Rent in {0}{1}
+e5544465	 (company accommodation)
+1759bc06	Monthly travel to family
+bce01ad5	Monthly travel to family{0}
+b23e0da2	 (outside the region)
+6a8bf84b	Market midpoint there for someone like you
+ad799f9a	The move pays off financially — set a fixed period up front and agree on returning to a project in your governorate afterwards.
+9aa18661	There is a difference, but it’s small. Ask for an away-from-home allowance or raise the offer by at least 1,500.
+0e538f76	The offer doesn’t cover the cost of moving. The number that makes it worth it:
+533073cf	Raise offered
+5997fada	Annual inflation
+6e59b148	Your purchasing power after the raise
+e810c93a	in real terms
+bcdbd842	The new salary
+b3aebd00	What you need just to stand still
+e25e9cfc	A raise that genuinely improves your position
+f146ed59	This raise is a pay cut in disguise. Bring the inflation figure into the discussion — it’s your strongest argument.
+f44fc430	It barely covers inflation. Ask for the difference as a fixed allowance if the basic is locked.
+d00754c1	A real raise — rare these days. Log it under salaries so others benefit.
+c888adcd	Is now the time to ask for a raise?
+cfc2f85e	Updated
+67c80ce3	Updated {0}
+c521d1bf	Regulatory references (real, with sources)
+008de1ec	Source:
+f6dcd820	Source: {0}
+1ba136ad	The basis of the figures
+e6759471	P10–P90 for each discipline × experience, then the governorate/city factor (
+e3af78c4	cities, markaz and districts across 27 governorates: 0.74 Juhayna → 1.12 New Alamein) and the track factor (site 1.00 → project management 1.35).
+2aafa5f9	P10–P90 for each discipline × experience, then the governorate/city factor ({0} cities, markaz and districts across 27 governorates: 0.74 Juhayna → 1.12 New Alamein) and the track factor (site 1.00 → project management 1.35).
+84a5a3dd	Allowances are shown separately because they don’t count towards social insurance or bonus calculations.
+1391aad2	Quality badge: Verified ≥100 reports · Sufficient ≥30 · Early below that.
+9aee9356	Modelled figures have a ±15% margin of error. Every figure you share replaces an estimate with a real number.
+8337f949	How lists and filters are ordered
+a4f85c01	One rule on every screen: filters go from broadest to narrowest (discipline → track → title → location), then sorting. “For you” in Jobs starts sorted by match score, then newest, with every other sort available; the other lists default to newest. Companies: reports → median as the tie-breaker, with unknown founding years at the end. Post replies: the accepted answer first, then the most “Helpful”, then the oldest.
+0f894665	Applying for jobs
+dae28dbd	Happens off the platform: every ad carries the company’s email or phone, and the engineer sends a CV from their personal email or calls. No forms, no tracking, no middleman. The “CV reviewer” tool runs on your device and doesn’t upload the file.
+20658228	The expected range on job ads
+b91c9dbd	Companies don’t write a number. Range = lower to upper quartile of the market for (discipline × years of experience) × city factor × sub-discipline factor × exact-title factor (fresh graduate 0.90 → director 1.45) × employer-type factor (government 0.72 → back office 1.90). The midpoint is shown with the number of reports and the quality badge.
+145b01ba	Matching & notifications
+915d55a5	Discipline 40 points · sub-discipline 25 (neighbouring tracks 12) · years of experience 20 (±2 years 10) · location 10 (same region 5) · title 5. 85 and above is an “exact match” and triggers an instant notification; 65–84 is “strong” and shows under “For you” without a notification.
+24904ea1	Company classification & logos
+edab2b3d	Facts (founding year, headquarters, ownership, category, federation grade) come from the public record. Real logos are taken from each company’s official website or its Wikipedia page, and are replaced by whatever the company uploads from its verified account. “—” means we can’t confirm the fact, rather than guessing it.
+fc6cbf1c	Replace an estimate with your real number

@@ -1,0 +1,163 @@
+# _app_2_chrome · _app_2b_onboarding — headers, tab bar, sheets, place picker, ID camera check, post cards, reactions, votes, polls
+9b64ffa5	{0} out of 5
+98864328	Can’t send — inappropriate language
+948a2cdc	A note on tone
+7c3ab1dd	Your {0} will be visible to all members alongside your name — that’s allowed. For personal contact, use direct messages.
+12f7c844	Your {0} will be visible to all members alongside your anonymous ID — that’s allowed, but it may reveal your real identity. For personal contact, use direct messages.
+3112562c	Discussion
+988e67d1	Job details
+0eb7129e	Notifications
+692700e9	Your account
+56581c9e	Rooms
+76dc3328	Direct message
+2f2e403b	Relationship & permissions map
+81edf6c9	Edit ad
+80fcaa45	Post a job
+df9ca38e	CV reviewer
+db8520a4	Methodology & sources
+90b6c869	Settings
+5a15775d	User guide
+328ddce5	Back
+118393f0	Share link
+12601ae1	Link copied
+2db9bef1	Report post
+c2d01f94	Report ad
+126fd1c9	Back to the design system
+2ee7f3c2	Notifications{0}
+71b332cf	· {0} unread
+82c1fd65	Main navigation
+9f0fd247	City / markaz / district in
+1f909269	City / markaz / district in {0} {1}
+9e6718e3	All of {0}
+3623990b	Search for a city or markaz
+ae85f10f	Search cities
+b8db891a	No results
+fd44a40d	From {0} to {1} EGP, median {2}
+84d11dc0	Engineer · not verified
+b664ed56	Engineer · not verified
+9398b8dc	· verified
+4ab1332c	You
+5c144d6c	This embedded page has no camera permission (Permissions-Policy) — the camera works when the app runs on its own domain
+72314a2a	Browser camera permission: {0}
+8ce8adb7	allowed
+7eb70f32	denied
+a64ec8a7	will be requested now
+d6961d97	The page isn’t served over HTTPS — the camera needs a secure connection
+ddb8f696	This browser doesn’t provide getUserMedia here
+ad9d97af	Camera is on — place the card inside the frame and fill it
+ce8fe380	Permission was denied, or this embedded page has no camera permission
+856d2fc0	No suitable camera found
+83fdedd9	The camera is busy in another app
+a87f4bc1	This browser doesn’t support the live camera here
+7767dead	Unexpected error
+0d9941ae	Live camera unavailable: {0}
+107f0d17	We’ll open the system camera instead — if it doesn’t open, pick the photo from your library
+e0b85062	The camera isn’t ready yet
+dd17203f	Received {0} in browser memory only — nothing uploaded
+badd5a92	Couldn’t decode the image — if it’s HEIC, export it as JPG and try again
+3cd57e9b	File check: {0} · {1} KB · {2}×{3} · lighting {4}
+a71b7352	Card detection: gold header band ✓ · band ratio {0} · frame coverage {1}% · card body {2}% · green labels {3} px · sharpness inside the card {4}{5}
+cdb8db62	· rotated 90°
+5b1bc8ce	Card detection: no gold header band found in any orientation
+82a1844a	The image was not sent to any server
+77746a16	The image was deleted from browser memory
+5631addd	Matched the Engineers Syndicate card template — front side ✓ (server simulation)
+be632106	Reading the fields on your device (Arabic OCR): division and graduation year only — name and national ID are never stored
+0b6f35e2	Automatic reading couldn’t run on this device — choose the division manually
+631566c5	Division: “{0}” → {1} · {2}
+a7fe5777	We couldn’t find the division clearly written in the photo — choose it manually
+b907f858	Graduation year: {0}{1}
+2ee1feee	— uncertain reading, please check
+bcb5c884	We couldn’t read the graduation year — enter it manually
+d230f797	Read on your device in {0} s — the text read was neither stored nor sent
+2e02a1f6	Authenticity analysis: consistent compression, noise and edges ✓ (ELA simulation)
+a8be90b4	Matched against the Syndicate register by membership number and graduation year ✓ (simulation)
+2cd76235	The image was permanently deleted from memory (revokeObjectURL + canvas wiped) — retention policy: zero
+b650d334	No photo came back from the system camera — try “Choose from photos”
+ba17808c	Photograph your Syndicate ID card — the full front side
+e76ae652	The photo is checked, then
+a5b14b90	. We don’t keep the photo, your name, national ID or membership number — only the verification status, division and graduation year.
+724af53d	The photo is checked, then {0}. We don’t keep the photo, your name, national ID or membership number — only the verification status, division and graduation year.
+736d31ef	deleted immediately
+de0cd0b4	Take with camera
+f0cec2be	Choose from photos
+ccad872b	. If permission was denied: open the site settings in your browser and allow the camera. Inside the claude.ai preview the camera is disabled by the platform’s own policy — it works once the app is published on its own domain.
+321226f3	{0}. If permission was denied: open the site settings in your browser and allow the camera. Inside the claude.ai preview the camera is disabled by the platform’s own policy — it works once the app is published on its own domain.
+eec17631	Try with a sample card (fake data)
+50d4cb31	What happens on your device right now: detecting the Syndicate card itself (gold header band, card body, green field labels), resolution, lighting and sharpness, then reading the division and graduation year automatically (OCR) — with no upload. Forensic checks and matching against the Syndicate register run on the server in production and are simulated here.
+17218dbd	Front side · fill the frame with the card · avoid glare
+e776b020	Cancel
+63cd41b1	Capture
+dae3fa66	Switch camera
+bdfacbce	Deleted
+ccb55414	Checking…
+198cd750	The card is genuine — your “Verified” badge is ready
+6668487d	Needs a manual review within 24 hours
+aeb5bbdc	Photo not accepted — please retake it
+ffac835f	Anonymous reference:
+7cefd885	Anonymous reference: {0}
+58a0e875	Graduation year — read from the card
+618f5136	Graduation year — read from the card, please check
+eebb11bd	Graduation year
+4226b069	Confirm the “Verified” badge
+77cd9453	Continue — under review
+69ca06ab	Try again
+eb821f4b	Later
+0d5fe770	We keep
+59755877	We never keep
+690d3b64	Agree — clears “Disagree” if selected
+4a20e389	Disagree — clears “Agree” if selected
+98cc2252	Helpful — can be chosen alone or with Agree/Disagree
+6d04ef0b	Reactions
+2394fe0b	Your vote
+cd86d34c	Voted publicly:
+31b47701	Voted publicly: {0}
+48aa7e28	Your vote will appear:
+20cc206e	Take it
+d7063cdd	Turn it down
+06d9927a	votes
+8d47251d	{0} {0|vote|votes}
+c84c4905	participants
+1ef67b2f	{0} {0|participant|participants}
+01fb227c	Money figures aren’t shown to Site Supervisor accounts.
+b3b86478	Individual figures and who shared them aren’t shown to company accounts; the medians are available under “Market”.
+64188f24	years ·
+c128c63a	{0} · {1} years · {2}
+6d2fd25e	This post
+be784686	the post
+0351a0d4	Your post
+359c370e	Live
+397a798a	{0} Live
+2d69f3a3	Has an accepted answer
+f5002a5a	Write a reply
+1c63f4b2	Comments
+3b335b2c	Expected range — EngSpace estimate
+2e7f68d0	Contacted
+2c81d6d7	Apply directly
+5a443032	{0}{1} Apply directly
+e05e471a	Expected midpoint
+7b120502	EGP ·
+74d6e2cc	reports
+4487dcda	Expected midpoint {0} EGP · {1} {1|report|reports}
+fb80154c	Unsave
+c8df9932	Save job
+07a54537	Removed from saved
+d840ac45	Job saved
+713e1cdc	Following
+c0ea81a7	Classification: Grade
+b245190c	Classification: Grade {0}
+7708deec	Since
+b079fe1d	Since {0}
+136550eb	· pegged to
+0fd52743	{0}{1} · pegged to {2} · ≈{3}×
+b38d47c4	Engineers’ median
+cb1e2eef	{0}{1} EGP
+40dc9d91	reports ·
+2ecec54a	reports · {0}
+291f389b	recommend it
+f0243b8c	members
+0ffb39e5	{0} {0|member|members}
+75f40e54	Unfollowed {0}
+a5624667	Following {0} — it’ll show on your home screen
+651950a9	Following ✓
+97316466	Follow room

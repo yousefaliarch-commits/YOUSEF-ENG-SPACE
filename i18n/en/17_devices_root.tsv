@@ -1,0 +1,105 @@
+# _app_4b_devices · _app_5_root — device previews and live code editor, app root toasts, simulated replies, sheet titles, brand modals
+478bc3eb	{0} appearance
+ee7cb5aa	Follows the global setting
+54ae0cbd	Restart
+4186c1bd	Restart the app on this device
+1160e730	Every change here is reflected instantly on both devices, because both screens read the same variables from the same page.
+9bef41a6	Global + per-device override
+32fc0f53	Follow
+053fba1d	Corners
+7d1167b3	Corner radius
+893d0f89	Sharp
+e029dea7	Default
+90afa0c8	Round
+00e3ee8b	Arabic UI font
+78ae6cb7	Civil Engineer ·
+40ec476f	Civil Engineer · {0}
+af7601ba	Display size
+4edc59b4	As the phone’s setting
+9833447f	Smaller
+067aa2b4	Default
+7930619e	Larger
+4ea30e00	Largest
+51404e79	Adapt to the system UI
+4b0f0fa4	The back button, tab bar, bottom sheets and switches follow each device’s system
+e3629ac2	Restore defaults
+a8c2fde9	Couldn’t load the compiler — check your connection, then try again
+26f7b481	Runtime error:
+0383b7bb	Applied to both devices in {0} ms · {1}
+10074ba6	— line {0}{1}
+bab44d9e	No new changes
+98edbba0	Compiling…
+eebce852	This is the app’s own code. Edit anything — a component, some text, a colour — and it’s recompiled inside the page and shown on both devices, keeping the current screen and its data.
+2eac6839	Apply now
+8150554c	{0}Apply now{1}
+3fc4391f	Apply automatically while typing
+fff583ff	Go to a component
+064a3b54	Go to a component…
+fb4d51fd	Original
+3e6978c3	Restore the original code
+4923cf5d	Draft saved from
+bba289dd	Restore
+2d2bbdc2	Delete
+68b0ddda	App code
+e7286436	Ready — the current code is what’s running on both devices
+44382439	lines ·
+44c71fbb	changed
+f14c0989	{0} lines · {1} changed
+368f5236	Go to line
+bd1a7f3a	Go to line {0}
+40fdc1a1	Fit
+d6e8767e	Both devices show the page’s live code — any edit appears instantly
+4309a75e	updates
+f6e71e0e	{0} {0|update|updates}
+dac596a1	Devices in sync
+f3548512	Each device independent
+10d174f7	Zoom
+a98535f0	· scale
+831bf29e	{0}{1} · scale {2}
+148c1630	Design
+9fcc5a6d	Code
+4ad934dd	Close the panel
+029c52a7	Up to date — nothing new since last time
+5f843ca2	This account has been temporarily suspended by the community team — it can’t receive messages right now
+312a3486	Conversation
+f8b21d24	Not sent — inappropriate language
+fa968aed	Today · {0}
+c2c8db1b	Hello. Your question has reached the hiring team — we’ll reply here within one working day.
+e54d6913	If you’d like to apply, send your CV to the email in the ad with EngSpace in the subject — or call us on 01000000102.
+c40ffd3f	Great. If you need anything else clarified, write to us here or by email.
+2849da41	Hi. Send me the details and I’ll give you my honest opinion.
+364eed7f	The number you mentioned makes sense. If it’s the same company that made you the offer, negotiate the transport allowance.
+3e6c5bae	If it’s easier to talk by phone, here’s my number: 01000000909 — and take your time deciding.
+4ff837f3	Ad changes saved
+12450b1b	Published — an instant notification reached {0} matching {0|member|members}
+389496f2	Your ad is live
+b147d1a2	“{0}”: {1} instant notifications to exact matches · range shown EGP {2}–{3}.
+10adf597	The first to open your contact details
+288b6061	3 exactly matching engineers opened your email and phone in “{0}” — keep an eye on your inbox.
+465d5143	First contact on your ad
+8330fa70	Welcome {0} — we’ve arranged the app around your discipline and location
+7398426e	Welcome back, {0}
+92473218	Your details were saved
+35f67041	Not available to Site Supervisor accounts
+c128cc25	New post
+1356720a	Review the company
+e30dc2f4	Report {0}
+185fd641	content
+9a9eb1d6	Privacy & security
+e997ccc2	Verification — optional
+0239b0b6	Public profile
+5df670ae	Anonymous profile
+fb1dd99a	Company logo
+b44593ec	Tool
+ae99e108	A fully interactive preview · create your account (saved on your device only), and choose on every contribution: publicly under your name or anonymously. Swipe from the leading edge to go back.
+411c2299	The idea: the private atrium
+f08b0ab9	An atrium is an architectural space that lets light in while giving those inside a sense of privacy. At EngSpace, the light is professional knowledge, and the frosted glass is the line between experience and the identity of the person behind it.
+8282d116	An open arch, two calm layers and a clear verification point. No hard hats or warning signs — just precise details, like the trust we look for in financial services.
+9faa60c8	The promise: more clarity on your career path, with conscious control over what you share.
+366c104b	Try sharing a salary
+c446add7	All three steps are shown inside the “App preview” as a bottom sheet on the phone.
+d4077522	Open the app preview
+4bdbd197	The app stopped because of a code error
+a0243479	Restore the last working version
+253a7c1e	The original code
+3197cd37	Reload the page

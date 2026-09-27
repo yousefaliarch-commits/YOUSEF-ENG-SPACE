@@ -1,0 +1,238 @@
+# _app_2c_identity_ui · _app_2d_auth — identity switch, privacy, certificate check, sign-up, sign-in, welcome
+d14862b0	?
+09f2b113	Public profile · {0}
+6ffd1a13	this contribution
+daa59aa1	How
+d93c66b7	How you appear in {1}?
+57e24af2	appear
+1b905b16	appear
+940f4148	every time
+2d0c2d09	You choose every time
+cbb3b7f2	choose
+2998ce1c	choose
+b09beed6	Your identity in {0}
+05ae95a8	Everyone sees it like this:
+0d664adb	Showing {0} — tap to switch to {1}
+204d12b4	publicly, under your name
+6e670514	anonymously
+0f56a0d8	Tap to appear
+5c4e3a16	Tap to appear
+9ee85033	Your full name
+e5e0df29	Your full title: discipline, track, level and city
+12d7c7c7	Graduation year and age
+0f659bed	Verification badge, if any
+de0842bd	An anonymous ID and a cartoon character
+7c860286	General role and years of experience
+cb84b60f	Your email and password
+f07ee0a9	Your anonymous posts — never linked to you
+35062ed5	Your name and age
+fbfc5f16	Your city and employer
+cb20ab7f	Your email and any contact details
+2986646e	Any link to your public profile
+c1743ea0	Public — under your name
+95228391	Anonymous — ghost mode
+43022d4b	Shown
+3be4815d	Never shown
+2d3efc8c	Privacy & security policy
+4ab4c460	Our commitments to you — written and binding
+161dddc0	Three commitments that never change — no matter who is asking
+a3eb1ad4	The file is longer than 4 pages — upload the certificate page only
+ccee0b3a	Low resolution — photograph the certificate from closer or upload a clearer copy
+8e01778d	This doesn’t look like a certificate — photograph the whole certificate, flat
+b6916eef	No text or stamps detected in the document
+987e0c8f	The file text doesn’t look like an engineering certificate (no bachelor’s, engineering or university)
+4d7fafe6	-
+9414106a	-
+e772ede8	-
+6d5e9007	-
+5e3beb01	-
+c69c2da2	-
+02632490	-
+7394c0d1	-
+cbfb18be	-
+477a9824	-
+335deb36	-
+5831c410	-
+29fce8fa	-
+11bd01c5	-
+eaaf4c05	-
+a583e5fe	-
+2e9e8e9b	-
+58401e3a	-
+f507eb93	-
+cca0c5b3	-
+31fbf6d6	-
+5fa2dff7	Received {0} in browser memory only — nothing uploaded or stored
+92734440	Reading the first page of the PDF…
+fae1e71c	Couldn’t read the PDF — try a clear photo of the certificate
+f4fc530a	The document was deleted from browser memory
+38b4f640	File check: {0} · {1} KB · {2}×{3}
+2f2251fe	PDF · {0} {0|page|pages}
+56fc1c4e	Document analysis: paper area {0}% · text and stamps {1}% · sharpness {2} · lighting {3}
+6e17768c	The file text contains engineering-certificate wording ✓
+7b69f48d	The file text has no certificate wording
+a6b820d9	A scanned file with no text — automatic reading is reviewed on the server
+72ec1975	The document was deleted from browser memory right away — it wasn’t sent anywhere
+0c1ef5b1	Matched the certificate template and issuing institution ✓ (server simulation)
+2aeb65e6	Reading the file text on your device
+763b7d91	Reading the document on your device (Arabic + English OCR)
+48a47c7b	: specialisation and graduation year only — name, national ID and registration number are never stored
+9f58dd9f	Automatic reading couldn’t run on this device — choose the specialisation manually
+75a0f8a0	Specialisation: “{0}” → {1} · {2}
+c97369c2	We couldn’t find the specialisation clearly written — choose the division manually
+701e3ef1	Checked stamps, signatures and print consistency ✓ (simulation)
+d4584311	The document was permanently deleted right after the check — retention policy: zero
+2fad3e2b	— photo or PDF
+02dc2cc7	{0} — photo or PDF
+13611c11	Upload your certificate or experience letter
+54f2ace5	Upload your engineering certificate
+25efd05b	The document is checked, then
+71fb5406	. We don’t keep the image, your name, national ID or registration number — only the verification status, specialisation and graduation year.
+fbfa4736	The document is checked, then {0}. We don’t keep the image, your name, national ID or registration number — only the verification status, specialisation and graduation year.
+22233cba	deleted immediately and permanently
+a686924a	Photograph it
+b5c4b8b1	Choose a file
+6cd6a335	Try with a sample certificate (fake data)
+8807b21f	What happens on your device right now: file type and resolution, paper area, text and stamp density, sharpness and lighting, then reading the specialisation and graduation year automatically (OCR or the PDF text) — with no upload. Matching the issuing institution runs on the server in production and is simulated here.
+8eda8af3	Deleted
+002d3e98	Certificate accepted — your “Verified” badge is ready
+ffeef49e	Document not accepted
+2bfeaa09	Graduation year — read from the certificate
+c08b6d7e	Graduation year — read from the certificate, please check
+20ba4f6b	Graduation year as shown on the certificate
+c3056598	Syndicate ID card
+1e011d31	Engineering certificate
+80df05d0	Certificate / experience letter
+e0ac7529	Verification is entirely optional — nothing in the app requires it.
+7fbdeb8d	Hide password
+6e7844e2	Show password
+e8078304	Strength:
+a0b6c401	Strength: {0}
+6ec9054e	Create an account
+f5ab54d5	Your email and password are for signing in only — never shown to any member or company
+1ce7bafe	Your details
+56854ea9	Name, gender, age and graduation year
+51e9a56e	Discipline & track
+57b1a95e	Account type, your engineering discipline and your current track
+49dec68f	Governorate, then city or markaz
+5ec7b158	Identity & privacy
+71cb6a38	How you appear by default — verification is optional
+92ba1ab1	How you appear by default — verification is optional
+79ff0b95	This email is already registered on this device — sign in instead
+4fbc34eb	Choose your gender
+42e086be	Enter the name of the company you represent
+d89024bd	Enter the name of the company you represent
+fe7184fb	Choose your track
+d89382f1	Choose your track
+5ed27e9a	Choose your governorate
+a611da7c	Choose your governorate
+9d7813c9	Choose a city or markaz in the governorate
+73776de2	Choose a city or markaz in the governorate
+b21fdda9	To continue, accept the privacy policy and terms of use
+c8200586	To continue, accept the privacy policy and terms of use
+104a6f22	Couldn’t create the account on this device — please try again
+0915ef8e	Email
+47aa9fe5	For signing in and account recovery only — never shown to any member or employer
+145f2ce6	There’s an account saved on this device (
+50ad9563	There’s an account saved on this device ({0}). {1}
+21b10ada	Sign in with it
+7ba22cf7	Password
+2fe5d407	Confirm password
+1c9bb98b	Type it again
+e19b16bd	Full name
+a2146e9e	Shown only on what you choose to post publicly — never in anonymous mode
+ef0674e3	e.g. Mona Ahmed El Sherif
+e4b86919	Your photo — optional
+f12384b9	Change photo
+7f883501	Add a photo
+b257b4e1	Remove
+156249b9	Shown small next to your name on your public posts only — never in anonymous mode, and it doesn’t enlarge when tapped. It’s cropped square and its location data is removed on your device.
+03362615	Gender
+e58d9471	Male
+55ce0503	Female
+07dcaa18	Title:
+7f66fc12	Title: {0}
+0448afc3	Your character’s look
+b35b99d7	Character look
+04508c8d	Techwear hood
+28e3a74a	Hair
+59ae09c7	Sets your titles (engineer / female engineer in Arabic) and how the app addresses you. Your character is set by your discipline — never random, never changed.
+18bfd1ef	Age
+a764bb08	Your experience since graduating:
+56c3a58a	— this is what your anonymous identity shows instead of your age.
+8bc07659	Your experience since graduating: {0} — this is what your anonymous identity shows instead of your age.
+4679211f	Account type
+1f4e840d	The company you represent
+737c9c0d	A registered company — it will be linked to its page and logo
+e70ef4a7	Type the name or pick from the list
+02c2c39d	Company name
+40badf8f	You signed up with a personal email — you can continue, but the “Verified employer” badge needs an email on the company’s domain.
+7a188b9c	Fixed title:
+052c96da	One title for every site supervisor — no discipline, track or level. Your account is for taking part in the community: rooms, posts, replies and messages with colleagues. Salaries, jobs, companies and tools aren’t available to this account type.
+3fcbfb0e	Engineering discipline
+361e4e85	Track (sub-specialisation)
+b85773ed	Career level
+8b93f3ff	· suggested
+c944951d	Suggested from your graduation year — change it if needed.
+f608831d	Used for job matching and market estimates.
+f9ca9b6e	Your city shows on your public profile only and feeds market estimates and job matching — it never shows in anonymous mode.
+f177cdb8	Your default identity when posting
+881614fe	Default identity
+dafc766a	Just a default — on every post, reply, review, vote and salary share
+94ad9527	again: public or anonymous.
+40c0cb9b	Just a default — on every post, reply, review, vote and salary share you choose again: public or anonymous.
+a1c57ae6	“Verified” badge
+b0b74cce	“Verified” badge {0}
+b0b32c87	— optional
+e3128c5c	. Signing up and every feature of the app work without it, and the document is deleted right after the check.
+135a7ac0	{0}. Signing up and every feature of the app work without it, and the document is deleted right after the check.
+935e6fbd	Syndicate ID card or your engineering certificate
+f053dba6	Your certificate or experience letter
+985e128d	Verified certificate
+39cd9b56	Verified membership
+e14881c7	Verify again
+f6ea8353	Start verification
+ae529b1f	I’ve read the privacy & security policy above and agree to the terms of use.
+f5280645	Have an account? Sign in
+dfa2465f	{0} · {1} of {2}
+29a85387	Edit details
+26ddedc8	Sign up
+5d90043d	Previous step
+8d671fac	Your password is stored encrypted on your device
+f7505dfa	Enter your password
+13772a1f	No account with this email on this device — create a new one
+8383133d	5 wrong attempts — wait 30 seconds, then try again
+8c8bcb83	Incorrect password — {0} {0|attempt|attempts} left
+23080419	attempt
+ac2b425f	attempts
+8be35451	This account is registered as a surveyor — EngSpace no longer includes surveyors (surveying institute graduates). The platform is for engineers, site supervisors and employers.
+085650ee	The profile data isn’t on this device — create a new account
+c712ea91	New account
+8c6117b6	Sign in
+62dc1878	Welcome back. Your anonymous identity and your public profile are waiting — each in its own space.
+bb3a5024	Try again in {0} {0|second|seconds}
+6fc7ec1b	Forgot your password?
+044c740e	We don’t send recovery emails in this preview, because the account is saved on your device only and the password is encrypted so no one can read it. To start over, delete the local account and create a new one.
+2fd9d3cb	Delete the local account
+dde77f5b	Confirm permanent deletion
+98df46fb	Cancel
+eefab19e	There’s no account saved on this device yet.
+53dc1c4c	— two minutes.
+36e152d6	There’s no account saved on this device yet. {0} — two minutes.
+e27bdf84	Create your account
+1cce1d29	Welcome
+f0d5f9c4	— your account is ready
+abe543cb	Welcome {0} — your account is ready
+f6726211	You have two completely separate identities.
+2043970c	between them on every contribution.
+d7c31315	You have two completely separate identities. You choose between them on every contribution.
+9d16ba7d	Default for now:
+4708856c	Default for now: {0} — {1}.
+f06c0f49	you can change it anytime from “Your account”
+b0a64735	you can change it anytime from “Your account”
+089457e0	Your verification is under manual review — within 24 hours.
+0b5aab6d	Enter
+fda4ad3c	Enter
+157e5df9	— optional
+717c8e11	Verify your account now
+6de86ab1	Verify your account now
