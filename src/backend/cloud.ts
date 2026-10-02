@@ -297,6 +297,20 @@ export async function sendMessage(threadId: string, text: string) { const db = a
 export async function readThread(threadId: string) { const db = await supabase(); ok(await db.rpc("mark_thread_read", { t: threadId })); }
 export async function setThreadIdentity(threadId: string, as: string) { const db = await supabase(); ok(await db.rpc("set_thread_identity", { t: threadId, me_as: as === "public" ? "public" : "anon" })); }
 
+// ---------------------------------------------------------------- realtime
+// One private channel per member ("member:<auth id>", supabase/migrations/…_realtime.sql): a ping with a thread id when a
+// message arrives (the text is then read through thread_messages), and the member's own new notifications.
+// onEvent("message", { thread }) · onEvent("notification", row) · onStatus(true | false) when the socket connects / drops.
+export async function subscribeLive(onEvent: (event: string, payload: any) => void, onStatus: (live: boolean) => void = () => {}) {
+  const db = await supabase(); const { data: { session } } = await db.auth.getSession(); if (!session) return () => {};
+  await db.realtime.setAuth(session.access_token);
+  const ch = db.channel(`member:${session.user.id}`, { config: { private: true } })
+    .on("broadcast", { event: "message" }, (m: any) => onEvent("message", m.payload))
+    .on("broadcast", { event: "notification" }, (m: any) => onEvent("notification", m.payload))
+    .subscribe((status: string) => onStatus(status === "SUBSCRIBED"));
+  return () => { db.removeChannel(ch); };
+}
+
 // ---------------------------------------------------------------- verification
 // docs: [{ kind: "card" | "cert" | "letter", src: data URL (already re-encoded on this device: JPEG, no EXIF, ≤ 1600 px) }]
 export async function submitVerification(docs: { kind: string; src: string }[]) {

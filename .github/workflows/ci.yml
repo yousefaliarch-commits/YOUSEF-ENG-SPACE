@@ -32,7 +32,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Start local Supabase (database, auth, storage, API)
-        run: npx supabase start -x studio,logflare,vector,imgproxy,edge-runtime,supavisor,postgres-meta,realtime
+        run: npx supabase start -x studio,logflare,vector,imgproxy,edge-runtime,supavisor,postgres-meta
       - name: RLS and privacy tests (pgTAP)
         run: npx supabase test db
       - name: Cloud layer end to end (src/backend/cloud.ts as real members)
