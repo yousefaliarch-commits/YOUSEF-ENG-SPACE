@@ -58,7 +58,7 @@ location.hash = "#app/settings"; ok(C.parseHash().stack[0].type === "settings", 
 const mk = (role, access, isCo) => ({ profile: { ...C.DEMO_PERSONA, role }, moneyAccess: access, isCo, tabs: C.tabsFor({ role }), push() {}, setTab() {}, goMarket() {}, openSheet() {} });
 const eng = C.tourSteps(mk("engineer", "full", false)), sup = C.tourSteps(mk("supervisor", "none", false)), hr = C.tourSteps(mk("hr", "aggregate", true));
 ok(eng.length === 12 && eng.filter((s) => s.tab).length === 6, "engineer tour: welcome, tab bar, all 6 sections, theme, settings, account, done");
-ok(sup.length === 8 && !sup.some((s) => s.tab === "market") && /لا رواتب/.test(sup[1].body.ar) && /No salaries/.test(sup[1].body.en), "site-supervisor tour covers only Community and Messages, and says there are no salaries");
+ok(sup.length === 9 && !sup.some((s) => s.tab === "market") && sup.some((s) => s.tab === "tools" && /Site tools/.test(s.title.en)) && /لا رواتب/.test(sup[1].body.ar) && /No salaries/.test(sup[1].body.en), "site-supervisor tour covers Community, site Tools and Messages only, and says there are no salaries");
 ok(hr.find((s) => s.tab === "market").title.ar === "السوق — رؤية إجمالية", "HR / employer tour explains the aggregated market view");
 ok(["theme", "settings", "profile", "tabbar"].every((t) => eng.some((s) => s.target === t)), "the tour spotlights the theme switch, Settings, the account button and the tab bar");
 const gEng = C.guideSections(mk("engineer", "full", false)), gSup = C.guideSections(mk("supervisor", "none", false)), gCo = C.guideSections(mk("owner", "aggregate", true));

@@ -196,18 +196,22 @@ export const MONEY_RE = /(?<![\d٠-٩])(?:\d{1,3}(?:[,٬]\d{3})+|\d{4,7})(?![\d�
 
 export const maskMoney = (text?: any) => String(text == null ? "" : text).replace(MONEY_RE, (m) => { const t = m.trim(); return /^\d{4}$/.test(t) && +t >= 1950 && +t <= 2040 ? m : "•••"; });
 
-// Site supervisors: two tabs, and the screens / sheets / rooms / post types that carry money or employer data are closed to them
-export const SUPERVISOR_TABS = ["community", "inbox"];
+// Site supervisors: community, site tools and messages; the screens / sheets / rooms / post types that carry money or employer data
+// are closed to them. Their Tools tab holds only the site tools and the QA/QC checklists — never a salary, offer or net-pay tool.
+export const SUPERVISOR_TABS = ["community", "tools", "inbox"];
+export const SITE_TOOLS = ["concrete", "rebar", "masonry", "units"];
 
-export const SUPERVISOR_DENY = "حساب مشرف الموقع للمجتمع فقط — الرواتب والوظائف والشركات والأدوات غير متاحة له";
+export const SUPERVISOR_DENY = "حساب مشرف الموقع: المجتمع وأدوات الموقع وقوائم الفحص فقط — الرواتب والوظائف والشركات غير متاحة له";
 
 export const SUPERVISOR_NOTIFS = ["reply", "reaction", "ama", "privacy", "message", "mod", "report", "verify"];
 
 export const tabsFor = (p?: any) => (p && p.role === "supervisor" ? TABS.filter((t) => SUPERVISOR_TABS.includes(t.id)) : TABS);
 
-export const NO_BLOCKS = { stack: [], sheets: [], rooms: [], posts: [] };
+// toolsOnly: null = every tool; a list = only these tool sheets open (anything else in the "tool" sheet is refused)
+export const NO_BLOCKS = { stack: [], sheets: [], rooms: [], posts: [], toolsOnly: null as string[] | null };
+export const toolOpen = (b?: any, id?: any) => !b || !b.toolsOnly || b.toolsOnly.includes(id);
 
-export const blockedFor = (p?: any) => (p && p.role === "supervisor" ? { stack: ["company", "job", "postjob", "cvreview"], sheets: ["contribute", "review", "tool", "methodology", "logo"], rooms: ["nego"], posts: ["reveal", "vote"] } : NO_BLOCKS);
+export const blockedFor = (p?: any) => (p && p.role === "supervisor" ? { stack: ["company", "job", "postjob", "cvreview"], sheets: ["contribute", "review", "methodology", "logo"], rooms: ["nego"], posts: ["reveal", "vote"], toolsOnly: SITE_TOOLS } : NO_BLOCKS);
 
 // Messaging rule. me/them = { anon, role, dm, companyId, openToRecruiters }. ctx = { job, post }
 export function dmRule(me?: any, them?: any, ctx: any = {}) {

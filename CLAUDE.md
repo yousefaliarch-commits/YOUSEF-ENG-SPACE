@@ -7,7 +7,8 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 - Phase 1 ✅ single-file prototype → Vite + React 18 + TypeScript (docs/MIGRATION.md).
 - Phase 2 ✅ Supabase (Frankfurt, eu-central-1, project cyziykbqldtxyquqvvkr) + Capacitor 8 (docs/PHASE2.md). Migrations deploy via
   the "Deploy database" workflow (secrets SUPABASE_ACCESS_TOKEN / SUPABASE_DB_PASSWORD). Owner is the first admin.
-- Sprint 1 ✅ live salary explorer + give-to-get. Feature 2 ✅ offer evaluator + yearly net calculator.
+- Sprint 1 ✅ live salary explorer + give-to-get. Feature 2 ✅ offer evaluator + yearly net calculator. Features 13/15 ✅ realtime,
+  branded icons/splash. Features 6/7 ✅ site tools (concrete, rebar, masonry, units) + QA/QC checklists with PDF export.
 - Auth: e-mail, Google, Apple, phone (SMS); accounts without the form complete their profile once (profiles.onboarded).
 - Next: the brainstormed "high-impact features" (market transparency, daily engineering tools) — chosen with the owner
   AFTER Phase 2, on the real backend. Phase 3: admin console as its own web app behind MFA. Phase 4: store releases.
@@ -16,7 +17,8 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 - **Privacy model** (enforced in SQL, tested in supabase/tests): server-built author snapshots; no client-readable
   account id on content (`private.authorship`); anonymous snapshots carry no name/age/city/employer/grad year; threads
   only via functions; staff see `mod_ref`, never names behind anonymous items.
-- Money by role: engineers individual figures; HR/owner aggregates (≥ 5 reports per cell); field staff none.
+- Money by role: engineers individual figures; HR/owner aggregates (≥ 5 reports per cell); field staff none — their Tools tab
+  shows only the site tools + checklists (`blockedFor(...).toolsOnly`, `toolOpen`), never a salary/offer/net tool.
 - Verification documents: private bucket, own folder only, deleted at decision/withdrawal, **7 days max** (pg_cron +
   `purge-verification` sweep). Employer accounts are never verified.
 - Deleting an account deletes everything it wrote.

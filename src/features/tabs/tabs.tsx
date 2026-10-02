@@ -8,7 +8,7 @@ import { CATS, CAT_DESC, COMPANIES, catName } from "../../data/companies";
 import { DATASET, REGIONS, gov, govName, placeMult, placeName, regionName } from "../../data/geo";
 import { TOOLS } from "../../data/tools";
 import { authorOf, cleanName, displayName, gx } from "../../domain/identity";
-import { ALLOWANCES, COMPANY_MIN_SAMPLE, DISC, EMPLOYERS, EXP, FX, GOALS, GOALS_CO, POSITIONS, ROLE, TRACKS, can, label, posShort, trackLabel, tracksFor } from "../../domain/taxonomy";
+import { ALLOWANCES, COMPANY_MIN_SAMPLE, DISC, EMPLOYERS, EXP, FX, GOALS, GOALS_CO, POSITIONS, ROLE, TRACKS, can, label, posShort, toolOpen, trackLabel, tracksFor } from "../../domain/taxonomy";
 import { UGC } from "../../i18n/i18n";
 import { GOAL_TOOL, Money, egyptNet, estimateFor, marketFor, matchJob, personaExp, personaTitle, quality, reportsFor, round500, sampleSize } from "../../lib/helpers";
 import { countComments } from "../../lib/posts";
@@ -278,17 +278,20 @@ export const CompanyLimits = () => (
 // Tools tab — back in the main navigation. The CV reviewer sits on top; the eight calculators keep their goal-based highlight.
 export function ToolsScreen({ app }: any) {
   const p = app.profile; const fav = GOAL_TOOL[p.goal];
+  // site supervisors get the site tools and the checklists only — no CV review, no salary/offer/net-pay tools, no tax methodology
+  const siteOnly = !!(app.blocked && app.blocked.toolsOnly);
   return (
     <div className="py-4 space-y-3">
-      <div className="px-1"><h1 className="text-[22px] font-medium">الأدوات</h1><p className="text-[12px] text-ink-2">حسابات مصرية بأرقام السوق الحقيقية، ومراجع ذكي لسيرتك الذاتية — كله على جهازك.</p></div>
-      <button type="button" onClick={() => app.push({ type: "cvreview" })} className="press w-full flex items-center gap-3 p-4 rounded-2xl border border-accent/25 text-start shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" style={{ background: "linear-gradient(125deg, rgb(var(--wash)), rgb(var(--surface)) 80%)" }}>
+      <div className="px-1"><h1 className="text-[22px] font-medium">الأدوات</h1><p className="text-[12px] text-ink-2">{siteOnly ? "حصر الخرسانة والحديد والمباني، تحويل الوحدات، وقوائم فحص واستلام الأعمال — كله على جهازك." : "حسابات مصرية بأرقام السوق الحقيقية، ومراجع ذكي لسيرتك الذاتية — كله على جهازك."}</p></div>
+      {!siteOnly && <button type="button" onClick={() => app.push({ type: "cvreview" })} className="press w-full flex items-center gap-3 p-4 rounded-2xl border border-accent/25 text-start shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" style={{ background: "linear-gradient(125deg, rgb(var(--wash)), rgb(var(--surface)) 80%)" }}>
         <span className="grid place-items-center w-12 h-12 shrink-0 rounded-2xl bg-accent text-on-accent shadow-[0_8px_24px_-8px_rgb(var(--accent))]"><FileSearch size={22} /></span>
         <span className="min-w-0 flex-1"><span className="block text-[15px] font-medium">تدقيق السيرة الذاتية الهندسية</span><span className="block text-[12px] text-ink-2 leading-snug">تدقيق واحد بمعايير المقاولين والاستشاريين والشركات الدولية: عمق البرامج، حجم المشاريع بالأرقام، المسار، الأكواد والشهادات، وATS — مع إعادة كتابة بنودك سطرًا بسطر</span></span><span className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full bg-accent text-on-accent text-[10px]">جديد</span>
-      </button>
+      </button>}
       {/* Feature 6 & 7: the technical office and the site */}
       <SectionTitle>المكتب الفني والموقع</SectionTitle>
       <button type="button" onClick={() => app.push({ type: "checklists" })} className="press w-full flex items-center gap-3 p-4 rounded-2xl bg-surface border border-line text-start shadow-card"><span className="grid place-items-center w-11 h-11 shrink-0 rounded-xl bg-wash text-accent"><ClipboardCheck size={20} /></span><span className="min-w-0 flex-1"><span className="block text-[14px] font-medium">فحص واستلام الأعمال (QA/QC)</span><span className="block text-[11.5px] text-ink-2 leading-snug">9 قوائم للموقع والمكتب الفني — احفظ، ثم صدّر تقرير PDF للتوقيع</span></span><Forward /></button>
-      <div className="grid grid-cols-2 gap-3">{TOOLS.filter((t: any) => t.group === "site").map((t) => <button key={t.id} type="button" onClick={() => app.openSheet("tool", { id: t.id })} className="press relative p-4 rounded-2xl border text-start shadow-card bg-surface border-line hover:border-line-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><span className="grid place-items-center w-11 h-11 rounded-xl bg-wash text-accent"><t.icon size={20} /></span><span className="block mt-3 text-[14px] font-medium leading-snug">{t.name}</span><span className="block mt-0.5 text-[11.5px] text-ink-2 leading-snug">{t.desc}</span></button>)}</div>
+      <div className="grid grid-cols-2 gap-3">{TOOLS.filter((t: any) => t.group === "site" && toolOpen(app.blocked, t.id)).map((t) => <button key={t.id} type="button" onClick={() => app.openSheet("tool", { id: t.id })} className="press relative p-4 rounded-2xl border text-start shadow-card bg-surface border-line hover:border-line-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><span className="grid place-items-center w-11 h-11 rounded-xl bg-wash text-accent"><t.icon size={20} /></span><span className="block mt-3 text-[14px] font-medium leading-snug">{t.name}</span><span className="block mt-0.5 text-[11.5px] text-ink-2 leading-snug">{t.desc}</span></button>)}</div>
+      {!siteOnly && <>
       <SectionTitle>الراتب والعروض</SectionTitle>
       <div className="grid grid-cols-2 gap-3 stagger">{TOOLS.filter((t: any) => t.group !== "site").map((t) => <button key={t.id} type="button" onClick={() => app.openSheet("tool", { id: t.id })} className={`press relative p-4 rounded-2xl border text-start shadow-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${t.id === fav ? "border-accent/40 bg-wash" : "bg-surface border-line hover:border-line-3"}`}>
         {t.id === fav && <span className="absolute top-3 end-3 text-[9.5px] text-accent">لهدفك</span>}
@@ -296,7 +299,7 @@ export function ToolsScreen({ app }: any) {
         <span className="block mt-3 text-[14px] font-medium leading-snug">{t.name}</span><span className="block mt-0.5 text-[11.5px] text-ink-2 leading-snug">{t.desc}</span>
       </button>)}</div>
       <button type="button" onClick={() => app.openSheet("methodology")} className="press w-full flex items-center gap-3 p-4 rounded-2xl bg-surface border border-line text-start"><span className="grid place-items-center w-10 h-10 shrink-0 rounded-xl bg-wash text-accent"><FileCheck size={18} /></span><span className="min-w-0 flex-1"><span className="block text-[13.5px] font-medium">المنهجية والمصادر · {DATASET.version}</span><span className="block text-[11px] text-ink-2 leading-snug">الحد الأدنى للأجور، سقف التأمينات، شرائح الضريبة، كيف نبني النماذج، وكيف تُرتَّب القوائم</span></span><Forward size={16} /></button>
-      <p className="pb-2 text-center text-[10px] text-ink-4">الضرائب والتأمينات حسب القانون الساري · محدَّث {DATASET.updated}</p>
+      <p className="pb-2 text-center text-[10px] text-ink-4">الضرائب والتأمينات حسب القانون الساري · محدَّث {DATASET.updated}</p></>}
     </div>
   );
 }
