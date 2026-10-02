@@ -260,8 +260,8 @@
  },
  "جارٍ التحميل…": {
   "k": "x",
-  "p": "app/ScreenLoading.tsx",
-  "n": 1
+  "p": "app/ScreenLoading.tsx,features/market/raise-tracker.tsx",
+  "n": 2
  },
  "طريقة العرض": {
   "k": "s",
@@ -346,6 +346,11 @@
   "n": 1
  },
  "شاركت 3 رواتب خلال آخر 30 يومًا — يمكنك المشاركة مجددًا لاحقًا": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "سجّلت زيادتين خلال آخر 6 أشهر — يمكنك المشاركة مجددًا لاحقًا": {
   "k": "s",
   "p": "backend/cloud.ts",
   "n": 1
@@ -1243,8 +1248,8 @@
  },
  "زيادة سنوية": {
   "k": "s",
-  "p": "data/companies.tsx",
-  "n": 1
+  "p": "data/companies.tsx,features/market/raise-tracker.tsx",
+  "n": 2
  },
  "مهندس موقع": {
   "k": "s",
@@ -4272,6 +4277,11 @@
   "p": "data/geo.ts",
   "n": 1
  },
+ "الجهاز المركزي للتعبئة العامة والإحصاء — التضخم السنوي العام للحضر": {
+  "k": "s",
+  "p": "data/inflation.ts",
+  "n": 1
+ },
  "مهندس موقع مدني": {
   "k": "s",
   "p": "data/seed.ts",
@@ -5605,12 +5615,12 @@
   "p": "data/tools.ts",
   "n": 1
  },
- "العلاوة والتضخم": {
+ "الزيادة والتضخم": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
  },
- "هل زيادتك زيادة فعلًا؟": {
+ "سجّل راتبك وقارنه بالتضخم الرسمي والسوق": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
@@ -5807,8 +5817,8 @@
  },
  "مقبولة": {
   "k": "s",
-  "p": "domain/identity.ts,features/admin/AdminView.tsx",
-  "n": 2
+  "p": "domain/identity.ts,domain/scorecard.ts,features/admin/AdminView.tsx",
+  "n": 3
  },
  "قوية": {
   "k": "s",
@@ -6657,8 +6667,8 @@
  },
  "مهندس": {
   "k": "s",
-  "p": "domain/moderation.ts,domain/taxonomy.ts,features/auth/auth.tsx,features/stack/stack.tsx",
-  "n": 5
+  "p": "domain/moderation.ts,domain/taxonomy.ts,features/auth/auth.tsx,features/market/raise-tracker.tsx,features/stack/stack.tsx",
+  "n": 6
  },
  "موارد بشرية": {
   "k": "s",
@@ -6843,6 +6853,171 @@
  "عرض قوي": {
   "k": "s",
   "p": "domain/offer.ts",
+  "n": 1
+ },
+ "الراتب مقارنة بالسوق": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "الراتب هنا مقارنة بالسوق لنفس الخبرة": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "أقل بكثير": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "أقل": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "مثل السوق": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "أعلى": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "أعلى بكثير": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "انتظام الزيادات": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "الزيادات السنوية": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "لا زيادات": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "نادرة وغير منتظمة": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "سنوية أقل من التضخم": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "سنوية تواكب التضخم": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "أكثر من مرة في السنة": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "صرف الراتب في موعده": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "هل يُصرف الراتب في موعده؟": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "يتأخر شهورًا": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "يتأخر كثيرًا": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "يتأخر أحيانًا": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "نادرًا ما يتأخر": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "دائمًا في موعده": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "الساعات الإضافية": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 2
+ },
+ "طويلة وبلا مقابل": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "كثيرة وبلا مقابل": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "أحيانًا": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "لها مقابل عادل": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "نادرة": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "ظروف العمل والموقع": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "ظروف العمل (الموقع، السكن، المواصلات، الأمان)": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "سيئة جدًا": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "سيئة": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "جيدة": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
+  "n": 1
+ },
+ "ممتازة": {
+  "k": "s",
+  "p": "domain/scorecard.ts",
   "n": 1
  },
  "طوب أحمر 25×12×6": {
@@ -7157,8 +7332,8 @@
  },
  "تغيير شركة": {
   "k": "s",
-  "p": "domain/taxonomy.ts",
-  "n": 1
+  "p": "domain/taxonomy.ts,features/market/raise-tracker.tsx",
+  "n": 2
  },
  "أول وظيفة": {
   "k": "s",
@@ -9612,8 +9787,8 @@
  },
  "،": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/stack/stack.tsx,features/tabs/tabs.tsx,i18n/i18n.ts,lib/helpers.tsx,ui/feed.tsx",
-  "n": 10
+  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/market/raise-tracker.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,i18n/i18n.ts,lib/helpers.tsx,ui/feed.tsx",
+  "n": 11
  },
  "تنبيه لهجة: {0}": {
   "k": "t",
@@ -10975,6 +11150,69 @@
   "n": 1,
   "x": "d.staff"
  },
+ "اكتب الشهر والنسبة (بين −20 و100)": {
+  "k": "s",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1
+ },
+ "حُفظ تضخم {0}": {
+  "k": "t",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1,
+  "x": "monthLabel(month)"
+ },
+ "التضخم الرسمي (أداة الزيادة والتضخم)": {
+  "k": "x",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1
+ },
+ "أضف كل شهر فور نشره:": {
+  "k": "x",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1
+ },
+ ". آخر شهر مسجّل:": {
+  "k": "x",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1
+ },
+ "أضف كل شهر فور نشره: {0}. آخر شهر مسجّل: {1} ({2}%).{3}": {
+  "k": "r",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1,
+  "x": "INFLATION_SOURCE | EL <span className=\"text-ink\">{monthLabel(last && last[0])}</sp | EL <Num>{last ? last[1] : \"—\"}</Num> | behind > 0 ? <> الأداة تقدّر <Num>{behind}</Num> شهرًا بعده "
+ },
+ "الأداة تقدّر": {
+  "k": "x",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1
+ },
+ "شهرًا بعده بآخر معدل حتى تضيفها.": {
+  "k": "x",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1
+ },
+ "الأداة تقدّر {0} شهرًا بعده بآخر معدل حتى تضيفها.": {
+  "k": "r",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1,
+  "x": "EL <Num>{behind}</Num>"
+ },
+ "الشهر": {
+  "k": "s",
+  "p": "features/admin/inflation-admin.tsx,features/market/raise-tracker.tsx",
+  "n": 4
+ },
+ "التضخم السنوي": {
+  "k": "s",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 2
+ },
+ "حفظ الشهر": {
+  "k": "x",
+  "p": "features/admin/inflation-admin.tsx",
+  "n": 1
+ },
  "{0}: الربع الأدنى {1}، الوسط {2}، الربع الأعلى {3}": {
   "k": "t",
   "p": "features/admin/kit.tsx",
@@ -11491,8 +11729,8 @@
  },
  "من": {
   "k": "x",
-  "p": "features/auth/auth.tsx,features/market/live-salary.tsx,features/settings/settings.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,lib/search.ts",
-  "n": 10
+  "p": "features/auth/auth.tsx,features/market/live-salary.tsx,features/market/raise-tracker.tsx,features/settings/settings.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,lib/search.ts",
+  "n": 11
  },
  "{0} · {1} من {2}": {
   "k": "r",
@@ -13073,6 +13311,455 @@
   "n": 1,
   "x": "EL <Users size={12} /> | EL <Num>{fmt(d.platform)}</Num> | EL <Num>{d.min}</Num>"
  },
+ "يناير": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "فبراير": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "مارس": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "أبريل": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "مايو": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "يونيو": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "يوليو": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "أغسطس": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "سبتمبر": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "أكتوبر": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "نوفمبر": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "ديسمبر": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "ترقية": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "اكتب الشهر والراتب": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "شكرًا — أُضيفت نسبة زيادتك مجهولة إلى معدل السوق": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "منذ آخر تغيير في راتبك (": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "منذ آخر تغيير في راتبك ({0})": {
+  "k": "e",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "monthLabel(h.now.since)"
+ },
+ "من قوّتك الشرائية": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "التضخم منذ ذلك الشهر": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "راتبك بقيمة": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "راتبك بقيمة {0}": {
+  "k": "e",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "monthLabel(h.now.since)"
+ },
+ "لتعود لنفس المستوى اليوم": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "آخر شهر منشور رسميًا": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "— الأشهر بعده (": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ ") محسوبة بآخر معدل منشور.": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "آخر شهر منشور رسميًا {0} — الأشهر بعده ({1}) محسوبة بآخر معدل منشور.": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "monthLabel(h.now.lastPublished) | EL <Num>{h.now.assumed}</Num>"
+ },
+ "سجّل راتبك عند كل تغيير (شهر الزيادة والراتب الجديد) — نحسب كم أكل التضخم منه، وهل كانت كل زيادة زيادة فعلًا. السجل لك وحدك ولا يُشارك.": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "سجل راتبك": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "الراتب الإجمالي": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 2
+ },
+ "إضافة": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "زيادة": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "· التضخم": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "زيادة {0} · التضخم {1} · {2}": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "EL <Num>{pct(s.nominal)}</Num> | EL <Num>{pct(s.inflation)}</Num> | EL <span className={s.real >= 0 ? \"text-good\" : \"text-warn\"}>حق"
+ },
+ "حقيقية": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "حقيقية {0}": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "EL <Num>{pct(s.real)}</Num>"
+ },
+ "حذف": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 2
+ },
+ "ساعد غيرك: شارك نسبة زيادتك الأخيرة (": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ ") مجهولة — نسبة وشهر فقط، دون أي رقم راتب.": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "ساعد غيرك: شارك نسبة زيادتك الأخيرة ({0}، {1}) مجهولة — نسبة وشهر فقط، دون أي رقم راتب.": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "EL <Num>{pct(step.nominal)}</Num> | monthLabel(step.to)"
+ },
+ "شارك النسبة مجهولة": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "الزيادة السنوية في السوق ·": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "الزيادة السنوية في السوق · {0}": {
+  "k": "e",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "ROLE[pr.disc] || \"مهندس\""
+ },
+ "تعذّر التحميل — أعد المحاولة لاحقًا.": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "الوسيط · النصف الأوسط": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "الوسيط · النصف الأوسط {0}–{1}%": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "EL <Num>{market.p25}</Num> | EL <Num>{market.p75}</Num>"
+ },
+ "نموذجي (عرض تجريبي) — على المنصة الحية من تقارير الأعضاء": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "تقريرًا خلال آخر 12 شهرًا": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "من {0} تقريرًا خلال آخر 12 شهرًا{1}": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "EL <Num>{market.n}</Num> | market.wide ? \" · كل المسارات\" : \"\""
+ },
+ "· كل المسارات": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "زيادتك الأخيرة": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "{0} زيادتك الأخيرة {1} {2}": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "step.nominal >= market.p50 ? <TrendingUp size={14} /> : <Tre | EL <Num>{pct(step.nominal)}</Num> | step.nominal >= market.p50 ? \"عند وسط السوق أو أعلى\" : \"أقل "
+ },
+ "عند وسط السوق أو أعلى": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "أقل من وسط السوق": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ ": الوسيط": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "تقارير": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx,features/stack/stack.tsx",
+  "n": 2
+ },
+ "{0}: الوسيط {1}% · {2} تقارير": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "(KINDS.find((x) => x[0] === k.key) || [, k.key])[1] | EL <Num>{k.p50}</Num> | EL <Num>{k.n}</Num>"
+ },
+ "يظهر المعدل من 5 تقارير — الآن": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ ". شارك نسبة زيادتك لتقريبه.": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "{0} يظهر المعدل من 5 تقارير — الآن {1}. شارك نسبة زيادتك لتقريبه.": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "EL <LockKeyhole size={13} /> | EL <Num>{market.n || 0}</Num>"
+ },
+ "زيادة معروضة عليك؟": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "نسبة الزيادة": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 2
+ },
+ "مقابل آخر تضخم سنوي منشور (": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "%،": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "مقابل آخر تضخم سنوي منشور ({0}%، {1}): {2}{3}": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "EL <Num>{latest}</Num> | monthLabel(lastPub && lastPub[0]) | EL <span className={real >= 0 ? \"text-good font-medium\" : \"text | real < 0 ? \" — تخفيض مقنّع، والتضخم حجتك الأقوى في النقاش.\" "
+ },
+ "قوّتك الشرائية": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "قوّتك الشرائية {0}": {
+  "k": "r",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "EL <Num>{pct(real)}</Num>"
+ },
+ "— تخفيض مقنّع، والتضخم حجتك الأقوى في النقاش.": {
+  "k": "s",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "هل ده وقت طلب الزيادة؟": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "التضخم الرسمي — آخر 12 شهرًا": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "المصدر:": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx,features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "(سنوي على أساس سنوي). الحساب الشهري = (1 + المعدل السنوي)^(1/12).": {
+  "k": "x",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1
+ },
+ "المصدر: {0} (سنوي على أساس سنوي). الحساب الشهري = (1 + المعدل السنوي)^(1/12).": {
+  "k": "e",
+  "p": "features/market/raise-tracker.tsx",
+  "n": 1,
+  "x": "INFLATION_SOURCE"
+ },
+ "تعذّر تحميل بطاقة الشركة — اسحب للتحديث.": {
+  "k": "x",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "بطاقة الشركة": {
+  "k": "x",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "مهندس قيّموا": {
+  "k": "x",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "{0} مهندس قيّموا{1}": {
+  "k": "r",
+  "p": "features/market/scorecard.tsx",
+  "n": 1,
+  "x": "EL <Num>{sc.n}</Num> | sc.access === \"demo\" ? \" · نموذجي (عرض تجريبي)\" : \"\""
+ },
+ "· نموذجي (عرض تجريبي)": {
+  "k": "s",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "يحتاج": {
+  "k": "x",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "تقييمات أخرى": {
+  "k": "x",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "{0} يحتاج {1} تقييمات أخرى": {
+  "k": "r",
+  "p": "features/market/scorecard.tsx",
+  "n": 1,
+  "x": "EL <LockKeyhole size={11} /> | EL <Num>{SCORE_MIN - x.n}</Num>"
+ },
+ "% إيجابي · من": {
+  "k": "x",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "مهندسين": {
+  "k": "x",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "{0}% إيجابي · من {1} مهندسين": {
+  "k": "r",
+  "p": "features/market/scorecard.tsx",
+  "n": 1,
+  "x": "EL <Num>{x.good}</Num> | EL <Num>{x.n}</Num>"
+ },
+ "كل عضو يُحسب مرة واحدة (آخر تقييم له) خلال آخر 24 شهرًا، ولا يرى أحد إجابات عضو بعينه.": {
+  "k": "x",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
+ "{0}كل عضو يُحسب مرة واحدة (آخر تقييم له) خلال آخر 24 شهرًا، ولا يرى أحد إجابات عضو بعينه.": {
+  "k": "e",
+  "p": "features/market/scorecard.tsx",
+  "n": 1,
+  "x": "open.length ? \"\" : \"لا يظهر أي عامل قبل أن يقيّمه 5 مهندسين مختلفين. \""
+ },
+ "لا يظهر أي عامل قبل أن يقيّمه 5 مهندسين مختلفين.": {
+  "k": "s",
+  "p": "features/market/scorecard.tsx",
+  "n": 1
+ },
  "فحص واستلام الأعمال": {
   "k": "x",
   "p": "features/qaqc/qaqc.tsx",
@@ -13836,6 +14523,11 @@
   "n": 1,
   "x": "i"
  },
+ "اختياري. هذه الإجابات لا تظهر مع تقييمك ولا يراها أحد منفردة — تدخل فقط في بطاقة الشركة عندما يجيب 5 مهندسين مختلفين على الأقل.": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
  "ما الذي يجب أن يعرفه مهندس قبل قبول عرض هنا؟ المرتب، الزيادات، الساعات، الاحترام.": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
@@ -14520,7 +15212,7 @@
  "راتبك الحالي": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
-  "n": 6
+  "n": 4
  },
  "شهور منذ آخر زيادة": {
   "k": "s",
@@ -14837,61 +15529,6 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "الزيادة المعروضة": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 2
- },
- "التضخم السنوي": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 2
- },
- "قوّتك الشرائية بعد الزيادة": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "فعليًا": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "الراتب الجديد": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "اللي تحتاجه عشان تفضل مكانك": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "زيادة تحسّن وضعك فعلًا": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "الزيادة دي تخفيض مقنّع. قدّم رقم التضخم في النقاش — هو حجتك الأقوى.": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "بالكاد تغطي التضخم. اطلب الفرق كبدل ثابت لو الأساسي مقفول.": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "زيادة حقيقية — نادرة هذه الأيام. سجّلها في المرتبات ليستفيد غيرك.": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "هل ده وقت طلب الزيادة؟": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
  "نموذج": {
   "k": "x",
   "p": "features/sheets/sheets.tsx,features/tabs/tabs.tsx",
@@ -14909,11 +15546,6 @@
   "x": "EL <Num>{DATASET.updated}</Num>"
  },
  "مراجع تنظيمية (حقيقية ومصدرها مذكور)": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "المصدر:": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -15701,11 +16333,6 @@
   "k": "s",
   "p": "features/stack/stack.tsx,ui/feed.tsx",
   "n": 2
- },
- "تقارير": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
  },
  "ينصحون بها": {
   "k": "s",

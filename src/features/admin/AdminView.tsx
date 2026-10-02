@@ -26,6 +26,7 @@ import { Back, FilterChip, Num, Panel, Primary, Quiet, Secondary, Toggle } from 
 import { fmt } from "../../ui/theme";
 
 import { isCloud } from "../../backend/config";
+import { InflationPanel } from "./inflation-admin";
 import * as cloud from "../../backend/cloud";
 import { loadAdmin } from "./cloud-admin";
 // =====================================================================
@@ -430,6 +431,7 @@ export function SettingsSection({ A }: any) {
         <Row title="مدة الاحتفاظ بالرسائل الخاصة" desc="تُمسح المحادثات تلقائيًا بعد هذه المدة. تظهر في رأس كل محادثة."><Choice label="مدة الاحتفاظ" value={c.dmDays} onChange={(v) => A.setConfig({ dmDays: v }, `الاحتفاظ بالرسائل: ${daysText(v)}`)} items={[[3, "3 أيام"], [7, "7 أيام"], [14, "14 يومًا"], [30, "30 يومًا"]]} /></Row>
         <Row title="وضع القراءة فقط" desc="للصيانة أو الطوارئ: يتوقف النشر والردود والتقييمات والرسائل لكل الأعضاء، ويظهر شريط توضيحي في التطبيق."><Toggle on={!!c.readOnly} onChange={(v) => A.setConfig({ readOnly: v }, v ? "تشغيل وضع القراءة فقط" : "إيقاف وضع القراءة فقط")} label="وضع القراءة فقط" /></Row>
       </Panel>
+      <InflationPanel A={A} />
       <Panel className="p-4 border-bad/20"><PanelHead icon={RotateCcw} title="بيانات المعاينة" /><p className="text-[12px] text-ink-2 leading-relaxed">تعيد البلاغات والقرارات والإعدادات إلى البيانات التجريبية الأولى. لا تمس حسابك أو منشوراتك.</p>
         {!confirm ? <Secondary onClick={() => setConfirm(true)} className="mt-3 h-10 text-[13px]"><RotateCcw size={15} /> إعادة ضبط بيانات الإشراف</Secondary> : <div className="mt-3 flex gap-2 flex-wrap"><Primary onClick={() => { A.resetDemo(); setConfirm(false); }} className="h-10 text-[13px] !bg-bad !text-white">تأكيد إعادة الضبط</Primary><Secondary onClick={() => setConfirm(false)} className="h-10 text-[13px]">تراجع</Secondary></div>}</Panel>
     </div>

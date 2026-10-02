@@ -96,6 +96,22 @@ run("cloud backend (local Supabase)", () => {
     expect((await cloud.latestShares("civil", "3-5", "cairo")).some((r: any) => r.salary === 18000)).toBe(true);
   });
 
+  it("company scorecard: factor ratings stay private; under 5 reviewers only counts come back", async () => {
+    const co = "cloudtest-" + tag;
+    await cloud.addReview(co, { stars: 4, text: "تقييم تجريبي للشركة من الاختبار", as: "anon", scores: { pay: 3, ontime: 5 } });
+    const sc = await cloud.companyScorecard(co); expect(sc.n).toBe(1); expect(sc.factors.pay).toEqual({ n: 1 }); expect(sc.factors.site).toEqual({ n: 0 });
+    const { supabase } = await import("../src/backend/client"); const db = await supabase();
+    expect((await db.from("company_ratings").select("*")).error).toBeTruthy(); // nobody reads individual ratings, not even their own
+  });
+
+  it("raises: a report carries a percentage and a month; the market rate needs 5; inflation is readable", async () => {
+    const d = new Date(); d.setMonth(d.getMonth() - 1); const last = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    await cloud.reportRaise({ disc: "civil", track: "tech", pos: "mid", pct: 17.5, kind: "annual", month: last });
+    const m = await cloud.marketRaises("civil", "tech"); expect(m.access).toBe("full"); expect(m.n).toBeGreaterThanOrEqual(1);
+    if (m.n < 5) expect(m).not.toHaveProperty("p50");
+    const s = await cloud.inflationSeries(); expect(s[0]).toEqual(["2022-01", 7.3]); expect(s.length).toBeGreaterThanOrEqual(45);
+  });
+
   it("reports the post; the author is never revealed to the reporter", async () => {
     const ref = await cloud.report("post", postId, "spam", "تجربة"); expect(ref).toMatch(/^R-/);
     await expect(cloud.admin.cases()).rejects.toThrow("ليست لديك صلاحية");

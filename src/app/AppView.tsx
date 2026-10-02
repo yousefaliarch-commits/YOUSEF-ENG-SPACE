@@ -4,6 +4,7 @@ import {
   CircleCheck, LockKeyhole, ShieldAlert
 } from "lucide-react";
 import { loadInspections, mergeInspections, storeInspections } from "../data/checklists";
+import { loadDevice, storeDevice } from "../lib/device-store";
 import { ROOMS } from "../data/companies";
 import { TABS } from "../data/geo";
 import { JOBS, NOTIFS0, POSTS0, R0 } from "../data/seed";
@@ -90,6 +91,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // QA/QC inspections live on this device first (sites often have no signal); on the live platform they also go to the member's own state row
   const [inspections, setInspections] = S("inspections", () => loadInspections(persona && persona.pid));
   useEffect(() => { setInspections(loadInspections(persona && persona.pid)); }, [persona && persona.pid]);
+  // the salary history behind the raise tracker: private to the member (device first, then their own state row)
+  const [salaryLog, setSalaryLog] = S("salaryLog", () => loadDevice("salarylog", persona && persona.pid, { at: 0, log: [] }));
+  useEffect(() => { setSalaryLog(loadDevice("salarylog", persona && persona.pid, { at: 0, log: [] })); }, [persona && persona.pid]);
   // role scope: which tabs, screens and content this member may see, and how much of money
   const access = moneyAccess(profile); const blocked = blockedFor(profile); const tabs = tabsFor(profile); const curTab = tabs.some((t) => t.id === tab) ? tab : tabs[0].id;
   const deny = () => setMsg(SUPERVISOR_DENY);
@@ -182,6 +186,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     setPosts(d.posts); setJobs(d.jobs); setJobStats(Object.fromEntries(d.jobs.map((j) => [j.id, j.stats]))); setNotifs(d.notifs); setThreads((ts) => d.threads.map((t) => { const old = ts.find((x) => x.id === t.id); return old ? { ...t, messages: old.messages } : t; }));
     setReviews(d.reviews); setReacts(d.reacts); setVotes(d.votes); setVoteAs(d.voteAs); setSaved(d.saved); setFollows(d.follows); setRoomFollows(d.roomFollows); setHidden(d.hidden); setContacted(d.contacted);
     setInspections((mine) => mergeInspections(mine, d.inspections));
+    // the whole history is one value stamped with its last edit: the newer copy wins, so a deletion on one device sticks everywhere
+    setSalaryLog((mine) => (d.salaryLog && d.salaryLog.at > (mine.at || 0) ? d.salaryLog : mine));
     if (d.config) setConfig({ ...MOD_CONFIG0, ...d.config });
     const v = d.verification; updateProfileLocal({ pending: !!v && v.status === "pending", verifyRef: v && v.status === "pending" ? v.ref : null, verifyReq: v ? { id: v.ref, kinds: v.kinds, status: v.status, at: Date.parse(v.created_at), decidedAt: v.decided_at ? Date.parse(v.decided_at) : null, purged: 0 } : null });
     setTimeout(() => { hydrated.current = true; }, 0);
@@ -226,6 +232,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const persist = (key?: any, value?: any) => { if (!CLOUD || !hydrated.current) return; clearTimeout(saveLater.current[key]); saveLater.current[key] = setTimeout(() => sync(() => cloud.saveState(key, value)), 800); };
   useEffect(() => persist("saved", saved), [saved]); useEffect(() => persist("follows", follows), [follows]); useEffect(() => persist("roomFollows", roomFollows), [roomFollows]); useEffect(() => persist("hidden", hidden), [hidden]);
   useEffect(() => { storeInspections(inspections, persona && persona.pid); persist("inspections", inspections); }, [inspections]);
+  useEffect(() => { storeDevice("salarylog", persona && persona.pid, salaryLog); persist("salaryLog", salaryLog); }, [salaryLog]);
   const swapId = (list?: any, tmp?: any, item?: any) => list.map((x) => (x.id === tmp ? { ...x, ...item, mine: true } : { ...x, ...(x.replies ? { replies: swapId(x.replies, tmp, item) } : {}), ...(x.comments ? { comments: swapId(x.comments, tmp, item) } : {}) }));
   const kindOf = (id?: any) => (posts.some((p) => p.id === id) ? "posts" : "comments");
   // Android back button: the open viewer, sheet or pushed screen closes first; on a tab other than home it goes home; then the app leaves
@@ -241,6 +248,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     // bumps after a share reaches the server, so the live explorer reloads (and unlocks — give-to-get)
     salaryRev,
     shares,
+    salaryLog: salaryLog.log || [], saveSalaryLog: (log?: any) => setSalaryLog({ at: Date.now(), log: [...log].sort((a, b) => (a.month < b.month ? -1 : 1)).slice(-60) }),
     inspections, saveInspection: (x?: any) => setInspections((l) => [x, ...l.filter((i) => i.id !== x.id)].slice(0, 100)), deleteInspection: (id?: any) => setInspections((l) => l.filter((i) => i.id !== id)),
     saved, toggleSaved: toggleIn(setSaved), follows, toggleFollow: toggleIn(setFollows), roomFollows, toggleRoom: toggleIn(setRoomFollows),
     // Reactions: «أوافق» and «لا أوافق» exclude each other (picking one clears the other); «مفيد» toggles independently and may sit with either
@@ -370,7 +378,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         </div>
         {viewer && <ImageViewer image={viewer} onClose={() => setViewer(null)} />}
         {tourOn && !sheet && !viewer && <Tour app={app} onClose={() => setTourOn(false)} />}
-        {sheet && sheets[sheet.type] && <Sheet title={sheets[sheet.type][0]} onClose={app.closeSheet} tall={["compose", "contract", "methodology", "move", "contribute", "verify"].includes(sheet.type === "tool" ? sheet.payload.id : sheet.type)}>{sheets[sheet.type][1]}</Sheet>}
+        {sheet && sheets[sheet.type] && <Sheet title={sheets[sheet.type][0]} onClose={app.closeSheet} tall={["compose", "contract", "methodology", "move", "contribute", "verify", "inflation"].includes(sheet.type === "tool" ? sheet.payload.id : sheet.type)}>{sheets[sheet.type][1]}</Sheet>}
         <div role="status" aria-live="polite" className={`absolute bottom-[calc(var(--tabh,68px)+var(--sab)+16px)] inset-x-4 z-30 flex justify-center transition-all ${msg ? "opacity-100" : "opacity-0 translate-y-2 pointer-events-none"}`}>{msg && <span key={msg} className="toast-in inline-flex items-start gap-2 max-w-full px-4 py-2.5 rounded-2xl bg-elevated/95 backdrop-blur border border-line-2 text-[12.5px] leading-snug shadow-float"><CircleCheck size={15} className="react-pop text-accent shrink-0 mt-0.5" /><span>{msg}</span></span>}</div>
       </div>,
       <p className="hidden sm:block text-[11px] text-ink-3 text-center max-w-[48ch] leading-relaxed">معاينة تفاعلية كاملة · أنشئ حسابك (يُحفظ على جهازك فقط)، واختر في كل مشاركة: علنًا باسمك أو مجهولًا. اسحب من حافة البداية للرجوع.</p>

@@ -1,0 +1,130 @@
+# Company scorecards (pay vs market, raises, paying on time, overtime, site conditions) and the raise & inflation tracker
+5a7c8526	You reported two raises in the last 6 months — you can share again later
+531277b2	CAPMAS — annual urban headline inflation
+bd2b858b	Raises & inflation
+b5233e3f	Log your salary and compare it with official inflation and the market
+6cb16961	Pay vs market
+4beae4f1	Pay here compared with the market for the same experience
+19d366b6	Much lower
+7f5b9bf1	Lower
+c88e081d	Same as market
+0ad19c1d	Much higher
+7d5fb988	Regular raises
+4d5c89d6	Yearly raises
+cc1178ce	No raises
+1eec1cc9	Rare and irregular
+d9cf45d8	Yearly, below inflation
+b77ea043	Yearly, keeping up with inflation
+d3cf0e53	More than once a year
+e8abc9db	Salary paid on time
+e17bad94	Is the salary paid on time?
+65d2a219	Months late
+39b47dc4	Often late
+e15ad37c	Sometimes late
+284bcb5d	Rarely late
+4a085e5a	Always on time
+2eae1213	Overtime
+53464d91	Long and unpaid
+4d007c3e	Frequent and unpaid
+ec6409e2	Sometimes
+aac03b44	Fairly paid
+97be2777	Rare
+650e56a6	Work and site conditions
+3c04d5d1	Working conditions (site, housing, transport, safety)
+53db4ce6	Very poor
+f043e963	Poor
+83685825	Good
+207ffb8f	Excellent
+1f3dc893	January
+36e82573	February
+452ec922	March
+aa57db81	April
+391eb76a	May
+3131fb25	June
+cf519ecc	July
+70667b3f	August
+c7013f99	September
+ba5e1d7c	November
+8e5dbca7	December
+2b7d0044	Promotion
+c2e0cfed	Enter the month and the salary
+d4531ec1	Thank you — your raise percentage was added anonymously to the market rate
+57a2dac8	Since your salary last changed (
+8cdc1350	Since your salary last changed ({0})
+1b784a69	of your purchasing power
+c174d818	Inflation since that month
+d26da5e6	Your salary in the money of
+61baaa2e	Your salary in the money of {0}
+62631975	To get back to the same level today
+c7765349	Last officially published month
+7b034ac3	— the months after it (
+0d7688c7	) use the latest published rate.
+2c52c979	Last officially published month {0} — the months after it ({1}) use the latest published rate.
+576400f2	Log your salary every time it changes (the month and the new salary) — we work out how much inflation took from it, and whether each raise was really a raise. The log is yours alone and is never shared.
+b125d482	Your salary log
+b1472f66	Month
+104d1dc1	Gross salary
+5e3a3fdf	Add
+ea26c1bf	Raise
+18473702	· inflation
+d857f745	Raise {0} · inflation {1} · {2}
+a71c89ec	real
+3ef59e34	real {0}
+c2a3455a	Help others: share your latest raise percentage (
+105202b7	) anonymously — a percentage and a month only, never a salary figure.
+a82f5a0c	Help others: share your latest raise percentage ({0}, {1}) anonymously — a percentage and a month only, never a salary figure.
+9092e80a	Share the percentage anonymously
+8305f19a	Yearly raise in the market ·
+9af06e8a	Yearly raise in the market · {0}
+f7228f8d	Couldn't load — try again later.
+3adf591c	median · middle half
+699b0954	median · middle half {0}–{1}%
+dc2ebf6d	Modeled (demo) — on the live platform it comes from members' reports
+9862ab80	reports in the last 12 months
+e6d49f49	from {0} reports in the last 12 months{1}
+3399eead	· all tracks
+8ac1b667	Your latest raise
+0662ac2f	{0} Your latest raise {1} {2}
+b81ae04c	is at or above the market median
+a96a8bb9	is below the market median
+f7e6be44	: median
+1b108429	{0}: median {1}% · {2} reports
+f3cf09c1	The rate shows from 5 reports — now
+38c1975d	. Share your raise percentage to get it there.
+2ebd599e	{0} The rate shows from 5 reports — now {1}. Share your raise percentage to get it there.
+df8ee389	Offered a raise?
+0661bcea	Raise percentage
+121958c6	Against the latest published yearly inflation (
+19df83e8	%,
+7d2e0460	Against the latest published yearly inflation ({0}%, {1}): {2}{3}
+ff4e0d34	your purchasing power
+e4b62143	your purchasing power {0}
+e143499d	 — a disguised pay cut; inflation is your strongest argument.
+a4dc0b2e	Official inflation — last 12 months
+7ec709df	(year on year). Monthly factor = (1 + yearly rate)^(1/12).
+26fa2b08	Source: {0} (year on year). Monthly factor = (1 + yearly rate)^(1/12).
+61667fa9	Couldn't load the company scorecard — pull to refresh.
+e53b1749	Company scorecard
+0d3b31aa	engineers rated
+332d1a6d	{0} engineers rated{1}
+d8c89d2a	· modeled (demo)
+5ad9bf0d	Needs
+1165fd41	more ratings
+5fcf6cb9	{0} Needs {1} more ratings
+ec926d3d	% positive · from
+c3678819	engineers
+965c1f68	{0}% positive · from {1} engineers
+d6de2dea	Each member counts once (their latest rating) over the last 24 months, and nobody sees any one member's answers.
+c1fe1a58	{0}Each member counts once (their latest rating) over the last 24 months, and nobody sees any one member's answers.
+7a30aadf	No factor shows until 5 different engineers have rated it. 
+48ddde4d	Optional. These answers are never shown with your review and nobody sees them individually — they only count in the company scorecard once at least 5 different engineers have answered.
+51320c3d	Enter the month and the rate (between −20 and 100)
+78f67a25	Saved inflation for {0}
+47a7dce7	Official inflation (raises & inflation tool)
+05bdd56f	Add each month as soon as it is published:
+eb09c385	. Latest month on file:
+f52d575a	Add each month as soon as it is published: {0}. Latest month on file: {1} ({2}%).{3}
+4848f4a0	The tool estimates
+b25bb904	months after it with the latest rate until you add them.
+36c66abd	The tool estimates {0} months after it with the latest rate until you add them.
+1d9afe8e	Save month

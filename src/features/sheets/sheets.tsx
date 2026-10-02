@@ -19,6 +19,8 @@ import { IdentityFace, IdentitySwitch, IdentityTag, TrustPolicy, copyText } from
 import { Back, Chip, FilterChip, Forward, Num, Primary, Quiet, Secondary, Toggle } from "../../ui/primitives";
 import { fmt } from "../../ui/theme";
 import { evaluateOffer, grossForNet, netPay, offerPackage } from "../../domain/offer";
+import { FACTORS } from "../../domain/scorecard";
+import { RaiseTracker } from "../market/raise-tracker";
 import { govName } from "../../data/geo";
 import { useLiveSalary } from "../market/live-salary";
 import { SITE_TOOL_VIEWS } from "../sitetools/site-tools";
@@ -99,12 +101,15 @@ export function ComposeSheet({ app, payload = {} }: any) {
 
 
 export function ReviewSheet({ app, payload }: any) {
-  const c = company(payload.company); const [stars, setStars] = useState(4); const [text, setText] = useState<any>(""); const guard = screenLanguage(text); const [as, setAs] = useState<any>(app.profile.identity === "public" ? "public" : "anon");
+  const c = company(payload.company); const [stars, setStars] = useState(4); const [scores, setScores] = useState<any>({}); const [text, setText] = useState<any>(""); const guard = screenLanguage(text); const [as, setAs] = useState<any>(app.profile.identity === "public" ? "public" : "anon");
   return (<div><IdentitySwitch app={app} value={as} onChange={setAs} what={`تقييم ${c.name}`} className="mb-3" />
     <div className="flex items-center gap-1 mb-3" role="radiogroup" aria-label="التقييم">{[1, 2, 3, 4, 5].map((i) => <button key={i} type="button" role="radio" aria-checked={stars === i} aria-label={`${i} نجوم`} onClick={() => setStars(i)} className="press grid place-items-center w-11 h-11 rounded-full text-accent hover:bg-elevated"><Star size={22} fill={i <= stars ? "currentColor" : "none"} className={i <= stars ? "" : "text-ink-4"} /></button>)}</div>
+    {/* Feature 3: the scorecard factors — optional; they are never shown with this review, only in the company's aggregate from 5 reviewers */}
+    <div className="mb-3 space-y-2.5">{FACTORS.map((f) => <div key={f.id}><p className="text-[12px] text-ink-2 mb-1">{f.q}</p><div className="-mx-4 px-4 flex gap-1.5 overflow-x-auto no-scrollbar">{f.opts.map((o, i) => <FilterChip key={o} on={scores[f.id] === i + 1} onClick={() => setScores((x) => ({ ...x, [f.id]: x[f.id] === i + 1 ? undefined : i + 1 }))}>{o}</FilterChip>)}</div></div>)}
+      <p className="text-[10.5px] text-ink-3 leading-relaxed">اختياري. هذه الإجابات لا تظهر مع تقييمك ولا يراها أحد منفردة — تدخل فقط في بطاقة الشركة عندما يجيب 5 مهندسين مختلفين على الأقل.</p></div>
     <textarea value={text} onChange={(e) => setText(e.target.value)} rows={4} placeholder="ما الذي يجب أن يعرفه مهندس قبل قبول عرض هنا؟ المرتب، الزيادات، الساعات، الاحترام." className="w-full p-4 rounded-xl bg-canvas border border-line-2 text-[14px] leading-[1.8] placeholder:text-ink-4 focus:outline-none focus:ring-2 focus:ring-accent resize-none" />
     <LanguageGuard text={text} className="mt-2" />
-    <Primary disabled={text.trim().length < 10 || guard.blocked} onClick={() => { app.addReview(c.id, { ...authorOf(app.profile, as, repLevel(app.pts).i), when: "الآن", stars, text: text.trim(), mine: true }); app.closeSheet(); app.toast(`شكرًا — نُشر تقييمك ${as === "public" ? "باسمك" : "بمعرّفك المجهول"} · +15 نقطة`); }} className="w-full h-12 mt-3 press">{as === "public" ? "نشر التقييم باسمك" : "نشر التقييم مجهولًا"}</Primary>
+    <Primary disabled={text.trim().length < 10 || guard.blocked} onClick={() => { app.addReview(c.id, { ...authorOf(app.profile, as, repLevel(app.pts).i), when: "الآن", stars, text: text.trim(), mine: true, at: Date.now(), scores: Object.fromEntries(Object.entries(scores).filter(([, v]) => v)) }); app.closeSheet(); app.toast(`شكرًا — نُشر تقييمك ${as === "public" ? "باسمك" : "بمعرّفك المجهول"} · +15 نقطة`); }} className="w-full h-12 mt-3 press">{as === "public" ? "نشر التقييم باسمك" : "نشر التقييم مجهولًا"}</Primary>
     {text.trim().length < 10 && <p className="mt-1.5 text-[11px] text-ink-3 text-center">اكتب 10 أحرف على الأقل.</p>}</div>);
 }
 
@@ -283,16 +288,6 @@ export function MoveTool({ app }: any) {
       <p className="mt-2 text-[11.5px] text-ink-2">{diff > 3000 ? "الانتقال يستاهل ماليًا — حدد مدة من الأول واتفق على العودة لمشروع في محافظتك بعدها." : diff > 0 ? "الفرق موجود لكنه صغير. اطلب بدل اغتراب أو ارفع العرض 1,500 على الأقل." : "العرض ما يغطيش تكلفة الانتقال. الرقم اللي يستاهل: " + fmt(round500((Number(cur) || 0) - rentNow + rentTo + trips + 2500)) + " ج.م."}</p></Result></div>);
 }
 
-export function InflationTool({ app }: any) {
-  const pr = app.profile; const [sal, setSal] = useState<any>(String(myMedian(pr))); const [raise, setRaise] = useState<any>("10"); const [inf, setInf] = useState<any>("12.5");
-  const s = Number(sal) || 0, r = Number(raise) || 0, i = Number(inf) || 0; const real = ((1 + r / 100) / (1 + i / 100) - 1) * 100; const need = Math.round(i + 3);
-  return (<div><Field label="راتبك الحالي" value={sal} onChange={setSal} /><div className="grid grid-cols-2 gap-2 mt-2"><Field label="الزيادة المعروضة" value={raise} onChange={setRaise} unit="%" /><Field label="التضخم السنوي" value={inf} onChange={setInf} unit="%" /></div>
-    <Result tone={real >= 2 ? "good" : real >= 0 ? "accent" : "warn"}><p className="text-[11px] text-ink-2">قوّتك الشرائية بعد الزيادة</p><div className="flex items-baseline gap-2"><Num className={`text-[32px] font-semibold tracking-[-0.04em] ${real >= 0 ? "text-good" : "text-warn"}`}>{real >= 0 ? "+" : "−"}{Math.abs(real).toFixed(1)}%</Num><span className="text-[12px] text-ink-2">فعليًا</span></div>
-      <ul className="mt-2 space-y-1 text-[12.5px] text-ink-2"><li className="flex justify-between"><span>الراتب الجديد</span><Num>{fmt(round500(s * (1 + r / 100)))}</Num></li><li className="flex justify-between"><span>اللي تحتاجه عشان تفضل مكانك</span><Num>{fmt(round500(s * (1 + i / 100)))}</Num></li><li className="flex justify-between"><span>زيادة تحسّن وضعك فعلًا</span><Num>{need}%+</Num></li></ul>
-      <p className="mt-2 text-[11.5px] text-ink-2">{real < 0 ? "الزيادة دي تخفيض مقنّع. قدّم رقم التضخم في النقاش — هو حجتك الأقوى." : real < 2 ? "بالكاد تغطي التضخم. اطلب الفرق كبدل ثابت لو الأساسي مقفول." : "زيادة حقيقية — نادرة هذه الأيام. سجّلها في المرتبات ليستفيد غيرك."}</p></Result>
-    <Secondary onClick={() => { app.closeSheet(); app.openSheet("tool", { id: "raise" }); }} className="w-full h-11 mt-3">هل ده وقت طلب الزيادة؟</Secondary></div>);
-}
-
 export function MethodologySheet({ app }: any) {
   return (
     <div className="space-y-4">
@@ -310,4 +305,4 @@ export function MethodologySheet({ app }: any) {
   );
 }
 
-export const TOOL_VIEWS = { ...SITE_TOOL_VIEWS, offer: OfferTool, net: NetTool, compare: CompareTool, script: ScriptTool, raise: RaiseTool, path: PathTool, contract: ContractTool, move: MoveTool, inflation: InflationTool };
+export const TOOL_VIEWS = { ...SITE_TOOL_VIEWS, offer: OfferTool, net: NetTool, compare: CompareTool, script: ScriptTool, raise: RaiseTool, path: PathTool, contract: ContractTool, move: MoveTool, inflation: RaiseTracker };
