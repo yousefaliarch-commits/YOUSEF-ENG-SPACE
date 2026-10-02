@@ -32,21 +32,23 @@ await page.evaluate(({ API, KEY, PW, ACCOUNTS, MAX }) => {
       r = await fetch(`${API}/auth/v1/token?grant_type=password`, { method: "POST", headers: h, body: JSON.stringify({ email: a.email, password: PW }) }); }
     return r.json();
   };
-  const cache = {};
   window.__CRAWL_MAX_TESTS = MAX; window.__CRAWL_SETTLE = 2500;
   window.__CRAWL_BEFORE = async (start) => {
     const who = start.tag === "hr" || start.tag === "welcome-hr" ? "hr" : start.tag === "public-default" || start.tag === "welcome" ? "pub" : start.account ? null : "eng";
     localStorage.removeItem("engspace.auth"); localStorage.removeItem("engspace.persona.v6"); localStorage.removeItem("engspace.session.v1");
     if (!who) return; // the sign-in screen
-    let s = cache[who];
-    if (s) { const ok = await fetch(`${API}/auth/v1/user`, { headers: { apikey: KEY, authorization: "Bearer " + s.access_token } }); if (!ok.ok) s = null; }
-    if (!s) s = cache[who] = await login(ACCOUNTS[who]);
+    // a fresh session every time: the crawl itself signs out (revoking sessions) and deletes accounts
+    const s = await login(ACCOUNTS[who]); if (!s.access_token) throw new Error("login failed: " + JSON.stringify(s).slice(0, 120));
     localStorage.setItem("engspace.auth", JSON.stringify(s));
-    localStorage.setItem("engspace.persona.v6", JSON.stringify({ ...ACCOUNTS[who].meta, email: ACCOUNTS[who].email }));
+    // the client keeps its session in memory across remounts: hand it the new one
+    if (window.__engspaceDev && window.__engspaceDev.supabase) await (await window.__engspaceDev.supabase()).auth.setSession({ access_token: s.access_token, refresh_token: s.refresh_token });
+    // the persona the app caches after sign-in (it needs the real anon handle and pid)
+    const [p] = await (await fetch(`${API}/rest/v1/profiles?select=*`, { headers: { apikey: KEY, authorization: "Bearer " + s.access_token } })).json();
+    localStorage.setItem("engspace.persona.v6", JSON.stringify({ ...ACCOUNTS[who].meta, email: ACCOUNTS[who].email, anon: p.anon, pid: p.pid, gradYear: p.grad_year, staff: p.staff }));
     localStorage.setItem("engspace.session.v1", "1");
   };
 }, { API, KEY, PW, ACCOUNTS, MAX });
-await page.evaluate((ids) => {
+await page.evaluate(({ ids, only }) => {
   const P = ids.map((id) => ({ hash: `#app/post/${id}` }));
   window.__CRAWL_STARTS = [
     { hash: "#app" }, { hash: "#app/home" }, { hash: "#app/community" }, { hash: "#app/jobs" }, { hash: "#app/market/salaries" }, { hash: "#app/market/companies" },
@@ -55,8 +57,8 @@ await page.evaluate((ids) => {
     { hash: "#app/home", tag: "public-default" }, { hash: "#app/community", tag: "public-default" },
     { hash: "#app/home", tag: "hr" }, { hash: "#app/jobs", tag: "hr" }, { hash: "#app/postjob", tag: "hr" },
     { hash: "#app", account: true, tag: "sign-in" },
-  ];
-}, ids);
+  ].filter((x) => !only || x.hash === only);
+}, { ids, only: process.env.CRAWL_ONLY || "" });
 await page.addScriptTag({ path: new URL("./crawl-ui.js", import.meta.url).pathname });
 const t0 = Date.now();
 while (true) {
@@ -65,6 +67,7 @@ while (true) {
   if (r && r.done) break;
   if (Date.now() - t0 > 40 * 60e3) { console.log("time limit"); break; }
 }
-const out = await page.evaluate(() => { const c = window.__CRAWL; return { summary: c.summary, errors: c.errors.slice(0, 30), dead: c.dead.slice(0, 20), noHandler: c.noHandler.slice(0, 20), hook: c.log.filter((l) => /before-hook|unreachable/.test(l)).slice(0, 10) }; });
+const out = await page.evaluate(() => { const c = window.__CRAWL; const why = {}; c.skipped.forEach((x) => { why[x.why] = (why[x.why] || 0) + 1; });
+  return { summary: c.summary, skippedWhy: why, errors: c.errors.slice(0, 30), dead: c.dead.slice(0, 20), noHandler: c.noHandler.slice(0, 20), hook: c.log.filter((l) => /before-hook|unreachable/.test(l)).slice(0, 10) }; });
 console.log(JSON.stringify(out, null, 1));
 await browser.close();
