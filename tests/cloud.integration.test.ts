@@ -50,6 +50,28 @@ run("cloud backend (local Supabase)", () => {
     const ts = await cloud.threads(); expect(ts[0].with.anon).toBe(anonA); expect(JSON.stringify(ts)).not.toContain(A.email);
   });
 
+  it("realtime: the recipient hears about a new message at once, without its text; nobody else can listen", async () => {
+    const { createClient } = await import("@supabase/supabase-js");
+    const env = (import.meta as any).env; const opts = { auth: { persistSession: false, autoRefreshToken: false } };
+    const a = createClient(env.VITE_SUPABASE_URL, env.VITE_SUPABASE_PUBLISHABLE_KEY, opts);
+    const { data: { session } } = await a.auth.signInWithPassword({ email: A.email, password: A.pw }); await a.realtime.setAuth(session!.access_token);
+    const got: any[] = []; let joined = false;
+    const ch = a.channel(`member:${session!.user.id}`, { config: { private: true } }).on("broadcast", { event: "message" }, (m: any) => got.push(m.payload))
+      .subscribe((st: string) => { if (st === "SUBSCRIBED") joined = true; });
+    for (let i = 0; i < 50 && !joined; i++) await new Promise((r) => setTimeout(r, 100));
+    expect(joined).toBe(true);
+    const t = (await cloud.threads())[0]; await cloud.sendMessage(t.id, "رسالة لحظية");
+    for (let i = 0; i < 50 && !got.length; i++) await new Promise((r) => setTimeout(r, 100));
+    // the ping is the thread id (plus Realtime's own delivery id) — never the text or the sender
+    expect(got[0].thread).toBe(t.id); expect(Object.keys(got[0]).sort()).toEqual(["id", "thread"]); expect(JSON.stringify(got)).not.toContain("رسالة لحظية");
+    // B (signed in through cloud.ts) tries to join A's channel: refused
+    const { supabase } = await import("../src/backend/client"); const b = await supabase(); const { data: bs } = await b.auth.getSession(); await b.realtime.setAuth(bs.session!.access_token);
+    let denied = false; const spy = b.channel(`member:${session!.user.id}`, { config: { private: true } }).subscribe((st: string) => { if (st === "CHANNEL_ERROR" || st === "TIMED_OUT") denied = true; });
+    for (let i = 0; i < 80 && !denied; i++) await new Promise((r) => setTimeout(r, 100));
+    expect(denied).toBe(true);
+    await a.removeChannel(ch); await b.removeChannel(spy);
+  });
+
   it("cannot upload into someone else's verification folder", async () => {
     const { supabase } = await import("../src/backend/client"); const db = await supabase();
     const blob = await (await fetch(JPEG)).blob();
@@ -81,7 +103,7 @@ run("cloud backend (local Supabase)", () => {
 
   it("the author reads the reply notification-free feed and their thread", async () => {
     await cloud.signOut(); await cloud.signIn(A.email, A.pw);
-    const ts = await cloud.threads(); expect(ts[0].unread).toBe(1);
+    const ts = await cloud.threads(); expect(ts[0].unread).toBe(2); // «أهلًا» and the realtime test's message
     const msgs = await cloud.messages(ts[0].id); expect(msgs[0]).toMatchObject({ from: "them", text: "أهلًا" });
     await cloud.deleteAccount();
     await expect(cloud.signIn(A.email, A.pw)).rejects.toThrow("البريد أو كلمة المرور غير صحيحة");

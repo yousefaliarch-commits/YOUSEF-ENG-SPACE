@@ -200,10 +200,21 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   }, []);
   // back to the app (tab switch, phone unlocked): fetch what changed
   useEffect(() => { if (!CLOUD) return; const on = () => { if (!document.hidden && persona) hydrate().catch(() => {}); }; document.addEventListener("visibilitychange", on); return () => document.removeEventListener("visibilitychange", on); }, [!!persona]);
-  // an open conversation checks for new messages every 5 seconds
+  // Realtime: a new message or notification arrives at once over the member's private channel. While the socket is up an
+  // open conversation needs no polling; if it drops, the conversation checks every 5 s until it is back.
   const chatTop = stack[stack.length - 1]; const chatId = CLOUD && chatTop && chatTop.type === "chat" ? chatTop.id : null;
+  const chatRef = useRef<any>(null); chatRef.current = chatId; const [live, setLive] = useState(false);
   const loadChat = (tid?: any) => cloud.messages(tid).then((msgs) => setThreads((ts) => ts.map((t) => (t.id === tid ? { ...t, messages: msgs, unread: 0 } : t))));
-  useEffect(() => { if (!chatId) return; loadChat(chatId).catch(() => {}); cloud.readThread(chatId).catch(() => {}); const i = setInterval(() => { if (!document.hidden) loadChat(chatId).catch(() => {}); }, 5000); return () => clearInterval(i); }, [chatId]);
+  const refreshThreads = () => cloud.threads().then((ts) => setThreads((old) => ts.map((t) => { const o = old.find((x) => x.id === t.id); return o ? { ...t, messages: o.messages, unread: t.id === chatRef.current ? 0 : t.unread } : t; })));
+  useEffect(() => {
+    if (!CLOUD || !persona) return; let off: any = null; let gone = false;
+    cloud.subscribeLive((event, p) => {
+      if (event === "message") { refreshThreads().catch(() => {}); if (p && p.thread === chatRef.current) { loadChat(p.thread).catch(() => {}); cloud.readThread(p.thread).catch(() => {}); } }
+      if (event === "notification" && p) { setNotifs((ns) => (ns.some((n) => n.id === p.id) ? ns : [{ id: p.id, kind: p.kind, title: p.title, body: p.body, target: p.target || undefined, read: false, when: "الآن" }, ...ns])); pushNative(p.title, p.body); }
+    }, setLive).then((f) => { if (gone) f(); else off = f; }).catch(() => {});
+    return () => { gone = true; if (off) off(); setLive(false); };
+  }, [!!persona, persona && persona.pid]);
+  useEffect(() => { if (!chatId) return; loadChat(chatId).catch(() => {}); cloud.readThread(chatId).catch(() => {}); if (live) return; const i = setInterval(() => { if (!document.hidden) loadChat(chatId).catch(() => {}); }, 5000); return () => clearInterval(i); }, [chatId, live]);
   // saved items, follows, personal hiding, opened contacts: one row each, written a moment after the last change
   const saveLater = useRef<any>({});
   const persist = (key?: any, value?: any) => { if (!CLOUD || !hydrated.current) return; clearTimeout(saveLater.current[key]); saveLater.current[key] = setTimeout(() => sync(() => cloud.saveState(key, value)), 800); };
