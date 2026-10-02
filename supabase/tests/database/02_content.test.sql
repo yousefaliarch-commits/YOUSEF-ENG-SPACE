@@ -18,11 +18,14 @@ select is((select tally from public.posts where body = 'أي برنامج؟'), '
 
 -- salaries: engineers share and read; HR sees bands only; field staff see no money
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
-insert into public.salary_shares (disc, years, salary, gov) values ('civil', 4, 17000, 'cairo'), ('civil', 4, 18000, 'cairo'), ('civil', 4, 16000, 'cairo'),
-  ('civil', 4, 21000, 'cairo'), ('civil', 4, 19000, 'cairo'), ('civil', 9, 40000, 'cairo');
-select is((select contributions from public.profiles), 6, 'contributions are counted');
-select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
-select is((select count(*)::int from public.salary_shares), 6, 'engineers read individual salaries');
+insert into public.salary_shares (disc, years, salary, gov) values ('civil', 4, 17000, 'cairo'), ('civil', 4, 18000, 'cairo'), ('civil', 4, 16000, 'cairo');
+select is((select contributions from public.profiles), 3, 'contributions are counted');
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');
+insert into public.salary_shares (disc, years, salary, gov) values ('civil', 4, 21000, 'cairo'), ('civil', 4, 19000, 'cairo');
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
+insert into public.salary_shares (disc, years, salary, gov) values ('civil', 9, 40000, 'cairo');
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');
+select is((select count(*)::int from public.salary_shares), 6, 'engineers who shared read individual salaries');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000e');
 select is((select count(*)::int from public.salary_shares), 0, 'HR reads no individual salary');
 select is((select median from public.salary_bands('civil') where years = 4), 18000, 'HR reads the aggregate band');
