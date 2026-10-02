@@ -18,6 +18,9 @@ import { ContactHint, Field, GovPicker, LanguageGuard, Result, RoleBadge, TextIn
 import { IdentityFace, IdentitySwitch, IdentityTag, TrustPolicy, copyText } from "../../ui/identity";
 import { Back, Chip, FilterChip, Forward, Num, Primary, Quiet, Secondary, Toggle } from "../../ui/primitives";
 import { fmt } from "../../ui/theme";
+import { evaluateOffer, grossForNet, netPay, offerPackage } from "../../domain/offer";
+import { govName } from "../../data/geo";
+import { useLiveSalary } from "../market/live-salary";
 
 // =====================================================================
 //  Sheets — community
@@ -171,13 +174,51 @@ export const Bar = ({ parts }: any) => { const tot = parts.reduce((a, p) => a + 
 export const myMedian = (pr?: any) => medianFor((isCompanyRole(pr.role) ? "civil" : pr.disc), personaExp(pr), pr.gov, isCompanyRole(pr.role) ? "site" : pr.track, pr.city);
 
 
+// Net pay on the YEAR's income (src/domain/offer.ts): bonus months taxed at the member's real rate, high-earner band rules,
+// and the reverse question — what gross gives the net I need?
 export function NetTool({ app, payload }: any) {
-  const pr = app.profile; const med = myMedian(pr); const [g, setG] = useState<any>(String(payload.gross || med)); const gross = Number(g) || 0; const r = egyptNet(gross);
-  return (<div><Field label="الراتب الإجمالي الشهري" value={g} onChange={setG} placeholder={fmt(med)} />
-    <Result><p className="text-[11px] text-ink-2">يصل حسابك تقريبًا</p><Money n={r.net} size="text-[34px]" /><Bar parts={[["صافي", r.net, "bg-accent"], ["تأمينات", r.ins, "bg-ink-3"], ["ضريبة", r.tax, "bg-ink-4"]]} />
-      <ul className="mt-3 space-y-1.5 text-[12.5px]">{[["تأمينات اجتماعية (11% حتى الحد الأقصى)", r.ins], ["ضريبة الدخل الشهرية", r.tax], ["نسبة الاستقطاع الفعلية", gross ? `${Math.round(((gross - r.net) / gross) * 100)}%` : "—"]].map(([k, v]: any) => <li key={k} className="flex justify-between gap-3 text-ink-2"><span>{k}</span><Num className="text-ink">{typeof v === "number" ? fmt(v) : v}</Num></li>)}</ul></Result>
-    <p className="mt-3 text-[11px] text-ink-3 leading-relaxed">تقديري: شرائح قانون 175 لسنة 2023، إعفاء شخصي 20,000 ج.م سنويًا، وحد أقصى للأجر التأميني 16,700 ج.م. لا يشمل بدلات معفاة أو تأمينًا طبيًا خاصًا.</p>
-    <Secondary onClick={() => { app.closeSheet(); app.openSheet("compose", {}); }} className="w-full h-11 mt-3">شارك النتيجة بدون اسم</Secondary></div>);
+  const pr = app.profile; const med = myMedian(pr); const [mode, setMode] = useState<any>("net");
+  const [g, setG] = useState<any>(String(payload.gross || med)); const [bonus, setBonus] = useState<any>(String(payload.bonusMonths || 0)); const [want, setWant] = useState<any>(String(round500(egyptNet(med).net)));
+  const gross = mode === "net" ? Number(g) || 0 : grossForNet(Number(want) || 0); const r = netPay(gross, gross * (Number(bonus) || 0));
+  return (<div>
+    <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-canvas/60 border border-line text-[12.5px]">{[["net", "من الإجمالي إلى الصافي"], ["gross", "كم أطلب لأقبض…؟"]].map(([id, l]: any) => <button key={id} type="button" aria-pressed={mode === id} onClick={() => setMode(id)} className={`press h-9 rounded-lg ${mode === id ? "bg-surface border border-line-2 font-medium" : "text-ink-2"}`}>{l}</button>)}</div>
+    <div className="mt-3 grid grid-cols-2 gap-2">{mode === "net" ? <Field label="الراتب الإجمالي الشهري" value={g} onChange={setG} placeholder={fmt(med)} /> : <Field label="الصافي الذي تحتاجه شهريًا" value={want} onChange={setWant} />}<Field label="أشهر مكافأة في السنة" value={bonus} onChange={setBonus} unit="شهر" placeholder="0" /></div>
+    <Result>{mode === "gross" && <p className="mb-2 text-[12.5px]">اطلب إجماليًا <Num className="text-[18px] font-semibold text-ink">{fmt(gross)}</Num> ج.م شهريًا</p>}
+      <p className="text-[11px] text-ink-2">يصل حسابك في الشهر العادي تقريبًا</p><Money n={r.netRegular} size="text-[34px]" /><Bar parts={[["صافي", r.netRegular, "bg-accent"], ["تأمينات", r.ins, "bg-ink-3"], ["ضريبة", r.tax, "bg-ink-4"]]} />
+      <ul className="mt-3 space-y-1.5 text-[12.5px]">{[["تأمينات اجتماعية (11% حتى الحد الأقصى)", r.ins], ["ضريبة الدخل الشهرية", r.tax], ...(r.bonusNet ? [["صافي المكافآت في السنة", r.bonusNet]] : []), ["صافي السنة كاملة", r.netYear], ["نسبة الاستقطاع الفعلية", r.yearGross ? `${Math.round(r.rate * 100)}%` : "—"]].map(([k, v]: any) => <li key={k} className="flex justify-between gap-3 text-ink-2"><span>{k}</span><Num className="text-ink">{typeof v === "number" ? fmt(v) : v}</Num></li>)}</ul></Result>
+    <p className="mt-3 text-[11px] text-ink-3 leading-relaxed">تقديري: الضريبة على دخل السنة كاملة (شرائح قانون 175 لسنة 2023، إعفاء شخصي 20,000 ج.م)، ويفقد الدخل السنوي فوق 600,000 ج.م الشرائح الأدنى. الحد الأقصى للأجر التأميني 16,700 ج.م. لا يشمل بدلات معفاة أو تأمينًا طبيًا خاصًا — راجع محاسبك للأرقام النهائية.</p>
+    <Secondary onClick={() => { app.closeSheet(); app.openSheet("tool", { id: "offer", base: gross }); }} className="w-full h-11 mt-3">قيّم عرض عمل بهذا الرقم</Secondary></div>);
+}
+
+// The offer evaluator: an offer's real take-home and where it sits in the market — live member data when the member can
+// see it (salary explorer, give-to-get), the reference model otherwise. Nothing typed here is sent anywhere.
+export function OfferTool({ app, payload }: any) {
+  const pr = app.profile; const co = isCompanyRole(pr.role);
+  const [disc, setDisc] = useState<any>(payload.disc || (co ? "civil" : pr.disc)); const [exp, setExp] = useState<any>(payload.exp || personaExp(pr)); const [g] = useState<any>(payload.gov || pr.gov);
+  const [o, setO] = useState<any>({ base: String(payload.base || round500(myMedian(pr) * 0.95)), allowances: "0", bonusMonths: "0", medical: false });
+  const live = useLiveSalary(disc, exp, g, app.salaryRev); const d = live.data;
+  const liveOk = !!(d && d.p25 && d.n >= d.min); const model = marketFor(disc, exp, g, payload.track || pr.track || "site", null);
+  const m = liveOk ? d : model; const pkg = offerPackage(o); const ev = pkg.monthly ? evaluateOffer(pkg.monthly, m) : null;
+  const up = (k?: any) => (v?: any) => setO((x) => ({ ...x, [k]: v }));
+  const tone = ev ? (ev.tone === "good" || ev.tone === "great" ? "good" : "warn") : "accent";
+  return (<div className="space-y-3">
+    <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{DISC.map(([id, l]: any) => <FilterChip key={id} on={disc === id} onClick={() => setDisc(id)}>{l}</FilterChip>)}</div>
+    <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{EXP.map(([id, l]: any) => <FilterChip key={id} on={exp === id} onClick={() => setExp(id)}>{l}</FilterChip>)}</div>
+    <div className="grid grid-cols-2 gap-2"><Field label="الأساسي الشهري" value={o.base} onChange={up("base")} /><Field label="بدلات شهرية" value={o.allowances} onChange={up("allowances")} /><Field label="أشهر مكافأة في السنة" value={o.bonusMonths} onChange={up("bonusMonths")} unit="شهر" /><label className="flex items-center justify-between gap-2 px-3 rounded-xl bg-canvas/60 border border-line text-[12.5px] min-h-11 self-end"><span>تأمين طبي خاص</span><Toggle on={o.medical} onChange={up("medical")} label="تأمين طبي خاص" /></label></div>
+    <Result tone={tone}>
+      <p className="text-[11px] text-ink-2">يصل حسابك في الشهر العادي</p><Money n={pkg.netRegular} size="text-[30px]" />
+      <ul className="mt-2 space-y-1 text-[12px] text-ink-2">{[["الإجمالي الشهري (أساسي + بدلات)", pkg.monthly], ["صافي السنة كاملة (مع المكافآت)", pkg.netYear], ...(pkg.medicalValue ? [["قيمة التأمين الطبي تقريبًا / شهر", pkg.medicalValue]] : [])].map(([k, v]: any) => <li key={k} className="flex justify-between gap-3"><span>{k}</span><Num className="text-ink">{fmt(v)}</Num></li>)}</ul>
+      {ev && <div className="mt-3 pt-3 border-t border-line/60">
+        <p className="text-[15px] font-medium">{ev.label} <span className="text-[12px] text-ink-2">· أعلى من <Num>{ev.p}%</Num> من {liveOk ? "تقارير الأعضاء" : "تقديرات السوق"}</span></p>
+        <p className="mt-1 text-[11.5px] text-ink-2">الوسط: <Num className="text-ink">{fmt(m.p50)}</Num> · الربعان الأوسطان: <Num>{fmt(m.p25)}</Num>–<Num>{fmt(m.p75)}</Num> ج.م — {label(EXP, exp)} · {govName(g)}</p>
+        {ev.gap > 0 ? <p className="mt-2 text-[13px]">اطلب <Num className="text-[17px] font-semibold">{fmt(ev.counter)}</Num> ج.م (+<Num>{fmt(ev.gap)}</Num>) — رقم قابل للدفاع بالأرقام</p>
+          : <p className="mt-2 text-[13px]">الرقم قوي — فاوض على البدلات أو مراجعة مكتوبة بعد 6 أشهر.</p>}
+      </div>}
+      <p className="mt-3 text-[10.5px] text-ink-3 leading-relaxed">{liveOk ? <>المقارنة بـ<Num>{d.n}</Num> تقرير حقيقي من الأعضاء{live.wide ? " على مستوى مصر" : ""}.</> : d && d.access === "teaser" ? "المقارنة بالنموذج المرجعي — شارك راتبك لتقارن بتقارير الأعضاء الحقيقية." : "المقارنة بالنموذج المرجعي — تقارير الأعضاء في هذه الخلية أقل من 5 بعد."} لا نرسل أرقام العرض إلى أي مكان.</p>
+    </Result>
+    <div className="flex gap-2">{ev && ev.gap > 0 && <Primary onClick={() => { app.closeSheet(); app.openSheet("tool", { id: "script", offer: pkg.monthly, median: m.p50 }); }} className="flex-1 h-11 press">جهّز سكريبت التفاوض</Primary>}
+      {d && d.access === "teaser" && <Secondary onClick={() => { app.closeSheet(); app.openSheet("contribute", { disc, exp, gov: g }); }} className="flex-1 h-11">شارك راتبك وقارن بالحقيقي</Secondary>}</div>
+  </div>);
 }
 
 export function CompareTool({ app }: any) {
@@ -268,4 +309,4 @@ export function MethodologySheet({ app }: any) {
   );
 }
 
-export const TOOL_VIEWS = { net: NetTool, compare: CompareTool, script: ScriptTool, raise: RaiseTool, path: PathTool, contract: ContractTool, move: MoveTool, inflation: InflationTool };
+export const TOOL_VIEWS = { offer: OfferTool, net: NetTool, compare: CompareTool, script: ScriptTool, raise: RaiseTool, path: PathTool, contract: ContractTool, move: MoveTool, inflation: InflationTool };

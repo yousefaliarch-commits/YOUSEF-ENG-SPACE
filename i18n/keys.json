@@ -4845,12 +4845,22 @@
   "p": "data/seed.ts",
   "n": 1
  },
+ "تقييم عرض عمل": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "صافيه ومكانه من السوق ورقمك المضاد": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
  "حاسبة الصافي": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
  },
- "من الإجمالي إلى ما يصل حسابك": {
+ "الصافي، والعكس: كم أطلب لأقبض؟": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
@@ -6135,6 +6145,26 @@
   "p": "domain/moderation.ts",
   "n": 1
  },
+ "أقل من السوق بوضوح": {
+  "k": "s",
+  "p": "domain/offer.ts",
+  "n": 1
+ },
+ "أقل من الوسط": {
+  "k": "s",
+  "p": "domain/offer.ts",
+  "n": 1
+ },
+ "عرض عادل": {
+  "k": "s",
+  "p": "domain/offer.ts",
+  "n": 1
+ },
+ "عرض قوي": {
+  "k": "s",
+  "p": "domain/offer.ts",
+  "n": 1
+ },
  "يشمل الإنشائي والجيوتقني والطرق والصحي": {
   "k": "s",
   "p": "domain/taxonomy.ts",
@@ -6376,7 +6406,7 @@
  "تأمين طبي خاص": {
   "k": "s",
   "p": "domain/taxonomy.ts,features/sheets/sheets.tsx",
-  "n": 2
+  "n": 5
  },
  "قيمة تقديرية للفرد": {
   "k": "s",
@@ -10632,7 +10662,7 @@
  "من": {
   "k": "x",
   "p": "features/auth/auth.tsx,features/market/live-salary.tsx,features/settings/settings.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,lib/search.ts",
-  "n": 9
+  "n": 10
  },
  "{0} · {1} من {2}": {
   "k": "r",
@@ -12914,7 +12944,48 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "يصل حسابك تقريبًا": {
+ "من الإجمالي إلى الصافي": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "كم أطلب لأقبض…؟": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الصافي الذي تحتاجه شهريًا": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "أشهر مكافأة في السنة": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 4
+ },
+ "شهر": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 6
+ },
+ "اطلب إجماليًا": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "ج.م شهريًا": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "اطلب إجماليًا {0} ج.م شهريًا": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num className=\"text-[18px] font-semibold text-ink\">{fmt(gro"
+ },
+ "يصل حسابك في الشهر العادي تقريبًا": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -12944,17 +13015,177 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
+ "صافي المكافآت في السنة": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "صافي السنة كاملة": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
  "نسبة الاستقطاع الفعلية": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "تقديري: شرائح قانون 175 لسنة 2023، إعفاء شخصي 20,000 ج.م سنويًا، وحد أقصى للأجر التأميني 16,700 ج.م. لا يشمل بدلات معفاة أو تأمينًا طبيًا خاصًا.": {
+ "تقديري: الضريبة على دخل السنة كاملة (شرائح قانون 175 لسنة 2023، إعفاء شخصي 20,000 ج.م)، ويفقد الدخل السنوي فوق 600,000 ج.م الشرائح الأدنى. الحد الأقصى للأجر التأميني 16,700 ج.م. لا يشمل بدلات معفاة أو تأمينًا طبيًا خاصًا — راجع محاسبك للأرقام النهائية.": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "شارك النتيجة بدون اسم": {
+ "قيّم عرض عمل بهذا الرقم": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الأساسي الشهري": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "بدلات شهرية": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "يصل حسابك في الشهر العادي": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الإجمالي الشهري (أساسي + بدلات)": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "صافي السنة كاملة (مع المكافآت)": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "قيمة التأمين الطبي تقريبًا / شهر": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "· أعلى من": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "· أعلى من {0} من {1}": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num>{ev.p}%</Num> | liveOk ? \"تقارير الأعضاء\" : \"تقديرات السوق\""
+ },
+ "تقارير الأعضاء": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "تقديرات السوق": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الوسط:": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "· الربعان الأوسطان:": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "ج.م —": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الوسط: {0} · الربعان الأوسطان: {1}–{2} ج.م — {3} · {4}": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num className=\"text-ink\">{fmt(m.p50)}</Num> | EL <Num>{fmt(m.p25)}</Num> | EL <Num>{fmt(m.p75)}</Num> | label(EXP, exp) | govName(g)"
+ },
+ "اطلب": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "ج.م (+": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ ") — رقم قابل للدفاع بالأرقام": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "اطلب {0} ج.م (+{1}) — رقم قابل للدفاع بالأرقام": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num className=\"text-[17px] font-semibold\">{fmt(ev.counter)} | EL <Num>{fmt(ev.gap)}</Num>"
+ },
+ "الرقم قوي — فاوض على البدلات أو مراجعة مكتوبة بعد 6 أشهر.": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "لا نرسل أرقام العرض إلى أي مكان.": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "{0} لا نرسل أرقام العرض إلى أي مكان.": {
+  "k": "e",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "liveOk ? <>المقارنة بـ<Num>{d.n}</Num> تقرير حقيقي من الأعضاء{live.wide ? \" على مستوى مصر\" : \"\"}.</> : d && d.access === \"teaser\" ? \"المقارنة بالنموذج المرجعي —"
+ },
+ "المقارنة بـ": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "تقرير حقيقي من الأعضاء": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "المقارنة بـ{0} تقرير حقيقي من الأعضاء{1}.": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num>{d.n}</Num> | live.wide ? \" على مستوى مصر\" : \"\""
+ },
+ "على مستوى مصر": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "المقارنة بالنموذج المرجعي — شارك راتبك لتقارن بتقارير الأعضاء الحقيقية.": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "المقارنة بالنموذج المرجعي — تقارير الأعضاء في هذه الخلية أقل من 5 بعد.": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "جهّز سكريبت التفاوض": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "شارك راتبك وقارن بالحقيقي": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -13084,11 +13315,6 @@
   "p": "features/sheets/sheets.tsx",
   "n": 2
  },
- "اطلب": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
  "— 5% فوق الوسط، رقم قابل للدفاع": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
@@ -13121,11 +13347,6 @@
   "n": 6
  },
  "شهور منذ آخر زيادة": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 2
- },
- "شهر": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
@@ -14398,6 +14619,11 @@
   "x": "EL <Num className=\"text-ink\">{fmt(e.mid)}</Num>"
  },
  "الصافي من الوسط": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "قيّم عرضهم": {
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1
