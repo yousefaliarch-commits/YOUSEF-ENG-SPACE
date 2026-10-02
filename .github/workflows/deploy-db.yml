@@ -1,0 +1,36 @@
+# Applies supabase/migrations to the hosted Frankfurt project and deploys the purge-verification function.
+# Runs when migrations change on main, or by hand (Actions → Deploy database → Run workflow).
+# Needs two repository secrets: SUPABASE_ACCESS_TOKEN (supabase.com → Account → Access Tokens) and
+# SUPABASE_DB_PASSWORD (the database password chosen when the project was created).
+name: Deploy database
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["supabase/migrations/**", "supabase/functions/**"]
+concurrency: deploy-db
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_REF: cyziykbqldtxyquqvvkr
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Secrets present
+        run: |
+          [ -n "$SUPABASE_ACCESS_TOKEN" ] || { echo "::error::Add the repository secret SUPABASE_ACCESS_TOKEN"; exit 1; }
+          [ -n "$SUPABASE_DB_PASSWORD" ] || { echo "::error::Add the repository secret SUPABASE_DB_PASSWORD"; exit 1; }
+      - run: npx supabase link --project-ref "$PROJECT_REF"
+      - name: Migrations waiting to be applied
+        run: npx supabase migration list
+      - run: npx supabase db push
+      - run: npx supabase functions deploy purge-verification --project-ref "$PROJECT_REF" --use-api
