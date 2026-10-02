@@ -5,6 +5,11 @@
 name: Deploy database
 on:
   workflow_dispatch:
+    inputs:
+      admin_email:
+        description: "Make this account the first administrator (it must have signed up in the app; only works while no administrator exists)"
+        required: false
+        default: "yousefaliarch@gmail.com"
   push:
     branches: [main]
     paths: ["supabase/migrations/**", "supabase/functions/**"]
@@ -34,3 +39,13 @@ jobs:
         run: npx supabase migration list
       - run: npx supabase db push
       - run: npx supabase functions deploy purge-verification --project-ref "$PROJECT_REF" --use-api
+      # `supabase link` stores the pooler address (without the password) in supabase/.temp/pooler-url
+      - name: First administrator
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.admin_email != '' }}
+        env:
+          ADMIN_EMAIL: ${{ inputs.admin_email }}
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          sudo apt-get install -y -qq postgresql-client >/dev/null
+          out=$(psql "$(cat supabase/.temp/pooler-url)" -XAt -v ON_ERROR_STOP=1 -v email="$ADMIN_EMAIL" -c "select public.bootstrap_admin(:'email')" 2>&1) && echo "::notice::$ADMIN_EMAIL is now an administrator ($out)" \
+            || echo "::warning::Administrator not set: $(echo "$out" | grep -o 'ERROR:.*' | head -1) — sign up in the app with $ADMIN_EMAIL, then run this workflow again"
