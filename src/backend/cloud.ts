@@ -26,6 +26,7 @@ export function friendly(e: any): Error {
     : /rate limit|too many/i.test(m) || code === 429 ? "محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة"
     : /room closed/i.test(m) ? "هذه الغرفة مغلقة مؤقتًا بقرار من الإدارة"
     : /share limit/i.test(m) ? "شاركت 3 رواتب خلال آخر 30 يومًا — يمكنك المشاركة مجددًا لاحقًا"
+    : /raise report limit/i.test(m) ? "سجّلت زيادتين خلال آخر 6 أشهر — يمكنك المشاركة مجددًا لاحقًا"
     : /cannot post|cannot message/i.test(m) ? "حسابك موقوف مؤقتًا — لا يمكنك النشر أو المراسلة الآن"
     : /does not accept messages/i.test(m) ? "هذا العضو أغلق باب الرسائل"
     : /Failed to fetch|NetworkError|network/i.test(m) ? "تعذّر الاتصال — تحقّق من الإنترنت وأعد المحاولة"
@@ -193,7 +194,7 @@ export async function loadAll() {
     notifs: (notifs.data || []).map((n: any) => notifOf(n, now)),
     threads: (threads.data || []).map((t: any) => threadOf(t, null, now)),
     reviews: reviewsOut, config: cfg.data ? cfg.data.value : null,
-    saved: st.saved || {}, follows: st.follows || {}, roomFollows: st.roomFollows || {}, hidden: st.hidden || {}, inspections: st.inspections || [], contacted,
+    saved: st.saved || {}, follows: st.follows || {}, roomFollows: st.roomFollows || {}, hidden: st.hidden || {}, inspections: st.inspections || [], salaryLog: st.salaryLog || null, contacted,
     myReports: reports.data || [], verification: (verif.data || [])[0] || null,
   };
 }
@@ -254,7 +255,21 @@ export async function latestShares(disc: string, exp: string, gov: string | null
 export async function salaryBands(disc: string, gov: string | null = null) { const db = await supabase(); return ok(await db.rpc("salary_bands", { p_disc: disc, p_gov: gov })) as any[]; }
 
 export async function addReview(companyId: string, r: any) {
-  const db = await supabase(); const row: any = ok(await db.from("company_reviews").insert(reviewRow(companyId, r)).select("*").single()); return reviewOf(row);
+  const db = await supabase(); const row: any = ok(await db.from("company_reviews").insert(reviewRow(companyId, r)).select("*").single());
+  // the factor ratings go to their own table that nobody reads individually — only the scorecard's aggregates come back
+  if (r.scores && Object.keys(r.scores).length) ok(await db.rpc("rate_company", { p_review: row.id, p_scores: r.scores }));
+  return reviewOf(row);
+}
+
+// ---- Feature 3: company scorecard · Feature 4: raises and inflation ----
+export async function companyScorecard(companyId: string) { const db = await supabase(); return ok(await db.rpc("company_scorecard", { p_company: companyId })) as any; }
+export async function marketRaises(disc: string, track: string | null = null) { const db = await supabase(); return ok(await db.rpc("market_raises", { p_disc: disc, p_track: track })) as any; }
+export async function inflationSeries() {
+  const db = await supabase(); const rows = (ok(await db.from("inflation_rates").select("month,yoy").order("month")) as any[]) || [];
+  return rows.map((r) => [String(r.month).slice(0, 7), Number(r.yoy)] as [string, number]);
+}
+export async function reportRaise(x: { disc: string; track?: string; pos?: string; pct: number; kind: string; month: string }) {
+  const db = await supabase(); ok(await db.from("raise_reports").insert({ disc: x.disc, track: x.track || null, pos: x.pos || null, pct: Math.round(x.pct * 10) / 10, kind: x.kind, month: x.month + "-01" }));
 }
 
 export async function postJob(j: any) { const db = await supabase(); const r: any = ok(await db.from("jobs").insert(jobRow(j)).select("*").single()); return jobOf(r); }
@@ -326,6 +341,7 @@ export async function withdrawVerification() { const db = await supabase(); cons
 
 // ---------------------------------------------------------------- admin console (staff; every function re-checks the role on the server)
 export const admin = {
+  async setInflation(month: string, yoy: number) { const db = await supabase(); ok(await db.from("inflation_rates").upsert({ month: month + "-01", yoy, updated_at: new Date().toISOString() })); },
   async cases(status = "open") { const db = await supabase(); return (ok(await db.rpc("mod_cases", { p_status: status })) as any[]) || []; },
   async decide(kind: string, id: string, d: { accept: boolean; hide?: boolean; warn?: string | null; suspendDays?: number | null; note?: string }) {
     const db = await supabase(); ok(await db.rpc("decide_case", { p_kind: kind, p_item: id, p_accept: d.accept, p_hide: d.hide !== false, p_warn: d.warn || null, p_suspend_days: d.suspendDays ?? null, p_note: d.note || null }));

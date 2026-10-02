@@ -19,5 +19,5 @@ export const TOOLS = [
   { id: "path", name: "خريطة المسار", desc: "خطوتك القادمة ورقمها", icon: Route },
   { id: "contract", name: "فاحص العقد", desc: "قبل ما تمضي", icon: FileCheck },
   { id: "move", name: "تكلفة الانتقال", desc: "القاهرة ↔ العاصمة ↔ العلمين", icon: MapIcon },
-  { id: "inflation", name: "العلاوة والتضخم", desc: "هل زيادتك زيادة فعلًا؟", icon: Percent },
+  { id: "inflation", name: "الزيادة والتضخم", desc: "سجّل راتبك وقارنه بالتضخم الرسمي والسوق", icon: Percent },
 ];
