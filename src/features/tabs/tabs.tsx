@@ -21,6 +21,8 @@ import { IdentityFace, IdentityTag } from "../../ui/identity";
 import { NotificationsBody } from "../../ui/notifications";
 import { Chip, FilterChip, Forward, Num, Panel, Primary, RangeBar, RoundButton, Secondary } from "../../ui/primitives";
 import { fmt } from "../../ui/theme";
+import { isCloud } from "../../backend/config";
+import { LiveSalaryPanel, useLiveSalary } from "../market/live-salary";
 
 export const engagement = (p?: any) => (p.reactions.agree || 0) + (p.reactions.disagree || 0) + (p.reactions.useful || 0) + countComments(p.comments) * 3;
 
@@ -220,6 +222,9 @@ export function SalariesBody({ app }: any) {
   const pr = app.profile; const d0 = (app.isCo ? "civil" : pr.disc); const [disc, setDisc] = useState<any>(d0); const [exp, setExp] = useState<any>(app.isCo ? "3-5" : personaExp(pr)); const [g, setG] = useState<any>(pr.gov); const [city, setCity] = useState(pr.city || null); const [track, setTrack] = useState<any>(app.isCo ? "site" : pr.track); const [showPlace, setShowPlace] = useState(false);
   const m = marketFor(disc, exp, g, track, city); const n = sampleSize(disc, exp, g); const q = quality(n); const reports = reportsFor(disc, exp, g); const net = egyptNet(m.p50);
   const thin = app.isCo && n < COMPANY_MIN_SAMPLE; // company accounts: a cell with too few reports could point at individuals
+  // cloud: live member reports above the model; give-to-get comes from the server's answer, not from this device
+  const live = useLiveSalary(disc, exp, g, app.salaryRev); const CLOUD = isCloud();
+  const unlocked = CLOUD ? !!(live.data && live.data.access === "full") : can(pr, "bands"); const rlist = CLOUD ? live.shares : reports;
   return (
     <div className="space-y-4">
       {app.isCo && <div className="p-3.5 rounded-2xl border border-accent/20 bg-wash text-[12px] leading-relaxed"><p className="font-medium inline-flex items-center gap-1.5"><Scale size={14} className="text-accent" /> حدود اطلاع حسابات الشركات</p><p className="mt-1 text-ink-2">متوسطات ونطاقات السوق فقط — لتعرض أرقامًا عادلة. لا أرقام فردية، ولا تفاصيل مسميات لشركات غير شركتك.</p></div>}
@@ -231,7 +236,9 @@ export function SalariesBody({ app }: any) {
         <button type="button" onClick={() => setShowPlace((v) => !v)} aria-expanded={showPlace} className="press w-full flex items-center justify-between gap-2 min-h-11 px-4 py-2 rounded-2xl bg-surface border border-line-2 text-[13px] text-start"><span className="inline-flex items-center gap-2 flex-wrap"><MapPin size={14} className="text-accent shrink-0" />{placeName(g, city)} <span className="text-[11px] text-ink-3">· {regionName(gov(g)[2])} · معامل <Num>{placeMult(g, city).toFixed(2)}</Num></span></span><ChevronDown size={16} className={`shrink-0 text-ink-2 transition-transform ${showPlace ? "rotate-180" : ""}`} /></button>
         {showPlace && <div className="screen-tab p-4 rounded-2xl bg-surface border border-line-2 -mx-1"><GovPicker gov={g} city={city} onChange={(gg, cc) => { setG(gg); setCity(cc); }} /></div>}
       </div>
+      <LiveSalaryPanel app={app} live={live} disc={disc} exp={exp} g={g} track={track} />
       <Panel className="p-4">
+        {CLOUD && <p className="mb-1 text-[11px] font-medium text-ink-3">النموذج المرجعي — تقدير من مصادر السوق، ليس من تقارير الأعضاء</p>}
         <div className="flex items-start justify-between gap-2"><span className="text-[11px] text-ink-2 leading-snug">{ROLE[disc]} · {trackLabel(track, disc)} · {label(EXP, exp)} · {placeName(g, city)}</span><Chip tone={q[1]} className="h-6 px-2 text-[10.5px] shrink-0">{q[0]} · <Num>{n}</Num></Chip></div>
         {thin ? <p className="mt-2 p-3 rounded-xl bg-canvas/60 border border-line text-[12px] leading-relaxed text-ink-2 flex items-start gap-2"><LockKeyhole size={13} className="shrink-0 mt-0.5 text-ink-3" />عينة صغيرة (<Num>{n}</Num> تقرير) — تُخفى عن حسابات الشركات حتى <Num>{COMPANY_MIN_SAMPLE}</Num> تقريرًا حمايةً للأفراد. وسّع المكان أو الخبرة.</p> : <>
         <div className="mt-1"><Money n={m.p50} size="text-[38px]" /></div>
@@ -243,12 +250,14 @@ export function SalariesBody({ app }: any) {
       <Panel className="p-4"><h3 className="text-[13px] font-medium">بدلات نموذجية فوق الأساسي</h3><ul className="mt-2 divide-y divide-line">{ALLOWANCES.map(([l, lo, hi, note]: any) => <li key={l} className="py-2.5 flex items-center justify-between gap-3 text-[12.5px]"><span><span className="text-ink">{l}</span><span className="block text-[10.5px] text-ink-3">{note}</span></span><span className="shrink-0 text-ink">{hi <= 2 ? <><Num>{lo}–{hi}</Num> راتب</> : <><Num>{fmt(lo)}–{fmt(hi)}</Num> <span className="text-[10.5px] text-ink-3">ج.م</span></>}</span></li>)}</ul></Panel>
       {app.isCo ? <CompanyLimits /> : <>
       <section>
-        <SectionTitle>{can(pr, "bands") ? "أحدث التقارير" : "أحدث التقارير · مقفلة"}</SectionTitle>
+        <SectionTitle>{unlocked ? "أحدث التقارير" : "أحدث التقارير · مقفلة"}</SectionTitle>
         <div className="relative space-y-2">
-          {reports.map((r) => <Panel key={r.id} className="p-3.5"><div className={can(pr, "bands") ? "" : "blur-[6px] select-none"} aria-hidden={!can(pr, "bands")}>
+          {CLOUD && unlocked && rlist.length === 0 && <p className="p-3.5 rounded-2xl bg-surface border border-line text-[12.5px] text-ink-2">لا تقارير فردية في هذه الخلية بعد.</p>}
+          {/* locked in the cloud: the server sends no rows, so the blurred cards are the model's, never anyone's real number */}
+          {(CLOUD && !unlocked ? reports : rlist).map((r) => <Panel key={r.id} className="p-3.5"><div className={unlocked ? "" : "blur-[6px] select-none"} aria-hidden={!unlocked}>
             <div className="flex items-center gap-2 flex-wrap text-[11.5px] text-ink-2"><AnonChip id={r.anon} spec={disc} /><span>{r.title} · {r.years} سنوات</span>{r.verified && <ShieldCheck size={13} className="text-good shrink-0" />}<span className="ms-auto shrink-0 text-ink-3">{r.when}</span></div>
-            <div className="mt-1.5 flex items-center justify-between gap-2"><button type="button" onClick={() => app.push({ type: "company", id: r.coId })} className="text-[13px] text-ink hover:text-accent text-start">{r.company}</button><span className="shrink-0"><Num className="text-[16px] font-semibold">{fmt(r.salary)}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></div></div></Panel>)}
-          {!can(pr, "bands") && <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-5 text-center"><span className="glow-pulse grid place-items-center w-11 h-11 rounded-full bg-wash border border-accent/25 text-accent"><LockKeyhole size={18} /></span><p className="text-[13.5px] font-medium">{app.isCo ? "التقارير الفردية تُفتح بعد نشر أول وظيفة" : "التقارير الفردية تُفتح بعد مشاركة راتبك"}</p>{app.isCo ? <Primary onClick={() => app.push({ type: "postjob" })} className="h-11 px-6 press">انشر وظيفة <Forward /></Primary> : <Primary onClick={() => app.openSheet("contribute", { disc, exp, gov: g, city })} className="h-11 px-6 press">شارك راتبك <Forward /></Primary>}</div>}
+            <div className="mt-1.5 flex items-center justify-between gap-2">{r.coId ? <button type="button" onClick={() => app.push({ type: "company", id: r.coId })} className="text-[13px] text-ink hover:text-accent text-start">{r.company}</button> : <span className="text-[13px] text-ink">{r.company || "—"}</span>}<span className="shrink-0"><Num className="text-[16px] font-semibold">{fmt(r.salary)}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></div></div></Panel>)}
+          {!unlocked && <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-5 text-center"><span className="glow-pulse grid place-items-center w-11 h-11 rounded-full bg-wash border border-accent/25 text-accent"><LockKeyhole size={18} /></span><p className="text-[13.5px] font-medium">{app.isCo ? "التقارير الفردية تُفتح بعد نشر أول وظيفة" : "التقارير الفردية تُفتح بعد مشاركة راتبك"}</p>{app.isCo ? <Primary onClick={() => app.push({ type: "postjob" })} className="h-11 px-6 press">انشر وظيفة <Forward /></Primary> : <Primary onClick={() => app.openSheet("contribute", { disc, exp, gov: g, city })} className="h-11 px-6 press">شارك راتبك <Forward /></Primary>}</div>}
         </div>
       </section>
       </>}

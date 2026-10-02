@@ -9,7 +9,7 @@ import { AUTH_REDIRECT_NATIVE } from "./config";
 import { supabase } from "./client";
 import {
   ballotOf, choiceOf, commentTree, jobOf, jobRow, notifOf, personaFromProfile, postOf, postRow, profilePatch, reviewOf, reviewRow,
-  shareRow, signupMeta, threadOf,
+  shareOf, shareRow, signupMeta, threadOf, yearsRange,
 } from "./map";
 
 const FEED_LIMIT = 60;
@@ -25,6 +25,7 @@ export function friendly(e: any): Error {
     : /Password should be|weak password/i.test(m) ? "كلمة المرور ضعيفة — اختر كلمة أقوى"
     : /rate limit|too many/i.test(m) || code === 429 ? "محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة"
     : /room closed/i.test(m) ? "هذه الغرفة مغلقة مؤقتًا بقرار من الإدارة"
+    : /share limit/i.test(m) ? "شاركت 3 رواتب خلال آخر 30 يومًا — يمكنك المشاركة مجددًا لاحقًا"
     : /cannot post|cannot message/i.test(m) ? "حسابك موقوف مؤقتًا — لا يمكنك النشر أو المراسلة الآن"
     : /does not accept messages/i.test(m) ? "هذا العضو أغلق باب الرسائل"
     : /Failed to fetch|NetworkError|network/i.test(m) ? "تعذّر الاتصال — تحقّق من الإنترنت وأعد المحاولة"
@@ -179,6 +180,18 @@ export async function vote(postId: string, type: string, choice: any, as: string
 }
 
 export async function contribute(share: any) { const db = await supabase(); ok(await db.from("salary_shares").insert(shareRow(share))); }
+// The live explorer (supabase/migrations/…_salary_explorer.sql): one cell and its breakdowns, shaped by give-to-get
+export async function salaryExplorer(disc: string, exp: string, gov: string | null, track: string | null = null) {
+  const db = await supabase(); const [lo, hi] = yearsRange(exp);
+  return ok(await db.rpc("salary_explorer", { p_disc: disc, p_track: track, p_years_min: lo, p_years_max: hi, p_gov: gov })) as any;
+}
+// the newest individual reports in a cell — the table's RLS returns rows only to engineers who shared (give-to-get)
+export async function latestShares(disc: string, exp: string, gov: string | null, limit = 8) {
+  const db = await supabase(); const [lo, hi] = yearsRange(exp);
+  let q = db.from("salary_shares").select("id,title,years,salary,company,gov,track,author,created_at").eq("disc", disc).gte("years", lo).lte("years", hi).order("created_at", { ascending: false }).limit(limit);
+  if (gov) q = q.eq("gov", gov);
+  return ((ok(await q) as any[]) || []).map((r) => shareOf(r));
+}
 export async function salaryBands(disc: string, gov: string | null = null) { const db = await supabase(); return ok(await db.rpc("salary_bands", { p_disc: disc, p_gov: gov })) as any[]; }
 
 export async function addReview(companyId: string, r: any) {
