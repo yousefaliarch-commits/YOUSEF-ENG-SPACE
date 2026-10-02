@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import {
   CircleCheck, LockKeyhole, ShieldAlert
 } from "lucide-react";
+import { loadInspections, mergeInspections, storeInspections } from "../data/checklists";
 import { ROOMS } from "../data/companies";
 import { TABS } from "../data/geo";
 import { JOBS, NOTIFS0, POSTS0, R0 } from "../data/seed";
@@ -36,13 +37,14 @@ import * as cloud from "../backend/cloud";
 // The CV review (parser, engineering knowledge base, audit, report) is the largest feature; it loads on first open, and
 // pdf.js / mammoth only when a file is picked
 const CVReviewScreen = lazy(() => import("../features/cv/CVReviewScreen").then((m) => ({ default: m.CVReviewScreen })));
+const ChecklistsScreen = lazy(() => import("../features/qaqc/qaqc").then((m) => ({ default: m.ChecklistsScreen })));
 
 // =====================================================================
 //  App view — state, routing, gestures
 // =====================================================================
-export const STACK_TYPES = ["post", "company", "job", "room", "chat"];
+export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection"];
 
-export const PLAIN_TYPES = ["notifications", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide"];
+export const PLAIN_TYPES = ["notifications", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists"];
 
 export function parseHash() {
   const parts = (location.hash || "").replace(/^#/, "").split("/").filter(Boolean);
@@ -85,6 +87,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const [reports, setReports] = S("reports", () => seed(seedReports(), [])); const [mod, setMod] = S("mod", () => seed(MOD0(), { users: {}, content: {} })); const [config, setConfig] = S("config", () => ({ ...MOD_CONFIG0 }));
   // verification: the member's own request and the admin console's review queue are the same list
   const [verifs, setVerifs] = S("verifs", () => seed(verifs0(), []));
+  // QA/QC inspections live on this device first (sites often have no signal); on the live platform they also go to the member's own state row
+  const [inspections, setInspections] = S("inspections", () => loadInspections(persona && persona.pid));
+  useEffect(() => { setInspections(loadInspections(persona && persona.pid)); }, [persona && persona.pid]);
   // role scope: which tabs, screens and content this member may see, and how much of money
   const access = moneyAccess(profile); const blocked = blockedFor(profile); const tabs = tabsFor(profile); const curTab = tabs.some((t) => t.id === tab) ? tab : tabs[0].id;
   const deny = () => setMsg(SUPERVISOR_DENY);
@@ -176,6 +181,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     const d = await cloud.loadAll(); hydrated.current = false;
     setPosts(d.posts); setJobs(d.jobs); setJobStats(Object.fromEntries(d.jobs.map((j) => [j.id, j.stats]))); setNotifs(d.notifs); setThreads((ts) => d.threads.map((t) => { const old = ts.find((x) => x.id === t.id); return old ? { ...t, messages: old.messages } : t; }));
     setReviews(d.reviews); setReacts(d.reacts); setVotes(d.votes); setVoteAs(d.voteAs); setSaved(d.saved); setFollows(d.follows); setRoomFollows(d.roomFollows); setHidden(d.hidden); setContacted(d.contacted);
+    setInspections((mine) => mergeInspections(mine, d.inspections));
     if (d.config) setConfig({ ...MOD_CONFIG0, ...d.config });
     const v = d.verification; updateProfileLocal({ pending: !!v && v.status === "pending", verifyRef: v && v.status === "pending" ? v.ref : null, verifyReq: v ? { id: v.ref, kinds: v.kinds, status: v.status, at: Date.parse(v.created_at), decidedAt: v.decided_at ? Date.parse(v.decided_at) : null, purged: 0 } : null });
     setTimeout(() => { hydrated.current = true; }, 0);
@@ -219,6 +225,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const saveLater = useRef<any>({});
   const persist = (key?: any, value?: any) => { if (!CLOUD || !hydrated.current) return; clearTimeout(saveLater.current[key]); saveLater.current[key] = setTimeout(() => sync(() => cloud.saveState(key, value)), 800); };
   useEffect(() => persist("saved", saved), [saved]); useEffect(() => persist("follows", follows), [follows]); useEffect(() => persist("roomFollows", roomFollows), [roomFollows]); useEffect(() => persist("hidden", hidden), [hidden]);
+  useEffect(() => { storeInspections(inspections, persona && persona.pid); persist("inspections", inspections); }, [inspections]);
   const swapId = (list?: any, tmp?: any, item?: any) => list.map((x) => (x.id === tmp ? { ...x, ...item, mine: true } : { ...x, ...(x.replies ? { replies: swapId(x.replies, tmp, item) } : {}), ...(x.comments ? { comments: swapId(x.comments, tmp, item) } : {}) }));
   const kindOf = (id?: any) => (posts.some((p) => p.id === id) ? "posts" : "comments");
   // Android back button: the open viewer, sheet or pushed screen closes first; on a tab other than home it goes home; then the app leaves
@@ -234,6 +241,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     // bumps after a share reaches the server, so the live explorer reloads (and unlocks — give-to-get)
     salaryRev,
     shares,
+    inspections, saveInspection: (x?: any) => setInspections((l) => [x, ...l.filter((i) => i.id !== x.id)].slice(0, 100)), deleteInspection: (id?: any) => setInspections((l) => l.filter((i) => i.id !== id)),
     saved, toggleSaved: toggleIn(setSaved), follows, toggleFollow: toggleIn(setFollows), roomFollows, toggleRoom: toggleIn(setRoomFollows),
     // Reactions: «أوافق» and «لا أوافق» exclude each other (picking one clears the other); «مفيد» toggles independently and may sit with either
     reacts, react: (id?: any, k?: any) => { const next = applyReaction(reacts[id], k); setReacts((r) => ({ ...r, [id]: next })); sync(() => cloud.react(kindOf(id), id, next)); },
@@ -332,7 +340,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const top = stack[stack.length - 1];
   const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title="غير متاح لحساب مشرف الموقع" body={SUPERVISOR_DENY} action="رجوع" onAction={app.pop} /></div>
     : top
-    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
+    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : curTab === "home" ? <HomeScreen app={app} /> : curTab === "community" ? <CommunityScreen app={app} /> : curTab === "jobs" ? <JobsScreen app={app} /> : curTab === "market" ? <MarketScreen app={app} /> : curTab === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;
   const sheets: any = {

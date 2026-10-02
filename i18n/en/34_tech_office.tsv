@@ -1,0 +1,255 @@
+# Technical office toolkit (concrete, rebar, masonry, units) and QA/QC inspection checklists with PDF reports
+d94cf483	Reinforcement inspection
+899aad2f	Before casting — slabs, beams, columns, footings
+b2e6b84e	Conformity with drawings
+8de9c0a8	Bar diameters and numbers match the approved shop drawings (latest revision)
+dd2c721c	Bar spacing matches the drawings
+f9ee2c11	Lap lengths and lap locations per the drawings and the code
+a5ec1f37	Stirrups: diameter, spacing and confinement at supports and lap zones
+38a10dbf	Column and wall starter bars in place and at the required lengths
+e79ae11f	Execution
+2945c440	Concrete cover achieved with enough chairs/spacers
+4f334fae	Steel clean and free of loose rust, oil and mud
+5ea7be95	Tying is firm; bars do not move when walked on
+3d9a83e9	Top reinforcement supported on fixed chairs
+6872efa0	No clash with electrical and plumbing openings and runs (coordinated)
+40d43edb	Documents
+26d9447f	Mill certificates and steel sample test results available and accepted
+1fd704ce	Inspection request signed by the site engineer
+b783f185	Formwork inspection (timber / steel)
+a0fdb662	Before fixing steel and before casting
+7b2dd2e2	Dimensions and levels
+6be81441	Internal dimensions match the drawings
+c7255297	Levels and falls set with the level
+944aa1f7	Columns and walls plumb (plumb line / laser)
+386ba9b9	Openings, boxes and embedded items in place
+eeea58c3	Stability and tightness
+5d583294	Props and shores at the designed spacing, bearing on firm ground
+74ec8232	Bracing and ties adequate against concrete pressure
+730f1549	Joints tight to stop grout leakage
+fd4108e1	Formwork clean and coated with the approved release agent
+54581a49	Safety
+94d088ce	Working scaffolds and guardrails safe
+7ddb814a	Pump and worker access routes defined
+e01a3218	Pre-pour check
+3e42fa05	Permit to pour
+1d028b56	Readiness
+06c49c79	Reinforcement and formwork accepted and their comments closed
+2dda2a57	Embedded services (electrical/plumbing/HVAC) accepted by the specialists
+57a3fe6b	Construction joints at their approved locations
+d8fb0bb9	Formwork cleared of sawdust and debris and wetted
+81b25243	Concrete
+946c501e	Concrete grade and quantity confirmed with the supplier
+c19c64f3	Slump test on site on arrival
+3d9f11e3	Test cubes taken in the required number and labelled
+66614c21	Transit time and air temperature within limits
+e0d459f4	Equipment and curing
+2648e0d8	Enough vibrators plus spares
+89ef80a5	Curing plan (spraying/covering) ready
+60582632	Masonry works (brick/block)
+576593ff	Internal and external walls
+fea10144	Materials
+f7d22ca1	Brick/block type and size match the specification and approved sample
+c448537d	Mortar at the approved mix and used within its working time
+6b898aac	Bricks wetted before laying (red brick)
+0fd48633	Axes and wall thicknesses per the drawings
+524a3123	Walls plumb and straight within tolerance
+064620ed	Joints filled and of even thickness
+fa41d511	Concrete lintels over openings with the required bearing
+fcbad8a1	Ties to columns (mesh/dowels) installed
+245c43bf	Door and window openings at the correct sizes and levels
+198b0182	Plastering works
+f57721f0	Internal and external
+45a7bfb6	Preparation
+aecbbbe9	Walls clean and wetted; electrical and plumbing runs accepted
+6b4d0e29	Mesh over joints between concrete and masonry
+5110b2f4	Spatter dash applied and cured
+44c4bf42	Screeds and dots set plumb and level
+6427818c	Thickness even and within the specification
+e4b89fba	Corners and reveals straight and sharp
+ceb7f4de	Final surface even (straightedge test) and free of cracks
+e510a65f	Waterproofing works
+d2e15092	Roofs, bathrooms, tanks, foundations
+c896fcf5	Substrate
+3468b717	Surface clean, dry and free of protrusions and sharp edges
+b13581cd	Falls towards the drains achieved
+b2c41bff	Upturns on walls at the required height
+b7461fb4	Material, type and batch match the approved submittal
+2cac4f1f	Number of layers and overlaps per the specification and manufacturer
+778994d3	Detailing around pipes and drains
+be7b4fa0	Flood test for the required duration with no leakage
+ccdedafa	Protection
+644cf2bb	Protection layer placed right after acceptance
+1a10c1e6	Tiling and ceramics
+b4f9d391	Floors and walls
+63f739d3	Type, colour, size and grade match the approved sample
+b68fe50c	Adhesive/mortar per the specification
+8232a882	Levels and falls (especially bathrooms and balconies) correct
+87c2cb4e	Joints even and straight at the specified width
+e77b1349	No hollow tiles (tap test)
+9fab0c4c	Cuts clean around openings and corners
+5b12e46a	Movement joints provided where needed
+c0b0ca5b	Grouting and final cleaning
+5de8187f	Shop drawing review
+3052e85b	Technical office — architectural / structural / BIM
+80b315c7	Sheet frame
+12d1d95c	Title block: project, sheet number, revision, date, scale
+dd80be16	References to the design drawings and specifications
+20e3fd0b	Revision table up to date
+20a6d2ca	Grids and main dimensions match the approved design
+09582152	Levels (FFL/SSL) consistent between plans and sections
+0a9e687a	Structural/architectural details sufficient for construction
+05b4450f	Door, window and finishes schedules consistent with the plans
+ff84349a	MEP coordination: no open clashes in the model
+f861d948	Output
+519b9c53	Lineweights, linetypes and layers standard and legible
+992006b3	Dimensions legible and clear of the drawing
+49712e54	Services inspection before close-up (MEP)
+293a5e62	Before false ceilings and plaster
+85b01dcf	Electrical
+ebe0d06e	Conduits and boxes in place per the drawings
+af7bca5a	Conduits fixed and their ends capped
+5b4a8a1e	Distribution boards and routes coordinated
+8557999c	Plumbing and water supply
+1772d11f	Supply pipes pressure-tested with no pressure drop
+26bdeff4	Drainage falls correct and drainage tested
+0899858c	Sleeves and sealing where pipes pass walls and slabs
+7653c8b9	HVAC and fire fighting
+0cd1b570	Duct and pipe routes match the coordination
+2856b87b	Thermal insulation installed
+53e13688	Sprinkler heads in place and the network tested
+f72facf0	Conforms
+a3ce2694	Does not conform
+2355d8cd	Accepted
+964e2f98	Accepted with comments
+0dd1f30d	Rejected — re-inspect
+b27971dd	Concrete take-off
+86ef655d	Volume, cement, sand and gravel
+900da5e4	Rebar weights
+a91eda3f	Weight and number of 12 m bars
+32585616	Masonry take-off
+b9273fd1	Bricks, blocks and mortar
+d3771562	Unit converter
+3d4f062b	Engineering units, and feddan, qirat, sahm
+27ff27d8	Red brick 25×12×6
+b0f612e4	Solid cement brick 25×12×6
+84f94586	Cement block 40×20×20
+c762b7e3	Cement block 40×20×15
+49969ff8	Cement block 40×20×10
+b38717bc	Metre
+36bd5fe7	cm
+c100a87e	mm
+ad783f94	Foot
+058baca3	Inch
+b1fdbf9e	Area
+32fae0be	m²
+498be85c	Feddan
+c734729e	Qirat
+f9a65637	Sahm
+70180ef8	ft²
+a4f5dff7	m³
+7150e427	Litre
+069be842	ft³
+d825df7c	Force
+3ea196ca	kN
+c8f1e929	Tonne-force
+a6be8f32	kgf
+5bb2d1e5	Stress and pressure
+b8947fae	MPa (N/mm²)
+a790ac24	kg/cm²
+7fc8b564	kN/m²
+40e9efab	t/m²
+482f3d29	psi
+c7054859	Work inspection and acceptance
+e6174864	QA/QC checklists for site and technical office — saved on your device at once, exported as a PDF report for signature.
+59c43401	New checklist
+6f0122a1	My checklists
+e3e5e7b8	No saved checklists yet
+83913838	Start a checklist above — it saves automatically as you fill it in.
+b41c2947	Draft
+4daccd3a	Checklist not found
+2cc5d15e	It may have been deleted on another device.
+70b57ce4	Project
+db100cbb	Zone / floor
+8db8231d	Drawing reference
+d94d702d	Date
+ca49b4e2	Inspecting engineer
+f16b8f76	Conforms {0} · Does not conform {1} · N/A {2} · of {3} items
+aa20de8d	Prepared on EngSpace — a guidance checklist; the approved project drawings and specifications govern
+731495e7	Couldn't create the report — try again
+819329d8	Project name
+1edaadda	e.g. third floor — grid B
+ac8740c7	What needs correcting?
+8fca520b	Note
+08aa99ca	conform ·
+40eccc32	do not conform ·
+2bd52d0b	N/A ·
+69bf22ab	not inspected
+c90b1678	{0} conform · {1} do not conform · {2} N/A · {3} not inspected
+0d0f3927	← suggested
+a7abe0b2	Creating the report…
+0f7b9bca	Export PDF report
+ca1164b7	Delete checklist
+400be398	Slab
+5b116750	Beam
+4c8b3532	Column
+e4eaa797	Round column
+8cf36ea2	Footing
+00ac0a5f	Concrete wall
+a82c1974	Count
+d8fe6f07	m
+11b7e79a	Waste %
+32b965de	Cement / m³
+50e162fa	kg
+942e82c1	Concrete volume with waste
+b88f3f91	Net volume
+d6fcc05e	Cement bags (50 kg)
+c876e76a	bags
+1ac350d7	Sand
+a14c4b67	Gravel / crushed stone
+2adee977	An estimate for take-off and ordering: the common reinforced-concrete mix in Egypt (350 kg cement, 0.4 m³ sand, 0.8 m³ gravel per m³) — change it to the approved mix design. Ready-mix is ordered by the cubic metre directly.
+f54219d3	Number of bars
+a78b7428	Bar length
+00e81f33	Weight of Ø
+f5762218	required
+27036a56	Weight of Ø{0} required
+82467aa1	t
+1d0e8ef2	Weight
+55e20f06	Total length
+ffd4bf40	Weight per metre
+27fafff8	kg/m
+308d2f94	12 m bars to order
+095bdc37	bars
+c1ca63d6	Pieces from each 12 m bar
+9a0edb1d	Rebar weight table
+58d9e7e1	{0} kg/m
+ae6d88a2	Weight = π × d² ÷ 4 × 7850 kg/m³ (≈ d² ÷ 162). Laps and hooks are not included — add them to the bar length per the drawings and the code.
+ca31751c	Half-brick
+b28d4ddb	bricks
+63e37623	Wall length
+d1813a44	Height
+36198a2d	Openings area
+314a6c0c	Joint thickness
+14072408	Required quantity with waste
+86cdfa76	blocks
+44befadb	Net area
+4f82b764	Wall thickness
+8d8ecb45	Per m²
+eb1e4a41	Mortar volume, approx.
+916f5137	An estimate: it depends on the unit size and joint thickness. Check the actual brick size on site (it varies between factories) and add waste for breakage and cutting.
+1a39dcff	Value
+efb559eb	1 feddan = 24 qirat ≈ 4,200.83 m² · 1 qirat = 24 sahm ≈ 175.03 m².
+54862d3a	Technical office and site
+4064cbb4	Work inspection and acceptance (QA/QC)
+5eb2769b	9 checklists for site and technical office — save, then export a PDF report for signature
+0bf5ee4f	Salary and offers
+9dbe06f2	EngSpace · Inspection report
+2600826f	Page {0}
+88be8251	Note:
+fe11ca3c	Result:
+ae39dce5	Inspecting engineer's signature: ____________________
+fe4fa50b	Site engineer's signature: ____________________
+26dbf0eb	One brick
+92d226bc	Thickness
+c65638a4	Depth
+2f22fada	Diameter

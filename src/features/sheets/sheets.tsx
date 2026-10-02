@@ -21,6 +21,7 @@ import { fmt } from "../../ui/theme";
 import { evaluateOffer, grossForNet, netPay, offerPackage } from "../../domain/offer";
 import { govName } from "../../data/geo";
 import { useLiveSalary } from "../market/live-salary";
+import { SITE_TOOL_VIEWS } from "../sitetools/site-tools";
 
 // =====================================================================
 //  Sheets — community
@@ -309,4 +310,4 @@ export function MethodologySheet({ app }: any) {
   );
 }
 
-export const TOOL_VIEWS = { offer: OfferTool, net: NetTool, compare: CompareTool, script: ScriptTool, raise: RaiseTool, path: PathTool, contract: ContractTool, move: MoveTool, inflation: InflationTool };
+export const TOOL_VIEWS = { ...SITE_TOOL_VIEWS, offer: OfferTool, net: NetTool, compare: CompareTool, script: ScriptTool, raise: RaiseTool, path: PathTool, contract: ContractTool, move: MoveTool, inflation: InflationTool };
