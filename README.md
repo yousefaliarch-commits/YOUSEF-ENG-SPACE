@@ -4,8 +4,8 @@ An anonymous career and salary network for Egyptian engineers. It is Arabic-firs
 and shows money in EGP.
 
 This repository is the production codebase. It was migrated from the single-file prototype in Phase 1 of the native app
-roadmap; see [docs/MIGRATION.md](docs/MIGRATION.md). The next phases wrap this same build in Capacitor for iOS and Android
-and move the local stores to a cloud backend.
+roadmap ([docs/MIGRATION.md](docs/MIGRATION.md)). Phase 2 added the Supabase backend (Frankfurt) and the Capacitor 8 iOS and
+Android shells ([docs/PHASE2.md](docs/PHASE2.md)). Without Supabase keys the app runs as a self-contained demo.
 
 ## Requirements
 
@@ -26,6 +26,12 @@ and move the local stores to a cloud backend.
 | `npm run typecheck` | TypeScript for the app (`tsconfig.json`), then for the tests and config (`tsconfig.node.json`) |
 | `npm run i18n` | Regenerates the English dictionary from the source and `i18n/` (runs before dev, build and test) |
 | `npm run check` | Typecheck + tests + build, the same gate as CI |
+| `npm run live` | Preview on the laptop and the phone at once; rebuilds and reloads both on every save ([details](docs/PHASE2.md#previewing-on-the-laptop-and-the-phone-at-the-same-time)) |
+| `npm run phone` | Serves the last build to the phone on the Wi-Fi (read-only, live sync) |
+| `npm run db:start` · `db:reset` · `db:test` | Local Supabase (Docker Desktop), recreate it from the migrations, run the RLS tests |
+| `npm run db:env` | Points `.env.local` at the local Supabase (`-- --lan` for a phone) |
+| `npm run test:cloud` | The app's cloud layer end to end against the local Supabase |
+| `npm run cap:sync` | Builds and copies the web app into `android/` and `ios/` |
 
 `dev` and `build` first copy the Tesseract worker and WASM core into `public/vendor/` (`scripts/copy-vendor.mjs`). That
 folder is generated and not committed.

@@ -9,6 +9,8 @@ import { divOf } from "../../domain/division";
 import { IDENTITY, PASSWORD_LEVELS, THIS_YEAR, ageError, checkPassword, cleanName, confirmError, createAccountRecord, credentialOf, emailError, gradError, gx, loadAccount, nameError, passwordChecks, passwordError, passwordScore, randHex, yearsText } from "../../domain/identity";
 import { DISC, POSITIONS, ROLES, can, canVerifyRole, genderOf, isCompanyRole, posForYears, posLabelG, roleOf, roleTitle, trackLabel, tracksFor } from "../../domain/taxonomy";
 import { LANGS } from "../../i18n/i18n";
+import { isCloud } from "../../backend/config";
+import * as cloud from "../../backend/cloud";
 import { DEFAULT_PERSONA, loadPersona, storedRetiredRole } from "../../lib/helpers";
 import { imageError, processImage, useImagePicker } from "../../lib/media";
 import { reduced } from "../../lib/runtime";
@@ -56,7 +58,7 @@ export function Registration({ app, mode = "signup", initial = null }: any) {
     : { ...DEFAULT_PERSONA, gender: null, age: "", gradYear: "", pos: null, city: null, companyName: "", email: "", password: "", confirm: "", accept: false, identity: "anon", anon: randHex(4), pid: "u-" + randHex(10) });
   const set = (k?: any, v?: any) => setF((s) => ({ ...s, [k]: v })); const body = useRef<any>(null);
   const [photoErr, setPhotoErr] = useState<any>(""); const [photoInput, pickPhoto] = useImagePicker(async (file) => { try { const im = await processImage(file, { square: true, size: 256 }); set("photo", im.src); setPhotoErr(""); } catch (e) { setPhotoErr(imageError(e)); } });
-  const key = keys[step]; const isCo = isCompanyRole(f.role); const disc = f.disc; const existing = edit ? null : loadAccount();
+  const key = keys[step]; const isCo = isCompanyRole(f.role); const disc = f.disc; const existing = edit || isCloud() ? null : loadAccount();
   const nameChanged = edit && !!initial && cleanName(f.name) !== cleanName(initial.name); const hadBadge = edit && !!initial && canVerifyRole(initial.role) && (initial.verified || initial.pending);
   const yrs = !ageError(f.age) && !gradError(f.gradYear, f.age) ? Math.max(0, THIS_YEAR - Number(f.gradYear)) : null; const suggested = yrs != null ? posForYears(yrs) : "mid"; const pos = f.pos || suggested;
   const errs: any = {
@@ -83,7 +85,14 @@ export function Registration({ app, mode = "signup", initial = null }: any) {
     if (!valid) { setAttempt((n) => n + 1); return; }
     if (step < keys.length - 1) { setStep(step + 1); return; }
     const p = persona(); if (edit) { app.saveProfile(p); return; }
-    setBusy(true); try { const acc = await createAccountRecord(f.email, f.password); app.register(p, acc); } catch (e) { setSubmitErr("تعذّر إنشاء الحساب على هذا الجهاز — أعد المحاولة"); setBusy(false); }
+    setBusy(true);
+    // cloud: the account lives on the server (Supabase Auth); the profile is created from this form by the database
+    if (isCloud()) {
+      try { const r = await cloud.signUp(f.email, f.password, p); if (r.confirm) { setBusy(false); app.setAuthView("signin"); app.toast("أرسلنا رابط تأكيد إلى بريدك — افتحه ثم سجّل الدخول"); return; } app.register({ ...p, ...r.persona }, null); }
+      catch (e) { setSubmitErr(e.message); setBusy(false); }
+      return;
+    }
+    try { const acc = await createAccountRecord(f.email, f.password); app.register(p, acc); } catch (e) { setSubmitErr("تعذّر إنشاء الحساب على هذا الجهاز — أعد المحاولة"); setBusy(false); }
   };
   const preview = persona();
   const chipRow = "flex flex-wrap gap-1.5";
@@ -163,12 +172,18 @@ export function Registration({ app, mode = "signup", initial = null }: any) {
 
 
 export function SignIn({ app }: any) {
-  const acc = loadAccount(); const [email, setEmail] = useState<any>(acc ? acc.email : ""); const [pw, setPw] = useState<any>(""); const [err, setErr] = useState<any>(""); const [busy, setBusy] = useState(false);
+  const CLOUD = isCloud(); const acc = CLOUD ? null : loadAccount(); const [email, setEmail] = useState<any>(acc ? acc.email : ""); const [resetSent, setResetSent] = useState(false); const [pw, setPw] = useState<any>(""); const [err, setErr] = useState<any>(""); const [busy, setBusy] = useState(false);
   const [fails, setFails] = useState(0); const [lockUntil, setLockUntil] = useState(0); const [forgot, setForgot] = useState(false); const [confirmWipe, setConfirmWipe] = useState(false); const [, tick] = useState(0);
   useEffect(() => { if (!lockUntil) return; const i = setInterval(() => { tick((t) => t + 1); if (Date.now() >= lockUntil) { setLockUntil(0); setFails(0); setErr(""); } }, 1000); return () => clearInterval(i); }, [lockUntil]);
   const locked = lockUntil > Date.now(); const secs = Math.max(0, Math.ceil((lockUntil - Date.now()) / 1000));
   const submit = async (e?: any) => {
     if (e) e.preventDefault(); if (locked) return; const ee = emailError(email); if (ee) { setErr(ee); return; } if (!pw) { setErr("اكتب كلمة المرور"); return; }
+    if (CLOUD) {
+      setBusy(true); setErr("");
+      try { const p = await cloud.signIn(email, pw); setBusy(false); app.signIn(p); }
+      catch (x) { setBusy(false); setPw(""); const n = fails + 1; setFails(n); if (n >= 5) { setLockUntil(Date.now() + 30000); setErr("5 محاولات خاطئة — انتظر 30 ثانية ثم أعد المحاولة"); } else setErr(x.message); }
+      return;
+    }
     const a = loadAccount(); if (!a || a.email !== email.trim().toLowerCase()) { setErr("لا يوجد حساب بهذا البريد على هذا الجهاز — أنشئ حسابًا جديدًا"); return; }
     setBusy(true); setErr(""); let ok = false; try { ok = await checkPassword(a, pw); } catch (x) { ok = false; } setBusy(false);
     if (!ok) { const n = fails + 1; setFails(n); setPw(""); if (n >= 5) { setLockUntil(Date.now() + 30000); setErr("5 محاولات خاطئة — انتظر 30 ثانية ثم أعد المحاولة"); } else setErr(`كلمة المرور غير صحيحة — تبقّت ${5 - n} ${5 - n === 1 ? "محاولة" : "محاولات"}`); return; }
@@ -186,18 +201,45 @@ export function SignIn({ app }: any) {
         <button type="submit" disabled={busy || locked} aria-busy={busy} className={`${BTN} btn-primary w-full h-12`}>{busy ? <><LoaderCircle size={16} className="spin" /> جارٍ التحقق…</> : <><LogIn size={16} /> دخول</>}</button>
         <button type="button" onClick={() => { setForgot((v) => !v); setConfirmWipe(false); }} aria-expanded={forgot} className="w-full h-10 text-[12.5px] text-accent hover:underline underline-offset-4">نسيت كلمة المرور؟</button>
       </form>
-      {forgot && <div className="mt-2 p-4 rounded-2xl bg-surface border border-line space-y-3 pop-in">
+      {forgot && CLOUD && <div className="mt-2 p-4 rounded-2xl bg-surface border border-line space-y-3 pop-in">
+        {resetSent ? <p className="text-[12.5px] leading-relaxed text-ink-2">أرسلنا رابط إعادة تعيين كلمة المرور إلى <Num>{email.trim()}</Num> إن كان مسجّلًا. افتحه من هذا الجهاز.</p>
+          : <><p className="text-[12.5px] leading-relaxed text-ink-2">اكتب بريدك في الأعلى، وسنرسل لك رابطًا لاختيار كلمة مرور جديدة.</p>
+            <Secondary disabled={busy} onClick={async () => { const ee = emailError(email); if (ee) { setErr(ee); return; } setBusy(true); try { await cloud.resetPassword(email); setResetSent(true); } catch (x) { setErr(x.message); } setBusy(false); }} className="w-full h-11">إرسال رابط إعادة التعيين</Secondary></>}
+      </div>}
+      {forgot && !CLOUD && <div className="mt-2 p-4 rounded-2xl bg-surface border border-line space-y-3 pop-in">
         <p className="text-[12.5px] leading-relaxed text-ink-2">لا نرسل رسائل استرجاع في هذه المعاينة، لأن الحساب محفوظ على جهازك فقط وكلمة المرور مشفّرة بحيث لا يمكن لأحد قراءتها. لإعادة البدء احذف الحساب المحلي وأنشئ حسابًا جديدًا.</p>
         {!confirmWipe ? <Secondary onClick={() => setConfirmWipe(true)} className="w-full h-11 text-bad"><Trash2 size={15} /> حذف الحساب المحلي</Secondary>
           : <div className="flex gap-2"><Primary onClick={app.deleteAccount} className="flex-1 h-11 !bg-bad !text-white"><Trash2 size={15} /> تأكيد الحذف النهائي</Primary><Secondary onClick={() => setConfirmWipe(false)} className="h-11 px-4">تراجع</Secondary></div>}
       </div>}
-      {!acc && <p className="mt-4 p-3 rounded-xl bg-wash border border-accent/20 text-[12px] text-ink-2 leading-relaxed">لا يوجد حساب محفوظ على هذا الجهاز بعد. <button type="button" onClick={() => app.setAuthView("signup")} className="text-accent hover:underline underline-offset-4">أنشئ حسابك</button> — دقيقتان.</p>}
+      {!acc && !CLOUD && <p className="mt-4 p-3 rounded-xl bg-wash border border-accent/20 text-[12px] text-ink-2 leading-relaxed">لا يوجد حساب محفوظ على هذا الجهاز بعد. <button type="button" onClick={() => app.setAuthView("signup")} className="text-accent hover:underline underline-offset-4">أنشئ حسابك</button> — دقيقتان.</p>}
       <TrustPolicy variant="compact" className="mt-6" />
     </div>
   );
 }
 
-export const AuthScreen = ({ app }: any) => (app.authView === "signin" ? <SignIn app={app} /> : <Registration app={app} mode="signup" />);
+// Opened by the password-reset link: the link signed the member in for this one purpose; they choose a new password here
+export function NewPassword({ app }: any) {
+  const [pw, setPw] = useState<any>(""); const [confirm, setConfirm] = useState<any>(""); const [err, setErr] = useState<any>(""); const [busy, setBusy] = useState(false);
+  const submit = async (e?: any) => {
+    if (e) e.preventDefault(); const pe = passwordError(pw) || confirmError(pw, confirm); if (pe) { setErr(pe); return; }
+    setBusy(true); try { const p = await cloud.setPassword(pw); setBusy(false); app.signIn(p); } catch (x) { setBusy(false); setErr(x.message); }
+  };
+  return (
+    <div className="h-full flex flex-col px-5 pt-[calc(var(--sat)+1rem)] pb-[max(1.25rem,var(--sab))] overflow-y-auto scroll-area">
+      <AuthHeader />
+      <div className="mt-8"><h1 className="text-[26px] font-medium leading-tight">كلمة مرور جديدة</h1><p className="mt-1 text-[13px] text-ink-2">اختر كلمة مرور قوية لم تستخدمها من قبل.</p></div>
+      <form onSubmit={submit} className="mt-6 space-y-4" noValidate>
+        <FormField label="كلمة المرور الجديدة" htmlFor="np-pw"><PasswordInput id="np-pw" value={pw} onChange={(v) => { setPw(v); setErr(""); }} autoComplete="new-password" placeholder="••••••••" /></FormField>
+        <StrengthMeter pw={pw} />
+        <FormField label="تأكيد كلمة المرور" htmlFor="np-confirm"><PasswordInput id="np-confirm" value={confirm} onChange={(v) => { setConfirm(v); setErr(""); }} autoComplete="new-password" placeholder="••••••••" /></FormField>
+        <FieldError>{err}</FieldError>
+        <button type="submit" disabled={busy} aria-busy={busy} className={`${BTN} btn-primary w-full h-12`}>{busy ? <><LoaderCircle size={16} className="spin" /> جارٍ الحفظ…</> : <><Lock size={16} /> حفظ كلمة المرور</>}</button>
+      </form>
+    </div>
+  );
+}
+
+export const AuthScreen = ({ app }: any) => (app.authView === "newpw" ? <NewPassword app={app} /> : app.authView === "signin" ? <SignIn app={app} /> : <Registration app={app} mode="signup" />);
 
 
 // Shown once, right after the account is created

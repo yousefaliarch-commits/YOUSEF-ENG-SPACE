@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EngSpace</string>
+    <string name="title_activity_main">EngSpace</string>
+    <string name="package_name">app.engspace</string>
+    <string name="custom_url_scheme">app.engspace</string>
+</resources>

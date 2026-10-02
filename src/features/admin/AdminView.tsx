@@ -11,7 +11,7 @@ import { JOBS, NOTIFS0, POSTS0 } from "../../data/seed";
 import { divOf } from "../../domain/division";
 import { displayName, hasSession, loadAccount, memberAccId, normalizeAuthor, normalizeSeedPosts } from "../../domain/identity";
 import { ACTION_LABELS, AUDIT0, AUDIT_ACTIONS, DAY, HOUR, MEMBERS_BASE, MOD0, MOD_CONFIG0, REPORT_KINDS, REPORT_KINDS_DEF, ROLE_GROUPS, WARN_TEMPLATES, activitySeries, agoText, buildAccounts, casesOf, ckey, coverageOf, daysText, decideCase, engagementOf, fmtClock, fmtDay, histogram, jobAnalytics, jobStats0, maskEmail, modUser, reasonOf, reopenCase, roleGroup, salarySample, seedReports, snapUGC, suspendText, threadsFor0, threadsKind, trendingDiscs, trendingTracks } from "../../domain/moderation";
-import { DISC, EXP, REP_LEVELS, canVerifyRole, isCompanyRole, label, roleTitle } from "../../domain/taxonomy";
+import { DISC, EXP, REP_LEVELS, canVerifyRole, isCompanyRole, label, roleTitle, discTitle } from "../../domain/taxonomy";
 import { detectContact, screenLanguage } from "../../domain/text-guard";
 import { BoxRow, Choice, Columns, HBar, Kpi, PanelHead, STATUS_CHIP, SearchBox, SettingRow, SevChip, Stepper, ToneChip, accName, faceOf, usePeek } from "./kit";
 import { VerifySection } from "./verify-admin";
@@ -25,6 +25,9 @@ import { IdentityFace, IdentityTag, copyText } from "../../ui/identity";
 import { Back, FilterChip, Num, Panel, Primary, Quiet, Secondary, Toggle } from "../../ui/primitives";
 import { fmt } from "../../ui/theme";
 
+import { isCloud } from "../../backend/config";
+import * as cloud from "../../backend/cloud";
+import { loadAdmin } from "./cloud-admin";
 // =====================================================================
 //  Admin console — moderation queue, members, analytics, content, settings, audit log
 //  It reads and writes the app's own store: a report filed in the app lands here at once, and every decision shows up in the app.
@@ -37,22 +40,31 @@ export function AdminView({ init, openApp }: any) {
   const [section, setSection] = useState<any>(ADMIN_SECTIONS.some((s) => s[0] === init.section) ? init.section : "overview");
   const [focus, setFocus] = useState<any>(null); const [focusUser, setFocusUser] = useState<any>(null); const [focusVerify, setFocusVerify] = useState<any>(null); const [msg, setMsg] = useState<any>("");
   const [reports, setReports] = S("reports", seedReports); const [mod, setMod] = S("mod", MOD0); const [audit, setAudit] = S("audit", AUDIT0); const [config, setConfigRaw] = S("config", () => ({ ...MOD_CONFIG0 }));
-  const [verifs, setVerifs] = S("verifs", verifs0);
-  const [posts] = S("posts", () => normalizeSeedPosts(POSTS0)); const [jobs] = S("jobs", JOBS); const [reviews] = S("reviews", {}); const [jobStats] = S("jobStats", jobStats0);
-  const [fallback] = useState<any>(() => (hasSession() && loadAccount() ? loadPersona() : null) || (liveState().noDemo ? null : DEMO_PERSONA));
+  const [verifs0_, setVerifs] = S("verifs", verifs0);
+  const [posts0_] = S("posts", () => normalizeSeedPosts(POSTS0)); const [jobs0_] = S("jobs", JOBS); const [reviews0_] = S("reviews", {}); const [jobStats0_] = S("jobStats", jobStats0);
+  // cloud: the console shows the live platform and acts through staff-only database functions; `live` is null while loading
+  const CLOUD = isCloud(); const [live, setLive] = useState<any>(null); const [liveErr, setLiveErr] = useState<any>("");
+  const reload = () => loadAdmin().then((d) => { setLive(d); setLiveErr(""); }, (e) => setLiveErr(e.message));
+  // load only for a signed-in staff account (the server would refuse anyone else anyway)
+  useEffect(() => { if (!CLOUD) return; cloud.currentPersona().then((p) => { if (!p) return; store.set("persona", (x) => ({ ...(x || {}), ...p })); if (store.has("profile")) store.set("profile", (x) => ({ ...(x || {}), ...p })); if (p.staff === "moderator" || p.staff === "admin") reload(); }); }, []);
+  const act = (p?: any, done?: any) => Promise.resolve(p).then(() => { if (done) setMsg(done); return reload(); }, (e) => setMsg(e.message));
+  const L: any = CLOUD ? live || { reports: [], mod: { users: {}, content: {} }, accounts: [], audit: [], verifs: [], posts: [], jobs: [], reviews: {}, config: null } : null;
+  const reports_ = CLOUD ? L.reports : reports; const mod_ = CLOUD ? L.mod : mod; const audit_ = CLOUD ? L.audit : audit; const config_ = CLOUD ? { ...MOD_CONFIG0, ...(L.config || {}) } : config;
+  const jobStats = CLOUD ? Object.fromEntries((L.jobs || []).map((j) => [j.id, j.stats])) : jobStats0_; const verifs = CLOUD ? L.verifs : verifs0_; const posts = CLOUD ? L.posts : posts0_; const jobs = CLOUD ? L.jobs : jobs0_; const reviews = CLOUD ? L.reviews : reviews0_;
+  const [fallback] = useState<any>(() => (hasSession() && (CLOUD || loadAccount()) ? loadPersona() : null) || (CLOUD || liveState().noDemo ? null : DEMO_PERSONA));
   const persona = usePeek(store, "persona", fallback); const profile = usePeek(store, "profile", null) || persona;
   useEffect(() => { try { history.replaceState(null, "", "#admin/" + section); } catch (e) {} }, [section]);
   useEffect(() => { if (!msg) return; const t = setTimeout(() => setMsg(""), 2800); return () => clearTimeout(t); }, [msg]);
   const now = Date.now(); const memberAcc = profile ? memberAccId(profile) : null;
-  const cases = useMemo<any>(() => casesOf(reports), [reports]);
-  const accounts = useMemo<any>(() => buildAccounts({ posts, jobs, reviews, reports, profile, mod, now }), [posts, jobs, reviews, reports, profile, mod]);
+  const cases = useMemo<any>(() => casesOf(reports_), [reports_]);
+  const accounts = useMemo<any>(() => (CLOUD ? L.accounts : buildAccounts({ posts, jobs, reviews, reports, profile, mod, now })), [posts, jobs, reviews, reports, profile, mod, live]);
   const log = (action?: any, target?: any, detail: any = "") => setAudit((a) => [{ id: "L" + Date.now() + Math.floor(Math.random() * 1e3), at: Date.now(), who: "أنت (مشرف)", action, target, detail }, ...(a || [])]);
   const notifyMember = (n?: any) => store.set("notifs", (ns) => [{ id: "n" + Date.now() + Math.floor(Math.random() * 1e3), when: "الآن", read: false, target: { type: "profile" }, ...n }, ...(ns || NOTIFS0)]);
   // the signed-in member's own profile follows the console's decisions (badge, role) the same way a server push would
   const patchMember = (patch?: any) => { const base = persona || DEMO_PERSONA; const next: any = { ...base, ...patch }; const flip = patch.role && threadsKind({ role: patch.role }) !== threadsKind(base); store.set("persona", next); if (store.has("profile")) store.set("profile", (p) => ({ ...p, ...patch })); if (flip && store.has("threads")) store.set("threads", threadsFor0(next)); if (hasSession()) savePersona(next); };
   const A: any = {
     section, go: (s?: any, f: any = null) => { setSection(s); if (s === "queue") setFocus(f); if (s === "users") setFocusUser(f); if (s === "verify") setFocusVerify(f); }, toast: setMsg, now,
-    reports, cases, mod, audit, config, posts, jobs, reviews, jobStats, accounts, profile, memberAcc, focus, setFocus, focusUser, setFocusUser, verifs, focusVerify, setFocusVerify,
+    reports: reports_, cases, mod: mod_, audit: audit_, config: config_, posts, jobs, reviews, jobStats, accounts, profile, memberAcc, cloud: CLOUD, live: L && L.live, focus, setFocus, focusUser, setFocusUser, verifs, focusVerify, setFocusVerify,
     // ---- verification: a reviewer's decision. The documents are purged in the same step — here and in the member's browser. ----
     decideVerify: (r?: any, d?: any) => {
       const now = Date.now(); const ok = !!d.approve; const n = (r.docs || []).length; const dv = ok && d.division ? divOf(d.division) : null;
@@ -98,6 +110,30 @@ export function AdminView({ init, openApp }: any) {
     setConfig: (patch?: any, what?: any) => { setConfigRaw((c) => ({ ...(c || MOD_CONFIG0), ...patch })); log(patch.announce ? "announce" : patch.closedRooms ? "room" : "config", "config", what); setMsg("حُفظ الإعداد — يسري في التطبيق فورًا"); },
     resetDemo: () => { setReports(seedReports()); setMod(MOD0()); setAudit(AUDIT0()); setConfigRaw({ ...MOD_CONFIG0 }); setVerifs((vs) => [...(vs || []).filter((r) => r.mine), ...seedVerifs()]); setFocus(null); setFocusUser(null); setFocusVerify(null); setMsg("أُعيدت بيانات الإشراف التجريبية"); },
   };
+  if (CLOUD) Object.assign(A, {
+    decide: (c?: any, d?: any) => act(cloud.admin.decide(c.kind, c.key.slice(c.kind.length + 1), { accept: !!d.accept, hide: d.hide !== false, warn: d.warn || null, suspendDays: d.suspendDays ?? null, note: d.note || "" }), d.accept ? "نُفّذ القرار — أُبلغ العضو والمُبلّغون" : "رُفض البلاغ — أُبلغ المُبلّغون بالنتيجة"),
+    reopen: (c?: any) => act(cloud.admin.reopen(c.kind, c.key.slice(c.kind.length + 1)), "أُعيد فتح القضية"),
+    setContent: (key?: any, hidden?: any) => { const [kind, ...rest] = String(key).split(":"); return act(cloud.admin.setHidden(kind, rest.join(":"), !!hidden), hidden ? "أُخفي المحتوى" : "أُعيد المحتوى"); },
+    warnUser: (acc?: any, text?: any) => act(cloud.admin.warn(acc.id, text), "أُرسل التحذير"),
+    suspend: (acc?: any, days?: any) => act(cloud.admin.setAccount(acc.id, { suspendDays: days || 0 }), `أُوقف الحساب ${suspendText(days)}`),
+    unsuspend: (acc?: any) => act(cloud.admin.setAccount(acc.id, { lift: true }), "رُفع الإيقاف"),
+    setVerified: (acc?: any, on?: any) => { if (on || !canVerifyRole(acc.role)) return; return act(cloud.admin.setAccount(acc.id, { verified: false }), "سُحبت الشارة"); },
+    setRole: (acc?: any, role?: any) => act(cloud.admin.setAccount(acc.id, { role }), `الدور الآن: ${roleTitle(role)}`),
+    setStaff: (acc?: any, staff?: any) => act(cloud.admin.setStaff(acc.id, staff), "حُفظت الصلاحية"),
+    setConfig: (patch?: any) => act(cloud.admin.setConfig(patch), "حُفظ الإعداد — يسري في التطبيق فورًا"),
+    decideVerify: (r?: any, d?: any) => { const why = d.approve ? null : [rejectOf(d.reason).ar, d.note].filter(Boolean).join(" — "); return act(cloud.admin.decideVerification(r.id, !!d.approve, { reason: why || undefined, division: d.division || undefined, kind: d.kind || undefined }), d.approve ? "اعتُمد التوثيق — وحُذفت المستندات نهائيًا" : "رُفض الطلب — وحُذفت المستندات نهائيًا"); },
+    resetDemo: () => setMsg("غير متاح على المنصة الحية"),
+  });
+  // cloud: the console is for staff accounts only (the server enforces it on every call; this screen just says so)
+  if (CLOUD && (!profile || !["moderator", "admin"].includes(profile.staff))) return (
+    <main className="rise max-w-xl mx-auto px-4 py-16 text-center space-y-3">
+      <ShieldCheck size={40} className="mx-auto text-accent" />
+      <h1 className="text-[22px] font-medium">لوحة الإدارة لفريق المنصة فقط</h1>
+      <p className="text-[13px] text-ink-2 leading-relaxed">{profile ? "حسابك ليس له صلاحية إشراف. يمنح المسؤول الصلاحيات من قسم «الأعضاء»." : "سجّل الدخول من التطبيق بحساب له صلاحية إشراف، ثم عُد إلى هذه الصفحة."}</p>
+      <Secondary onClick={() => A.openApp()} className="h-10 text-[13px] mx-auto"><Smartphone size={15} /> افتح التطبيق</Secondary>
+    </main>
+  );
+  if (CLOUD && !live) return <main className="rise max-w-xl mx-auto px-4 py-16 text-center text-[13px] text-ink-2">{liveErr || "جارٍ تحميل بيانات المنصة…"}</main>;
   const openCount = cases.filter((c) => c.status === "open").length; const verifyCount = verifs.filter((r) => r.status === "pending").length;
   const body = section === "queue" ? <QueueSection A={A} /> : section === "verify" ? <VerifySection A={A} /> : section === "users" ? <UsersSection A={A} /> : section === "analytics" ? <AnalyticsSection A={A} /> : section === "content" ? <ContentSection A={A} /> : section === "settings" ? <SettingsSection A={A} /> : section === "audit" ? <AuditSection A={A} /> : <OverviewSection A={A} />;
   return (
@@ -129,17 +165,23 @@ export function OverviewSection({ A }: any) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {A.live ? <>
+          <Kpi icon={Users} label="الأعضاء المسجّلون" value={<Num>{fmt(A.live.members)}</Num>} sub={<>+<Num>{fmt(A.live.newMembers)}</Num> خلال 30 يومًا</>} />
+          <Kpi icon={Activity} label="نشطون خلال 30 يومًا" value={<Num>{fmt(A.live.activeMembers)}</Num>} sub="نشروا أو ردّوا مرة على الأقل" />
+        </> : <>
         <Kpi icon={Users} label="الأعضاء المسجّلون" value={<Num>{fmt(MEMBERS_BASE + A.accounts.length)}</Num>} sub={<>+<Num>{fmt(series.slice(-7).reduce((a, d) => a + d.signups, 0))}</Num> هذا الأسبوع</>} />
         <Kpi icon={Activity} label="نشطون اليوم" value={<Num>{fmt(today.dau)}</Num>} sub={<><Num className={delta >= 0 ? "text-good" : "text-warn"}>{delta >= 0 ? "+" : ""}{delta}%</Num> عن متوسط الأسبوع</>} />
+        </>}
         <Kpi icon={Flag} tone="text-bad" label="بلاغات مفتوحة" value={<Num>{open.length}</Num>} sub={<><Num>{urgent}</Num> عاجلة · <Num>{late}</Num> تجاوزت <Num>{A.config.slaHours}</Num> ساعة</>} />
         <Kpi icon={Hourglass} label="متوسط زمن الحل" value={<><Num>{mttr.toFixed(1)}</Num> <span className="text-[14px] text-ink-2">ساعة</span></>} sub={<><Num>{closed.length}</Num> قضية مغلقة · <Num>{suspended}</Num> حساب موقوف</>} />
         <Kpi icon={IdCard} tone="text-warn" label="طلبات توثيق تنتظر المراجعة" value={<Num>{waiting.length}</Num>} sub={<>{waiting.length > 0 && <span className="block">أقدمها: {agoText(oldest, A.now)}</span>}<span className="block"><Num>{Math.round(verified * 100)}%</Num> من المهندسين والمشرفين موثّقون</span></>} />
-        <Kpi icon={Scale} label="تغطية شفافية الرواتب" value={<Num>{Math.round(cov * 100)}%</Num>} sub="خلايا (تخصص × خبرة × محافظة) بجودة «موثّق»: 100 تقرير أو أكثر" />
+        {A.live ? <Kpi icon={Scale} label="مشاركات الرواتب" value={<Num>{fmt(A.live.salaryShares)}</Num>} sub="خلال 30 يومًا — تظهر في السوق من 5 تقارير لكل خلية" />
+          : <Kpi icon={Scale} label="تغطية شفافية الرواتب" value={<Num>{Math.round(cov * 100)}%</Num>} sub="خلايا (تخصص × خبرة × محافظة) بجودة «موثّق»: 100 تقرير أو أكثر" />}
         <Kpi icon={Briefcase} label="إعلانات وظائف نشطة" value={<Num>{ja.totals.jobs}</Num>} sub={<><Num>{fmt(ja.totals.contacts)}</Num> فتحوا بيانات التواصل</>} />
         <Kpi icon={MousePointerClick} label="معدل التواصل مع الشركات" value={<Num>{(ja.totals.rate * 100).toFixed(1)}%</Num>} sub="من مشاهدة الإعلان إلى فتح البريد أو الهاتف" />
       </div>
       <div className="grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-4">
-        <Panel className="p-4"><PanelHead icon={Activity} title="النشطون يوميًا — آخر 30 يومًا"><button type="button" onClick={() => A.go("analytics")} className="text-[12px] text-accent hover:underline underline-offset-4">كل التحليلات</button></PanelHead><Columns data={series} value={(d) => d.dau} label="النشطون يوميًا خلال 30 يومًا" h={140} /><p className="mt-2 text-[11px] text-ink-3">الجمعة والسبت أقل نشاطًا — عطلة نهاية الأسبوع في مصر. سلسلة نموذجية ثابتة لكل يوم.</p></Panel>
+        <Panel className="p-4"><PanelHead icon={Activity} title={A.live ? "المنشورات يوميًا — آخر 30 يومًا" : "النشطون يوميًا — آخر 30 يومًا"}><button type="button" onClick={() => A.go("analytics")} className="text-[12px] text-accent hover:underline underline-offset-4">كل التحليلات</button></PanelHead>{A.live ? <Columns data={liveDays(A.live)} value={(d) => d.posts} label="المنشورات يوميًا خلال 30 يومًا" h={140} /> : <><Columns data={series} value={(d) => d.dau} label="النشطون يوميًا خلال 30 يومًا" h={140} /><p className="mt-2 text-[11px] text-ink-3">الجمعة والسبت أقل نشاطًا — عطلة نهاية الأسبوع في مصر. سلسلة نموذجية ثابتة لكل يوم.</p></>}</Panel>
         <Panel className="p-4"><PanelHead icon={Siren} title="تحتاج قرارك الآن"><button type="button" onClick={() => A.go("queue")} className="text-[12px] text-accent hover:underline underline-offset-4">كل البلاغات</button></PanelHead>
           {open.length === 0 ? <p className="text-[12.5px] text-ink-2">لا بلاغات مفتوحة — القائمة نظيفة.</p> : <ul className="space-y-2">{open.slice(0, 4).map((c) => <li key={c.key}><button type="button" onClick={() => A.go("queue", c.key)} className="press w-full text-start p-3 rounded-xl border border-line hover:border-line-3 bg-canvas/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><div className="flex items-center gap-1.5 flex-wrap"><SevChip n={c.sev} /><ToneChip>{REPORT_KINDS[c.kind]}</ToneChip><span className="ms-auto text-[10.5px] text-ink-3">{agoText(c.first, A.now)}</span></div><p className="mt-1 text-[12.5px] leading-snug">{reasonOf(c.top)[1]} <span className="text-ink-3">· <Num>{c.reporters}</Num> مُبلّغ</span></p></button></li>)}</ul>}</Panel>
       </div>
@@ -264,6 +306,7 @@ export function UserDetail({ A, acc }: any) {
         <p className="text-[12px] text-ink-2 leading-relaxed">{!canVerifyRole(acc.role) ? "حسابات جهات العمل لا توثَّق ولا ترفع مستندات — تظهر بشارة دورها «صاحب عمل» أو «موارد بشرية»." : acc.verified ? [cred, acc.division && divOf(acc.division) ? divOf(acc.division).label : null, acc.gradYear ? "دفعة " + acc.gradYear : null].filter(Boolean).join(" · ") : "الحساب غير موثّق. تُمنح الشارة فقط بعد مراجعة المستندات يدويًا في «طلبات التوثيق»."}</p>
         <p className="mt-1.5 text-[11.5px] text-ink-3 leading-relaxed">لا تُحفظ صورة أي مستند بعد المراجعة: تُحذف نهائيًا لحظة القرار، ويبقى فقط الحالة والشعبة وسنة التخرج ورقم الطلب.</p>
         {pendingReq && <button type="button" onClick={() => A.go("verify", pendingReq.id)} className="mt-2 inline-flex items-center gap-1.5 min-h-9 text-[12.5px] text-accent hover:underline underline-offset-4"><IdCard size={14} /> طلب توثيق ينتظر المراجعة — افتحه</button>}</Panel>
+      {A.cloud && A.profile && A.profile.staff === "admin" && <Panel className="p-4"><PanelHead icon={ShieldCheck} title="صلاحية الإدارة" /><Choice label="صلاحية الإدارة" value={acc.staff || "member"} onChange={(v) => { if (v !== (acc.staff || "member")) A.setStaff(acc, v); }} items={[["member", "عضو"], ["moderator", "مشرف"], ["admin", "مسؤول"]]} /><p className="mt-2 text-[11px] text-ink-3">المشرف يراجع البلاغات وطلبات التوثيق؛ المسؤول يدير الإعدادات والصلاحيات أيضًا.</p></Panel>}
       <Panel className="p-4"><PanelHead icon={UserCog} title="الدور" /><Choice label="الدور" value={grp} onChange={(g) => { if (g === grp) return; A.setRole(acc, g === "field" ? "supervisor" : g); }} items={ROLE_GROUPS.map(([id, l]: any) => [id, l])} />
         <p className="mt-2 text-[11px] text-ink-3 leading-relaxed">الدور يحدد الصلاحيات في التطبيق: المهندس يشارك الرواتب ويقيّم الشركات؛ مشرف الموقع للمجتمع فقط؛ الموارد البشرية وأصحاب العمل ينشرون الوظائف ولا يقيّمون ولا يوثَّقون.{acc.member ? " تغيير دور حسابك يظهر في التطبيق فورًا." : ""}</p></Panel>
       <Panel className="p-4"><PanelHead icon={TriangleAlert} title="تحذير" /><textarea value={warnText} onChange={(e) => setWarnText(e.target.value.slice(0, 240))} rows={2} placeholder="نص التحذير كما سيصل للعضو" aria-label="نص التحذير" className="w-full p-3 rounded-xl bg-canvas border border-line-2 text-[13px] leading-[1.7] placeholder:text-ink-4 focus:outline-none focus:ring-2 focus:ring-accent resize-none" />
@@ -278,7 +321,28 @@ export function UserDetail({ A, acc }: any) {
 
 
 // ---- analytics ----
-export function AnalyticsSection({ A }: any) {
+// ---- live analytics (cloud): real counts from admin_analytics; the reference salary model stays as it is in the app ----
+export const liveDays = (lv?: any) => (lv.daily || []).map((d) => ({ ...d, label: String(d.day).slice(5) }));
+export function LiveAnalytics({ A }: any) {
+  const lv = A.live; const days = liveDays(lv); const discs = Object.entries(lv.trendingDiscs || {}).sort((a: any, b: any) => b[1] - a[1]);
+  const sal = Object.entries(lv.salaryByDisc || {}).sort((a: any, b: any) => b[1].median - a[1].median); const maxSal = Math.max(1, ...sal.map(([, v]: any) => v.median));
+  const kpis = [["الأعضاء", lv.members], ["جدد (30 يومًا)", lv.newMembers], ["نشطون (30 يومًا)", lv.activeMembers], ["موثّقون", lv.verified], ["منشورات", lv.posts], ["ردود", lv.comments], ["مشاركات رواتب", lv.salaryShares], ["تقييمات شركات", lv.reviews], ["إعلانات وظائف", lv.jobs], ["فتحوا بيانات التواصل", lv.jobContacts], ["بلاغات مفتوحة", lv.openCases], ["توثيق ينتظر", lv.pendingVerifications]];
+  return (
+    <div className="space-y-4">
+      <p className="text-[11px] text-ink-3">أرقام حية من قاعدة البيانات — آخر 30 يومًا ما لم يُذكر غير ذلك.</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">{kpis.map(([l, v]: any) => <Panel key={l} className="p-3"><p className="text-[11px] text-ink-2">{l}</p><p className="text-[20px] font-medium"><Num>{fmt(v || 0)}</Num></p></Panel>)}</div>
+      <Panel className="p-4"><PanelHead icon={Activity} title="المنشورات والأعضاء الجدد يوميًا" /><Columns data={days} value={(d) => d.posts} label="المنشورات يوميًا" h={140} /><div className="mt-3"><Columns data={days} value={(d) => d.members} label="الأعضاء الجدد يوميًا" h={80} tone="bg-good" /></div></Panel>
+      <div className="grid lg:grid-cols-2 gap-4">
+        <Panel className="p-4"><PanelHead icon={TrendingUp} title="التخصصات الأكثر نشاطًا" />{discs.length ? <div className="space-y-2.5">{discs.map(([d, n]: any) => <HBar key={d} label={d === "other" ? "أخرى" : discTitle(d)} value={n} max={discs[0][1]} shown={<Num>{fmt(n)}</Num>} />)}</div> : <p className="text-[12px] text-ink-2">لا منشورات بعد.</p>}</Panel>
+        <Panel className="p-4"><PanelHead icon={Scale} title="وسيط الرواتب المُبلّغ عنها" />{sal.length ? <div className="space-y-2.5">{sal.map(([d, v]: any) => <HBar key={d} label={`${discTitle(d)} · ${v.n} تقرير`} value={v.median} max={maxSal} shown={<><Num>{fmt(v.median)}</Num> ج.م</>} />)}</div> : <p className="text-[12px] text-ink-2">لا مشاركات رواتب بعد.</p>}</Panel>
+      </div>
+      <Panel className="p-4"><PanelHead icon={Users} title="الأعضاء حسب الدور" /><div className="flex flex-wrap gap-1.5">{Object.entries(lv.byRole || {}).map(([r, n]: any) => <ToneChip key={r} tone="info">{roleTitle(r)} <Num>{fmt(n)}</Num></ToneChip>)}</div></Panel>
+    </div>
+  );
+}
+
+export function AnalyticsSection({ A }: any) { return A.live ? <LiveAnalytics A={A} /> : <ModelAnalytics A={A} />; }
+function ModelAnalytics({ A }: any) {
   const [days, setDays] = useState(30); const [exp, setExp] = useState<any>("3-5"); const [g, setG] = useState<any>("cairo");
   const series = useMemo<any>(() => activitySeries(days), [days]); const avg = Math.round(series.reduce((a, d) => a + d.dau, 0) / series.length); const mau = Math.round(avg * 3.9); const signups = series.reduce((a, d) => a + d.signups, 0); const shares = series.reduce((a, d) => a + d.shares, 0);
   const eng = useMemo<any>(() => engagementOf(A.posts), [A.posts]); const trend = useMemo<any>(() => trendingDiscs(days, A.posts, A.jobs), [days, A.posts, A.jobs]); const tracks = useMemo<any>(() => trendingTracks(days), [days]);

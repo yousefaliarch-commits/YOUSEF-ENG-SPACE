@@ -224,7 +224,7 @@ export function ChatScreen({ app, id }: any) {
   const t = app.threads.find((x) => x.id === id); const [text, setText] = useState<any>(""); const [typing, setTyping] = useState(false); const endRef = useRef<any>(null);
   useEffect(() => { if (t && t.unread) app.readThread(t.id); }, [id]);
   useEffect(() => { if (endRef.current) endRef.current.scrollIntoView({ block: "end" }); }, [t && t.messages.length, typing]);
-  useEffect(() => { if (!t) return; const last = t.messages[t.messages.length - 1]; if (!last || last.from !== "me") return; setTyping(true); const h = setTimeout(() => { setTyping(false); app.simulateReply(t.id); }, 1500); return () => clearTimeout(h); }, [t && t.messages.length]);
+  useEffect(() => { if (!t || !app.simulated) return; const last = t.messages[t.messages.length - 1]; if (!last || last.from !== "me") return; setTyping(true); const h = setTimeout(() => { setTyping(false); app.simulateReply(t.id); }, 1500); return () => clearTimeout(h); }, [t && t.messages.length]);
   if (!t) return <Empty icon={MessageCircle} title="المحادثة غير موجودة" body={`ربما مُسحت بعد ${daysText(app.config.dmDays)}.`} action="رجوع" onAction={app.pop} />;
   const guard = screenLanguage(text); const rule = dmRule(app.profile, t.with, t.ctx.type === "job" ? { job: t.ctx.id } : {});
   const meAs = t.meAs === "public" ? "public" : "anon"; const meA = authorOf(app.profile, meAs); const sentByMe = t.messages.some((m) => m.from === "me"); const withA: any = { ...t.with, userRole: t.with.role, role: t.with.title };

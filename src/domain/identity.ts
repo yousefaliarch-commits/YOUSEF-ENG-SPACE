@@ -129,7 +129,7 @@ export const authorOf = (p?: any, as?: any, level: any = 0) => {
     : { as: "anon", anon: p.anon, avatar: p.avatar, role: anonTitle(p), ...base };
 };
 
-export const AUTHOR_FIELDS = ["as", "anon", "avatar", "spec", "look", "photo", "pid", "name", "age", "gradYear", "gender", "userRole", "verified", "verifyKind", "division", "level", "expert", "role", "dm"];
+export const AUTHOR_FIELDS = ["ref", "as", "anon", "avatar", "spec", "look", "photo", "pid", "name", "age", "gradYear", "gender", "userRole", "verified", "verifyKind", "division", "level", "expert", "role", "dm"];
 
 export const pickAuthor = (x?: any) => Object.fromEntries(AUTHOR_FIELDS.filter((k) => x && x[k] !== undefined).map((k) => [k, x[k]]));
 

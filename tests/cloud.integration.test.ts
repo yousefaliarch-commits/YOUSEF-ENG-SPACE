@@ -1,0 +1,81 @@
+// End-to-end through src/backend/cloud.ts against a running local Supabase (npx supabase start), as real members.
+// Skipped unless the run has VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY: `npm run test:cloud` sets them from `supabase status`.
+import { beforeAll, describe, expect, it } from "vitest";
+
+const run = (import.meta as any).env.VITE_SUPABASE_URL && process.env.ENGSPACE_CLOUD_TEST === "1" ? describe : describe.skip;
+// a 1×1 JPEG
+const JPEG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=";
+
+run("cloud backend (local Supabase)", () => {
+  let cloud: any; const tag = Date.now().toString(36);
+  const A = { email: `a-${tag}@example.com`, pw: "Str0ng!pass-" + tag }, B = { email: `b-${tag}@example.com`, pw: "Str0ng!pass-" + tag };
+  const persona = (name: string, extra: any = {}) => ({ name, gender: "male", age: 30, gradYear: 2018, role: "engineer", disc: "civil", track: "tech", pos: "mid", gov: "cairo", city: "nasr", identity: "anon", ...extra });
+  let postId = "", anonA = "";
+
+  beforeAll(async () => {
+    cloud = await import("../src/backend/cloud");
+  });
+
+  it("signs up two members; the profile comes from the form", async () => {
+    const b = await cloud.signUp(B.email, B.pw, persona("منى خالد", { gender: "female" }));
+    expect(b.persona.name).toBe("منى خالد");
+    await cloud.signOut();
+    const a = await cloud.signUp(A.email, A.pw, persona("أحمد سامي"));
+    expect(a.confirm).toBe(false); expect(a.persona.anon).toMatch(/^[0-9a-f]{6}$/); expect(a.persona.staff).toBe("member");
+    anonA = a.persona.anon;
+  });
+
+  it("posts anonymously with an image in Storage, not inline", async () => {
+    const p = await cloud.addPost({ room: "tech", type: "question", body: "سؤال تجريبي عن المرتبات", image: { src: JPEG, w: 1, h: 1, alt: "" } }, "anon");
+    postId = p.id;
+    expect(p.anon).toBe(anonA); expect(p.name).toBeUndefined(); expect(p.ref).toBe(`posts:${p.id}`);
+    expect(p.role).toContain("مهندس"); expect(p.image.src).toMatch(/\/storage\/v1\/object\/public\/media\//);
+    const res = await fetch(p.image.src); expect(res.status).toBe(200);
+  });
+
+  it("another member sees it, replies, reacts; counts exclude their own reaction", async () => {
+    await cloud.signOut(); await cloud.signIn(B.email, B.pw);
+    await cloud.addComment(postId, { text: "رد تجريبي" }, null, "public");
+    await cloud.react("posts", postId, { agree: true, useful: true });
+    const all = await cloud.loadAll();
+    const p = all.posts.find((x: any) => x.id === postId);
+    expect(p.comments[0].name).toBe("منى خالد");
+    expect(p.reactions).toEqual({ agree: 0, disagree: 0, useful: 0 }); expect(all.reacts[postId]).toEqual({ agree: true, disagree: false, useful: true });
+  });
+
+  it("messages the anonymous author without learning who they are", async () => {
+    const all = await cloud.loadAll(); const p = all.posts.find((x: any) => x.id === postId);
+    const t = await cloud.startThread({ ref: p.ref }, { type: "post", id: postId, label: "من نقاش" }, "anon", "زميل فتح باب الرسائل");
+    await cloud.sendMessage(t, "أهلًا");
+    const ts = await cloud.threads(); expect(ts[0].with.anon).toBe(anonA); expect(JSON.stringify(ts)).not.toContain(A.email);
+  });
+
+  it("cannot upload into someone else's verification folder", async () => {
+    const { supabase } = await import("../src/backend/client"); const db = await supabase();
+    const blob = await (await fetch(JPEG)).blob();
+    const r = await db.storage.from("verification").upload(`00000000-0000-0000-0000-000000000000/x.jpg`, blob, { contentType: "image/jpeg" });
+    expect(r.error).toBeTruthy();
+  });
+
+  it("submits verification documents; withdrawing deletes them", async () => {
+    const ref = await cloud.submitVerification([{ kind: "card", src: JPEG }]); expect(ref).toMatch(/^V-/);
+    const { supabase } = await import("../src/backend/client"); const db = await supabase();
+    const { data: { user } } = await db.auth.getUser();
+    expect(((await db.storage.from("verification").list(user!.id)).data || []).length).toBe(1);
+    await cloud.withdrawVerification();
+    expect(((await db.storage.from("verification").list(user!.id)).data || []).length).toBe(0);
+  });
+
+  it("reports the post; the author is never revealed to the reporter", async () => {
+    const ref = await cloud.report("post", postId, "spam", "تجربة"); expect(ref).toMatch(/^R-/);
+    await expect(cloud.admin.cases()).rejects.toThrow("ليست لديك صلاحية");
+  });
+
+  it("the author reads the reply notification-free feed and their thread", async () => {
+    await cloud.signOut(); await cloud.signIn(A.email, A.pw);
+    const ts = await cloud.threads(); expect(ts[0].unread).toBe(1);
+    const msgs = await cloud.messages(ts[0].id); expect(msgs[0]).toMatchObject({ from: "them", text: "أهلًا" });
+    await cloud.deleteAccount();
+    await expect(cloud.signIn(A.email, A.pw)).rejects.toThrow("البريد أو كلمة المرور غير صحيحة");
+  });
+});
