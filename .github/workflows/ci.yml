@@ -39,7 +39,7 @@ jobs:
         run: npm run test:cloud
 
   # An installable Android build of every push (Actions → this run → Artifacts → engspace-debug-apk).
-  # With the repository secrets VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY it talks to the hosted project;
+  # With the repository secrets VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (or VITE_SUPABASE_ANON_KEY) it talks to the hosted project;
   # without them it is the demo.
   android:
     runs-on: ubuntu-latest
@@ -59,6 +59,7 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       - run: npx cap sync android
       - run: ./gradlew assembleDebug --no-daemon
         working-directory: android
