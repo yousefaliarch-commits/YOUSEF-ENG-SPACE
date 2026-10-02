@@ -27,6 +27,8 @@ const lucideStub = {
 
 export default defineConfig({
   plugins: [lucideStub],
+  // never read .env / .env.local: the suites run the demo; the cloud suite gets its backend from the environment (npm run test:cloud)
+  envDir: here("./tests/stubs"),
   resolve: {
     alias: [
       { find: /^react\/jsx-(dev-)?runtime$/, replacement: here("./tests/stubs/jsx-runtime.ts") },

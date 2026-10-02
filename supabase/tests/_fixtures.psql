@@ -1,0 +1,37 @@
+-- Shared test fixtures, included by every test file (psql \ir). Runs as postgres inside the test's transaction.
+-- Starts from empty tables (the whole file runs in the test's transaction and is rolled back), so data left by the
+-- end-to-end tests or by local use never changes a count.
+truncate public.posts, public.comments, public.reactions, public.ballots, public.salary_shares, public.company_reviews, public.jobs,
+  public.job_contacts, public.notifications, public.member_state, public.reports, public.audit_log, public.verification_requests,
+  private.threads, private.messages, private.authorship, private.item_mod cascade;
+set local storage.allow_delete_query = 'true';
+delete from storage.objects where bucket_id in ('verification', 'media');
+reset storage.allow_delete_query;
+delete from auth.users;
+-- Accounts: A, B, C, D engineers (civil · tech office), H HR, S site supervisor, M moderator, X admin.
+create or replace function pg_temp.mkuser(uid uuid, email text, meta jsonb) returns void language sql as $$
+  insert into auth.users (instance_id, id, aud, role, email, encrypted_password, raw_user_meta_data, raw_app_meta_data, created_at, updated_at)
+  values ('00000000-0000-0000-0000-000000000000', uid, 'authenticated', 'authenticated', email, '', meta, '{}'::jsonb, now(), now())
+$$;
+select pg_temp.mkuser('00000000-0000-0000-0000-00000000000a', 'a@example.com', '{"name":"أحمد سامي","role":"engineer","disc":"civil","track":"tech","gradYear":"2020","gov":"cairo","identity":"anon"}');
+select pg_temp.mkuser('00000000-0000-0000-0000-00000000000b', 'b@example.com', '{"name":"منى خالد","gender":"female","role":"engineer","disc":"civil","track":"tech","gradYear":"2016"}');
+select pg_temp.mkuser('00000000-0000-0000-0000-00000000000c', 'c@example.com', '{"name":"كريم علي","role":"engineer","disc":"civil","track":"site"}');
+select pg_temp.mkuser('00000000-0000-0000-0000-00000000000d', 'd@example.com', '{"name":"دينا فؤاد","gender":"female","role":"engineer","disc":"mechanical"}');
+select pg_temp.mkuser('00000000-0000-0000-0000-00000000000e', 'hr@example.com', '{"name":"سارة الموارد","gender":"female","role":"hr","companyName":"ريدكون"}');
+select pg_temp.mkuser('00000000-0000-0000-0000-00000000000f', 's@example.com', '{"name":"حسن المشرف","role":"supervisor","disc":"civil"}');
+select pg_temp.mkuser('00000000-0000-0000-0000-000000000001', 'mod@example.com', '{"name":"مشرف المحتوى","role":"engineer"}');
+select pg_temp.mkuser('00000000-0000-0000-0000-000000000002', 'admin@example.com', '{"name":"مدير المنصة","role":"engineer"}');
+update public.profiles set staff = 'moderator' where id = '00000000-0000-0000-0000-000000000001';
+update public.profiles set staff = 'admin' where id = '00000000-0000-0000-0000-000000000002';
+
+-- act as a signed-in member (or as nobody with as_anon)
+create or replace function pg_temp.as_user(uid uuid) returns void language plpgsql as $$
+begin
+  perform set_config('request.jwt.claims', json_build_object('sub', uid, 'role', 'authenticated')::text, true);
+  execute 'set local role authenticated';
+end $$;
+create or replace function pg_temp.as_anon() returns void language plpgsql as $$
+begin
+  perform set_config('request.jwt.claims', '{"role":"anon"}', true);
+  execute 'set local role anon';
+end $$;

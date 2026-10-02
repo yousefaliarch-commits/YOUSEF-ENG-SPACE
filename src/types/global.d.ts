@@ -7,6 +7,6 @@ declare global {
     __LIVE?: any;
     __i18n?: any;
     __engspaceBuildChanged?: () => boolean;
-    __engspaceDev?: { mount: () => void; unmount: () => void };
+    __engspaceDev?: { mount: () => void; unmount: () => void; supabase?: () => Promise<any> };
   }
 }

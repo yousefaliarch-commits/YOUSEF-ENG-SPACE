@@ -50,7 +50,9 @@
     if (!start.freshLang) localStorage.setItem("engspace.lang", start.lang || R.lang); if (!start.tour) localStorage.setItem("engspace.tour", "done");
     if (start.persona || start.account) localStorage.setItem("engspace.account.v1", JSON.stringify(ACC));
     if (start.persona) { localStorage.setItem("engspace.persona.v6", JSON.stringify(start.persona)); localStorage.setItem("engspace.session.v1", "1"); }
-    history.replaceState(null, "", start.hash); dev.mount(); await settle(1800);
+    // optional async hook run before every remount (cloud runs restore the backend session here: the crawl signs out and deletes accounts too)
+    if (window.__CRAWL_BEFORE) { try { await window.__CRAWL_BEFORE(start); } catch (e) { R.log.push("before-hook failed: " + e); } }
+    history.replaceState(null, "", start.hash); dev.mount(); await settle(window.__CRAWL_SETTLE || 1800);
     if (start.store) { Object.entries(start.store).forEach(([k, v]) => L.stores.app.set(k, v)); await settle(); }
   }
   async function settle(max = 1200, quiet = 80) {

@@ -1,0 +1,71 @@
+# Phase 2 — cloud backend: auth errors, the live admin console, password reset
+bb992a7e	Updated
+a63aff5c	Ad published — matching members were notified instantly
+3c7f90bf	Wrong e-mail or password
+c7ae795b	Confirm your e-mail first — we sent you a confirmation link
+d548be55	This e-mail is already registered — sign in
+a7ccbb74	Weak password — choose a stronger one
+934c31f8	Too many attempts — wait a minute and try again
+8f9a70d1	This room is temporarily closed by the administration
+6f14f329	Your account is suspended — you can't post or message right now
+a464a46b	This member has closed messages
+930af308	Couldn't connect — check your internet and try again
+0ab689d1	You don't have permission for this action
+60cd1d96	Something went wrong — please try again
+a40cd73b	Decision applied — the member and the reporters were notified
+317ecaeb	Content hidden
+10a7edcb	Warning sent
+dd03c4fc	Account suspended {0}
+18859506	Badge removed
+c71dcaf9	Permission saved
+1a654766	Verification approved — the documents were permanently deleted
+d4fc8c0a	Request rejected — the documents were permanently deleted
+19742039	Not available on the live platform
+de21f019	The admin console is for the platform team only
+d9efea04	Your account has no moderation permission. An administrator grants permissions from the «Members» section.
+d174556f	Sign in from the app with an account that has moderation permission, then come back to this page.
+1038b80c	Loading platform data…
+7cc66517	in the last 30 days
+507d2a92	+{0} in the last 30 days
+3bc85f74	Active in the last 30 days
+381f0dd8	Posted or replied at least once
+7279a274	Salary shares
+ad3daa23	In the last 30 days — shown in the market from 5 reports per cell
+3ff18de4	Posts per day — last 30 days
+25ee59bc	Posts per day over 30 days
+3a9fae9e	Admin permission
+e36a99cc	Moderator
+407f84be	A moderator reviews reports and verification requests; an administrator also manages settings and permissions.
+b449e9a0	New (30 days)
+00e10b03	Active (30 days)
+bef2c3f3	Verified
+1f99e508	Salary shares
+eb920d5b	Company reviews
+023b0eee	Job ads
+f9e4a82d	Verification waiting
+4d889157	Live numbers from the database — last 30 days unless stated otherwise.
+09301702	Posts and new members per day
+74f1343a	Posts per day
+9762d1a5	New members per day
+7e9a5913	Most active disciplines
+3fff7342	No posts yet.
+09d98d38	Median reported salary
+bf132554	{0} · {1} reports
+65279cc9	No salary shares yet.
+d300eef6	Members by role
+d7c45d22	Report accepted
+428e0556	Warning: «{0}»
+6bc1adae	Permanent suspension
+60981af2	Suspended {0} days
+fa048f5e	Permission: {0}
+c6adc9c7	We sent a confirmation link to your e-mail — open it, then sign in
+c204da41	We sent a password reset link to
+e7025531	if it is registered. Open it on this device.
+f86a057d	We sent a password reset link to {0} if it is registered. Open it on this device.
+e4618aa6	Type your e-mail above and we'll send you a link to choose a new password.
+2f5a2ba6	Send reset link
+cd8a4201	New password
+2e6573ab	Choose a strong password you haven't used before.
+a29c7e96	New password
+97f917e1	Saving…
+2173a6dc	Save password

@@ -9,6 +9,11 @@
   "p": "app/App.tsx",
   "n": 1
  },
+ "محدّث": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
  "محدّث — لا جديد منذ آخر مرة": {
   "k": "s",
   "p": "app/AppView.tsx",
@@ -17,7 +22,7 @@
  "الآن": {
   "k": "s",
   "p": "app/AppView.tsx,domain/moderation.ts,features/admin/AdminView.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx",
-  "n": 9
+  "n": 10
  },
  "النظام": {
   "k": "s",
@@ -113,6 +118,11 @@
   "c": 1
  },
  "حُفظت تعديلات الإعلان": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "نُشر الإعلان — وصل إشعار فوري للأعضاء المطابقين": {
   "k": "s",
   "p": "app/AppView.tsx",
   "n": 1
@@ -299,6 +309,61 @@
   "p": "app/TopBar.tsx",
   "n": 1,
   "x": "tLabel"
+ },
+ "البريد أو كلمة المرور غير صحيحة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "أكّد بريدك أولًا — أرسلنا لك رابط التأكيد": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "هذا البريد مسجّل بالفعل — سجّل الدخول": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "كلمة المرور ضعيفة — اختر كلمة أقوى": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "هذه الغرفة مغلقة مؤقتًا بقرار من الإدارة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "حسابك موقوف مؤقتًا — لا يمكنك النشر أو المراسلة الآن": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "هذا العضو أغلق باب الرسائل": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "تعذّر الاتصال — تحقّق من الإنترنت وأعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "ليست لديك صلاحية لهذا الإجراء": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "حدث خطأ غير متوقع — أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
  },
  "المكتب الفني": {
   "k": "s",
@@ -7977,7 +8042,7 @@
  "الأعضاء": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "n": 3
  },
  "التحليلات": {
   "k": "s",
@@ -8061,8 +8126,8 @@
  },
  "لا مخالفة": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts",
+  "n": 2
  },
  "إيقاف تلقائي 7 أيام — {0} مخالفات مؤكدة": {
   "k": "t",
@@ -8132,7 +8197,7 @@
  "رُفض البلاغ — أُبلغ المُبلّغون بالنتيجة": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "n": 2
  },
  "أُعيدت القضية إلى قائمة البلاغات": {
   "k": "s",
@@ -8142,7 +8207,7 @@
  "أُعيد فتح القضية": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "n": 2
  },
  "قرار المشرف": {
   "k": "s",
@@ -8157,7 +8222,7 @@
  "أُعيد المحتوى": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "n": 2
  },
  "أُرسل التحذير إلى {0}": {
   "k": "t",
@@ -8196,7 +8261,7 @@
  "رُفع الإيقاف": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "n": 2
  },
  "رُفع الإيقاف عن حسابك": {
   "k": "s",
@@ -8238,15 +8303,86 @@
  "الدور الآن: {0}": {
   "k": "t",
   "p": "features/admin/AdminView.tsx",
-  "n": 1,
+  "n": 2,
   "x": "roleTitle(role)"
  },
  "حُفظ الإعداد — يسري في التطبيق فورًا": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "n": 2
  },
  "أُعيدت بيانات الإشراف التجريبية": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "نُفّذ القرار — أُبلغ العضو والمُبلّغون": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "أُخفي المحتوى": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "أُرسل التحذير": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "أُوقف الحساب {0}": {
+  "k": "t",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1,
+  "x": "suspendText(days)"
+ },
+ "سُحبت الشارة": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "حُفظت الصلاحية": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "اعتُمد التوثيق — وحُذفت المستندات نهائيًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "رُفض الطلب — وحُذفت المستندات نهائيًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "غير متاح على المنصة الحية": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "لوحة الإدارة لفريق المنصة فقط": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "حسابك ليس له صلاحية إشراف. يمنح المسؤول الصلاحيات من قسم «الأعضاء».": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "سجّل الدخول من التطبيق بحساب له صلاحية إشراف، ثم عُد إلى هذه الصفحة.": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "افتح التطبيق": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
+ "جارٍ تحميل بيانات المنصة…": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
   "n": 1
@@ -8261,17 +8397,33 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
- "افتح التطبيق": {
-  "k": "x",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1
- },
  "أقسام لوحة الإدارة": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
   "n": 2
  },
  "الأعضاء المسجّلون": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 4
+ },
+ "خلال 30 يومًا": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "+{0} خلال 30 يومًا": {
+  "k": "r",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1,
+  "x": "EL <Num>{fmt(A.live.newMembers)}</Num>"
+ },
+ "نشطون خلال 30 يومًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
+ "نشروا أو ردّوا مرة على الأقل": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
   "n": 2
@@ -8306,7 +8458,7 @@
  "بلاغات مفتوحة": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "n": 3
  },
  "عاجلة ·": {
   "k": "x",
@@ -8377,6 +8529,16 @@
   "n": 1,
   "x": "EL <Num>{Math.round(verified * 100)}%</Num>"
  },
+ "مشاركات الرواتب": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
+ "خلال 30 يومًا — تظهر في السوق من 5 تقارير لكل خلية": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
  "تغطية شفافية الرواتب": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
@@ -8395,7 +8557,7 @@
  "فتحوا بيانات التواصل": {
   "k": "x",
   "p": "features/admin/AdminView.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx",
-  "n": 4
+  "n": 5
  },
  "{0} فتحوا بيانات التواصل": {
   "k": "r",
@@ -8413,15 +8575,25 @@
   "p": "features/admin/AdminView.tsx",
   "n": 2
  },
+ "المنشورات يوميًا — آخر 30 يومًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
  "النشطون يوميًا — آخر 30 يومًا": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "n": 1
  },
  "كل التحليلات": {
   "k": "x",
   "p": "features/admin/AdminView.tsx",
   "n": 1
+ },
+ "المنشورات يوميًا خلال 30 يومًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
  },
  "النشطون يوميًا خلال 30 يومًا": {
   "k": "s",
@@ -8575,8 +8747,8 @@
  },
  "،": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,i18n/i18n.ts,lib/helpers.tsx,ui/feed.tsx",
-  "n": 9
+  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/stack/stack.tsx,features/tabs/tabs.tsx,i18n/i18n.ts,lib/helpers.tsx,ui/feed.tsx",
+  "n": 10
  },
  "تنبيه لهجة: {0}": {
   "k": "t",
@@ -8713,8 +8885,8 @@
  },
  "إخفاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts",
+  "n": 2
  },
  "عن الجميع": {
   "k": "x",
@@ -9068,6 +9240,31 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
+ "صلاحية الإدارة": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 4
+ },
+ "عضو": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx,ui/feed.tsx",
+  "n": 3
+ },
+ "مشرف": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "مسؤول": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "المشرف يراجع البلاغات وطلبات التوثيق؛ المسؤول يدير الإعدادات والصلاحيات أيضًا.": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
  "الدور يحدد الصلاحيات في التطبيق: المهندس يشارك الرواتب ويقيّم الشركات؛ مشرف الموقع للمجتمع فقط؛ الموارد البشرية وأصحاب العمل ينشرون الوظائف ولا يقيّمون ولا يوثَّقون.": {
   "k": "x",
   "p": "features/admin/AdminView.tsx",
@@ -9166,6 +9363,118 @@
   "k": "s",
   "p": "features/admin/AdminView.tsx",
   "n": 1
+ },
+ "جدد (30 يومًا)": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "نشطون (30 يومًا)": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "موثّقون": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "منشورات": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx",
+  "n": 3
+ },
+ "ردود": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx",
+  "n": 3
+ },
+ "مشاركات رواتب": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "تقييمات شركات": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "إعلانات وظائف": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "توثيق ينتظر": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "أرقام حية من قاعدة البيانات — آخر 30 يومًا ما لم يُذكر غير ذلك.": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "المنشورات والأعضاء الجدد يوميًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
+ "المنشورات يوميًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
+ "الأعضاء الجدد يوميًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
+ "التخصصات الأكثر نشاطًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
+ "أخرى": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx,features/cv/extract.ts",
+  "n": 2
+ },
+ "لا منشورات بعد.": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "وسيط الرواتب المُبلّغ عنها": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
+ "{0} · {1} تقرير": {
+  "k": "t",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1,
+  "x": "discTitle(d) | v.n"
+ },
+ "ج.م": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
+  "n": 19
+ },
+ "{0} ج.م": {
+  "k": "r",
+  "p": "features/admin/AdminView.tsx,ui/primitives.tsx",
+  "n": 3,
+  "x": "EL <Num>{fmt(v.median)}</Num>"
+ },
+ "لا مشاركات رواتب بعد.": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "الأعضاء حسب الدور": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
  },
  "الفترة": {
   "k": "s",
@@ -9773,6 +10082,34 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
+ "قُبل البلاغ": {
+  "k": "s",
+  "p": "features/admin/cloud-admin.ts",
+  "n": 1
+ },
+ "تحذير: «{0}»": {
+  "k": "t",
+  "p": "features/admin/cloud-admin.ts",
+  "n": 1,
+  "x": "d.warn"
+ },
+ "إيقاف دائم": {
+  "k": "s",
+  "p": "features/admin/cloud-admin.ts",
+  "n": 1
+ },
+ "إيقاف {0} يوم": {
+  "k": "t",
+  "p": "features/admin/cloud-admin.ts",
+  "n": 1,
+  "x": "d.suspendDays"
+ },
+ "الصلاحية: {0}": {
+  "k": "t",
+  "p": "features/admin/cloud-admin.ts",
+  "n": 1,
+  "x": "d.staff"
+ },
  "{0}: الربع الأدنى {1}، الوسط {2}، الربع الأعلى {3}": {
   "k": "t",
   "p": "features/admin/kit.tsx",
@@ -9922,6 +10259,11 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
+ "أرسلنا رابط تأكيد إلى بريدك — افتحه ثم سجّل الدخول": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
  "تعذّر إنشاء الحساب على هذا الجهاز — أعد المحاولة": {
   "k": "s",
   "p": "features/auth/auth.tsx",
@@ -9961,7 +10303,7 @@
  "تأكيد كلمة المرور": {
   "k": "s",
   "p": "features/auth/auth.tsx",
-  "n": 2
+  "n": 4
  },
  "أعد كتابتها": {
   "k": "s",
@@ -10343,12 +10685,12 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
- "لا يوجد حساب بهذا البريد على هذا الجهاز — أنشئ حسابًا جديدًا": {
+ "5 محاولات خاطئة — انتظر 30 ثانية ثم أعد المحاولة": {
   "k": "s",
   "p": "features/auth/auth.tsx",
-  "n": 1
+  "n": 2
  },
- "5 محاولات خاطئة — انتظر 30 ثانية ثم أعد المحاولة": {
+ "لا يوجد حساب بهذا البريد على هذا الجهاز — أنشئ حسابًا جديدًا": {
   "k": "s",
   "p": "features/auth/auth.tsx",
   "n": 1
@@ -10420,6 +10762,32 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
+ "أرسلنا رابط إعادة تعيين كلمة المرور إلى": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "إن كان مسجّلًا. افتحه من هذا الجهاز.": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أرسلنا رابط إعادة تعيين كلمة المرور إلى {0} إن كان مسجّلًا. افتحه من هذا الجهاز.": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <Num>{email.trim()}</Num>"
+ },
+ "اكتب بريدك في الأعلى، وسنرسل لك رابطًا لاختيار كلمة مرور جديدة.": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "إرسال رابط إعادة التعيين": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
  "لا نرسل رسائل استرجاع في هذه المعاينة، لأن الحساب محفوظ على جهازك فقط وكلمة المرور مشفّرة بحيث لا يمكن لأحد قراءتها. لإعادة البدء احذف الحساب المحلي وأنشئ حسابًا جديدًا.": {
   "k": "x",
   "p": "features/auth/auth.tsx",
@@ -10452,6 +10820,31 @@
   "x": "EL <button type=\"button\" onClick={() => app.setAuthView(\"signup"
  },
  "أنشئ حسابك": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "كلمة مرور جديدة": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "اختر كلمة مرور قوية لم تستخدمها من قبل.": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "كلمة المرور الجديدة": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "جارٍ الحفظ…": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "حفظ كلمة المرور": {
   "k": "x",
   "p": "features/auth/auth.tsx",
   "n": 1
@@ -11050,11 +11443,6 @@
   "n": 1
  },
  "معلومات اضافية": {
-  "k": "s",
-  "p": "features/cv/extract.ts",
-  "n": 1
- },
- "أخرى": {
   "k": "s",
   "p": "features/cv/extract.ts",
   "n": 1
@@ -11734,11 +12122,6 @@
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
- },
- "ج.م": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
-  "n": 18
  },
  "لهذه الخبرة.": {
   "k": "x",
@@ -13116,11 +13499,6 @@
   "p": "features/stack/stack.tsx",
   "n": 4
  },
- "عضو": {
-  "k": "x",
-  "p": "features/stack/stack.tsx,ui/feed.tsx",
-  "n": 2
- },
  "{0} · {1} عضو": {
   "k": "r",
   "p": "features/stack/stack.tsx",
@@ -14298,16 +14676,6 @@
   "k": "s",
   "p": "features/stack/stack.tsx",
   "n": 1
- },
- "منشورات": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 2
- },
- "ردود": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 2
  },
  "رواتب": {
   "k": "s",
@@ -17813,12 +18181,6 @@
   "p": "ui/primitives.tsx",
   "n": 1,
   "x": "fmt(min) | fmt(max) | fmt(median)"
- },
- "{0} ج.م": {
-  "k": "r",
-  "p": "ui/primitives.tsx",
-  "n": 2,
-  "x": "EL <Num>{fmt(min)}</Num>"
  },
  "إنديغو": {
   "k": "s",

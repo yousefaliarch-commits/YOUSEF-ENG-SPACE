@@ -7,7 +7,8 @@ import { AppView, parseHash } from "./AppView";
 import { ScreenLoading } from "./ScreenLoading";
 import { TopBar } from "./TopBar";
 import { I18N, LANGS, LangCtx, i18nApply, loadLang, saveLang } from "../i18n/i18n";
-import { ModeCtx, liveState, reducedMotion } from "../lib/runtime";
+import { ModeCtx, PlatformCtx, liveState, reducedMotion } from "../lib/runtime";
+import { NATIVE, PLATFORM, setNativeMode } from "../native/native";
 import { Primary } from "../ui/primitives";
 import { ACCENTS } from "../ui/theme";
 
@@ -19,7 +20,7 @@ export const loadTheme = () => { try { return localStorage.getItem("engspace.the
 export const systemMode = () => { try { const host = document.documentElement.dataset.theme; if (host === "light" || host === "dark") return host; return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } catch (e) { return "dark"; } };
 
 export function App() {
-  const [init] = useState<any>(parseHash); const [view, setView] = useState<any>(init.view); const [accent, setAccent] = useState<any>("indigo"); const [toastMsg, setToastMsg] = useState<any>("");
+  const [init] = useState<any>(parseHash); const [view, setView] = useState<any>(NATIVE ? "app" : init.view); const [accent, setAccent] = useState<any>("indigo"); const [toastMsg, setToastMsg] = useState<any>("");
   const [theme, setThemeRaw] = useState<any>(loadTheme); const [sys, setSys] = useState<any>(systemMode);
   // Language: chosen on the app's first screen (before the e-mail / registration screen), saved, switchable any time from
   // Settings. The swap runs in a layout effect, so the first paint is already in the chosen language; a switch cross-fades as a
@@ -46,16 +47,18 @@ export function App() {
   const mode = theme === "system" ? sys : theme;
   useEffect(() => { try { const mq = matchMedia("(prefers-color-scheme: dark)"); const on = () => setSys(systemMode()); mq.addEventListener("change", on); const mo = new MutationObserver(on); mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }); return () => { mq.removeEventListener("change", on); mo.disconnect(); }; } catch (e) {} }, []);
   useEffect(() => { try { document.documentElement.dataset.mode = mode; document.documentElement.style.colorScheme = mode; const m = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null; if (m) m.content = mode === "light" ? "#fafafa" : "#09090b"; } catch (e) {} }, [mode]);
+  useEffect(() => { setNativeMode(mode); }, [mode]);
   const a = mode === "light" ? ACCENTS[accent].light : ACCENTS[accent].rgb;
   useEffect(() => { if (!toastMsg) return; const t = setTimeout(() => setToastMsg(""), 2600); return () => clearTimeout(t); }, [toastMsg]);
   const vars: any = { "--accent": a.accent, "--solid": a.solid, "--solid-hi": a.solidHi, "--hover": a.hover, "--wash": a.wash };
   return (
-    <ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
-      <div className={view === "app" ? "hidden sm:block" : ""}><TopBar view={view} setView={setView} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
+    <PlatformCtx.Provider value={PLATFORM}><ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
+      {/* the preview's top bar (app ⇄ admin console, theme, language) — the native apps open straight into the member app */}
+      <div className={NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}><TopBar view={view} setView={setView} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
       {view === "admin" ? <Suspense fallback={<ScreenLoading />}><AdminView init={init} openApp={() => setView("app")} /></Suspense>
         : <AppView onAdmin={() => setView("admin")} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
       <div role="status" aria-live="polite" className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-elevated border border-line-2 text-[13px] shadow-float transition-all ${toastMsg ? "opacity-100" : "opacity-0 translate-y-3 pointer-events-none"}`}>{toastMsg && <><CircleCheck size={17} className="text-accent" /><span>{toastMsg}</span></>}</div>
-    </div></LangCtx.Provider></ModeCtx.Provider>
+    </div></LangCtx.Provider></ModeCtx.Provider></PlatformCtx.Provider>
   );
 }
 

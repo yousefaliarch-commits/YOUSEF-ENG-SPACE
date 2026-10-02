@@ -1,8 +1,8 @@
 name: CI
 on:
   push:
-    branches: [main]
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -20,3 +20,50 @@ jobs:
       - run: npm run build
       - name: Generated dictionary is committed and current
         run: git diff --exit-code -- src/i18n/en.generated.json i18n/keys.json
+
+  # The database: every migration from scratch, the RLS / privacy suites (pgTAP), then the app's cloud layer end to end
+  database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Start local Supabase (database, auth, storage, API)
+        run: npx supabase start -x studio,logflare,vector,imgproxy,edge-runtime,supavisor,postgres-meta,realtime
+      - name: RLS and privacy tests (pgTAP)
+        run: npx supabase test db
+      - name: Cloud layer end to end (src/backend/cloud.ts as real members)
+        run: npm run test:cloud
+
+  # An installable Android build of every push (Actions → this run → Artifacts → engspace-debug-apk).
+  # With the repository secrets VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY it talks to the hosted project;
+  # without them it is the demo.
+  android:
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+      - run: npx cap sync android
+      - run: ./gradlew assembleDebug --no-daemon
+        working-directory: android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: engspace-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14

@@ -261,7 +261,7 @@ export function i18nApply(lang?: any) {
   I18N.lang = lang === "en" ? "en" : "ar";
   try { const root = document.documentElement; root.lang = I18N.lang; root.dir = LANGS[I18N.lang].dir; } catch (e) {}
   if (I18N.lang === "en") i18nOn(); else i18nOff();
-  try { window.__i18n = { lang: I18N.lang, missing: I18N.missing, tr }; } catch (e) {}
+  try { (window as any).__i18n = { lang: I18N.lang, missing: I18N.missing, tr }; } catch (e) {}
 }
 
 // Community content — spread on the element that holds what a member wrote: never translated, laid out in its own direction
