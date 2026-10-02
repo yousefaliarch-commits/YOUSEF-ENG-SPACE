@@ -4,7 +4,7 @@
 // "r" a sentence wrapping inline elements.
 // usage: node scripts/i18n/extract.mjs            → writes i18n/keys.json
 import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "@babel/parser";
 import traverseModule from "@babel/traverse";
@@ -55,8 +55,10 @@ function isContent(p) {
 const inRegexCtx = (p) => { const par = p.parentPath && p.parentPath.node; return par && t.isNewExpression(par) && t.isIdentifier(par.callee, { name: "RegExp" }); };
 const inType = (p) => !!p.findParent((x) => x.isTSType() || x.isTSTypeAnnotation());
 
-for (const file of walk(SRC).sort()) {
-  const part = relative(SRC, file).replace(/\\/g, "/");
+// sorted by POSIX-style relative path, so keys.json comes out identical on Windows and on Linux (CI)
+const posix = (file) => relative(SRC, file).split(sep).join("/");
+for (const file of walk(SRC).sort((a, b) => (posix(a) < posix(b) ? -1 : posix(a) > posix(b) ? 1 : 0))) {
+  const part = posix(file);
   if (NO_DICT.has(part)) continue;
   const src = readFileSync(file, "utf8");
   if (!AR.test(src)) continue;
