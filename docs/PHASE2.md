@@ -82,6 +82,30 @@ foreground, `loadAll()` replaces local state with the server's. An open conversa
    `select public.bootstrap_admin('your@email');` — it works only while there is no administrator. Further moderators and
    administrators are granted from the console (Members → a member → Admin permission).
 
+## Sign-in methods (Google, Apple, phone) and e-mail links
+
+The app shows a button for each method only once it is switched on in the project, so nothing breaks before setup.
+
+- **Google**: Google Cloud Console → APIs & Services → Credentials → OAuth client ID (Web application). Authorized
+  redirect URI: `https://cyziykbqldtxyquqvvkr.supabase.co/auth/v1/callback`. Paste the client ID and secret in Supabase →
+  Authentication → Providers → Google.
+- **Apple** (needs the paid Apple Developer account; required on iOS when Google sign-in is offered): Certificates,
+  IDs & Profiles → a Services ID with "Sign in with Apple", the same callback URL, and a key. Paste them in Supabase →
+  Providers → Apple.
+- **Phone (SMS code)**: Supabase → Providers → Phone, with an SMS provider (Twilio, MessageBird, Vonage or Textlocal)
+  and its credentials. Each SMS is billed by the provider.
+- **Redirect URLs** (Authentication → URL Configuration) must include `app.engspace://auth-callback**` so Google/Apple
+  come back to the phone app.
+- **E-mail templates** (Authentication → Email Templates): paste `supabase/templates/confirmation.html` into "Confirm
+  signup" and `supabase/templates/recovery.html` into "Reset password". Their links work on any device and carry the
+  6-digit code.
+
+Cross-device confirmation: after sign-up the app waits on «أكّد بريدك» and signs in by itself as soon as the link is
+opened on any device (it retries quietly every 10 s and when the app comes back to the front), or with the code.
+For the link itself to open the web app on a laptop, set **Site URL** to the hosted web address once the web app is
+deployed (any static host: the build in `dist/` is relative-path); until then the waiting device still signs in.
+Accounts made with Google, Apple or a phone number go through «أكمل ملفك» (the profile steps) once.
+
 ## Local development
 
 | Command | What it does |
@@ -116,6 +140,18 @@ on the other after a refresh. Other ways in:
 - **Phone not on the same Wi-Fi**: `npm run live -- --tunnel` prints the `localhost.run` command for an HTTPS address.
 
 `npm run dev` (hot reload, port 5173) still works alongside for the laptop.
+
+## Performance (120 Hz)
+
+Measured with `tools`-style benchmarks in Chromium at 6× CPU slowdown (≈ a mid-range Android phone), community feed:
+median frame 52 ms → 2–3 ms, 95th percentile 79 ms → 7–9 ms. The rules that got it there (keep them):
+- No infinite SVG animation on small avatars or anywhere inside bars and lists: SVG animation repaints every frame.
+  Idle character life only from 64 px (`ui/characters.tsx`); everything idle pauses while scrolling (`.is-scrolling`).
+- No `backdrop-filter` on bars over scrolling content; near-opaque `bg-canvas/[.97]` instead (blur stays on modal scrims).
+- Animate `transform` / `opacity` only. Gestures write styles directly (pull-to-refresh), never React state per touchmove.
+- Long lists through `ui/windowed.tsx` (memoized chunks, interruptible transitions).
+- Android asks for the display's fastest mode (`MainActivity.preferHighestRefreshRate`); the system may still cap it
+  in battery saver or when hot.
 
 ## Follow-ups
 

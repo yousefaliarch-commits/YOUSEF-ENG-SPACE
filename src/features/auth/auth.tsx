@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   BadgeCheck, Camera, Check, CircleAlert, CircleCheck, Clock, Eye, EyeOff, HardHat, Languages, LoaderCircle, 
-  Lock, LogIn, MapPin, ShieldCheck, Trash2, UserPlus
+  Lock, LogIn, MapPin, ShieldCheck, Smartphone, Trash2, UserPlus
 } from "lucide-react";
 import { COMPANIES } from "../../data/companies";
 import { placeName } from "../../data/geo";
@@ -51,10 +51,11 @@ export const REG_STEPS = { account: ["إنشاء حساب", "بريدك وكلم
 
 
 export function Registration({ app, mode = "signup", initial = null }: any) {
-  const edit = mode === "edit"; const keys = edit ? ["personal", "career", "place", "identity"] : ["account", "personal", "career", "place", "identity"];
+  // complete: an account made with Google, Apple or a phone number fills the same steps once (with the policy consent)
+  const complete = mode === "complete"; const edit = mode === "edit" || complete; const keys = edit ? ["personal", "career", "place", "identity"] : ["account", "personal", "career", "place", "identity"];
   const [step, setStep] = useState(0); const [tried, setTried] = useState<any>({}); const [attempt, setAttempt] = useState(0); const [busy, setBusy] = useState(false); const [submitErr, setSubmitErr] = useState<any>("");
   const [f, setF] = useState<any>(() => initial
-    ? { ...DEFAULT_PERSONA, ...initial, age: initial.age != null ? String(initial.age) : "", gradYear: initial.gradYear != null ? String(initial.gradYear) : "", companyName: initial.companyName || "", password: "", confirm: "", accept: true }
+    ? { ...DEFAULT_PERSONA, ...initial, age: initial.age != null ? String(initial.age) : "", gradYear: initial.gradYear != null ? String(initial.gradYear) : "", companyName: initial.companyName || "", password: "", confirm: "", accept: !complete }
     : { ...DEFAULT_PERSONA, gender: null, age: "", gradYear: "", pos: null, city: null, companyName: "", email: "", password: "", confirm: "", accept: false, identity: "anon", anon: randHex(4), pid: "u-" + randHex(10) });
   const set = (k?: any, v?: any) => setF((s) => ({ ...s, [k]: v })); const body = useRef<any>(null);
   const [photoErr, setPhotoErr] = useState<any>(""); const [photoInput, pickPhoto] = useImagePicker(async (file) => { try { const im = await processImage(file, { square: true, size: 256 }); set("photo", im.src); setPhotoErr(""); } catch (e) { setPhotoErr(imageError(e)); } });
@@ -66,7 +67,7 @@ export function Registration({ app, mode = "signup", initial = null }: any) {
     personal: { name: nameError(f.name), gender: f.gender ? "" : "اختر النوع", age: ageError(f.age), gradYear: gradError(f.gradYear, f.age) },
     career: f.role === "supervisor" ? {} : isCo ? { companyName: cleanName(f.companyName).length >= 2 ? "" : gx(f.gender, "اكتب اسم الشركة التي تمثّلها", "اكتبي اسم الشركة التي تمثّلينها") } : { track: tracksFor(disc).some((t) => t[0] === f.track) ? "" : gx(f.gender, "اختر المسار", "اختاري المسار") },
     place: { gov: f.gov ? "" : gx(f.gender, "اختر المحافظة", "اختاري المحافظة"), city: f.city ? "" : gx(f.gender, "اختر المدينة أو المركز داخل المحافظة", "اختاري المدينة أو المركز داخل المحافظة") },
-    identity: { accept: edit || f.accept ? "" : gx(f.gender, "للمتابعة وافق على سياسة الخصوصية وشروط الاستخدام", "للمتابعة وافقي على سياسة الخصوصية وشروط الاستخدام") },
+    identity: { accept: (edit && !complete) || f.accept ? "" : gx(f.gender, "للمتابعة وافق على سياسة الخصوصية وشروط الاستخدام", "للمتابعة وافقي على سياسة الخصوصية وشروط الاستخدام") },
   };
   const stepErrs = errs[key]; const valid = Object.values(stepErrs).every((x) => !x); const show = (k?: any) => (tried[key] ? stepErrs[k] : "");
   useEffect(() => { if (!attempt || !body.current) return; const el = body.current.querySelector('[aria-invalid="true"], [role="alert"]'); if (el) { try { el.scrollIntoView({ block: "center", behavior: reduced() ? "auto" : "smooth" }); if (el.focus && el.matches("input,button,textarea,select")) el.focus({ preventScroll: true }); } catch (e) {} } }, [attempt]);
@@ -84,11 +85,11 @@ export function Registration({ app, mode = "signup", initial = null }: any) {
     setTried((t) => ({ ...t, [key]: true })); setSubmitErr("");
     if (!valid) { setAttempt((n) => n + 1); return; }
     if (step < keys.length - 1) { setStep(step + 1); return; }
-    const p = persona(); if (edit) { app.saveProfile(p); return; }
+    const p = persona(); if (edit) { app.saveProfile(complete ? { ...p, onboarded: true } : p); return; }
     setBusy(true);
     // cloud: the account lives on the server (Supabase Auth); the profile is created from this form by the database
     if (isCloud()) {
-      try { const r = await cloud.signUp(f.email, f.password, p); if (r.confirm) { setBusy(false); app.setAuthView("signin"); app.toast("أرسلنا رابط تأكيد إلى بريدك — افتحه ثم سجّل الدخول"); return; } app.register({ ...p, ...r.persona }, null); }
+      try { const r = await cloud.signUp(f.email, f.password, p); if (r.confirm) { setBusy(false); pendingSignup = { email: f.email, password: f.password }; app.setAuthView("confirm"); return; } app.register({ ...p, ...r.persona }, null); }
       catch (e) { setSubmitErr(e.message); setBusy(false); }
       return;
     }
@@ -146,25 +147,26 @@ export function Registration({ app, mode = "signup", initial = null }: any) {
         {edit && (f.verified || f.pending) && !nameChanged && <div className="mt-3"><Chip tone={f.verified ? "verified" : "warn"}>{f.verified ? <><BadgeCheck size={12} /> {credentialOf(f) || "موثّق"}{f.division && divOf(f.division) ? ` · ${divOf(f.division).label}` : ""}</> : <><Clock size={12} /> قيد المراجعة</>}</Chip></div>}
       </section>}
       <TrustPolicy />
-      {!edit && <label className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer ${show("accept") ? "border-bad/50 bg-bad/5" : "border-line-2 bg-surface"}`}><input type="checkbox" checked={f.accept} onChange={(e) => set("accept", e.target.checked)} aria-invalid={!!show("accept") || undefined} className="mt-0.5 w-5 h-5 shrink-0 rounded accent-[rgb(var(--solid))]" /><span className="text-[12.5px] leading-relaxed">قرأت سياسة الخصوصية والأمان أعلاه وأوافق على شروط الاستخدام.</span></label>}
+      {(!edit || complete) && <label className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer ${show("accept") ? "border-bad/50 bg-bad/5" : "border-line-2 bg-surface"}`}><input type="checkbox" checked={f.accept} onChange={(e) => set("accept", e.target.checked)} aria-invalid={!!show("accept") || undefined} className="mt-0.5 w-5 h-5 shrink-0 rounded accent-[rgb(var(--solid))]" /><span className="text-[12.5px] leading-relaxed">قرأت سياسة الخصوصية والأمان أعلاه وأوافق على شروط الاستخدام.</span></label>}
       <FieldError>{show("accept")}</FieldError>
     </div>,
   };
   const [title, hintM, hintF] = REG_STEPS[key]; const hint = genderOf(f.gender) === "female" && hintF ? hintF : hintM; const last = step === keys.length - 1;
   return (
     <div className="h-full flex flex-col px-5 pt-[calc(var(--sat)+1rem)] pb-[max(1.25rem,var(--sab))]">
-      <AuthHeader>{edit ? <Quiet onClick={app.cancelEdit} className="h-9 text-[12px]">إلغاء</Quiet> : <Quiet onClick={() => app.setAuthView("signin")} className="h-9 text-[12px] whitespace-nowrap"><LogIn size={14} /> لديك حساب؟ دخول</Quiet>}</AuthHeader>
+      <AuthHeader>{complete ? <Quiet onClick={() => app.signOut()} className="h-9 text-[12px]">خروج</Quiet> : edit ? <Quiet onClick={app.cancelEdit} className="h-9 text-[12px]">إلغاء</Quiet> : <Quiet onClick={() => app.setAuthView("signin")} className="h-9 text-[12px] whitespace-nowrap"><LogIn size={14} /> لديك حساب؟ دخول</Quiet>}</AuthHeader>
       <div className="mt-5 flex gap-1.5" aria-hidden="true">{keys.map((k, i) => <span key={k} className={`h-1 flex-1 rounded-full transition-colors duration-300 ${i <= step ? "bg-accent" : "bg-elevated"}`} />)}</div>
       <div ref={body} key={key} className="screen-push flex-1 mt-5 min-h-0 overflow-y-auto scroll-area -mx-5 px-5 pb-2">
-        <p className="text-[12px] text-accent">{edit ? "تعديل البيانات" : "التسجيل"} · <Num>{step + 1}</Num> من <Num>{keys.length}</Num></p>
+        <p className="text-[12px] text-accent">{complete ? "أكمل ملفك" : edit ? "تعديل البيانات" : "التسجيل"} · <Num>{step + 1}</Num> من <Num>{keys.length}</Num></p>
         <h1 className="mt-1 text-[24px] font-medium leading-tight">{title}</h1><p className="mt-1 mb-5 text-[13px] text-ink-2 leading-snug">{hint}</p>
+        {!edit && key === "account" && <OtherMethods app={app} />}
         {views[key]}
         {submitErr && <FieldError>{submitErr}</FieldError>}
       </div>
       <div className="flex items-center gap-3 pt-3">
         {step > 0 ? <Secondary onClick={() => setStep(step - 1)} aria-label="الخطوة السابقة" className="h-12 px-4 shrink-0"><Back size={16} /></Secondary>
           : !edit && <Secondary onClick={() => app.setAuthView("lang")} aria-label="رجوع إلى اختيار اللغة" title="اللغة" className="h-12 px-4 shrink-0"><Back size={16} /></Secondary>}
-        <Primary onClick={next} disabled={busy} aria-busy={busy} className="h-12 px-6 flex-1">{busy ? <><LoaderCircle size={16} className="spin" /> جارٍ الإنشاء…</> : last ? (edit ? <>حفظ التعديلات <Check size={16} /></> : <>إنشاء الحساب <UserPlus size={16} /></>) : <>التالي <Forward /></>}</Primary>
+        <Primary onClick={next} disabled={busy} aria-busy={busy} className="h-12 px-6 flex-1">{busy ? <><LoaderCircle size={16} className="spin" /> جارٍ الإنشاء…</> : last ? (complete ? <>ابدأ <Check size={16} /></> : edit ? <>حفظ التعديلات <Check size={16} /></> : <>إنشاء الحساب <UserPlus size={16} /></>) : <>التالي <Forward /></>}</Primary>
       </div>
     </div>
   );
@@ -194,6 +196,7 @@ export function SignIn({ app }: any) {
     <div className="h-full flex flex-col px-5 pt-[calc(var(--sat)+1rem)] pb-[max(1.25rem,var(--sab))] overflow-y-auto scroll-area">
       <AuthHeader><span className="flex items-center gap-1"><Quiet onClick={() => app.setAuthView("lang")} aria-label="تغيير اللغة" className="h-9 text-[12px] whitespace-nowrap"><Languages size={14} /> <span translate="no" lang={app.lang}>{LANGS[app.lang].name}</span></Quiet><Quiet onClick={() => app.setAuthView("signup")} className="h-9 text-[12px] whitespace-nowrap"><UserPlus size={14} /> حساب جديد</Quiet></span></AuthHeader>
       <div className="mt-8"><h1 className="text-[26px] font-medium leading-tight">تسجيل الدخول</h1><p className="mt-1 text-[13px] text-ink-2">أهلًا بعودتك. هويتك المجهولة وملفك العلني في انتظارك — كلٌّ في مساحته.</p></div>
+      {CLOUD && <div className="mt-6"><OtherMethods app={app} /></div>}
       <form onSubmit={submit} className="mt-6 space-y-4" noValidate>
         <FormField label="البريد الإلكتروني" htmlFor="si-email"><TextInput id="si-email" dir="ltr" type="email" inputMode="email" autoComplete="username" value={email} onChange={(v) => { setEmail(v); setErr(""); }} placeholder="name@example.com" /></FormField>
         <FormField label="كلمة المرور" htmlFor="si-pw"><PasswordInput id="si-pw" value={pw} onChange={(v) => { setPw(v); setErr(""); }} autoComplete="current-password" placeholder="••••••••" invalid={!!err && !!pw} /></FormField>
@@ -239,7 +242,89 @@ export function NewPassword({ app }: any) {
   );
 }
 
-export const AuthScreen = ({ app }: any) => (app.authView === "newpw" ? <NewPassword app={app} /> : app.authView === "signin" ? <SignIn app={app} /> : <Registration app={app} mode="signup" />);
+// ---- other ways in (cloud): Google, Apple, phone — each button shows only when the project has switched that method on ----
+let methods: Promise<any> | null = null;
+const GoogleMark = () => <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.7v3h3.9c2.2-2.1 3.5-5.1 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg>;
+const AppleMark = () => <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="currentColor"><path d="M16.4 12.7c0-2.6 2.1-3.8 2.2-3.9a4.8 4.8 0 0 0-3.8-2c-1.6-.2-3.1.9-3.9.9s-2-.9-3.4-.9a5 5 0 0 0-4.2 2.6c-1.8 3.1-.5 7.7 1.3 10.2.8 1.2 1.8 2.6 3.1 2.5 1.3 0 1.7-.8 3.3-.8s2 .8 3.4.8 2.2-1.2 3-2.4c1-1.4 1.4-2.7 1.4-2.8 0 0-2.7-1-2.4-4.2zM13.9 5.2a4.3 4.3 0 0 0 1-3.2 4.5 4.5 0 0 0-2.9 1.5 4.2 4.2 0 0 0-1 3.1 3.7 3.7 0 0 0 2.9-1.4z"/></svg>;
+export function OtherMethods({ app }: any) {
+  const [m, setM] = useState<any>(null); const [busy, setBusy] = useState<any>(""); const [err, setErr] = useState<any>("");
+  useEffect(() => { if (!isCloud()) return; (methods = methods || cloud.authMethods()).then(setM); }, []);
+  if (!m || !(m.google || m.apple || m.phone)) return null;
+  const go = async (prov?: any) => { setBusy(prov); setErr(""); try { await cloud.signInWithProvider(prov); } catch (e) { setErr(e.message); } setBusy(""); };
+  const btn = "press w-full inline-flex items-center justify-center gap-2.5 h-12 rounded-xl border border-line-2 bg-surface text-[13.5px] font-medium hover:border-accent/40 transition-colors disabled:opacity-60";
+  return (
+    <div className="space-y-2.5">
+      {m.google && <button type="button" disabled={!!busy} onClick={() => go("google")} className={btn}>{busy === "google" ? <LoaderCircle size={16} className="spin" /> : <GoogleMark />} المتابعة بحساب Google</button>}
+      {m.apple && <button type="button" disabled={!!busy} onClick={() => go("apple")} className={btn}>{busy === "apple" ? <LoaderCircle size={16} className="spin" /> : <AppleMark />} المتابعة بحساب Apple</button>}
+      {m.phone && <button type="button" disabled={!!busy} onClick={() => app.setAuthView("phone")} className={btn}><Smartphone size={17} className="text-accent" /> المتابعة برقم الهاتف</button>}
+      <FieldError>{err}</FieldError>
+      <div className="flex items-center gap-3 text-[11.5px] text-ink-3" aria-hidden="true"><span className="h-px flex-1 bg-line" />أو بالبريد الإلكتروني<span className="h-px flex-1 bg-line" /></div>
+    </div>
+  );
+}
+
+// ---- phone: number → 6-digit SMS code → in (a new number fills the profile steps next) ----
+export function PhoneSignIn({ app }: any) {
+  const [phone, setPhone] = useState<any>(""); const [code, setCode] = useState<any>(""); const [sent, setSent] = useState(false); const [err, setErr] = useState<any>(""); const [busy, setBusy] = useState(false); const [wait, setWait] = useState(0);
+  useEffect(() => { if (!wait) return; const t = setTimeout(() => setWait(wait - 1), 1000); return () => clearTimeout(t); }, [wait]);
+  const valid = /^(\+?20|0)?1[0125]\d{8}$/.test(String(phone).replace(/[\s-]/g, ""));
+  const send = async (e?: any) => { if (e) e.preventDefault(); if (!valid) { setErr("اكتب رقم موبايل مصري صحيح، مثل 01012345678"); return; } setBusy(true); setErr(""); try { await cloud.sendPhoneCode(phone); setSent(true); setWait(60); } catch (x) { setErr(x.message); } setBusy(false); };
+  const verify = async (e?: any) => { if (e) e.preventDefault(); if (!/^\d{6}$/.test(code.trim())) { setErr("اكتب الرمز المكوّن من 6 أرقام"); return; } setBusy(true); setErr(""); try { const p = await cloud.verifyPhoneCode(phone, code); setBusy(false); app.signIn(p); } catch (x) { setBusy(false); setErr(x.message); } };
+  return (
+    <div className="h-full flex flex-col px-5 pt-[calc(var(--sat)+1rem)] pb-[max(1.25rem,var(--sab))] overflow-y-auto scroll-area">
+      <AuthHeader><Quiet onClick={() => app.setAuthView("signin")} className="h-9 text-[12px]"><LogIn size={14} /> بالبريد الإلكتروني</Quiet></AuthHeader>
+      <div className="mt-8"><h1 className="text-[26px] font-medium leading-tight">الدخول برقم الهاتف</h1><p className="mt-1 text-[13px] text-ink-2">نرسل رمزًا من 6 أرقام في رسالة نصية. رقمك لا يظهر لأي عضو.</p></div>
+      {!sent ? <form onSubmit={send} className="mt-6 space-y-4" noValidate>
+        <FormField label="رقم الموبايل" htmlFor="ph-num"><TextInput id="ph-num" dir="ltr" type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(v) => { setPhone(v); setErr(""); }} placeholder="01012345678" /></FormField>
+        <FieldError>{err}</FieldError>
+        <button type="submit" disabled={busy} className={`${BTN} btn-primary w-full h-12`}>{busy ? <LoaderCircle size={16} className="spin" /> : null} أرسل الرمز</button>
+      </form> : <form onSubmit={verify} className="mt-6 space-y-4" noValidate>
+        <p className="text-[12.5px] text-ink-2">أرسلنا الرمز إلى <Num>{cloud.e164(phone)}</Num></p>
+        <FormField label="الرمز" htmlFor="ph-code"><TextInput id="ph-code" dir="ltr" inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(v) => { setCode(String(v).replace(/\D/g, "").slice(0, 6)); setErr(""); }} placeholder="••••••" /></FormField>
+        <FieldError>{err}</FieldError>
+        <button type="submit" disabled={busy} className={`${BTN} btn-primary w-full h-12`}>{busy ? <LoaderCircle size={16} className="spin" /> : null} دخول</button>
+        <button type="button" disabled={wait > 0 || busy} onClick={() => send()} className="w-full h-10 text-[12.5px] text-accent disabled:text-ink-3">{wait > 0 ? <>إعادة الإرسال بعد <Num>{wait}</Num> ث</> : "أعد إرسال الرمز"}</button>
+      </form>}
+    </div>
+  );
+}
+
+// ---- after sign-up, until the e-mail is confirmed — on this device or any other ----
+// The password stays in this screen's memory only (never stored). Every 10 s, and each time the app comes back to the
+// front, it tries to sign in quietly: the moment the link is opened anywhere, this device is in. The 6-digit code from the
+// same e-mail works here too.
+let pendingSignup: { email: string; password: string } | null = null;
+export function ConfirmEmail({ app }: any) {
+  const cred = pendingSignup; const [code, setCode] = useState<any>(""); const [err, setErr] = useState<any>(""); const [busy, setBusy] = useState(false); const [sentAgain, setSentAgain] = useState(false);
+  const done = (p?: any) => { if (!p) return false; pendingSignup = null; app.signIn(p); return true; };
+  useEffect(() => {
+    if (!cred) { app.setAuthView("signin"); return; }
+    let stop = false; const tryNow = () => { if (!stop && !document.hidden) cloud.trySignIn(cred.email, cred.password).then((p) => { if (!stop) done(p); }); };
+    const i = setInterval(tryNow, 10000); document.addEventListener("visibilitychange", tryNow);
+    const quit = setTimeout(() => clearInterval(i), 15 * 60000); // a quarter of an hour of quiet tries; the button below stays
+    return () => { stop = true; clearInterval(i); clearTimeout(quit); document.removeEventListener("visibilitychange", tryNow); };
+  }, []);
+  if (!cred) return null;
+  const verify = async (e?: any) => { if (e) e.preventDefault(); if (!/^\d{6}$/.test(code.trim())) { setErr("اكتب الرمز المكوّن من 6 أرقام"); return; } setBusy(true); setErr(""); try { done(await cloud.verifyEmailCode(cred.email, code)); } catch (x) { setErr(x.message); } setBusy(false); };
+  const check = async () => { setBusy(true); setErr(""); const p = await cloud.trySignIn(cred.email, cred.password); setBusy(false); if (!done(p)) setErr("لم يُؤكَّد البريد بعد — افتح الرابط في الرسالة (من أي جهاز)"); };
+  return (
+    <div className="h-full flex flex-col px-5 pt-[calc(var(--sat)+1rem)] pb-[max(1.25rem,var(--sab))] overflow-y-auto scroll-area">
+      <AuthHeader><Quiet onClick={() => { pendingSignup = null; app.setAuthView("signin"); }} className="h-9 text-[12px]"><LogIn size={14} /> دخول</Quiet></AuthHeader>
+      <div className="mt-8"><h1 className="text-[26px] font-medium leading-tight">أكّد بريدك</h1>
+        <p className="mt-2 text-[13px] text-ink-2 leading-relaxed">أرسلنا رسالة إلى <Num>{cred.email}</Num>. افتح الرابط فيها من أي جهاز — موبايلك أو اللابتوب — وستدخل هنا تلقائيًا خلال ثوانٍ.</p></div>
+      <div className="mt-5 flex items-center gap-2 text-[12px] text-ink-2"><LoaderCircle size={14} className="spin text-accent" /> في انتظار التأكيد…</div>
+      <form onSubmit={verify} className="mt-6 space-y-3" noValidate>
+        <FormField label="أو اكتب الرمز من الرسالة" htmlFor="cf-code"><TextInput id="cf-code" dir="ltr" inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(v) => { setCode(String(v).replace(/\D/g, "").slice(0, 6)); setErr(""); }} placeholder="••••••" /></FormField>
+        <FieldError>{err}</FieldError>
+        <button type="submit" disabled={busy} className={`${BTN} btn-primary w-full h-12`}>{busy ? <LoaderCircle size={16} className="spin" /> : null} تأكيد</button>
+        <Secondary onClick={check} disabled={busy} className="w-full h-11">أكّدت البريد — ادخل الآن</Secondary>
+        <button type="button" disabled={sentAgain} onClick={async () => { try { await cloud.resendConfirmation(cred.email); setSentAgain(true); } catch (x) { setErr(x.message); } }} className="w-full h-10 text-[12.5px] text-accent disabled:text-ink-3">{sentAgain ? "أُعيد الإرسال" : "لم تصلك الرسالة؟ أعد الإرسال"}</button>
+      </form>
+    </div>
+  );
+}
+
+export const AuthScreen = ({ app }: any) => (app.authView === "confirm" ? <ConfirmEmail app={app} /> : app.authView === "phone" ? <PhoneSignIn app={app} /> : app.authView === "newpw" ? <NewPassword app={app} /> : app.authView === "signin" ? <SignIn app={app} /> : <Registration app={app} mode="signup" />);
 
 
 // Shown once, right after the account is created

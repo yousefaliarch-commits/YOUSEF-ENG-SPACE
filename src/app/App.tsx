@@ -7,7 +7,10 @@ import { AppView, parseHash } from "./AppView";
 import { ScreenLoading } from "./ScreenLoading";
 import { TopBar } from "./TopBar";
 import { I18N, LANGS, LangCtx, i18nApply, loadLang, saveLang } from "../i18n/i18n";
-import { ModeCtx, PlatformCtx, liveState, reducedMotion } from "../lib/runtime";
+import { ModeCtx, PlatformCtx, liveState, reducedMotion, storeFor, usePeek } from "../lib/runtime";
+import { isCloud } from "../backend/config";
+import { loadPersona } from "../lib/helpers";
+import { hasSession } from "../domain/identity";
 import { NATIVE, PLATFORM, setNativeMode } from "../native/native";
 import { Primary } from "../ui/primitives";
 import { ACCENTS } from "../ui/theme";
@@ -45,6 +48,12 @@ export function App() {
     [tr.ready, tr.updateCallbackDone].forEach((p) => p && p.catch(() => {})); tr.finished.then(done, done);
   };
   const mode = theme === "system" ? sys : theme;
+  // The admin console is for staff only. On the live platform the top bar shows it, the profile screen links to it and
+  // #admin opens it only for a signed-in moderator or administrator (the server enforces the same on every call);
+  // anyone else lands on the home feed. The demo has no accounts, so it keeps the console as a showcase.
+  const member = usePeek(storeFor("app"), "persona", null) || (hasSession() ? loadPersona() : null);
+  const staffOk = !isCloud() || !!(member && (member.staff === "admin" || member.staff === "moderator"));
+  useEffect(() => { if (view === "admin" && !staffOk) { setView("app"); try { history.replaceState(null, "", "#app/home"); } catch (e) {} } }, [view, staffOk]);
   useEffect(() => { try { const mq = matchMedia("(prefers-color-scheme: dark)"); const on = () => setSys(systemMode()); mq.addEventListener("change", on); const mo = new MutationObserver(on); mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }); return () => { mq.removeEventListener("change", on); mo.disconnect(); }; } catch (e) {} }, []);
   useEffect(() => { try { document.documentElement.dataset.mode = mode; document.documentElement.style.colorScheme = mode; const m = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null; if (m) m.content = mode === "light" ? "#fafafa" : "#09090b"; } catch (e) {} }, [mode]);
   useEffect(() => { setNativeMode(mode); }, [mode]);
@@ -54,9 +63,9 @@ export function App() {
   return (
     <PlatformCtx.Provider value={PLATFORM}><ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
       {/* the preview's top bar (app ⇄ admin console, theme, language) — the native apps open straight into the member app */}
-      <div className={NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}><TopBar view={view} setView={setView} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
-      {view === "admin" ? <Suspense fallback={<ScreenLoading />}><AdminView init={init} openApp={() => setView("app")} /></Suspense>
-        : <AppView onAdmin={() => setView("admin")} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
+      <div className={NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}><TopBar view={view} setView={setView} staff={staffOk} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
+      {view === "admin" && staffOk ? <Suspense fallback={<ScreenLoading />}><AdminView init={init} openApp={() => setView("app")} /></Suspense>
+        : <AppView onAdmin={staffOk && !NATIVE ? () => setView("admin") : null} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
       <div role="status" aria-live="polite" className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-elevated border border-line-2 text-[13px] shadow-float transition-all ${toastMsg ? "opacity-100" : "opacity-0 translate-y-3 pointer-events-none"}`}>{toastMsg && <><CircleCheck size={17} className="text-accent" /><span>{toastMsg}</span></>}</div>
     </div></LangCtx.Provider></ModeCtx.Provider></PlatformCtx.Provider>
   );

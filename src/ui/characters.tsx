@@ -202,7 +202,8 @@ export const RoleMark = ({ kind, badge = "#0b0b0f" }: any) => { const c: any = {
 export function Avatar({ spec, role, gender, look, size = 40, className = "", ring = false, animate }: any) {
   const s = CHAR_SPECS.includes(spec) ? spec : ["supervisor", "hr", "owner"].includes(role) ? role : "civil";
   const m = SPEC_META[s]; const fem = genderOf(gender) === "female"; const hood = fem && look !== "hair"; const g = GEARS[m.gear]; const mode = useMode(); const c = charPalette(m.hue, mode);
-  const u = "ch" + useCharId(); const live = animate != null ? animate : size >= 40; const hair = m.hair || "#1f1a17"; const P = PROPS[m.prop];
+  // idle life only on hero avatars (64 px and up): an SVG animation repaints every frame, so never in bars or lists
+  const u = "ch" + useCharId(); const live = animate != null ? animate : size >= 64; const hair = m.hair || "#1f1a17"; const P = PROPS[m.prop];
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" className={`ch shrink-0 rounded-full ${live ? "ch-live" : ""} ${ring ? "ring-2 ring-accent/40" : ""} ${className}`} role="img" aria-label={`شخصية ${fem ? m.f : m.m}`}>
       <defs>

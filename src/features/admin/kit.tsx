@@ -1,4 +1,3 @@
-import { useSyncExternalStore } from "react";
 import {
   Minus, Plus, Search
 } from "lucide-react";
@@ -7,7 +6,7 @@ import { DIV_SPECS } from "../../ui/characters";
 import { Num, Panel } from "../../ui/primitives";
 import { fmt } from "../../ui/theme";
 
-export function usePeek(store?: any, key?: any, fallback?: any) { const get = () => (store.has(key) ? store.get(key) : fallback); return useSyncExternalStore(store.subscribe, get, get); }
+export { usePeek } from "../../lib/runtime";
 
 export const SevChip = ({ n, className = "" }: any) => { const [l, cls] = SEVERITY[n] || SEVERITY[1]; return <span className={`inline-flex items-center gap-1.5 h-6 px-2 rounded-full border text-[11px] whitespace-nowrap ${cls} ${className}`}><span className="w-1.5 h-1.5 rounded-full bg-current" />{l}</span>; };
 

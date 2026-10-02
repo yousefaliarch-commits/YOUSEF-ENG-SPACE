@@ -18,11 +18,12 @@ let ids = 0;
 export const useId = () => `:r${ids++}:`;
 export const forwardRef = (render) => { const C = (props) => render(props, null); C.displayName = render.displayName || render.name; return C; };
 export const memo = (c) => c;
+export const startTransition = (f) => f();
 // lazy components render nothing until loaded; the smoke test loads them all first (__preloadLazy) so it reaches every screen
 const lazies: (() => Promise<unknown>)[] = [];
 export const lazy = (load) => { let C = null; const L: any = (props) => (C ? { $el: true, type: C, props } : null); L.preload = () => load().then((m) => (C = m.default)); lazies.push(L.preload); return L; };
 export const __preloadLazy = () => Promise.all(lazies.map((f) => f()));
 export const Suspense = ({ children }) => children;
 export class Component { props: any; state: any; constructor(p) { this.props = p; this.state = {}; } setState() {} }
-const React = { Fragment, createElement, useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback, useContext, createContext, useSyncExternalStore, useId, forwardRef, memo, lazy, Suspense, Component };
+const React = { Fragment, createElement, useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback, useContext, createContext, useSyncExternalStore, useId, forwardRef, memo, startTransition, lazy, Suspense, Component };
 export default React;

@@ -8,7 +8,7 @@ import { ACCENTS, THEMES, accentHex } from "../ui/theme";
 // =====================================================================
 //  Top bar
 // =====================================================================
-export function TopBar({ view, setView, accent, setAccent, theme, setTheme, mode, lang = "ar", setLang = () => {} }: any) {
+export function TopBar({ view, setView, staff = true, accent, setAccent, theme, setTheme, mode, lang = "ar", setLang = () => {} }: any) {
   const ti = THEMES.findIndex((t) => t[0] === theme); const [, tLabel, TIcon] = THEMES[ti];
   return (
     <header className="sticky top-0 z-30 backdrop-blur-md bg-canvas/80 border-b border-line">
@@ -17,7 +17,7 @@ export function TopBar({ view, setView, accent, setAccent, theme, setTheme, mode
         {view === "app" ? <div className="flex items-center gap-2.5 shrink-0"><ArchMark size={26} /><span className="hidden md:block"><Wordmark size="text-[20px]" /></span></div>
           : <a href="#app" aria-label="EngSpace" className="flex items-center gap-2.5 shrink-0 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" onClick={(e) => { e.preventDefault(); setView("app"); }}><ArchMark size={26} /><span className="hidden md:block"><Wordmark size="text-[20px]" /></span></a>}
         <div role="tablist" aria-label="طريقة العرض" className="flex p-1 rounded-full bg-surface border border-line">
-          {[["app", "معاينة التطبيق", "التطبيق"], ["admin", "لوحة الإدارة", "الإدارة"]].map(([id, label, short]: any) => (
+          {[["app", "معاينة التطبيق", "التطبيق"], ...(staff ? [["admin", "لوحة الإدارة", "الإدارة"]] : [])].map(([id, label, short]: any) => (
             <button key={id} role="tab" aria-selected={view === id} onClick={() => setView(id)}
               className={`h-9 px-2.5 sm:px-4 rounded-full text-[12px] sm:text-[13px] font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                   view === id ? "bg-elevated text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]" : "text-ink-2 hover:text-ink"}`}><span className="hidden lg:inline">{label}</span><span className="lg:hidden">{short}</span></button>

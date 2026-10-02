@@ -89,8 +89,11 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .draw { stroke-dasharray: 120; stroke-dashoffset: 120; animation: draw 1s ease-out forwards; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 .press { -webkit-tap-highlight-color: transparent; }
-.glow-pulse { animation: glow 2.4s ease-in-out infinite; }
-@keyframes glow { 0%, 100% { box-shadow: 0 0 0 0 rgb(var(--accent) / 0.35); } 50% { box-shadow: 0 0 0 6px rgb(var(--accent) / 0); } }
+/* transform + opacity only: composited on the GPU, no repaint (a box-shadow pulse repainted its area 60–120 times a second) */
+.glow-pulse { animation: glow 2.4s ease-in-out infinite; will-change: transform, opacity; }
+@keyframes glow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.82); opacity: .55; } }
+/* while the member scrolls (AppView sets .is-scrolling on the scroller for a moment), every idle animation holds still: the frame belongs to the scroll */
+.is-scrolling .ch-live *, .is-scrolling .glow-pulse, .is-scrolling .shimmer, .is-scrolling .sweep::after { animation-play-state: paused !important; }
 .sweep { position: relative; overflow: hidden; }
 .sweep::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / .12) 50%, transparent 70%); transform: translateX(-120%); animation: sweep .9s .2s ease-out forwards; }
 @keyframes sweep { to { transform: translateX(120%); } }

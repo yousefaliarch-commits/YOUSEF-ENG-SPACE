@@ -60,6 +60,11 @@
   "p": "app/AppView.tsx",
   "n": 1
  },
+ "تم تأكيد بريدك — سجّل الدخول للمتابعة": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
  "هذا الحساب موقوف مؤقتًا بقرار من فريق المجتمع — لا يستقبل رسائل الآن": {
   "k": "s",
   "p": "app/AppView.tsx",
@@ -366,6 +371,11 @@
   "n": 1
  },
  "حدث خطأ غير متوقع — أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "افتح رابط إعادة التعيين على الجهاز الذي طلبته منه": {
   "k": "s",
   "p": "backend/cloud.ts",
   "n": 1
@@ -10294,11 +10304,6 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
- "أرسلنا رابط تأكيد إلى بريدك — افتحه ثم سجّل الدخول": {
-  "k": "s",
-  "p": "features/auth/auth.tsx",
-  "n": 1
- },
  "تعذّر إنشاء الحساب على هذا الجهاز — أعد المحاولة": {
   "k": "s",
   "p": "features/auth/auth.tsx",
@@ -10649,6 +10654,11 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
+ "خروج": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
  "إلغاء": {
   "k": "x",
   "p": "features/auth/auth.tsx,ui/moderation.tsx",
@@ -10668,7 +10678,12 @@
   "k": "r",
   "p": "features/auth/auth.tsx",
   "n": 1,
-  "x": "edit ? \"تعديل البيانات\" : \"التسجيل\" | EL <Num>{step + 1}</Num> | EL <Num>{keys.length}</Num>"
+  "x": "complete ? \"أكمل ملفك\" : edit ? \"تعديل البيانات\" : \"التسجيل\" | EL <Num>{step + 1}</Num> | EL <Num>{keys.length}</Num>"
+ },
+ "أكمل ملفك": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
  },
  "تعديل البيانات": {
   "k": "s",
@@ -10696,6 +10711,11 @@
   "n": 6
  },
  "جارٍ الإنشاء…": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "ابدأ": {
   "k": "x",
   "p": "features/auth/auth.tsx",
   "n": 1
@@ -10790,7 +10810,7 @@
  "دخول": {
   "k": "x",
   "p": "features/auth/auth.tsx",
-  "n": 1
+  "n": 3
  },
  "نسيت كلمة المرور؟": {
   "k": "x",
@@ -10881,6 +10901,190 @@
  },
  "حفظ كلمة المرور": {
   "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "المتابعة بحساب Google": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0} المتابعة بحساب Google": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy === \"google\" ? <LoaderCircle size={16} className=\"spin\" /> : <GoogleMark />"
+ },
+ "المتابعة بحساب Apple": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0} المتابعة بحساب Apple": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy === \"apple\" ? <LoaderCircle size={16} className=\"spin\" /> : <AppleMark />"
+ },
+ "المتابعة برقم الهاتف": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أو بالبريد الإلكتروني": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0}أو بالبريد الإلكتروني{1}": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <span className=\"h-px flex-1 bg-line\" /> | EL <span className=\"h-px flex-1 bg-line\" />"
+ },
+ "اكتب رقم موبايل مصري صحيح، مثل 01012345678": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "اكتب الرمز المكوّن من 6 أرقام": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "بالبريد الإلكتروني": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "الدخول برقم الهاتف": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "نرسل رمزًا من 6 أرقام في رسالة نصية. رقمك لا يظهر لأي عضو.": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "رقم الموبايل": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "أرسل الرمز": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0} أرسل الرمز": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy ? <LoaderCircle size={16} className=\"spin\" /> : null"
+ },
+ "أرسلنا الرمز إلى": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أرسلنا الرمز إلى {0}": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <Num>{cloud.e164(phone)}</Num>"
+ },
+ "الرمز": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "{0} دخول": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy ? <LoaderCircle size={16} className=\"spin\" /> : null"
+ },
+ "إعادة الإرسال بعد": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "ث": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "إعادة الإرسال بعد {0} ث": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <Num>{wait}</Num>"
+ },
+ "أعد إرسال الرمز": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "لم يُؤكَّد البريد بعد — افتح الرابط في الرسالة (من أي جهاز)": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أكّد بريدك": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أرسلنا رسالة إلى": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ ". افتح الرابط فيها من أي جهاز — موبايلك أو اللابتوب — وستدخل هنا تلقائيًا خلال ثوانٍ.": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أرسلنا رسالة إلى {0}. افتح الرابط فيها من أي جهاز — موبايلك أو اللابتوب — وستدخل هنا تلقائيًا خلال ثوانٍ.": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <Num>{cred.email}</Num>"
+ },
+ "في انتظار التأكيد…": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أو اكتب الرمز من الرسالة": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "تأكيد": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0} تأكيد": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy ? <LoaderCircle size={16} className=\"spin\" /> : null"
+ },
+ "أكّدت البريد — ادخل الآن": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أُعيد الإرسال": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "لم تصلك الرسالة؟ أعد الإرسال": {
+  "k": "s",
   "p": "features/auth/auth.tsx",
   "n": 1
  },
