@@ -1,11 +1,16 @@
 import {
-  BadgeDollarSign, Calculator, FileCheck, Map as MapIcon, MessageSquare, Percent, Route, Scale, Timer
+  BadgeDollarSign, Blocks, Calculator, Cylinder, FileCheck, Ruler, Spline, Map as MapIcon, MessageSquare, Percent, Route, Scale, Timer
 } from "lucide-react";
 
 // =====================================================================
 //  Tools — Egypt
 // =====================================================================
 export const TOOLS = [
+  // site and technical office (Feature 6) — group "site"
+  { id: "concrete", group: "site", name: "حصر الخرسانة", desc: "الحجم والأسمنت والرمل والزلط", icon: Cylinder },
+  { id: "rebar", group: "site", name: "أوزان الحديد", desc: "الوزن وعدد أسياخ الـ 12 م", icon: Spline },
+  { id: "masonry", group: "site", name: "حصر المباني", desc: "عدد الطوب والبلوك والمونة", icon: Blocks },
+  { id: "units", group: "site", name: "تحويل الوحدات", desc: "هندسية، وفدان وقيراط وسهم", icon: Ruler },
   { id: "offer", name: "تقييم عرض عمل", desc: "صافيه ومكانه من السوق ورقمك المضاد", icon: BadgeDollarSign },
   { id: "net", name: "حاسبة الصافي", desc: "الصافي، والعكس: كم أطلب لأقبض؟", icon: Calculator },
   { id: "compare", name: "مقارن العروض", desc: "عرضان بالقيمة الحقيقية للساعة", icon: Scale },

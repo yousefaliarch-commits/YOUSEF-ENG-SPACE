@@ -4,7 +4,7 @@
 import { test, expect } from "vitest";
 import * as H from "./harness";
 const { C, store } = H;
-const names = ["PERMS", "CAPS", "can", "moneyAccess", "maskMoney", "COMPANY_MIN_SAMPLE", "tabsFor", "blockedFor", "SUPERVISOR_NOTIFS", "TABS", "dmRule", "personaTitle", "anonTitle", "DEMO_PERSONA",
+const names = ["PERMS", "CAPS", "can", "moneyAccess", "maskMoney", "COMPANY_MIN_SAMPLE", "tabsFor", "blockedFor", "toolOpen", "TOOLS", "SUPERVISOR_NOTIFS", "TABS", "dmRule", "personaTitle", "anonTitle", "DEMO_PERSONA",
   "normalizeSeedPosts", "POSTS0", "flatten", "threadsFor0", "threadsKind", "NOTIFS0", "CHAR_SPECS", "SPEC_META", "specOf", "specOfPersona", "characterName", "ROLES", "roleOf", "authorOf", "THREADS0", "COMPANIES", "placeName"];
 
 test("v18 · role rules — site supervisors (one fixed title, community only, no money anywhere), company accounts", async () => {
@@ -16,10 +16,13 @@ console.log("— site supervisors: the community only, no money —");
 ["market", "salaryDetail", "jobs", "reveal", "bands", "review", "contact", "postjob", "dm_co"].forEach((cap) => ok(C.PERMS.supervisor[cap] === 0 && !C.can(sup, cap), `supervisor cannot: ${cap}`));
 ok(C.can(sup, "read") && C.can(sup, "post") && C.can(sup, "dm_peer"), "supervisor can read the community, post, reply and message peers");
 ok(C.moneyAccess(sup) === "none" && C.moneyAccess(hr) === "aggregate" && C.moneyAccess(owner) === "aggregate" && C.moneyAccess(eng) === "full", "money access: supervisor none · HR/owner aggregate · engineer full");
-ok(C.tabsFor(sup).map((t) => t.id).join() === "community,inbox" && C.tabsFor(eng).length === C.TABS.length, "supervisor tabs: community + messages only; engineers keep all six");
+ok(C.tabsFor(sup).map((t) => t.id).join() === "community,tools,inbox" && C.tabsFor(eng).length === C.TABS.length, "supervisor tabs: community, site tools and messages; engineers keep all six");
 const b = C.blockedFor(sup);
 ok(["company", "job", "postjob", "cvreview"].every((x) => b.stack.includes(x)), "company, job, post-a-job and CV-review screens are closed to supervisors");
-ok(["contribute", "review", "tool", "methodology", "logo"].every((x) => b.sheets.includes(x)), "salary sharing, company reviews, tools and methodology sheets are closed to supervisors");
+ok(["contribute", "review", "methodology", "logo"].every((x) => b.sheets.includes(x)), "salary sharing, company reviews and the tax methodology sheet are closed to supervisors");
+ok(["concrete", "rebar", "masonry", "units"].every((x) => C.toolOpen(b, x)) && ["offer", "net", "compare", "script", "raise", "inflation"].every((x) => !C.toolOpen(b, x)), "supervisor tools: the site tools only — no offer, net-pay or any salary tool");
+ok(C.TOOLS.filter((t) => !C.toolOpen(b, t.id)).every((t) => t.group !== "site") && C.TOOLS.filter((t) => C.toolOpen(b, t.id)).every((t) => t.group === "site"), "every tool open to supervisors is a site tool, and every money tool stays closed");
+ok(C.TOOLS.every((t) => C.toolOpen(C.blockedFor(eng), t.id)), "engineers keep every tool");
 ok(b.rooms.includes("nego") && b.posts.includes("reveal") && b.posts.includes("vote"), "the negotiation room, salary-reveal posts and offer votes are hidden from supervisors");
 ok(C.blockedFor(eng).stack.length === 0 && C.blockedFor(hr).stack.length === 0, "nothing is closed to engineers or company accounts");
 ok(!C.SUPERVISOR_NOTIFS.some((k) => ["match", "job", "saved", "company", "data", "contact"].includes(k)) && C.SUPERVISOR_NOTIFS.includes("reply"), "supervisor notifications: community only (no job matches, salary reports or market data)");

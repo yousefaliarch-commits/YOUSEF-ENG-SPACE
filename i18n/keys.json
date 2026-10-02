@@ -189,8 +189,8 @@
  },
  "رجوع": {
   "k": "s",
-  "p": "app/AppView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
-  "n": 16
+  "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,ui/chrome.tsx",
+  "n": 18
  },
  "شارك راتبك": {
   "k": "s",
@@ -378,6 +378,636 @@
  "افتح رابط إعادة التعيين على الجهاز الذي طلبته منه": {
   "k": "s",
   "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "استلام حديد التسليح": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "قبل الصب — بلاطات، كمرات، أعمدة، قواعد": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المطابقة للوحات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الأقطار والأعداد مطابقة للوحات التنفيذية المعتمدة (آخر إصدار)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التباعدات بين الأسياخ مطابقة للوحات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أطوال الرباط (الوصلات) وأماكنها حسب اللوحات والكود": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الكانات: القطر والتباعد والتكثيف عند الركائز ومناطق الوصلات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أشاير الأعمدة والحوائط في أماكنها وبالأطوال المطلوبة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التنفيذ": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 5
+ },
+ "الغطاء الخرساني محقق بكراسي/بسكويت بالعدد الكافي": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الحديد نظيف وخالٍ من الصدأ المتقشر والزيوت والطين": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التربيط محكم ولا يتحرك الحديد عند المشي عليه": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "حديد التسليح العلوي محمول على كراسي ثابتة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "لا تعارض مع فتحات وتمديدات الكهرباء والصحي (منسّق)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المستندات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "شهادات المصنع ونتائج اختبار عينات الحديد متوفرة ومقبولة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "طلب الاستلام موقّع من مهندس التنفيذ": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "استلام الشدات الخشبية / المعدنية": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "قبل تركيب الحديد وقبل الصب": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الأبعاد والمناسيب": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الأبعاد الداخلية مطابقة للوحات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المناسيب والميول مضبوطة بالميزان": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "رأسية الأعمدة والحوائط مضبوطة (ميزان خيط/ليزر)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الفتحات والصناديق والأجزاء المدفونة في أماكنها": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الثبات والإحكام": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "القوائم والدعامات بالتباعد المصمم ومرتكزة على أرض ثابتة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التكتيف والتربيط كافٍ ضد ضغط الخرسانة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الفواصل محكمة لمنع تسرب لباني الأسمنت": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الشدة نظيفة ومدهونة بمادة الفك المعتمدة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "السلامة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "سقالات العمل والحواجز آمنة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "ممرات المضخة والعمال محددة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "ما قبل صب الخرسانة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "إذن الصب": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الجاهزية": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "تم استلام الحديد والشدات وإغلاق ملاحظاتهم": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التمديدات المدفونة (كهرباء/صحي/تكييف) مستلمة من المختصين": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "فواصل الصب في أماكنها المعتمدة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "نظافة الشدة من النشارة والمخلفات ورشّها بالماء": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الخرسانة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "رتبة الخرسانة والكمية مؤكدة مع المورد": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "اختبار الهبوط في الموقع عند الوصول": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أخذ مكعبات الاختبار بالعدد المطلوب وترقيمها": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "زمن النقل وحرارة الجو ضمن المسموح": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المعدات والمعالجة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "هزازات بالعدد الكافي واحتياطي": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "خطة المعالجة (رش/تغطية) جاهزة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أعمال المباني (طوب/بلوك)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الحوائط الداخلية والخارجية": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المواد": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 2
+ },
+ "نوع الطوب/البلوك ومقاساته مطابقة للمواصفات والعينة المعتمدة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المونة بالنسب المعتمدة ومستخدمة خلال زمنها": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الطوب مبلل قبل البناء (للطوب الأحمر)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المحاور وسمك الحوائط حسب اللوحات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "رأسية واستقامة الحوائط ضمن السماح": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "تخليل العراميس وسمكها منتظم": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الأعتاب الخرسانية فوق الفتحات بالارتكاز المطلوب": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الربط مع الأعمدة (شبك/أشاير) منفّذ": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "فتحات الأبواب والشبابيك بالمقاسات والمناسيب الصحيحة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أعمال البياض (المحارة)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "داخلي وخارجي": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التحضير": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الحوائط نظيفة ومبللة، وتمديدات الكهرباء والصحي مستلمة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "شبك اللحام على الفواصل بين الخرسانة والمباني": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الطرطشة منفذة وتمت معالجتها": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "البؤج والأوتار مضبوطة رأسيًا وأفقيًا": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "السمك منتظم وضمن المواصفات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الزوايا والحلوق مستقيمة وحادة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "السطح النهائي مستوٍ (اختبار القدة) وخالٍ من الشروخ": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أعمال العزل المائي": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أسطح، حمامات، خزانات، أساسات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "السطح": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "السطح نظيف وجاف وخالٍ من البروزات والحواف الحادة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الميول نحو الصفايات محققة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الوزرات (الدوران) على الحوائط منفذة بالارتفاع المطلوب": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المادة ونوعها ودفعتها مطابقة للمعتمد": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "عدد الطبقات والتراكبات حسب المواصفات وتعليمات المصنع": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "معالجة حول المواسير والصفايات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "اختبار الغمر بالماء للمدة المطلوبة دون تسرب": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الحماية": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "طبقة الحماية منفذة فورًا بعد الاستلام": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أعمال البلاط والسيراميك": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أرضيات وحوائط": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "النوع واللون والمقاس والدرجة مطابقة للعينة المعتمدة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "اللاصق/المونة حسب المواصفات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المناسيب والميول (خاصة الحمامات والبلكونات) صحيحة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "العراميس منتظمة ومستقيمة بالعرض المحدد": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "لا يوجد بلاط أجوف (اختبار الطرق)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "القص والتقاطيع نظيفة حول الفتحات والزوايا": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "فواصل التمدد منفذة حيث يلزم": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الترويب والتنظيف النهائي": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "مراجعة لوحات التنفيذ (Shop Drawings)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المكتب الفني — معماري / إنشائي / BIM": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الإطار": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "خانة العنوان: المشروع، رقم اللوحة، الإصدار، التاريخ، المقياس": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الإحالة إلى لوحات التصميم والمواصفات المرجعية": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "جدول المراجعات (Revisions) محدّث": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المحتوى": {
+  "k": "s",
+  "p": "data/checklists.ts,features/admin/AdminView.tsx",
+  "n": 3
+ },
+ "المحاور والأبعاد الرئيسية مطابقة للتصميم المعتمد": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المناسيب (FFL/SSL) متسقة بين المساقط والقطاعات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التفاصيل الإنشائية/المعمارية كافية للتنفيذ": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "جداول الأبواب والشبابيك والتشطيبات متطابقة مع المساقط": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التنسيق مع MEP: لا تعارضات (Clash) مفتوحة في النموذج": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الإخراج": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الأوزان والأنماط والطبقات (Layers) قياسية ومقروءة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الأبعاد مقروءة ولا تتداخل مع الرسومات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "استلام التمديدات قبل الإغلاق (MEP)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "قبل الأسقف المعلقة والبياض": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الكهرباء": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المواسير والعلب في أماكنها حسب اللوحات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "المواسير مثبتة ومغطاة الأطراف": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "لوحات التوزيع والمسارات منسّقة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الصحي والتغذية": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "اختبار الضغط لمواسير التغذية دون هبوط": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "ميول الصرف صحيحة وتم اختبار الصرف": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "الجلب والعزل عند اختراق الحوائط والبلاطات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "التكييف والحريق": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "مسارات الدكت والمواسير مطابقة للتنسيق": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "العزل الحراري منفذ": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "رؤوس الرشاشات في أماكنها وتم اختبار الشبكة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "مطابق": {
+  "k": "s",
+  "p": "data/checklists.ts,lib/report-pdf.ts",
+  "n": 2
+ },
+ "غير مطابق": {
+  "k": "s",
+  "p": "data/checklists.ts,lib/report-pdf.ts",
+  "n": 2
+ },
+ "لا ينطبق": {
+  "k": "s",
+  "p": "data/checklists.ts,features/stack/stack.tsx,lib/report-pdf.ts",
+  "n": 3
+ },
+ "مقبول": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "مقبول بملاحظات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "مرفوض — يعاد الاستلام": {
+  "k": "s",
+  "p": "data/checklists.ts",
   "n": 1
  },
  "المكتب الفني": {
@@ -1446,8 +2076,8 @@
  },
  "أسمنت": {
   "k": "s",
-  "p": "data/companies.tsx",
-  "n": 1
+  "p": "data/companies.tsx,features/sitetools/site-tools.tsx",
+  "n": 2
  },
  "شنايدر إلكتريك — مصر": {
   "k": "s",
@@ -4855,6 +5485,46 @@
   "p": "data/seed.ts",
   "n": 1
  },
+ "حصر الخرسانة": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "الحجم والأسمنت والرمل والزلط": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "أوزان الحديد": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "الوزن وعدد أسياخ الـ 12 م": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "حصر المباني": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "عدد الطوب والبلوك والمونة": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "تحويل الوحدات": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "هندسية، وفدان وقيراط وسهم": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
  "تقييم عرض عمل": {
   "k": "s",
   "p": "data/tools.ts",
@@ -6175,6 +6845,161 @@
   "p": "domain/offer.ts",
   "n": 1
  },
+ "طوب أحمر 25×12×6": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "طوب أسمنتي مصمت 25×12×6": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "بلوك أسمنتي 40×20×20": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "بلوك أسمنتي 40×20×15": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "بلوك أسمنتي 40×20×10": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "الطول": {
+  "k": "s",
+  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 6
+ },
+ "متر": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "سم": {
+  "k": "s",
+  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 4
+ },
+ "مم": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "قدم": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "بوصة": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "المساحة": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "م²": {
+  "k": "s",
+  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 4
+ },
+ "فدان": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "قيراط": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "سهم": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "قدم²": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "الحجم": {
+  "k": "s",
+  "p": "domain/site-calc.ts,features/stack/stack.tsx",
+  "n": 2
+ },
+ "م³": {
+  "k": "s",
+  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 6
+ },
+ "لتر": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "قدم³": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "القوة": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "كيلونيوتن": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "طن قوة": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "كجم قوة": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "الإجهاد والضغط": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "ميجاباسكال (ن/مم²)": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "كجم/سم²": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "كيلونيوتن/م²": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "طن/م²": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
+ "رطل/بوصة²": {
+  "k": "s",
+  "p": "domain/site-calc.ts",
+  "n": 1
+ },
  "يشمل الإنشائي والجيوتقني والطرق والصحي": {
   "k": "s",
   "p": "domain/taxonomy.ts",
@@ -6863,7 +7688,7 @@
   "p": "domain/taxonomy.ts",
   "n": 1
  },
- "حساب مشرف الموقع للمجتمع فقط — الرواتب والوظائف والشركات والأدوات غير متاحة له": {
+ "حساب مشرف الموقع: المجتمع وأدوات الموقع وقوائم الفحص فقط — الرواتب والوظائف والشركات غير متاحة له": {
   "k": "s",
   "p": "domain/taxonomy.ts",
   "n": 1
@@ -8093,11 +8918,6 @@
   "k": "s",
   "p": "features/admin/AdminView.tsx",
   "n": 1
- },
- "المحتوى": {
-  "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 2
  },
  "الإعدادات": {
   "k": "s",
@@ -10522,7 +11342,7 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
- "مسمّى واحد لكل مشرفي المواقع — بلا تخصص أو مسار أو مستوى. حسابك للمشاركة في المجتمع: الغرف والمنشورات والردود والرسائل مع الزملاء. الرواتب والوظائف والشركات والأدوات غير متاحة لهذا النوع من الحسابات.": {
+ "مسمّى واحد لكل مشرفي المواقع — بلا تخصص أو مسار أو مستوى. حسابك للمشاركة في المجتمع: الغرف والمنشورات والردود والرسائل مع الزملاء، ومعه أدوات الموقع (حصر الخرسانة والحديد والمباني وتحويل الوحدات) وقوائم الفحص والاستلام. الرواتب والوظائف والشركات غير متاحة لهذا النوع من الحسابات.": {
   "k": "x",
   "p": "features/auth/auth.tsx",
   "n": 1
@@ -12253,6 +13073,158 @@
   "n": 1,
   "x": "EL <Users size={12} /> | EL <Num>{fmt(d.platform)}</Num> | EL <Num>{d.min}</Num>"
  },
+ "فحص واستلام الأعمال": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "قوائم QA/QC للموقع والمكتب الفني — تُحفظ على جهازك فورًا، وتُصدَّر تقرير PDF للتوقيع.": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "قائمة جديدة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "قوائمي": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "لا قوائم محفوظة بعد": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "ابدأ قائمة من الأعلى — تُحفظ تلقائيًا أثناء الملء.": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "مسودة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "القائمة غير موجودة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "ربما حُذفت من جهاز آخر.": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "المشروع": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "المنطقة / الدور": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "مرجع اللوحة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "التاريخ": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "المهندس المستلم": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "مطابق {0} · غير مطابق {1} · لا ينطبق {2} · من {3} بندًا": {
+  "k": "t",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "c.pass | c.fail | c.na | c.total"
+ },
+ "أُعد على EngSpace — قائمة استرشادية؛ المرجع هو اللوحات والمواصفات المعتمدة للمشروع": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "تعذّر إنشاء التقرير — أعد المحاولة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "اسم المشروع": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "مثال: الدور الثالث — محور B": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "ما المطلوب تصحيحه؟": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "ملاحظة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "مطابق ·": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "غير مطابق ·": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "لا ينطبق ·": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "لم يُفحص": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "{0} مطابق · {1} غير مطابق · {2} لا ينطبق · {3} لم يُفحص": {
+  "k": "r",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "EL <Num className=\"text-ink\">{c.pass}</Num> | EL <Num className=\"text-bad\">{c.fail}</Num> | EL <Num>{c.na}</Num> | EL <Num>{c.open}</Num>"
+ },
+ "← مقترح": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "جارٍ إنشاء التقرير…": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "تصدير تقرير PDF": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "حذف القائمة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
  "واجهة من اليمين إلى اليسار": {
   "k": "s",
   "p": "features/settings/settings.tsx",
@@ -13451,8 +14423,8 @@
  },
  "العرض": {
   "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 3
+  "p": "features/sheets/sheets.tsx,features/sitetools/site-tools.tsx",
+  "n": 7
  },
  "{0} العرض {1} {2}": {
   "k": "r",
@@ -14038,6 +15010,273 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
+ "بلاطة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "السمك": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 3
+ },
+ "كمرة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "العمق": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "عمود": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "الارتفاع": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 5
+ },
+ "عمود دائري": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "القطر": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "قاعدة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "حائط خرساني": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "العدد": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "م": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 9
+ },
+ "هالك %": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 6
+ },
+ "أسمنت / م³": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "كجم": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 4
+ },
+ "حجم الخرسانة مع الهالك": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "الحجم الصافي": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "شكائر أسمنت (50 كجم)": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "شيكارة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "رمل": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "زلط / سن": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "تقدير للحصر والطلب: نسب الخلطة الشائعة للخرسانة المسلحة في مصر (350 كجم أسمنت، 0.4 م³ رمل، 0.8 م³ زلط لكل م³) — غيّرها حسب تصميم الخلطة المعتمد. الخرسانة الجاهزة تُطلب بالمتر المكعب مباشرة.": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "عدد الأسياخ": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "طول السيخ": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "وزن Ø": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "المطلوب": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "وزن Ø{0} المطلوب": {
+  "k": "e",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1,
+  "x": "d"
+ },
+ "طن": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "الوزن": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "الطول الكلي": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "وزن المتر الطولي": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "كجم/م": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "أسياخ 12 م للطلب": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "سيخ": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "قطع من كل سيخ 12 م": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "جدول أوزان الحديد": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "{0} كجم/م": {
+  "k": "r",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1,
+  "x": "EL <Num>{f1(rebarKgPerM(x), 3)}</Num>"
+ },
+ "الوزن = π × ق² ÷ 4 × 7850 كجم/م³ (≈ ق² ÷ 162). أطوال الرباط والجنشات غير محسوبة هنا — أضفها لطول السيخ حسب اللوحات والكود.": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "نص طوبة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "طوبة كاملة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "طول الحائط": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "مساحة الفتحات": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "سمك العرموس": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "العدد المطلوب مع الهالك": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "طوبة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "بلوكة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "المساحة الصافية": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "سمك الحائط": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "العدد لكل م²": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "حجم المونة تقريبًا": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "تقدير: يعتمد على مقاس الوحدة وسمك العرموس. راجع مقاس الطوب الفعلي في الموقع (يختلف بين المصانع) وأضف هالك الكسر والقص.": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
+ "القيمة": {
+  "k": "s",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "الفدان = 24 قيراطًا ≈ 4,200.83 م² · القيراط = 24 سهمًا ≈ 175.03 م².": {
+  "k": "x",
+  "p": "features/sitetools/site-tools.tsx",
+  "n": 1
+ },
  "تابع الغرف اللي تخصّك — منشوراتها تظهر في رئيسيتك.": {
   "k": "x",
   "p": "features/stack/stack.tsx",
@@ -14425,11 +15664,6 @@
   "p": "features/stack/stack.tsx",
   "n": 1
  },
- "الحجم": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
- },
  "موظف": {
   "k": "x",
   "p": "features/stack/stack.tsx",
@@ -14442,11 +15676,6 @@
   "x": "EL <Num>{c.size}</Num>"
  },
  "تصنيف الاتحاد": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
- },
- "لا ينطبق": {
   "k": "s",
   "p": "features/stack/stack.tsx",
   "n": 1
@@ -16762,8 +17991,13 @@
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
+ "حصر الخرسانة والحديد والمباني، تحويل الوحدات، وقوائم فحص واستلام الأعمال — كله على جهازك.": {
+  "k": "s",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
  "حسابات مصرية بأرقام السوق الحقيقية، ومراجع ذكي لسيرتك الذاتية — كله على جهازك.": {
-  "k": "x",
+  "k": "s",
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
@@ -16778,6 +18012,26 @@
   "n": 1
  },
  "جديد": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "المكتب الفني والموقع": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "فحص واستلام الأعمال (QA/QC)": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "9 قوائم للموقع والمكتب الفني — احفظ، ثم صدّر تقرير PDF للتوقيع": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "الراتب والعروض": {
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
@@ -17004,6 +18258,37 @@
  "الأرقام الفردية وجهة صاحبها لا تظهر لحسابات الشركات، والمتوسطات متاحة في «السوق».": {
   "k": "s",
   "p": "lib/media.tsx",
+  "n": 1
+ },
+ "EngSpace · تقرير فحص واستلام": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "صفحة {0}": {
+  "k": "t",
+  "p": "lib/report-pdf.ts",
+  "n": 1,
+  "x": "pageNo"
+ },
+ "ملاحظة:": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "النتيجة:": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "توقيع المهندس المستلم: ____________________": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "توقيع مهندس التنفيذ: ____________________": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
   "n": 1
  },
  "في": {
