@@ -95,6 +95,12 @@ export const yearsOfBand = (exp: any) => { const m = /\d+/.exec(String(exp ?? ""
 export const shareRow = (s: Row) => ({ disc: s.disc, track: s.track || null, pos: s.pos || null, gov: s.gov || null, years: s.years != null ? Number(s.years) : yearsOfBand(s.exp),
   salary: Math.round(Number(s.salary)), company: s.company || s.employer || null, title: s.title || null, extras: s.extras || null, author_mode: s.as === "public" ? "public" : "anon" });
 
+// an experience band of the market screen ("3-5", "12+") → the years range the explorer filters on
+export const yearsRange = (exp: any): [number, number] => { const m = /^(\d+)(?:-(\d+)|\+)$/.exec(String(exp || "")); return m ? [Number(m[1]), m[2] ? Number(m[2]) : 50] : [0, 50]; };
+// one individual report, as the market screen lists them (the author stays anonymous: handle only)
+export const shareOf = (r: Row, now = Date.now()) => ({ id: r.id, anon: (r.author && r.author.anon) || "----", title: r.title || "", years: r.years, salary: r.salary,
+  company: r.company || "", coId: null, gov: r.gov, track: r.track, verified: !!(r.author && r.author.verified), when: when(r.created_at, now) });
+
 export const notifOf = (r: Row, now = Date.now()) => ({ id: r.id, kind: r.kind, title: r.title, body: r.body, target: r.target || undefined, read: !!r.read, when: when(r.created_at, now) });
 
 export function reviewOf(r: Row, now = Date.now()) {

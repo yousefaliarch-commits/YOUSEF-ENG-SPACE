@@ -63,3 +63,15 @@ describe("jobs, shares, profile", () => {
     expect(THIS_YEAR).toBeGreaterThan(2025);
   });
 });
+
+describe("salary explorer", () => {
+  it("experience bands become the year ranges the explorer filters on", async () => {
+    const { yearsRange } = await import("../src/backend/map");
+    expect(yearsRange("0-2")).toEqual([0, 2]); expect(yearsRange("3-5")).toEqual([3, 5]); expect(yearsRange("12+")).toEqual([12, 50]); expect(yearsRange(undefined)).toEqual([0, 50]);
+  });
+  it("an individual report keeps the author anonymous: handle and badge only", async () => {
+    const { shareOf } = await import("../src/backend/map");
+    const r = shareOf({ id: "s", title: "مهندس مكتب فني", years: 4, salary: 18000, company: "أوراسكوم", author: { as: "anon", anon: "a1b2c3", verified: true, name: "should not travel" }, created_at: T });
+    expect(r).toMatchObject({ anon: "a1b2c3", verified: true, salary: 18000, company: "أوراسكوم" }); expect((r as any).name).toBeUndefined();
+  });
+});

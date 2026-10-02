@@ -340,6 +340,11 @@
   "p": "backend/cloud.ts",
   "n": 1
  },
+ "شاركت 3 رواتب خلال آخر 30 يومًا — يمكنك المشاركة مجددًا لاحقًا": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
  "حسابك موقوف مؤقتًا — لا يمكنك النشر أو المراسلة الآن": {
   "k": "s",
   "p": "backend/cloud.ts",
@@ -9457,8 +9462,8 @@
  },
  "ج.م": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
-  "n": 19
+  "p": "features/admin/AdminView.tsx,features/market/live-salary.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
+  "n": 20
  },
  "{0} ج.م": {
   "k": "r",
@@ -10626,8 +10631,8 @@
  },
  "من": {
   "k": "x",
-  "p": "features/auth/auth.tsx,features/settings/settings.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,lib/search.ts",
-  "n": 8
+  "p": "features/auth/auth.tsx,features/market/live-salary.tsx,features/settings/settings.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,lib/search.ts",
+  "n": 9
  },
  "{0} · {1} من {2}": {
   "k": "r",
@@ -11889,6 +11894,130 @@
   "k": "s",
   "p": "features/cv/extract.ts",
   "n": 1
+ },
+ "تقرير": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx,features/stack/stack.tsx,ui/feed.tsx",
+  "n": 4
+ },
+ "· {0} تقرير": {
+  "k": "r",
+  "p": "features/market/live-salary.tsx,features/stack/stack.tsx",
+  "n": 2,
+  "x": "EL <Num>{r.n}</Num>"
+ },
+ "كل مصر": {
+  "k": "s",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "من تقارير الأعضاء — حيّ": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "{0} تقرير": {
+  "k": "r",
+  "p": "features/market/live-salary.tsx",
+  "n": 1,
+  "x": "EL <Num>{d.n}</Num>"
+ },
+ "تقارير هذه الخلية (": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "— نعرض الأرقام الحية من": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "تقارير حتى لا يُستدل على أحد. حتى ذلك الحين، النموذج المرجعي أدناه.": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "تقارير هذه الخلية ({0}): {1} من {2} — نعرض الأرقام الحية من {3} تقارير حتى لا يُستدل على أحد. حتى ذلك الحين، النموذج المرجعي أدناه.": {
+  "k": "r",
+  "p": "features/market/live-salary.tsx",
+  "n": 1,
+  "x": "EL <span className=\"text-ink\">{where}</span> | EL <Num className=\"text-ink\">{d.n}</Num> | EL <Num>{d.min}</Num> | EL <Num>{d.min}</Num>"
+ },
+ "شارك راتبك — كل تقرير يقرّب الأرقام الحية": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "— محافظتك أقل من 5 تقارير بعد": {
+  "k": "s",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "النطاق والتفصيل والتقارير الفردية تُفتح بعد مشاركة راتبك": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "مرة واحدة تكفي لسنة كاملة — مجهولًا، ولا يظهر رقمك إلا ضمن خلية من 5 تقارير أو أكثر.": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "شارك راتبك وافتح السوق": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "من P10 إلى P90 — النطاق الغامق هو الربعان الأوسطان": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "الربع الأدنى": {
+  "k": "s",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "الوسيط": {
+  "k": "s",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "الربع الأعلى": {
+  "k": "s",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "حسب المسار": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "حسب المحافظة": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "حسب الشركة": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "تقرير راتب على المنصة · كل خلية وكل سطر من": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "تقارير على الأقل": {
+  "k": "x",
+  "p": "features/market/live-salary.tsx",
+  "n": 1
+ },
+ "{0} {1} تقرير راتب على المنصة · كل خلية وكل سطر من {2} تقارير على الأقل": {
+  "k": "r",
+  "p": "features/market/live-salary.tsx",
+  "n": 1,
+  "x": "EL <Users size={12} /> | EL <Num>{fmt(d.platform)}</Num> | EL <Num>{d.min}</Num>"
  },
  "واجهة من اليمين إلى اليسار": {
   "k": "s",
@@ -14036,17 +14165,6 @@
   "p": "features/stack/stack.tsx",
   "n": 1
  },
- "تقرير": {
-  "k": "x",
-  "p": "features/stack/stack.tsx,ui/feed.tsx",
-  "n": 2
- },
- "· {0} تقرير": {
-  "k": "r",
-  "p": "features/stack/stack.tsx",
-  "n": 1,
-  "x": "EL <Num>{n}</Num>"
- },
  "تفاصيل المسميات تظهر لشركتك فقط — حسابات الشركات لا ترى تفاصيل شركات أخرى": {
   "k": "s",
   "p": "features/stack/stack.tsx",
@@ -16069,6 +16187,11 @@
   "n": 1,
   "x": "regionName(gov(g)[2]) | EL <Num>{placeMult(g, city).toFixed(2)}</Num>"
  },
+ "النموذج المرجعي — تقدير من مصادر السوق، ليس من تقارير الأعضاء": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
  "عينة صغيرة (": {
   "k": "x",
   "p": "features/tabs/tabs.tsx",
@@ -16139,6 +16262,11 @@
  },
  "أحدث التقارير · مقفلة": {
   "k": "s",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "لا تقارير فردية في هذه الخلية بعد.": {
+  "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },

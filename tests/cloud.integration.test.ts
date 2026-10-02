@@ -66,6 +66,14 @@ run("cloud backend (local Supabase)", () => {
     expect(((await db.storage.from("verification").list(user!.id)).data || []).length).toBe(0);
   });
 
+  it("give-to-get: the explorer shows a teaser until the member shares", async () => {
+    const before = await cloud.salaryExplorer("civil", "3-5", "cairo"); expect(["teaser", "full"]).toContain(before.access);
+    expect(before).not.toHaveProperty("p25");
+    await cloud.contribute({ disc: "civil", exp: "3-5", salary: 18000, gov: "cairo", track: "tech", as: "anon" });
+    expect((await cloud.salaryExplorer("civil", "3-5", "cairo")).access).toBe("full");
+    expect((await cloud.latestShares("civil", "3-5", "cairo")).some((r: any) => r.salary === 18000)).toBe(true);
+  });
+
   it("reports the post; the author is never revealed to the reporter", async () => {
     const ref = await cloud.report("post", postId, "spam", "تجربة"); expect(ref).toMatch(/^R-/);
     await expect(cloud.admin.cases()).rejects.toThrow("ليست لديك صلاحية");

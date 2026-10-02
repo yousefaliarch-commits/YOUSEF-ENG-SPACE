@@ -72,7 +72,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const [editing, setEditing] = S("editing", false);
   const [tab, setTabRaw] = S("tab", init.tab); const [stack, setStack] = S("stack", init.stack); const [dir, setDir] = S("dir", "tab"); const [market, setMarket] = S("market", init.market);
   const [sheet, setSheet] = S("sheet", null); const [msg, setMsg] = S("msg", "");
-  const [contributed, setContributed] = S("contributed", false); const [pts, setPts] = S("pts", 0);
+  const [contributed, setContributed] = S("contributed", false); const [salaryRev, setSalaryRev] = S("salaryRev", 0); const [pts, setPts] = S("pts", 0);
   const [saved, setSaved] = S("saved", {}); const [reacts, setReacts] = S("reacts", {}); const [votes, setVotes] = S("votes", {}); const [follows, setFollows] = S("follows", () => seed({ dar: true }, {})); const [roomFollows, setRoomFollows] = S("roomFollows", () => seed({ tech: true, nego: true, grads: true }, {}));
   const [posts, setPosts] = S("posts", () => seed(normalizeSeedPosts(POSTS0), [])); const [voteAs, setVoteAs] = S("voteAs", {}); const [shares, setShares] = S("shares", []); const [jobs, setJobs] = S("jobs", () => seed(JOBS, [])); const [logos, setLogos] = S("logos", {}); const [notifs, setNotifs] = S("notifs", () => seed(NOTIFS0, [])); const [reviews, setReviews] = S("reviews", {}); const [hidden, setHidden] = S("hidden", {});
   const profileOf = (p?: any) => ({ contributions: 0, notify: true, dm: true, hide: true, rotate: true, ...(p || DEMO_PERSONA) });
@@ -200,7 +200,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     lang, setLang, langChosen, startTour: () => { setSheet(null); setViewer(null); if (stack.length) { navKind.current = "tab"; setStack([]); } setTourOn(true); },
     market, setMarket, goMarket: (m?: any) => { if (!tabs.some((x) => x.id === "market")) { deny(); return; } nav("tab", () => { setDir(vtOK ? "vt" : "tab"); if (m === "tools") { setTabRaw("tools"); } else { setMarket(m); setTabRaw("market"); } setStack([]); }); },
     viewImage: (image?: any) => setViewer(image || null), sheet, openSheet: (type?: any, payload: any = {}) => { if (blocked.sheets.includes(type)) { deny(); return; } if (["compose", "review", "contribute"].includes(type) && !gate.ok) { setMsg(gate.why); return; } setSheet({ type, payload }); }, closeSheet: () => setSheet(null), toast: setMsg, pts, addPts,
-    contributed, contribute: (share?: any) => { setContributed(true); addPts(50); setProfile((p) => ({ ...p, contributions: (p.contributions || 0) + 1, contributed: true })); if (share) { setShares((x) => [{ id: "s" + Date.now(), when: "الآن", ...share, as: asOf(share.as) }, ...x]); sync(() => cloud.contribute({ ...share, as: asOf(share.as) })); } },
+    contributed, contribute: (share?: any) => { setContributed(true); addPts(50); setProfile((p) => ({ ...p, contributions: (p.contributions || 0) + 1, contributed: true })); if (share) { setShares((x) => [{ id: "s" + Date.now(), when: "الآن", ...share, as: asOf(share.as) }, ...x]); sync(() => cloud.contribute({ ...share, as: asOf(share.as) }), () => setSalaryRev((r) => r + 1)); } },
+    // bumps after a share reaches the server, so the live explorer reloads (and unlocks — give-to-get)
+    salaryRev,
     shares,
     saved, toggleSaved: toggleIn(setSaved), follows, toggleFollow: toggleIn(setFollows), roomFollows, toggleRoom: toggleIn(setRoomFollows),
     // Reactions: «أوافق» and «لا أوافق» exclude each other (picking one clears the other); «مفيد» toggles independently and may sit with either
