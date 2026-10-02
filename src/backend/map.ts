@@ -122,7 +122,7 @@ export function personaOf_(p: Row, email: string) {
     goal: p.goal, companyName: p.company_name, companyId: p.company_id, avatar: p.avatar, look: p.look, photo: p.photo_path, identity: p.default_identity,
     verified: !!p.verified, verifyKind: p.verify_kind, division: p.division, pending: false, verifyRef: null, verifyReq: null,
     anon: p.anon, pid: p.pid, modRef: p.mod_ref, staff: p.staff, contributions: p.contributions || 0, strikes: p.strikes || 0,
-    suspendedUntil: p.suspended_until, suspendedForever: !!p.suspended_forever,
+    suspendedUntil: p.suspended_until, suspendedForever: !!p.suspended_forever, onboarded: p.onboarded !== false,
     notify: s.notify !== false, dm: s.dm !== false, hide: s.hide !== false, rotate: s.rotate !== false, openToRecruiters: s.openToRecruiters !== false, showPhoto: s.showPhoto !== false,
   };
 }
@@ -134,6 +134,7 @@ export function profilePatch(p: Row) {
   const map: Row = { name: "name", gender: "gender", age: "age", gradYear: "grad_year", role: "role", disc: "disc", track: "track", pos: "pos", gov: "gov", city: "city",
     goal: "goal", companyName: "company_name", companyId: "company_id", avatar: "avatar", look: "look", identity: "default_identity" };
   for (const [k, col] of Object.entries(map)) if (k in p) out[col] = p[k] === "" ? null : p[k];
+  if (p.onboarded === true) out.onboarded = true; // the «complete your profile» steps finish here (never set back to false)
   if (out.age != null) out.age = Number(out.age); if (out.grad_year != null) out.grad_year = Number(out.grad_year);
   const st = ["notify", "dm", "hide", "rotate", "openToRecruiters", "showPhoto"].filter((k) => k in p);
   if (st.length) out.settings = Object.fromEntries(st.map((k) => [k, !!p[k]]));

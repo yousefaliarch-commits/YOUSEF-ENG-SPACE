@@ -73,7 +73,7 @@ export function ContactHint({ text, as = "anon", className = "" }: any) {
 
 export function AppHeader({ app }: any) {
   const top = app.stack[app.stack.length - 1]; const pf = usePlatform();
-  const glass = `shrink-0 pt-[var(--sat)] backdrop-blur-md bg-canvas/80 border-b z-10 transition-shadow duration-300 ${app.scrolled ? "header-lift border-line-2" : "border-line"}`;
+  const glass = `shrink-0 pt-[var(--sat)] bg-canvas/[.97] border-b z-10 transition-shadow duration-300 ${app.scrolled ? "header-lift border-line-2" : "border-line"}`;
   if (top) {
     const closed = app.blocked && (app.blocked.stack.includes(top.type) || (top.type === "room" && app.blocked.rooms.includes(top.id)));
     const titles: any = { post: "نقاش", company: company(top.id)?.name, job: "تفاصيل الوظيفة", notifications: "الإشعارات", profile: "حسابك", rooms: "الغرف", room: room(top.id)?.name, chat: "رسالة خاصة", permissions: "خريطة العلاقات والصلاحيات", postjob: top.like ? "تعديل الإعلان" : "نشر وظيفة", cvreview: "تدقيق السيرة الهندسية", methodology: "المنهجية والمصادر", settings: "الإعدادات", guide: "دليل الاستخدام" };
@@ -111,7 +111,7 @@ export function AppHeader({ app }: any) {
 export function TabBar({ tabs = TABS, active, onChange, badge = {} }: any) {
   const idx = Math.max(0, tabs.findIndex((t) => t.id === active)); const md = usePlatform() === "android";
   return (
-    <nav aria-label="التنقل الرئيسي" data-tour="tabbar" className="relative shrink-0 backdrop-blur-md bg-canvas/80 border-t border-line pb-[var(--sab)]">
+    <nav aria-label="التنقل الرئيسي" data-tour="tabbar" className="relative shrink-0 bg-canvas/[.97] border-t border-line pb-[var(--sab)]">
       <ul className={`grid ${md ? "h-[80px]" : "h-[68px]"}`} style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
         {tabs.map((t) => { const on = t.id === active; const Icon = t.icon; const b = badge[t.id]; return (
           <li key={t.id}><button type="button" data-tour={"tab-" + t.id} onClick={() => onChange(t.id)} aria-current={on ? "page" : undefined}

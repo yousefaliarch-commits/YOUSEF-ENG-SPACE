@@ -29,6 +29,9 @@ export function createStore() {
 export const storeFor = (id?: any) => { const L = liveState(); if (!L.stores[id]) L.stores[id] = createStore(); return L.stores[id]; };
 
 // Drop-in replacement for useState whose value lives in a store (falls back to a private store when none is given)
+// read a store key without writing it (the top bar and the admin console watch the signed-in member this way)
+export function usePeek(store?: any, key?: any, fallback?: any) { const get = () => (store.has(key) ? store.get(key) : fallback); return useSyncExternalStore(store.subscribe, get, get); }
+
 export function useStore(store?: any, key?: any, init?: any) {
   const get = () => store.get(key, init);
   const value = useSyncExternalStore(store.subscribe, get, get);

@@ -5,7 +5,10 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 
 ## Roadmap and status
 - Phase 1 ✅ single-file prototype → Vite + React 18 + TypeScript (docs/MIGRATION.md).
-- Phase 2 ✅ Supabase (Frankfurt, eu-central-1) + Capacitor 8 (docs/PHASE2.md). Hosted project setup is a manual step there.
+- Phase 2 ✅ Supabase (Frankfurt, eu-central-1, project cyziykbqldtxyquqvvkr) + Capacitor 8 (docs/PHASE2.md). Migrations deploy via
+  the "Deploy database" workflow (secrets SUPABASE_ACCESS_TOKEN / SUPABASE_DB_PASSWORD). Owner is the first admin.
+- Sprint 1 ✅ live salary explorer + give-to-get. Feature 2 ✅ offer evaluator + yearly net calculator.
+- Auth: e-mail, Google, Apple, phone (SMS); accounts without the form complete their profile once (profiles.onboarded).
 - Next: the brainstormed "high-impact features" (market transparency, daily engineering tools) — chosen with the owner
   AFTER Phase 2, on the real backend. Phase 3: admin console as its own web app behind MFA. Phase 4: store releases.
 
@@ -33,6 +36,11 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 `npm run check` (typecheck + tests + build = CI gate) · `npm run live` (laptop + phone preview, rebuild on save) ·
 `npm run db:start | db:reset | db:test | db:env | db:admin -- email` · `npm run test:cloud` · `npm run cap:sync`.
 CI: check, database (pgTAP + cloud e2e on local Supabase), android (debug APK artifact).
+
+## Performance rules (120 Hz target — see docs/PHASE2.md → Performance)
+- No infinite/idle animation below 64 px or inside bars and lists; no backdrop blur over scrolling content.
+- Animate transform/opacity only; gestures write styles directly, never React state per touchmove.
+- Long lists render through `ui/windowed.tsx`.
 
 ## Conventions
 - Match the surrounding style: long single-line handlers, comments explaining *why*, Arabic product copy.

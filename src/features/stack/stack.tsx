@@ -10,7 +10,7 @@ import { govName, placeName } from "../../data/geo";
 import { divOf } from "../../domain/division";
 import { authorOf, credentialOf, displayName, expYears, gx, normalizeAuthor, pickAuthor, randHex, yearsText } from "../../domain/identity";
 import { ckey, daysText } from "../../domain/moderation";
-import { CAPS, DISC, FX, FX_NAMES, GOALS, GOALS_CO, JOB_TYPES, PERMS, POSITIONS, REP_LEVELS, ROLE, ROLES, SKILLS, TITLES, WORK_MODES, can, canVerifyRole, discTitle, dmRule, genderOf, isCompanyRole, label, permNote, posLabel, posLabelG, repLevel, roleOf, roleTitle, trackLabel, tracksFor, yearsLabel } from "../../domain/taxonomy";
+import { CAPS, DISC, expForYears, FX, FX_NAMES, GOALS, GOALS_CO, JOB_TYPES, PERMS, POSITIONS, REP_LEVELS, ROLE, ROLES, SKILLS, TITLES, WORK_MODES, can, canVerifyRole, discTitle, dmRule, genderOf, isCompanyRole, label, permNote, posLabel, posLabelG, repLevel, roleOf, roleTitle, trackLabel, tracksFor, yearsLabel } from "../../domain/taxonomy";
 import { detectContact, screenLanguage } from "../../domain/text-guard";
 import { UGC } from "../../i18n/i18n";
 import { LevelRing, Money, estimateFor, hex4, matchJob, medianFor, parseJobText, quality, reachFor, round500, seedOf } from "../../lib/helpers";
@@ -23,6 +23,7 @@ import { IdentityCard, IdentityFace, IdentityTag, IdentityToggle, Monogram, Trus
 import { HiddenByMe, Removed, RemovedMine } from "../../ui/moderation";
 import { BTN, Back, Chip, FilterChip, Forward, Num, Panel, Primary, Quiet, RangeBar, RoundButton, Secondary } from "../../ui/primitives";
 import { fmt } from "../../ui/theme";
+import { Windowed } from "../../ui/windowed";
 
 // =====================================================================
 //  Screens — stack
@@ -39,7 +40,7 @@ export function RoomScreen({ app, id }: any) {
       <Panel className="p-4"><div className="flex items-start gap-3"><span className="grid place-items-center w-12 h-12 shrink-0 rounded-2xl bg-wash text-accent"><r.icon size={22} /></span><div className="min-w-0 flex-1"><h1 className="text-[18px] font-medium leading-snug">{r.name}</h1><p className="text-[12px] text-ink-2 leading-snug">{r.desc} · <Num>{fmt(r.members)}</Num> عضو</p></div></div>
         <div className="mt-3 flex gap-2"><button type="button" aria-pressed={on} onClick={() => { app.toggleRoom(r.id); app.toast(on ? `ألغيت متابعة ${r.name}` : `تتابع ${r.name} الآن`); }} className={`press flex-1 h-11 rounded-xl border text-[13.5px] transition-colors ${on ? "bg-wash border-accent/40 text-accent" : "bg-elevated border-line-2 text-ink"}`}>{on ? "تتابعها ✓" : "متابعة"}</button><Primary disabled={closed} onClick={() => app.openSheet("compose", { room: r.id })} className="flex-1 h-11 press">{closed ? "مغلقة للنشر مؤقتًا" : "اكتب في الغرفة"}</Primary></div>{closed && <p className="mt-2 text-[11px] text-ink-3">أغلق فريق المجتمع فتح نقاشات جديدة هنا مؤقتًا — القراءة والردود متاحة.</p>}</Panel>
       {r.id === "ama" && <div className="p-4 rounded-2xl border border-good/20 bg-good/10"><div className="flex items-center gap-2 text-[12px] text-good"><span className="w-2 h-2 rounded-full bg-good glow-pulse" /> جلسة الليلة · 8 مساءً بتوقيت القاهرة</div><p className="mt-1.5 text-[13.5px] leading-relaxed">مدير مكتب فني بخبرة 14 سنة يجيب عن أسئلتكم عن الزيادات والانتقال للتصميم. الأسبوع القادم: مديرة موارد بشرية سابقة في مقاولات كبرى.</p></div>}
-      <div className="space-y-3 stagger">{posts.length === 0 ? <Empty icon={MessageCircle} title="الغرفة هادية" body="افتح أول نقاش." action={closed ? undefined : "اكتب منشورًا"} onAction={() => app.openSheet("compose", { room: r.id })} /> : posts.map((p) => <PostCard key={p.id} p={p} app={app} compact />)}</div>
+      <div className="space-y-3 stagger">{posts.length === 0 ? <Empty icon={MessageCircle} title="الغرفة هادية" body="افتح أول نقاش." action={closed ? undefined : "اكتب منشورًا"} onAction={() => app.openSheet("compose", { room: r.id })} /> : <Windowed items={posts} render={(p) => <PostCard key={p.id} p={p} app={app} compact />} />}</div>
     </div>
   );
 }
@@ -113,7 +114,7 @@ export function PostScreen({ app, id }: any) {
       <div className="flex items-center justify-between px-1"><h2 className="text-[12px] text-ink-2"><Num>{countComments(p.comments)}</Num> رد</h2><div className="flex gap-1">{[["best", "الأكثر فائدة"], ["new", "الأحدث"]].map(([k, l]: any) => <button key={k} type="button" aria-pressed={sort === k} onClick={() => setSort(k)} className={`h-7 px-2.5 rounded-full text-[11px] ${sort === k ? "bg-elevated text-ink" : "text-ink-3"}`}>{l}</button>)}</div></div>
       {comments.length === 0 && <Empty icon={MessageCircle} title="كن أول من يجيب" body="ردّك يظهر باسمك أو بمعرّفك المجهول — تختار قبل الإرسال." />}
       <div key={sort} className="space-y-3 stagger">{comments.map((c) => <Comment key={c.id} c={c} app={app} post={p} />)}</div>
-      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-3 pt-2 pb-2 backdrop-blur-md bg-canvas/85 border-t border-line"><ReplyBox app={app} post={p} sticky inputRef={replyRef} /></div>
+      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-3 pt-2 pb-2 bg-canvas/[.97] border-t border-line"><ReplyBox app={app} post={p} sticky inputRef={replyRef} /></div>
     </div>
   );
 }
@@ -146,7 +147,7 @@ export function CompanyScreen({ app, id }: any) {
           {!bandsOk && <div className="absolute inset-x-0 bottom-0 top-10 flex flex-col items-center justify-center gap-2 text-center p-4"><LockKeyhole size={18} className="text-accent" /><p className="text-[12.5px] leading-relaxed">{app.isCo ? "تفاصيل المسميات تظهر لشركتك فقط — حسابات الشركات لا ترى تفاصيل شركات أخرى" : "تفاصيل المسميات تُفتح بعد مشاركة راتبك"}</p>{app.isCo ? null : <Secondary onClick={() => app.openSheet("contribute", { company: c.id })} className="h-10">شارك راتبك</Secondary>}</div>}
           <div className="mt-3 pt-3 border-t border-line"><p className="text-[11px] text-ink-3 mb-1.5">مزايا ذكرها الموظفون</p><div className="flex flex-wrap gap-1.5">{c.perks.map((x) => <Chip key={x}>{x}</Chip>)}</div></div></Panel>}
         {tab === "reviews" && <>{can(app.profile, "review") && <Secondary onClick={() => app.openSheet("review", { company: c.id })} className="w-full h-11 press"><Star size={16} /> اكتب تقييمًا — باسمك أو مجهولًا</Secondary>}{reviews.map((r0) => { const r = normalizeAuthor(r0); const k = ckey("review", r.id); const gone = app.removed(k); if (gone && !r.mine) return <Removed key={r.id} what="هذا التقييم" info={app.removedInfo(k)} />; if (app.hidden[k]) return <HiddenByMe key={r.id} what="التقييم" onUndo={() => app.unhide(k)} />; return <Panel key={r.id} className="p-3.5">{gone && <RemovedMine what="تقييمك" info={app.removedInfo(k)} />}<div className="flex items-center gap-2 flex-wrap text-[11.5px] text-ink-2"><WhoChip a={r} onOpen={() => app.openSheet("user", pickAuthor(r))} />{r.as === "public" && <IdentityTag as="public" />}{r.mine && <Chip tone="accent" className="h-5 px-1.5 text-[10px]">أنت</Chip>}<span className="ms-auto shrink-0 text-ink-3">{r.when}</span>{!r.mine && <button type="button" aria-label="إبلاغ عن التقييم" onClick={() => app.openSheet("report", { kind: "review", id: r.id })} className="press grid place-items-center w-8 h-8 -my-1 rounded-full text-ink-3 hover:text-bad focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><Flag size={13} /></button>}</div><p className="mt-1 text-[11.5px] text-ink-2 leading-snug">{r.role}</p><div className="mt-1.5"><Stars n={r.stars} /></div><p {...UGC} className="mt-1.5 text-[13.5px] leading-[1.8] text-ink text-start">{app.money(r.text)}</p></Panel>; })}</>}
-        {tab === "jobs" && (jobs.length ? jobs.map((j) => <JobCard key={j.id} job={j} app={app} />) : <Empty icon={Briefcase} title="لا وظائف منشورة حاليًا" body="تابع الشركة لنخبرك عند نشر وظيفة تطابق ملفك." action={following ? undefined : "متابعة"} onAction={() => app.toggleFollow(c.id)} />)}
+        {tab === "jobs" && (jobs.length ? <Windowed items={jobs} render={(j) => <JobCard key={j.id} job={j} app={app} />} /> : <Empty icon={Briefcase} title="لا وظائف منشورة حاليًا" body="تابع الشركة لنخبرك عند نشر وظيفة تطابق ملفك." action={following ? undefined : "متابعة"} onAction={() => app.toggleFollow(c.id)} />)}
       </div>
     </div>
   );
@@ -202,7 +203,7 @@ export function JobScreen({ app, id }: any) {
         <div className="mt-2"><EstimateBar e={e} /></div>
         <p className="mt-1 text-[11.5px] leading-relaxed text-ink-2">لم تكتب الشركة رقمًا — والمنصة لا تسمح بذلك. النطاق محسوب من بيانات السوق للتصنيف نفسه، والوسط <Num className="text-ink">{fmt(e.mid)}</Num> ج.م ±15%.</p>
         <ul className="mt-2 divide-y divide-line text-[11.5px]">{e.parts.map(([k, v, f]: any) => <li key={k} className="py-1.5 flex items-center justify-between gap-2"><span className="text-ink-3">{k} <span className="text-ink-2">· {v}</span></span><Num className="shrink-0 text-ink-2">{f}</Num></li>)}</ul>
-        <div className="mt-3 flex gap-2 flex-wrap"><Secondary onClick={() => app.openSheet("tool", { id: "net", gross: e.mid })} className="flex-1 h-10 text-[12.5px]">الصافي من الوسط</Secondary>{!app.isCo && <Secondary onClick={() => app.openSheet("tool", { id: "script", offer: e.lo, median: e.mid })} className="flex-1 h-10 text-[12.5px]">سكريبت التفاوض</Secondary>}<button type="button" onClick={() => app.openSheet("methodology")} className="w-full py-1.5 -my-1.5 text-[11px] text-accent hover:underline underline-offset-4">كيف نحسب النطاق؟</button></div>
+        <div className="mt-3 flex gap-2 flex-wrap"><Secondary onClick={() => app.openSheet("tool", { id: "net", gross: e.mid })} className="flex-1 h-10 text-[12.5px]">الصافي من الوسط</Secondary>{!app.isCo && <Secondary onClick={() => app.openSheet("tool", { id: "offer", disc: job.disc, exp: expForYears((job.years || [3])[0]), gov: job.gov, track: job.sub, base: e.mid })} className="flex-1 h-10 text-[12.5px]">قيّم عرضهم</Secondary>}{!app.isCo && <Secondary onClick={() => app.openSheet("tool", { id: "script", offer: e.lo, median: e.mid })} className="flex-1 h-10 text-[12.5px]">سكريبت التفاوض</Secondary>}<button type="button" onClick={() => app.openSheet("methodology")} className="w-full py-1.5 -my-1.5 text-[11px] text-accent hover:underline underline-offset-4">كيف نحسب النطاق؟</button></div>
       </Panel>
 
       {mt && <Panel className="p-4"><div className="flex items-center justify-between gap-2"><h3 className="text-[13px] font-medium">مطابقتك لهذه الوظيفة</h3><Chip tone={mt.tone} className="pop-in"><Num>{mt.score}%</Num> {mt.tier}</Chip></div><div className="mt-3"><MatchBreakdown m={mt} /></div>{mt.gaps.length > 0 && <p className="mt-2 text-[11.5px] text-ink-2 leading-relaxed">الفجوة في: {mt.gaps.join("، ")}. {mt.score >= 65 ? "ما زالت مطابقة قوية — تواصل مع الشركة واذكر في بريدك ما يعوّض الفجوة." : "تواصل لو تملك ما يعوّضها، أو تابع الشركة لوظائف أقرب."}</p>}{mt.perfect && <p className="mt-2 text-[11.5px] text-good inline-flex items-center gap-1.5"><BadgeCheck size={13} /> مطابقة تامة — وصلك إشعار فوري بهذه الوظيفة عند نشرها</p>}</Panel>}
@@ -210,7 +211,7 @@ export function JobScreen({ app, id }: any) {
 
       <Panel className="p-4"><h3 className="text-[13px] font-medium">عن الوظيفة</h3><p className="mt-2 text-[14px] leading-[1.85] text-ink">{job.desc}</p><h3 className="mt-4 text-[13px] font-medium">المتطلبات</h3><ul className="mt-2 space-y-1.5">{job.reqs.map((r) => <li key={r} className="flex gap-2 text-[13.5px] text-ink-2 leading-relaxed"><span className="mt-2.5 w-1 h-1 rounded-full bg-accent shrink-0" />{r}</li>)}</ul>{job.skills && job.skills.length > 0 && <><h3 className="mt-4 text-[13px] font-medium">المهارات والبرامج</h3><div className="mt-2 flex flex-wrap gap-1.5">{job.skills.map((s) => <Chip key={s} tone="en" className="h-6 px-2 text-[10.5px]">{s}</Chip>)}</div></>}</Panel>
 
-      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-4 pt-3 pb-3 backdrop-blur-md bg-canvas/85 border-t border-line flex gap-2">
+      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-4 pt-3 pb-3 bg-canvas/[.97] border-t border-line flex gap-2">
         {app.isCo ? (mineCo ? <Primary onClick={() => app.push({ type: "postjob", like: job.id })} className="flex-1 h-12 press"><PenLine size={16} /> تعديل الإعلان</Primary> : <div className="flex-1 flex items-center gap-2 min-h-12 px-3 py-2 rounded-xl bg-elevated text-[12px] text-ink-2 leading-snug"><Building2 size={15} className="text-accent shrink-0" /> حساب شركة — التقديم غير متاح. <button type="button" onClick={() => app.push({ type: "postjob", like: job.id })} className="text-accent hover:underline underline-offset-4">انشر وظيفة مشابهة</button></div>)
           : mailto ? <a href={mailto} onClick={() => app.markContacted(job.id)} className={`${BTN} btn-primary flex-1 h-12 press`}><Mail size={16} /> أرسل سيرتك إلى {co.name}</a> : tel ? <a href={tel} onClick={() => app.markContacted(job.id)} className={`${BTN} btn-primary flex-1 h-12 press`}><Phone size={16} /> اتصل بـ{co.name}</a> : <div className="flex-1 flex items-center min-h-12 px-3 rounded-xl bg-elevated text-[12px] text-ink-2">لا بيانات تواصل في هذا الإعلان</div>}
         {!app.isCo && <Secondary onClick={() => askRule.ok ? app.startThread(hrUser, { type: "job", id: job.id, label: `سؤال عن إعلان «${job.title}»` }) : app.toast(askRule.why)} className="h-12 px-4 press" aria-label="اسأل الشركة"><MessageCircle size={17} /></Secondary>}
@@ -248,7 +249,7 @@ export function ChatScreen({ app, id }: any) {
         {typing && <div className="typing me-auto inline-flex gap-1 px-3.5 py-3 rounded-2xl bg-elevated"><span className="w-1.5 h-1.5 rounded-full bg-ink-2" /><span className="w-1.5 h-1.5 rounded-full bg-ink-2" /><span className="w-1.5 h-1.5 rounded-full bg-ink-2" /></div>}
         <div ref={endRef} />
       </div>
-      <form onSubmit={send} className="px-4 pt-2 pb-[max(0.75rem,var(--sab))] border-t border-line bg-canvas/85 backdrop-blur-md space-y-2">
+      <form onSubmit={send} className="px-4 pt-2 pb-[max(0.75rem,var(--sab))] border-t border-line bg-canvas/[.97] space-y-2">
         {t.blocked ? <div className="flex items-center justify-between gap-2 p-3 rounded-xl bg-bad/10 border border-bad/20 text-[12px] text-ink-2"><span className="inline-flex items-center gap-1.5"><Ban size={14} className="text-bad" /> حظرت هذا العضو — لا تصلك رسائله ولا يصله ردّك.</span><button type="button" onClick={() => { app.blockThread(t.id, false); app.toast("أُلغي الحظر"); }} className="shrink-0 text-accent hover:underline underline-offset-4">إلغاء الحظر</button></div>
           : !app.canAct.ok ? <p className="text-[12px] text-warn p-3 rounded-xl bg-warn/10 border border-warn/20">{app.canAct.why}</p>
           : !rule.ok ? <p className="text-[12px] text-warn p-3 rounded-xl bg-warn/10 border border-warn/20">{rule.why}</p> : (
@@ -415,7 +416,7 @@ export function PostJobScreen({ app, like }: any) {
         </>}
         {step === 2 && !valid && <Empty icon={CircleAlert} title="أكمل الإعلان أولًا" body={guardDesc.blocked ? "الوصف يحتوي لغة غير لائقة — عدّلها." : !contactOk || contactBad ? "بريد أو هاتف صحيح للتقديم مطلوب." : "المسمّى ووصف من 20 حرفًا على الأقل ونطاق خبرة منطقي."} action="رجوع للتصنيف" onAction={() => setStep(1)} />}
       </div>
-      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-4 pt-3 pb-3 backdrop-blur-md bg-canvas/85 border-t border-line flex gap-2">
+      <div className="sticky bottom-0 z-[6] mt-auto -mx-4 px-4 pt-3 pb-3 bg-canvas/[.97] border-t border-line flex gap-2">
         {step > 0 && <Secondary onClick={() => setStep(step - 1)} className="h-12 px-4"><Back size={16} /></Secondary>}
         {step === 0 && <Primary disabled={!parsed && !raw.trim()} onClick={() => { if (!parsed) analyze(); setStep(1); }} className="flex-1 h-12 press">{parsed ? "راجع التصنيف" : "حلّل وتابع"} <Forward /></Primary>}
         {step === 1 && <Primary disabled={!valid} onClick={() => setStep(2)} className="flex-1 h-12 press">معاينة النطاق والوصول <Forward /></Primary>}

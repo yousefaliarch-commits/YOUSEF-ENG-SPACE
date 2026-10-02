@@ -102,8 +102,21 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     [t.ready, t.updateCallbackDone].forEach((p) => p && p.catch(() => {})); t.finished.then(done, done);
   };
   const [viewer, setViewer] = useState<any>(null); // a post image open full screen
-  const [scrolled, setScrolled] = useState(false); const onScroll = (e?: any) => { const y = e.currentTarget.scrollTop; if (shownKey.current) scrollMem.current[shownKey.current] = y; const s = y > 6; if (s !== scrolled) setScrolled(s); };
-  const [pull, setPull] = useState(0); const [refreshing, setRefreshing] = useState(false); const touch = useRef<any>(null); const scroller = useRef<any>(null); const timers = useRef<any>([]);
+  const [scrolled, setScrolled] = useState(false); const onScroll = (e?: any) => { const y = e.currentTarget.scrollTop; if (shownKey.current) scrollMem.current[shownKey.current] = y; const s = y > 6; if (s !== scrolled) setScrolled(s); scrollingNow(); };
+  // .is-scrolling while the list moves: idle animations hold still so every frame goes to the scroll (no React state)
+  const scrollIdle = useRef<any>(null);
+  // (on the scroller, not <html>: a class on the root would restyle the whole document twice per gesture)
+  const scrollingNow = () => { const el = scroller.current; if (!el) return; if (!el.classList.contains("is-scrolling")) el.classList.add("is-scrolling"); clearTimeout(scrollIdle.current); scrollIdle.current = setTimeout(() => el.classList.remove("is-scrolling"), 180); };
+  // pull-to-refresh is painted straight onto the indicator and the screen (GPU transforms, one write per frame):
+  // a React state per touchmove re-rendered the whole app view dozens of times a second during the gesture
+  const pull = useRef(0); const pullEl = useRef<any>(null); const pullIcon = useRef<any>(null); const pullRaf = useRef(0); const [refreshing, setRefreshing] = useState(false);
+  const EASE = "cubic-bezier(.2,.7,.2,1)";
+  const paintPull = (v?: any) => { pull.current = v; cancelAnimationFrame(pullRaf.current); pullRaf.current = requestAnimationFrame(() => {
+    const ind = pullEl.current, sc = scroller.current, ic = pullIcon.current; if (!ind || !sc) return; const live = v > 0;
+    ind.style.transition = live ? "none" : `transform .3s ${EASE}, opacity .3s`; sc.style.transition = live ? "none" : `transform .3s ${EASE}`;
+    if (live) { ind.style.transform = `translate3d(0,${v - 44}px,0)`; ind.style.opacity = String(v / 70); if (ic) ic.style.transform = `rotate(${v * 3}deg)`; sc.style.transform = `translate3d(0,${v * 0.4}px,0)`; }
+    else { ind.style.transform = ""; ind.style.opacity = ""; sc.style.transform = ""; }
+  }); }; const touch = useRef<any>(null); const scroller = useRef<any>(null); const timers = useRef<any>([]);
   // Every screen shares one scroller, so each screen's position is remembered: a pushed screen (a post, a job…) always opens at
   // its top, going back returns to where the list was, and each tab keeps its own place. Applied before paint (and inside the
   // View Transition), so a screen never appears scrolled somewhere else first.
@@ -176,7 +189,13 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     if (!hasSession()) { savePersona(p); app.signIn(p); }
   });
   useEffect(() => {
-    if (!CLOUD || embed) return; authLink(cloud.resetLinkOpened());
+    if (!CLOUD || embed) return;
+    // a confirmation / reset / Google / Apple link landed on this page: finish it (any device), clean the address, then sign in
+    cloud.finishAuthLink().then((r) => {
+      if (r && r.error) setMsg(r.error);
+      if (r && r.confirmedElsewhere && !hasSession()) { setMsg("تم تأكيد بريدك — سجّل الدخول للمتابعة"); setAuthView("signin"); }
+      authLink(!!(r && r.reset) || cloud.resetLinkOpened());
+    });
     const on = (e?: any) => authLink(e.detail && e.detail.reset); window.addEventListener("engspace:auth", on); return () => window.removeEventListener("engspace:auth", on);
   }, []);
   // back to the app (tab switch, phone unlocked): fetch what changed
@@ -295,6 +314,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const wrap = (node?: any, caption: any = null) => embed || NATIVE ? node : <main className="rise sm:px-4 sm:py-6 md:py-10 flex flex-col items-center sm:gap-5">{node}{caption}</main>;
   if (!persona) return wrap(<div className={frameCls} style={frameStyle}>{authView === "lang" ? <LanguageScreen app={app} next={authNext()} onContinue={() => setAuthView(authNext())} /> : <AuthScreen app={app} />}</div>);
   if (!langChosen && !embed) return wrap(<div className={frameCls} style={frameStyle}><LanguageScreen app={app} next="home" onContinue={() => {}} /></div>);
+  // an account made with Google, Apple or a phone number fills the profile steps once, before anything else
+  if (CLOUD && persona && profile.onboarded === false && !editing) return wrap(<div className={frameCls} style={frameStyle}><Registration app={app} mode="complete" initial={profile} /></div>);
   if (editing) return wrap(<div className={frameCls} style={frameStyle}><Registration app={app} mode="edit" initial={profile} /></div>);
   if (welcome) return wrap(<div className={frameCls} style={frameStyle}><Welcome app={app} /></div>);
   const top = stack[stack.length - 1];
@@ -312,8 +333,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // back swipe starts at the leading edge: the right edge in Arabic, the left edge in English
   const ltr = lang === "en";
   const onTouchStart = (e?: any) => { if (tourOn) return; const t = e.touches[0]; const el = scroller.current; const rect = el ? el.getBoundingClientRect() : { left: 0, width: 390 }; touch.current = { x: t.clientX, y: t.clientY, edge: ltr ? t.clientX < rect.left + 28 : t.clientX > rect.left + rect.width - 28, top: el ? el.scrollTop <= 0 : false, moved: false }; };
-  const onTouchMove = (e?: any) => { const s = touch.current; if (!s) return; const t = e.touches[0]; const dx = t.clientX - s.x, dy = t.clientY - s.y; if (s.top && !top && dy > 0 && Math.abs(dy) > Math.abs(dx)) { setPull(Math.min(96, dy * 0.6)); s.moved = true; } };
-  const onTouchEnd = (e?: any) => { const s = touch.current; if (!s) return; const t = e.changedTouches[0]; const dx = t.clientX - s.x; if (s.edge && (ltr ? dx > 80 : dx < -80) && top) app.pop(); if (pull > 70) { if (typeof window !== "undefined" && typeof window.__engspaceBuildChanged === "function" && window.__engspaceBuildChanged()) { try { location.reload(); } catch (x) {} } else setRefreshing(true); } setPull(0); touch.current = null; };
+  const onTouchMove = (e?: any) => { const s = touch.current; if (!s) return; const t = e.touches[0]; const dx = t.clientX - s.x, dy = t.clientY - s.y; if (s.top && !top && dy > 0 && Math.abs(dy) > Math.abs(dx)) { paintPull(Math.min(96, dy * 0.6)); s.moved = true; } };
+  const onTouchEnd = (e?: any) => { const s = touch.current; if (!s) return; const t = e.changedTouches[0]; const dx = t.clientX - s.x; if (s.edge && (ltr ? dx > 80 : dx < -80) && top) app.pop(); if (pull.current > 70) { if (typeof window !== "undefined" && typeof window.__engspaceBuildChanged === "function" && window.__engspaceBuildChanged()) { try { location.reload(); } catch (x) {} } else setRefreshing(true); } if (pull.current) paintPull(0); touch.current = null; };
   return wrap(
       <div className={frameCls} style={frameStyle} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/* while a sheet is open everything behind it is inert: no focus, no clicks, hidden from assistive tech */}
@@ -321,8 +342,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         <AppHeader app={app} />
         {!gate.ok && <div role="status" className="shrink-0 px-4 py-2 flex items-start gap-2 text-[11.5px] leading-snug bg-warn/10 text-warn border-b border-warn/20"><ShieldAlert size={14} className="shrink-0 mt-px" /><span>{gate.why}</span></div>}
         <div className="relative flex-1 min-h-0">
-          <div aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] flex justify-center pointer-events-none" style={{ transform: `translateY(${(refreshing ? 56 : pull) - 44}px)`, opacity: refreshing ? 1 : pull / 70, transition: pull ? "none" : "transform .3s cubic-bezier(.2,.7,.2,1), opacity .3s" }}><span className={`grid place-items-center w-9 h-9 rounded-full bg-surface border border-line-2 shadow-float ${refreshing ? "spin" : ""}`} style={{ transform: refreshing ? undefined : `rotate(${pull * 3}deg)` }}><ArchMark size={16} /></span></div>
-          <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} px-4 ${vtOK ? "vt-screen" : ""}`} style={{ transform: pull ? `translateY(${pull * 0.4}px)` : undefined, transition: pull ? "none" : "transform .3s cubic-bezier(.2,.7,.2,1)" }}>
+          <div ref={pullEl} aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] flex justify-center pointer-events-none will-change-transform" style={{ transform: `translate3d(0,${refreshing ? 12 : -44}px,0)`, opacity: refreshing ? 1 : 0, transition: `transform .3s ${EASE}, opacity .3s` }}><span ref={pullIcon} className={`grid place-items-center w-9 h-9 rounded-full bg-surface border border-line-2 shadow-float ${refreshing ? "spin" : ""}`}><ArchMark size={16} /></span></div>
+          <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} px-4 ${vtOK ? "vt-screen" : ""}`}>
             <div key={top ? `${top.type}-${top.id || ""}` : curTab} className={`${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : dir === "vt" ? "" : "screen-tab"}`}>{screen}</div>
           </div>
         </div>

@@ -60,6 +60,11 @@
   "p": "app/AppView.tsx",
   "n": 1
  },
+ "تم تأكيد بريدك — سجّل الدخول للمتابعة": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
  "هذا الحساب موقوف مؤقتًا بقرار من فريق المجتمع — لا يستقبل رسائل الآن": {
   "k": "s",
   "p": "app/AppView.tsx",
@@ -366,6 +371,11 @@
   "n": 1
  },
  "حدث خطأ غير متوقع — أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "افتح رابط إعادة التعيين على الجهاز الذي طلبته منه": {
   "k": "s",
   "p": "backend/cloud.ts",
   "n": 1
@@ -4845,12 +4855,22 @@
   "p": "data/seed.ts",
   "n": 1
  },
+ "تقييم عرض عمل": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
+ "صافيه ومكانه من السوق ورقمك المضاد": {
+  "k": "s",
+  "p": "data/tools.ts",
+  "n": 1
+ },
  "حاسبة الصافي": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
  },
- "من الإجمالي إلى ما يصل حسابك": {
+ "الصافي، والعكس: كم أطلب لأقبض؟": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
@@ -6135,6 +6155,26 @@
   "p": "domain/moderation.ts",
   "n": 1
  },
+ "أقل من السوق بوضوح": {
+  "k": "s",
+  "p": "domain/offer.ts",
+  "n": 1
+ },
+ "أقل من الوسط": {
+  "k": "s",
+  "p": "domain/offer.ts",
+  "n": 1
+ },
+ "عرض عادل": {
+  "k": "s",
+  "p": "domain/offer.ts",
+  "n": 1
+ },
+ "عرض قوي": {
+  "k": "s",
+  "p": "domain/offer.ts",
+  "n": 1
+ },
  "يشمل الإنشائي والجيوتقني والطرق والصحي": {
   "k": "s",
   "p": "domain/taxonomy.ts",
@@ -6376,7 +6416,7 @@
  "تأمين طبي خاص": {
   "k": "s",
   "p": "domain/taxonomy.ts,features/sheets/sheets.tsx",
-  "n": 2
+  "n": 5
  },
  "قيمة تقديرية للفرد": {
   "k": "s",
@@ -10264,11 +10304,6 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
- "أرسلنا رابط تأكيد إلى بريدك — افتحه ثم سجّل الدخول": {
-  "k": "s",
-  "p": "features/auth/auth.tsx",
-  "n": 1
- },
  "تعذّر إنشاء الحساب على هذا الجهاز — أعد المحاولة": {
   "k": "s",
   "p": "features/auth/auth.tsx",
@@ -10619,6 +10654,11 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
+ "خروج": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
  "إلغاء": {
   "k": "x",
   "p": "features/auth/auth.tsx,ui/moderation.tsx",
@@ -10632,13 +10672,18 @@
  "من": {
   "k": "x",
   "p": "features/auth/auth.tsx,features/market/live-salary.tsx,features/settings/settings.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,lib/search.ts",
-  "n": 9
+  "n": 10
  },
  "{0} · {1} من {2}": {
   "k": "r",
   "p": "features/auth/auth.tsx",
   "n": 1,
-  "x": "edit ? \"تعديل البيانات\" : \"التسجيل\" | EL <Num>{step + 1}</Num> | EL <Num>{keys.length}</Num>"
+  "x": "complete ? \"أكمل ملفك\" : edit ? \"تعديل البيانات\" : \"التسجيل\" | EL <Num>{step + 1}</Num> | EL <Num>{keys.length}</Num>"
+ },
+ "أكمل ملفك": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
  },
  "تعديل البيانات": {
   "k": "s",
@@ -10666,6 +10711,11 @@
   "n": 6
  },
  "جارٍ الإنشاء…": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "ابدأ": {
   "k": "x",
   "p": "features/auth/auth.tsx",
   "n": 1
@@ -10760,7 +10810,7 @@
  "دخول": {
   "k": "x",
   "p": "features/auth/auth.tsx",
-  "n": 1
+  "n": 3
  },
  "نسيت كلمة المرور؟": {
   "k": "x",
@@ -10851,6 +10901,190 @@
  },
  "حفظ كلمة المرور": {
   "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "المتابعة بحساب Google": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0} المتابعة بحساب Google": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy === \"google\" ? <LoaderCircle size={16} className=\"spin\" /> : <GoogleMark />"
+ },
+ "المتابعة بحساب Apple": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0} المتابعة بحساب Apple": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy === \"apple\" ? <LoaderCircle size={16} className=\"spin\" /> : <AppleMark />"
+ },
+ "المتابعة برقم الهاتف": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أو بالبريد الإلكتروني": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0}أو بالبريد الإلكتروني{1}": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <span className=\"h-px flex-1 bg-line\" /> | EL <span className=\"h-px flex-1 bg-line\" />"
+ },
+ "اكتب رقم موبايل مصري صحيح، مثل 01012345678": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "اكتب الرمز المكوّن من 6 أرقام": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "بالبريد الإلكتروني": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "الدخول برقم الهاتف": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "نرسل رمزًا من 6 أرقام في رسالة نصية. رقمك لا يظهر لأي عضو.": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "رقم الموبايل": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "أرسل الرمز": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0} أرسل الرمز": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy ? <LoaderCircle size={16} className=\"spin\" /> : null"
+ },
+ "أرسلنا الرمز إلى": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أرسلنا الرمز إلى {0}": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <Num>{cloud.e164(phone)}</Num>"
+ },
+ "الرمز": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "{0} دخول": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy ? <LoaderCircle size={16} className=\"spin\" /> : null"
+ },
+ "إعادة الإرسال بعد": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "ث": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "إعادة الإرسال بعد {0} ث": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <Num>{wait}</Num>"
+ },
+ "أعد إرسال الرمز": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "لم يُؤكَّد البريد بعد — افتح الرابط في الرسالة (من أي جهاز)": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أكّد بريدك": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أرسلنا رسالة إلى": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ ". افتح الرابط فيها من أي جهاز — موبايلك أو اللابتوب — وستدخل هنا تلقائيًا خلال ثوانٍ.": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أرسلنا رسالة إلى {0}. افتح الرابط فيها من أي جهاز — موبايلك أو اللابتوب — وستدخل هنا تلقائيًا خلال ثوانٍ.": {
+  "k": "r",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "EL <Num>{cred.email}</Num>"
+ },
+ "في انتظار التأكيد…": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أو اكتب الرمز من الرسالة": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 2
+ },
+ "تأكيد": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "{0} تأكيد": {
+  "k": "e",
+  "p": "features/auth/auth.tsx",
+  "n": 1,
+  "x": "busy ? <LoaderCircle size={16} className=\"spin\" /> : null"
+ },
+ "أكّدت البريد — ادخل الآن": {
+  "k": "x",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "أُعيد الإرسال": {
+  "k": "s",
+  "p": "features/auth/auth.tsx",
+  "n": 1
+ },
+ "لم تصلك الرسالة؟ أعد الإرسال": {
+  "k": "s",
   "p": "features/auth/auth.tsx",
   "n": 1
  },
@@ -12914,7 +13148,48 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "يصل حسابك تقريبًا": {
+ "من الإجمالي إلى الصافي": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "كم أطلب لأقبض…؟": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الصافي الذي تحتاجه شهريًا": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "أشهر مكافأة في السنة": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 4
+ },
+ "شهر": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 6
+ },
+ "اطلب إجماليًا": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "ج.م شهريًا": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "اطلب إجماليًا {0} ج.م شهريًا": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num className=\"text-[18px] font-semibold text-ink\">{fmt(gro"
+ },
+ "يصل حسابك في الشهر العادي تقريبًا": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -12944,17 +13219,177 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
+ "صافي المكافآت في السنة": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "صافي السنة كاملة": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
  "نسبة الاستقطاع الفعلية": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "تقديري: شرائح قانون 175 لسنة 2023، إعفاء شخصي 20,000 ج.م سنويًا، وحد أقصى للأجر التأميني 16,700 ج.م. لا يشمل بدلات معفاة أو تأمينًا طبيًا خاصًا.": {
+ "تقديري: الضريبة على دخل السنة كاملة (شرائح قانون 175 لسنة 2023، إعفاء شخصي 20,000 ج.م)، ويفقد الدخل السنوي فوق 600,000 ج.م الشرائح الأدنى. الحد الأقصى للأجر التأميني 16,700 ج.م. لا يشمل بدلات معفاة أو تأمينًا طبيًا خاصًا — راجع محاسبك للأرقام النهائية.": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "شارك النتيجة بدون اسم": {
+ "قيّم عرض عمل بهذا الرقم": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الأساسي الشهري": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "بدلات شهرية": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "يصل حسابك في الشهر العادي": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الإجمالي الشهري (أساسي + بدلات)": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "صافي السنة كاملة (مع المكافآت)": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "قيمة التأمين الطبي تقريبًا / شهر": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "· أعلى من": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "· أعلى من {0} من {1}": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num>{ev.p}%</Num> | liveOk ? \"تقارير الأعضاء\" : \"تقديرات السوق\""
+ },
+ "تقارير الأعضاء": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "تقديرات السوق": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الوسط:": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "· الربعان الأوسطان:": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "ج.م —": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "الوسط: {0} · الربعان الأوسطان: {1}–{2} ج.م — {3} · {4}": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num className=\"text-ink\">{fmt(m.p50)}</Num> | EL <Num>{fmt(m.p25)}</Num> | EL <Num>{fmt(m.p75)}</Num> | label(EXP, exp) | govName(g)"
+ },
+ "اطلب": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "ج.م (+": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ ") — رقم قابل للدفاع بالأرقام": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "اطلب {0} ج.م (+{1}) — رقم قابل للدفاع بالأرقام": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num className=\"text-[17px] font-semibold\">{fmt(ev.counter)} | EL <Num>{fmt(ev.gap)}</Num>"
+ },
+ "الرقم قوي — فاوض على البدلات أو مراجعة مكتوبة بعد 6 أشهر.": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "لا نرسل أرقام العرض إلى أي مكان.": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "{0} لا نرسل أرقام العرض إلى أي مكان.": {
+  "k": "e",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "liveOk ? <>المقارنة بـ<Num>{d.n}</Num> تقرير حقيقي من الأعضاء{live.wide ? \" على مستوى مصر\" : \"\"}.</> : d && d.access === \"teaser\" ? \"المقارنة بالنموذج المرجعي —"
+ },
+ "المقارنة بـ": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "تقرير حقيقي من الأعضاء": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "المقارنة بـ{0} تقرير حقيقي من الأعضاء{1}.": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <Num>{d.n}</Num> | live.wide ? \" على مستوى مصر\" : \"\""
+ },
+ "على مستوى مصر": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "المقارنة بالنموذج المرجعي — شارك راتبك لتقارن بتقارير الأعضاء الحقيقية.": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "المقارنة بالنموذج المرجعي — تقارير الأعضاء في هذه الخلية أقل من 5 بعد.": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "جهّز سكريبت التفاوض": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "شارك راتبك وقارن بالحقيقي": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -13084,11 +13519,6 @@
   "p": "features/sheets/sheets.tsx",
   "n": 2
  },
- "اطلب": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
  "— 5% فوق الوسط، رقم قابل للدفاع": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
@@ -13121,11 +13551,6 @@
   "n": 6
  },
  "شهور منذ آخر زيادة": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 2
- },
- "شهر": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
@@ -14398,6 +14823,11 @@
   "x": "EL <Num className=\"text-ink\">{fmt(e.mid)}</Num>"
  },
  "الصافي من الوسط": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "قيّم عرضهم": {
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1

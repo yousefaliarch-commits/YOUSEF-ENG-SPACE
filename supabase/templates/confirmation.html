@@ -1,0 +1,11 @@
+<!-- EngSpace — confirm sign-up. The link works on ANY device (token hash, not tied to the device that signed up);
+     the device that signed up also signs in by itself once it is opened, or with the code below. -->
+<div dir="rtl" style="font-family:system-ui,'IBM Plex Sans Arabic',sans-serif;max-width:480px;margin:auto;padding:24px;color:#18181b">
+  <h2 style="margin:0 0 8px">أكّد بريدك في EngSpace</h2>
+  <p style="line-height:1.8">اضغط الزر من أي جهاز — الموبايل أو اللابتوب. التطبيق المفتوح على جهازك سيدخل تلقائيًا.</p>
+  <p><a href="{{ .SiteURL }}/?token_hash={{ .TokenHash }}&type=signup#app" style="display:inline-block;background:#6d5bd0;color:#fff;padding:12px 22px;border-radius:12px;text-decoration:none">تأكيد البريد</a></p>
+  <p style="line-height:1.8">أو اكتب هذا الرمز في التطبيق: <b style="font-size:20px;letter-spacing:4px" dir="ltr">{{ .Token }}</b></p>
+  <hr style="border:0;border-top:1px solid #e4e4e7;margin:20px 0">
+  <div dir="ltr"><p style="margin:0 0 6px"><b>Confirm your EngSpace e-mail</b></p>
+  <p style="line-height:1.6;margin:0">Open the button above on any device, or type the code <b>{{ .Token }}</b> in the app.</p></div>
+</div>

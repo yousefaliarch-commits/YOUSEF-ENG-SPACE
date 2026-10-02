@@ -21,6 +21,7 @@ import { IdentityFace, IdentityTag } from "../../ui/identity";
 import { NotificationsBody } from "../../ui/notifications";
 import { Chip, FilterChip, Forward, Num, Panel, Primary, RangeBar, RoundButton, Secondary } from "../../ui/primitives";
 import { fmt } from "../../ui/theme";
+import { Windowed } from "../../ui/windowed";
 import { isCloud } from "../../backend/config";
 import { LiveSalaryPanel, useLiveSalary } from "../market/live-salary";
 
@@ -90,7 +91,7 @@ export function HomeScreen({ app }: any) {
 
       <section className="space-y-3">
         <SectionTitle action="المجتمع كله" onAction={() => app.setTab("community")}>من غرفك</SectionTitle>
-        {feed.length === 0 ? <Empty icon={MessageCircle} title="تابع غرفة لتظهر هنا" body="الغرف التي تتابعها تغذّي رئيسيتك." action="تصفّح الغرف" onAction={() => app.push({ type: "rooms" })} /> : feed.map((x) => <PostCard key={x.id} p={x} app={app} compact />)}
+        {feed.length === 0 ? <Empty icon={MessageCircle} title="تابع غرفة لتظهر هنا" body="الغرف التي تتابعها تغذّي رئيسيتك." action="تصفّح الغرف" onAction={() => app.push({ type: "rooms" })} /> : <Windowed items={feed} render={(x) => <PostCard key={x.id} p={x} app={app} compact />} />}
         <p className="pb-2 text-center text-[10px] text-ink-4">جميع الرواتب وبيانات التواصل بيانات توضيحية</p>
       </section>
     </div>
@@ -146,7 +147,7 @@ export function CommunityScreen({ app }: any) {
       </button>
       <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={roomF === "all"} onClick={() => setRoomF("all")}>الكل</FilterChip><FilterChip on={roomF === "verified"} onClick={() => setRoomF("verified")}><BadgeCheck size={12} />مهندسون موثّقون</FilterChip><FilterChip on={roomF === "employers-any"} onClick={() => setRoomF("employers-any")}><Building2 size={12} />جهات العمل</FilterChip>{followed.map((r) => <FilterChip key={r.id} on={roomF === r.id} onClick={() => setRoomF(r.id)}><r.icon size={12} />{r.name}</FilterChip>)}</div>
       <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{POST_SORTS.map(([id, l, I]: any) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}><I size={12} />{l}</FilterChip>)}</div>
-      <div key={roomF + sort} className="space-y-3 stagger">{feed.length === 0 ? <Empty icon={MessageCircle} title={sort === "open" ? "لا أسئلة بلا إجابة" : "الغرفة هادية"} body={sort === "open" ? "كل سؤال هنا له إجابة معتمدة — جرّب ترتيبًا آخر." : "كن أول من يفتح النقاش هنا."} action="اكتب منشورًا" onAction={() => app.openSheet("compose", { room: roomF })} /> : feed.map((x) => <PostCard key={x.id} p={x} app={app} compact />)}</div>
+      <div key={roomF + sort} className="space-y-3 stagger">{feed.length === 0 ? <Empty icon={MessageCircle} title={sort === "open" ? "لا أسئلة بلا إجابة" : "الغرفة هادية"} body={sort === "open" ? "كل سؤال هنا له إجابة معتمدة — جرّب ترتيبًا آخر." : "كن أول من يفتح النقاش هنا."} action="اكتب منشورًا" onAction={() => app.openSheet("compose", { room: roomF })} /> : <Windowed items={feed} render={(x) => <PostCard key={x.id} p={x} app={app} compact />} />}</div>
       </>}
       <p className="pb-2 text-center text-[10px] text-ink-4">{sup ? "حساب مشرف موقع · المجتمع فقط — الأرقام المالية مخفية" : "جميع الرواتب بيانات توضيحية"}</p>
     </div>
@@ -177,7 +178,7 @@ export function JobsScreen({ app }: any) {
       <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={region === "all"} onClick={() => setRegion("all")}>كل المناطق</FilterChip>{REGIONS.map(([id, l]: any) => <FilterChip key={id} on={region === id} onClick={() => setRegion(id)}><MapPin size={12} />{l}</FilterChip>)}</div>
       <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{JOB_SORTS.filter(([id]: any) => !(co && id === "best")).map(([id, l, I]: any) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}><I size={12} />{l}</FilterChip>)}</div>
       <div className="px-1 flex items-center justify-between text-[11px] text-ink-3"><span><Num>{list.length}</Num> وظيفة{active ? ` · ${active} مرشح${active > 1 ? "ات" : ""}` : ""}</span>{active > 0 && <button type="button" onClick={reset} className="text-accent hover:underline underline-offset-4">إعادة الضبط</button>}</div>
-      <div key={f + disc + sub + pos + region + sort} className="space-y-3 stagger">{list.length === 0 ? <Empty icon={f === "saved" ? Bookmark : Briefcase} title={f === "match" ? "لا وظائف مطابقة بعد" : f === "company" ? "لم تنشر وظائف بعد" : f === "saved" ? "لا وظائف محفوظة" : "لا وظائف هنا"} body={f === "match" ? "نُخطرك فور نشر وظيفة تطابق تخصّصك ومسارك ومسمّاك ومكانك." : f === "company" ? "انشر إعلانك الأول — الصق الوصف ونصنّفه لك." : f === "saved" ? "احفظ الوظائف التي تنوي التقديم عليها لتعود إليها هنا." : "جرّب مرشحات أوسع."} action={f === "company" ? "نشر وظيفة" : f === "all" && [disc, sub, pos, region].every((x) => x === "all") ? null : "عرض الكل"} onAction={() => f === "company" ? app.push({ type: "postjob" }) : (setF("all"), reset())} /> : list.map((j) => <JobCard key={j.id} job={j} app={app} />)}</div>
+      <div key={f + disc + sub + pos + region + sort} className="space-y-3 stagger">{list.length === 0 ? <Empty icon={f === "saved" ? Bookmark : Briefcase} title={f === "match" ? "لا وظائف مطابقة بعد" : f === "company" ? "لم تنشر وظائف بعد" : f === "saved" ? "لا وظائف محفوظة" : "لا وظائف هنا"} body={f === "match" ? "نُخطرك فور نشر وظيفة تطابق تخصّصك ومسارك ومسمّاك ومكانك." : f === "company" ? "انشر إعلانك الأول — الصق الوصف ونصنّفه لك." : f === "saved" ? "احفظ الوظائف التي تنوي التقديم عليها لتعود إليها هنا." : "جرّب مرشحات أوسع."} action={f === "company" ? "نشر وظيفة" : f === "all" && [disc, sub, pos, region].every((x) => x === "all") ? null : "عرض الكل"} onAction={() => f === "company" ? app.push({ type: "postjob" }) : (setF("all"), reset())} /> : <Windowed items={list} render={(j) => <JobCard key={j.id} job={j} app={app} />} />}</div>
       {!co && list.length > 0 && <p className="pb-2 text-center text-[10px] text-ink-4">التقديم يتم مباشرة مع الشركة عبر بريدك أو هاتفك — EngSpace لا يتوسط ولا يحتفظ بطلبك</p>}
     </div>
   );
@@ -210,7 +211,7 @@ export function CompaniesBody({ app }: any) {
       <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar"><FilterChip on={region === "all"} onClick={() => setRegion("all")}>كل المناطق</FilterChip>{REGIONS.map(([id, l]: any) => <FilterChip key={id} on={region === id} onClick={() => setRegion(id)}><MapPin size={12} />{l}</FilterChip>)}</div>
       <div className="-mx-4 px-4 flex items-center gap-2 overflow-x-auto no-scrollbar"><span className="shrink-0 text-[11px] text-ink-3 inline-flex items-center gap-1"><ArrowUpDown size={12} /> ترتيب</span>{[["reports", "الأكثر تقارير"], ["median", "الأعلى راتبًا"], ["recommend", "الأعلى توصية"], ["founded", "الأقدم"]].map(([id, l]: any) => <FilterChip key={id} on={sort === id} onClick={() => setSort(id)}>{l}</FilterChip>)}</div>
       {CAT_DESC[cat] && <div className="p-3.5 rounded-2xl border border-info/20 bg-info/10 text-[12.5px] leading-[1.8]"><span className="inline-flex items-center gap-1.5 font-medium text-info"><Coins size={14} /> {catName(cat)}</span><p className="mt-1 text-ink-2">{CAT_DESC[cat]}</p>{cat === "backoffice" && <p className="mt-1 text-[11px] text-ink-3">أسعار مرجعية: <Num>1</Num> USD ≈ <Num>{FX.USD}</Num> ج.م · <Num>1</Num> SAR ≈ <Num>{FX.SAR}</Num> · <Num>1</Num> AED ≈ <Num>{FX.AED}</Num> · <Num>1</Num> EUR ≈ <Num>{FX.EUR}</Num> — تقريبية، تُحدَّث شهريًا.</p>}</div>}
-      <div key={sort + q + cat + region} className="space-y-3 stagger">{list.length === 0 ? <Empty icon={Search} title="لا نتائج" body="لا شركة تطابق هذا المزيج. وسّع الفئة أو المنطقة." action="إعادة الضبط" onAction={() => { setQ(""); setCat("all"); setRegion("all"); }} /> : list.map((c) => <CompanyRow key={c.id} c={c} app={app} />)}</div>
+      <div key={sort + q + cat + region} className="space-y-3 stagger">{list.length === 0 ? <Empty icon={Search} title="لا نتائج" body="لا شركة تطابق هذا المزيج. وسّع الفئة أو المنطقة." action="إعادة الضبط" onAction={() => { setQ(""); setCat("all"); setRegion("all"); }} /> : <Windowed items={list} render={(c) => <CompanyRow key={c.id} c={c} app={app} />} />}</div>
       <p className="pb-2 text-center text-[10px] text-ink-4 leading-relaxed"><Num>{list.length}</Num> من <Num>{COMPANIES.length}</Num> جهة · <Num>{withLogo}</Num> شعارًا حقيقيًا من المواقع الرسمية وويكيبيديا · الحقائق من السجل العام والأرقام نموذجية</p>
     </div>
   );

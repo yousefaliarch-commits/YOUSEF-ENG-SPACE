@@ -5,7 +5,7 @@
 //  Errors come back as Error objects whose message is ready to show (Arabic; the i18n layer translates it).
 // =====================================================================
 import { Capacitor } from "@capacitor/core";
-import { AUTH_REDIRECT_NATIVE } from "./config";
+import { AUTH_REDIRECT_NATIVE, SUPABASE_KEY, SUPABASE_URL } from "./config";
 import { supabase } from "./client";
 import {
   ballotOf, choiceOf, commentTree, jobOf, jobRow, notifOf, personaFromProfile, postOf, postRow, profilePatch, reviewOf, reviewRow,
@@ -72,10 +72,69 @@ export async function resetPassword(email: string) {
 
 export async function deleteAccount() { const db = await supabase(); ok(await db.rpc("delete_my_account")); await db.auth.signOut(); }
 
+// ---------------------------------------------------------------- Google, Apple, phone
+// which sign-in methods the project has switched on (Dashboard → Authentication → Providers): a button shows only when it works
+export async function authMethods() {
+  try { const r = await fetch(`${SUPABASE_URL}/auth/v1/settings`, { headers: { apikey: SUPABASE_KEY } }); const s = await r.json(); const e = s.external || {};
+    return { google: !!e.google, apple: !!e.apple, phone: !!e.phone };
+  } catch (e) { return { google: false, apple: false, phone: false }; }
+}
+
+// Google / Apple: the browser goes to the provider and comes back here (web), or the system browser comes back to the app
+// through app.engspace://auth-callback (native: Google refuses sign-in inside an embedded web view)
+export async function signInWithProvider(provider: "google" | "apple") {
+  const db = await supabase();
+  if (!Capacitor.isNativePlatform()) { ok(await db.auth.signInWithOAuth({ provider, options: { redirectTo: location.origin + location.pathname } })); return; }
+  const r = ok(await db.auth.signInWithOAuth({ provider, options: { redirectTo: AUTH_REDIRECT_NATIVE, skipBrowserRedirect: true } })) as any;
+  const { Browser } = await import("@capacitor/browser"); await Browser.open({ url: r.url, presentationStyle: "popover" });
+}
+
+// Egyptian mobile numbers as typed (010…, 0020…, +20…) → E.164 (+201…)
+export const e164 = (raw: string) => { const d = String(raw || "").replace(/[^\d+]/g, ""); if (d.startsWith("+")) return d; if (d.startsWith("00")) return "+" + d.slice(2); if (d.startsWith("0")) return "+20" + d.slice(1); return "+" + d; };
+export async function sendPhoneCode(phone: string) { const db = await supabase(); ok(await db.auth.signInWithOtp({ phone: e164(phone) })); }
+export async function verifyPhoneCode(phone: string, code: string) {
+  const db = await supabase(); ok(await db.auth.verifyOtp({ phone: e164(phone), token: String(code).trim(), type: "sms" }));
+  const p = await myProfile(); if (!p) throw friendly("profile missing"); return p;
+}
+
+// ---------------------------------------------------------------- confirming an e-mail from any device
+// the 6-digit code in the confirmation e-mail, typed on the device that signed up
+export async function verifyEmailCode(email: string, code: string) {
+  const db = await supabase(); ok(await db.auth.verifyOtp({ email: email.trim().toLowerCase(), token: String(code).trim(), type: "signup" }));
+  return myProfile();
+}
+// the device that signed up keeps trying quietly: once the link is opened anywhere, this succeeds and the member is in
+export async function trySignIn(email: string, password: string) {
+  const db = await supabase(); const r = await db.auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
+  if (r.error) return null; return myProfile();
+}
+export async function resendConfirmation(email: string) { const db = await supabase(); ok(await db.auth.resend({ type: "signup", email: email.trim().toLowerCase() })); }
+
+// A link opened on THIS page: ?token_hash=…&type=… (the e-mail templates in supabase/templates — works on any device),
+// or ?code=… (PKCE — works only on the device that started it). Returns what happened, and always cleans the address so
+// a reload never replays the link. { signedIn, reset, confirmedElsewhere, error }
+export async function finishAuthLink(): Promise<any> {
+  let q: URLSearchParams; try { q = new URLSearchParams(location.search); } catch (e) { return null; }
+  const th = q.get("token_hash"), type = q.get("type"), code = q.get("code"), err = q.get("error_description"), reset = q.get("reset") === "1" || type === "recovery";
+  if (!th && !code && !err) return null;
+  const clean = () => { try { history.replaceState(null, "", location.pathname + (location.hash || "#app")); } catch (e) {} };
+  const db = await supabase();
+  try {
+    if (th) { ok(await db.auth.verifyOtp({ token_hash: th, type: (type || "email") as any })); clean(); return { signedIn: true, reset }; }
+    if (err) { clean(); return { error: err }; }
+    // ?code= — the client already tried it on load (detectSessionInUrl); a session means it worked here
+    const { data } = await db.auth.getSession(); clean();
+    return data.session ? { signedIn: true, reset } : { confirmedElsewhere: !reset, error: reset ? "افتح رابط إعادة التعيين على الجهاز الذي طلبته منه" : null };
+  } catch (e) { clean(); return { error: friendly(e).message }; }
+}
+
 // an auth link opened the native app (app.engspace://auth-callback?code=…[&reset=1]): finish the sign-in it carries
 export async function handleAuthUrl(url: string) {
   const q = new URL(url.replace(/^app\.engspace:\/\//, "https://x/")).searchParams; const code = q.get("code");
-  if (!code) return null; const db = await supabase(); ok(await db.auth.exchangeCodeForSession(code)); return { reset: q.get("reset") === "1" };
+  try { const { Browser } = await import("@capacitor/browser"); await Browser.close(); } catch (e) { /* not open */ }
+  const db = await supabase(); const th = q.get("token_hash");
+  if (th) { ok(await db.auth.verifyOtp({ token_hash: th, type: (q.get("type") || "email") as any })); return { reset: q.get("reset") === "1" || q.get("type") === "recovery" }; }
+  if (!code) return null; ok(await db.auth.exchangeCodeForSession(code)); return { reset: q.get("reset") === "1" };
 }
 // on the web the client finishes the link itself (detectSessionInUrl); the reset link is marked with ?reset=1
 export const resetLinkOpened = () => { try { return new URLSearchParams(location.search).get("reset") === "1"; } catch (e) { return false; } };

@@ -1,0 +1,49 @@
+# Feature 2 — the job offer evaluator and the net salary calculator
+ba86c149	Evaluate a job offer
+1dc35005	Its take-home, where it sits in the market, and your counter
+c0137f0f	Net pay — and the reverse: how much to ask for?
+85e1b7e1	Clearly below the market
+3a07ea27	Below the middle
+a9d7905e	A fair offer
+c59bc902	A strong offer
+b6621841	From gross to net
+58387363	What should I ask for…?
+76effaa6	The net you need each month
+ee632099	Bonus months a year
+8884e27a	Ask for a gross of
+e8f6923e	EGP a month
+b4af67ad	Ask for a gross of {0} EGP a month
+fbacb36b	Reaches your account in a regular month, roughly
+3176a6bb	Net bonuses a year
+2f08f0ba	Net for the whole year
+61b28a95	An estimate: tax on the whole year's income (Law 175 of 2023 brackets, 20,000 EGP personal exemption), and yearly income above 600,000 EGP loses the lower brackets. Insurable wage capped at 16,700 EGP. Excludes tax-exempt allowances and private medical cover — check final figures with your accountant.
+b0bc996b	Evaluate a job offer at this number
+18d34c37	Monthly basic
+0edc8f59	Monthly allowances
+378f6a08	Reaches your account in a regular month
+f90c2ef6	Monthly gross (basic + allowances)
+277e45d9	Net for the whole year (with bonuses)
+13d02a0e	Value of medical cover, roughly / month
+bb5696fd	· higher than
+992c8fc3	· higher than {0} of {1}
+9f50d2fe	member reports
+e985e02e	market estimates
+50a4bb39	Middle:
+df487176	· middle two quarters:
+deac5d81	EGP —
+37a19b82	Middle: {0} · middle two quarters: {1}–{2} EGP — {3} · {4}
+fc812810	EGP (+
+49003768	) — a number you can defend with figures
+de6e94c2	Ask for {0} EGP (+{1}) — a number you can defend with figures
+9aec42b6	A strong number — negotiate the allowances or a written review after 6 months.
+e78352cc	We never send the offer's figures anywhere.
+152c0da8	{0} We never send the offer's figures anywhere.
+3e3e726d	Compared with
+32b3d0c4	real member reports
+28dec06e	Compared with {0} real member reports{1}.
+c365cfdb	across Egypt
+b73a956f	Compared with the reference model — share your salary to compare with real member reports.
+cec0f65d	Compared with the reference model — this cell has fewer than 5 member reports so far.
+970f9090	Prepare the negotiation script
+89462901	Share your salary and compare with the real data
+cabc71d7	Evaluate their offer
