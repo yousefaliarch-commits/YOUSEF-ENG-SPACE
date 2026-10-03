@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Suspense, lazy, memo, startTransition, useEffect, useLayoutEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   CircleCheck, LockKeyhole, ShieldAlert
@@ -44,6 +44,17 @@ const ChecklistsScreen = lazy(() => import("../features/qaqc/qaqc").then((m) => 
 // =====================================================================
 //  App view — state, routing, gestures
 // =====================================================================
+// A kept-alive tab: an inactive pane is skipped with content-visibility:hidden, which keeps its computed style and layout
+// (display:none would throw them away and showing the tab again would recompute the whole screen). Its content does not
+// re-render while hidden, nor to be hidden; it renders again only as the visible tab.
+const PaneBody = memo(({ render }: any) => render(), (a: any, b: any) => !b.active);
+// a pane built in the background is laid out once (invisible) before it is skipped, so its first appearance is cheap too
+const TabPane = ({ active, render }: any) => {
+  const [warm, setWarm] = useState(active);
+  useEffect(() => { if (warm) return; let id = requestAnimationFrame(() => { id = requestAnimationFrame(() => setWarm(true)); }); return () => cancelAnimationFrame(id); }, []);
+  return <div className={`tab-pane ${active ? "" : warm ? "is-off" : "is-off is-warming"}`} {...(active ? {} : { inert: "", "aria-hidden": true })}><PaneBody active={active} render={render} /></div>;
+};
+
 export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "ticket"];
 
 export const PLAIN_TYPES = ["notifications", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists", "support"];
@@ -105,7 +116,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // previews and browsers without the API keep the class-based entrances. Reduced motion turns both off.
   const vtOK = !embed && typeof document !== "undefined" && typeof document.startViewTransition === "function" && !reducedMotion();
   const nav = (kind?: any, fn?: any) => {
-    const root = document.documentElement; const L = liveState(); if (!vtOK || L.vtBusy || L.tourOn) { fn(); return; } // under the tour the screen changes at once: a view transition behind the scrim only costs frames
+    const root = document.documentElement; const L = liveState(); if (!vtOK || L.vtBusy || L.tourOn || kind === "tab") { fn(); return; } // under the tour the screen changes at once: a view transition behind the scrim only costs frames
     L.vtBusy = true; root.dataset.vt = kind; let t = null;
     const done = () => { L.vtBusy = false; if (root.dataset.vt === kind) delete root.dataset.vt; };
     try { t = document.startViewTransition(() => { ReactDOM.flushSync(fn); }); } catch (e) { done(); fn(); return; }
@@ -132,6 +143,11 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // View Transition), so a screen never appears scrolled somewhere else first.
   const scrollMem = useRef<any>({}); const navKind = useRef<any>("tab"); const shownKey = useRef<any>(null);
   const [tourOn, setTourOn] = useState(false); liveState().tourOn = tourOn;
+  // Tabs stay mounted once shown (hidden with display:none), so switching back only toggles visibility; after the first screen
+  // has painted, the remaining tabs are built in an idle, interruptible render so even a first visit is instant.
+  const [visited, setVisited] = useState<any>(() => [init.tab]);
+  useEffect(() => { if (!visited.includes(curTab)) setVisited((v) => [...v, curTab]); }, [curTab]);
+  useEffect(() => { if (!persona) return; const ric: any = (window as any).requestIdleCallback || ((f: any) => setTimeout(f, 1200)); const id = ric(() => startTransition(() => setVisited((v) => [...new Set([...v, ...tabs.map((x) => x.id)])])), { timeout: 2500 }); return () => { const c: any = (window as any).cancelIdleCallback || clearTimeout; c(id); }; }, [!!persona, tabs.length]);
   useEffect(() => { if (!persona || welcome || editing || embed || !langChosen || tourSeen()) return; const t = setTimeout(() => setTourOn(true), 900); return () => clearTimeout(t); }, [!!persona, welcome, editing, langChosen]);
   const topNow = stack[stack.length - 1]; const screenKey = topNow ? `${topNow.type}-${topNow.id || ""}#${stack.length}` : "tab:" + curTab;
   useLayoutEffect(() => {
@@ -244,7 +260,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   backRef.current = () => { if (viewer) { setViewer(null); return true; } if (sheet) { setSheet(null); return true; } if (stack.length) { app.pop(); return true; } if (persona && curTab !== "home") { app.setTab("home"); return true; } return false; };
   useEffect(() => { if (NATIVE && !embed) setBackHandler(() => backRef.current()); }, []);
   const app: any = {
-    tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; nav("tab", () => { setDir(vtOK ? "vt" : "tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; nav("push", () => { setDir(vtOK ? "vt" : "push"); setStack((st) => [...st, s]); }); if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => { navKind.current = "pop"; nav("pop", () => { setDir(vtOK ? "vt" : "pop"); setStack((st) => st.slice(0, -1)); }); }, scrolled,
+    tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; startTransition(() => { setDir("tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; nav("push", () => { setDir(vtOK ? "vt" : "push"); setStack((st) => [...st, s]); }); if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => { navKind.current = "pop"; nav("pop", () => { setDir(vtOK ? "vt" : "pop"); setStack((st) => st.slice(0, -1)); }); }, scrolled,
     lang, setLang, langChosen, startTour: () => { setSheet(null); setViewer(null); if (stack.length) { navKind.current = "tab"; setStack([]); } setTourOn(true); },
     market, setMarket, goMarket: (m?: any) => { if (!tabs.some((x) => x.id === "market")) { deny(); return; } nav("tab", () => { setDir(vtOK ? "vt" : "tab"); if (m === "tools") { setTabRaw("tools"); } else { setMarket(m); setTabRaw("market"); } setStack([]); }); },
     viewImage: (image?: any) => setViewer(image || null), sheet, openSheet: (type?: any, payload: any = {}) => { if (blocked.sheets.includes(type) || (type === "tool" && !toolOpen(blocked, payload.id))) { deny(); return; } if (["compose", "review", "contribute"].includes(type) && !gate.ok) { setMsg(gate.why); return; } setSheet({ type, payload }); }, closeSheet: () => setSheet(null), toast: setMsg, pts, addPts,
@@ -353,7 +369,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
     : top
     ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
-    : curTab === "home" ? <HomeScreen app={app} /> : curTab === "community" ? <CommunityScreen app={app} /> : curTab === "jobs" ? <JobsScreen app={app} /> : curTab === "market" ? <MarketScreen app={app} /> : curTab === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
+    : null;
+  const tabScreen = (id?: any) => id === "home" ? <HomeScreen app={app} /> : id === "community" ? <CommunityScreen app={app} /> : id === "jobs" ? <JobsScreen app={app} /> : id === "market" ? <MarketScreen app={app} /> : id === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" && toolOpen(blocked, sheet.payload.id) ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;
   const sheets: any = {
     contribute: ["شارك راتبك", <ContributeSheet app={app} payload={sheet?.payload} />], compose: ["منشور جديد", <ComposeSheet app={app} payload={sheet?.payload} />], review: ["تقييم الشركة", <ReviewSheet app={app} payload={sheet?.payload} />],
@@ -374,8 +391,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         {!gate.ok && <div role="status" className="shrink-0 px-4 py-2 flex items-start gap-2 text-[11.5px] leading-snug bg-warn/10 text-warn border-b border-warn/20"><ShieldAlert size={14} className="shrink-0 mt-px" /><span>{gate.why}</span></div>}
         <div className="relative flex-1 min-h-0">
           <div ref={pullEl} aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] flex justify-center pointer-events-none will-change-transform" style={{ transform: `translate3d(0,${refreshing ? 12 : -44}px,0)`, opacity: refreshing ? 1 : 0, transition: `transform .3s ${EASE}, opacity .3s` }}><span ref={pullIcon} className={`grid place-items-center w-9 h-9 rounded-full bg-surface border border-line-2 shadow-float ${refreshing ? "spin" : ""}`}><ArchMark size={16} /></span></div>
-          <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} px-4 pb-[var(--tabbar-space)] ${vtOK ? "vt-screen" : ""}`}>
-            <div key={top ? `${top.type}-${top.id || ""}` : curTab} className={`${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : dir === "vt" ? "" : "screen-tab"}`}>{screen}</div>
+          <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} relative px-4 pb-[var(--tabbar-space)] ${vtOK ? "vt-screen" : ""}`}>
+            {top && <div key={`${top.type}-${top.id || ""}`} className={`${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>}
+            {visited.filter((id) => tabs.some((x) => x.id === id)).map((id) => <TabPane key={id} active={!top && id === curTab} render={() => tabScreen(id)} />)}
           </div>
           <TabBar tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} />
         </div>

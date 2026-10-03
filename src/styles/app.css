@@ -238,4 +238,11 @@ html[data-glass="lite"] .glass { -webkit-backdrop-filter: none; backdrop-filter:
 [dir="rtl"] .tab-ind { --dx: -1; }
 @media (prefers-reduced-motion: reduce) { .tab-ind { transition: none; } }
 
+/* kept-alive tab panes: shown with flex only when not [hidden]; a short composited fade replays each time a pane is shown */
+/* kept-alive tab panes: the visible one is in the flow; the others sit out of it, unpainted and unhittable, with their
+   rendering state kept (content-visibility:hidden), at the same width so showing them needs no new layout */
+.tab-pane { display: flex; flex-direction: column; min-height: 100%; }
+.tab-pane.is-off { position: absolute; top: 0; left: 1rem; right: 1rem; min-height: 0; visibility: hidden; content-visibility: hidden; pointer-events: none; }
+.tab-pane.is-warming { content-visibility: visible; }
+
 @tailwind utilities;
