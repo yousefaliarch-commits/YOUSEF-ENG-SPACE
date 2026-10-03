@@ -71,7 +71,7 @@ export const SETTINGS_TOGGLES = (app?: any) => { const p = app.profile; return [
 
 
 // Live web updates (native shells): which web bundle runs, and a manual check. The app also checks by itself at launch.
-const OTA_STATUS: any = { idle: "لم يُفحص بعد", checking: "جارٍ فحص التحديثات…", downloading: "جارٍ تنزيل التحديث…", ready: "تحديث جاهز — يُطبَّق عند الفتح التالي", current: "أنت على أحدث نسخة", failed: "تعذّر فحص التحديث — حاول لاحقًا", incompatible: "يلزم تثبيت نسخة جديدة من التطبيق لهذا التحديث" };
+const OTA_STATUS: any = { idle: "لم يُفحص بعد", checking: "جارٍ فحص التحديثات…", downloading: "جارٍ تنزيل التحديث…", ready: "تحديث جاهز — يُطبَّق عند الفتح التالي", current: "أنت على أحدث إصدار بالفعل", failed: "تعذّر فحص التحديث — حاول لاحقًا", incompatible: "يلزم تثبيت نسخة جديدة من التطبيق لهذا التحديث" };
 export function LiveUpdate() {
   const [s, setS] = useState<any>(otaState()); useEffect(() => onOtaState(setS), []);
   if (!s.supported) return null;
@@ -80,10 +80,10 @@ export function LiveUpdate() {
     <div data-ota={s.status}><Panel className="px-4 py-3">
       <h2 className="text-[13px] font-medium inline-flex items-center gap-1.5"><RefreshCw size={15} className="text-accent" /> التحديثات الفورية</h2>
       <p className="mt-1 text-[11.5px] text-ink-2 leading-relaxed">حزمة الواجهة: <span dir="ltr" className="text-ink">{s.bundle}</span> · {s.builtin ? "مدمجة في التطبيق" : "محدَّثة عبر الإنترنت"}</p>
-      <p className="mt-0.5 text-[11.5px] text-ink-3" role="status">{OTA_STATUS[s.status] || ""}{s.pending && s.status === "ready" ? <> · <span dir="ltr">{s.pending.version}</span></> : null}</p>
+      <p className="mt-0.5 text-[11.5px] text-ink-3" role="status">{s.status === "failed" && s.error ? s.error : OTA_STATUS[s.status] || ""}{s.status === "downloading" && s.progress != null ? <> <Num>{s.progress}%</Num></> : null}{s.pending && s.status === "ready" ? <> · <span dir="ltr">{s.pending.version}</span></> : null}</p>
       {s.rolledBack && <p className="mt-0.5 text-[11px] text-warn">تراجع التطبيق تلقائيًا عن تحديث لم يعمل (<span dir="ltr">{s.rolledBack}</span>) وبقي على النسخة السليمة.</p>}
       <div className="mt-2.5 flex gap-2">
-        <Secondary onClick={() => checkForUpdate()} disabled={busy} className="h-10 px-4 flex-1"><RefreshCw size={14} className={busy ? "spin" : ""} /> تحقّق من التحديث</Secondary>
+        <Secondary onClick={() => checkForUpdate({ manual: true })} disabled={busy} className="h-10 px-4 flex-1"><RefreshCw size={14} className={busy ? "spin" : ""} /> تحقّق من التحديث</Secondary>
         {s.status === "ready" && <Primary onClick={() => applyUpdateNow()} className="h-10 px-4 flex-1">طبّق الآن</Primary>}
       </div>
     </Panel></div>

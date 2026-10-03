@@ -1,0 +1,11 @@
+# v0.1.12: update check feedback
+d9becea0	You're already on the latest version
+12046f5a	No internet connection — try again
+ff68049c	The update check timed out — check your connection and try again
+b88b0f5b	Couldn't reach the update server — try again later
+535f042c	The update data on the server is invalid — tell the EngSpace team
+481d5b44	Couldn't download the update — we'll try again automatically
+5389117e	The update service isn't available in this version — install the latest app version
+8b076cd1	An update is available that needs a newer app version — install it from the releases page
+eadf8c01	The update is ready — tap «Update now» in the top bar
+fd47a9b3	Couldn't apply the update now — it will apply at the next launch

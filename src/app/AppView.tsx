@@ -22,6 +22,7 @@ import { CommunityScreen, HomeScreen, InboxScreen, JobsScreen, MarketScreen, Too
 import { dropOwnRequest, newVerifyRequest, purgeRequest, saveOwnRequest, verifs0, verifySummary } from "../features/verify/verify";
 import { L2, say, tr } from "../i18n/i18n";
 import { UpdateBanner } from "../ui/update-banner";
+import { onOtaToast } from "../native/updater";
 import { DEMO_PERSONA, estimateFor, loadPersona, reachFor, savePersona } from "../lib/helpers";
 import { ImageViewer } from "../lib/media";
 import { applyReaction, mergeLocalPosts } from "../lib/posts";
@@ -164,6 +165,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     if (kind === "push") delete scrollMem.current[screenKey];
   }, [screenKey]);
   useEffect(() => { if (!msg) return; const t = setTimeout(() => setMsg(""), 2600); return () => clearTimeout(t); }, [msg]);
+  // the outcome of an update check the member started (Settings → تحقّق من التحديث): up to date, needs a new install, or why it failed
+  useEffect(() => onOtaToast((t) => setMsg(t)), []);
   // the route lives in the hash; signed out it is just #app, so a reload of the sign-up/sign-in screens never lands in the demo member
   useEffect(() => { if (embed && !embed.hash) return; const top = stack[stack.length - 1]; try { history.replaceState(null, "", !persona ? (embed ? "#devices" : "#app") : (embed ? "#devices/" : "#app/") + (top ? (top.id ? `${top.type}/${top.id}` : top.type) : curTab === "market" ? `market/${market}` : curTab)); } catch (e) {} }, [curTab, stack, market, persona]);
   // Pull-to-refresh always lets go: when the data arrives, when it fails, or after 12 s on a connection that never answers (the spinner
