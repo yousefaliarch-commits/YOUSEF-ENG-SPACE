@@ -24,5 +24,5 @@ export default defineConfig({
     { name: "android", use: { ...pixel, ...chromiumUse } },
     { name: "ios", use: webkit ? { ...devices["iPhone 15"] } : { ...iphoneNoEngine, ...chromiumUse } },
   ],
-  webServer: process.env.E2E_BASE ? undefined : { command: "npx vite --port 5173 --strictPort --host 127.0.0.1", url: base, reuseExistingServer: true, timeout: 120_000 },
+  webServer: process.env.E2E_BASE ? undefined : { command: "npm run dev -- --port 5173 --strictPort --host 127.0.0.1", url: base, reuseExistingServer: true, timeout: 120_000 },
 });
