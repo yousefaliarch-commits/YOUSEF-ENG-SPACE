@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Probe manifest and bundle
         run: |
+          exec > >(tee /tmp/out.txt) 2>&1
           base="https://cyziykbqldtxyquqvvkr.supabase.co/storage/v1/object/public/app-updates/preview"
           for o in "capacitor://localhost" "https://localhost" "http://localhost"; do
             echo "=== manifest GET Origin: $o"; curl -sS -D - -o /tmp/m.json -H "Origin: $o" "$base/manifest.json?t=1" | grep -iE "^HTTP|access-control|content-type|cache-control|content-length|vary"; done
@@ -21,3 +22,7 @@ jobs:
           ls -l /tmp/b.zip; sha256sum /tmp/b.zip
           echo "=== bundle GET range"; curl -sS -D - -o /dev/null -H "Range: bytes=0-" "$url" | grep -iE "^HTTP|content-range|content-length"
           echo "=== iOS UA"; curl -sS -D - -o /dev/null -A "EngSpace/1 CFNetwork/1568 Darwin/24.0.0" "$url" | grep -iE "^HTTP|content-length|content-encoding"
+      - name: Report
+        if: always()
+        run: |
+          split -l 12 /tmp/out.txt /tmp/part_; for f in /tmp/part_*; do body=$(sed 's/%/%25/g' "$f" | tr -d '\r' | awk '{printf "%s%%0A", $0}'); echo "::notice title=probe $(basename $f)::$body"; done
