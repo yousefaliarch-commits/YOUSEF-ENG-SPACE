@@ -31,8 +31,8 @@
  },
  "العضو": {
   "k": "s",
-  "p": "app/AppView.tsx",
-  "n": 1
+  "p": "app/AppView.tsx,features/admin/directory-support.tsx",
+  "n": 2
  },
  "{0} — حُذفت المستندات ({1}) نهائيًا": {
   "k": "t",
@@ -184,8 +184,8 @@
  },
  "رجوع": {
   "k": "s",
-  "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,ui/chrome.tsx",
-  "n": 18
+  "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/support/support.tsx,ui/chrome.tsx",
+  "n": 20
  },
  "شارك راتبك": {
   "k": "s",
@@ -255,8 +255,8 @@
  },
  "جارٍ التحميل…": {
   "k": "x",
-  "p": "app/ScreenLoading.tsx,features/market/raise-tracker.tsx",
-  "n": 2
+  "p": "app/ScreenLoading.tsx,features/admin/directory-support.tsx,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 7
  },
  "طريقة العرض": {
   "k": "s",
@@ -345,6 +345,16 @@
   "p": "backend/cloud.ts",
   "n": 1
  },
+ "فتحت 5 تذاكر اليوم — انتظر الرد أو أضف إلى تذكرة مفتوحة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "هذه التذكرة مغلقة — افتح تذكرة جديدة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
  "سجّلت زيادتين خلال آخر 6 أشهر — يمكنك المشاركة مجددًا لاحقًا": {
   "k": "s",
   "p": "backend/cloud.ts",
@@ -384,6 +394,11 @@
   "k": "s",
   "p": "backend/cloud.ts,native/native.ts",
   "n": 2
+ },
+ "فريق إدارة المنصة": {
+  "k": "s",
+  "p": "backend/map.ts",
+  "n": 1
  },
  "استلام حديد التسليح": {
   "k": "s",
@@ -6010,13 +6025,13 @@
  },
  "منشور": {
   "k": "s",
-  "p": "domain/moderation.ts",
-  "n": 1
+  "p": "domain/moderation.ts,features/admin/directory-support.tsx",
+  "n": 2
  },
  "رد": {
   "k": "s",
-  "p": "domain/moderation.ts,features/admin/AdminView.tsx,features/stack/stack.tsx",
-  "n": 5
+  "p": "domain/moderation.ts,features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/stack/stack.tsx",
+  "n": 6
  },
  "تقييم شركة": {
   "k": "s",
@@ -6065,8 +6080,8 @@
  },
  "الحساب": {
   "k": "s",
-  "p": "domain/moderation.ts",
-  "n": 1
+  "p": "domain/moderation.ts,features/support/support.tsx",
+  "n": 2
  },
  "يكشف هوية شخص أو بياناته الخاصة": {
   "k": "s",
@@ -9099,10 +9114,20 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
- "الأعضاء": {
+ "دليل الأعضاء": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx",
+  "n": 3
+ },
+ "تذاكر الدعم": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx",
+  "n": 3
+ },
+ "حسابات الإشراف": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 3
+  "n": 1
  },
  "التحليلات": {
   "k": "s",
@@ -9698,8 +9723,8 @@
  },
  "مفتوحة": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/support/support.tsx",
+  "n": 4
  },
  "مفتوحة {0}": {
   "k": "r",
@@ -9726,8 +9751,8 @@
  },
  "الكل": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/tabs/tabs.tsx",
-  "n": 5
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/tabs/tabs.tsx",
+  "n": 6
  },
  "كل الأنواع": {
   "k": "s",
@@ -10102,13 +10127,13 @@
  },
  "التوثيق": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 3
+  "p": "features/admin/AdminView.tsx,features/support/support.tsx",
+  "n": 4
  },
  "موثّق": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/tabs/tabs.tsx,lib/helpers.tsx,ui/characters.tsx,ui/feed.tsx",
-  "n": 6
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/auth/auth.tsx,features/tabs/tabs.tsx,lib/helpers.tsx,ui/characters.tsx,ui/feed.tsx",
+  "n": 8
  },
  "غير موثّق": {
   "k": "s",
@@ -10297,23 +10322,23 @@
  },
  "صلاحية الإدارة": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 4
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx",
+  "n": 8
  },
  "عضو": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx,ui/feed.tsx",
-  "n": 3
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/stack/stack.tsx,ui/feed.tsx",
+  "n": 5
  },
  "مشرف": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx",
+  "n": 2
  },
  "مسؤول": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx",
+  "n": 2
  },
  "المشرف يراجع البلاغات وطلبات التوثيق؛ المسؤول يدير الإعدادات والصلاحيات أيضًا.": {
   "k": "x",
@@ -10419,6 +10444,11 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
+ "الأعضاء": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
  "جدد (30 يومًا)": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
@@ -10436,13 +10466,13 @@
  },
  "منشورات": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx",
-  "n": 3
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/stack/stack.tsx",
+  "n": 4
  },
  "ردود": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx",
-  "n": 3
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/stack/stack.tsx",
+  "n": 4
  },
  "مشاركات رواتب": {
   "k": "s",
@@ -10451,8 +10481,8 @@
  },
  "تقييمات شركات": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx",
+  "n": 2
  },
  "إعلانات وظائف": {
   "k": "s",
@@ -10491,8 +10521,8 @@
  },
  "أخرى": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/cv/extract.ts",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx",
+  "n": 4
  },
  "لا منشورات بعد.": {
   "k": "x",
@@ -11165,6 +11195,331 @@
   "n": 1,
   "x": "d.staff"
  },
+ "قيد المراجعة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx,features/auth/auth.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "مرفوض": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "سُحب": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "انتهت المهلة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "مدير المنصة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "للمسؤولين فقط": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "دليل الأعضاء يعرض بيانات الحسابات الكاملة، ولذلك يقتصر على المسؤولين.": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "{0} عضو": {
+  "k": "r",
+  "p": "features/admin/directory-support.tsx,ui/feed.tsx",
+  "n": 2,
+  "x": "EL <Num>{list.length}</Num>"
+ },
+ "البيانات الكاملة لكل حساب. الدليل لا يربط أي عضو بمنشوراته المجهولة — هذه تبقى مجهولة حتى عن الإدارة، كما وعدنا الأعضاء.": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "ابحث بالاسم أو البريد أو الهاتف": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "لا نتائج": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx,features/tabs/tabs.tsx,ui/chrome.tsx",
+  "n": 5
+ },
+ "جرّب اسمًا أو بريدًا آخر.": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "· انضم": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "{0}{1}{2} · انضم {3}": {
+  "k": "e",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1,
+  "x": "roleTitle(m.role) | m.pos ? ` · ${posLabel(m.pos)}` : \"\" | m.gov ? ` · ${placeName(m.gov, m.city)}` : \"\" | day(m.created_at)"
+ },
+ "لم يطلب التوثيق": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "الرسائل من الإدارة تعمل على المنصة الحية": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "أُرسلت الرسالة باسم «فريق EngSpace»": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "حُدّثت الصلاحية": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "→ رجوع للدليل": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "البريد": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx,features/stack/stack.tsx",
+  "n": 2
+ },
+ "الهاتف": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx,features/stack/stack.tsx",
+  "n": 2
+ },
+ "المكان": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx,features/stack/stack.tsx,lib/helpers.tsx",
+  "n": 6
+ },
+ "الشركة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx,features/stack/stack.tsx",
+  "n": 3
+ },
+ "النوع / العمر": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "أنثى": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx,features/auth/auth.tsx,features/stack/stack.tsx",
+  "n": 3
+ },
+ "ذكر": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx,features/auth/auth.tsx,features/stack/stack.tsx",
+  "n": 3
+ },
+ "سنة التخرج": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx,features/auth/auth.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx",
+  "n": 6
+ },
+ "تاريخ الانضمام": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "آخر دخول": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "طريقة الدخول": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "المعرّف العلني": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "سجل التوثيق": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "الطلب": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "المستند": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "شهادة تخرج": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "كارنيه النقابة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "الشعبة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "تاريخ القرار": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "المراجِع": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "حذف المستندات": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "حُذفت {0}": {
+  "k": "t",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1,
+  "x": "day(v.documents_deleted_at)"
+ },
+ "تُحذف عند القرار": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "لا طلب توثيق.": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "المستندات نفسها لا تُحفظ: تُحذف فور القرار، ويبقى هذا السجل فقط.": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "النشاط العلني": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "ما نشره باسمه فقط. المشاركات المجهولة لا تُنسب لأحد في لوحة الإدارة.": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "إرسال رسالة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 3
+ },
+ "تصل في «الرسائل» عند العضو باسم «فريق EngSpace»": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "عضو تجريبي": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "· قيد المراجعة": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "مفتوحة {0} · قيد المراجعة {1}": {
+  "k": "r",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1,
+  "x": "EL <Num>{counts.open || 0}</Num> | EL <Num>{counts.review || 0}</Num>"
+ },
+ "النشطة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "لا تذاكر هنا": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "عندما يفتح عضو تذكرة تظهر في هذه القائمة.": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "رسائل": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "{0} · {1} · {2} · {3} رسائل{4}": {
+  "k": "r",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1,
+  "x": "t.ref | catName(t.category) | EL <bdi {...UGC}>{t.member_name}</bdi> | EL <Num>{t.messages}</Num> | t.last_from_staff === false && t.status !== \"closed\" ? \" · ب"
+ },
+ "· بانتظار الرد": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "أُرسل الرد — وصل العضو إشعار": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "→ رجوع للتذاكر": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "الحالة": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "فريق الدعم": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx,features/support/support.tsx",
+  "n": 2
+ },
+ "ردّك على العضو — يصله إشعار": {
+  "k": "s",
+  "p": "features/admin/directory-support.tsx",
+  "n": 2
+ },
+ "إرسال الرد": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "ردّ وأغلق": {
+  "k": "x",
+  "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
  "اكتب الشهر والنسبة (بين −20 و100)": {
   "k": "s",
   "p": "features/admin/inflation-admin.tsx",
@@ -11483,16 +11838,6 @@
   "p": "features/auth/auth.tsx,features/stack/stack.tsx",
   "n": 4
  },
- "ذكر": {
-  "k": "s",
-  "p": "features/auth/auth.tsx,features/stack/stack.tsx",
-  "n": 2
- },
- "أنثى": {
-  "k": "s",
-  "p": "features/auth/auth.tsx,features/stack/stack.tsx",
-  "n": 2
- },
  "اللقب:": {
   "k": "x",
   "p": "features/auth/auth.tsx",
@@ -11530,11 +11875,6 @@
   "n": 1
  },
  "العمر": {
-  "k": "s",
-  "p": "features/auth/auth.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx",
-  "n": 4
- },
- "سنة التخرج": {
   "k": "s",
   "p": "features/auth/auth.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx",
   "n": 4
@@ -11717,11 +12057,6 @@
   "p": "features/auth/auth.tsx",
   "n": 1
  },
- "قيد المراجعة": {
-  "k": "x",
-  "p": "features/auth/auth.tsx",
-  "n": 1
- },
  "قرأت سياسة الخصوصية والأمان أعلاه وأوافق على شروط الاستخدام.": {
   "k": "x",
   "p": "features/auth/auth.tsx",
@@ -11734,8 +12069,8 @@
  },
  "إلغاء": {
   "k": "x",
-  "p": "features/auth/auth.tsx,ui/moderation.tsx",
-  "n": 2
+  "p": "features/auth/auth.tsx,features/support/support.tsx,ui/moderation.tsx",
+  "n": 3
  },
  "لديك حساب؟ دخول": {
   "k": "x",
@@ -13328,63 +13663,63 @@
  },
  "يناير": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "فبراير": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "مارس": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "أبريل": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "مايو": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "يونيو": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "يوليو": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "أغسطس": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "سبتمبر": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "أكتوبر": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "نوفمبر": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "ديسمبر": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 2
  },
  "ترقية": {
   "k": "s",
@@ -14113,6 +14448,16 @@
   "p": "features/settings/settings.tsx",
   "n": 1
  },
+ "تواصل مع الإدارة": {
+  "k": "s",
+  "p": "features/settings/settings.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "افتح تذكرة دعم وتابع حالتها والرد عليها": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 2
+ },
  "كيف نحمي هويتك؟": {
   "k": "s",
   "p": "features/settings/settings.tsx,features/stack/stack.tsx",
@@ -14489,8 +14834,8 @@
  },
  "إزالة الصورة": {
   "k": "s",
-  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx",
-  "n": 3
+  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/support/support.tsx",
+  "n": 5
  },
  "وصف قصير للصورة — لمن يستخدم قارئ الشاشة (اختياري)": {
   "k": "s",
@@ -16226,8 +16571,8 @@
  },
  "إرسال": {
   "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 4
+  "p": "features/stack/stack.tsx,features/support/support.tsx",
+  "n": 6
  },
  "المنشور غير موجود": {
   "k": "s",
@@ -16549,8 +16894,8 @@
  },
  "أنت": {
   "k": "x",
-  "p": "features/stack/stack.tsx,ui/chrome.tsx",
-  "n": 2
+  "p": "features/stack/stack.tsx,features/support/support.tsx,ui/chrome.tsx",
+  "n": 3
  },
  "إبلاغ عن التقييم": {
   "k": "s",
@@ -16626,16 +16971,6 @@
   "k": "s",
   "p": "features/stack/stack.tsx",
   "n": 2
- },
- "البريد": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
- },
- "الهاتف": {
-  "k": "x",
-  "p": "features/stack/stack.tsx",
-  "n": 1
  },
  "الهاتف{0}": {
   "k": "e",
@@ -16887,10 +17222,25 @@
   "p": "features/stack/stack.tsx",
   "n": 2
  },
+ "فريق المنصة": {
+  "k": "x",
+  "p": "features/stack/stack.tsx,features/tabs/tabs.tsx",
+  "n": 3
+ },
  "إبلاغ عن المحادثة": {
   "k": "s",
   "p": "features/stack/stack.tsx",
   "n": 2
+ },
+ "رسالة رسمية من فريق المنصة": {
+  "k": "s",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "تكتب باسم «فريق EngSpace» — لا يظهر اسمك للعضو": {
+  "k": "s",
+  "p": "features/stack/stack.tsx",
+  "n": 1
  },
  "تظهر له:": {
   "k": "x",
@@ -16911,6 +17261,12 @@
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1
+ },
+ "مسموح: {0}": {
+  "k": "e",
+  "p": "features/stack/stack.tsx",
+  "n": 1,
+  "x": "t.rule"
  },
  "تُمسح بعد": {
   "k": "x",
@@ -16994,20 +17350,15 @@
   "p": "features/stack/stack.tsx",
   "n": 1
  },
- "الشركة": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
- },
  "— ثابت": {
   "k": "s",
   "p": "features/stack/stack.tsx",
   "n": 1
  },
- "المكان": {
-  "k": "s",
-  "p": "features/stack/stack.tsx,lib/helpers.tsx",
-  "n": 4
+ "تواصل مع الإدارة — تذاكر الدعم": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
  },
  "توثيق قيد المراجعة": {
   "k": "x",
@@ -17805,6 +18156,126 @@
   "p": "features/stack/stack.tsx",
   "n": 1
  },
+ "بيانات الرواتب": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "مشكلة تقنية": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "تم الرد": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "مغلقة": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "إرفاق صورة (اختياري)": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "وصلت تذكرتك — سنرد عليك هنا وسيصلك إشعار": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "مشكلة في حسابك أو بياناتك أو التوثيق؟ افتح تذكرة وتابع الرد هنا. لا يراها إلا فريق الدعم.": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "تذكرة جديدة": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "التصنيف": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "الموضوع": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "مثال: لا أستطيع تغيير بريدي": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 2
+ },
+ "التفاصيل": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "اكتب ما حدث وما تتوقعه — كلما كانت التفاصيل أوضح كان الرد أسرع.": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 2
+ },
+ "جارٍ الإرسال…": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "الموضوع 3 أحرف على الأقل والتفاصيل 10 أحرف على الأقل.": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "تذاكري": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "لا تذاكر بعد": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 2
+ },
+ "عند فتح تذكرة تظهر هنا مع حالتها.": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 2
+ },
+ "التذكرة غير موجودة": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 2
+ },
+ "ربما حُذفت.": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 2
+ },
+ "أُغلقت التذكرة": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "هذه التذكرة مغلقة — افتح تذكرة جديدة إن احتجت.": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
+ "أضف ردًا أو تفاصيل": {
+  "k": "s",
+  "p": "features/support/support.tsx",
+  "n": 2
+ },
+ "إغلاق التذكرة": {
+  "k": "x",
+  "p": "features/support/support.tsx",
+  "n": 1
+ },
  "صباح الخير": {
   "k": "s",
   "p": "features/tabs/tabs.tsx",
@@ -18490,11 +18961,6 @@
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
- },
- "لا نتائج": {
-  "k": "s",
-  "p": "features/tabs/tabs.tsx,ui/chrome.tsx",
-  "n": 3
  },
  "لا شركة تطابق هذا المزيج. وسّع الفئة أو المنطقة.": {
   "k": "s",
@@ -20017,6 +20483,16 @@
   "n": 1,
   "x": "what"
  },
+ "الدعم الفني": {
+  "k": "s",
+  "p": "ui/chrome.tsx",
+  "n": 1
+ },
+ "تذكرة دعم": {
+  "k": "s",
+  "p": "ui/chrome.tsx",
+  "n": 1
+ },
  "نقاش": {
   "k": "s",
   "p": "ui/chrome.tsx",
@@ -20344,12 +20820,6 @@
   "p": "ui/feed.tsx",
   "n": 1,
   "x": "quality(c.reports)[0]"
- },
- "{0} عضو": {
-  "k": "r",
-  "p": "ui/feed.tsx",
-  "n": 1,
-  "x": "EL <Num>{fmt(r.members)}</Num>"
  },
  "تتابع {0} — هتظهر في رئيسيتك": {
   "k": "t",

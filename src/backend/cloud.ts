@@ -26,6 +26,8 @@ export function friendly(e: any): Error {
     : /rate limit|too many/i.test(m) || code === 429 ? "محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة"
     : /room closed/i.test(m) ? "هذه الغرفة مغلقة مؤقتًا بقرار من الإدارة"
     : /share limit/i.test(m) ? "شاركت 3 رواتب خلال آخر 30 يومًا — يمكنك المشاركة مجددًا لاحقًا"
+    : /ticket limit/i.test(m) ? "فتحت 5 تذاكر اليوم — انتظر الرد أو أضف إلى تذكرة مفتوحة"
+    : /ticket closed/i.test(m) ? "هذه التذكرة مغلقة — افتح تذكرة جديدة"
     : /raise report limit/i.test(m) ? "سجّلت زيادتين خلال آخر 6 أشهر — يمكنك المشاركة مجددًا لاحقًا"
     : /cannot post|cannot message/i.test(m) ? "حسابك موقوف مؤقتًا — لا يمكنك النشر أو المراسلة الآن"
     : /does not accept messages/i.test(m) ? "هذا العضو أغلق باب الرسائل"
@@ -270,6 +272,21 @@ export async function addReview(companyId: string, r: any) {
   return reviewOf(row);
 }
 
+// ---- support tickets (the member's side): their own tickets only, by RLS; an optional image goes to their own folder ----
+export async function myTickets() { const db = await supabase(); return (ok(await db.from("support_tickets").select("id,ref,category,subject,status,created_at,updated_at").order("updated_at", { ascending: false })) as any[]) || []; }
+export async function ticketMessages(id: string) { const db = await supabase(); return (ok(await db.from("ticket_messages").select("id,from_staff,body,attachment,created_at").eq("ticket_id", id).order("created_at")) as any[]) || []; }
+async function uploadSupportImage(file: Blob | null) {
+  if (!file) return null; const db = await supabase(); const { data: { user } } = await db.auth.getUser(); if (!user) throw friendly("not signed in");
+  const path = `${user.id}/${Date.now().toString(36)}.jpg`; ok(await db.storage.from("support").upload(path, file, { contentType: "image/jpeg" })); return path;
+}
+export async function openTicket(t: { category: string; subject: string; body: string; image?: Blob | null }) {
+  const db = await supabase(); const att = await uploadSupportImage(t.image || null);
+  return ok(await db.rpc("open_ticket", { p_category: t.category, p_subject: t.subject, p_body: t.body, p_attachment: att })) as string;
+}
+export async function replyTicket(id: string, body: string, image: Blob | null = null) { const db = await supabase(); const att = await uploadSupportImage(image); ok(await db.rpc("reply_ticket", { p_ticket: id, p_body: body, p_attachment: att })); }
+export async function closeTicket(id: string) { const db = await supabase(); ok(await db.rpc("close_my_ticket", { p_ticket: id })); }
+export async function supportFileUrl(path: string) { const db = await supabase(); const r: any = ok(await db.storage.from("support").createSignedUrl(path, 600)); return r.signedUrl as string; }
+
 // ---- Feature 3: company scorecard · Feature 4: raises and inflation ----
 export async function companyScorecard(companyId: string) { const db = await supabase(); return ok(await db.rpc("company_scorecard", { p_company: companyId })) as any; }
 export async function marketRaises(disc: string, track: string | null = null) { const db = await supabase(); return ok(await db.rpc("market_raises", { p_disc: disc, p_track: track })) as any; }
@@ -350,6 +367,15 @@ export async function withdrawVerification() { const db = await supabase(); cons
 
 // ---------------------------------------------------------------- admin console (staff; every function re-checks the role on the server)
 export const admin = {
+  // ---- member directory (admins): keyed by public id, never by moderation reference ----
+  async directory(search: string | null = null) { const db = await supabase(); return (ok(await db.rpc("admin_directory", { p_search: search })) as any[]) || []; },
+  async publicItems(pid: string) { const db = await supabase(); return (ok(await db.rpc("admin_public_items", { p_pid: pid })) as any[]) || []; },
+  async setStaffByPid(pid: string, staff: string) { const db = await supabase(); ok(await db.rpc("admin_directory_set_staff", { p_pid: pid, p_staff: staff })); },
+  async message(pid: string, text: string) { const db = await supabase(); return ok(await db.rpc("admin_message", { p_pid: pid, p_text: text })) as string; },
+  // ---- support tickets (staff) ----
+  async tickets(status: string | null = null) { const db = await supabase(); return (ok(await db.rpc("staff_tickets", { p_status: status })) as any[]) || []; },
+  async replyTicket(id: string, body: string, status = "answered") { const db = await supabase(); ok(await db.rpc("staff_reply_ticket", { p_ticket: id, p_body: body, p_status: status })); },
+  async setTicketStatus(id: string, status: string) { const db = await supabase(); ok(await db.rpc("staff_set_ticket_status", { p_ticket: id, p_status: status })); },
   async setInflation(month: string, yoy: number) { const db = await supabase(); ok(await db.from("inflation_rates").upsert({ month: month + "-01", yoy, updated_at: new Date().toISOString() })); },
   async cases(status = "open") { const db = await supabase(); return (ok(await db.rpc("mod_cases", { p_status: status })) as any[]) || []; },
   async decide(kind: string, id: string, d: { accept: boolean; hide?: boolean; warn?: string | null; suspendDays?: number | null; note?: string }) {

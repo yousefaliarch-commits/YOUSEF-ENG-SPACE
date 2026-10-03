@@ -1,0 +1,89 @@
+# Admin member directory, team messages, support tickets, glass tab bar and tour polish
+ffb68a2a	You opened 5 tickets today — wait for a reply or add to an open ticket
+6d500363	This ticket is closed — open a new ticket
+a701fba6	Member directory
+4a54d5aa	Support tickets
+9d0cb4c4	Moderation accounts
+09d92292	Withdrawn
+4003373e	Expired
+d1fa2dbe	Platform admin
+cd81e8ac	Admins only
+0cd13291	The member directory shows full account details, so it is limited to administrators.
+c02c9689	Full details of every account. The directory never links a member to their anonymous posts — those stay anonymous even to the platform team, as members were promised.
+37c8ee2e	Search by name, e-mail or phone
+d787d6f9	Try another name or e-mail.
+6fc96d41	· joined
+914868e0	{0}{1}{2} · joined {3}
+321b3579	No verification request
+903b255b	Messages from the team work on the live platform
+1ee16629	Message sent as “EngSpace team”
+b63237fd	Role updated
+b6bf6bfd	→ Back to the directory
+1e0dc473	Gender / age
+527072fb	Joined
+8ae0f595	Last sign-in
+2315ed21	Sign-in method
+f87129a6	Public ID
+87beae69	Verification record
+8ee5ae3b	Request
+1dd9d26e	Decision date
+fbe7d573	Reviewer
+a83c9cd6	Documents deleted
+69955b77	Deleted {0}
+9525a47a	Deleted at the decision
+d1ba16f2	No verification request.
+4e08fd6b	The documents themselves are not kept: they are deleted at the decision, and only this record remains.
+549f2e75	Public activity
+a8746464	Only what they published under their name. Anonymous posts are never attributed to anyone in the admin console.
+d9663736	Send message
+813b091e	Arrives in the member's Messages as “EngSpace team”
+25d62e8f	Demo member
+e72dd00f	· in review
+1a15aa6e	Open {0} · in review {1}
+c7a84f6e	Active
+e7b1da7b	No tickets here
+ecc45948	When a member opens a ticket it appears in this list.
+765dd3dd	messages
+85b4c7e3	{0} · {1} · {2} · {3} messages{4}
+7a1d4816	· awaiting reply
+2bf13c44	Reply sent — the member was notified
+79586fed	→ Back to tickets
+d6370401	Status
+d5f9fada	Support team
+34f0f09f	Your reply to the member — they get a notification
+d6019588	Send reply
+de627674	Reply and close
+7cae8478	Contact the team
+ae804b96	Open a support ticket and follow its status and replies
+1bc80ac5	Contact the team — support tickets
+22a57b1a	Salary data
+a8ba37ed	Technical issue
+a549b16b	Answered
+249b0f6b	Closed
+8e79185a	Attach an image (optional)
+1116a9e5	Your ticket arrived — we'll reply here and you'll get a notification
+2e071ced	A problem with your account, data or verification? Open a ticket and follow the reply here. Only the support team sees it.
+7d5a3a1a	New ticket
+7c75fec5	Category
+9fa8e94a	Subject
+63bfc15d	e.g. I can't change my e-mail
+b2959a33	Details
+ddb5f126	Write what happened and what you expected — the clearer the details, the faster the reply.
+37bf1b12	Sending…
+d26555b3	Subject at least 3 characters and details at least 10.
+d1cccde2	My tickets
+1f67ecd6	No tickets yet
+9a9315cd	Tickets you open appear here with their status.
+d384e883	Ticket not found
+3d1e8e61	It may have been deleted.
+2565de03	Ticket closed
+78ae90b1	This ticket is closed — open a new one if you need to.
+8e53210f	Add a reply or details
+c253dd0d	Close ticket
+8d7071ea	Support
+2afdea52	Support ticket
+eaa02314	Platform team
+1e7e6097	Platform team
+5cd7104b	An official message from the platform team
+07e7362b	You write as “EngSpace team” — the member does not see your name
+a1131711	Allowed: {0}

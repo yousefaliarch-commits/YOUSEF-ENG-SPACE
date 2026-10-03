@@ -2,7 +2,7 @@
 -- Starts from empty tables (the whole file runs in the test's transaction and is rolled back), so data left by the
 -- end-to-end tests or by local use never changes a count.
 truncate public.posts, public.comments, public.reactions, public.ballots, public.salary_shares, public.company_reviews, public.jobs,
-  public.job_contacts, public.notifications, public.member_state, public.raise_reports, public.reports, public.audit_log, public.verification_requests,
+  public.job_contacts, public.notifications, public.member_state, public.raise_reports, public.support_tickets, public.reports, public.audit_log, public.verification_requests,
   private.threads, private.messages, private.authorship, private.item_mod cascade;
 set local storage.allow_delete_query = 'true';
 delete from storage.objects where bucket_id in ('verification', 'media');

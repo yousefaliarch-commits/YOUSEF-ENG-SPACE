@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  Activity, BadgeCheck, Ban, Briefcase, ChartColumn, CheckCheck, CircleCheck, Copy, ExternalLink, Eye, EyeOff, 
-  Flag, Gavel, Hourglass, IdCard, Layers, LayoutDashboard, LockKeyhole, Megaphone, MessageSquare, 
+  Activity, BadgeCheck, Ban, Briefcase, ChartColumn, CheckCheck, CircleCheck, Contact, Copy, ExternalLink, Eye, EyeOff, 
+  Flag, Gavel, Hourglass, IdCard, Layers, LayoutDashboard, LifeBuoy, LockKeyhole, Megaphone, MessageSquare, 
   MousePointerClick, RotateCcw, Scale, ScanSearch, ScrollText, Settings2, ShieldCheck, Siren, SlidersHorizontal, 
   Smartphone, TrendingUp, TriangleAlert, Undo2, UserCog, Users
 } from "lucide-react";
@@ -27,13 +27,14 @@ import { fmt } from "../../ui/theme";
 
 import { isCloud } from "../../backend/config";
 import { InflationPanel } from "./inflation-admin";
+import { DirectorySection, TicketsSection } from "./directory-support";
 import * as cloud from "../../backend/cloud";
 import { loadAdmin } from "./cloud-admin";
 // =====================================================================
 //  Admin console — moderation queue, members, analytics, content, settings, audit log
 //  It reads and writes the app's own store: a report filed in the app lands here at once, and every decision shows up in the app.
 // =====================================================================
-export const ADMIN_SECTIONS = [["overview", "نظرة عامة", LayoutDashboard], ["queue", "البلاغات", Flag], ["verify", "طلبات التوثيق", IdCard], ["users", "الأعضاء", Users], ["analytics", "التحليلات", ChartColumn], ["content", "المحتوى", Layers], ["settings", "الإعدادات", SlidersHorizontal], ["audit", "سجل التدقيق", ScrollText]];
+export const ADMIN_SECTIONS = [["overview", "نظرة عامة", LayoutDashboard], ["queue", "البلاغات", Flag], ["verify", "طلبات التوثيق", IdCard], ["directory", "دليل الأعضاء", Contact], ["support", "تذاكر الدعم", LifeBuoy], ["users", "حسابات الإشراف", Users], ["analytics", "التحليلات", ChartColumn], ["content", "المحتوى", Layers], ["settings", "الإعدادات", SlidersHorizontal], ["audit", "سجل التدقيق", ScrollText]];
 
 
 export function AdminView({ init, openApp }: any) {
@@ -136,7 +137,7 @@ export function AdminView({ init, openApp }: any) {
   );
   if (CLOUD && !live) return <main className="rise max-w-xl mx-auto px-4 py-16 text-center text-[13px] text-ink-2">{liveErr || "جارٍ تحميل بيانات المنصة…"}</main>;
   const openCount = cases.filter((c) => c.status === "open").length; const verifyCount = verifs.filter((r) => r.status === "pending").length;
-  const body = section === "queue" ? <QueueSection A={A} /> : section === "verify" ? <VerifySection A={A} /> : section === "users" ? <UsersSection A={A} /> : section === "analytics" ? <AnalyticsSection A={A} /> : section === "content" ? <ContentSection A={A} /> : section === "settings" ? <SettingsSection A={A} /> : section === "audit" ? <AuditSection A={A} /> : <OverviewSection A={A} />;
+  const body = section === "queue" ? <QueueSection A={A} /> : section === "verify" ? <VerifySection A={A} /> : section === "directory" ? <DirectorySection A={A} /> : section === "support" ? <TicketsSection A={A} />: section === "users" ? <UsersSection A={A} /> : section === "analytics" ? <AnalyticsSection A={A} /> : section === "content" ? <ContentSection A={A} /> : section === "settings" ? <SettingsSection A={A} /> : section === "audit" ? <AuditSection A={A} /> : <OverviewSection A={A} />;
   return (
     <main className="rise max-w-7xl mx-auto px-4 md:px-8 py-5 md:py-8" style={{ paddingTop: "calc(var(--sat, 0px) + 1.25rem)" }}>
       <div className="flex items-start justify-between gap-3 flex-wrap mb-5">
@@ -293,7 +294,7 @@ export function UserDetail({ A, acc }: any) {
   const [warnText, setWarnText] = useState<any>(""); const [days, setDays] = useState(7); const grp = roleGroup(acc.role); const cases = A.cases.filter((c) => c.acc === acc.id);
   const [sl, stone] = STATUS_CHIP[acc.status]; const cred = !canVerifyRole(acc.role) ? "بلا توثيق — شارة الدور" : acc.verified ? (acc.role === "supervisor" ? "مؤهل موثّق" : acc.verifyKind === "certificate" ? "شهادة هندسية موثّقة" : "عضوية نقابة موثّقة") : "غير موثّق";
   const pendingReq = A.verifs.find((r) => r.acc === acc.id && r.status === "pending") || null;
-  const facts: any = [["رقم الحساب", <Num>{acc.id}</Num>], ["الهوية المعروضة", acc.as === "public" ? "علنية بالاسم" : "مجهولة فقط"], ["الدور", roleTitle(acc.role, acc.gender)], ["التخصص", label(DISC, acc.disc)], ["المحافظة", govName(acc.gov)], ["الانضمام", fmtDay(acc.joined)], ["آخر نشاط", agoText(acc.last, A.now)], ["مشاركات", <Num>{acc.items}</Num>], ["تحذيرات", <Num>{acc.warnings}</Num>], ["مخالفات مؤكدة", <Num>{acc.strikes}</Num>]];
+  const facts: any = [["رقم الحساب", <Num>{acc.id}</Num>], ["الهوية المعروضة", acc.as === "public" ? "علنية بالاسم" : "مجهولة فقط"], ["الدور", roleTitle(acc.role, acc.gender)], ...(acc.disc ? [["التخصص", label(DISC, acc.disc)]] : []), ...(acc.gov ? [["المحافظة", govName(acc.gov)]] : []), ...(acc.joined ? [["الانضمام", fmtDay(acc.joined)]] : []), ...(acc.last ? [["آخر نشاط", agoText(acc.last, A.now)]] : []), ...(A.cloud ? [] : [["مشاركات", <Num>{acc.items}</Num>]]), ["تحذيرات", <Num>{acc.warnings}</Num>], ["مخالفات مؤكدة", <Num>{acc.strikes}</Num>]];
   return (
     <div className="space-y-3">
       <button type="button" onClick={() => A.setFocusUser(null)} className="xl:hidden inline-flex items-center gap-1.5 min-h-9 text-[12.5px] text-accent"><Back size={15} /> كل الأعضاء</button>

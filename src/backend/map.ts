@@ -109,7 +109,9 @@ export function reviewOf(r: Row, now = Date.now()) {
 
 export function threadOf(r: Row, messages: Row[] | null = null, now = Date.now()) {
   const w = authorFields(r.with_author);
-  return { id: r.id, meAs: r.me_as, with: { ...w, title: w.role, role: w.userRole }, ctx: r.ctx || {}, rule: r.rule || "", unread: Number(r.unread || 0),
+  // a team thread: the other side is the platform (no person, no discipline — nothing to default)
+  const team = !!(r.with_author && r.with_author.team);
+  return { id: r.id, meAs: r.me_as, with: team ? { ...w, team: true, title: "فريق إدارة المنصة", role: "staff" } : { ...w, title: w.role, role: w.userRole }, ctx: r.ctx || {}, rule: r.rule || "", unread: Number(r.unread || 0),
     lastText: r.last_text || "", when: when(r.last_at, now),
     messages: messages ? messages.map((m) => ({ id: m.id, from: m.from_me ? "me" : "them", text: m.text, at: when(m.at, now) })) : [] };
 }

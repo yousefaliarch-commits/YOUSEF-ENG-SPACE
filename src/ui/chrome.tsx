@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { tapHaptic } from "../native/native";
 import {
   BadgeCheck, Bell, ChevronLeft, Eye, Flag, MapPin, Moon, Search, Settings, Share2, ShieldAlert, ShieldCheck, Star, Sun, X
 } from "lucide-react";
@@ -76,7 +77,7 @@ export function AppHeader({ app }: any) {
   const glass = `shrink-0 pt-[var(--sat)] bg-canvas/[.97] border-b z-10 transition-shadow duration-300 ${app.scrolled ? "header-lift border-line-2" : "border-line"}`;
   if (top) {
     const closed = app.blocked && (app.blocked.stack.includes(top.type) || (top.type === "room" && app.blocked.rooms.includes(top.id)));
-    const titles: any = { post: "نقاش", company: company(top.id)?.name, job: "تفاصيل الوظيفة", notifications: "الإشعارات", profile: "حسابك", rooms: "الغرف", room: room(top.id)?.name, chat: "رسالة خاصة", permissions: "خريطة العلاقات والصلاحيات", postjob: top.like ? "تعديل الإعلان" : "نشر وظيفة", cvreview: "تدقيق السيرة الهندسية", methodology: "المنهجية والمصادر", settings: "الإعدادات", guide: "دليل الاستخدام" };
+    const titles: any = { support: "الدعم الفني", ticket: "تذكرة دعم", post: "نقاش", company: company(top.id)?.name, job: "تفاصيل الوظيفة", notifications: "الإشعارات", profile: "حسابك", rooms: "الغرف", room: room(top.id)?.name, chat: "رسالة خاصة", permissions: "خريطة العلاقات والصلاحيات", postjob: top.like ? "تعديل الإعلان" : "نشر وظيفة", cvreview: "تدقيق السيرة الهندسية", methodology: "المنهجية والمصادر", settings: "الإعدادات", guide: "دليل الاستخدام" };
     return (
       <header className={glass}><div className="min-h-14 py-1.5 px-1.5 flex items-center gap-1">
         <RoundButton label="رجوع" onClick={app.pop} className="press shrink-0">{pf === "ios" ? <ChevronLeft size={26} strokeWidth={2.2} className="rtl:-scale-x-100" /> : <Back />}</RoundButton>
@@ -90,15 +91,16 @@ export function AppHeader({ app }: any) {
     );
   }
   return (
-    <header className={glass}><div className="h-14 ps-4 pe-2 flex items-center justify-between">
-      <div className="flex items-center gap-2"><ArchMark size={22} /><Wordmark size="text-[17px]" /></div>
-      <div className="flex items-center">
+    <header className={glass}><div className="h-14 px-3 flex items-center justify-between gap-2">
+      {/* narrow phones (under 400px): the wordmark gives way to the staff button, and the theme toggle lives in Settings */}
+      <div className="flex items-center gap-2 min-w-0 shrink"><ArchMark size={22} /><span className={app.openAdmin ? "hidden min-[400px]:inline" : ""}><Wordmark size="text-[17px]" /></span></div>
+      <div className="flex items-center shrink-0">
         {/* staff (moderators, administrators) reach the console from every screen size, the Android app included */}
         {app.openAdmin && <button type="button" onClick={app.openAdmin} aria-label="لوحة الإدارة" className="press shrink-0 inline-flex items-center gap-1 h-9 px-2.5 me-1 rounded-full bg-accent text-on-accent text-[12px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><ShieldCheck size={15} /> الإدارة</button>}
-        <ThemeQuick app={app} />
+        <span className="hidden min-[400px]:contents"><ThemeQuick app={app} /></span>
         <RoundButton label="الإعدادات" data-tour="settings" onClick={() => app.push({ type: "settings" })} className="press w-10"><Settings size={19} /></RoundButton>
         <RoundButton label={`الإشعارات${app.unread ? ` · ${app.unread} غير مقروء` : ""}`} data-tour="notifs" onClick={() => app.push({ type: "notifications" })} className="relative press w-10">
-          <Bell size={20} />{app.unread > 0 && <span className="pop-in absolute top-2 end-2 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-accent text-on-accent font-grotesk text-[10px] font-semibold ring-2 ring-canvas">{app.unread}</span>}
+          <span className="relative grid place-items-center"><Bell size={20} />{app.unread > 0 && <span className="pop-in absolute -top-2 -end-2.5 min-w-4 h-4 px-1 grid place-items-center rounded-full bg-accent text-on-accent font-grotesk text-[9.5px] font-semibold leading-none ring-2 ring-canvas">{app.unread}</span>}</span>
         </RoundButton>
         <button type="button" aria-label="حسابك" data-tour="profile" onClick={() => app.push({ type: "profile" })} className="press h-11 ps-1 grid place-items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
           <LevelRing pts={app.pts} size={38}><IdentityFace a={authorOf(app.profile, app.profile.identity)} size={28} /></LevelRing>
@@ -110,18 +112,23 @@ export function AppHeader({ app }: any) {
 
 
 // Tab bar: iOS-style icons + 10pt labels; inside the Android preview it takes Material 3 proportions (80dp, pill indicator, 12sp labels)
+// Floating "liquid glass" tab bar: it overlays the feed (the scroller pads its bottom by --tabbar-space), so the frosted
+// layer has content to blur. One indicator slides under the active tab with transform only (composited), the icons do not
+// re-layout, and the layer is promoted once (translateZ). Android draws the same glass without the live blur when the
+// device cannot afford it (html[data-glass="lite"], set by src/native/native.ts) — see the .glass rules in app.css.
 export function TabBar({ tabs = TABS, active, onChange, badge = {} }: any) {
-  const idx = Math.max(0, tabs.findIndex((t) => t.id === active)); const md = usePlatform() === "android";
+  const idx = Math.max(0, tabs.findIndex((t) => t.id === active)); const n = tabs.length;
   return (
-    <nav aria-label="التنقل الرئيسي" data-tour="tabbar" className="relative shrink-0 bg-canvas/[.97] border-t border-line pb-[var(--sab)]">
-      <ul className={`grid ${md ? "h-[80px]" : "h-[68px]"}`} style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
+    <nav aria-label="التنقل الرئيسي" data-tour="tabbar" className="absolute inset-x-3 z-20 bottom-[calc(8px+var(--sab))] glass glass-bar rounded-[26px]">
+      <ul className="relative grid h-[64px] p-1.5" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
+        <span aria-hidden="true" className="tab-ind absolute top-1.5 bottom-1.5 rounded-[20px]" style={{ width: `calc((100% - 12px) / ${n})`, insetInlineStart: 6, ["--i" as any]: idx }} />
         {tabs.map((t) => { const on = t.id === active; const Icon = t.icon; const b = badge[t.id]; return (
-          <li key={t.id}><button type="button" data-tour={"tab-" + t.id} onClick={() => onChange(t.id)} aria-current={on ? "page" : undefined}
-            className={`press w-full h-full flex flex-col items-center justify-center gap-1 ${md ? "text-[11px] font-medium" : "text-[10px]"} leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent ${on ? "text-accent" : "text-ink-3 hover:text-ink-2"}`}>
-            <span className={`relative grid place-items-center ${md ? "w-14 h-8" : "w-10 h-7"} rounded-full transition-all duration-300 ${on ? "bg-wash scale-100" : "scale-95"}`}><Icon key={on ? "on" : "off"} size={20} strokeWidth={on ? 2.2 : 1.8} className={on ? "tab-hop" : ""} />{b > 0 && <span key={b} className="pop-in absolute -top-1 -end-0.5 min-w-[16px] h-4 px-1 grid place-items-center rounded-full bg-accent text-on-accent font-grotesk text-[9.5px] font-semibold ring-2 ring-canvas">{b}</span>}</span>{t.label}
+          <li key={t.id} className="relative"><button type="button" data-tour={"tab-" + t.id} onClick={() => { if (!on) tapHaptic(); onChange(t.id); }} aria-current={on ? "page" : undefined}
+            className={`press w-full h-full flex flex-col items-center justify-center gap-[3px] rounded-[20px] text-[10.5px] font-medium leading-none transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent ${on ? "text-accent" : "text-ink-3 hover:text-ink-2"}`}>
+            <span className="relative grid place-items-center w-6 h-6"><Icon size={20} strokeWidth={on ? 2.2 : 1.8} />{b > 0 && <span key={b} className="pop-in absolute -top-1.5 -end-2 min-w-[16px] h-4 px-1 grid place-items-center rounded-full bg-accent text-on-accent font-grotesk text-[9.5px] font-semibold ring-2 ring-surface">{b}</span>}</span>
+            <span className="max-w-full truncate px-0.5">{t.label}</span>
           </button></li>); })}
       </ul>
-      {!md && <span aria-hidden="true" className="absolute bottom-[calc(6px+var(--sab))] w-1 h-1 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--accent))]" style={{ insetInlineStart: `calc(${(idx * 100) / tabs.length + 100 / (2 * tabs.length)}% - 2px)`, transition: "inset-inline-start .32s cubic-bezier(.2,.7,.2,1)" }} />}
     </nav>
   );
 }

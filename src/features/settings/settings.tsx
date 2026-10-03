@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Award, Bell, BookOpen, Briefcase, Building2, Calculator, Check, ChevronDown, CircleHelp, Compass, Home, 
+  Award, Bell, BookOpen, Briefcase, Building2, Calculator, Check, ChevronDown, CircleHelp, Compass, Home, LifeBuoy, 
   Languages, Layers, LockKeyhole, MessageCircle, Moon, Settings, ShieldCheck, SlidersHorizontal, Sparkles, Sun, 
   UserRound, Users, VenetianMask, Wallet
 } from "lucide-react";
@@ -96,6 +96,7 @@ export function SettingsScreen({ app }: any) {
       <Panel className="px-4 py-2"><h2 className="pt-2 pb-1 text-[13px] font-medium inline-flex items-center gap-1.5"><CircleHelp size={15} className="text-accent" /> المساعدة</h2>
         <SettingsLink icon={Compass} title="جولة تعريفية في التطبيق" sub={gx(p.gender, "جولة تفاعلية قصيرة على أهم الأقسام — أعدها متى شئت", "جولة تفاعلية قصيرة على أهم الأقسام — أعيديها متى شئتِ")} onClick={app.startTour} />
         <SettingsLink icon={BookOpen} title="دليل الاستخدام" sub={gx(p.gender, "شرح مفصّل لكل ميزة، وكيف تقرأ أرقام الرواتب وتستفيد منها", "شرح مفصّل لكل ميزة، وكيف تقرئين أرقام الرواتب وتستفيدين منها")} onClick={() => app.push({ type: "guide" })} />
+        <SettingsLink icon={LifeBuoy} title="تواصل مع الإدارة" sub="افتح تذكرة دعم وتابع حالتها والرد عليها" onClick={() => app.push({ type: "support" })} />
         <SettingsLink icon={ShieldCheck} title="كيف نحمي هويتك؟" onClick={() => app.openSheet("privacy")} />
         <SettingsLink icon={SlidersHorizontal} title="صلاحياتي" sub="ما يراه حسابك وما لا يراه، ومن يراسل من" onClick={() => app.push({ type: "permissions" })} />
       </Panel>
@@ -287,28 +288,32 @@ export function Tour({ app, onClose }: any) {
   useEffect(() => { const b = box.current; if (!b || typeof ResizeObserver === "undefined") return; const ro = new ResizeObserver(() => mRef.current()); ro.observe(b); return () => ro.disconnect(); }, []);
   const keys = useRef<any>(null); keys.current = (e) => { if (e.key === "Escape") finish(); else if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) next(); else if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) back(); };
   useEffect(() => { const onKey = (e?: any) => keys.current(e); window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
-  const pad = 6; const W = geo ? geo.W : 390, H = geo ? geo.H : 800; const r = geo && geo.r;
-  const hole = r ? { left: r.x - pad, top: r.y - pad, width: r.w + pad * 2, height: r.h + pad * 2 } : { left: W / 2, top: H / 2, width: 0, height: 0 };
-  const below = r && hole.top + hole.height + 250 < H; const I = s.icon;
+  // Geometry is clamped inside the overlay (a tab-bar target must not spill past the screen edge). Nothing here animates
+  // layout: the spotlight cross-fades between steps (opacity only) and the card slides in with transform + opacity.
+  const pad = 6; const W = geo ? geo.W : 390, H = geo ? geo.H : 800; const r = geo && geo.r; const m = 4;
+  const hole = r ? (() => { const left = Math.max(m, r.x - pad), top = Math.max(m, r.y - pad); return { left, top, width: Math.min(W - m, r.x + r.w + pad) - left, height: Math.min(H - m, r.y + r.h + pad) - top }; })() : null;
+  const below = hole ? hole.top + hole.height + 250 < H : false; const I = s.icon;
   const card = (
     <div key={s.id} translate="no" lang={app.lang} className="tour-card p-4 rounded-3xl bg-surface border border-line-2 shadow-float">
       <div className="flex items-center gap-2.5"><span className="grid place-items-center w-9 h-9 rounded-xl bg-wash text-accent shrink-0">{I && <I size={17} />}</span><span className="flex-1 text-[11px] text-ink-3">{rtl ? <>الخطوة <Num>{i + 1}</Num> من <Num>{steps.length}</Num></> : <>Step <Num>{i + 1}</Num> of <Num>{steps.length}</Num></>}</span>{!last && <button type="button" onClick={() => finish()} className="h-8 px-2.5 rounded-full text-[11.5px] text-ink-2 hover:text-ink hover:bg-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">{t(TOUR_UI.skip)}</button>}</div>
       <h2 id="tour-title" className="mt-2.5 text-[16px] font-medium leading-snug">{t(s.title)}</h2>
       <p id="tour-body" className="mt-1 text-[12.5px] leading-relaxed text-ink-2">{t(s.body)}</p>
-      <div aria-hidden="true" className="mt-3 flex gap-1">{steps.map((x, k) => <span key={x.id} className={`h-1 rounded-full transition-all duration-300 ${k === i ? "flex-[3] bg-accent" : k < i ? "flex-1 bg-accent/45" : "flex-1 bg-track"}`} />)}</div>
-      <div className="mt-3 flex items-center gap-2">
-        {i > 0 && <Secondary onClick={back} className="h-10 px-3 text-[12.5px] press"><Back size={15} /> {t(TOUR_UI.back)}</Secondary>}
-        {s.guide && <Secondary onClick={() => finish(() => app.push({ type: "guide" }))} className="h-10 px-3 text-[12.5px] press"><BookOpen size={15} /> {t(TOUR_UI.guide)}</Secondary>}
-        <span className="flex-1" />
-        <button ref={nextBtn} type="button" onClick={next} className={`${BTN} btn-primary h-10 px-4 text-[13px] press`}>{t(last ? TOUR_UI.finish : i === 0 ? TOUR_UI.start : TOUR_UI.next)} {!last && <Forward size={15} />}</button>
+      <div aria-hidden="true" className="mt-3 flex gap-1">{steps.map((x, k) => <span key={x.id} className={`h-1 flex-1 rounded-full transition-colors duration-200 ${k === i ? "bg-accent" : k < i ? "bg-accent/45" : "bg-track"}`} />)}</div>
+      {/* the primary action has a full row of its own on the last step, so it never wraps or clips on a narrow phone */}
+      <div className={`mt-3 flex items-center gap-2 ${last ? "flex-wrap" : ""}`}>
+        {i > 0 && <Secondary onClick={back} className="h-10 px-3 text-[12.5px] whitespace-nowrap press"><Back size={15} /> {t(TOUR_UI.back)}</Secondary>}
+        {s.guide && <Secondary onClick={() => finish(() => app.push({ type: "guide" }))} className="h-10 px-3 text-[12.5px] whitespace-nowrap press"><BookOpen size={15} /> {t(TOUR_UI.guide)}</Secondary>}
+        {!last && <span className="flex-1" />}
+        <button ref={nextBtn} type="button" onClick={next} className={`${BTN} btn-primary px-4 text-[13px] whitespace-nowrap press ${last ? "basis-full h-11" : "h-10"}`}>{t(last ? TOUR_UI.finish : i === 0 ? TOUR_UI.start : TOUR_UI.next)} {!last && <Forward size={15} />}</button>
       </div>
     </div>
   );
   return (
     <div ref={box} className="absolute inset-0 z-[45]" role="dialog" aria-modal="true" aria-labelledby="tour-title" aria-describedby="tour-body">
       <div aria-hidden="true" className="absolute inset-0" onClick={(e) => e.stopPropagation()} />
-      <div aria-hidden="true" className="tour-hole absolute rounded-2xl pointer-events-none" style={{ ...hole, boxShadow: "0 0 0 200vmax rgb(var(--scrim) / 0.66)" }}>{r && <span className="tour-ring absolute inset-0 rounded-2xl" />}</div>
-      {!r ? <div className="absolute inset-0 flex items-center px-3 pointer-events-none"><div className="w-full pointer-events-auto">{card}</div></div>
+      {hole ? <div key={"hole-" + s.id} aria-hidden="true" className="tour-hole absolute rounded-2xl pointer-events-none" style={{ ...hole, boxShadow: "0 0 0 200vmax rgb(var(--scrim) / 0.66)" }}><span className="tour-ring absolute inset-0 rounded-2xl" /></div>
+        : <div key="scrim" aria-hidden="true" className="tour-hole absolute inset-0 pointer-events-none" style={{ background: "rgb(var(--scrim) / 0.66)" }} />}
+      {!hole ? <div className="absolute inset-0 flex items-center px-3 pointer-events-none"><div className="w-full pointer-events-auto">{card}</div></div>
         : <div className="absolute inset-x-3" style={below ? { top: hole.top + hole.height + 12 } : { bottom: H - hole.top + 12 }}>{card}</div>}
     </div>
   );

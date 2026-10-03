@@ -19,6 +19,10 @@ export const setBackHandler = (fn: () => boolean) => { back = fn; };
 
 export async function initNative() {
   if (!NATIVE) return;
+  // liquid glass: iPhones always get the live blur; an Android phone only when it has the headroom (8+ cores, 6+ GB) —
+  // otherwise the same glass with a denser fill and no backdrop blur, so scrolling stays at the panel's refresh rate
+  const nav: any = navigator; const strong = (nav.hardwareConcurrency || 4) >= 8 && (nav.deviceMemory || 4) >= 6;
+  if (PLATFORM === "android" && !strong) document.documentElement.dataset.glass = "lite";
   const [{ App }, { SplashScreen }, { StatusBar }] = await Promise.all([import("@capacitor/app"), import("@capacitor/splash-screen"), import("@capacitor/status-bar")]);
   App.addListener("backButton", () => { if (!back()) App.minimizeApp(); });
   // auth links: while the app runs (appUrlOpen) and when the link itself started the app (Android may have closed it while the
@@ -38,4 +42,10 @@ export async function setNativeMode(mode: "light" | "dark") {
   if (!NATIVE) return;
   const { StatusBar, Style } = await import("@capacitor/status-bar");
   StatusBar.setStyle({ style: mode === "dark" ? Style.Dark : Style.Light }).catch(() => {});
+}
+
+// a light tap under the finger when the member changes tab (no-op in a browser)
+export function tapHaptic() {
+  if (!NATIVE) return;
+  import("@capacitor/haptics").then(({ Haptics, ImpactStyle }) => Haptics.impact({ style: ImpactStyle.Light })).catch(() => {});
 }
