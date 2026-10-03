@@ -1,0 +1,36 @@
+# Creates (or removes) the test accounts for every role on the hosted project: five disciplines, a site supervisor, HR,
+# an employer / owner, a moderator and a super admin — all @engspace.test (no mailbox, so no one can reset a password).
+# Passwords are the committed bcrypt hashes in scripts/seed/test-accounts.json; the plaintext was given to the owner only.
+# Uses the existing SUPABASE_ACCESS_TOKEN secret to read the project's service key at run time; the key is masked and never printed.
+# Run by hand: Actions → Seed test accounts → Run workflow (action: seed | remove). Run "remove" before a public launch.
+name: Seed test accounts
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "seed (create / update) or remove (delete all test accounts)"
+        required: true
+        default: seed
+        type: choice
+        options: [seed, remove]
+permissions:
+  contents: read
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_REF: cyziykbqldtxyquqvvkr
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Read the service key (masked)
+        run: |
+          key=$(npx --yes supabase@latest projects api-keys --project-ref "$PROJECT_REF" -o json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const k=JSON.parse(s);const x=k.find(a=>a.name==="service_role")||k.find(a=>a.type==="secret");process.stdout.write(x.api_key)})')
+          test -n "$key"; echo "::add-mask::$key"; echo "SEED_SERVICE_KEY=$key" >> "$GITHUB_ENV"
+      - name: Seed / remove
+        env:
+          SEED_API_URL: https://cyziykbqldtxyquqvvkr.supabase.co
+        run: node scripts/seed/test-accounts.mjs ${{ inputs.action == 'remove' && '--remove' || '' }}

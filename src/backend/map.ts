@@ -79,12 +79,12 @@ export function jobOf(r: Row, now = Date.now()) {
   const yrs = r.years ? String(r.years).replace(/[[\]()]/g, "").split(",").map(Number) : null;
   return { id: r.id, title: r.title, co: r.co, gov: r.gov, city: r.city, disc: r.disc, sub: r.sub, pos: r.pos,
     years: yrs ? [yrs[0], String(r.years).endsWith(")") ? yrs[1] - 1 : yrs[1]] : null, mode: r.mode, type: r.type, desc: r.descr, reqs: r.reqs || [], skills: r.skills || [],
-    contact: r.contact || {}, when: when(r.created_at, now), coName: r.author && r.author.companyName, hiddenByMod: !!r.hidden,
+    contact: r.contact || {}, when: when(r.created_at, now), coName: r.co_name || (r.author && r.author.companyName), hiddenByMod: !!r.hidden,
     stats: { views: r.view_count || 0, contacts: r.contact_count || 0 } };
 }
 export function jobRow(j: Row) {
   const y = Array.isArray(j.years) ? `[${j.years[0]},${j.years[1]}]` : null;
-  return { title: j.title, co: j.co || null, gov: j.gov, city: j.city || null, disc: j.disc, sub: j.sub || null, pos: j.pos || null, years: y, mode: j.mode || null,
+  return { title: j.title, co: j.co || null, co_name: (j.coName || "").trim() || null, gov: j.gov, city: j.city || null, disc: j.disc, sub: j.sub || null, pos: j.pos || null, years: y, mode: j.mode || null,
     type: j.type || null, descr: j.desc || "", reqs: j.reqs || [], skills: j.skills || [], contact: j.contact || {}, author_mode: "public" };
 }
 
@@ -94,13 +94,13 @@ export const reviewRow = (companyId: string, r: Row) => ({ company_id: companyId
 // a salary share from the contribute sheet: experience is a band ("3-5", "12+"); the share keeps its lower bound in years
 export const yearsOfBand = (exp: any) => { const m = /\d+/.exec(String(exp ?? "")); return m ? Math.min(50, Number(m[0])) : 0; };
 export const shareRow = (s: Row) => ({ disc: s.disc, track: s.track || null, pos: s.pos || null, gov: s.gov || null, years: s.years != null ? Number(s.years) : yearsOfBand(s.exp),
-  salary: Math.round(Number(s.salary)), company: s.company || s.employer || null, title: s.title || null, extras: s.extras || null, author_mode: s.as === "public" ? "public" : "anon" });
+  salary: Math.round(Number(s.salary)), company: s.company || null, employer: s.employer || null, title: s.title || null, extras: s.extras || null, author_mode: s.as === "public" ? "public" : "anon" });
 
 // an experience band of the market screen ("3-5", "12+") → the years range the explorer filters on
 export const yearsRange = (exp: any): [number, number] => { const m = /^(\d+)(?:-(\d+)|\+)$/.exec(String(exp || "")); return m ? [Number(m[1]), m[2] ? Number(m[2]) : 50] : [0, 50]; };
 // one individual report, as the market screen lists them (the author stays anonymous: handle only)
 export const shareOf = (r: Row, now = Date.now()) => ({ id: r.id, anon: (r.author && r.author.anon) || "----", title: r.title || "", years: r.years, salary: r.salary,
-  company: r.company || "", coId: null, gov: r.gov, track: r.track, verified: !!(r.author && r.author.verified), when: when(r.created_at, now) });
+  company: r.company || "", employer: r.employer || null, coId: null, gov: r.gov, track: r.track, verified: !!(r.author && r.author.verified), when: when(r.created_at, now) });
 
 export const notifOf = (r: Row, now = Date.now()) => ({ id: r.id, kind: r.kind, title: r.title, body: r.body, target: r.target || undefined, read: !!r.read, when: when(r.created_at, now),
   category: r.category || notifCategory(r.kind), ...(r.en && r.en.title ? { en: { title: r.en.title, body: r.en.body || "" } } : {}) });

@@ -40,6 +40,43 @@ jobs:
       - run: npx supabase db push
       - run: npx supabase functions deploy purge-verification --project-ref "$PROJECT_REF" --use-api
       - run: npx supabase functions deploy send-push --project-ref "$PROJECT_REF" --use-api
+      # Push delivery. The Firebase service account is the repository secret FCM_SERVICE_ACCOUNT (the whole JSON file) — it is never
+      # in the repo. PUSH_SECRET is generated here on every deploy and handed to both sides (the function's secrets and the database's
+      # Vault), so nobody has to know it. Without the FCM secret this step only warns and Android push stays off.
+      - name: Push notification credentials
+        env:
+          FCM_SERVICE_ACCOUNT: ${{ secrets.FCM_SERVICE_ACCOUNT }}
+          APNS_KEY_P8: ${{ secrets.APNS_KEY_P8 }}
+          APNS_KEY_ID: ${{ secrets.APNS_KEY_ID }}
+          APNS_TEAM_ID: ${{ secrets.APNS_TEAM_ID }}
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          if [ -z "$FCM_SERVICE_ACCOUNT" ]; then
+            echo "::warning title=Push credentials::Add the repository secret FCM_SERVICE_ACCOUNT (the Firebase service-account JSON file, pasted whole) and run Deploy database again — Android push stays off until then"; exit 0
+          fi
+          sa=$(printf '%s' "$FCM_SERVICE_ACCOUNT" | jq -c .) || { echo "::error::FCM_SERVICE_ACCOUNT is not valid JSON"; exit 1; }
+          secret=$(openssl rand -hex 24); echo "::add-mask::$secret"
+          args=(PUSH_SECRET="$secret" FCM_SERVICE_ACCOUNT="$sa")
+          [ -n "$APNS_KEY_P8" ] && [ -n "$APNS_KEY_ID" ] && [ -n "$APNS_TEAM_ID" ] && args+=(APNS_KEY_P8="$APNS_KEY_P8" APNS_KEY_ID="$APNS_KEY_ID" APNS_TEAM_ID="$APNS_TEAM_ID")
+          npx supabase secrets set --project-ref "$PROJECT_REF" "${args[@]}" >/dev/null
+          sudo apt-get install -y -qq postgresql-client >/dev/null
+          psql "$(cat supabase/.temp/pooler-url)" -XAt -v ON_ERROR_STOP=1 -v url="https://$PROJECT_REF.supabase.co" -v secret="$secret" >/dev/null <<'SQL'
+          select set_config('engspace.tmp_url', :'url', false), set_config('engspace.tmp_secret', :'secret', false);
+          do $$
+          declare u text := current_setting('engspace.tmp_url'); s text := current_setting('engspace.tmp_secret'); sid uuid;
+          begin
+            select v.id into sid from vault.secrets v where v.name = 'push_url';
+            if sid is null then perform vault.create_secret(u, 'push_url'); else perform vault.update_secret(sid, u, 'push_url'); end if;
+            select v.id into sid from vault.secrets v where v.name = 'push_secret';
+            if sid is null then perform vault.create_secret(s, 'push_secret'); else perform vault.update_secret(sid, s, 'push_secret'); end if;
+          end $$;
+          select set_config('engspace.tmp_secret', '', false);
+          SQL
+          # the proof: ask the function itself which platforms it can deliver to
+          sleep 5
+          answer=$(curl -sS -X POST -H "x-push-secret: $secret" "https://$PROJECT_REF.supabase.co/functions/v1/send-push" || true)
+          echo "::notice title=send-push answered::$answer"
+          echo "$answer" | jq -e '.platforms | index("android")' >/dev/null || { echo "::error::send-push does not see the Firebase credentials"; exit 1; }
       # `supabase link` stores the pooler address (without the password) in supabase/.temp/pooler-url
       - name: First administrator
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.admin_email != '' }}

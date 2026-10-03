@@ -51,3 +51,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return config
     }
 }
+
+// The web view's scroll view must not zoom: no pinch gesture, one fixed zoom scale (the viewport meta says the same).
+// The storyboard's view controller is this class (Main.storyboard).
+class EngViewController: CAPBridgeViewController {
+    override func capacitorDidLoad() {
+        guard let scrollView = webView?.scrollView else { return }
+        scrollView.pinchGestureRecognizer?.isEnabled = false
+        scrollView.minimumZoomScale = 1
+        scrollView.maximumZoomScale = 1
+    }
+}

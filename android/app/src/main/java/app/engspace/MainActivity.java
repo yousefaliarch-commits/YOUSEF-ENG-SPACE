@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
@@ -11,6 +12,16 @@ public class MainActivity extends BridgeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferHighestRefreshRate();
+        disableZoom();
+    }
+
+    // The app behaves like a native app: no pinch zoom, no zoom controls (the viewport meta and the CSS say the same).
+    private void disableZoom() {
+        if (getBridge() == null || getBridge().getWebView() == null) return;
+        WebSettings settings = getBridge().getWebView().getSettings();
+        settings.setSupportZoom(false);
+        settings.setBuiltInZoomControls(false);
+        settings.setDisplayZoomControls(false);
     }
 
     @Override

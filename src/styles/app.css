@@ -55,6 +55,15 @@ body { background: rgb(var(--canvas)); color: rgb(var(--ink)); font-family: var(
 /* iPhone: Safari zooms into any field whose text is under 16px and stays zoomed after typing; landscape also inflates text.
    Only iOS Safari understands -webkit-touch-callout, so fields grow to 16px there and nowhere else — pinch-zoom stays free. */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* nothing may make the page wider than the screen (a wide table or link would otherwise pan the whole app sideways) */
+body { overflow-x: clip; }
+/* Pinch and double-tap zoom are off everywhere. :where() keeps this at zero specificity, so a control that needs touch-action: none
+   (the sheet's drag handle) or pan-x (a horizontal scroller) still says so itself. */
+:where(html, body, #root, #root *) { touch-action: pan-x pan-y; }
+
+/* Member-written text (UGC: translate="no" dir="auto") is its own bidi isolate: the base direction comes from its first strong
+   letter and nothing around it can reorder what is inside it (numbers are isolated one level deeper, ui/bidi.tsx). */
+:where([translate="no"][dir="auto"]) { unicode-bidi: isolate; overflow-wrap: anywhere; }   /* a long link or word wraps instead of widening the screen */
 @supports (-webkit-touch-callout: none) { input:not([type=checkbox]):not([type=radio]):not([type=range]), textarea, select { font-size: max(16px, 1em) !important; } }
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }

@@ -45,13 +45,15 @@ select vault.create_secret('<the same PUSH_SECRET>', 'push_secret');
 Without these the every-minute cron sweep (`engspace-push-sweep`) still calls nothing — the function must be reachable by pg_net,
 so do this step. Check: `select * from net._http_response order by id desc limit 3;` after a test push.
 
-### 3. Android (Firebase Cloud Messaging)
-1. console.firebase.google.com → Add project → Add Android app with package name **`app.engspace`**.
-2. Download `google-services.json`. Add it to the repository as a **secret**: `base64 -w0 google-services.json` →
-   GitHub → Settings → Secrets → **`GOOGLE_SERVICES_JSON`** (the release workflow writes it to `android/app/` before building).
-3. Project settings → Service accounts → Generate new private key → one-line the JSON and set it:
-   `npx supabase secrets set FCM_SERVICE_ACCOUNT="$(cat service-account.json)"`.
+### 3. Android (Firebase Cloud Messaging) — automated since v0.1.8
+`android/app/google-services.json` is committed (it holds only the public app config, not a secret) and the Gradle plugin picks it up.
+Steps 1–2 above are done by the **Deploy database** workflow once you add one repository secret:
+1. Firebase console → Project settings → Service accounts → Generate new private key.
+2. GitHub → Settings → Secrets → Actions → **`FCM_SERVICE_ACCOUNT`** = the whole JSON file (paste its contents).
+3. Actions → **Deploy database** → Run workflow. It sets the function secrets (`FCM_SERVICE_ACCOUNT`, a fresh `PUSH_SECRET`), writes the
+   Vault entries, deploys `send-push` and fails if the function does not report Android as ready.
 4. Build the release (Actions → Release preview builds). Settings → إعدادات الإشعارات → «أرسل لي إشعارًا تجريبيًا».
+Never commit the service-account JSON; if one was ever pasted in a chat or ticket, revoke it in the Firebase console and create a new one.
 
 ### 4. iOS (APNs) — needs the paid Apple Developer Program
 Push does **not** work in the sideloaded IPA (a free Apple ID cannot sign the Push Notifications capability). For the signed build:

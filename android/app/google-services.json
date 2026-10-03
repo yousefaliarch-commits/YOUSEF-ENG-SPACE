@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "967881059159",
+    "project_id": "engspace-bb933",
+    "storage_bucket": "engspace-bb933.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967881059159:android:c8e3f9c0f2c30bf301ec12",
+        "android_client_info": {
+          "package_name": "app.engspace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDC7ATjQQBh8cdI1hb3MCH7nM_AJXnpf1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

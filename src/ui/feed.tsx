@@ -8,6 +8,7 @@ import { authorOf, displayName } from "../domain/identity";
 import { ckey } from "../domain/moderation";
 import { DISC, FX_NAMES, JOB_TYPES, WORK_MODES, label, posShort, trackLabel, yearsLabel } from "../domain/taxonomy";
 import { UGC } from "../i18n/i18n";
+import { bidi } from "./bidi";
 import { Money, estimateFor, matchJob, quality } from "../lib/helpers";
 import { HiddenFigure, PostImage } from "../lib/media";
 import { countComments } from "../lib/posts";
@@ -59,7 +60,7 @@ export function PollBlock({ p, app }: any) {
   const my = app.votes[p.id]; const [as, setAs] = useState<any>(app.profile.identity === "public" ? "public" : "anon"); const opts = p.poll.options.map(([t, n]: any, i) => [t, n + (my === i ? 1 : 0), i]); const tot = opts.reduce((a, o) => a + o[1], 0);
   return (
     <div className="mt-3 space-y-2">
-      <p {...UGC} className="text-[13.5px] text-ink text-start">{app.money(p.poll.q)}</p>
+      <p {...UGC} className="text-[13.5px] text-ink text-start">{bidi(app.money(p.poll.q))}</p>
       {my == null && <VoteChoice app={app} value={as} onChange={setAs} />}
       {opts.map(([t, n, i]: any) => <button key={i} type="button" disabled={my != null} onClick={(e) => { e.stopPropagation(); app.vote(p.id, i, as); }} className={`press relative w-full min-h-10 px-3 py-2 rounded-xl border overflow-hidden text-start text-[13px] transition-colors ${my === i ? "border-accent/40" : "border-line-2"} ${my == null ? "hover:border-accent/40" : ""}`}>
         {my != null && <span className="absolute inset-y-0 start-0 bg-wash" style={{ width: `${Math.round((n / tot) * 100)}%`, transition: "width .6s cubic-bezier(.2,.7,.2,1)" }} />}
@@ -97,7 +98,7 @@ export function PostCard({ p, app, compact = false, onComments = null }: any) {
       {gone && <RemovedMine what="منشورك" info={app.removedInfo(k)} />}
       <Author a={p} app={app} when={p.when} mine={p.mine} />
         <div className="mt-2 flex items-center gap-1.5 flex-wrap text-[10.5px]">{rm && (inRoom ? <span className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2"><rm.icon size={10} />{rm.name}</span> : <button type="button" onClick={() => app.push({ type: "room", id: rm.id })} className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><rm.icon size={10} />{rm.name}</button>)}{p.type !== "question" && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-wash text-accent"><TI size={10} />{type[1]}</span>}{p.ama && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-good/15 text-good"><span className="w-1.5 h-1.5 rounded-full bg-good glow-pulse" /> مباشر</span>}{p.best && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-good/15 text-good"><Award size={10} /> فيه إجابة معتمدة</span>}</div>
-      {onComments ? <p {...UGC} className="mt-2.5 text-[14.5px] leading-[1.85] text-ink text-start">{app.money(p.body)}</p> : <button type="button" onClick={() => app.push({ type: "post", id: p.id })} className="mt-2.5 block w-full text-start rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><p {...UGC} className="text-[14.5px] leading-[1.85] text-ink text-start">{app.money(p.body)}</p></button>}
+      {onComments ? <p {...UGC} className="mt-2.5 text-[14.5px] leading-[1.85] text-ink text-start">{bidi(app.money(p.body))}</p> : <button type="button" onClick={() => app.push({ type: "post", id: p.id })} className="mt-2.5 block w-full text-start rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><p {...UGC} className="text-[14.5px] leading-[1.85] text-ink text-start">{bidi(app.money(p.body))}</p></button>}
       {p.image && <PostImage image={p.image} app={app} />}
       {p.type === "reveal" && (app.moneyAccess === "full" ? <RevealBlock r={p.reveal} /> : <HiddenFigure app={app} what="كشف راتب" />)}
       {p.type === "vote" && <VoteBlock p={p} app={app} />}

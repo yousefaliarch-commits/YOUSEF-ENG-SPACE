@@ -8,7 +8,7 @@ import { CATS, CAT_DESC, COMPANIES, GENERAL_ROOM, catName } from "../../data/com
 import { DATASET, REGIONS, gov, govName, placeMult, placeName, regionName } from "../../data/geo";
 import { TOOLS } from "../../data/tools";
 import { authorOf, cleanName, displayName, gx } from "../../domain/identity";
-import { ALLOWANCES, COMPANY_MIN_SAMPLE, DISC, EMPLOYERS, EXP, FX, GOALS, GOALS_CO, POSITIONS, ROLE, TRACKS, can, label, posShort, toolOpen, trackLabel, tracksFor } from "../../domain/taxonomy";
+import { ALLOWANCES, COMPANY_MIN_SAMPLE, DISC, EMPLOYERS, EXP, FX, GOALS, GOALS_CO, POSITIONS, ROLE, TRACKS, can, employerBadge, label, posShort, toolOpen, trackLabel, tracksFor } from "../../domain/taxonomy";
 import { UGC } from "../../i18n/i18n";
 import { GOAL_TOOL, Money, estimateFor, marketFor, matchJob, personaExp, personaTitle, quality, reportsFor, round500, sampleSize } from "../../lib/helpers";
 import { countComments } from "../../lib/posts";
@@ -261,7 +261,7 @@ export function SalariesBody({ app }: any) {
           {/* locked in the cloud: the server sends no rows, so the blurred cards are the model's, never anyone's real number */}
           {(CLOUD && !unlocked ? reports : rlist).map((r) => <Panel key={r.id} className="p-3.5"><div className={unlocked ? "" : "blur-[6px] select-none"} aria-hidden={!unlocked}>
             <div className="flex items-center gap-2 flex-wrap text-[11.5px] text-ink-2"><AnonChip id={r.anon} spec={disc} /><span>{r.title} · {r.years} سنوات</span>{r.verified && <ShieldCheck size={13} className="text-good shrink-0" />}<span className="ms-auto shrink-0 text-ink-3">{r.when}</span></div>
-            <div className="mt-1.5 flex items-center justify-between gap-2">{r.coId ? <button type="button" onClick={() => app.push({ type: "company", id: r.coId })} className="text-[13px] text-ink hover:text-accent text-start">{r.company}</button> : <span className="text-[13px] text-ink">{r.company || "—"}</span>}<span className="shrink-0"><Num className="text-[16px] font-semibold">{fmt(r.salary)}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></div></div></Panel>)}
+            <div className="mt-1.5 flex items-center justify-between gap-2">{r.coId ? <button type="button" onClick={() => app.push({ type: "company", id: r.coId })} className="text-[13px] text-ink hover:text-accent text-start">{r.company}</button> : <span className="text-[13px] text-ink">{r.company || "—"}</span>}{(() => { const b = employerBadge(r.employer); return b ? <Chip tone={b[1]} className="h-5 px-1.5 text-[10px] shrink-0">{b[0]}</Chip> : null; })()}<span className="ms-auto shrink-0"><Num className="text-[16px] font-semibold">{fmt(r.salary)}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></div></div></Panel>)}
           {!unlocked && <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-5 text-center"><span className="glow-pulse grid place-items-center w-11 h-11 rounded-full bg-wash border border-accent/25 text-accent"><LockKeyhole size={18} /></span><p className="text-[13.5px] font-medium">{app.isCo ? "التقارير الفردية تُفتح بعد نشر أول وظيفة" : "التقارير الفردية تُفتح بعد مشاركة راتبك"}</p>{app.isCo ? <Primary onClick={() => app.push({ type: "postjob" })} className="h-11 px-6 press">انشر وظيفة <Forward /></Primary> : <Primary onClick={() => app.openSheet("contribute", { disc, exp, gov: g, city })} className="h-11 px-6 press">شارك راتبك <Forward /></Primary>}</div>}
         </div>
       </section>

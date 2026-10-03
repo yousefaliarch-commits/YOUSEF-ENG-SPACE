@@ -1,0 +1,9 @@
+# v0.1.8: job company name
+2ad7077f	The advertising company
+86024c42	Company name as it appears in the ad
+04e779ad	e.g. Orascom Construction
+17834d96	Enter the company name (at least 2 characters).
+4920530c	Linked to the “
+e45900b6	” scorecard — engineers see employee reviews on the ad
+49d5163f	View the scorecard
+deb46888	This company is not in the EngSpace directory yet — the ad shows under its name without a review scorecard. Pick a name from the list to link it to an existing company scorecard.

@@ -271,7 +271,7 @@ export async function salaryExplorer(disc: string, exp: string, gov: string | nu
 // the newest individual reports in a cell — the table's RLS returns rows only to engineers who shared (give-to-get)
 export async function latestShares(disc: string, exp: string, gov: string | null, limit = 8) {
   const db = await supabase(); const [lo, hi] = yearsRange(exp);
-  let q = db.from("salary_shares").select("id,title,years,salary,company,gov,track,author,created_at").eq("disc", disc).gte("years", lo).lte("years", hi).order("created_at", { ascending: false }).limit(limit);
+  let q = db.from("salary_shares").select("id,title,years,salary,company,employer,gov,track,author,created_at").eq("disc", disc).gte("years", lo).lte("years", hi).order("created_at", { ascending: false }).limit(limit);
   if (gov) q = q.eq("gov", gov);
   return ((ok(await q) as any[]) || []).map((r) => shareOf(r));
 }
@@ -367,14 +367,34 @@ export async function setThreadIdentity(threadId: string, as: string) { const db
 // One private channel per member ("member:<auth id>", supabase/migrations/…_realtime.sql): a ping with a thread id when a
 // message arrives (the text is then read through thread_messages), and the member's own new notifications.
 // onEvent("message", { thread }) · onEvent("notification", row) · onStatus(true | false) when the socket connects / drops.
-export async function subscribeLive(onEvent: (event: string, payload: any) => void, onStatus: (live: boolean) => void = () => {}) {
+// One post with its comments, as the feed shows it (a realtime «post» / «comment» event names only an id; this reads it through RLS).
+export async function postById(id: string) {
+  const db = await supabase(); const now = Date.now();
+  const [p, c, reacts, ballots] = await Promise.all([
+    db.from("posts").select("*").eq("id", id).maybeSingle(), db.from("comments").select("*").eq("post_id", id),
+    db.from("reactions").select("kind,item_id,agree,disagree,useful"), db.from("ballots").select("post_id,choice,author_mode").eq("post_id", id),
+  ]);
+  for (const r of [p, c, reacts, ballots]) if (r.error) throw friendly(r.error);
+  if (!p.data) return null;
+  const myReacts: Record<string, any> = {}; for (const r of reacts.data || []) myReacts[r.item_id] = r;
+  const b = (ballots.data || [])[0];
+  return postOf(p.data, commentTree(c.data || [], myReacts, now), { reacts: myReacts[id], ballot: b ? b.choice : null }, now);
+}
+
+// Realtime: the member's own private channel (messages, notifications, «profile» — their verification, role, strikes changed), the
+// shared «feed» (a new post / comment, moderation of anything — ids only), and for staff the «staff» topic (reports, decisions).
+// onEvent("message" | "notification" | "profile" | "post" | "comment" | "moderation" | "report", payload) · onStatus(true | false)
+export async function subscribeLive(onEvent: (event: string, payload: any) => void, onStatus: (live: boolean) => void = () => {}, opts: { staff?: boolean } = {}) {
   const db = await supabase(); const { data: { session } } = await db.auth.getSession(); if (!session) return () => {};
   await db.realtime.setAuth(session.access_token);
-  const ch = db.channel(`member:${session.user.id}`, { config: { private: true } })
-    .on("broadcast", { event: "message" }, (m: any) => onEvent("message", m.payload))
-    .on("broadcast", { event: "notification" }, (m: any) => onEvent("notification", m.payload))
-    .subscribe((status: string) => onStatus(status === "SUBSCRIBED"));
-  return () => { db.removeChannel(ch); };
+  const listen = (topic: string, events: string[], main = false) => {
+    let ch: any = db.channel(topic, { config: { private: true } });
+    for (const e of events) ch = ch.on("broadcast", { event: e }, (m: any) => onEvent(e, m.payload));
+    return ch.subscribe((status: string) => { if (main) onStatus(status === "SUBSCRIBED"); });
+  };
+  const chans = [listen(`member:${session.user.id}`, ["message", "notification", "profile"], true), listen("feed", ["post", "comment", "moderation"])];
+  if (opts.staff) chans.push(listen("staff", ["report", "moderation"]));
+  return () => { for (const c of chans) db.removeChannel(c); };
 }
 
 // ---------------------------------------------------------------- verification
