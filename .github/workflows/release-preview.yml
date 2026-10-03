@@ -35,9 +35,9 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-      # push (Android): the Firebase config is a repository secret — base64 of google-services.json (docs/PUSH.md). Without it the app
-      # builds and runs as before; only the phone-side push registration reports "not available in this build".
-      - name: Firebase config
+      # push (Android): android/app/google-services.json (Firebase client config, project engspace-bb933) is committed on purpose —
+      # it identifies the app, it is not a secret. A repository secret GOOGLE_SERVICES_JSON (base64) overrides it, e.g. for another project.
+      - name: Firebase config override
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: if [ -n "$GOOGLE_SERVICES_JSON" ]; then echo "$GOOGLE_SERVICES_JSON" | base64 -d > android/app/google-services.json; fi

@@ -84,6 +84,9 @@ export const TITLES = {
 export const SKILLS = ["AutoCAD", "Revit", "Revit MEP", "ETABS", "SAP2000", "SAFE", "Tekla", "Navisworks", "Civil 3D", "Primavera P6", "MS Project", "STAAD", "PLAXIS", "Robot Structural", "Dynamo", "Lumion", "SketchUp", "3ds Max", "Enscape", "HAP", "Dialux", "ETAP", "BIM 360", "Excel", "FIDIC", "PMP", "NEBOSH", "ISO 9001", "Total Station", "GNSS", "ArcGIS", "QGIS", "Bluebeam", "Synchro", "Power BI", "ASHRAE", "NFPA", "IEC", "الكود المصري", "ACI"];
 
 export const EMPLOYERS = [["contracting", "مقاولات عامة", 0.98], ["special", "مقاولات متخصصة (MEP/تشطيبات)", 0.96], ["consulting", "استشاري تصميم/إشراف", 1.10], ["developer", "تطوير عقاري", 1.02], ["industrial", "صناعة وطاقة", 1.05], ["oil", "بترول وغاز", 1.25], ["public", "حكومي / هيئات", 0.72], ["intl", "شركة دولية — مشاريع في مصر", 1.30], ["backoffice", "مكتب خلفي لشركة أجنبية — مرتبط بالعملة", 1.9]];
+// the short badge on a salary report: contracting, consulting or owner (developers, industry, oil & gas, government), and the two special cases
+export const EMPLOYER_BADGE: any = { contracting: ["مقاولات", "default"], special: ["مقاولات", "default"], consulting: ["استشاري", "accent"], developer: ["مالك", "verified"], industrial: ["مالك", "verified"], oil: ["مالك", "verified"], public: ["مالك", "verified"], intl: ["دولية", "accent"], backoffice: ["مكتب خلفي", "warn"] };
+export const employerBadge = (id?: any) => (id && EMPLOYER_BADGE[id]) || null;
 
 export const CAT_MULT = { contracting: 0.98, developer: 1.02, consulting: 1.10, intl: 1.30, backoffice: 1.9, public: 0.72, industrial: 1.05, oil: 1.25, transport: 1.28 };
 

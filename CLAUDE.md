@@ -53,6 +53,17 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   (`npm run i18n`, then `node scripts/i18n/build.mjs todo`). CI fails if `i18n/keys.json` / `src/i18n/en.generated.json`
   are not committed and current.
 
+- v0.1.8: **zoom is locked** (viewport meta, `touch-action`, gesture listeners, Android `MainActivity.disableZoom()`, iOS `EngViewController`).
+  Member text (posts, comments, chat) is `translate="no" dir="auto"` with `unicode-bidi: isolate` and numbers in `<bdi dir="ltr">` (`ui/bidi.tsx`).
+  Feeds merge the member's own in-flight / just-confirmed posts into every hydrate (`mergeLocalPosts`) so nothing vanishes or doubles.
+  Realtime: private channels `member:<id>` (verification, profile, notices), `feed` (post/moderation changes), `staff` (console reload).
+  Job matching is **discipline-first**: SQL filter + client `matchJob` gate (experience / city only count after the discipline matches);
+  `jobs.co_name` links an ad to its company scorecard. Salary shares keep the employer type in `salary_shares.employer`
+  (مقاولات / استشاري / مالك), never in `company`. Pull-to-refresh always lets go (12 s guard).
+- Test accounts (`scripts/seed/`, `@engspace.test`, no mailbox): civil, architect, mep, electrical, survey, supervisor, hr, owner, moderator, admin.
+  Hosted: Actions → **Seed test accounts** (`seed` / `remove` — remove them before launch); local/CI: `npm run db:seed`. Passwords are never in the repo
+  (bcrypt hashes only). E2E: `npm run e2e` (Playwright, iPhone 15 + Pixel 7 profiles; `E2E_LIVE=1` adds the signed-in suite; `E2E_WEBKIT=1` real WebKit).
+
 ## How the code is organised
 - `src/app/AppView.tsx` holds member-app state (one store, keys like posts/jobs/threads) and every handler; handlers update
   locally, then `sync(() => cloud.x())` in cloud mode. Demo mode (no `VITE_SUPABASE_*`) must keep working unchanged.

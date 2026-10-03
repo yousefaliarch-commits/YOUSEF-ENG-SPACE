@@ -35,7 +35,7 @@ export function reportsFor(disc?: any, exp?: any, govKey?: any) {
   const { p25, p75 } = marketFor(disc, exp, govKey); const seed = seedOf(disc + exp + govKey);
   const whens: any = ["منذ يومين", "منذ 4 أيام", "منذ أسبوع", "منذ أسبوعين", "منذ 3 أسابيع", "منذ شهر"]; const yrs = { "0-2": [1, 2], "3-5": [3, 5], "5-8": [5, 8], "8-12": [8, 12], "12+": [12, 20] }[exp];
   return Array.from({ length: 6 }, (_, i) => { const r = rand(seed + i * 13), r2 = rand(seed + i * 29); const c = COMPANIES[Math.floor(r2 * COMPANIES.length)];
-    return { id: `${seed}-${i}`, anon: hex4(seed + i * 7), title: TITLES[disc][i % TITLES[disc].length], company: c.name, coId: c.id, years: yrs[0] + Math.round(r * (yrs[1] - yrs[0])), salary: round500(p25 + (p75 - p25) * r * 1.15), verified: r2 > 0.3, when: whens[i] }; });
+    return { id: `${seed}-${i}`, anon: hex4(seed + i * 7), title: TITLES[disc][i % TITLES[disc].length], company: c.name, coId: c.id, employer: c.cat, years: yrs[0] + Math.round(r * (yrs[1] - yrs[0])), salary: round500(p25 + (p75 - p25) * r * 1.15), verified: r2 > 0.3, when: whens[i] }; });
 }
 
 // ---- Expected salary range for a job: market band (discipline × years) × place × sub-discipline × position × employer category. The employer never types a number. ----
@@ -50,7 +50,10 @@ export function estimateFor(job?: any) {
 export function matchJob(job?: any, p?: any) {
   if (!p || isCompanyRole(p.role)) return null;
   const pd = p.disc; const parts: any = [];
-  const disc = job.disc === pd ? 40 : 0; parts.push(["التخصّص", disc, 40, ROLE[job.disc]]);
+  // The discipline is a hard requirement, decided first: a civil engineer is never «partly» matched with a mechanical, electrical or
+  // architectural job. Track, experience and place are only weighed once the discipline is the member's own.
+  if (job.disc !== pd) return { score: 0, parts: [["التخصّص", 0, 40, ROLE[job.disc]]], tier: "غير مطابق", tone: "default", perfect: false, gaps: ["التخصّص"], mismatch: true };
+  const disc = 40; parts.push(["التخصّص", disc, 40, ROLE[job.disc]]);
   const sub = job.sub === p.track ? 25 : (TRACK_ADJ[job.sub] || []).includes(p.track) ? 12 : 0; parts.push(["المسار", sub, 25, trackLabel(job.sub, job.disc)]);
   const [ya, yb] = posYears(p.pos); const my = (ya + yb) / 2; const [ja, jb] = job.years || [0, 30]; const inRange = my >= ja && my <= jb; const dist = inRange ? 0 : Math.min(Math.abs(my - ja), Math.abs(my - jb));
   const exp = inRange ? 20 : dist <= 2 ? 10 : 0; parts.push(["سنوات الخبرة", exp, 20, yearsLabel(job.years || [0, 30])]);

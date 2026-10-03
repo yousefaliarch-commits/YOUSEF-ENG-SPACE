@@ -23,7 +23,7 @@ import { dropOwnRequest, newVerifyRequest, purgeRequest, saveOwnRequest, verifs0
 import { L2, say, tr } from "../i18n/i18n";
 import { DEMO_PERSONA, estimateFor, loadPersona, reachFor, savePersona } from "../lib/helpers";
 import { ImageViewer } from "../lib/media";
-import { applyReaction } from "../lib/posts";
+import { applyReaction, mergeLocalPosts } from "../lib/posts";
 import { liveState, reducedMotion, storeFor, useStore } from "../lib/runtime";
 import { AppHeader, Empty, Sheet, TabBar } from "../ui/chrome";
 import { ReportSheet } from "../ui/moderation";
@@ -151,7 +151,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // Tabs stay mounted once shown (hidden with display:none), so switching back only toggles visibility; after the first screen
   // has painted, the remaining tabs are built in an idle, interruptible render so even a first visit is instant.
   const [visited, setVisited] = useState<any>(() => [init.tab]);
-  useEffect(() => { if (!visited.includes(curTab)) setVisited((v) => [...v, curTab]); }, [curTab]);
+  // the updater re-checks: two quick tab changes before the first commit used to append the same tab twice (two live panes, same React key)
+  useEffect(() => { setVisited((v) => (v.includes(curTab) ? v : [...v, curTab])); }, [curTab]);
   useEffect(() => { if (!persona) return; const ric: any = (window as any).requestIdleCallback || ((f: any) => setTimeout(f, 1200)); const id = ric(() => startTransition(() => setVisited((v) => [...new Set([...v, ...tabs.map((x) => x.id)])])), { timeout: 2500 }); return () => { const c: any = (window as any).cancelIdleCallback || clearTimeout; c(id); }; }, [!!persona, tabs.length]);
   useEffect(() => { if (!persona || welcome || editing || embed || !langChosen || tourSeen()) return; const t = setTimeout(() => setTourOn(true), 900); return () => clearTimeout(t); }, [!!persona, welcome, editing, langChosen]);
   const topNow = stack[stack.length - 1]; const screenKey = topNow ? `${topNow.type}-${topNow.id || ""}#${stack.length}` : "tab:" + curTab;
@@ -164,7 +165,16 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   useEffect(() => { if (!msg) return; const t = setTimeout(() => setMsg(""), 2600); return () => clearTimeout(t); }, [msg]);
   // the route lives in the hash; signed out it is just #app, so a reload of the sign-up/sign-in screens never lands in the demo member
   useEffect(() => { if (embed && !embed.hash) return; const top = stack[stack.length - 1]; try { history.replaceState(null, "", !persona ? (embed ? "#devices" : "#app") : (embed ? "#devices/" : "#app/") + (top ? (top.id ? `${top.type}/${top.id}` : top.type) : curTab === "market" ? `market/${market}` : curTab)); } catch (e) {} }, [curTab, stack, market, persona]);
-  useEffect(() => { if (!refreshing) return; if (CLOUD) { hydrate().then(() => { setRefreshing(false); setMsg("محدّث"); }, (e) => { setRefreshing(false); setMsg(e.message); }); return; } const t = setTimeout(() => { setRefreshing(false); setMsg("محدّث — لا جديد منذ آخر مرة"); }, 1100); return () => clearTimeout(t); }, [refreshing]);
+  // Pull-to-refresh always lets go: when the data arrives, when it fails, or after 12 s on a connection that never answers (the spinner
+  // used to wait on a request with no timeout). A late answer still updates the screen, it just no longer holds the spinner.
+  useEffect(() => {
+    if (!refreshing) return; let done = false;
+    const finish = (m: any) => { if (done) return; done = true; clearTimeout(guard); setRefreshing(false); setMsg(m); };
+    const guard = setTimeout(() => finish("تعذّر التحديث — تحقّق من اتصالك"), CLOUD ? 12000 : 1100);
+    if (CLOUD) hydrate().then(() => finish("محدّث"), (e) => finish(e && e.message ? e.message : "تعذّر التحديث"));
+    else setTimeout(() => finish("محدّث — لا جديد منذ آخر مرة"), 1000);
+    return () => { done = true; clearTimeout(guard); };
+  }, [refreshing]);
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
   const later = (fn?: any, ms?: any) => { timers.current.push(setTimeout(fn, ms)); };
   const toggleIn = (set?: any) => (id) => set((s) => ({ ...s, [id]: !s[id] }));
@@ -202,11 +212,11 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const clock = () => new Date().toLocaleTimeString("ar-EG-u-nu-latn", { hour: "2-digit", minute: "2-digit" });
   // ---- cloud: load the member's real data, keep it fresh, and send every change to the server ----
   // writes stay optimistic (the screen updates at once); a failure shows its reason and the next refresh restores the truth
-  const sync = (call?: any, onOk?: any) => { if (!CLOUD) return; Promise.resolve().then(call).then(onOk, (e) => setMsg(e && e.message ? e.message : String(e))); };
+  const sync = (call?: any, onOk?: any, onErr?: any) => { if (!CLOUD) return; Promise.resolve().then(call).then(onOk, (e) => { if (onErr) onErr(e); setMsg(e && e.message ? e.message : String(e)); }); };
   const hydrated = useRef(false); const contributing = useRef(false); const sharing = useRef(false); const shareOkAt = useRef(0);
   const hydrate = async () => {
     const d = await cloud.loadAll(); hydrated.current = false;
-    setPosts(d.posts); setJobs(d.jobs); setJobStats(Object.fromEntries(d.jobs.map((j) => [j.id, j.stats]))); setNotifs(d.notifs); setThreads((ts) => d.threads.map((t) => { const old = ts.find((x) => x.id === t.id); return old ? { ...t, messages: old.messages } : t; }));
+    setPosts(mergeLocal(d.posts)); setJobs(d.jobs); setJobStats(Object.fromEntries(d.jobs.map((j) => [j.id, j.stats]))); setNotifs(d.notifs); setThreads((ts) => d.threads.map((t) => { const old = ts.find((x) => x.id === t.id); return old ? { ...t, messages: old.messages } : t; }));
     // give-to-get comes from the server, so a fresh install or another phone is unlocked the same way (a share made seconds ago
     // may not be in a read that started before it — keep the local answer for a minute)
     if (d.contributed || Date.now() - shareOkAt.current > 60000) { setContributed((c) => (isCompanyRole(persona && persona.role) ? c || !!d.contributed : !!d.contributed)); updateProfileLocal({ contributed: !!d.contributed || (isCompanyRole(persona && persona.role) && !!profile.contributed) }); }
@@ -258,14 +268,30 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const chatRef = useRef<any>(null); chatRef.current = chatId; const [live, setLive] = useState(false);
   const loadChat = (tid?: any) => cloud.messages(tid).then((msgs) => setThreads((ts) => ts.map((t) => (t.id === tid ? { ...t, messages: msgs, unread: 0 } : t))));
   const refreshThreads = () => cloud.threads().then((ts) => setThreads((old) => ts.map((t) => { const o = old.find((x) => x.id === t.id); return o ? { ...t, messages: o.messages, unread: t.id === chatRef.current ? 0 : t.unread } : t; })));
+  // the realtime handlers outlive a render: they always call the latest functions through this ref
+  const rt = useRef<any>({}); const hydrateTimer = useRef<any>(null);
+  const uniqById = (ps: any[]) => { const seen = new Set(); return ps.filter((p) => !seen.has(p.id) && seen.add(p.id)); };
+  rt.current = {
+    refreshMe: () => refreshMe().catch(() => {}),
+    // moderation and other bulk changes: one refresh shortly after the last event
+    hydrateSoon: () => { clearTimeout(hydrateTimer.current); hydrateTimer.current = setTimeout(() => hydrate().catch(() => {}), 600); },
+    // a new post by someone else; mine is already on screen (give a post of mine still on its way a moment to finish first)
+    pullPost: (id: any) => setTimeout(() => cloud.postById(id).then((p) => { if (p) setPosts((ps) => (ps.some((x) => x.id === p.id) || recentOwn.current[p.id] ? ps : uniqById([p, ...ps]))); }).catch(() => {}), Object.keys(pendingPosts.current).length ? 1500 : 0),
+    // a new comment under a post the feed holds: re-read that post (its counts and tree)
+    pullComments: (postId: any) => { if (!posts.some((x) => x.id === postId)) return; cloud.postById(postId).then((p) => { if (p) setPosts((ps) => ps.map((x) => (x.id === p.id ? { ...x, comments: p.comments, reactions: p.reactions } : x))); }).catch(() => {}); },
+  };
   useEffect(() => {
     if (!CLOUD || !persona) return; let off: any = null; let gone = false;
     cloud.subscribeLive((event, p) => {
+      if (event === "profile") { rt.current.refreshMe(); rt.current.hydrateSoon(); }
+      if (event === "post" && p) rt.current.pullPost(p.id);
+      if (event === "comment" && p) rt.current.pullComments(p.post);
+      if (event === "moderation") rt.current.hydrateSoon();
       if (event === "message") { refreshThreads().catch(() => {}); if (p && p.thread === chatRef.current) { loadChat(p.thread).catch(() => {}); cloud.readThread(p.thread).catch(() => {}); } }
-      if (event === "notification" && p) { setNotifs((ns) => (ns.some((n) => n.id === p.id) ? ns : [{ id: p.id, kind: p.kind, title: p.title, body: p.body, target: p.target || undefined, read: false, when: "الآن", category: p.category || notifCategory(p.kind), ...(p.en && p.en.title ? { en: p.en } : {}) }, ...ns])); pushNative(p.title, p.body, p.kind); }
-    }, setLive).then((f) => { if (gone) f(); else off = f; }).catch(() => {});
+      if (event === "notification" && p) { setNotifs((ns) => (ns.some((n) => n.id === p.id) ? ns : [{ id: p.id, kind: p.kind, title: p.title, body: p.body, target: p.target || undefined, read: false, when: "الآن", category: p.category || notifCategory(p.kind), ...(p.en && p.en.title ? { en: p.en } : {}) }, ...ns])); pushNative(p.title, p.body, p.kind); if (["verify", "mod", "warn", "suspend"].includes(p.kind)) rt.current.refreshMe(); }
+    }, setLive, { staff: !!persona && (persona.staff === "moderator" || persona.staff === "admin") }).then((f) => { if (gone) f(); else off = f; }).catch(() => {});
     return () => { gone = true; if (off) off(); setLive(false); };
-  }, [!!persona, persona && persona.pid]);
+  }, [!!persona, persona && persona.pid, persona && persona.staff]);
   // a thread opened from the admin console may be new to this list: fetch the list first, then its messages
   useEffect(() => { if (!chatId) return; (threads.some((x) => x.id === chatId) ? loadChat(chatId) : refreshThreads().then(() => loadChat(chatId))).catch(() => {}); cloud.readThread(chatId).catch(() => {}); if (live) return; const i = setInterval(() => { if (!document.hidden) loadChat(chatId).catch(() => {}); }, 5000); return () => clearInterval(i); }, [chatId, live]);
   // saved items, follows, personal hiding, opened contacts: one row each, written a moment after the last change
@@ -275,6 +301,13 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   useEffect(() => { storeInspections(inspections, persona && persona.pid); persist("inspections", inspections); }, [inspections]);
   useEffect(() => { storeDevice("salarylog", persona && persona.pid, salaryLog); persist("salaryLog", salaryLog); }, [salaryLog]);
   const swapId = (list?: any, tmp?: any, item?: any) => list.map((x) => (x.id === tmp ? { ...x, ...item, mine: true } : { ...x, ...(x.replies ? { replies: swapId(x.replies, tmp, item) } : {}), ...(x.comments ? { comments: swapId(x.comments, tmp, item) } : {}) }));
+  // A post just published exists only here until the server answers, and for a moment after that a read may not include it yet.
+  // A refresh (pull, focus, realtime) in that window used to replace the feed and drop it — «some posts only show after a reload».
+  const pendingPosts = useRef<any>({}); const recentOwn = useRef<any>({});
+  const mergeLocal = (server: any[]) => {
+    const now = Date.now(); for (const [id, p] of Object.entries<any>(recentOwn.current)) if (now - p.keptAt > 120000) delete recentOwn.current[id];
+    return mergeLocalPosts(server, [...Object.values<any>(pendingPosts.current), ...Object.values<any>(recentOwn.current)]);
+  };
   const kindOf = (id?: any) => (posts.some((p) => p.id === id) ? "posts" : "comments");
   // Android back button: the open viewer, sheet or pushed screen closes first; on a tab other than home it goes home; then the app leaves
   const backRef = useRef<any>(null);
@@ -337,7 +370,15 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     // meets a masked Arabic string it can't look up.
     moneyAccess: access, money: (t?: any) => (access === "full" ? t : maskMoney(t)), moneyDM: (t?: any) => (access === "none" ? maskMoney(t) : t),
     moneyNote: (t?: any) => (access === "none" ? maskMoney(tr(t)) : t),
-    addPost: (post?: any, as?: any) => { later(() => askPush(), 2500); const tmp = stamp({ comments: [], dm: !!profile.dm, best: null, ...post }, as); setPosts((ps) => [tmp, ...ps]); addPts(post.type === "reveal" ? 15 : 5); sync(() => cloud.addPost(post, asOf(as)), (srv) => setPosts((ps) => swapId(ps, tmp.id, { ...srv, comments: [] }))); },
+    addPost: (post?: any, as?: any) => {
+      later(() => askPush(), 2500); const tmp: any = stamp({ comments: [], dm: !!profile.dm, best: null, at: Date.now(), ...post }, as);
+      pendingPosts.current[tmp.id] = tmp; setPosts((ps) => [tmp, ...ps]); addPts(post.type === "reveal" ? 15 : 5);
+      sync(() => cloud.addPost(post, asOf(as)), (srv: any) => {
+        delete pendingPosts.current[tmp.id]; const full = { ...srv, comments: [], mine: true }; recentOwn.current[srv.id] = { ...full, keptAt: Date.now() };
+        // swap the temporary post for the real one — or add it, when a refresh already replaced the feed
+        setPosts((ps) => uniqById(ps.some((x) => x.id === tmp.id) ? swapId(ps, tmp.id, { ...srv, comments: [] }) : ps.some((x) => x.id === srv.id) ? ps : [full, ...ps]));
+      }, () => { delete pendingPosts.current[tmp.id]; setPosts((ps) => ps.filter((x) => x.id !== tmp.id)); });   // refused: it never existed — the message says why
+    },
     addComment: (pid?: any, c?: any, parentId?: any, as?: any) => { const node = stamp({ replies: [], dm: !!profile.dm, ...c }, as); setPosts((ps) => ps.map((p) => p.id !== pid ? p : { ...p, comments: parentId ? attach(p.comments, parentId, node) : [...p.comments, node] })); addPts(10); sync(() => cloud.addComment(pid, c, parentId, asOf(as)), (srv) => setPosts((ps) => swapId(ps, node.id, { ...srv, replies: undefined }))); },
     setBest: (pid?: any, cid?: any) => { setPosts((ps) => ps.map((p) => p.id === pid ? { ...p, best: cid } : p)); sync(() => cloud.setBest(pid, cid)); },
     // personal hiding (after my own report) and moderation removal are both keyed by ckey(kind, id)

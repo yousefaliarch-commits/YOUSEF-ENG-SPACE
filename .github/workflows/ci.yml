@@ -38,6 +38,35 @@ jobs:
       - name: Cloud layer end to end (src/backend/cloud.ts as real members)
         run: npm run test:cloud
 
+  # The whole app in a browser on two phone profiles (iPhone 15, Pixel 7): demo members of every role, then the seeded test
+  # accounts against a local Supabase (sign-in, every tab, every tool, the admin console, publishing a post).
+  e2e:
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Start local Supabase and seed the test accounts
+        run: |
+          npx supabase start -x studio,logflare,vector,imgproxy,edge-runtime,supavisor,postgres-meta
+          npm run db:env
+          npm run db:seed
+      - name: End-to-end (demo + live, both phone profiles)
+        run: E2E_LIVE=1 npm run e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+
   # An installable Android build of every push (Actions → this run → Artifacts → engspace-debug-apk).
   # With the repository secrets VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (or VITE_SUPABASE_ANON_KEY) it talks to the hosted project;
   # without them it is the demo.

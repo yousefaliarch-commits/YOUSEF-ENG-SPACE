@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity, BadgeCheck, Ban, Briefcase, ChartColumn, CheckCheck, CircleCheck, Contact, Copy, ExternalLink, Eye, EyeOff, 
   Flag, Gavel, Hourglass, IdCard, Layers, LayoutDashboard, LifeBuoy, LockKeyhole, Megaphone, MessageSquare, 
@@ -48,6 +48,15 @@ export function AdminView({ init, openApp }: any) {
   // cloud: the console shows the live platform and acts through staff-only database functions; `live` is null while loading
   const CLOUD = isCloud(); const [live, setLive] = useState<any>(null); const [liveErr, setLiveErr] = useState<any>("");
   const reload = () => loadAdmin().then((d) => { setLive(d); setLiveErr(""); }, (e) => setLiveErr(e.message));
+  // Follow the other staff and the members live: a new report, a decision by another moderator, content hidden or deleted, a member's
+  // verification — the console reloads shortly after the last event (the «staff» realtime topic, staff only; supabase/…_realtime_feed_profile.sql)
+  const reloadRef = useRef<any>(null); reloadRef.current = reload;
+  useEffect(() => {
+    if (!CLOUD) return; let off: any = null, gone = false, t: any = null;
+    cloud.subscribeLive((ev) => { if (ev === "report" || ev === "moderation" || ev === "profile") { clearTimeout(t); t = setTimeout(() => reloadRef.current && reloadRef.current(), 500); } }, () => {}, { staff: true })
+      .then((f) => { if (gone) f(); else off = f; }).catch(() => {});
+    return () => { gone = true; clearTimeout(t); if (off) off(); };
+  }, []);
   // load only for a signed-in staff account (the server would refuse anyone else anyway)
   useEffect(() => { if (!CLOUD) return; cloud.currentPersona().then((p) => { if (!p) return; store.set("persona", (x) => ({ ...(x || {}), ...p })); if (store.has("profile")) store.set("profile", (x) => ({ ...(x || {}), ...p })); if (p.staff === "moderator" || p.staff === "admin") reload(); }); }, []);
   const act = (p?: any, done?: any) => Promise.resolve(p).then(() => { if (done) setMsg(done); return reload(); }, (e) => setMsg(e.message));

@@ -22,3 +22,10 @@ initNative();
 // clean state on a new deep link without reloading the page
 // (`supabase` hands the cloud crawler the live client, so a remount can adopt a fresh test session without a page reload)
 if (import.meta.env.DEV) window.__engspaceDev = { mount, unmount: () => { if (root) root.unmount(); root = null; }, supabase: () => import("./backend/client").then((m) => m.supabase()) };
+
+// iOS (Safari and WKWebView) ignores user-scalable=no for accessibility and sends gesture events for a pinch: cancel them.
+// A second finger on the screen never zooms either.
+if (typeof document !== "undefined") {
+  for (const ev of ["gesturestart", "gesturechange", "gestureend"]) document.addEventListener(ev, (e) => e.preventDefault(), { passive: false });
+  document.addEventListener("touchmove", (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+}

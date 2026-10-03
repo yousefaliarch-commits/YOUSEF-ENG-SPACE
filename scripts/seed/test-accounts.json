@@ -1,0 +1,172 @@
+{
+ "domain": "engspace.test",
+ "note": "Test accounts for every role. Passwords are NOT in this file: hosted seeding uses the bcrypt hashes below (the plaintext was given to the owner only); local seeding takes SEED_PASSWORD / SEED_ADMIN_PASSWORD from the environment. gradYear is an offset from the current year.",
+ "hashes": {
+  "general": "$2a$10$HxvvyTem2puHiFIGUV0FQOz0f7Dv64jXMxys8rqaFb4IUg8DvRnv6",
+  "admin": "$2a$10$yOuBZDTLteerNVp.bQz4GeULED.KM4iE.ks4WpoBkECr3fmU8/TRq"
+ },
+ "accounts": [
+  {
+   "key": "civil",
+   "local": "test.civil",
+   "name": "مهندس مدني — حساب تجريبي",
+   "role": "engineer",
+   "profile": {
+    "disc": "civil",
+    "track": "site",
+    "pos": "senior",
+    "gradYear": -9,
+    "gov": "cairo",
+    "city": "nasr",
+    "gender": "male",
+    "age": 33
+   },
+   "passwordGroup": "general",
+   "staff": null
+  },
+  {
+   "key": "architect",
+   "local": "test.architect",
+   "name": "مهندسة معمارية — حساب تجريبي",
+   "role": "engineer",
+   "profile": {
+    "disc": "architecture",
+    "track": "tech",
+    "pos": "mid",
+    "gradYear": -6,
+    "gov": "giza",
+    "gender": "female",
+    "age": 30
+   },
+   "passwordGroup": "general",
+   "staff": null
+  },
+  {
+   "key": "mep",
+   "local": "test.mep",
+   "name": "مهندس MEP (ميكانيكا) — حساب تجريبي",
+   "role": "engineer",
+   "profile": {
+    "disc": "mechanical",
+    "track": "site",
+    "pos": "mid",
+    "gradYear": -7,
+    "gov": "alexandria",
+    "gender": "male",
+    "age": 31
+   },
+   "passwordGroup": "general",
+   "staff": null
+  },
+  {
+   "key": "electrical",
+   "local": "test.electrical",
+   "name": "مهندس كهرباء — حساب تجريبي",
+   "role": "engineer",
+   "profile": {
+    "disc": "electrical",
+    "track": "tech",
+    "pos": "junior",
+    "gradYear": -3,
+    "gov": "cairo",
+    "gender": "male",
+    "age": 27
+   },
+   "passwordGroup": "general",
+   "staff": null
+  },
+  {
+   "key": "survey",
+   "local": "test.survey",
+   "name": "مهندس مساحة — حساب تجريبي",
+   "role": "engineer",
+   "profile": {
+    "disc": "survey",
+    "track": "site",
+    "pos": "mid",
+    "gradYear": -5,
+    "gov": "giza",
+    "gender": "male",
+    "age": 29
+   },
+   "passwordGroup": "general",
+   "staff": null
+  },
+  {
+   "key": "supervisor",
+   "local": "test.supervisor",
+   "name": "مشرف موقع — حساب تجريبي",
+   "role": "supervisor",
+   "profile": {
+    "disc": "civil",
+    "gov": "cairo",
+    "gender": "male",
+    "age": 38
+   },
+   "passwordGroup": "general",
+   "staff": null
+  },
+  {
+   "key": "hr",
+   "local": "test.hr",
+   "name": "مسؤولة موارد بشرية — حساب تجريبي",
+   "role": "hr",
+   "profile": {
+    "companyName": "شركة الاختبار الهندسية",
+    "gov": "cairo",
+    "gender": "female",
+    "age": 34
+   },
+   "passwordGroup": "general",
+   "staff": null
+  },
+  {
+   "key": "owner",
+   "local": "test.owner",
+   "name": "صاحب شركة — حساب تجريبي",
+   "role": "owner",
+   "profile": {
+    "companyName": "مقاولات الاختبار",
+    "gov": "cairo",
+    "gender": "male",
+    "age": 48
+   },
+   "passwordGroup": "general",
+   "staff": null
+  },
+  {
+   "key": "moderator",
+   "local": "test.moderator",
+   "name": "مشرف محتوى — حساب تجريبي",
+   "role": "engineer",
+   "profile": {
+    "disc": "civil",
+    "track": "tech",
+    "pos": "mid",
+    "gradYear": -8,
+    "gov": "cairo",
+    "gender": "male",
+    "age": 32
+   },
+   "passwordGroup": "admin",
+   "staff": "moderator"
+  },
+  {
+   "key": "admin",
+   "local": "test.admin",
+   "name": "مدير المنصة (Super Admin) — حساب تجريبي",
+   "role": "engineer",
+   "profile": {
+    "disc": "architecture",
+    "track": "tech",
+    "pos": "senior",
+    "gradYear": -12,
+    "gov": "cairo",
+    "gender": "male",
+    "age": 40
+   },
+   "passwordGroup": "admin",
+   "staff": "admin"
+  }
+ ]
+}

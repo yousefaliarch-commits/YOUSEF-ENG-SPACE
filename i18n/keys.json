@@ -9,7 +9,17 @@
   "p": "app/App.tsx",
   "n": 1
  },
+ "تعذّر التحديث — تحقّق من اتصالك": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
  "محدّث": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "تعذّر التحديث": {
   "k": "s",
   "p": "app/AppView.tsx",
   "n": 1
@@ -1057,8 +1067,8 @@
  },
  "غير مطابق": {
   "k": "s",
-  "p": "data/checklists.ts,lib/report-pdf.ts",
-  "n": 2
+  "p": "data/checklists.ts,lib/helpers.tsx,lib/report-pdf.ts",
+  "n": 3
  },
  "لا ينطبق": {
   "k": "s",
@@ -7603,6 +7613,31 @@
   "p": "domain/taxonomy.ts",
   "n": 1
  },
+ "مقاولات": {
+  "k": "s",
+  "p": "domain/taxonomy.ts,lib/search.ts",
+  "n": 3
+ },
+ "استشاري": {
+  "k": "s",
+  "p": "domain/taxonomy.ts,features/tabs/tabs.tsx,lib/search.ts",
+  "n": 3
+ },
+ "مالك": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 4
+ },
+ "دولية": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 1
+ },
+ "مكتب خلفي": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 1
+ },
  "دولار": {
   "k": "s",
   "p": "domain/taxonomy.ts",
@@ -9135,18 +9170,18 @@
  },
  "ا": {
   "k": "s",
-  "p": "domain/text-guard.ts,lib/search.ts",
-  "n": 3
+  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts",
+  "n": 4
  },
  "ي": {
   "k": "s",
-  "p": "domain/text-guard.ts,lib/search.ts",
-  "n": 5
+  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts",
+  "n": 6
  },
  "ه": {
   "k": "s",
-  "p": "domain/text-guard.ts,lib/search.ts",
-  "n": 3
+  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts",
+  "n": 4
  },
  "ك": {
   "k": "s",
@@ -18237,7 +18272,7 @@
   "k": "e",
   "p": "features/stack/stack.tsx",
   "n": 1,
-  "x": "editing ? \"تعديل إعلان منشور\" : `تُنشر باسم ${pr.companyName || \"شركتك\"}`"
+  "x": "editing ? \"تعديل إعلان منشور\" : `تُنشر باسم ${coName || pr.companyName || \"شركتك\"}`"
  },
  "تعديل إعلان منشور": {
   "k": "s",
@@ -18248,7 +18283,7 @@
   "k": "t",
   "p": "features/stack/stack.tsx",
   "n": 1,
-  "x": "pr.companyName || \"شركتك\""
+  "x": "coName || pr.companyName || \"شركتك\""
  },
  "شركتك": {
   "k": "s",
@@ -18288,7 +18323,7 @@
  "التخصّص": {
   "k": "s",
   "p": "features/stack/stack.tsx,lib/helpers.tsx",
-  "n": 2
+  "n": 4
  },
  "لم يُذكر — سيُستخدم مكان الشركة": {
   "k": "s",
@@ -18317,6 +18352,46 @@
   "x": "EL <Coins size={12} className=\"inline\" /> | EL <Num>{parsed.salaryStripped}</Num>"
  },
  "نُقلت بيانات التقديم إلى بطاقة التواصل:": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "الشركة المُعلِنة": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "اسم الشركة كما يظهر في الإعلان": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "مثال: أوراسكوم للإنشاءات": {
+  "k": "s",
+  "p": "features/stack/stack.tsx",
+  "n": 2
+ },
+ "اكتب اسم الشركة (حرفان على الأقل).": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "مرتبطة ببطاقة «": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "» — يرى المهندس تقييمات الموظفين عند الإعلان": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "عرض البطاقة": {
+  "k": "x",
+  "p": "features/stack/stack.tsx",
+  "n": 1
+ },
+ "هذه الشركة ليست في دليل EngSpace بعد — يظهر الإعلان باسمها دون بطاقة تقييمات. اختر اسمًا من القائمة لربطه ببطاقة شركة موجودة.": {
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1
@@ -18823,11 +18898,6 @@
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
- },
- "استشاري": {
-  "k": "x",
-  "p": "features/tabs/tabs.tsx,lib/search.ts",
-  "n": 2
  },
  "شارك راتبك لكشف السوق": {
   "k": "x",
@@ -20582,11 +20652,6 @@
   "n": 1
  },
  "مقاول": {
-  "k": "s",
-  "p": "lib/search.ts",
-  "n": 1
- },
- "مقاولات": {
   "k": "s",
   "p": "lib/search.ts",
   "n": 1
