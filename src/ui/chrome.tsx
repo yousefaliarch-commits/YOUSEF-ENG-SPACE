@@ -92,11 +92,11 @@ export function AppHeader({ app }: any) {
   }
   return (
     <header className={glass}><div className="h-14 px-3 flex items-center justify-between gap-2">
-      {/* narrow phones (under 400px): the wordmark gives way to the staff button, and the theme toggle lives in Settings */}
-      <div className="flex items-center gap-2 min-w-0 shrink"><ArchMark size={22} /><span className={app.openAdmin ? "hidden min-[400px]:inline" : ""}><Wordmark size="text-[17px]" /></span></div>
+      {/* narrow phones (under 400px): a smaller wordmark next to the mark, a compact staff button, and the theme toggle in Settings */}
+      <div className="flex items-center gap-1.5 min-w-0 shrink"><ArchMark size={20} /><span className="min-w-0 truncate"><Wordmark size="text-[14.5px] min-[400px]:text-[17px]" /></span></div>
       <div className="flex items-center shrink-0">
         {/* staff (moderators, administrators) reach the console from every screen size, the Android app included */}
-        {app.openAdmin && <button type="button" onClick={app.openAdmin} aria-label="لوحة الإدارة" className="press shrink-0 inline-flex items-center gap-1 h-9 px-2.5 me-1 rounded-full bg-accent text-on-accent text-[12px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><ShieldCheck size={15} /> الإدارة</button>}
+        {app.openAdmin && <button type="button" onClick={app.openAdmin} aria-label="لوحة الإدارة" className="press shrink-0 inline-flex items-center gap-1 h-8 px-2 min-[400px]:h-9 min-[400px]:px-2.5 me-0.5 rounded-full bg-accent text-on-accent text-[11.5px] min-[400px]:text-[12px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><ShieldCheck size={15} /> الإدارة</button>}
         <span className="hidden min-[400px]:contents"><ThemeQuick app={app} /></span>
         <RoundButton label="الإعدادات" data-tour="settings" onClick={() => app.push({ type: "settings" })} className="press w-10"><Settings size={19} /></RoundButton>
         <RoundButton label={`الإشعارات${app.unread ? ` · ${app.unread} غير مقروء` : ""}`} data-tour="notifs" onClick={() => app.push({ type: "notifications" })} className="relative press w-10">
@@ -116,14 +116,16 @@ export function AppHeader({ app }: any) {
 // layer has content to blur. One indicator slides under the active tab with transform only (composited), the icons do not
 // re-layout, and the layer is promoted once (translateZ). Android draws the same glass without the live blur when the
 // device cannot afford it (html[data-glass="lite"], set by src/native/native.ts) — see the .glass rules in app.css.
-export function TabBar({ tabs = TABS, active, onChange, badge = {} }: any) {
+export function TabBar({ tabs = TABS, active: current, onChange, badge = {} }: any) {
+  // the tapped tab lights up at once (only this bar re-renders); the app switches screens in a concurrent render after it
+  const [tap, setTap] = useState<any>(null); useEffect(() => { setTap(null); }, [current]); const active = tap || current;
   const idx = Math.max(0, tabs.findIndex((t) => t.id === active)); const n = tabs.length;
   return (
     <nav aria-label="التنقل الرئيسي" data-tour="tabbar" className="absolute inset-x-3 z-20 bottom-[calc(8px+var(--sab))] glass glass-bar rounded-[26px]">
       <ul className="relative grid h-[64px] p-1.5" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
         <span aria-hidden="true" className="tab-ind absolute top-1.5 bottom-1.5 rounded-[20px]" style={{ width: `calc((100% - 12px) / ${n})`, insetInlineStart: 6, ["--i" as any]: idx }} />
         {tabs.map((t) => { const on = t.id === active; const Icon = t.icon; const b = badge[t.id]; return (
-          <li key={t.id} className="relative"><button type="button" data-tour={"tab-" + t.id} onClick={() => { if (!on) tapHaptic(); onChange(t.id); }} aria-current={on ? "page" : undefined}
+          <li key={t.id} className="relative"><button type="button" data-tour={"tab-" + t.id} onClick={() => { if (!on) { tapHaptic(); setTap(t.id); } onChange(t.id); }} aria-current={on ? "page" : undefined}
             className={`press w-full h-full flex flex-col items-center justify-center gap-[3px] rounded-[20px] text-[10.5px] font-medium leading-none transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent ${on ? "text-accent" : "text-ink-3 hover:text-ink-2"}`}>
             <span className="relative grid place-items-center w-6 h-6"><Icon size={20} strokeWidth={on ? 2.2 : 1.8} />{b > 0 && <span key={b} className="pop-in absolute -top-1.5 -end-2 min-w-[16px] h-4 px-1 grid place-items-center rounded-full bg-accent text-on-accent font-grotesk text-[9.5px] font-semibold ring-2 ring-surface">{b}</span>}</span>
             <span className="max-w-full truncate px-0.5">{t.label}</span>

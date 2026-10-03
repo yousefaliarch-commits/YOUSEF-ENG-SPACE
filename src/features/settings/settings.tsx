@@ -275,7 +275,8 @@ export const TOUR_UI = {
 export function Tour({ app, onClose }: any) {
   const steps = tourSteps(app); const [i, setI] = useState(0); const [geo, setGeo] = useState<any>(null); const box = useRef<any>(null); const nextBtn = useRef<any>(null); const home = useRef<any>(app.tab);
   const s = steps[Math.min(i, steps.length - 1)]; const last = i >= steps.length - 1; const rtl = app.lang !== "en"; const t = (x?: any) => say(app, x);
-  const measure = () => { const b = box.current; if (!b) return; const B = b.getBoundingClientRect(); const el = s.target && b.parentElement ? b.parentElement.querySelector(`[data-tour="${s.target}"]`) : null; const R = el ? el.getBoundingClientRect() : null; setGeo({ W: B.width, H: B.height, r: R && R.width ? { x: R.left - B.left, y: R.top - B.top, w: R.width, h: R.height } : null }); };
+  // tabs stay mounted (hidden): a target may exist in several panes — take the visible copy
+  const measure = () => { const b = box.current; if (!b) return; const B = b.getBoundingClientRect(); const el = s.target && b.parentElement ? ([...b.parentElement.querySelectorAll(`[data-tour="${s.target}"]`)] as any[]).find((x) => x.getClientRects().length) || null : null; const R = el ? el.getBoundingClientRect() : null; setGeo({ W: B.width, H: B.height, r: R && R.width ? { x: R.left - B.left, y: R.top - B.top, w: R.width, h: R.height } : null }); };
   const mRef = useRef<any>(measure); mRef.current = measure;
   const finish = (then?: any) => { markTourSeen(); if (app.tab !== home.current && app.tabs.some((x) => x.id === home.current)) app.setTab(home.current); onClose(); if (then) then(); };
   const next = () => (last ? finish() : setI((k) => k + 1)); const back = () => setI((k) => Math.max(0, k - 1));
