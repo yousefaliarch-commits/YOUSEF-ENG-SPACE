@@ -8,6 +8,7 @@ import { gx } from "../../domain/identity";
 import { L3, say } from "../../i18n/i18n";
 import { ArchMark, BTN, Back, Forward, Num, Panel, Primary, Secondary, Toggle, Wordmark } from "../../ui/primitives";
 import { THEMES } from "../../ui/theme";
+import { isCloud } from "../../backend/config";
 import { applyUpdateNow, checkForUpdate, onOtaState, otaState } from "../../native/updater";
 
 // =====================================================================
@@ -81,6 +82,7 @@ export function LiveUpdate() {
       <h2 className="text-[13px] font-medium inline-flex items-center gap-1.5"><RefreshCw size={15} className="text-accent" /> التحديثات الفورية</h2>
       <p className="mt-1 text-[11.5px] text-ink-2 leading-relaxed">حزمة الواجهة: <span dir="ltr" className="text-ink">{s.bundle}</span> · {s.builtin ? "مدمجة في التطبيق" : "محدَّثة عبر الإنترنت"}</p>
       <p className="mt-0.5 text-[11.5px] text-ink-3" role="status">{s.status === "failed" && s.error ? s.error : OTA_STATUS[s.status] || ""}{s.status === "downloading" && s.progress != null ? <> <Num>{s.progress}%</Num></> : null}{s.pending && s.status === "ready" ? <> · <span dir="ltr">{s.pending.version}</span></> : null}</p>
+      <p className="mt-0.5 text-[10.5px] text-ink-4" dir="ltr">shell {s.native || "?"} · updater {s.plugin === false ? "missing" : s.plugin ? "linked" : "…"}</p>
       {s.rolledBack && <p className="mt-0.5 text-[11px] text-warn">تراجع التطبيق تلقائيًا عن تحديث لم يعمل (<span dir="ltr">{s.rolledBack}</span>) وبقي على النسخة السليمة.</p>}
       <div className="mt-2.5 flex gap-2">
         <Secondary onClick={() => checkForUpdate({ manual: true })} disabled={busy} className="h-10 px-4 flex-1"><RefreshCw size={14} className={busy ? "spin" : ""} /> تحقّق من التحديث</Secondary>
@@ -122,7 +124,8 @@ export function SettingsScreen({ app }: any) {
         <SettingsLink icon={ShieldCheck} title="كيف نحمي هويتك؟" onClick={() => app.openSheet("privacy")} />
         <SettingsLink icon={SlidersHorizontal} title="صلاحياتي" sub="ما يراه حسابك وما لا يراه، ومن يراسل من" onClick={() => app.push({ type: "permissions" })} />
       </Panel>
-      <p className="px-1 text-[10.5px] text-ink-3 leading-relaxed text-center"><Wordmark size="text-[11px]" /> · الإصدار <Num>24</Num> · نسخة تجريبية تعمل بالكامل على جهازك</p>
+      {/* the live app talks to the cloud backend; only the demo (no backend configured, or ?backend=demo) keeps everything on the phone */}
+      <p className="px-1 text-[10.5px] text-ink-3 leading-relaxed text-center" data-env={isCloud() ? "cloud" : "demo"}><Wordmark size="text-[11px]" /> · {isCloud() ? "متصل بمنصة EngSpace السحابية — حسابك وبياناتك محفوظة بأمان على خوادمنا" : "نسخة عرض تجريبية — البيانات على هذا الجهاز فقط"}</p>
       <LiveUpdate />
       {/* which build this is — the first thing to check when a fix "is not there" on a phone */}
       <p className="pt-2 pb-1 text-center text-[10.5px] text-ink-4" dir="ltr">EngSpace {__BUILD__.version}{__BUILD__.run ? ` · build ${__BUILD__.run}` : ""} · {__BUILD__.sha} · {__BUILD__.date}</p>

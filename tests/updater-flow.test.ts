@@ -5,16 +5,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const URL0 = "https://abc.supabase.co"; const sha = "b".repeat(64);
 const manifest = (extra: any = {}) => ({ version: "0.25.0-2000", build: 2000, nativeLine: 1, url: `${URL0}/storage/v1/object/public/app-updates/preview/0.25.0-2000.zip`, sha256: sha, notes: "تحسينات", ...extra });
 const P: any = { current: vi.fn(), download: vi.fn(), next: vi.fn(), set: vi.fn(), list: vi.fn(), notifyAppReady: vi.fn(), getFailedUpdate: vi.fn(), getNextBundle: vi.fn(), addListener: vi.fn() };
-vi.mock("@capacitor/core", () => ({ Capacitor: { isNativePlatform: () => true, getPlatform: () => "android" } }));
+let available = true;
+vi.mock("@capacitor/core", () => ({ Capacitor: { isNativePlatform: () => true, getPlatform: () => "android", isPluginAvailable: (n: string) => available && n === "CapacitorUpdater" } }));
 vi.mock("../src/backend/config", () => ({ SUPABASE_URL: "https://abc.supabase.co" }));
-vi.mock("@capgo/capacitor-updater", () => ({ CapacitorUpdater: P }));
+// Like Capacitor's registerPlugin proxy: EVERY property is a method wrapper — `then` too, and a native «then» never answers.
+// Resolving a promise with this object therefore hangs; the updater must never do it (the bug behind both phone reports).
+const capacitorLike = (target: any) => new Proxy(target, { get: (t, k) => (k === "then" ? () => {} : t[k]) });
+vi.mock("@capgo/capacitor-updater", () => ({ CapacitorUpdater: capacitorLike(P) }));
 
 let U: any; let served: any; let store: Record<string, string>; let progress: ((e: any) => void) | null; let toasts: string[];
 const never = () => new Promise(() => {});
 // fetch that honours AbortSignal like a browser
 const fetchOk = () => vi.fn((_u: string, o: any) => new Promise((res, rej) => { if (o && o.signal) o.signal.addEventListener("abort", () => rej(Object.assign(new Error("aborted"), { name: "AbortError" }))); res({ ok: true, status: 200, json: async () => served }); }));
 beforeEach(async () => {
-  vi.resetModules(); store = {}; progress = null; toasts = [];
+  vi.resetModules(); store = {}; progress = null; toasts = []; available = true;
   (globalThis as any).localStorage = { getItem: (k: string) => store[k] ?? null, setItem: (k: string, v: string) => { store[k] = v; } };
   (globalThis as any).navigator = { onLine: true };
   served = manifest(); (globalThis as any).fetch = fetchOk();
@@ -87,6 +91,19 @@ describe("nothing hangs (the bug on both phones)", () => {
   it("withTimeout settles with the value, or rejects at the deadline", async () => {
     vi.useFakeTimers(); await expect(U.withTimeout(Promise.resolve(5), 10)).resolves.toBe(5);
     const p = U.withTimeout(never(), 1000).catch((e: any) => e.kind); await vi.advanceTimersByTimeAsync(1001); expect(await p).toBe("timeout");
+  });
+});
+
+describe("the Capacitor plugin proxy (root cause of «خدمة التحديث غير متاحة» / the endless spinner)", () => {
+  it("resolving a promise with a Capacitor-like plugin object never settles — the trap itself", async () => {
+    vi.useFakeTimers(); const trap = capacitorLike({}); let settled = false; (async () => trap)().then(() => { settled = true; }, () => { settled = true; });
+    await vi.advanceTimersByTimeAsync(60000); expect(settled).toBe(false);
+  });
+  it("the updater talks to such a plugin without ever awaiting it: a full check completes", async () => { const s = await U.checkForUpdate({ manual: true }); expect(s.status).toBe("ready"); expect(P.current).toHaveBeenCalled(); expect(P.download).toHaveBeenCalled(); });
+  it("startUpdater and applyUpdateNow too", async () => { await U.startUpdater(() => ({ rootHasContent: true, uncaughtErrors: 0, errorScreen: false })); expect(P.notifyAppReady).toHaveBeenCalled(); await U.checkForUpdate(); await U.applyUpdateNow(); expect(P.set).toHaveBeenCalled(); });
+  it("a shell without the native plugin is told so at once, without a network request or a wait", async () => {
+    available = false; const t0 = Date.now(); const s = await U.checkForUpdate({ manual: true }); await Promise.resolve();
+    expect(s.status).toBe("failed"); expect(s.error).toContain("خدمة التحديث"); expect((globalThis as any).fetch).not.toHaveBeenCalled(); expect(Date.now() - t0).toBeLessThan(1000); expect(U.pluginAvailable()).toBe(false);
   });
 });
 

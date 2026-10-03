@@ -60,3 +60,17 @@ describe("native plugin registration is committed (cap sync)", () => {
     const wf = file("../.github/workflows/publish-update.yml"); for (const o of ["https://localhost", "capacitor://localhost"]) expect(wf).toContain(o); expect(wf).toMatch(/access-control-allow-origin/);
   });
 });
+
+describe("Settings footer reflects the environment", () => {
+  const set = file("../src/features/settings/settings.tsx");
+  it("no longer claims the live app is a device-only demo", () => { expect(set).not.toMatch(/تعمل بالكامل على جهازك/); expect(set).not.toMatch(/الإصدار <Num>24<\/Num>/); });
+  it("says cloud when connected, demo otherwise", () => { expect(set).toMatch(/isCloud\(\) \? "متصل بمنصة EngSpace السحابية/); expect(set).toMatch(/نسخة عرض تجريبية — البيانات على هذا الجهاز فقط/); });
+});
+
+describe("plugin objects are never awaited (the Capacitor proxy trap)", () => {
+  const up = file("../src/native/updater.ts");
+  it("no promise in the updater resolves to the plugin itself", () => {
+    expect(up).not.toMatch(/\.then\(\(m\) => m\.CapacitorUpdater\)/); expect(up).not.toMatch(/async \(\) => \(await import\([^)]*\)\)\.CapacitorUpdater/);
+    expect(up).toMatch(/Capacitor\.isPluginAvailable\("CapacitorUpdater"\)/);
+  });
+});

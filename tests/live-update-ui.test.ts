@@ -24,3 +24,10 @@ describe("LiveUpdate (Settings)", () => {
   it("says so when the plugin rolled a bundle back", () => { current = { ...base, rolledBack: "0.25.0-1" }; const t = flat(LiveUpdate()); expect(t).toContain("تراجع التطبيق تلقائيًا"); expect(t).toContain("0.25.0-1"); });
   it("says a new install is needed when the bundle is for another native line", () => { current = { ...base, status: "incompatible" }; expect(flat(LiveUpdate())).toContain("يلزم تثبيت نسخة جديدة"); });
 });
+
+describe("LiveUpdate diagnostics line", () => {
+  it("shows the shell version and whether the native updater is linked", () => {
+    current = { ...base, native: "1.13", plugin: true }; expect(flat(LiveUpdate())).toContain("shell 1.13 · updater linked");
+    current = { ...base, native: "1.13", plugin: false }; expect(flat(LiveUpdate())).toContain("updater missing");
+  });
+});

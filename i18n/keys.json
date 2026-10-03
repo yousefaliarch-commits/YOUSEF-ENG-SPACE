@@ -14981,21 +14981,15 @@
   "p": "features/settings/settings.tsx",
   "n": 2
  },
- "· الإصدار": {
-  "k": "x",
+ "متصل بمنصة EngSpace السحابية — حسابك وبياناتك محفوظة بأمان على خوادمنا": {
+  "k": "s",
   "p": "features/settings/settings.tsx",
   "n": 1
  },
- "· نسخة تجريبية تعمل بالكامل على جهازك": {
-  "k": "x",
+ "نسخة عرض تجريبية — البيانات على هذا الجهاز فقط": {
+  "k": "s",
   "p": "features/settings/settings.tsx",
   "n": 1
- },
- "{0} · الإصدار {1} · نسخة تجريبية تعمل بالكامل على جهازك": {
-  "k": "r",
-  "p": "features/settings/settings.tsx",
-  "n": 1,
-  "x": "EL <Wordmark size=\"text-[11px]\" /> | EL <Num>24</Num>"
  },
  "الخطوة": {
   "k": "x",

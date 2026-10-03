@@ -77,6 +77,8 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   google-services); shells only take bundles of their own line. Settings → التحديثات الفورية shows the active bundle. A downloaded update shows the top `UpdateBanner` (تحديث الآن / ✕); e2e drives it through the dev-only `window.__engspaceOta`.
   **Every updater step is time-limited** (`LIMITS` in updater.ts: manifest 10 s, plugin calls 6 s, download watchdog 30 s idle / 3 min) — never await a
   plugin call without `withTimeout`; a manual check always ends in a toast (up to date / banner / reason).
+  **Never resolve a promise with a Capacitor plugin object** (it is a Proxy whose `then` is a native call that never answers): destructure plugins
+  from the awaited module (`const { X } = await import(...)`) — never `async () => plugin` / `.then((m) => m.Plugin)`.
 
 ## How the code is organised
 - `src/app/AppView.tsx` holds member-app state (one store, keys like posts/jobs/threads) and every handler; handlers update

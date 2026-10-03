@@ -39,6 +39,14 @@ failed (offline, timeout, server, invalid data, download, update service missing
 The publish workflow ends by reading the manifest from outside with the WebView origins (`https://localhost`, `capacitor://localhost`,
 `http://localhost`) and fails unless it is public and CORS allows them (Supabase Storage answers `Access-Control-Allow-Origin: *`).
 
+## Never await a Capacitor plugin object (v0.1.13)
+Capacitor plugins are Proxies that answer every property with a native-method wrapper — including `then`. A promise resolved with the plugin
+(`async () => plugin`, `.then((m) => m.CapacitorUpdater)`) therefore calls a native «then» that does not exist and **never settles**. That was the
+real cause of the endless spinner (v0.1.11) and of «خدمة التحديث غير متاحة» after the 6 s deadline (v0.1.12) on both phones — the native plugin was
+linked all along (in `capacitor.plugins.json` / the dex on Android, in `packageClassList` / the binary on iOS). Promises carry the module; the
+plugin is read from it synchronously. `tests/updater-flow.test.ts` mocks the plugin as such a Proxy, so the mistake cannot come back unnoticed.
+Settings shows `shell <version> · updater linked|missing` (`Capacitor.isPluginAvailable("CapacitorUpdater")`).
+
 ## Publishing
 Actions → **Publish web update** → Run workflow (channel `preview`, optional one-line note). Needs the repository secrets of the release
 builds (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) and `SUPABASE_ACCESS_TOKEN` (the workflow reads the project's service key
