@@ -44,12 +44,13 @@ export function DirectorySection({ A }: any) {
       <Panel className="p-4"><PanelHead icon={Users} title="دليل الأعضاء"><span className="text-[11.5px] text-ink-3"><Num>{list.length}</Num> عضو</span></PanelHead>
         <p className="text-[11.5px] text-ink-2 leading-relaxed mb-3">البيانات الكاملة لكل حساب. الدليل لا يربط أي عضو بمنشوراته المجهولة — هذه تبقى مجهولة حتى عن الإدارة، كما وعدنا الأعضاء.</p>
         <div className="flex"><SearchBox value={q} onChange={setQ} placeholder="ابحث بالاسم أو البريد أو الهاتف" /></div></Panel>
+      {/* minmax(0, 1fr): a long e-mail may not stretch the column past the screen (it was cut off on the left of the phone) */}
       {rows == null ? <p className="text-[12px] text-ink-3">جارٍ التحميل…</p> : list.length === 0 ? <Empty icon={Users} title="لا نتائج" body="جرّب اسمًا أو بريدًا آخر." /> : (
-        <div className="grid gap-2 md:grid-cols-2">{list.map((m: any) => (
-          <button key={m.pid} type="button" onClick={() => setSel(m)} className="press p-3.5 rounded-2xl bg-surface border border-line text-start hover:border-line-3 transition-colors">
+        <div className="grid gap-2 grid-cols-[minmax(0,1fr)] md:grid-cols-2">{list.map((m: any) => (
+          <button key={m.pid} type="button" onClick={() => setSel(m)} className="press min-w-0 w-full p-3.5 rounded-2xl bg-surface border border-line text-start hover:border-line-3 transition-colors">
             <div className="flex items-center justify-between gap-2"><span className="min-w-0 truncate text-[14px] font-medium"><bdi {...UGC}>{m.name}</bdi></span>
               <span className="flex items-center gap-1.5 shrink-0">{m.staff !== "member" && <ToneChip tone="accent">{(STAFF.find((s) => s[0] === m.staff) || [, m.staff])[1]}</ToneChip>}{m.verified && <BadgeCheck size={15} className="text-good" />}</span></div>
-            <p className="mt-1 text-[11.5px] text-ink-2 truncate" dir="ltr">{m.email || m.phone || "—"}</p>
+            <p className="mt-1 text-[11.5px] text-ink-2 truncate text-start" dir="ltr">{m.email || m.phone || "—"}</p>
             <p className="mt-0.5 text-[11px] text-ink-3 truncate">{roleTitle(m.role)}{m.pos ? ` · ${posLabel(m.pos)}` : ""}{m.gov ? ` · ${placeName(m.gov, m.city)}` : ""} · انضم {day(m.created_at)}</p>
           </button>))}</div>)}
     </div>

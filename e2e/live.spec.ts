@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { signIn, tab, watch, noCrash, noOverflow, settle } from "./helpers";
+import { signIn, tab, watch, noCrash, noOverflow, noClipped, settle } from "./helpers";
 
 // The real backend (local Supabase seeded with `npm run db:seed`, or hosted via E2E_BASE + E2E_PASSWORD): each test account signs in
 // and walks what its role may see. Skipped unless E2E_LIVE=1, so the demo suite runs anywhere.
@@ -27,11 +27,11 @@ test("supervisor: site tools only", async ({ page }) => {
 
 for (const key of ["moderator", "admin"]) {
   test(`${key}: console opens, every section fits the phone`, async ({ page }) => {
-    const errs = watch(page); await signIn(page, key, true);
+    const errs = watch(page); await page.setViewportSize({ width: 320, height: 700 }); /* small phones and enlarged system text: long lines (e-mails, role · city · date) only overflow here */ await signIn(page, key, true);
     await page.getByRole("button", { name: "لوحة الإدارة" }).first().click(); await settle(page, 1500);
     for (const s of ["نظرة عامة", "البلاغات", "المحتوى", "طلبات التوثيق", "دليل الأعضاء", "تذاكر الدعم", "سجل التدقيق", "التحليلات", "الإعدادات"]) {
       const b = page.getByRole("button", { name: new RegExp(s) }).first(); if (!(await b.count())) continue;
-      await b.click(); await settle(page, 800); await noCrash(page, errs, `${key}/${s}`); await noOverflow(page, `${key}/${s}`);
+      await b.click(); await settle(page, 800); await noCrash(page, errs, `${key}/${s}`); await noOverflow(page, `${key}/${s}`); await noClipped(page, `${key}/${s}`);
     }
   });
 }
