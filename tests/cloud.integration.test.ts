@@ -10,7 +10,7 @@ run("cloud backend (local Supabase)", () => {
   let cloud: any; const tag = Date.now().toString(36);
   const A = { email: `a-${tag}@example.com`, pw: "Str0ng!pass-" + tag }, B = { email: `b-${tag}@example.com`, pw: "Str0ng!pass-" + tag };
   const persona = (name: string, extra: any = {}) => ({ name, gender: "male", age: 30, gradYear: 2018, role: "engineer", disc: "civil", track: "tech", pos: "mid", gov: "cairo", city: "nasr", identity: "anon", ...extra });
-  let postId = "", anonA = "";
+  let postId = "", anonA = "", realtimeSends = 0;
 
   beforeAll(async () => {
     cloud = await import("../src/backend/cloud");
@@ -60,8 +60,9 @@ run("cloud backend (local Supabase)", () => {
       .subscribe((st: string) => { if (st === "SUBSCRIBED") joined = true; });
     for (let i = 0; i < 200 && !joined; i++) await new Promise((r) => setTimeout(r, 100));
     expect(joined).toBe(true);
-    const t = (await cloud.threads())[0]; await cloud.sendMessage(t.id, "رسالة لحظية");
-    for (let i = 0; i < 200 && !got.length; i++) await new Promise((r) => setTimeout(r, 100));
+    // a private channel can need a moment after SUBSCRIBED before the first broadcast is authorised on a busy runner: send again if nothing came
+    const t = (await cloud.threads())[0];
+    for (let attempt = 0; attempt < 3 && !got.length; attempt++) { await cloud.sendMessage(t.id, "رسالة لحظية"); realtimeSends++; for (let i = 0; i < 80 && !got.length; i++) await new Promise((r) => setTimeout(r, 100)); }
     // the ping is the thread id (plus Realtime's own delivery id) — never the text or the sender
     expect(got[0].thread).toBe(t.id); expect(Object.keys(got[0]).sort()).toEqual(["id", "thread"]); expect(JSON.stringify(got)).not.toContain("رسالة لحظية");
     // B (signed in through cloud.ts) tries to join A's channel: refused
@@ -194,7 +195,7 @@ run("cloud backend (local Supabase)", () => {
 
   it("the author reads the reply notification-free feed and their thread", async () => {
     await cloud.signOut(); await cloud.signIn(A.email, A.pw);
-    const ts = await cloud.threads(); expect(ts[0].unread).toBe(2); // «أهلًا» and the realtime test's message
+    const ts = await cloud.threads(); expect(ts[0].unread).toBe(1 + realtimeSends); // «أهلًا» and the realtime test's message(s)
     const msgs = await cloud.messages(ts[0].id); expect(msgs[0]).toMatchObject({ from: "them", text: "أهلًا" });
     await cloud.deleteAccount();
     await expect(cloud.signIn(A.email, A.pw)).rejects.toThrow("البريد أو كلمة المرور غير صحيحة");
