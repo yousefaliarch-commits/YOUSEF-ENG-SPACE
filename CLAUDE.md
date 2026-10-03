@@ -70,6 +70,12 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   post shows «معدّل · مرة / مرتان / N مرات» (`EditedBadge`); the feed gets an `edit` event (id only). Delete always asks first. Tests: pgTAP 16,
   `tests/post-author.test.ts`, the cloud suite, `e2e/posts.spec.ts` (every seeded role + cross-role live checks).
 
+- v0.1.11: **live web updates** (docs/OTA.md). `@capgo/capacitor-updater` in manual mode (no Capgo endpoints); `src/native/updater.ts` +
+  `updater-core.ts` read `app-updates/<channel>/manifest.json` from Supabase Storage, download a newer bundle (SHA-256 checked) and apply it at the next
+  launch; an unhealthy bundle is rolled back and never retried. Publish with the **Publish web update** workflow (`scripts/ota/publish.mjs`).
+  **`ota.config.json → nativeLine` must be bumped for any change that needs a new APK / IPA** (plugins, manifest / Info.plist, MainActivity,
+  google-services); shells only take bundles of their own line. Settings → التحديثات الفورية shows the active bundle.
+
 ## How the code is organised
 - `src/app/AppView.tsx` holds member-app state (one store, keys like posts/jobs/threads) and every handler; handlers update
   locally, then `sync(() => cloud.x())` in cloud mode. Demo mode (no `VITE_SUPABASE_*`) must keep working unchanged.

@@ -24,6 +24,10 @@ const config: CapacitorConfig = {
     PushNotifications: { presentationOptions: ["badge"] },
     Keyboard: { resize: "native" as any, resizeOnFullScreen: true },
     StatusBar: { overlaysWebView: true },
+    // Live web updates (docs/OTA.md): manual mode — src/native/updater.ts reads our own manifest in Supabase Storage and downloads the bundle.
+    // The plugin's default Capgo cloud endpoints (update check, stats, channels) are switched off: nothing leaves for a third party.
+    // A bundle that does not call notifyAppReady() within 15 s is rolled back by the plugin; a new native build resets to the bundled web app.
+    CapacitorUpdater: { autoUpdate: false, resetWhenUpdate: true, appReadyTimeout: 15000, responseTimeout: 30, autoDeleteFailed: true, autoDeletePrevious: true, updateUrl: "", statsUrl: "", channelUrl: "" },
   },
 };
 

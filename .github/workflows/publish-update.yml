@@ -1,0 +1,57 @@
+# Publishes the web app as a live update for the installed phone apps (docs/OTA.md): builds it against the live backend, zips dist/
+# (index.html at the zip root), uploads <channel>/<version>.zip and <channel>/manifest.json to the public Supabase bucket app-updates.
+# Phones with the updater download it in the background and apply it at the next launch (or from Settings → التحديثات الفورية).
+# Run by hand: Actions → Publish web update → Run workflow. Needs the same secrets as the release builds plus SUPABASE_ACCESS_TOKEN
+# (used only to read the project's service key at run time; masked, never printed). Native changes still need a new APK / IPA:
+# bump nativeLine in ota.config.json for those — shells on an older line ignore bundles of a newer one.
+name: Publish web update
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: "Channel (the apps read 'preview')"
+        required: true
+        default: preview
+      notes:
+        description: "One line shown in the app's update note (optional)"
+        required: false
+        default: ""
+permissions:
+  contents: read
+concurrency: publish-update
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_REF: cyziykbqldtxyquqvvkr
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      CHANNEL: ${{ inputs.channel }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Build the bundle
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          export BUILD_TS=$(date +%s)
+          echo "BUILD_TS=$BUILD_TS" >> "$GITHUB_ENV"
+          npm run build
+          # the bundle must carry the live backend, or the phones would fall back to the demo
+          grep -rq "cyziykbqldtxyquqvvkr" dist/assets || { echo "::error::the build has no live backend keys (repository secrets VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY)"; exit 1; }
+      - name: Package, upload and publish the manifest
+        env:
+          NOTES: ${{ inputs.notes }}
+        run: |
+          set -euo pipefail
+          key=$(npx --yes supabase@latest projects api-keys --project-ref "$PROJECT_REF" -o json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const k=JSON.parse(s);const x=k.find(a=>a.name==="service_role")||k.find(a=>a.type==="secret");process.stdout.write(x.api_key)})')
+          test -n "$key"; echo "::add-mask::$key"
+          out=$(SUPABASE_URL="https://$PROJECT_REF.supabase.co" SERVICE_KEY="$key" node scripts/ota/publish.mjs)
+          echo "$out"
+          echo "::notice title=Published web update::$(echo "$out" | node -p 'const m=JSON.parse(require("fs").readFileSync(0,"utf8"));`${m.version} · native line ${m.nativeLine} · ${(m.size/1048576).toFixed(1)} MB — phones pick it up at their next launch`')"

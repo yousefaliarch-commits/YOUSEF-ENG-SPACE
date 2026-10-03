@@ -1,0 +1,20 @@
+# v0.1.10: live web updates
+d25cbfd1	A new update was downloaded — it applies at the next launch, or from Settings
+3d7f3a1d	Not checked yet
+e0e0d31d	Checking for updates…
+a7e29e0a	Downloading the update…
+5bc30ab2	Update ready — applies at the next launch
+f579473c	You're on the latest version
+3aab7527	Couldn't check for updates — try again later
+9285d67a	A new install of the app is needed for this update
+5d8c3e92	Live updates
+6344830c	Interface bundle:
+1c451df7	Interface bundle: {0} · {1}
+a298fb58	built into the app
+fd2bc0e6	updated over the internet
+1e8a017a	The app automatically rolled back an update that didn't work (
+60f2a2e3	) and stayed on the working version.
+d50a698a	The app automatically rolled back an update that didn't work ({0}) and stayed on the working version.
+af3056e5	Check for updates
+6222ac17	Apply now
+bd106049	{0} times
