@@ -9,11 +9,6 @@
   "p": "app/App.tsx",
   "n": 1
  },
- "تم تنزيل تحديث جديد — يُطبَّق عند الفتح التالي، أو من الإعدادات": {
-  "k": "s",
-  "p": "app/AppView.tsx",
-  "n": 1
- },
  "تعذّر التحديث — تحقّق من اتصالك": {
   "k": "s",
   "p": "app/AppView.tsx",
@@ -11144,8 +11139,8 @@
  },
  "إغلاق": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/sheets/sheets.tsx,lib/media.tsx,ui/chrome.tsx,ui/moderation.tsx",
-  "n": 11
+  "p": "features/admin/AdminView.tsx,features/sheets/sheets.tsx,lib/media.tsx,ui/chrome.tsx,ui/moderation.tsx,ui/update-banner.tsx",
+  "n": 13
  },
  "النشر في {0}": {
   "k": "t",
@@ -21915,6 +21910,21 @@
  "الحدود · black/8": {
   "k": "s",
   "p": "ui/theme.ts",
+  "n": 1
+ },
+ "جارٍ تطبيق التحديث…": {
+  "k": "s",
+  "p": "ui/update-banner.tsx",
+  "n": 1
+ },
+ "يتوفر تحديث جديد للمنصة لتحسين الأداء": {
+  "k": "s",
+  "p": "ui/update-banner.tsx",
+  "n": 1
+ },
+ "تحديث الآن": {
+  "k": "x",
+  "p": "ui/update-banner.tsx",
   "n": 1
  }
 }

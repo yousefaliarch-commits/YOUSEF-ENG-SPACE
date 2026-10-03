@@ -9,7 +9,8 @@ Actions → "Publish web update"  (npm run check → build with the live keys �
    → Supabase Storage, public bucket app-updates:  <channel>/<version>.zip  +  <channel>/manifest.json
 phone app, 4 s after launch and when it returns to the foreground (at most every 30 min), or Settings → «تحقّق من التحديث»:
    → reads manifest.json (8 s timeout, no cache) → parseManifest() → decide() → download() with the SHA-256 → next()
-   → «تم تنزيل تحديث جديد» → applied at the next launch (or «طبّق الآن» in Settings)
+   → a top banner «يتوفر تحديث جديد للمنصة لتحسين الأداء» (src/ui/update-banner.tsx): «تحديث الآن» applies it ~1 s later, ✕ hides it for the
+     session and the update is then applied silently at the next cold start. Nobody has to open Settings.
 ```
 Settings → **التحديثات الفورية** shows which bundle runs (built in / updated over the internet), the status, and a manual check.
 

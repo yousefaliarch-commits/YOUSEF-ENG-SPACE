@@ -59,7 +59,7 @@ export async function checkForUpdate(): Promise<OtaState> {
 }
 
 // Apply the downloaded bundle now (reloads the app on it)
-export async function applyUpdateNow() { const p = state.pending; if (!OTA || !p) return; try { await (await plugin()).set({ id: p.id }); } catch (e) { emit({ status: "failed", note: "apply" }); } }
+export async function applyUpdateNow() { const p = state.pending; if (!OTA || !p) { if (import.meta.env.DEV && (window as any).__engspaceOta) (window as any).__engspaceOta.applied++; return; }  try { await (await plugin()).set({ id: p.id }); } catch (e) { emit({ status: "failed", note: "apply" }); } }
 
 // launch + coming back to the app (at most every 30 minutes)
 let lastAuto = 0;
@@ -70,3 +70,6 @@ export function scheduleChecks() {
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") run(); });
 }
 export { nativeLineOf };
+
+// Development only (compiled out of production builds): lets the e2e tests drive the update banner in a browser, where there is no plugin
+if (import.meta.env.DEV && typeof window !== "undefined") (window as any).__engspaceOta = { applied: 0, ready: (version = "0.25.0-test") => emit({ supported: true, status: "ready", pending: { id: "t1", version } }), reset: () => emit({ status: "idle", pending: undefined }) };

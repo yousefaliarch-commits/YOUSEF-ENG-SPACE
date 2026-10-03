@@ -74,7 +74,7 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   `updater-core.ts` read `app-updates/<channel>/manifest.json` from Supabase Storage, download a newer bundle (SHA-256 checked) and apply it at the next
   launch; an unhealthy bundle is rolled back and never retried. Publish with the **Publish web update** workflow (`scripts/ota/publish.mjs`).
   **`ota.config.json → nativeLine` must be bumped for any change that needs a new APK / IPA** (plugins, manifest / Info.plist, MainActivity,
-  google-services); shells only take bundles of their own line. Settings → التحديثات الفورية shows the active bundle.
+  google-services); shells only take bundles of their own line. Settings → التحديثات الفورية shows the active bundle. A downloaded update shows the top `UpdateBanner` (تحديث الآن / ✕); e2e drives it through the dev-only `window.__engspaceOta`.
 
 ## How the code is organised
 - `src/app/AppView.tsx` holds member-app state (one store, keys like posts/jobs/threads) and every handler; handlers update
