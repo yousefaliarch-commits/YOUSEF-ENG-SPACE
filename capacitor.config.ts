@@ -20,6 +20,8 @@ const config: CapacitorConfig = {
   ios: { contentInset: "never", scrollEnabled: false },
   plugins: {
     SplashScreen: { launchAutoHide: false, backgroundColor: "#09090b", showSpinner: false },
+    // a push that arrives while the app is open only badges: the in-app notification center updates itself (realtime)
+    PushNotifications: { presentationOptions: ["badge"] },
     Keyboard: { resize: "native" as any, resizeOnFullScreen: true },
     StatusBar: { overlaysWebView: true },
   },

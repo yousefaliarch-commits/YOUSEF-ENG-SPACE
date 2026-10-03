@@ -9,3 +9,4 @@ coverage/
 .env.local
 supabase/.temp/
 supabase/.branches/
+android/app/google-services.json

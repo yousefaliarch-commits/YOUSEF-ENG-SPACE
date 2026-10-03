@@ -29,11 +29,14 @@ import { AppHeader, Empty, Sheet, TabBar } from "../ui/chrome";
 import { ReportSheet } from "../ui/moderation";
 import { NotificationsScreen } from "../ui/notifications";
 import { ArchMark } from "../ui/primitives";
+import { NotificationPrefsScreen, PushPrimerSheet } from "../features/notifications/prefs";
 import { fmt } from "../ui/theme";
 import { ScreenLoading } from "./ScreenLoading";
 import { isCloud } from "../backend/config";
 import { profilePatch } from "../backend/map";
 import { NATIVE, setBackHandler, setPendingOpen, shareContent, takePendingAuth, takePendingOpen } from "../native/native";
+import { dropPush, enablePush, mayAskAgain, pushPermission, pushSupported, readAsk, refreshPush, webNotify, writeAsk } from "../native/push";
+import { DEFAULT_PREFS, notifCategory, notifPref } from "../domain/notifications";
 import { SHAREABLE, linkFor, snippet } from "../lib/share";
 import * as cloud from "../backend/cloud";
 
@@ -58,7 +61,7 @@ const TabPane = ({ active, render }: any) => {
 
 export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "ticket"];
 
-export const PLAIN_TYPES = ["notifications", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists", "support"];
+export const PLAIN_TYPES = ["notifications", "notifprefs", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists", "support"];
 
 export function parseHash() {
   const parts = (location.hash || "").replace(/^#/, "").split("/").filter(Boolean);
@@ -88,6 +91,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const [editing, setEditing] = S("editing", false);
   const [tab, setTabRaw] = S("tab", init.tab); const [stack, setStack] = S("stack", init.stack); const [dir, setDir] = S("dir", "tab"); const [market, setMarket] = S("market", init.market);
   const [sheet, setSheet] = S("sheet", null); const [msg, setMsg] = S("msg", "");
+  const [notifPrefs, setNotifPrefs] = S("notifPrefs", DEFAULT_PREFS); const [pushStatus, setPushStatus] = S("pushStatus", { permission: "default", devices: 0, supported: pushSupported() });
   const [contributed, setContributed] = S("contributed", false); const [salaryRev, setSalaryRev] = S("salaryRev", 0); const [pts, setPts] = S("pts", 0);
   const [saved, setSaved] = S("saved", {}); const [reacts, setReacts] = S("reacts", {}); const [votes, setVotes] = S("votes", {}); const [follows, setFollows] = S("follows", () => seed({ dar: true }, {})); const [roomFollows, setRoomFollows] = S("roomFollows", () => seed({ tech: true, nego: true, grads: true }, {}));
   const [posts, setPosts] = S("posts", () => seed(normalizeSeedPosts(POSTS0), [])); const [voteAs, setVoteAs] = S("voteAs", {}); const [shares, setShares] = S("shares", []); const [jobs, setJobs] = S("jobs", () => seed(JOBS, [])); const [logos, setLogos] = S("logos", {}); const [notifs, setNotifs] = S("notifs", () => seed(NOTIFS0, [])); const [reviews, setReviews] = S("reviews", {}); const [hidden, setHidden] = S("hidden", {});
@@ -192,7 +196,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     purgeOwn("expired");
     notify({ kind: "verify", title: "انتهت مهلة طلب التوثيق", body: "لم يُراجَع طلبك خلال 7 أيام، فحُذفت مستنداته نهائيًا. يمكنك التقديم من جديد متى شئت.", en: { title: "Verification request expired", body: "Your request wasn't reviewed within 7 days, so its documents were permanently deleted. You can apply again any time." }, target: { type: "profile", sheet: "verify" } });
   }, [profile.pending, profile.verifyRef, verifs, !!persona]);
-  const pushNative = (title?: any, body?: any) => { try { if (profile.notify && "Notification" in window && Notification.permission === "granted") new Notification(tr(title), { body: tr(body) }); } catch (e) {} };
+  // a browser tab that is hidden shows the notice as a system notification (when the member allowed it and the type is switched on)
+  const pushNative = (title?: any, body?: any, kind?: any) => webNotify({ kind, title: tr(title), body: tr(body) }, { ...notifPrefs, notify: profile.notify !== false });
   // stored times keep the Arabic form with Latin digits («10:45 م»); the English view shows them as "10:45 PM"
   const clock = () => new Date().toLocaleTimeString("ar-EG-u-nu-latn", { hour: "2-digit", minute: "2-digit" });
   // ---- cloud: load the member's real data, keep it fresh, and send every change to the server ----
@@ -205,6 +210,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     // give-to-get comes from the server, so a fresh install or another phone is unlocked the same way (a share made seconds ago
     // may not be in a read that started before it — keep the local answer for a minute)
     if (d.contributed || Date.now() - shareOkAt.current > 60000) { setContributed((c) => (isCompanyRole(persona && persona.role) ? c || !!d.contributed : !!d.contributed)); updateProfileLocal({ contributed: !!d.contributed || (isCompanyRole(persona && persona.role) && !!profile.contributed) }); }
+    if (d.prefs) setNotifPrefs({ ...DEFAULT_PREFS, ...d.prefs });
     setReviews(d.reviews); setReacts(d.reacts); setVotes(d.votes); setVoteAs(d.voteAs); setSaved(d.saved); setFollows(d.follows); setRoomFollows(d.roomFollows); setHidden(d.hidden); setContacted(d.contacted);
     setInspections((mine) => mergeInspections(mine, d.inspections));
     // the whole history is one value stamped with its last edit: the newer copy wins, so a deletion on one device sticks everywhere
@@ -215,9 +221,17 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   };
   const refreshMe = () => cloud.currentPersona().then((p) => { if (!p) { app.signOut(true); return; } savePersona(p); setPersona((pp) => ({ ...(pp || {}), ...p })); setProfileRaw((s) => ({ ...s, ...p })); });
   useEffect(() => { if (!CLOUD || !persona) return; refreshMe(); hydrate().catch((e) => setMsg(e.message)); }, [!!persona]);
+  // ---- push notifications: this device's state, a silent token refresh, and the primer (never a raw OS prompt)
+  const refreshPushStatus = async () => { const permission = await pushPermission(); const devices = CLOUD ? await cloud.myPushDevices().then((d) => d.length).catch(() => 0) : 0; setPushStatus({ permission, devices, supported: pushSupported() }); };
+  useEffect(() => { if (!persona || embed) return; refreshPushStatus().catch(() => {}); if (CLOUD) refreshPush(lang).catch(() => {}); const on = () => refreshPushStatus().catch(() => {}); window.addEventListener("engspace:push-registered", on); return () => window.removeEventListener("engspace:push-registered", on); }, [!!persona]);
+  const primerShown = useRef(false); const askRefs = useRef<any>({});
+  // ask once the member has had a moment with the app (7 s on a screen, never during the tour or over a sheet), at most twice a week apart
+  askRefs.current = { sheet: !!sheet, tour: tourOn, perm: pushStatus.permission, supported: pushStatus.supported };
+  const askPush = () => { const r = askRefs.current; if (primerShown.current || r.sheet || r.tour || !r.supported || r.perm !== "default" || !mayAskAgain(readAsk())) return; primerShown.current = true; setSheet({ type: "pushprimer", payload: {} }); };
+  useEffect(() => { if (!persona || embed || !CLOUD && !NATIVE || profile.onboarded === false) return; const t = setTimeout(askPush, 7000); return () => clearTimeout(t); }, [!!persona, curTab]);
   // a shared link: the phone app gets app.engspace://open/<type>/<id>; the web gets #app/<type>/<id>. Signed out, it waits for the sign-in.
   useEffect(() => { if (!persona && !embed && init.stack.length === 1 && init.stack[0].id && SHAREABLE.includes(init.stack[0].type)) setPendingOpen(init.stack[0]); }, []);
-  useEffect(() => { if (!persona || embed) return; const go = () => { const o = takePendingOpen(); if (o) app.push({ type: o.type, id: o.id }); }; go(); window.addEventListener("engspace:open", go); return () => window.removeEventListener("engspace:open", go); }, [!!persona]);
+  useEffect(() => { if (!persona || embed) return; const go = () => { const o = takePendingOpen(); if (!o) return; if (o.nid) app.markRead(o.nid); if (o.tab) app.setTab(o.tab); else app.push({ type: o.type, id: o.id }); }; go(); window.addEventListener("engspace:open", go); return () => window.removeEventListener("engspace:open", go); }, [!!persona]);
   // An auth link finished (web: on load; app: the native URL handler): a reset link opens «new password»; otherwise a server
   // session without a member on this device (e-mail just confirmed, storage cleared) signs the member in.
   const authLink = (reset?: any) => cloud.currentPersona().then((p) => {
@@ -248,7 +262,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     if (!CLOUD || !persona) return; let off: any = null; let gone = false;
     cloud.subscribeLive((event, p) => {
       if (event === "message") { refreshThreads().catch(() => {}); if (p && p.thread === chatRef.current) { loadChat(p.thread).catch(() => {}); cloud.readThread(p.thread).catch(() => {}); } }
-      if (event === "notification" && p) { setNotifs((ns) => (ns.some((n) => n.id === p.id) ? ns : [{ id: p.id, kind: p.kind, title: p.title, body: p.body, target: p.target || undefined, read: false, when: "الآن" }, ...ns])); pushNative(p.title, p.body); }
+      if (event === "notification" && p) { setNotifs((ns) => (ns.some((n) => n.id === p.id) ? ns : [{ id: p.id, kind: p.kind, title: p.title, body: p.body, target: p.target || undefined, read: false, when: "الآن", category: p.category || notifCategory(p.kind), ...(p.en && p.en.title ? { en: p.en } : {}) }, ...ns])); pushNative(p.title, p.body, p.kind); }
     }, setLive).then((f) => { if (gone) f(); else off = f; }).catch(() => {});
     return () => { gone = true; if (off) off(); setLive(false); };
   }, [!!persona, persona && persona.pid]);
@@ -284,6 +298,17 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         if (r === "copied") setMsg("تم نسخ الرابط"); else if (r === "failed") setMsg("تعذّر نسخ الرابط");
       } finally { sharing.current = false; }
     },
+    // notification preferences + push (the primer sheet and the preferences screen)
+    notifPrefs, pushStatus, native: NATIVE, cloud: CLOUD, refreshPushStatus: () => refreshPushStatus().catch(() => {}),
+    setNotifPref: (k?: any, v?: any) => { setNotifPrefs((p) => ({ ...p, [k]: v })); sync(() => cloud.setNotificationPrefs({ [k]: v } as any)); },
+    enablePush: async () => {
+      const r = await enablePush(lang); refreshPushStatus().catch(() => {});
+      if (r.ok || r.reason === "denied") writeAsk({ n: 2, at: Date.now() });   // decided: stop asking by ourselves
+      return r;
+    },
+    pushPrimerLater: () => writeAsk({ n: readAsk().n + 1, at: Date.now() }),
+    askPush: () => askPush(),
+    testPush: async () => { try { await cloud.sendTestPush(); setMsg("أُرسل الإشعار التجريبي — يصلك خلال ثوانٍ"); } catch (e: any) { setMsg(/wait a minute|54000/.test(String(e && e.message)) ? "انتظر دقيقة قبل التجربة التالية" : (e && e.message) || "تعذّر الإرسال"); } },
     viewImage: (image?: any) => setViewer(image || null), sheet, openSheet: (type?: any, payload: any = {}) => { if (blocked.sheets.includes(type) || (type === "tool" && !toolOpen(blocked, payload.id))) { deny(); return; } if (["compose", "review", "contribute"].includes(type) && !gate.ok) { setMsg(gate.why); return; } setSheet({ type, payload }); }, closeSheet: () => setSheet(null), toast: setMsg, pts, addPts,
     // A salary report: one at a time (a second tap while the first is on its way is ignored), and the member is only «unlocked»
     // once it is recorded — the sheet gets { ok, error } back and stays on the form when the server said no.
@@ -312,7 +337,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     // meets a masked Arabic string it can't look up.
     moneyAccess: access, money: (t?: any) => (access === "full" ? t : maskMoney(t)), moneyDM: (t?: any) => (access === "none" ? maskMoney(t) : t),
     moneyNote: (t?: any) => (access === "none" ? maskMoney(tr(t)) : t),
-    addPost: (post?: any, as?: any) => { const tmp = stamp({ comments: [], dm: !!profile.dm, best: null, ...post }, as); setPosts((ps) => [tmp, ...ps]); addPts(post.type === "reveal" ? 15 : 5); sync(() => cloud.addPost(post, asOf(as)), (srv) => setPosts((ps) => swapId(ps, tmp.id, { ...srv, comments: [] }))); },
+    addPost: (post?: any, as?: any) => { later(() => askPush(), 2500); const tmp = stamp({ comments: [], dm: !!profile.dm, best: null, ...post }, as); setPosts((ps) => [tmp, ...ps]); addPts(post.type === "reveal" ? 15 : 5); sync(() => cloud.addPost(post, asOf(as)), (srv) => setPosts((ps) => swapId(ps, tmp.id, { ...srv, comments: [] }))); },
     addComment: (pid?: any, c?: any, parentId?: any, as?: any) => { const node = stamp({ replies: [], dm: !!profile.dm, ...c }, as); setPosts((ps) => ps.map((p) => p.id !== pid ? p : { ...p, comments: parentId ? attach(p.comments, parentId, node) : [...p.comments, node] })); addPts(10); sync(() => cloud.addComment(pid, c, parentId, asOf(as)), (srv) => setPosts((ps) => swapId(ps, node.id, { ...srv, replies: undefined }))); },
     setBest: (pid?: any, cid?: any) => { setPosts((ps) => ps.map((p) => p.id === pid ? { ...p, best: cid } : p)); sync(() => cloud.setBest(pid, cid)); },
     // personal hiding (after my own report) and moderation removal are both keyed by ckey(kind, id)
@@ -328,7 +353,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
       return { id: rep.id, autoHidden: r.autoHidden };
     },
     blockThread: (tid?: any, on?: any) => setThreads((ts) => ts.map((t) => (t.id === tid ? { ...t, blocked: !!on } : t))),
-    notifs: visibleNotifs, unread: visibleNotifs.filter((n) => !n.read).length, markRead: (id?: any) => { setNotifs((ns) => ns.map((n) => n.id === id ? { ...n, read: true } : n)); sync(() => cloud.markRead(id)); }, markAllRead: () => { setNotifs((ns) => ns.map((n) => ({ ...n, read: true }))); sync(() => cloud.markRead(null)); },
+    notifs: visibleNotifs, unread: visibleNotifs.filter((n) => !n.read).length, markRead: (id?: any) => { setNotifs((ns) => ns.map((n) => n.id === id ? { ...n, read: true } : n)); sync(() => cloud.markRead(id)); }, markAllRead: (cat?: any) => { setNotifs((ns) => ns.map((n) => (!cat || (n.category || notifCategory(n.kind)) === cat ? { ...n, read: true } : n))); sync(() => cloud.markRead(null, cat || null)); },
     profile, setProfile, theme, setTheme, mode, isCo: isCompanyRole(profile.role),
     logos, setLogo: (id?: any, url?: any) => setLogos((l) => ({ ...l, [id]: url || undefined })),
     // removed ads (moderation) and ads I reported and hid disappear from every list; my own ads always stay visible to me
@@ -346,7 +371,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     },
     // my identity in a thread can change only before my first message — afterwards it is fixed so the two identities never meet
     setThreadIdentity: (tid?: any, as?: any) => { setThreads((ts) => ts.map((t) => (t.id === tid && !t.messages.some((m) => m.from === "me") ? { ...t, meAs: as === "public" ? "public" : "anon" } : t))); sync(() => cloud.setThreadIdentity(tid, as)); },
-    sendMessage: (tid?: any, text?: any) => { const g = screenLanguage(text); if (g.blocked) { setMsg("لم تُرسل — لغة غير لائقة"); return false; } setThreads((ts) => ts.map((t) => t.id === tid ? { ...t, messages: [...t.messages, { from: "me", text, at: `اليوم · ${clock()}` }] } : t)); sync(() => cloud.sendMessage(tid, text)); return true; },
+    sendMessage: (tid?: any, text?: any) => { later(() => askPush(), 2500); const g = screenLanguage(text); if (g.blocked) { setMsg("لم تُرسل — لغة غير لائقة"); return false; } setThreads((ts) => ts.map((t) => t.id === tid ? { ...t, messages: [...t.messages, { from: "me", text, at: `اليوم · ${clock()}` }] } : t)); sync(() => cloud.sendMessage(tid, text)); return true; },
     // The other side is simulated: it answers in-app and, like any member, may share a number or an e-mail — that is allowed by design
     simulated: !CLOUD, simulateReply: (tid?: any) => !CLOUD && setThreads((ts) => ts.map((t) => { if (t.id !== tid) return t; const mine = t.messages.filter((m) => m.from === "me").length; const co = isCompanyRole(t.with.role); const canned = co ? ["أهلًا. سؤالك وصل لفريق التوظيف — نرد هنا خلال يوم عمل.", "لو حابب تقدّم، ابعت سيرتك على البريد المكتوب في الإعلان واكتب EngSpace في العنوان — أو اتصل بنا على 01000000102.", "تمام. لو محتاج أي توضيح تاني اكتب لنا هنا أو على البريد."] : ["أهلًا. ابعتلي التفاصيل وأنا أقولك رأيي بصراحة.", "الرقم اللي قلته منطقي. لو الشركة نفسها اللي عرضت عليك، فاوض على بدل الانتقال.", "لو أسهل نتكلم صوت، ده رقمي 01000000909 — وخد وقتك في القرار."]; return { ...t, messages: [...t.messages, { from: "them", text: canned[Math.min(mine - 1, 2)], at: `اليوم · ${clock()}` }] }; })),
     // ---- applying happens off-platform: remember that this member opened the employer's contact, and count it for the employer ----
@@ -369,7 +394,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     register: (p?: any, acc?: any) => { if (acc) saveAccount(acc); savePersona(p); setSession(true); liveState().noDemo = false; store.reset(); store.set("persona", p); store.set("profile", profileOf(p)); store.set("welcome", true); },
     dismissWelcome: () => { setWelcome(false); setDir("tab"); setTabRaw("home"); setStack([]); setMsg(`أهلًا ${cleanName(profile.name).split(" ")[0] || ""} — رتّبنا التطبيق على تخصصك ومكانك`); },
     signIn: (p?: any) => { setSession(true); liveState().noDemo = false; setPersona(p); setProfileRaw(profileOf(p)); setThreads(threadsFor(p)); setWelcome(false); setEditing(false); setStack([]); setSheet(null); setDir("tab"); setTabRaw("home"); setMsg(`أهلًا بعودتك، ${cleanName(p.name).split(" ")[0]}`); },
-    signOut: (already?: any) => { if (!already) sync(() => cloud.signOut()); setSession(false); liveState().noDemo = true; setSheet(null); setStack([]); setEditing(false); setWelcome(false); setTabRaw("home"); setAuthView(loadAccount() ? "signin" : "signup"); setPersona(null); },
+    signOut: (already?: any) => { if (!already) sync(() => (CLOUD ? dropPush().catch(() => {}) : Promise.resolve()).then(() => cloud.signOut())); setSession(false); liveState().noDemo = true; setSheet(null); setStack([]); setEditing(false); setWelcome(false); setTabRaw("home"); setAuthView(loadAccount() ? "signin" : "signup"); setPersona(null); },
     deleteAccount: () => { if (CLOUD && persona) { cloud.deleteAccount().then(() => { savePersona(null); setSession(false); liveState().noDemo = true; store.reset(); }, (e) => setMsg(e.message)); return; } dropOwnRequest(); saveAccount(null); savePersona(null); setSession(false); liveState().noDemo = true; store.reset(); },
     editPersona: () => { setStack([]); setSheet(null); setEditing(true); }, cancelEdit: () => setEditing(false),
     saveProfile: (p0?: any) => { const p = profile.pending && !p0.pending ? { ...p0, verifyReq: purgeOwn("withdrawn", false) } : p0; const roleChanged = threadsKind(p) !== threadsKind(profile); if (hasSession()) savePersona(p); setPersona(p); setProfileRaw((s) => ({ ...s, ...p })); if (roleChanged) setThreads(threadsFor(p)); setEditing(false); setMsg("حُفظت بياناتك"); sync(() => cloud.saveProfile(p), (srv) => srv && setProfileRaw((s) => ({ ...s, ...srv }))); },
@@ -400,11 +425,12 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const top = stack[stack.length - 1];
   const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
     : top
-    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
+    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : null;
   const tabScreen = (id?: any) => id === "home" ? <HomeScreen app={app} /> : id === "community" ? <CommunityScreen app={app} /> : id === "jobs" ? <JobsScreen app={app} /> : id === "market" ? <MarketScreen app={app} /> : id === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" && toolOpen(blocked, sheet.payload.id) ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;
   const sheets: any = {
+    pushprimer: ["الإشعارات", <PushPrimerSheet app={app} />],
     contribute: ["شارك راتبك", <ContributeSheet app={app} payload={sheet?.payload} />], compose: ["منشور جديد", <ComposeSheet app={app} payload={sheet?.payload} />], review: ["تقييم الشركة", <ReviewSheet app={app} payload={sheet?.payload} />],
     report: [`إبلاغ عن ${REPORT_KINDS[sheet?.payload?.kind] || "محتوى"}`, <ReportSheet app={app} payload={sheet?.payload} />], privacy: ["الخصوصية والأمان", <PrivacyBody />], methodology: ["المنهجية والمصادر", <MethodologySheet app={app} />], verify: ["التوثيق — اختياري", <VerifySheet app={app} />], user: [sheet?.payload?.as === "public" ? "الملف العلني" : "الملف المجهول", <UserSheet app={app} payload={sheet?.payload} />], logo: ["شعار الشركة", <LogoSheet app={app} payload={sheet?.payload} />],
     tool: [toolMeta?.name || "أداة", ToolView ? <ToolView app={app} payload={sheet?.payload || {}} /> : null],

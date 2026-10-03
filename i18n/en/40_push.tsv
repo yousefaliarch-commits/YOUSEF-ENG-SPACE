@@ -1,0 +1,61 @@
+# Push notifications: primer, preferences, notification center
+2f5c8749	Test notification sent — it should arrive within seconds
+d67e54bd	Wait a minute before the next test
+62056e88	Couldn't send it
+c380b562	Support
+49bb0a34	Job alerts the moment they appear
+61979a06	New jobs that fit your engineering discipline, experience level and governorate — as soon as they are posted.
+c923bdda	Salary and inflation updates
+a579cd68	New market benchmarks and inflation tracker changes, so you know what your pay is worth.
+10eb428f	Instant replies and messages
+94f982ce	Replies to your questions and comments, mentions, and private messages from colleagues.
+ffb0e82e	Support from the EngSpace team
+8967e7fa	Updates and replies on your support tickets, straight from the “EngSpace team”.
+5b1a1f08	Notifications are on
+880b48ce	Choose what matters to you in notification settings, any time.
+e9320a2c	{0} Choose what matters to you in notification settings, any time.
+d72f1169	Notifications will show while the app is open in a browser tab.
+da11a567	Notifications will reach this device.
+14d476e4	Notification settings
+57d56138	Permission is off on this device
+c0260bb4	This browser doesn't support notifications
+1f1b7685	Push notifications aren't ready in this build
+4b6fc9ef	To turn them on, open Device Settings → EngSpace → Notifications and allow them.
+a44b96ad	Everything new still reaches you inside the app, in the notification center.
+8b110977	The notification service isn't connected to this build yet. Everything new still appears inside the app in the notification center, and push will work in the next version.
+69567345	OK
+1b8810ee	Stay in the loop, moment by moment
+ab8c3d81	Turn on notifications to get opportunities and replies as they happen — and only what concerns you.
+d80413bd	The text of replies or messages, and anyone's name, never shows on the lock screen, and you can turn off any type at any time.
+87d6d274	Turning on…
+100d7a73	Turn on notifications
+289acec2	Not now
+433796c7	Not available here
+209ebebb	Blocked in device settings
+64632270	On for this device
+6023efea	Permission granted — this device isn't registered yet
+aecf1098	Off
+db2e99b7	Choose what reaches your device and the notification center. The text of replies or messages, and anyone's identity, never shows on the lock screen.
+ce1fde1d	Push notifications on this device
+1e65a3dd	Send me a test notification
+a2181e3c	Your browser doesn't support notifications. Everything new reaches you inside the app.
+29f743c0	The master switch — turning it off stops all push notifications.
+59e5d717	Alert types
+e73b896b	Matching jobs
+59185590	A new job that fits your discipline, experience and governorate — at most 3 a day.
+9883842e	Replies and mentions
+9ceb89db	A reply to your post or comment, or someone who mentioned you with @.
+f476feed	A new message from a colleague — never its text on the lock screen.
+66a7e6c1	Salaries and inflation
+f1a74e98	New market figures for your discipline and governorate, and a new inflation month.
+e2688f04	Support and the EngSpace team
+42c18129	Replies to support tickets and status changes, and messages from the team.
+8690922d	Account and security notices (verification, moderation, suspension) always reach you. Everything also stays in the in-app notification center even if you turn push off.
+d6914c75	Push notifications, matching jobs, replies, salaries and support
+0958f87f	New jobs that fit your discipline, experience and city
+4945d998	Replies, mentions and private messages
+b1b9ac38	Replies and updates from the EngSpace team
+ac551718	Salary and inflation updates and account notices
+da5e71de	Notification categories
+9f096b13	Matching jobs, replies and support updates will appear here.
+e7fae903	Nothing in this section right now.

@@ -427,3 +427,6 @@ enabled = true
 # called by pg_cron with a shared secret header, not a member's JWT (see docs/PHASE2.md)
 [functions.purge-verification]
 verify_jwt = false
+
+[functions.send-push]
+verify_jwt = false

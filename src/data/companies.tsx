@@ -150,13 +150,14 @@ export const LOGO_SOURCE = { wikipedia: "ويكيبيديا (شعار الصفح
 
 export const logoSourceLabel = (c?: any) => c.logoSrc ? (LOGO_SOURCE[c.logoSrc.split(":")[0]] || "الموقع الرسمي") : null;
 
-export const hueOf = (id?: any) => [...id].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) % 360, 7);
+export const hueOf = (id?: any) => [...String(id == null ? "" : id)].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) % 360, 7);
 
 // Logo tile: real logo on a white plate (brand marks are designed for light backgrounds), an HR-uploaded logo overrides it, and a monogram stands in when neither exists
 export function CompanyLogo({ c, size = 44, logo, className = "" }: any) {
   const [broken, setBroken] = useState(false); const src = logo || (!broken && c.logo) || null;
-  const initials = c.en.split(" ").filter((w) => /^[A-Za-z]/.test(w)).map((w) => w[0]).join("").slice(0, 2).toUpperCase() || c.name[0];
-  const h = hueOf(c.id);
+  // an employer whose company is not in the registry has only a name (no id, no English name): its monogram is the name's first letter
+  const initials = (c.id ? (c.en || "").split(" ").filter((w) => /^[A-Za-z]/.test(w)).map((w) => w[0]).join("").slice(0, 2).toUpperCase() : "") || (c.name || "?")[0];
+  const h = hueOf(c.id || c.name);
   if (src) return <span className={`shrink-0 grid place-items-center overflow-hidden rounded-xl bg-white border border-line ${className}`} style={{ width: size, height: size }}><img src={src} alt={`شعار ${c.name}`} onError={() => setBroken(true)} className="max-w-full max-h-full object-contain" style={{ width: size - Math.round(size * 0.18), height: size - Math.round(size * 0.18) }} /></span>;
   return <span dir="ltr" className={`shrink-0 grid place-items-center rounded-xl font-grotesk font-semibold text-white border border-line ${className}`} style={{ width: size, height: size, fontSize: size * 0.34, background: `linear-gradient(135deg, hsl(${h} 45% 42%), hsl(${(h + 40) % 360} 55% 30%))` }} title={c.name}>{initials}</span>;
 }

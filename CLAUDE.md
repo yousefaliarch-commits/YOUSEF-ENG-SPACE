@@ -40,6 +40,12 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 - Brand: the E+S mark lives in `src/ui/brand-mark.json` (polygons in the 1024 space of `assets/icon-only.png`, the owner's master
   icon — never redraw it). `scripts/brand/render.mjs` (adaptive layers, splash) + `web.mjs` (favicon, apple-touch) +
   `npx @capacitor/assets generate` (delete the `icons/` and `public/manifest.webmanifest` it also writes) make every size.
+- Push (docs/PUSH.md): notices are written by SQL triggers (replies/mentions, DMs, tickets, job matches, inflation, salary cells), then
+  queued in `private.push_outbox` only if the member's master + type switch is on and a device exists; `send-push` (Edge Function,
+  shared code in `supabase/functions/_shared/push.ts`) delivers through FCM / APNs. Reply / mention / message pushes carry NO
+  text and NO sender. Tokens live in `user_push_tokens` — never readable by a client. Categories (jobs · community · support ·
+  system) and preference keys are pinned to the SQL by `tests/push-notifications.test.ts`. Credentials only as function secrets /
+  GitHub secrets; absent credentials mean "not ready in this build", never an error screen.
 - Sharing (header button on post/job/company/room): `shareContent()` in native.ts — phone share sheet → `navigator.share` → copy
   link. Links: `https://<VITE_PUBLIC_URL>/#app/<type>/<id>` when set, else the web hash route, else `app.engspace://open/<type>/<id>`
   (Android filter host `open`); a link opened signed-out waits for the sign-in (`takePendingOpen`).

@@ -105,6 +105,26 @@ run("cloud backend (local Supabase)", () => {
   });
 
 
+  it("push: a device is registered, never read back; a notice is queued, claimed by the service role, delivered, finished", async () => {
+    const service = (import.meta as any).env.ENGSPACE_SERVICE_KEY || process.env.ENGSPACE_SERVICE_KEY; if (!service) return;   // only with `npm run test:cloud`
+    const { createClient } = await import("@supabase/supabase-js"); const { deliver } = await import("../supabase/functions/_shared/push");
+    const dev = "fcm-integration-" + tag + "-0000000000000000"; await cloud.registerPushToken(dev, "android", "ar");
+    expect((await cloud.myPushDevices()).length).toBeGreaterThan(0); expect(JSON.stringify(await cloud.myPushDevices())).not.toContain(dev);
+    await cloud.setNotificationPrefs({ salary: false }); expect((await cloud.myNotificationPrefs()).salary).toBe(false); await cloud.setNotificationPrefs({ salary: true });
+    await cloud.sendTestPush();
+    const svc = createClient((import.meta as any).env.VITE_SUPABASE_URL, service, { auth: { persistSession: false } });
+    const { data: rows, error } = await svc.rpc("push_claim", { p_limit: 100 }); expect(error).toBeNull();
+    const mine = (rows as any[]).filter((r) => r.tokens.some((t: any) => t.token === dev)); expect(mine.length).toBe(1);
+    expect(mine[0]).toMatchObject({ category: "system", title_ar: "إشعار تجريبي", title_en: "Test notification" });
+    const seen: any[] = []; const out = await deliver(mine, { android: async (t, p) => { seen.push([t, p]); return { ok: true }; } });
+    expect(seen[0][1]).toMatchObject({ title: "إشعار تجريبي", category: "system", data: { type: "notifications" } });
+    expect((await svc.rpc("push_finish", { p_results: out })).error).toBeNull();
+    expect((await svc.rpc("push_claim", { p_limit: 100 })).data.filter((r: any) => r.tokens.some((t: any) => t.token === dev))).toEqual([]);
+    const anon = createClient((import.meta as any).env.VITE_SUPABASE_URL, (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+    expect((await anon.rpc("push_claim", { p_limit: 1 })).error).not.toBeNull();   // the queue is not reachable from a client
+    await cloud.unregisterPushToken(dev);
+  });
+
   it("company scorecard: factor ratings stay private; under 5 reviewers only counts come back", async () => {
     const co = "cloudtest-" + tag;
     await cloud.addReview(co, { stars: 4, text: "تقييم تجريبي للشركة من الاختبار", as: "anon", scores: { pay: 3, ontime: 5 } });

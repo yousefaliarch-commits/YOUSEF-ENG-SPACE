@@ -26,8 +26,8 @@
  },
  "النظام": {
   "k": "s",
-  "p": "app/AppView.tsx,domain/moderation.ts",
-  "n": 3
+  "p": "app/AppView.tsx,domain/moderation.ts,domain/notifications.ts,native/push.ts",
+  "n": 5
  },
  "العضو": {
   "k": "s",
@@ -91,6 +91,21 @@
   "n": 1
  },
  "تعذّر نسخ الرابط": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "أُرسل الإشعار التجريبي — يصلك خلال ثوانٍ": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "انتظر دقيقة قبل التجربة التالية": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "تعذّر الإرسال": {
   "k": "s",
   "p": "app/AppView.tsx",
   "n": 1
@@ -216,6 +231,11 @@
   "k": "s",
   "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/support/support.tsx,ui/chrome.tsx",
   "n": 20
+ },
+ "الإشعارات": {
+  "k": "s",
+  "p": "app/AppView.tsx,ui/chrome.tsx",
+  "n": 2
  },
  "شارك راتبك": {
   "k": "s",
@@ -2629,13 +2649,13 @@
  },
  "المجتمع": {
   "k": "s",
-  "p": "data/geo.ts,domain/moderation.ts,features/tabs/tabs.tsx",
-  "n": 3
+  "p": "data/geo.ts,domain/moderation.ts,domain/notifications.ts,features/tabs/tabs.tsx,native/push.ts",
+  "n": 5
  },
  "الوظائف": {
   "k": "s",
-  "p": "data/geo.ts,features/admin/AdminView.tsx,features/tabs/tabs.tsx",
-  "n": 3
+  "p": "data/geo.ts,domain/notifications.ts,features/admin/AdminView.tsx,features/tabs/tabs.tsx",
+  "n": 4
  },
  "السوق": {
   "k": "s",
@@ -6885,6 +6905,11 @@
   "p": "domain/moderation.ts",
   "n": 1
  },
+ "الدعم": {
+  "k": "s",
+  "p": "domain/notifications.ts,native/push.ts",
+  "n": 2
+ },
  "أقل من السوق بوضوح": {
   "k": "s",
   "p": "domain/offer.ts",
@@ -9796,8 +9821,8 @@
  },
  "الكل": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/tabs/tabs.tsx",
-  "n": 7
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/tabs/tabs.tsx,ui/notifications.tsx",
+  "n": 8
  },
  "كل الأنواع": {
   "k": "s",
@@ -14180,6 +14205,272 @@
   "p": "features/market/scorecard.tsx",
   "n": 1
  },
+ "فرص عمل فورية": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "وظائف جديدة تناسب تخصصك الهندسي ومستوى خبرتك ومحافظتك — فور نشرها.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "تحديثات الرواتب والتضخم": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "معايير السوق الجديدة وتغيّرات متتبّع التضخم لتعرف قيمة راتبك.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "ردود ورسائل فورية": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "ردود على أسئلتك وتعليقاتك، وإشارات إليك، ورسائل زملائك الخاصة.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "الدعم من فريق EngSpace": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "تحديثات وردود تذاكر الدعم مباشرةً من «فريق EngSpace».": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "تم تفعيل الإشعارات": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "اختر ما يهمّك من إعدادات الإشعارات في أي وقت.": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "{0} اختر ما يهمّك من إعدادات الإشعارات في أي وقت.": {
+  "k": "e",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1,
+  "x": "web ? \"ستظهر لك الإشعارات عندما يكون التطبيق مفتوحًا في تبويب متصفحك.\" : \"ستصلك الإشعارات على هذا الجهاز.\""
+ },
+ "ستظهر لك الإشعارات عندما يكون التطبيق مفتوحًا في تبويب متصفحك.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "ستصلك الإشعارات على هذا الجهاز.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "إعدادات الإشعارات": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx,features/settings/settings.tsx,ui/chrome.tsx",
+  "n": 5
+ },
+ "تم": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx,ui/moderation.tsx",
+  "n": 2
+ },
+ "الإذن مغلق على هذا الجهاز": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "المتصفح لا يدعم الإشعارات": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "الإشعارات الفورية غير جاهزة في هذه النسخة": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "لتفعيلها افتح إعدادات الجهاز ← EngSpace ← الإشعارات ثم اسمح بها.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "كل جديد يصلك داخل التطبيق على أي حال، في مركز الإشعارات.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "لم يكتمل ربط خدمة الإشعارات بهذه النسخة بعد. كل جديد يظهر داخل التطبيق في مركز الإشعارات، وستعمل الإشعارات الفورية في النسخة القادمة.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "حسنًا": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "ابقَ على اطلاع لحظة بلحظة": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "فعّل الإشعارات لتصلك الفرص والردود فور حدوثها — ولا نرسل إلا ما يخصّك.": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "لا يظهر نص الردود أو الرسائل ولا اسم أحد على شاشة القفل، ويمكنك إيقاف أي نوع في أي وقت.": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "جارٍ التفعيل…": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "تفعيل الإشعارات": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 4
+ },
+ "ليس الآن": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "غير متاحة هنا": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "محظورة من إعدادات الجهاز": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "مفعّلة على هذا الجهاز": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "الإذن ممنوح — الجهاز لم يُسجَّل بعد": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "غير مفعّلة": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "اختر ما يصلك على جهازك وفي مركز الإشعارات. لا يظهر نص الردود أو الرسائل ولا هوية أحد على شاشة القفل.": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "الإشعارات الفورية على هذا الجهاز": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "جارٍ الإرسال…": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx,features/support/support.tsx",
+  "n": 2
+ },
+ "أرسل لي إشعارًا تجريبيًا": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "متصفحك لا يدعم الإشعارات. كل جديد يصلك داخل التطبيق.": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "المفتاح الرئيسي — إيقافه يوقف كل الإشعارات الفورية.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "تم التفعيل": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx,features/settings/settings.tsx",
+  "n": 2
+ },
+ "تم الإيقاف": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx,features/settings/settings.tsx",
+  "n": 2
+ },
+ "أنواع التنبيهات": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
+ "الوظائف المطابقة": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx,native/push.ts",
+  "n": 3
+ },
+ "وظيفة جديدة تناسب تخصصك وخبرتك ومحافظتك — بحدّ أقصى 3 يوميًا.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "الردود والإشارات": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "ردّ على منشورك أو تعليقك، أو من ذكرك بـ @.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "الرسائل الخاصة": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "رسالة جديدة من زميل — دون نصها على شاشة القفل.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "الرواتب والتضخم": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "أرقام سوق جديدة في تخصصك ومحافظتك، وشهر تضخم جديد.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "الدعم وفريق EngSpace": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "ردود تذاكر الدعم وتغيّر حالتها، ورسائل الفريق.": {
+  "k": "s",
+  "p": "features/notifications/prefs.tsx",
+  "n": 2
+ },
+ "إشعارات الحساب والأمان (التوثيق، الإشراف، إيقاف الحساب) تصلك دائمًا. وكل شيء يبقى في مركز الإشعارات داخل التطبيق حتى لو أوقفت الإشعارات الفورية.": {
+  "k": "x",
+  "p": "features/notifications/prefs.tsx",
+  "n": 1
+ },
  "فحص واستلام الأعمال": {
   "k": "x",
   "p": "features/qaqc/qaqc.tsx",
@@ -14382,11 +14673,6 @@
   "p": "features/settings/settings.tsx,features/stack/stack.tsx",
   "n": 4
  },
- "إشعارات الردود والوظائف المطابقة": {
-  "k": "s",
-  "p": "features/settings/settings.tsx",
-  "n": 1
- },
  "السماح بالرسائل الخاصة من الزملاء": {
   "k": "s",
   "p": "features/settings/settings.tsx",
@@ -14473,15 +14759,10 @@
   "p": "features/settings/settings.tsx",
   "n": 1
  },
- "تم التفعيل": {
+ "الإشعارات الفورية، والوظائف المطابقة، والردود، والرواتب، والدعم": {
   "k": "s",
   "p": "features/settings/settings.tsx",
-  "n": 1
- },
- "تم الإيقاف": {
-  "k": "s",
-  "p": "features/settings/settings.tsx",
-  "n": 1
+  "n": 2
  },
  "المساعدة": {
   "k": "x",
@@ -18281,11 +18562,6 @@
   "p": "features/support/support.tsx",
   "n": 2
  },
- "جارٍ الإرسال…": {
-  "k": "s",
-  "p": "features/support/support.tsx",
-  "n": 1
- },
  "الموضوع 3 أحرف على الأقل والتفاصيل 10 أحرف على الأقل.": {
   "k": "x",
   "p": "features/support/support.tsx",
@@ -20390,6 +20666,26 @@
   "p": "lib/search.ts",
   "n": 1
  },
+ "وظائف جديدة تناسب تخصصك وخبرتك ومدينتك": {
+  "k": "s",
+  "p": "native/push.ts",
+  "n": 1
+ },
+ "الردود والإشارات والرسائل الخاصة": {
+  "k": "s",
+  "p": "native/push.ts",
+  "n": 1
+ },
+ "ردود وتحديثات من فريق EngSpace": {
+  "k": "s",
+  "p": "native/push.ts",
+  "n": 1
+ },
+ "تحديثات الرواتب والتضخم وإشعارات الحساب": {
+  "k": "s",
+  "p": "native/push.ts",
+  "n": 1
+ },
  "موثّقة": {
   "k": "s",
   "p": "ui/characters.tsx",
@@ -20575,11 +20871,6 @@
   "n": 1
  },
  "تفاصيل الوظيفة": {
-  "k": "s",
-  "p": "ui/chrome.tsx",
-  "n": 1
- },
- "الإشعارات": {
   "k": "s",
   "p": "ui/chrome.tsx",
   "n": 1
@@ -21174,11 +21465,6 @@
   "p": "ui/moderation.tsx",
   "n": 1
  },
- "تم": {
-  "k": "x",
-  "p": "ui/moderation.tsx",
-  "n": 1
- },
  "أبلغت عن": {
   "k": "x",
   "p": "ui/moderation.tsx",
@@ -21241,11 +21527,16 @@
   "p": "ui/moderation.tsx",
   "n": 1
  },
+ "تصنيف الإشعارات": {
+  "k": "s",
+  "p": "ui/notifications.tsx",
+  "n": 2
+ },
  "{0} غير مقروء": {
   "k": "t",
   "p": "ui/notifications.tsx",
   "n": 1,
-  "x": "app.unread"
+  "x": "shown"
  },
  "كل شيء مقروء": {
   "k": "s",
@@ -21270,7 +21561,17 @@
  "كل شيء مقروء.": {
   "k": "s",
   "p": "ui/notifications.tsx",
-  "n": 2
+  "n": 1
+ },
+ "ستظهر هنا الوظائف المطابقة والردود وتحديثات الدعم.": {
+  "k": "s",
+  "p": "ui/notifications.tsx",
+  "n": 1
+ },
+ "لا شيء في هذا القسم الآن.": {
+  "k": "s",
+  "p": "ui/notifications.tsx",
+  "n": 1
  },
  "نطاق من {0} إلى {1} جنيه، المتوسط {2}": {
   "k": "t",

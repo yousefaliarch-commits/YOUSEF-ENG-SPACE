@@ -66,7 +66,7 @@ export const SettingsLink = ({ icon: I, title, sub, onClick }: any) => (
   </button>
 );
 
-export const SETTINGS_TOGGLES = (app?: any) => { const p = app.profile; return [["notify", "إشعارات الردود والوظائف المطابقة"], ["dm", "السماح بالرسائل الخاصة من الزملاء"], ...(p.photo ? [["showPhoto", "إظهار صورتي مع اسمي في المشاركات العلنية"]] : []), ...(app.isCo || app.moneyAccess === "none" ? [] : [["openToRecruiters", "متاح لرسائل الشركات عند مطابقة وظيفة"]]), ...(app.moneyAccess === "none" ? [] : [["hide", "إخفاء نشاطي عن الشركات التي أتابعها"]]), ["rotate", "تجديد المعرّف المجهول تلقائيًا كل 90 يومًا"]]; };
+export const SETTINGS_TOGGLES = (app?: any) => { const p = app.profile; return [["dm", "السماح بالرسائل الخاصة من الزملاء"], ...(p.photo ? [["showPhoto", "إظهار صورتي مع اسمي في المشاركات العلنية"]] : []), ...(app.isCo || app.moneyAccess === "none" ? [] : [["openToRecruiters", "متاح لرسائل الشركات عند مطابقة وظيفة"]]), ...(app.moneyAccess === "none" ? [] : [["hide", "إخفاء نشاطي عن الشركات التي أتابعها"]]), ["rotate", "تجديد المعرّف المجهول تلقائيًا كل 90 يومًا"]]; };
 
 
 export function SettingsScreen({ app }: any) {
@@ -91,6 +91,7 @@ export function SettingsScreen({ app }: any) {
         <p className="mt-2 text-[10.5px] text-ink-3 leading-snug">الآن: {app.mode === "light" ? "فاتح" : "داكن"} · يُحفظ اختيارك على هذا الجهاز ويبقى بعد إعادة التحميل. تبديل سريع من زر الشمس والقمر أعلى الرئيسية.</p>
       </Panel>
       <Panel className="p-4"><h2 className="text-[13px] font-medium mb-1 inline-flex items-center gap-1.5"><Bell size={15} className="text-accent" /> الإشعارات والخصوصية</h2>
+        <SettingsLink icon={Bell} title="إعدادات الإشعارات" sub="الإشعارات الفورية، والوظائف المطابقة، والردود، والرواتب، والدعم" onClick={() => app.push({ type: "notifprefs" })} />
         {SETTINGS_TOGGLES(app).map(([k, l]: any) => <div key={k} className="py-2.5 flex items-center justify-between gap-3 border-t border-line first:border-0"><span className="text-[13px] text-ink leading-snug">{l}</span><Toggle on={!!p[k]} onChange={(v) => { persist({ [k]: v }); app.toast(v ? "تم التفعيل" : "تم الإيقاف"); }} label={l} /></div>)}
       </Panel>
       <Panel className="px-4 py-2"><h2 className="pt-2 pb-1 text-[13px] font-medium inline-flex items-center gap-1.5"><CircleHelp size={15} className="text-accent" /> المساعدة</h2>

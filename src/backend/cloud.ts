@@ -170,7 +170,7 @@ export async function saveProfile(persona: any) {
 // ---------------------------------------------------------------- everything the member's app shows
 export async function loadAll() {
   const db = await supabase(); const now = Date.now();
-  const [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary] = await Promise.all([
+  const [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary, nprefs] = await Promise.all([
     db.from("posts").select("*").order("created_at", { ascending: false }).limit(FEED_LIMIT),
     db.from("reactions").select("kind,item_id,agree,disagree,useful"),
     db.from("ballots").select("post_id,choice,author_mode"),
@@ -184,8 +184,9 @@ export async function loadAll() {
     db.from("verification_requests").select("ref,kinds,status,decision,created_at,decided_at").order("created_at", { ascending: false }).limit(1),
     db.from("job_contacts").select("job_id"),
     db.rpc("my_salary_status"),
+    db.rpc("my_notification_prefs"),
   ]);
-  for (const r of [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary]) if (r.error) throw friendly(r.error);
+  for (const r of [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary, nprefs]) if (r.error) throw friendly(r.error);
   const postRows = posts.data || [];
   const comments = postRows.length ? ok(await db.from("comments").select("*").in("post_id", postRows.map((p: any) => p.id))) as any[] : [];
 
@@ -209,6 +210,7 @@ export async function loadAll() {
     saved: st.saved || {}, follows: st.follows || {}, roomFollows: st.roomFollows || {}, hidden: st.hidden || {}, inspections: st.inspections || [], salaryLog: st.salaryLog || null, contacted,
     myReports: reports.data || [], verification: (verif.data || [])[0] || null,
     contributed: !!salary.data && (salary.data as any).access === "full",
+    prefs: (nprefs.data || null) as any,
   };
 }
 
@@ -319,10 +321,23 @@ export async function saveState(key: string, value: any) {
   ok(await db.from("member_state").upsert({ account_id: user.id, key, value, updated_at: new Date().toISOString() }));
 }
 
-export async function markRead(id: string | null) {
+// one notice, or every unread one (optionally only a category: jobs · community · support · system)
+export async function markRead(id: string | null, category: string | null = null) {
   const db = await supabase(); const q = db.from("notifications").update({ read: true });
-  ok(await (id ? q.eq("id", id) : q.eq("read", false)));
+  ok(await (id ? q.eq("id", id) : category ? q.eq("read", false).eq("category", category) : q.eq("read", false)));
 }
+
+// ---------------------------------------------------------------- push notifications (supabase/migrations/…_push_notifications.sql)
+// A device token is written through register_push_token and never read back — not even by its owner.
+export async function registerPushToken(token: string, platform: "android" | "ios" | "web", lang: "ar" | "en") {
+  const db = await supabase(); ok(await db.rpc("register_push_token", { p_token: token, p_platform: platform, p_lang: lang }));
+}
+export async function unregisterPushToken(token: string) { const db = await supabase(); ok(await db.rpc("unregister_push_token", { p_token: token })); }
+export async function myPushDevices() { const db = await supabase(); return (ok(await db.rpc("my_push_devices")) as any[]) || []; }
+export type NotifPrefs = { notify: boolean; jobs: boolean; replies: boolean; messages: boolean; salary: boolean; support: boolean };
+export async function myNotificationPrefs() { const db = await supabase(); return ok(await db.rpc("my_notification_prefs")) as NotifPrefs; }
+export async function setNotificationPrefs(patch: Partial<NotifPrefs>) { const db = await supabase(); return ok(await db.rpc("set_notification_prefs", { p_prefs: patch })) as NotifPrefs; }
+export async function sendTestPush() { const db = await supabase(); ok(await db.rpc("send_test_push")); }
 
 export async function report(kind: string, id: string, reason: string, note?: string) {
   const db = await supabase(); return ok(await db.rpc("file_report", { p_kind: kind, p_item: id, p_reason: reason, p_note: note || null })) as string;

@@ -8,6 +8,10 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
+        <!-- push notifications (Firebase Cloud Messaging): the status-bar icon, its tint and the fallback channel -->
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_stat_engspace" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/push_accent" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="system" />
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
             android:name=".MainActivity"
@@ -42,4 +46,6 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Android 13+: asking to show notifications is a runtime permission (the primer sheet asks first) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 </manifest>

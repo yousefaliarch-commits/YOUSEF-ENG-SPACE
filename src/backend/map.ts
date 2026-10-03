@@ -4,6 +4,7 @@
 //    built here with the same anonTitle / publicTitle the app uses, so a title can never claim more than the snapshot.
 //  · The UI shows "count + my own reaction / vote", so the member's own reaction or ballot is taken out of the server totals.
 // =====================================================================
+import { notifCategory } from "../domain/notifications";
 import { agoText } from "../domain/moderation";
 import { THIS_YEAR, anonTitle, publicTitle } from "../domain/identity";
 import { specOfPersona } from "../ui/characters";
@@ -101,7 +102,8 @@ export const yearsRange = (exp: any): [number, number] => { const m = /^(\d+)(?:
 export const shareOf = (r: Row, now = Date.now()) => ({ id: r.id, anon: (r.author && r.author.anon) || "----", title: r.title || "", years: r.years, salary: r.salary,
   company: r.company || "", coId: null, gov: r.gov, track: r.track, verified: !!(r.author && r.author.verified), when: when(r.created_at, now) });
 
-export const notifOf = (r: Row, now = Date.now()) => ({ id: r.id, kind: r.kind, title: r.title, body: r.body, target: r.target || undefined, read: !!r.read, when: when(r.created_at, now) });
+export const notifOf = (r: Row, now = Date.now()) => ({ id: r.id, kind: r.kind, title: r.title, body: r.body, target: r.target || undefined, read: !!r.read, when: when(r.created_at, now),
+  category: r.category || notifCategory(r.kind), ...(r.en && r.en.title ? { en: { title: r.en.title, body: r.en.body || "" } } : {}) });
 
 export function reviewOf(r: Row, now = Date.now()) {
   return { id: r.id, stars: r.rating, text: r.text, ...(r.data || {}), ...authorFields(r.author, `company_reviews:${r.id}`), when: when(r.created_at, now), hiddenByMod: !!r.hidden };
