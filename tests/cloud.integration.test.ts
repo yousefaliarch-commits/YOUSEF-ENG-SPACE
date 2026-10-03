@@ -112,6 +112,14 @@ run("cloud backend (local Supabase)", () => {
     const s = await cloud.inflationSeries(); expect(s[0]).toEqual(["2022-01", 7.3]); expect(s.length).toBeGreaterThanOrEqual(45);
   });
 
+  it("support tickets: a member opens one with an image, reads it back; the member directory is refused to non-admins", async () => {
+    const id = await cloud.openTicket({ category: "technical", subject: "تجربة تذكرة", body: "رسالة اختبار للتذكرة من الاختبار الآلي", image: new Blob([new Uint8Array([0xff, 0xd8, 0xff, 0xd9])], { type: "image/jpeg" }) });
+    const mine = await cloud.myTickets(); expect(mine.find((t: any) => t.id === id).status).toBe("open");
+    const msgs = await cloud.ticketMessages(id); expect(msgs[0].attachment).toMatch(/^[0-9a-f-]{36}\/.+\.jpg$/); expect(await cloud.supportFileUrl(msgs[0].attachment)).toMatch(/^http/);
+    await cloud.closeTicket(id); expect((await cloud.myTickets()).find((t: any) => t.id === id).status).toBe("closed");
+    await expect(cloud.admin.directory()).rejects.toThrow("ليست لديك صلاحية");
+  });
+
   it("reports the post; the author is never revealed to the reporter", async () => {
     const ref = await cloud.report("post", postId, "spam", "تجربة"); expect(ref).toMatch(/^R-/);
     await expect(cloud.admin.cases()).rejects.toThrow("ليست لديك صلاحية");

@@ -35,9 +35,10 @@ export function modOf(cases: any[], accounts: any[]) {
 export function accountsOf(rows: any[], now = Date.now()) {
   return rows.map((a) => {
     const until = ms(a.suspended_until); const suspended = a.suspended_forever || (until != null && until > now);
-    return { id: a.mod_ref, key: a.mod_ref, as: "anon", name: null, anon: null, email: a.email_masked, role: a.role, staff: a.staff, gender: "male",
+    // the moderation list carries only what moderation needs (no e-mail, place or join date) so it cannot be matched to the directory
+    return { id: a.mod_ref, key: a.mod_ref, as: "anon", name: null, anon: null, email: null, role: a.role, staff: a.staff, gender: "male",
       title: a.role === "engineer" && a.disc ? discTitle(a.disc) : roleTitle(a.role), verified: !!a.verified, verifyKind: null, division: null, gradYear: null,
-      disc: a.disc || "civil", gov: a.gov, level: 0, joined: ms(a.created_at), last: null, items: a.contributions || 0, companyId: null, member: false,
+      disc: a.disc || null, gov: a.gov || null, level: 0, joined: a.created_at ? ms(a.created_at) : null, last: null, items: a.contributions || 0, companyId: null, member: false,
       status: suspended ? "suspended" : a.strikes > 0 ? "warned" : "active", until: suspended && !a.suspended_forever ? until : null, permanent: !!a.suspended_forever,
       warnings: a.strikes || 0, strikes: a.strikes || 0, lastWarning: null };
   });

@@ -19,7 +19,7 @@ select is((select onboarded from public.profiles where id = '00000000-0000-0000-
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a3');
 select lives_ok($$ update public.profiles set name = 'هاني سمير', disc = 'civil', gov = 'cairo', onboarded = true $$, 'the member completes their own profile');
 select pg_temp.as_user('00000000-0000-0000-0000-000000000002');
-select ok((select email_masked from public.admin_accounts() where email_masked like '+2010%') is not null, 'the directory masks a phone number');
+select ok((select phone from public.admin_directory('2010') limit 1) like '%2010%', 'a phone-only member is found in the admin directory by number');
 
 select * from finish();
 rollback;

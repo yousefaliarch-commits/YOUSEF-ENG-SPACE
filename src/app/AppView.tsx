@@ -4,6 +4,7 @@ import {
   CircleCheck, LockKeyhole, ShieldAlert
 } from "lucide-react";
 import { loadInspections, mergeInspections, storeInspections } from "../data/checklists";
+import { SupportScreen, TicketScreen } from "../features/support/support";
 import { loadDevice, storeDevice } from "../lib/device-store";
 import { ROOMS } from "../data/companies";
 import { TABS } from "../data/geo";
@@ -43,9 +44,9 @@ const ChecklistsScreen = lazy(() => import("../features/qaqc/qaqc").then((m) => 
 // =====================================================================
 //  App view — state, routing, gestures
 // =====================================================================
-export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection"];
+export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "ticket"];
 
-export const PLAIN_TYPES = ["notifications", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists"];
+export const PLAIN_TYPES = ["notifications", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists", "support"];
 
 export function parseHash() {
   const parts = (location.hash || "").replace(/^#/, "").split("/").filter(Boolean);
@@ -104,7 +105,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // previews and browsers without the API keep the class-based entrances. Reduced motion turns both off.
   const vtOK = !embed && typeof document !== "undefined" && typeof document.startViewTransition === "function" && !reducedMotion();
   const nav = (kind?: any, fn?: any) => {
-    const root = document.documentElement; const L = liveState(); if (!vtOK || L.vtBusy) { fn(); return; }
+    const root = document.documentElement; const L = liveState(); if (!vtOK || L.vtBusy || L.tourOn) { fn(); return; } // under the tour the screen changes at once: a view transition behind the scrim only costs frames
     L.vtBusy = true; root.dataset.vt = kind; let t = null;
     const done = () => { L.vtBusy = false; if (root.dataset.vt === kind) delete root.dataset.vt; };
     try { t = document.startViewTransition(() => { ReactDOM.flushSync(fn); }); } catch (e) { done(); fn(); return; }
@@ -130,7 +131,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // its top, going back returns to where the list was, and each tab keeps its own place. Applied before paint (and inside the
   // View Transition), so a screen never appears scrolled somewhere else first.
   const scrollMem = useRef<any>({}); const navKind = useRef<any>("tab"); const shownKey = useRef<any>(null);
-  const [tourOn, setTourOn] = useState(false);
+  const [tourOn, setTourOn] = useState(false); liveState().tourOn = tourOn;
   useEffect(() => { if (!persona || welcome || editing || embed || !langChosen || tourSeen()) return; const t = setTimeout(() => setTourOn(true), 900); return () => clearTimeout(t); }, [!!persona, welcome, editing, langChosen]);
   const topNow = stack[stack.length - 1]; const screenKey = topNow ? `${topNow.type}-${topNow.id || ""}#${stack.length}` : "tab:" + curTab;
   useLayoutEffect(() => {
@@ -228,7 +229,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     }, setLive).then((f) => { if (gone) f(); else off = f; }).catch(() => {});
     return () => { gone = true; if (off) off(); setLive(false); };
   }, [!!persona, persona && persona.pid]);
-  useEffect(() => { if (!chatId) return; loadChat(chatId).catch(() => {}); cloud.readThread(chatId).catch(() => {}); if (live) return; const i = setInterval(() => { if (!document.hidden) loadChat(chatId).catch(() => {}); }, 5000); return () => clearInterval(i); }, [chatId, live]);
+  // a thread opened from the admin console may be new to this list: fetch the list first, then its messages
+  useEffect(() => { if (!chatId) return; (threads.some((x) => x.id === chatId) ? loadChat(chatId) : refreshThreads().then(() => loadChat(chatId))).catch(() => {}); cloud.readThread(chatId).catch(() => {}); if (live) return; const i = setInterval(() => { if (!document.hidden) loadChat(chatId).catch(() => {}); }, 5000); return () => clearInterval(i); }, [chatId, live]);
   // saved items, follows, personal hiding, opened contacts: one row each, written a moment after the last change
   const saveLater = useRef<any>({});
   const persist = (key?: any, value?: any) => { if (!CLOUD || !hydrated.current) return; clearTimeout(saveLater.current[key]); saveLater.current[key] = setTimeout(() => sync(() => cloud.saveState(key, value)), 800); };
@@ -350,7 +352,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const top = stack[stack.length - 1];
   const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
     : top
-    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
+    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : curTab === "home" ? <HomeScreen app={app} /> : curTab === "community" ? <CommunityScreen app={app} /> : curTab === "jobs" ? <JobsScreen app={app} /> : curTab === "market" ? <MarketScreen app={app} /> : curTab === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" && toolOpen(blocked, sheet.payload.id) ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;
   const sheets: any = {
@@ -372,16 +374,16 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         {!gate.ok && <div role="status" className="shrink-0 px-4 py-2 flex items-start gap-2 text-[11.5px] leading-snug bg-warn/10 text-warn border-b border-warn/20"><ShieldAlert size={14} className="shrink-0 mt-px" /><span>{gate.why}</span></div>}
         <div className="relative flex-1 min-h-0">
           <div ref={pullEl} aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] flex justify-center pointer-events-none will-change-transform" style={{ transform: `translate3d(0,${refreshing ? 12 : -44}px,0)`, opacity: refreshing ? 1 : 0, transition: `transform .3s ${EASE}, opacity .3s` }}><span ref={pullIcon} className={`grid place-items-center w-9 h-9 rounded-full bg-surface border border-line-2 shadow-float ${refreshing ? "spin" : ""}`}><ArchMark size={16} /></span></div>
-          <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} px-4 ${vtOK ? "vt-screen" : ""}`}>
+          <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} px-4 pb-[var(--tabbar-space)] ${vtOK ? "vt-screen" : ""}`}>
             <div key={top ? `${top.type}-${top.id || ""}` : curTab} className={`${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : dir === "vt" ? "" : "screen-tab"}`}>{screen}</div>
           </div>
+          <TabBar tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} />
         </div>
-        <TabBar tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} />
         </div>
         {viewer && <ImageViewer image={viewer} onClose={() => setViewer(null)} />}
         {tourOn && !sheet && !viewer && <Tour app={app} onClose={() => setTourOn(false)} />}
         {sheet && sheets[sheet.type] && <Sheet title={sheets[sheet.type][0]} onClose={app.closeSheet} tall={["compose", "contract", "methodology", "move", "contribute", "verify", "inflation"].includes(sheet.type === "tool" ? sheet.payload.id : sheet.type)}>{sheets[sheet.type][1]}</Sheet>}
-        <div role="status" aria-live="polite" className={`absolute bottom-[calc(var(--tabh,68px)+var(--sab)+16px)] inset-x-4 z-30 flex justify-center transition-all ${msg ? "opacity-100" : "opacity-0 translate-y-2 pointer-events-none"}`}>{msg && <span key={msg} className="toast-in inline-flex items-start gap-2 max-w-full px-4 py-2.5 rounded-2xl bg-elevated/95 backdrop-blur border border-line-2 text-[12.5px] leading-snug shadow-float"><CircleCheck size={15} className="react-pop text-accent shrink-0 mt-0.5" /><span>{msg}</span></span>}</div>
+        <div role="status" aria-live="polite" className={`absolute bottom-[calc(var(--tabbar-space)+8px)] inset-x-4 z-30 flex justify-center transition-all ${msg ? "opacity-100" : "opacity-0 translate-y-2 pointer-events-none"}`}>{msg && <span key={msg} className="toast-in inline-flex items-start gap-2 max-w-full px-4 py-2.5 rounded-2xl bg-elevated/95 backdrop-blur border border-line-2 text-[12.5px] leading-snug shadow-float"><CircleCheck size={15} className="react-pop text-accent shrink-0 mt-0.5" /><span>{msg}</span></span>}</div>
       </div>,
       <p className="hidden sm:block text-[11px] text-ink-3 text-center max-w-[48ch] leading-relaxed">معاينة تفاعلية كاملة · أنشئ حسابك (يُحفظ على جهازك فقط)، واختر في كل مشاركة: علنًا باسمك أو مجهولًا. اسحب من حافة البداية للرجوع.</p>
   );
