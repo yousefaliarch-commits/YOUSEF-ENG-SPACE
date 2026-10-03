@@ -31,7 +31,9 @@ export const engagement = (p?: any) => (p.reactions.agree || 0) + (p.reactions.d
 export function HomeScreen({ app }: any) {
   const p = app.profile; const co = app.isCo; const exp = personaExp(p); const m = co ? null : marketFor(p.disc, exp, p.gov, p.track, p.city); const n = co ? 0 : sampleSize(p.disc, exp, p.gov);
   const hour = new Date().getHours(); const greet = hour < 12 ? "صباح الخير" : "مساء الخير";
-  const goal = (co ? GOALS_CO : GOALS).find((g) => g[0] === p.goal) || GOALS[4]; const tool = TOOLS.find((t) => t.id === GOAL_TOOL[p.goal]) || TOOLS[0];
+  const goal = (co ? GOALS_CO : GOALS).find((g) => g[0] === p.goal) || GOALS[4]; // the goal's tool, only if this role may open it; otherwise the first tool it may (HR: the CV review, which is a screen)
+  const openTools = TOOLS.filter((t: any) => toolOpen(app.blocked, t.id)); const cvOnly = !openTools.length;
+  const tool: any = cvOnly ? { id: "cvreview", name: "تدقيق السيرة الذاتية الهندسية", desc: "راجع السير الذاتية للمرشحين بمعايير السوق الهندسي", icon: FileSearch } : openTools.find((t) => t.id === GOAL_TOOL[p.goal]) || openTools.find((t: any) => t.group !== "site") || openTools[0];
   const matched = co ? [] : app.jobs.map((j) => ({ j, m: matchJob(j, p) })).filter((x) => x.m && x.m.score >= 40).sort((a, b) => b.m.score - a.m.score || byNewest(a.j, b.j)).slice(0, 4);
   const myJobs = co ? app.jobs.filter((j) => j.co === p.companyId || j.mine) : []; const stats = myJobs.reduce((a, j) => { const s = app.jobStats[j.id] || { views: 0, contacts: 0 }; return { views: a.views + s.views, contacts: a.contacts + s.contacts }; }, { views: 0, contacts: 0 });
   const feed = app.posts.filter((x) => app.roomFollows[x.room] || x.room === GENERAL_ROOM).sort(byNewest).slice(0, 2);
@@ -64,7 +66,7 @@ export function HomeScreen({ app }: any) {
 
       <section>
         <SectionTitle action="كل الأدوات" onAction={() => app.setTab("tools")}>لهدفك: {goal[1]}</SectionTitle>
-        <button type="button" onClick={() => app.openSheet("tool", { id: tool.id })} className="press w-full flex items-center gap-3 p-4 rounded-2xl border border-accent/25 text-start shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" style={{ background: "linear-gradient(125deg, rgb(var(--wash)), rgb(var(--surface)) 80%)" }}>
+        <button type="button" onClick={() => (cvOnly ? app.push({ type: "cvreview" }) : app.openSheet("tool", { id: tool.id }))} className="press w-full flex items-center gap-3 p-4 rounded-2xl border border-accent/25 text-start shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" style={{ background: "linear-gradient(125deg, rgb(var(--wash)), rgb(var(--surface)) 80%)" }}>
           <span className="grid place-items-center w-12 h-12 shrink-0 rounded-2xl bg-accent text-on-accent shadow-[0_8px_24px_-8px_rgb(var(--accent))]"><tool.icon size={22} /></span>
           <span className="min-w-0 flex-1"><span className="block text-[15px] font-medium">{tool.name}</span><span className="block text-[12px] text-ink-2 leading-snug">{tool.desc}</span></span><Forward size={18} />
         </button>

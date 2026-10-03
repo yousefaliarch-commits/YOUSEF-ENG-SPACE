@@ -100,6 +100,8 @@ export function SettingsScreen({ app }: any) {
         <SettingsLink icon={SlidersHorizontal} title="صلاحياتي" sub="ما يراه حسابك وما لا يراه، ومن يراسل من" onClick={() => app.push({ type: "permissions" })} />
       </Panel>
       <p className="px-1 text-[10.5px] text-ink-3 leading-relaxed text-center"><Wordmark size="text-[11px]" /> · الإصدار <Num>24</Num> · نسخة تجريبية تعمل بالكامل على جهازك</p>
+      {/* which build this is — the first thing to check when a fix "is not there" on a phone */}
+      <p className="pt-2 pb-1 text-center text-[10.5px] text-ink-4" dir="ltr">EngSpace {__BUILD__.version}{__BUILD__.run ? ` · build ${__BUILD__.run}` : ""} · {__BUILD__.sha} · {__BUILD__.date}</p>
     </div>
   );
 }

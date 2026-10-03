@@ -40,7 +40,7 @@ export function ChecklistsScreen({ app, id }: any) {
 function Inspection({ app, id }: any) {
   const isNew = String(id).startsWith("new:");
   const [x, setX] = useState<any>(() => (isNew ? newInspection(tplOf(String(id).slice(4)), app.profile && app.profile.name) : (app.inspections || []).find((i) => i.id === id)));
-  const [busy, setBusy] = useState(false); const [draft, setDraft] = useState<any>("");
+  const [busy, setBusy] = useState(false); const [focusId, setFocusId] = useState<any>(null);
   if (!x) return <Empty icon={ClipboardCheck} title="القائمة غير موجودة" body="ربما حُذفت من جهاز آخر." action="رجوع" onAction={app.pop} />;
   const t = tplOf(x.template); const custom = x.custom || []; const c = tally(t, x.marks, custom);
   // every change is saved at once (a dropped signal or a closed app never loses a half-filled inspection)
@@ -51,7 +51,7 @@ function Inspection({ app, id }: any) {
     try {
       const rows: any[] = []; t.sections.forEach(([title, items], s) => { rows.push({ section: tr(title) }); items.forEach((text, i) => rows.push({ text: tr(text), mark: x.marks[`${s}.${i}`] || "", note: x.notes[`${s}.${i}`] || "" })); });
       // the engineer's own items go in as typed (never translated), with the same marks, notes and signatures
-      if (custom.length) { rows.push({ section: tr("بنود مخصصة") }); custom.forEach((it) => rows.push({ text: it.text, mark: x.marks[customKey(it)] || "", note: x.notes[customKey(it)] || "" })); }
+      const filled = custom.filter((it) => it.text.trim()); if (filled.length) { rows.push({ section: tr("بنود مخصصة") }); filled.forEach((it) => rows.push({ text: it.text, mark: x.marks[customKey(it)] || "", note: x.notes[customKey(it)] || "" })); }
       // the template's own words follow the interface language; what the member typed (project, zone, notes) is never translated
       const head: [string, string][] = [["المشروع", x.project], ["المنطقة / الدور", x.zone], ["مرجع اللوحة", x.ref], ["التاريخ", x.date], ["المهندس المستلم", x.inspector]];
       const bytes = await inspectionPdf({ title: tr(t.title), scope: tr(t.scope), head: head.map(([k, v]) => [tr(k), v]), rows,
@@ -72,12 +72,12 @@ function Inspection({ app, id }: any) {
     <div className="py-4 space-y-4">
       <div className="px-1"><h1 className="text-[21px] font-medium">{t.title}</h1><p className="text-[12px] text-ink-2">{t.scope}</p></div>
       <Panel className="p-4 grid grid-cols-2 gap-3">{field("project", "المشروع", "اسم المشروع")}{field("zone", "المنطقة / الدور", "مثال: الدور الثالث — محور B")}{field("ref", "مرجع اللوحة", "S-103 Rev.2")}{field("date", "التاريخ", "")}<div className="col-span-2">{field("inspector", "المهندس المستلم", "")}</div></Panel>
-      {t.sections.map(([title, items], s) => <section key={title}><SectionTitle>{title}</SectionTitle><div className="space-y-2">{items.map((text, i) => item(`${s}.${i}`, text))}</div></section>)}
+      {/* the engineer's own items: the button adds an editable row at once (same marks and notes; saved and printed as typed) */}
       <section><SectionTitle>بنود مخصصة</SectionTitle>
-        <div className="space-y-2">{custom.map((it) => item(customKey(it), <bdi {...UGC}>{it.text}</bdi>, () => up({ custom: custom.filter((y) => y.id !== it.id), marks: { ...x.marks, [customKey(it)]: undefined }, notes: { ...x.notes, [customKey(it)]: undefined } })))}</div>
-        <div className="mt-2 flex gap-2"><TextInput value={draft} onChange={setDraft} placeholder="بند إضافي تريد فحصه — مثال: نظافة فتحات الصرف" className="flex-1 min-w-0 h-11 px-3 rounded-xl bg-surface border border-line-2 text-[13px]" />
-          <Secondary onClick={() => { if (draft.trim().length < 3) return; up({ custom: [...custom, newCustom(draft)] }); setDraft(""); }} disabled={draft.trim().length < 3} className="h-11 px-3 shrink-0 press"><Plus size={16} /> إضافة بند مخصص</Secondary></div>
+        {custom.length > 0 && <div className="space-y-2 mb-2">{custom.map((it) => item(customKey(it), <TextInput {...UGC} value={it.text} autoFocus={focusId === it.id} onChange={(v) => up({ custom: custom.map((y) => (y.id === it.id ? { ...y, text: v.slice(0, 300) } : y)) })} placeholder="اكتب البند — مثال: نظافة فتحات الصرف" className="w-full h-10 px-3 rounded-xl bg-canvas/60 border border-line-2 text-[13px]" />, () => up({ custom: custom.filter((y) => y.id !== it.id), marks: { ...x.marks, [customKey(it)]: undefined }, notes: { ...x.notes, [customKey(it)]: undefined } })))}</div>}
+        <Secondary onClick={() => { const c = newCustom(""); setFocusId(c.id); up({ custom: [...custom, c] }); }} className="w-full h-11 press border-dashed"><Plus size={16} /> إضافة بند مخصص</Secondary>
       </section>
+      {t.sections.map(([title, items], s) => <section key={title}><SectionTitle>{title}</SectionTitle><div className="space-y-2">{items.map((text, i) => item(`${s}.${i}`, text))}</div></section>)}
       <Panel className="p-4">
         <p className="text-[12.5px] text-ink-2"><Num className="text-ink">{c.pass}</Num> مطابق · <Num className="text-bad">{c.fail}</Num> غير مطابق · <Num>{c.na}</Num> لا ينطبق · <Num>{c.open}</Num> لم يُفحص</p>
         <div className="mt-3 flex gap-1.5 flex-wrap">{Object.entries(VERDICT).map(([k, l]) => <FilterChip key={k} on={x.verdict === k} onClick={() => up({ verdict: x.verdict === k ? "" : k })}>{l}{c.suggested === k && x.verdict !== k ? " ← مقترح" : ""}</FilterChip>)}</div>

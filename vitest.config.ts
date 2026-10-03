@@ -26,6 +26,7 @@ const lucideStub = {
 };
 
 export default defineConfig({
+  define: { __BUILD__: JSON.stringify({ version: "test", sha: "test", run: "", date: "" }) },
   plugins: [lucideStub],
   // never read .env / .env.local: the suites run the demo; the cloud suite gets its backend from the environment (npm run test:cloud)
   envDir: here("./tests/stubs"),

@@ -275,13 +275,13 @@
  },
  "لوحة الإدارة": {
   "k": "s",
-  "p": "app/TopBar.tsx,features/admin/AdminView.tsx,ui/chrome.tsx",
-  "n": 4
+  "p": "app/TopBar.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
+  "n": 5
  },
  "الإدارة": {
   "k": "s",
-  "p": "app/TopBar.tsx",
-  "n": 1
+  "p": "app/TopBar.tsx,ui/chrome.tsx",
+  "n": 2
  },
  "لون الهوية": {
   "k": "s",
@@ -13891,7 +13891,7 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "بند إضافي تريد فحصه — مثال: نظافة فتحات الصرف": {
+ "اكتب البند — مثال: نظافة فتحات الصرف": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
@@ -14165,6 +14165,11 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
+ "أكّد أن الرقم صافي راتبك الحقيقي للمتابعة.": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
  "أكد أن القيمة تجريبية للمتابعة.": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
@@ -14185,16 +14190,11 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "اكتملت المحاكاة محليًا ولم يُرسل شيء.": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "صافي راتبك {0} ج.م {1} لهذه الخبرة. {2} اكتملت المحاكاة محليًا ولم يُرسل شيء.": {
+ "صافي راتبك {0} ج.م {1} لهذه الخبرة. {2} {3}": {
   "k": "r",
   "p": "features/sheets/sheets.tsx",
   "n": 1,
-  "x": "EL <Num className=\"text-ink\">{fmt(Number(f.salary))}</Num> | Number(f.salary) >= p25 && Number(f.salary) <= p75 ? \"ضمن نط | EL <span className=\"text-accent\">+50 نقطة.</span>"
+  "x": "EL <Num className=\"text-ink\">{fmt(Number(f.salary))}</Num> | Number(f.salary) >= p25 && Number(f.salary) <= p75 ? \"ضمن نط | EL <span className=\"text-accent\">+50 نقطة.</span> | isCloud() ? \"أُضيف رقمك إلى متوسطات السوق — ولا يظهر منفردًا"
  },
  "ضمن نطاق السوق": {
   "k": "s",
@@ -14213,6 +14213,16 @@
  },
  "+50 نقطة.": {
   "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "أُضيف رقمك إلى متوسطات السوق — ولا يظهر منفردًا إلا لمن شاركوا.": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "اكتملت المحاكاة محليًا ولم يُرسل شيء.": {
+  "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
@@ -14304,7 +14314,7 @@
   "n": 1,
   "x": "company(payload.company)?.name"
  },
- "صافي الراتب الشهري": {
+ "الراتب الشهري الصافي": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
@@ -14340,8 +14350,13 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
+ "أؤكد أن هذا صافي راتبي الشهري الحقيقي الحالي.": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
  "أستخدم قيمة تجريبية وأفهم أنها لن تُرسل.": {
-  "k": "x",
+  "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
@@ -17272,11 +17287,6 @@
   "n": 1,
   "x": "next"
  },
- "لوحة الإدارة — معاينة فريق المنصة": {
-  "k": "x",
-  "p": "features/stack/stack.tsx",
-  "n": 1
- },
  "تسجيل الخروج": {
   "k": "x",
   "p": "features/stack/stack.tsx",
@@ -17801,6 +17811,16 @@
   "n": 1
  },
  "مساء الخير": {
+  "k": "s",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "تدقيق السيرة الذاتية الهندسية": {
+  "k": "s",
+  "p": "features/tabs/tabs.tsx",
+  "n": 2
+ },
+ "راجع السير الذاتية للمرشحين بمعايير السوق الهندسي": {
   "k": "s",
   "p": "features/tabs/tabs.tsx",
   "n": 1
@@ -18680,11 +18700,6 @@
  },
  "حسابات مصرية بأرقام السوق الحقيقية، ومراجع ذكي لسيرتك الذاتية — كله على جهازك.": {
   "k": "s",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
- },
- "تدقيق السيرة الذاتية الهندسية": {
-  "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
