@@ -3,6 +3,8 @@
 // hook the UI crawler uses (src/main.tsx).
 export {};
 declare global {
+  // build stamp injected by vite.config.ts (define)
+  const __BUILD__: { version: string; sha: string; run: string; date: string };
   interface Window {
     __LIVE?: any;
     __i18n?: any;

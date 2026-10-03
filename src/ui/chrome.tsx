@@ -94,7 +94,7 @@ export function AppHeader({ app }: any) {
       <div className="flex items-center gap-2"><ArchMark size={22} /><Wordmark size="text-[17px]" /></div>
       <div className="flex items-center">
         {/* staff (moderators, administrators) reach the console from every screen size, the Android app included */}
-        {app.openAdmin && <RoundButton label="لوحة الإدارة" onClick={app.openAdmin} className="press w-10 text-accent"><ShieldCheck size={19} /></RoundButton>}
+        {app.openAdmin && <button type="button" onClick={app.openAdmin} aria-label="لوحة الإدارة" className="press shrink-0 inline-flex items-center gap-1 h-9 px-2.5 me-1 rounded-full bg-accent text-on-accent text-[12px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><ShieldCheck size={15} /> الإدارة</button>}
         <ThemeQuick app={app} />
         <RoundButton label="الإعدادات" data-tour="settings" onClick={() => app.push({ type: "settings" })} className="press w-10"><Settings size={19} /></RoundButton>
         <RoundButton label={`الإشعارات${app.unread ? ` · ${app.unread} غير مقروء` : ""}`} data-tour="notifs" onClick={() => app.push({ type: "notifications" })} className="relative press w-10">

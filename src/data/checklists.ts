@@ -62,8 +62,9 @@ export const newInspection = (t: Template, inspector = "") => ({
 // custom items the engineer added to this inspection: [{ id, text }] — their marks and notes live under "c.<id>"
 export type Custom = { id: string; text: string };
 export const customKey = (c: Custom) => "c." + c.id;
-export const newCustom = (text: string): Custom => ({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), text: text.trim().slice(0, 300) });
-export const itemsOf = (t: Template, custom: Custom[] = []) => [...t.sections.flatMap(([, items], s) => items.map((_, i) => `${s}.${i}`)), ...custom.map(customKey)];
+export const newCustom = (text = ""): Custom => ({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), text: text.trim().slice(0, 300) });
+// a custom row still being typed (no text yet) does not count and is not printed
+export const itemsOf = (t: Template, custom: Custom[] = []) => [...t.sections.flatMap(([, items], s) => items.map((_, i) => `${s}.${i}`)), ...custom.filter((c) => c.text.trim()).map(customKey)];
 // the verdict the marks suggest: any failure → rejected; every item answered and none failed → accepted
 export function tally(t: Template, marks: Record<string, string>, custom: Custom[] = []) {
   const keys = itemsOf(t, custom); const c = { pass: 0, fail: 0, na: 0, open: 0 };

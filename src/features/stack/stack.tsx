@@ -276,6 +276,8 @@ export function ProfileScreen({ app }: any) {
     ...(isCompanyRole(p.role) ? [["الشركة", p.companyName || "—"]] : p.role === "supervisor" ? [["المسمّى", roleTitle(p.role, p.gender) + " — ثابت"]] : [["التخصص", p.role === "engineer" ? discTitle(p.disc, p.gender) : roleTitle(p.role, p.gender)], ["المسار", trackLabel(p.track, p.disc)], ["المستوى", posLabelG(p.pos, p.gender)]]), ["المكان", placeName(p.gov, p.city)]];
   return (
     <div className="py-4 space-y-3">
+      {/* staff: the console first, where it cannot be missed */}
+      {app.openAdmin && <Primary onClick={app.openAdmin} className="w-full h-12 press"><LayoutDashboard size={17} /> لوحة الإدارة</Primary>}
       <Panel className="p-4">
         <div className="flex items-center gap-3"><Monogram name={p.name} role={p.role} photo={p.photo} size={54} /><div className="min-w-0 flex-1"><h2 className="text-[17px] font-medium leading-snug">{displayName(pubA)}</h2><Num className="block text-[12px] text-ink-2 break-all">{p.email}</Num><div className="mt-1.5 flex flex-wrap gap-1.5"><RoleBadge role={p.role} verified={p.verified} gender={p.gender} />{p.pending && <Chip tone="warn"><Clock size={12} /> توثيق قيد المراجعة</Chip>}</div></div></div>
         <dl className="mt-3 grid grid-cols-2 gap-x-3 text-[11.5px]">{facts.map(([k, v]: any) => <div key={k} className="flex justify-between gap-2 border-b border-line py-1.5"><dt className="text-ink-3 shrink-0">{k}</dt><dd className="text-ink text-end leading-snug">{v}</dd></div>)}</dl>
@@ -309,7 +311,6 @@ export function ProfileScreen({ app }: any) {
       <TrustPolicy />
       <Secondary onClick={() => { const next = randHex(4); persist({ anon: next }); app.toast(`معرّفك المجهول الجديد #${next} — نشاطك السابق لا يرتبط به`); }} className="w-full h-11 press"><RefreshCw size={16} /> تجديد المعرّف المجهول الآن</Secondary>
       <Secondary onClick={() => app.openSheet("privacy")} className="w-full h-11 press"><ShieldCheck size={16} /> كيف نحمي هويتك؟</Secondary>
-      {app.openAdmin && <Secondary onClick={app.openAdmin} className="w-full h-11 press"><LayoutDashboard size={16} /> لوحة الإدارة — معاينة فريق المنصة</Secondary>}
       <Secondary onClick={app.signOut} className="w-full h-11 press"><LogOut size={16} /> تسجيل الخروج</Secondary>
       {!confirmDel ? <Quiet onClick={() => setConfirmDel(true)} className="w-full h-11 text-bad/80 hover:text-bad"><Trash2 size={16} /> حذف الحساب وكل بياناتي</Quiet>
         : <Panel className="p-4 border-bad/30"><p className="text-[13px] font-medium text-bad flex items-center gap-1.5"><Trash2 size={15} /> حذف نهائي</p><p className="mt-1 text-[12px] leading-relaxed text-ink-2">يُحذف حسابك وملفك ومشاركاتك وتفاعلاتك من هذا الجهاز نهائيًا، ولا يمكن التراجع.</p><div className="mt-3 flex gap-2"><Primary onClick={app.deleteAccount} className="flex-1 h-11 !bg-bad !text-white"><Trash2 size={15} /> احذف نهائيًا</Primary><Secondary onClick={() => setConfirmDel(false)} className="h-11 px-4">تراجع</Secondary></div></Panel>}

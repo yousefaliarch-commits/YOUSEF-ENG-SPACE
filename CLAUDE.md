@@ -44,7 +44,9 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 ## Commands
 `npm run check` (typecheck + tests + build = CI gate) · `npm run live` (laptop + phone preview, rebuild on save) ·
 `npm run db:start | db:reset | db:test | db:env | db:admin -- email` · `npm run test:cloud` · `npm run cap:sync`.
-CI: check, database (pgTAP + cloud e2e on local Supabase), android (debug APK artifact).
+CI: check, database (pgTAP + cloud e2e on local Supabase), android (debug APK artifact). Phone builds: Actions → "Release
+  preview builds" (APK + unsigned IPA for Sideloadly). `android/app/debug.keystore` is committed on purpose: one fixed debug key so
+  each preview APK installs over the last (a random CI key makes Android refuse the update). Settings shows the build stamp.
 
 ## Performance rules (120 Hz target — see docs/PHASE2.md → Performance)
 - No infinite/idle animation below 64 px or inside bars and lists; no backdrop blur over scrolling content.
