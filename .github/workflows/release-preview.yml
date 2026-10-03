@@ -1,0 +1,91 @@
+# Preview builds for phones, published as one GitHub Release: the Android APK and an unsigned iOS package for sideloading.
+#  · app-debug.apk — debug-signed; Android installs it after "allow from this source".
+#  · engspace.ipa  — built WITHOUT any Apple certificate. Sideloadly (or AltStore) signs it on your PC with your own Apple ID
+#    when it installs it; with a free Apple ID that signature lasts 7 days, then reinstall the same file.
+# Both connect to the live Frankfurt project. Run from Actions → "Release preview builds" → Run workflow, or
+# `gh workflow run release-preview.yml -f tag=v0.1.2-preview`. Re-running with the same tag replaces the files.
+name: Release preview builds
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag (e.g. v0.1.1-preview)
+        required: true
+        default: v0.1.1-preview
+permissions:
+  contents: write
+env:
+  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+  VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+  VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - run: npx cap sync android
+      - run: ./gradlew assembleDebug --no-daemon
+        working-directory: android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx cap sync ios
+      - name: Build for iPhone without signing
+        run: |
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" DEVELOPMENT_TEAM="" \
+            -quiet build
+      - name: Package engspace.ipa
+        run: |
+          app=$(find build/ios/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -1)
+          [ -n "$app" ] || { echo "::error::No .app was built"; exit 1; }
+          mkdir -p Payload && cp -R "$app" Payload/ && zip -qry engspace.ipa Payload
+          ls -la engspace.ipa
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios
+          path: engspace.ipa
+
+  publish:
+    needs: [android, ios]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          NOTES="Preview builds of EngSpace, connected to the live platform (Frankfurt). Built from ${GITHUB_SHA::7}.
+
+          Android: download app-debug.apk on the phone and open it (allow installing from this source when asked).
+          iPhone: download engspace.ipa on your PC and install it with Sideloadly using your Apple ID (with a free Apple ID the install lasts 7 days; then reinstall). On the iPhone, trust the developer profile under Settings → General → VPN & Device Management."
+          files="out/android/app-debug.apk out/ios/engspace.ipa"
+          if gh release view "$TAG" >/dev/null 2>&1; then gh release upload "$TAG" $files --clobber
+          else gh release create "$TAG" $files --prerelease --target "$GITHUB_SHA" --title "EngSpace ${TAG}" --notes "$NOTES"; fi
