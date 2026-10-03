@@ -14,10 +14,6 @@ on:
         default: v0.1.1-preview
 permissions:
   contents: write
-env:
-  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-  VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-  VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -34,6 +30,11 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+        # the live keys reach the build only — the tests run in demo mode, as in CI
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       - run: npx cap sync android
       - run: ./gradlew assembleDebug --no-daemon
         working-directory: android
@@ -52,6 +53,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        # the live keys reach the build only — the tests run in demo mode, as in CI
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       - run: npx cap sync ios
       - name: Build for iPhone without signing
         run: |
