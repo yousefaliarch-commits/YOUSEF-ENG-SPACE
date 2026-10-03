@@ -10,7 +10,7 @@ import { TOOLS } from "../../data/tools";
 import { authorOf, cleanName, displayName, gx } from "../../domain/identity";
 import { ALLOWANCES, COMPANY_MIN_SAMPLE, DISC, EMPLOYERS, EXP, FX, GOALS, GOALS_CO, POSITIONS, ROLE, TRACKS, can, label, posShort, toolOpen, trackLabel, tracksFor } from "../../domain/taxonomy";
 import { UGC } from "../../i18n/i18n";
-import { GOAL_TOOL, Money, egyptNet, estimateFor, marketFor, matchJob, personaExp, personaTitle, quality, reportsFor, round500, sampleSize } from "../../lib/helpers";
+import { GOAL_TOOL, Money, estimateFor, marketFor, matchJob, personaExp, personaTitle, quality, reportsFor, round500, sampleSize } from "../../lib/helpers";
 import { countComments } from "../../lib/posts";
 import { SEARCH_THRESHOLD, buildSearchIndex, searchPosts } from "../../lib/search";
 import { byNewest } from "../../lib/time";
@@ -221,7 +221,7 @@ export function CompaniesBody({ app }: any) {
 // Salaries filters (audit): discipline → sub-discipline → years → place — the same order as the market model's factors.
 export function SalariesBody({ app }: any) {
   const pr = app.profile; const d0 = (app.isCo ? "civil" : pr.disc); const [disc, setDisc] = useState<any>(d0); const [exp, setExp] = useState<any>(app.isCo ? "3-5" : personaExp(pr)); const [g, setG] = useState<any>(pr.gov); const [city, setCity] = useState(pr.city || null); const [track, setTrack] = useState<any>(app.isCo ? "site" : pr.track); const [showPlace, setShowPlace] = useState(false);
-  const m = marketFor(disc, exp, g, track, city); const n = sampleSize(disc, exp, g); const q = quality(n); const reports = reportsFor(disc, exp, g); const net = egyptNet(m.p50);
+  const m = marketFor(disc, exp, g, track, city); const n = sampleSize(disc, exp, g); const q = quality(n); const reports = reportsFor(disc, exp, g);
   const thin = app.isCo && n < COMPANY_MIN_SAMPLE; // company accounts: a cell with too few reports could point at individuals
   // cloud: live member reports above the model; give-to-get comes from the server's answer, not from this device
   const live = useLiveSalary(disc, exp, g, app.salaryRev); const CLOUD = isCloud();
@@ -229,7 +229,7 @@ export function SalariesBody({ app }: any) {
   return (
     <div className="space-y-4">
       {app.isCo && <div className="p-3.5 rounded-2xl border border-accent/20 bg-wash text-[12px] leading-relaxed"><p className="font-medium inline-flex items-center gap-1.5"><Scale size={14} className="text-accent" /> حدود اطلاع حسابات الشركات</p><p className="mt-1 text-ink-2">متوسطات ونطاقات السوق فقط — لتعرض أرقامًا عادلة. لا أرقام فردية، ولا تفاصيل مسميات لشركات غير شركتك.</p></div>}
-      <div className="px-1 flex items-start justify-between gap-3"><p className="text-[12px] text-ink-2 leading-snug">إجمالي شهري بالجنيه قبل الضرائب · نموذج {DATASET.version}</p>{can(pr, "reveal") && <Primary onClick={() => app.openSheet("contribute", { disc, exp, gov: g, city })} className="h-10 px-4 text-[13px] press shrink-0">شارك راتبك</Primary>}</div>
+      <div className="px-1 flex items-start justify-between gap-3"><p className="text-[12px] text-ink-2 leading-snug">صافي شهري بالجنيه — ما يصل حسابك بعد الضرائب والتأمينات · نموذج {DATASET.version}</p>{can(pr, "reveal") && <Primary onClick={() => app.openSheet("contribute", { disc, exp, gov: g, city })} className="h-10 px-4 text-[13px] press shrink-0">شارك راتبك</Primary>}</div>
       <div className="space-y-2">
         <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{DISC.map(([id, l]: any) => <FilterChip key={id} on={disc === id} onClick={() => { setDisc(id); if (!tracksFor(id).some((t) => t[0] === track)) setTrack("site"); }}>{l}</FilterChip>)}</div>
         <div className="-mx-4 px-4 flex gap-2 overflow-x-auto no-scrollbar">{tracksFor(disc).map(([id]: any) => <FilterChip key={id} on={track === id} onClick={() => setTrack(id)}>{trackLabel(id, disc)}</FilterChip>)}</div>
@@ -244,7 +244,7 @@ export function SalariesBody({ app }: any) {
         {thin ? <p className="mt-2 p-3 rounded-xl bg-canvas/60 border border-line text-[12px] leading-relaxed text-ink-2 flex items-start gap-2"><LockKeyhole size={13} className="shrink-0 mt-0.5 text-ink-3" />عينة صغيرة (<Num>{n}</Num> تقرير) — تُخفى عن حسابات الشركات حتى <Num>{COMPANY_MIN_SAMPLE}</Num> تقريرًا حمايةً للأفراد. وسّع المكان أو الخبرة.</p> : <>
         <div className="mt-1"><Money n={m.p50} size="text-[38px]" /></div>
         <p className="mt-3 text-[11px] text-ink-2">التوزيع من P10 إلى P90 — النطاق الغامق هو الربعان الأوسطان</p><div className="mt-1"><Percentiles m={m} /></div></>}
-        <div className="mt-3 pt-3 border-t border-line grid grid-cols-2 gap-2 text-[11.5px]"><div className="text-ink-2">صافي المتوسط تقريبًا <Num className="text-ink">{fmt(net.net)}</Num> ج.م</div><button type="button" onClick={() => app.openSheet("methodology")} className="inline-block py-1 -my-1 text-accent text-end hover:underline underline-offset-4">المنهجية والمصادر</button></div>
+        <div className="mt-3 pt-3 border-t border-line grid grid-cols-2 gap-2 text-[11.5px]"><button type="button" onClick={() => app.openSheet("tool", { id: "net", net: m.p50 })} className="text-start text-ink-2 hover:text-accent">الإجمالي المقابل؟ حاسبة الصافي والإجمالي</button><button type="button" onClick={() => app.openSheet("methodology")} className="inline-block py-1 -my-1 text-accent text-end hover:underline underline-offset-4">المنهجية والمصادر</button></div>
       </Panel>
       <Panel className="p-4"><h3 className="text-[13px] font-medium">حسب المسمّى الدقيق</h3><ul className="mt-2 divide-y divide-line">{POSITIONS.map(([id, l, e, k]: any) => { const mm = marketFor(disc, e, g, track, city); return <li key={id} className={`py-2.5 flex items-center justify-between gap-3 text-[13px] ${id === pr.pos && !app.isCo ? "-mx-2 px-2 rounded-lg bg-wash" : ""}`}><span className="text-ink-2 leading-snug">{l}</span><span className="shrink-0"><Num className="font-semibold">{fmt(round500(mm.p50 * k))}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></li>; })}</ul></Panel>
       <Panel className="p-4"><h3 className="text-[13px] font-medium">حسب نوع الجهة</h3><ul className="mt-2 divide-y divide-line">{EMPLOYERS.map(([id, l, k]: any) => <li key={id} className={`py-2.5 flex items-center justify-between gap-3 text-[13px] ${id === "backoffice" ? "-mx-2 px-2 rounded-lg bg-info/10" : ""}`}><span className={id === "backoffice" ? "text-info inline-flex items-center gap-1.5 leading-snug" : "text-ink-2 leading-snug"}>{id === "backoffice" && <Coins size={13} className="shrink-0" />}{l}</span><span className="shrink-0"><Num className="font-semibold">{fmt(round500(m.p50 * k))}</Num> <span className="text-[11px] text-ink-3">ج.م</span></span></li>)}</ul><p className="mt-2 text-[10.5px] text-ink-3">المكاتب الخلفية تسعّر بالعملة الأجنبية — راجع فئة «مكاتب خلفية» في الشركات.</p></Panel>

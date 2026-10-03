@@ -7,46 +7,9 @@
 //  · Social insurance: 11% of the monthly wage up to the insurable cap; bonus months carry no insurance here.
 //  Nothing here leaves the device: an offer a member types is never sent to the server.
 // =====================================================================
-import { TAX } from "../lib/helpers";
 
-// annual taxable income above `over` → tax starts from bracket index `from` (the lower bands are not granted)
-export const BRACKET_LOSS: [number, number][] = [[1200000, 6], [900000, 4], [800000, 3], [700000, 2], [600000, 1]];
-
-export function annualTax(taxable: number) {
-  if (taxable <= 0) return 0;
-  const loss = BRACKET_LOSS.find(([over]) => taxable > over); const from = loss ? loss[1] : 0;
-  let tax = 0, prev = 0;
-  TAX.brackets.forEach(([lim, r]: any, i: number) => {
-    if (taxable > prev) tax += (Math.min(taxable, lim) - prev) * (i < from ? (TAX.brackets[from] as any)[1] : r);
-    prev = lim;
-  });
-  return tax;
-}
-
-// monthly gross (+ a yearly bonus amount) → what reaches the account
-export function netPay(monthlyGross: number, bonusYear = 0) {
-  const g = Math.max(0, Number(monthlyGross) || 0); const bonus = Math.max(0, Number(bonusYear) || 0);
-  const insMonthly = Math.min(g, TAX.cap) * TAX.ins;
-  const yearGross = g * 12 + bonus;
-  const taxable = Math.max(0, yearGross - insMonthly * 12 - TAX.exempt);
-  const taxYear = annualTax(taxable);
-  const netYear = yearGross - insMonthly * 12 - taxYear;
-  // a regular month carries its share of the year's tax on the salary alone; the bonus carries the rest
-  const taxSalaryOnly = annualTax(Math.max(0, g * 12 - insMonthly * 12 - TAX.exempt));
-  return {
-    gross: g, ins: Math.round(insMonthly), tax: Math.round(taxSalaryOnly / 12), taxYear: Math.round(taxYear), yearGross: Math.round(yearGross),
-    netYear: Math.round(netYear), netRegular: Math.round(g - insMonthly - taxSalaryOnly / 12), bonusNet: Math.round(bonus - (taxYear - taxSalaryOnly)),
-    rate: yearGross ? (yearGross - netYear) / yearGross : 0,
-  };
-}
-
-// the gross a member must ask for to take home `net` in a regular month (bisection: the net rises with the gross)
-export function grossForNet(net: number) {
-  const target = Math.max(0, Number(net) || 0); if (!target) return 0;
-  let lo = target, hi = target * 2 + 50000;
-  for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (netPay(mid).netRegular < target) lo = mid; else hi = mid; }
-  return Math.ceil(hi / 10) * 10;
-}
+import { netPay } from "./pay";
+export { BRACKET_LOSS, annualTax, grossForNet, netPay } from "./pay";
 
 // where a monthly figure sits in a distribution { p10, p25, p50, p75, p90 } — a percentile from 1 to 99
 export function percentileOf(v: number, m: any) {
@@ -75,6 +38,12 @@ export function offerPackage(o: { base?: any; allowances?: any; bonusMonths?: an
   const base = Number(o.base) || 0, alw = Number(o.allowances) || 0, months = Number(o.bonusMonths) || 0;
   const monthly = base + alw; const pay = netPay(monthly, base * months);
   return { monthly, base, allowances: alw, bonusMonths: months, ...pay, medicalValue: o.medical ? MEDICAL_VALUE : 0 };
+}
+// The same offer as engineers discuss it — in NET: net basic + net monthly allowances; bonus months at the net basic
+// (approximation: a bonus is taxed at the marginal rate, so its net is somewhat lower — the screen says so)
+export function offerNet(o: { base?: any; allowances?: any; bonusMonths?: any; medical?: boolean }) {
+  const base = Number(o.base) || 0, alw = Number(o.allowances) || 0, months = Number(o.bonusMonths) || 0; const monthly = base + alw;
+  return { monthly, base, allowances: alw, bonusMonths: months, netYear: monthly * 12 + base * months, medicalValue: o.medical ? MEDICAL_VALUE : 0 };
 }
 // what private family medical cover is worth a month, roughly, when comparing offers
 export const MEDICAL_VALUE = 1200;

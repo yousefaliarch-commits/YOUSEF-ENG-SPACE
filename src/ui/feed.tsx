@@ -122,7 +122,7 @@ export function JobCard({ job, app, compact = false }: any) {
         <div className="mt-2.5"><div className="text-[10.5px] text-ink-3 inline-flex items-center gap-1"><Sparkles size={10} className="text-accent" /> النطاق المتوقع — تقدير EngSpace</div><EstimateBar e={e} compact /></div>
         <div className="mt-2 flex flex-wrap gap-1.5">{mt && <Chip tone={mt.tone} className="h-6 px-2 text-[11px]"><Num>{mt.score}%</Num> {mt.tier}</Chip>}{contacted && <Chip tone="verified" className="h-6 px-2 text-[11px]"><Check size={11} /> تواصلت</Chip>}{!compact && <Chip className="h-6 px-2 text-[11px] gap-1">{ct.email && <Mail size={11} />}{ct.phone && <Phone size={11} />} التقديم مباشرة</Chip>}{!compact && <Chip className="h-6 px-2 text-[11px]">{label(WORK_MODES, job.mode)} · {label(JOB_TYPES, job.type)}</Chip>}{job.note && !compact && <Chip tone="info" className="h-6 px-2 text-[11px]">{job.note}</Chip>}</div>
       </button>
-      {!compact && <div className="mt-2 -mb-1 flex items-center justify-between gap-2"><span className="text-[11px] text-ink-3">الوسط المتوقع <Num className="text-ink-2">{fmt(e.mid)}</Num> ج.م · <Num>{e.n}</Num> تقرير</span>
+      {!compact && <div className="mt-2 -mb-1 flex items-center justify-between gap-2"><span className="text-[11px] text-ink-3">الوسط المتوقع <Num className="text-ink-2">{fmt(e.mid)}</Num> ج.م صافي · <Num>{e.n}</Num> تقرير</span>
         <RoundButton label={saved ? "إلغاء الحفظ" : "حفظ الوظيفة"} aria-pressed={saved} active={saved} onClick={() => { app.toggleSaved("job:" + job.id); app.toast(saved ? "أُزيلت من المحفوظات" : "حُفظت الوظيفة"); }} className="w-10 h-10 press"><Bookmark size={17} fill={saved ? "currentColor" : "none"} /></RoundButton></div>}
     </Panel>
   );

@@ -20,8 +20,12 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 - **Privacy model** (enforced in SQL, tested in supabase/tests): server-built author snapshots; no client-readable
   account id on content (`private.authorship`); anonymous snapshots carry no name/age/city/employer/grad year; threads
   only via functions; staff see `mod_ref`, never names behind anonymous items.
+- **Salaries are NET (الصافي) everywhere** — model (`marketFor` converts gross anchors with `src/domain/pay.ts`), companies,
+  shares (`salary_shares.salary` is net; pre-net rows converted, `gross_original` kept), tools, labels. Gross appears only in
+  the net ⇄ gross calculator. `private.net_of_gross()` mirrors `netPay()` (tests pin both).
 - Money by role: engineers individual figures; HR/owner aggregates (≥ 5 reports per cell); field staff none — their Tools tab
-  shows only the site tools + checklists (`blockedFor(...).toolsOnly`, `toolOpen`), never a salary/offer/net tool.
+  shows only the site tools + checklists (`blockedFor(...).toolsOnly`, `toolOpen`). HR's Tools tab: CV review only.
+- Staff (`profiles.staff` moderator/admin; `role` stays engineer) reach the console from the header on every device.
 - Verification documents: private bucket, own folder only, deleted at decision/withdrawal, **7 days max** (pg_cron +
   `purge-verification` sweep). Employer accounts are never verified.
 - Deleting an account deletes everything it wrote.

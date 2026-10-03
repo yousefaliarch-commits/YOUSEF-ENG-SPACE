@@ -5,6 +5,10 @@ import {
   Sparkles, ThumbsDown, ThumbsUp, Vote, Wallet, Wrench
 } from "lucide-react";
 import { BACKOFFICE_MULT, CAT_MULT, label } from "../domain/taxonomy";
+import { toNet } from "../domain/pay";
+
+// company figures are modeled on gross like the market table; members see them NET (الصافي)
+const netFig = (g?: any) => (Number.isFinite(g) && g > 0 ? Math.round(toNet(g) / 500) * 500 : g);
 
 export const ROOMS = [
   { id: "tech", name: "المكتب الفني", desc: "حصر، مستخلصات، لوحات تنفيذية", members: 4820, icon: Layers },
@@ -41,7 +45,7 @@ const LOGO_URLS = import.meta.glob("../assets/logos/*.png", { eager: true, impor
 const logoUrl = (id: string) => LOGO_URLS[`../assets/logos/${id}.png`] || null;
 export const LOGO_FILES: Record<string, string> = Object.fromEntries(Object.entries(LOGO_MANIFEST as Record<string, string>).filter(([id]: any) => logoUrl(id)));
 
-export const co = (id?: any, name?: any, en?: any, cat?: any, founded?: any, hq?: any, own?: any, size?: any, grade?: any, sector?: any, median?: any, reports?: any, recommend?: any, range?: any, perks?: any, bands?: any, reviews?: any, extra?: any) => ({ id, name, en, cat, founded, hq, own, size, grade, sector, median, reports, recommend, range, perks, bands, reviews: reviews || [], logo: LOGO_FILES[id] ? logoUrl(id) : null, logoSrc: LOGO_FILES[id] || null, origin: "مصر", pay: { basis: "EGP", mult: 1 }, ...(extra || {}) });
+export const co = (id?: any, name?: any, en?: any, cat?: any, founded?: any, hq?: any, own?: any, size?: any, grade?: any, sector?: any, median?: any, reports?: any, recommend?: any, range?: any, perks?: any, bands?: any, reviews?: any, extra?: any) => ({ id, name, en, cat, founded, hq, own, size, grade, sector, median: netFig(median), reports, recommend, range: range && range.map(netFig), perks, bands: (bands || []).map(([r, m, n]: any) => [r, netFig(m), n]), reviews: reviews || [], logo: LOGO_FILES[id] ? logoUrl(id) : null, logoSrc: LOGO_FILES[id] || null, origin: "مصر", pay: { basis: "EGP", mult: 1 }, ...(extra || {}) });
 
 export const bo = (id?: any, name?: any, en?: any, origin?: any, ccy?: any, hq?: any, sector?: any, size?: any, reports?: any, recommend?: any, perks?: any, bands?: any, extra?: any) => { const base = 30000; const med = Math.round(base * BACKOFFICE_MULT / 500) * 500; return co(id, name, en, "backoffice", extra?.founded || null, hq, `دولي — المقر ${origin}`, size, "—", sector, med, reports, recommend, [Math.round(med * 0.55 / 500) * 500, Math.round(med * 2.2 / 500) * 500], perks, bands, extra?.reviews, { origin, pay: { basis: ccy, mult: BACKOFFICE_MULT } }); };
 

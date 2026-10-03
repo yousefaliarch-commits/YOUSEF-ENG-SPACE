@@ -184,7 +184,7 @@ export const Percentiles = ({ m, compact = false }: any) => (
 // Expected range for a job: EngSpace estimate, never an employer figure
 export const EstimateBar = ({ e, compact = false }: any) => (
   <div>
-    <div className="flex items-baseline gap-1.5 flex-wrap"><Num className={`${compact ? "text-[17px]" : "text-[26px]"} font-semibold tracking-[-0.03em] leading-none`}>{fmt(e.lo)}–{fmt(e.hi)}</Num><span className="text-[11px] text-ink-2">ج.م / شهر</span>{e.ccy && <span className="text-[10.5px] text-info">≈ {fmt(Math.round(e.lo / FX[e.ccy]))}–{fmt(Math.round(e.hi / FX[e.ccy]))} {e.ccy}</span>}</div>
+    <div className="flex items-baseline gap-1.5 flex-wrap"><Num className={`${compact ? "text-[17px]" : "text-[26px]"} font-semibold tracking-[-0.03em] leading-none`}>{fmt(e.lo)}–{fmt(e.hi)}</Num><span className="text-[11px] text-ink-2">ج.م صافي / شهر</span>{e.ccy && <span className="text-[10.5px] text-info">≈ {fmt(Math.round(e.lo / FX[e.ccy]))}–{fmt(Math.round(e.hi / FX[e.ccy]))} {e.ccy}</span>}</div>
     {!compact && <div className="relative h-5 mt-1"><span className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1 rounded-full bg-track" /><span className="absolute top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-accent/80" style={{ insetInlineStart: "18%", width: "64%" }} /><span className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-accent border-2 border-surface" style={{ insetInlineStart: `calc(${18 + ((e.mid - e.lo) / Math.max(1, e.hi - e.lo)) * 64}% - 5px)` }} /></div>}
   </div>
 );

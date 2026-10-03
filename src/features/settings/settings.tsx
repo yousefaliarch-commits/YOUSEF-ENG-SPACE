@@ -168,7 +168,7 @@ export function guideSections(app?: any) {
     L3("كلها تقديرات — المرجع دائمًا اللوحات والمواصفات المعتمدة للمشروع.", null, "All are estimates — the approved project drawings and specifications always govern."),
   ], action: [L3("افتح الأدوات", "افتحي الأدوات", "Open Tools"), () => app.setTab("tools")] });
   if (!sup && !hr) S.push({ id: "tools", icon: Calculator, title: L3("الأدوات", null, "Tools"), points: [
-    L3("حاسبة الصافي: من الإجمالي إلى ما يصل حسابك بعد الضرائب والتأمينات.", null, "Net calculator: from gross to what reaches your account after tax and social insurance."),
+    L3("كل أرقام الرواتب في التطبيق صافية — ما يصل حسابك بعد الضرائب والتأمينات. حاسبة الصافي والإجمالي تحوّل بينهما عند الحاجة.", null, "Every salary figure in the app is net — what reaches your account after tax and social insurance. The net ⇄ gross calculator converts when you need it."),
     L3("مقارن العروض وسكريبت التفاوض وتوقيت الزيادة: قرارات مبنية على أرقام.", null, "Offer comparer, negotiation script and raise timing: decisions built on numbers."),
     L3("خريطة المسار، وفاحص العقد، وتكلفة الانتقال، والعلاوة مقابل التضخم.", null, "Career path map, contract checker, relocation cost, and raise vs inflation."),
   ], action: [L3("افتح الأدوات", "افتحي الأدوات", "Open Tools"), () => app.goMarket("tools")] });
