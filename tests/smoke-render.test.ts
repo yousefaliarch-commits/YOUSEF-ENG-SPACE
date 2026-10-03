@@ -48,6 +48,10 @@ const setups: [string, string, () => void, string][] = [
   ["CV review deep link (lazy chunk)", "#app/cvreview", () => signIn("ar"), "CVReviewScreen"],
   ["admin console (lazy chunk)", "#admin", () => signIn("ar"), "AdminView"],
   // company accounts carry no discipline — the post screen's reply box once read TITLES[undefined][0] and crashed for them
+  ["notification preferences", "#app/notifprefs", () => signIn("ar"), "NotificationPrefsScreen"],
+  ["notification center", "#app/notifications", () => signIn("ar"), "NotificationsScreen"],
+  ["notification preferences (English)", "#app/notifprefs", () => signIn("en"), "NotificationPrefsScreen"],
+  ["notification center (English)", "#app/notifications", () => signIn("en"), "NotificationsScreen"],
   ["a post, as HR", "#app/post/p1", () => signInAs({ role: "hr", disc: null, companyName: "ريدكون" }), "ReplyBox"],
   ["a post, as an employer", "#app/post/p1", () => signInAs({ role: "owner", disc: null, companyName: "ريدكون" }), "ReplyBox"],
 ];
@@ -72,4 +76,19 @@ test("every handler reached from those screens runs without throwing", () => {
   for (const [, hash, setup] of setups) { freshPage(); setup(); location.hash = hash; crawl(el(C.App)); }
   expect(handlers).toBeGreaterThan(50);
   expect(handlerErrors).toEqual([]);
+});
+
+test("the push primer renders for each role, in each state, and its handlers run", () => {
+  for (const role of ["engineer", "supervisor", "hr"]) {
+    const app: any = { profile: { role }, native: false, enablePush: async () => ({ ok: true }), pushPrimerLater() {}, closeSheet() {}, push() {} };
+    count = 0; seen.clear(); render(el(C.PushPrimerSheet, { app })); expect(seen.has("PushPrimerSheet")).toBe(true);
+    const errs: string[] = []; handlers = 0; const before = handlerErrors.length; crawl(el(C.PushPrimerSheet, { app })); expect(handlerErrors.length).toBe(before); void errs;
+  }
+});
+
+test("a job from an employer whose company is not in the registry renders (no id, no English name) — it once crashed every member's feed", () => {
+  const job = { id: "j9", title: "مهندس موقع أول", co: null, coName: "ريدكون", gov: "cairo", city: "nasr", disc: "civil", sub: null, years: [5, 8], mode: null, desc: "وصف", reqs: [], skills: [], contact: { email: "j@example.com" }, when: "الآن" };
+  const app: any = { saved: {}, contacted: {}, logos: {}, profile: { role: "engineer", disc: "civil", gov: "cairo" }, push() {}, moneyAccess: "full", jobStats: {}, toast() {} };
+  count = 0; seen.clear(); render(el(C.JobCard, { job, app })); expect(seen.has("CompanyLogo")).toBe(true);
+  render(el(C.CompanyLogo, { c: { name: "ريدكون" } })); expect(C.hueOf(undefined)).toBe(7);
 });

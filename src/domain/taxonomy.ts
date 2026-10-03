@@ -203,7 +203,7 @@ export const SITE_TOOLS = ["concrete", "rebar", "masonry", "units"];
 
 export const SUPERVISOR_DENY = "حساب مشرف الموقع: المجتمع وأدوات الموقع وقوائم الفحص فقط — الرواتب والوظائف والشركات غير متاحة له";
 
-export const SUPERVISOR_NOTIFS = ["reply", "reaction", "ama", "privacy", "message", "mod", "report", "verify"];
+export const SUPERVISOR_NOTIFS = ["reply", "mention", "reaction", "ama", "privacy", "message", "team", "support", "test", "mod", "report", "verify"];
 
 export const tabsFor = (p?: any) => (p && p.role === "supervisor" ? TABS.filter((t) => SUPERVISOR_TABS.includes(t.id)) : TABS);
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- the status-bar icon of a push notification: the EngSpace mark, one color (Android tints it) — generated from src/ui/brand-mark.json -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M6.56,2.32 L22.00,2.32 L18.58,5.74 L6.08,5.74 L6.08,8.08 L16.98,8.08 L22.00,13.07 L22.00,16.46 L16.74,21.68 L2.00,21.68 L2.00,18.50 L14.94,18.50 L18.70,14.75 L15.30,11.32 L2.00,11.32 L2.00,6.88 Z M2.00,13.52 L15.48,13.52 L12.54,16.46 L2.00,16.46 Z"/>
+</vector>
