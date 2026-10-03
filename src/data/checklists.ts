@@ -54,15 +54,19 @@ export const TEMPLATES: Template[] = [
 export const RESULT = { pass: "مطابق", fail: "غير مطابق", na: "لا ينطبق" } as const;
 export const VERDICT = { accepted: "مقبول", conditional: "مقبول بملاحظات", rejected: "مرفوض — يعاد الاستلام" } as const;
 
-// a filled inspection: { id, template, project, zone, ref, inspector, date, marks: { "s.i": "pass" | "fail" | "na" }, notes: {}, verdict }
+// a filled inspection: { id, template, project, zone, ref, inspector, date, marks: { "s.i" | "c.<id>": "pass" | "fail" | "na" }, notes: {}, custom: [], verdict }
 export const newInspection = (t: Template, inspector = "") => ({
   id: "qc-" + Date.now().toString(36), template: t.id, project: "", zone: "", ref: "", inspector, date: new Date().toISOString().slice(0, 10),
-  marks: {} as Record<string, string>, notes: {} as Record<string, string>, verdict: "", at: Date.now(),
+  marks: {} as Record<string, string>, notes: {} as Record<string, string>, custom: [] as Custom[], verdict: "", at: Date.now(),
 });
-export const itemsOf = (t: Template) => t.sections.flatMap(([, items], s) => items.map((_, i) => `${s}.${i}`));
+// custom items the engineer added to this inspection: [{ id, text }] — their marks and notes live under "c.<id>"
+export type Custom = { id: string; text: string };
+export const customKey = (c: Custom) => "c." + c.id;
+export const newCustom = (text: string): Custom => ({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), text: text.trim().slice(0, 300) });
+export const itemsOf = (t: Template, custom: Custom[] = []) => [...t.sections.flatMap(([, items], s) => items.map((_, i) => `${s}.${i}`)), ...custom.map(customKey)];
 // the verdict the marks suggest: any failure → rejected; every item answered and none failed → accepted
-export function tally(t: Template, marks: Record<string, string>) {
-  const keys = itemsOf(t); const c = { pass: 0, fail: 0, na: 0, open: 0 };
+export function tally(t: Template, marks: Record<string, string>, custom: Custom[] = []) {
+  const keys = itemsOf(t, custom); const c = { pass: 0, fail: 0, na: 0, open: 0 };
   for (const k of keys) { const m = marks[k]; if (m === "pass" || m === "fail" || m === "na") c[m]++; else c.open++; }
   return { ...c, total: keys.length, suggested: c.fail ? "rejected" : c.open ? "" : "accepted" };
 }

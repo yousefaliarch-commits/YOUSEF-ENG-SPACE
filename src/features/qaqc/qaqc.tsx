@@ -6,8 +6,8 @@
 // =====================================================================
 import { useState } from "react";
 import { ClipboardCheck, FileDown, Plus, Trash2 } from "lucide-react";
-import { RESULT, TEMPLATES, VERDICT, newInspection, tally } from "../../data/checklists";
-import { tr } from "../../i18n/i18n";
+import { RESULT, TEMPLATES, VERDICT, customKey, newCustom, newInspection, tally } from "../../data/checklists";
+import { UGC, tr } from "../../i18n/i18n";
 import { inspectionPdf, saveOrShare } from "../../lib/report-pdf";
 import { Empty, SectionTitle, TextInput } from "../../ui/chrome";
 import { Chip, FilterChip, Num, Panel, Primary, Secondary } from "../../ui/primitives";
@@ -27,7 +27,7 @@ export function ChecklistsScreen({ app, id }: any) {
       </section>
       <section><SectionTitle>قوائمي</SectionTitle>
         {list.length === 0 ? <Empty icon={ClipboardCheck} title="لا قوائم محفوظة بعد" body="ابدأ قائمة من الأعلى — تُحفظ تلقائيًا أثناء الملء." /> :
-          <div className="space-y-2">{list.map((x) => { const t = tplOf(x.template); const c = tally(t, x.marks); return (
+          <div className="space-y-2">{list.map((x) => { const t = tplOf(x.template); const c = tally(t, x.marks, x.custom); return (
             <button key={x.id} type="button" onClick={() => app.push({ type: "inspection", id: x.id })} className="press w-full p-3.5 rounded-2xl bg-surface border border-line text-start">
               <div className="flex items-center justify-between gap-2"><span className="text-[13.5px] font-medium">{t.title}</span>{x.verdict ? <Chip tone={x.verdict === "accepted" ? "good" : x.verdict === "rejected" ? "bad" : "warn"} className="h-6 px-2 text-[10.5px]">{VERDICT[x.verdict]}</Chip> : <span className="text-[11px] text-ink-3">مسودة</span>}</div>
               <p className="mt-1 text-[11.5px] text-ink-2">{[x.project, x.zone, x.date].filter(Boolean).join(" · ") || "—"} · <Num>{c.pass + c.fail + c.na}</Num>/<Num>{c.total}</Num></p>
@@ -40,9 +40,9 @@ export function ChecklistsScreen({ app, id }: any) {
 function Inspection({ app, id }: any) {
   const isNew = String(id).startsWith("new:");
   const [x, setX] = useState<any>(() => (isNew ? newInspection(tplOf(String(id).slice(4)), app.profile && app.profile.name) : (app.inspections || []).find((i) => i.id === id)));
-  const [busy, setBusy] = useState(false);
+  const [busy, setBusy] = useState(false); const [draft, setDraft] = useState<any>("");
   if (!x) return <Empty icon={ClipboardCheck} title="القائمة غير موجودة" body="ربما حُذفت من جهاز آخر." action="رجوع" onAction={app.pop} />;
-  const t = tplOf(x.template); const c = tally(t, x.marks);
+  const t = tplOf(x.template); const custom = x.custom || []; const c = tally(t, x.marks, custom);
   // every change is saved at once (a dropped signal or a closed app never loses a half-filled inspection)
   const up = (patch?: any) => { const n = { ...x, ...patch, at: Date.now() }; setX(n); app.saveInspection(n); };
   const mark = (k?: any, m?: any) => up({ marks: { ...x.marks, [k]: x.marks[k] === m ? "" : m } });
@@ -50,6 +50,8 @@ function Inspection({ app, id }: any) {
     setBusy(true);
     try {
       const rows: any[] = []; t.sections.forEach(([title, items], s) => { rows.push({ section: tr(title) }); items.forEach((text, i) => rows.push({ text: tr(text), mark: x.marks[`${s}.${i}`] || "", note: x.notes[`${s}.${i}`] || "" })); });
+      // the engineer's own items go in as typed (never translated), with the same marks, notes and signatures
+      if (custom.length) { rows.push({ section: tr("بنود مخصصة") }); custom.forEach((it) => rows.push({ text: it.text, mark: x.marks[customKey(it)] || "", note: x.notes[customKey(it)] || "" })); }
       // the template's own words follow the interface language; what the member typed (project, zone, notes) is never translated
       const head: [string, string][] = [["المشروع", x.project], ["المنطقة / الدور", x.zone], ["مرجع اللوحة", x.ref], ["التاريخ", x.date], ["المهندس المستلم", x.inspector]];
       const bytes = await inspectionPdf({ title: tr(t.title), scope: tr(t.scope), head: head.map(([k, v]) => [tr(k), v]), rows,
@@ -58,17 +60,24 @@ function Inspection({ app, id }: any) {
     } catch (e) { app.toast("تعذّر إنشاء التقرير — أعد المحاولة"); }
     setBusy(false);
   };
+  // one checklist row: the template's own items and the engineer's custom ones look and behave the same
+  const item = (k: string, text: any, remove?: () => void) => { const m = x.marks[k] || ""; return (
+    <Panel key={k} className={`p-3.5 ${m === "fail" ? "border-bad/40" : ""}`}>
+      <div className="flex items-start gap-2"><p className="flex-1 min-w-0 text-[13px] leading-relaxed">{text}</p>{remove && <button type="button" aria-label="حذف البند" onClick={remove} className="press shrink-0 grid place-items-center w-8 h-8 -mt-1 rounded-full text-ink-3 hover:text-bad"><Trash2 size={14} /></button>}</div>
+      <div className="mt-2 flex gap-1.5 flex-wrap">{(["pass", "fail", "na"] as const).map((r) => <FilterChip key={r} on={m === r} onClick={() => mark(k, r)}>{RESULT[r]}</FilterChip>)}</div>
+      {(m === "fail" || x.notes[k]) && <TextInput value={x.notes[k] || ""} onChange={(v) => up({ notes: { ...x.notes, [k]: v } })} placeholder={m === "fail" ? "ما المطلوب تصحيحه؟" : "ملاحظة"} className="mt-2 h-10 w-full px-3 rounded-xl bg-canvas/60 border border-line-2 text-[12.5px]" />}
+    </Panel>); };
   const field = (k?: any, label?: any, ph?: any) => <label className="block"><span className="text-[11.5px] text-ink-2">{label}</span><TextInput value={x[k]} onChange={(v) => up({ [k]: v })} placeholder={ph} className="mt-1 h-11 w-full px-3 rounded-xl bg-surface border border-line-2 text-[13.5px]" /></label>;
   return (
     <div className="py-4 space-y-4">
       <div className="px-1"><h1 className="text-[21px] font-medium">{t.title}</h1><p className="text-[12px] text-ink-2">{t.scope}</p></div>
       <Panel className="p-4 grid grid-cols-2 gap-3">{field("project", "المشروع", "اسم المشروع")}{field("zone", "المنطقة / الدور", "مثال: الدور الثالث — محور B")}{field("ref", "مرجع اللوحة", "S-103 Rev.2")}{field("date", "التاريخ", "")}<div className="col-span-2">{field("inspector", "المهندس المستلم", "")}</div></Panel>
-      {t.sections.map(([title, items], s) => <section key={title}><SectionTitle>{title}</SectionTitle><div className="space-y-2">{items.map((text, i) => { const k = `${s}.${i}`; const m = x.marks[k] || ""; return (
-        <Panel key={k} className={`p-3.5 ${m === "fail" ? "border-bad/40" : ""}`}>
-          <p className="text-[13px] leading-relaxed">{text}</p>
-          <div className="mt-2 flex gap-1.5 flex-wrap">{(["pass", "fail", "na"] as const).map((r) => <FilterChip key={r} on={m === r} onClick={() => mark(k, r)}>{RESULT[r]}</FilterChip>)}</div>
-          {(m === "fail" || x.notes[k]) && <TextInput value={x.notes[k] || ""} onChange={(v) => up({ notes: { ...x.notes, [k]: v } })} placeholder={m === "fail" ? "ما المطلوب تصحيحه؟" : "ملاحظة"} className="mt-2 h-10 w-full px-3 rounded-xl bg-canvas/60 border border-line-2 text-[12.5px]" />}
-        </Panel>); })}</div></section>)}
+      {t.sections.map(([title, items], s) => <section key={title}><SectionTitle>{title}</SectionTitle><div className="space-y-2">{items.map((text, i) => item(`${s}.${i}`, text))}</div></section>)}
+      <section><SectionTitle>بنود مخصصة</SectionTitle>
+        <div className="space-y-2">{custom.map((it) => item(customKey(it), <bdi {...UGC}>{it.text}</bdi>, () => up({ custom: custom.filter((y) => y.id !== it.id), marks: { ...x.marks, [customKey(it)]: undefined }, notes: { ...x.notes, [customKey(it)]: undefined } })))}</div>
+        <div className="mt-2 flex gap-2"><TextInput value={draft} onChange={setDraft} placeholder="بند إضافي تريد فحصه — مثال: نظافة فتحات الصرف" className="flex-1 min-w-0 h-11 px-3 rounded-xl bg-surface border border-line-2 text-[13px]" />
+          <Secondary onClick={() => { if (draft.trim().length < 3) return; up({ custom: [...custom, newCustom(draft)] }); setDraft(""); }} disabled={draft.trim().length < 3} className="h-11 px-3 shrink-0 press"><Plus size={16} /> إضافة بند مخصص</Secondary></div>
+      </section>
       <Panel className="p-4">
         <p className="text-[12.5px] text-ink-2"><Num className="text-ink">{c.pass}</Num> مطابق · <Num className="text-bad">{c.fail}</Num> غير مطابق · <Num>{c.na}</Num> لا ينطبق · <Num>{c.open}</Num> لم يُفحص</p>
         <div className="mt-3 flex gap-1.5 flex-wrap">{Object.entries(VERDICT).map(([k, l]) => <FilterChip key={k} on={x.verdict === k} onClick={() => up({ verdict: x.verdict === k ? "" : k })}>{l}{c.suggested === k && x.verdict !== k ? " ← مقترح" : ""}</FilterChip>)}</div>

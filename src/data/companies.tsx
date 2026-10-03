@@ -20,6 +20,8 @@ export const ROOMS = [
 ];
 
 export const room = (id?: any) => ROOMS.find((r) => r.id === id);
+// a general post («منشور عام»): straight to the community feed, in no room (room() finds nothing, so no room badge is shown)
+export const GENERAL_ROOM = "general";
 
 // Exactly three reactions everywhere — posts, comments and replies
 export const REACTIONS = [["agree", "أوافق", ThumbsUp], ["disagree", "لا أوافق", ThumbsDown], ["useful", "مفيد", Lightbulb]];

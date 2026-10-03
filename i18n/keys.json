@@ -182,11 +182,6 @@
   "p": "app/AppView.tsx",
   "n": 1
  },
- "غير متاح لحساب مشرف الموقع": {
-  "k": "s",
-  "p": "app/AppView.tsx",
-  "n": 2
- },
  "رجوع": {
   "k": "s",
   "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,ui/chrome.tsx",
@@ -280,8 +275,8 @@
  },
  "لوحة الإدارة": {
   "k": "s",
-  "p": "app/TopBar.tsx,features/admin/AdminView.tsx",
-  "n": 2
+  "p": "app/TopBar.tsx,features/admin/AdminView.tsx,ui/chrome.tsx",
+  "n": 4
  },
  "الإدارة": {
   "k": "s",
@@ -384,6 +379,11 @@
   "k": "s",
   "p": "backend/cloud.ts",
   "n": 1
+ },
+ "تعذّر إكمال تسجيل الدخول — أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts,native/native.ts",
+  "n": 2
  },
  "استلام حديد التسليح": {
   "k": "s",
@@ -7868,6 +7868,21 @@
   "p": "domain/taxonomy.ts",
   "n": 1
  },
+ "حساب الموارد البشرية: من قسم الأدوات تتاح أداة مراجعة السير الذاتية فقط": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 1
+ },
+ "غير متاح لحساب الموارد البشرية": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 1
+ },
+ "غير متاح لحساب مشرف الموقع": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 1
+ },
  "هذا أنت": {
   "k": "s",
   "p": "domain/taxonomy.ts,features/sheets/sheets.tsx",
@@ -13805,6 +13820,11 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
  },
+ "بنود مخصصة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
  "المشروع": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
@@ -13846,6 +13866,21 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
+ "حذف البند": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "ما المطلوب تصحيحه؟": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "ملاحظة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
  "اسم المشروع": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
@@ -13856,13 +13891,13 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "ما المطلوب تصحيحه؟": {
+ "بند إضافي تريد فحصه — مثال: نظافة فتحات الصرف": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
-  "n": 1
+  "n": 2
  },
- "ملاحظة": {
-  "k": "s",
+ "إضافة بند مخصص": {
+  "k": "x",
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
@@ -14355,7 +14390,23 @@
   "p": "features/sheets/sheets.tsx,ui/feed.tsx",
   "n": 4
  },
- "الغرفة": {
+ "أين يُنشر؟": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "أين يُنشر؟ {0}": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <span className=\"text-ink-3\">· الغرفة اختيارية</span>"
+ },
+ "· الغرفة اختيارية": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "منشور عام": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -18619,6 +18670,11 @@
   "n": 1
  },
  "حصر الخرسانة والحديد والمباني، تحويل الوحدات، وقوائم فحص واستلام الأعمال — كله على جهازك.": {
+  "k": "s",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "راجع السير الذاتية للمرشحين بمعايير المقاولين والاستشاريين — على جهازك، دون رفع الملف لأي خادم.": {
   "k": "s",
   "p": "features/tabs/tabs.tsx",
   "n": 1

@@ -129,13 +129,22 @@ export async function finishAuthLink(): Promise<any> {
   } catch (e) { clean(); return { error: friendly(e).message }; }
 }
 
-// an auth link opened the native app (app.engspace://auth-callback?code=…[&reset=1]): finish the sign-in it carries
+// an auth link opened the native app: app.engspace://auth-callback?code=… (Google / Apple, PKCE), ?token_hash=… (e-mail
+// templates), #access_token=… (implicit links) or ?error=… (the provider or Supabase refused). Finishes the sign-in it carries.
+const handledCodes = new Set<string>();
 export async function handleAuthUrl(url: string) {
-  const q = new URL(url.replace(/^app\.engspace:\/\//, "https://x/")).searchParams; const code = q.get("code");
+  const u = new URL(url.replace(/^app\.engspace:\/\//, "https://x/")); const h = new URLSearchParams(u.hash.replace(/^#/, ""));
+  const get = (k: string) => u.searchParams.get(k) || h.get(k);
   try { const { Browser } = await import("@capacitor/browser"); await Browser.close(); } catch (e) { /* not open */ }
-  const db = await supabase(); const th = q.get("token_hash");
-  if (th) { ok(await db.auth.verifyOtp({ token_hash: th, type: (q.get("type") || "email") as any })); return { reset: q.get("reset") === "1" || q.get("type") === "recovery" }; }
-  if (!code) return null; ok(await db.auth.exchangeCodeForSession(code)); return { reset: q.get("reset") === "1" };
+  const reset = get("reset") === "1" || get("type") === "recovery";
+  if (get("error") || get("error_description")) return { error: "تعذّر إكمال تسجيل الدخول — أعد المحاولة", detail: get("error_description") || get("error") };
+  const db = await supabase(); const th = get("token_hash"), code = get("code"), at = get("access_token"), rt = get("refresh_token");
+  if (th) { ok(await db.auth.verifyOtp({ token_hash: th, type: (get("type") || "email") as any })); return { reset }; }
+  if (at && rt) { ok(await db.auth.setSession({ access_token: at, refresh_token: rt })); return { reset }; }
+  if (!code) return null;
+  // the same link can arrive twice (cold start: the launch URL and appUrlOpen) — a code is single-use
+  if (handledCodes.has(code)) return null; handledCodes.add(code);
+  ok(await db.auth.exchangeCodeForSession(code)); return { reset };
 }
 // on the web the client finishes the link itself (detectSessionInUrl); the reset link is marked with ?reset=1
 export const resetLinkOpened = () => { try { return new URLSearchParams(location.search).get("reset") === "1"; } catch (e) { return false; } };
