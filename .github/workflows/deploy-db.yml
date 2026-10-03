@@ -49,3 +49,13 @@ jobs:
           sudo apt-get install -y -qq postgresql-client >/dev/null
           out=$(echo "select public.bootstrap_admin(:'email');" | psql "$(cat supabase/.temp/pooler-url)" -XAt -v ON_ERROR_STOP=1 -v email="$ADMIN_EMAIL" 2>&1) && echo "::notice::$ADMIN_EMAIL is now an administrator ($out)" \
             || echo "::warning::Administrator not set: $(echo "$out" | grep -o 'ERROR:.*' | head -1) — sign up in the app with $ADMIN_EMAIL, then run this workflow again"
+      # read-only: who holds a staff role, and how each of those accounts signs in (e-mail, Google, phone…)
+      - name: Staff accounts
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          sudo apt-get install -y -qq postgresql-client >/dev/null
+          echo "select u.email, p.staff, p.role, p.onboarded, coalesce((select string_agg(i.provider, '+' order by i.provider) from auth.identities i where i.user_id = u.id), '-') as sign_in, (select count(*) from auth.users u2 where lower(u2.email) = lower(u.email)) as accounts_with_this_email from public.profiles p join auth.users u on u.id = p.id where p.staff <> 'member' or lower(u.email) = lower(:'email');" \
+            | psql "$(cat supabase/.temp/pooler-url)" -X -v ON_ERROR_STOP=1 -v email="${{ inputs.admin_email }}"
+
