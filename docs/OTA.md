@@ -29,6 +29,16 @@ Settings → **التحديثات الفورية** shows which bundle runs (buil
   and the plugin drops any downloaded bundle when a newer shell is installed over it — so a fresh APK is never stuck on an old bundle.
 - Nothing goes to Capgo: manual mode, and `updateUrl` / `statsUrl` / `channelUrl` are empty in `capacitor.config.ts`.
 
+## Nothing waits forever (v0.1.12)
+Both phones once showed «تحقّق من التحديث» spinning forever: the plugin's `download()` waits for its background worker with no deadline,
+and that worker retries network errors indefinitely; our check also refused a new start while one was "running". Now (`src/native/updater.ts`):
+manifest request 10 s (aborted), every quick plugin call 6 s, the download a watchdog — no progress event for 30 s or more than 3 min in all
+ends the wait (a download that still finishes later is scheduled anyway and the banner appears), the whole check 200 s. A check already
+running is joined, never blocks. A manual check always ends in a message: «أنت على أحدث إصدار بالفعل», the update banner, or the reason it
+failed (offline, timeout, server, invalid data, download, update service missing). Settings shows download progress in %.
+The publish workflow ends by reading the manifest from outside with the WebView origins (`https://localhost`, `capacitor://localhost`,
+`http://localhost`) and fails unless it is public and CORS allows them (Supabase Storage answers `Access-Control-Allow-Origin: *`).
+
 ## Publishing
 Actions → **Publish web update** → Run workflow (channel `preview`, optional one-line note). Needs the repository secrets of the release
 builds (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) and `SUPABASE_ACCESS_TOKEN` (the workflow reads the project's service key

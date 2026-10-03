@@ -55,3 +55,15 @@ jobs:
           out=$(SUPABASE_URL="https://$PROJECT_REF.supabase.co" SERVICE_KEY="$key" node scripts/ota/publish.mjs)
           echo "$out"
           echo "::notice title=Published web update::$(echo "$out" | node -p 'const m=JSON.parse(require("fs").readFileSync(0,"utf8"));`${m.version} · native line ${m.nativeLine} · ${(m.size/1048576).toFixed(1)} MB — phones pick it up at their next launch`')"
+      # what a phone sees, from outside: the manifest is public and CORS lets the app's WebView origins read it
+      # (Android https://localhost, iOS capacitor://localhost) — the update check fails without it
+      - name: Check the manifest as a phone reads it
+        run: |
+          set -euo pipefail
+          url="https://$PROJECT_REF.supabase.co/storage/v1/object/public/app-updates/$CHANNEL/manifest.json?t=$(date +%s)"
+          for origin in "https://localhost" "capacitor://localhost" "http://localhost"; do
+            h=$(curl -sS -D - -o /dev/null -H "Origin: $origin" "$url")
+            echo "$h" | grep -qE '^HTTP/[0-9.]+ 200' || { echo "::error::manifest not readable for $origin"; exit 1; }
+            echo "$h" | grep -qiE "^access-control-allow-origin: (\*|$origin)" || { echo "::error::CORS does not allow $origin"; exit 1; }
+          done
+          echo "::notice title=Phone check::manifest public, CORS allows https://localhost, capacitor://localhost and http://localhost"

@@ -22,7 +22,7 @@ initNative();
 // Live web updates (native shells only): after the first render, confirm this bundle is healthy, then check for a newer one in the background
 setTimeout(() => import("./native/updater").then((u) => {
   if (!u.OTA) return;
-  u.startUpdater(() => ({ rootHasContent: !!el.firstElementChild, uncaughtErrors: startErrors, errorScreen: document.body.innerText.includes("حدث خطأ غير متوقع") })).then(() => u.scheduleChecks());
+  u.startUpdater(() => ({ rootHasContent: !!el.firstElementChild, uncaughtErrors: startErrors, errorScreen: document.body.innerText.includes("حدث خطأ غير متوقع") })).finally(() => u.scheduleChecks());
 }).catch(() => {}), 2000);
 
 // Development only (compiled out of production builds): lets the in-page UI crawler (tools/crawl-ui.js) restart the app from a

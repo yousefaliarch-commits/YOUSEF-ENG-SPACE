@@ -52,3 +52,11 @@ describe("plumbing is pinned", () => {
   it("every release build raises the native build number, so a newer APK / IPA drops an older downloaded bundle", () => { expect(file("../android/app/build.gradle")).toMatch(/versionCode\(Integer\.parseInt\(System\.getenv\("GITHUB_RUN_NUMBER"\)/); expect(rel).toMatch(/CURRENT_PROJECT_VERSION="\$GITHUB_RUN_NUMBER"/); expect(rel).toMatch(/MARKETING_VERSION="\$line\.\$GITHUB_RUN_NUMBER"/); });
   it("the shell's versionName starts with the native line from ota.config.json", () => { expect(file("../android/app/build.gradle")).toMatch(/ota\.config\.json[\s\S]*nativeLine/); expect(JSON.parse(file("../ota.config.json")).nativeLine).toBeGreaterThan(0); });
 });
+
+describe("native plugin registration is committed (cap sync)", () => {
+  it("Android: the updater module is included and linked", () => { expect(file("../android/capacitor.settings.gradle")).toMatch(/include ':capgo-capacitor-updater'/); expect(file("../android/app/capacitor.build.gradle")).toMatch(/implementation project\(':capgo-capacitor-updater'\)/); });
+  it("iOS: the updater package is in the Swift package list", () => { expect(file("../ios/App/CapApp-SPM/Package.swift")).toMatch(/CapgoCapacitorUpdater/); });
+  it("the publish workflow checks the manifest as a phone reads it (public + CORS for the WebView origins)", () => {
+    const wf = file("../.github/workflows/publish-update.yml"); for (const o of ["https://localhost", "capacitor://localhost"]) expect(wf).toContain(o); expect(wf).toMatch(/access-control-allow-origin/);
+  });
+});

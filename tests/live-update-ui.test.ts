@@ -12,7 +12,7 @@ const base = { supported: true, bundle: "0.25.0", builtin: true, native: "1.9", 
 describe("LiveUpdate (Settings)", () => {
   it("shows nothing on the web (no updater)", () => { current = { ...base, supported: false }; expect(LiveUpdate()).toBeNull(); });
   it("shows the bundle version and that it is built in", () => { current = base; const t = flat(LiveUpdate()); expect(t).toContain("0.25.0"); expect(t).toContain("مدمجة في التطبيق"); expect(t).toContain("لم يُفحص بعد"); });
-  it("a downloaded bundle is called updated over the internet", () => { current = { ...base, builtin: false, bundle: "0.25.0-2000", status: "current" }; const t = flat(LiveUpdate()); expect(t).toContain("0.25.0-2000"); expect(t).toContain("محدَّثة عبر الإنترنت"); expect(t).toContain("أنت على أحدث نسخة"); });
+  it("a downloaded bundle is called updated over the internet", () => { current = { ...base, builtin: false, bundle: "0.25.0-2000", status: "current" }; const t = flat(LiveUpdate()); expect(t).toContain("0.25.0-2000"); expect(t).toContain("محدَّثة عبر الإنترنت"); expect(t).toContain("أنت على أحدث إصدار بالفعل"); });
   it("a ready update offers «apply now»; otherwise only the check button", () => {
     current = { ...base, status: "ready", pending: { id: "b1", version: "0.25.0-3000" } }; let t = flat(LiveUpdate()); expect(t).toContain("طبّق الآن"); expect(t).toContain("0.25.0-3000");
     current = base; t = flat(LiveUpdate()); expect(t).not.toContain("طبّق الآن"); expect(t).toContain("تحقّق من التحديث");
