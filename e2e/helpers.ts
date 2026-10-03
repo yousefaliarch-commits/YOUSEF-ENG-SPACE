@@ -49,3 +49,20 @@ export async function signIn(page: Page, key: string, admin = false) {
   const skip = page.getByRole("button", { name: /تخطي الجولة/ }); if (await skip.count()) await skip.click();
   await settle(page, 600);
 }
+
+// ---- posts ----
+export const visibleText = (page: Page, text: string) => page.getByText(text, { exact: false }).locator("visible=true");
+// the dashed «ask / share» card on the community tab (its wording differs by role, its shape does not)
+export const composer = (page: Page) => page.locator("button.border-dashed").filter({ hasText: /اسأل/ }).first();
+export async function publish(page: Page, body: string) {
+  await tab(page, "community"); await composer(page).click(); await settle(page, 700);
+  const d = page.getByRole("dialog"); await d.locator("textarea").first().fill(body); await d.getByRole("button", { name: /^نشر/ }).last().click(); await settle(page, 2200);
+}
+// a second member in the same browser (own context, same phone profile)
+export async function newMember(page: Page, key: string, admin = false) {
+  const b = page.context().browser()!; const u: any = (test_info_use());
+  const ctx = await b.newContext({ viewport: u.viewport, userAgent: u.userAgent, deviceScaleFactor: u.deviceScaleFactor, isMobile: u.isMobile, hasTouch: u.hasTouch, locale: "ar-EG" });
+  const p = await ctx.newPage(); await signIn(p, key, admin); return p;
+}
+import { test } from "@playwright/test";
+const test_info_use = () => test.info().project.use;

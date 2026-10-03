@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-  Award, Bookmark, Check, Coins, Mail, MessageCircle, Phone, ShieldCheck, Sparkles
+  Award, Bookmark, Check, Coins, Mail, MessageCircle, Pencil, Phone, ShieldCheck, Sparkles, Trash2
 } from "lucide-react";
 import { CompanyLogo, POST_TYPES, REACTIONS, catName, company, room } from "../data/companies";
 import { govName, placeName } from "../data/geo";
@@ -15,7 +15,7 @@ import { countComments } from "../lib/posts";
 import { Author, EstimateBar } from "./chrome";
 import { IdentityTag, IdentityToggle } from "./identity";
 import { HiddenByMe, Removed, RemovedMine } from "./moderation";
-import { Chip, Num, Panel, RoundButton } from "./primitives";
+import { Chip, Num, Panel, Primary, RoundButton, Secondary } from "./primitives";
 import { fmt } from "./theme";
 
 export const REACTION_HINT = { agree: "أوافق — يلغي «لا أوافق» إن كان مختارًا", disagree: "لا أوافق — يلغي «أوافق» إن كان مختارًا", useful: "مفيد — يمكن اختياره وحده أو مع أوافق/لا أوافق" };
@@ -86,6 +86,37 @@ export const NumberReply = ({ d }: any) => (
 export const ExpReply = ({ d }: any) => <div className="mt-2 inline-flex items-center gap-2 text-[11.5px] flex-wrap"><Chip tone={d.outcome === "قبلت" ? "verified" : "warn"} className="h-6 px-2">{d.outcome}</Chip><span {...UGC} className="text-ink-3">{d.note}</span></div>;
 
 
+
+// «معدّل · مرة / مرتان / ٣ مرات» — the count is the server's number of real edits (a save with the same text is not counted)
+export const editedWord = (n: number) => (n === 1 ? "مرة" : n === 2 ? "مرتان" : null);
+export const EditedBadge = ({ n }: any) => (n > 0 ? <span data-edited={n} title="عدّل كاتب المنشور نصه" className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2"><Pencil size={10} />معدّل · {editedWord(n) || <><Num>{n}</Num> مرات</>}</span> : null);
+
+// The author's own controls: edit the text (counted and shown as «معدّل») and delete for good (after a confirmation).
+function AuthorControls({ p, app, onGone }: any) {
+  const [mode, setMode] = useState<any>(null); const [text, setText] = useState(p.body || "");
+  const save = () => { const t = text.trim(); if (!t) { app.toast("اكتب نص المنشور أولًا"); return; } if (t !== (p.body || "").trim()) app.editPost(p.id, t); setMode(null); };
+  if (mode === "edit") return (
+    <div className="mt-3 rounded-2xl border border-accent/30 p-3" role="group" aria-label="تعديل المنشور">
+      <textarea {...UGC} value={text} onChange={(e) => setText(e.target.value)} rows={4} maxLength={5000} aria-label="نص المنشور" className="w-full rounded-xl bg-elevated border border-line p-3 text-[14px] leading-[1.8] text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" />
+      <p className="mt-1.5 text-[10.5px] text-ink-3">يظهر للجميع أن المنشور «معدّل» مع عدد مرات التعديل. الصورة والتصويت والردود تبقى كما هي.</p>
+      <div className="mt-2.5 flex gap-2"><Primary onClick={save} className="flex-1 h-10"><Check size={15} /> حفظ التعديل</Primary><Secondary onClick={() => { setText(p.body || ""); setMode(null); }} className="h-10 px-4">إلغاء</Secondary></div>
+    </div>
+  );
+  if (mode === "delete") return (
+    <div className="mt-3 rounded-2xl border border-bad/30 p-3" role="alertdialog" aria-label="تأكيد حذف المنشور">
+      <p className="text-[13px] font-medium text-bad flex items-center gap-1.5"><Trash2 size={15} /> حذف المنشور نهائيًا؟</p>
+      <p className="mt-1 text-[12px] leading-relaxed text-ink-2">يُحذف المنشور وكل الردود والتفاعلات عليه، ولا يمكن التراجع.</p>
+      <div className="mt-2.5 flex gap-2"><Primary onClick={() => { app.deletePost(p.id); if (onGone) onGone(); }} className="flex-1 h-10 !bg-bad !text-white"><Trash2 size={15} /> احذف نهائيًا</Primary><Secondary onClick={() => setMode(null)} className="h-10 px-4">إلغاء</Secondary></div>
+    </div>
+  );
+  return (
+    <div className="mt-2.5 flex items-center gap-1.5" data-author-controls>
+      <button type="button" onClick={() => { setText(p.body || ""); setMode("edit"); }} className="press inline-flex items-center gap-1 h-8 px-2.5 rounded-full border border-line text-[11.5px] text-ink-2 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><Pencil size={12} /> تعديل</button>
+      <button type="button" onClick={() => setMode("delete")} className="press inline-flex items-center gap-1 h-8 px-2.5 rounded-full border border-line text-[11.5px] text-bad/80 hover:text-bad focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><Trash2 size={12} /> حذف</button>
+    </div>
+  );
+}
+
 // The author chip and the room chip are real buttons beside the card's open-post button (never nested inside it).
 // On the post's own screen (`onComments` given) the body is plain text and the comment count jumps to the reply field.
 export function PostCard({ p, app, compact = false, onComments = null }: any) {
@@ -97,12 +128,13 @@ export function PostCard({ p, app, compact = false, onComments = null }: any) {
     <Panel className="p-4">
       {gone && <RemovedMine what="منشورك" info={app.removedInfo(k)} />}
       <Author a={p} app={app} when={p.when} mine={p.mine} />
-        <div className="mt-2 flex items-center gap-1.5 flex-wrap text-[10.5px]">{rm && (inRoom ? <span className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2"><rm.icon size={10} />{rm.name}</span> : <button type="button" onClick={() => app.push({ type: "room", id: rm.id })} className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><rm.icon size={10} />{rm.name}</button>)}{p.type !== "question" && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-wash text-accent"><TI size={10} />{type[1]}</span>}{p.ama && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-good/15 text-good"><span className="w-1.5 h-1.5 rounded-full bg-good glow-pulse" /> مباشر</span>}{p.best && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-good/15 text-good"><Award size={10} /> فيه إجابة معتمدة</span>}</div>
+        <div className="mt-2 flex items-center gap-1.5 flex-wrap text-[10.5px]"><EditedBadge n={p.edits} />{rm && (inRoom ? <span className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2"><rm.icon size={10} />{rm.name}</span> : <button type="button" onClick={() => app.push({ type: "room", id: rm.id })} className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><rm.icon size={10} />{rm.name}</button>)}{p.type !== "question" && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-wash text-accent"><TI size={10} />{type[1]}</span>}{p.ama && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-good/15 text-good"><span className="w-1.5 h-1.5 rounded-full bg-good glow-pulse" /> مباشر</span>}{p.best && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-good/15 text-good"><Award size={10} /> فيه إجابة معتمدة</span>}</div>
       {onComments ? <p {...UGC} className="mt-2.5 text-[14.5px] leading-[1.85] text-ink text-start">{bidi(app.money(p.body))}</p> : <button type="button" onClick={() => app.push({ type: "post", id: p.id })} className="mt-2.5 block w-full text-start rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><p {...UGC} className="text-[14.5px] leading-[1.85] text-ink text-start">{bidi(app.money(p.body))}</p></button>}
       {p.image && <PostImage image={p.image} app={app} />}
       {p.type === "reveal" && (app.moneyAccess === "full" ? <RevealBlock r={p.reveal} /> : <HiddenFigure app={app} what="كشف راتب" />)}
       {p.type === "vote" && <VoteBlock p={p} app={app} />}
       {p.type === "poll" && <PollBlock p={p} app={app} />}
+      {p.mine && !gone && <AuthorControls p={p} app={app} onGone={onComments ? app.pop : null} />}
       <div className="mt-3 flex items-center justify-between gap-2">
         <Reactions id={p.id} counts={p.reactions} app={app} compact={compact} />
         <button type="button" onClick={() => (onComments ? onComments() : app.push({ type: "post", id: p.id }))} aria-label={onComments ? "اكتب ردًا" : "التعليقات"} className="press shrink-0 inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full bg-elevated/70 border border-line text-[11.5px] text-ink-2 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><MessageCircle size={13} /><Num>{countComments(p.comments)}</Num></button>

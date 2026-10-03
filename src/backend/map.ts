@@ -54,7 +54,7 @@ export function postOf(r: Row, comments: Row[] = [], mine: { reacts?: Row; ballo
   const data = r.data || {}; const tally: Row = { ...(r.tally || {}) };
   if (mine.ballot != null) tally[mine.ballot] = Math.max(0, (tally[mine.ballot] || 0) - 1);
   const p: Row = { id: r.id, room: r.room, type: r.type, body: r.body, ...authorFields(r.author, `posts:${r.id}`), dm: r.dm !== false, best: r.best_comment || null,
-    when: when(r.created_at, now), at: Date.parse(r.created_at), reactions: minus(r.reactions, mine.reacts), comments, hiddenByMod: !!r.hidden };
+    when: when(r.created_at, now), at: Date.parse(r.created_at), reactions: minus(r.reactions, mine.reacts), comments, hiddenByMod: !!r.hidden, edits: r.edit_count || 0, editedAt: r.edited_at ? Date.parse(r.edited_at) : null };
   if (data.reveal) p.reveal = data.reveal;
   if (data.image) p.image = data.image;
   if (r.type === "vote") p.vote = { ...(data.vote || {}), yes: tally[0] || 0, no: tally[1] || 0 };
