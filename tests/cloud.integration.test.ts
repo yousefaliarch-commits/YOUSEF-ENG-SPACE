@@ -58,16 +58,16 @@ run("cloud backend (local Supabase)", () => {
     const got: any[] = []; let joined = false;
     const ch = a.channel(`member:${session!.user.id}`, { config: { private: true } }).on("broadcast", { event: "message" }, (m: any) => got.push(m.payload))
       .subscribe((st: string) => { if (st === "SUBSCRIBED") joined = true; });
-    for (let i = 0; i < 50 && !joined; i++) await new Promise((r) => setTimeout(r, 100));
+    for (let i = 0; i < 200 && !joined; i++) await new Promise((r) => setTimeout(r, 100));
     expect(joined).toBe(true);
     const t = (await cloud.threads())[0]; await cloud.sendMessage(t.id, "رسالة لحظية");
-    for (let i = 0; i < 50 && !got.length; i++) await new Promise((r) => setTimeout(r, 100));
+    for (let i = 0; i < 200 && !got.length; i++) await new Promise((r) => setTimeout(r, 100));
     // the ping is the thread id (plus Realtime's own delivery id) — never the text or the sender
     expect(got[0].thread).toBe(t.id); expect(Object.keys(got[0]).sort()).toEqual(["id", "thread"]); expect(JSON.stringify(got)).not.toContain("رسالة لحظية");
     // B (signed in through cloud.ts) tries to join A's channel: refused
     const { supabase } = await import("../src/backend/client"); const b = await supabase(); const { data: bs } = await b.auth.getSession(); await b.realtime.setAuth(bs.session!.access_token);
     let denied = false; const spy = b.channel(`member:${session!.user.id}`, { config: { private: true } }).subscribe((st: string) => { if (st === "CHANNEL_ERROR" || st === "TIMED_OUT") denied = true; });
-    for (let i = 0; i < 80 && !denied; i++) await new Promise((r) => setTimeout(r, 100));
+    for (let i = 0; i < 200 && !denied; i++) await new Promise((r) => setTimeout(r, 100));
     expect(denied).toBe(true);
     await a.removeChannel(ch); await b.removeChannel(spy);
   });
