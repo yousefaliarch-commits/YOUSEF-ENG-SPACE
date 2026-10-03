@@ -138,7 +138,7 @@ export function AdminView({ init, openApp }: any) {
   const openCount = cases.filter((c) => c.status === "open").length; const verifyCount = verifs.filter((r) => r.status === "pending").length;
   const body = section === "queue" ? <QueueSection A={A} /> : section === "verify" ? <VerifySection A={A} /> : section === "users" ? <UsersSection A={A} /> : section === "analytics" ? <AnalyticsSection A={A} /> : section === "content" ? <ContentSection A={A} /> : section === "settings" ? <SettingsSection A={A} /> : section === "audit" ? <AuditSection A={A} /> : <OverviewSection A={A} />;
   return (
-    <main className="rise max-w-7xl mx-auto px-4 md:px-8 py-5 md:py-8">
+    <main className="rise max-w-7xl mx-auto px-4 md:px-8 py-5 md:py-8" style={{ paddingTop: "calc(var(--sat, 0px) + 1.25rem)" }}>
       <div className="flex items-start justify-between gap-3 flex-wrap mb-5">
         <div className="min-w-0"><h1 className="text-[22px] md:text-[26px] font-medium tracking-[-0.02em] flex items-center gap-2"><ShieldCheck size={24} className="text-accent" /> لوحة الإدارة</h1><p className="mt-1 text-[12.5px] text-ink-2 max-w-[74ch] leading-relaxed">لوحة فريق المنصة: البلاغات وطلبات التوثيق والأعضاء والتحليلات والمحتوى والإعدادات. تعمل على بيانات التطبيق نفسها — كل بلاغ ترسله من التطبيق يظهر هنا فورًا، وكل قرار هنا يظهر في التطبيق.</p></div>
         <div className="flex items-center gap-2 flex-wrap"><ToneChip tone="warn"><LockKeyhole size={12} /> للمشرفين فقط · مصادقة ثنائية في الإنتاج</ToneChip><Secondary onClick={() => A.openApp()} className="h-10 text-[13px]"><Smartphone size={15} /> افتح التطبيق</Secondary></div>

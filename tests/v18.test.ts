@@ -24,7 +24,10 @@ ok(["concrete", "rebar", "masonry", "units"].every((x) => C.toolOpen(b, x)) && [
 ok(C.TOOLS.filter((t) => !C.toolOpen(b, t.id)).every((t) => t.group !== "site") && C.TOOLS.filter((t) => C.toolOpen(b, t.id)).every((t) => t.group === "site"), "every tool open to supervisors is a site tool, and every money tool stays closed");
 ok(C.TOOLS.every((t) => C.toolOpen(C.blockedFor(eng), t.id)), "engineers keep every tool");
 ok(b.rooms.includes("nego") && b.posts.includes("reveal") && b.posts.includes("vote"), "the negotiation room, salary-reveal posts and offer votes are hidden from supervisors");
-ok(C.blockedFor(eng).stack.length === 0 && C.blockedFor(hr).stack.length === 0, "nothing is closed to engineers or company accounts");
+ok(C.blockedFor(eng).stack.length === 0 && C.blockedFor(owner).stack.length === 0, "nothing is closed to engineers or owners");
+const bh = C.blockedFor(hr);
+ok(C.TOOLS.every((t) => !C.toolOpen(bh, t.id)) && !bh.stack.includes("cvreview") && bh.stack.includes("checklists") && bh.stack.includes("inspection") && bh.sheets.includes("methodology"), "HR tools: the CV review only — no site tools, calculators, checklists or tax methodology");
+ok(!bh.stack.includes("company") && !bh.stack.includes("postjob"), "HR keeps companies and job posting");
 ok(!C.SUPERVISOR_NOTIFS.some((k) => ["match", "job", "saved", "company", "data", "contact"].includes(k)) && C.SUPERVISOR_NOTIFS.includes("reply"), "supervisor notifications: community only (no job matches, salary reports or market data)");
 ok(!C.dmRule(sup, { role: "hr", anon: "b0d2", dm: true }, { job: "j2" }).ok, "a supervisor cannot message a company — not even from a job ad");
 ok(!C.dmRule(hr, { role: "supervisor", anon: "a911", dm: true, openToRecruiters: true }).ok, "a company cannot message a supervisor");

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { TAX, netPay, toNet } from "../domain/pay";
 import { COMPANIES, catName, company, companyMult } from "../data/companies";
 import { CITIES, GOVS, gov, placeMult, placeName } from "../data/geo";
 import { divTitle } from "../domain/division";
@@ -16,10 +17,12 @@ export const hex4 = (s?: any) => Math.floor(rand(s) * 65535).toString(16).padSta
 
 export const seedOf = (str?: any) => [...String(str)].reduce((a, c) => a + c.charCodeAt(0) * 7, 3);
 
-// Percentiles for a discipline × experience, scaled by place and track. Returns {p10,p25,p50,p75,p90}
+// Percentiles for a discipline × experience, scaled by place and track — NET (الصافي, what reaches the account). The base
+// table is calibrated on gross anchors; each scaled figure is converted with the payroll rules. Returns {p10,p25,p50,p75,p90}
 export function marketFor(disc?: any, exp?: any, govKey?: any, track: any = "site", cityKey?: any) {
   const m = placeMult(govKey, cityKey) * (TRACK_MULT[track] || 1); const [p10, p25, p50, p75, p90] = (MARKET[disc] || MARKET.civil)[exp] || MARKET.civil["3-5"];
-  return { p10: round500(p10 * m), p25: round500(p25 * m), p50: round500(p50 * m), p75: round500(p75 * m), p90: round500(p90 * m) };
+  const n = (g: number) => round500(toNet(g * m));
+  return { p10: n(p10), p25: n(p25), p50: n(p50), p75: n(p75), p90: n(p90) };
 }
 
 export const medianFor = (...a: any[]) => marketFor(...a).p50;
@@ -111,14 +114,9 @@ export function parseJobText(raw?: any) {
   return out;
 }
 
-// Egypt payroll (approximate): social insurance 11% up to the insurable-wage cap; income tax brackets of Law 175/2023 with the 20,000 personal exemption
-export const TAX = { cap: 16700, ins: 0.11, exempt: 20000, brackets: [[40000, 0], [55000, 0.10], [70000, 0.15], [200000, 0.20], [400000, 0.225], [1200000, 0.25], [Infinity, 0.275]] };
-
-export function egyptNet(gross?: any) {
-  const ins = Math.min(gross, TAX.cap) * TAX.ins; const annual = Math.max(0, (gross - ins) * 12 - TAX.exempt); let tax = 0, prev = 0;
-  for (const [lim, r] of TAX.brackets) { if (annual > prev) tax += (Math.min(annual, lim) - prev) * r; prev = lim; if (annual <= lim) break; }
-  return { ins: Math.round(ins), tax: Math.round(tax / 12), net: Math.round(gross - ins - tax / 12) };
-}
+// Egypt payroll: one implementation in src/domain/pay.ts (kept here under the old names for the screens that import them)
+export { TAX };
+export function egyptNet(gross?: any) { const r = netPay(Number(gross) || 0); return { ins: r.ins, tax: r.tax, net: r.netRegular }; }
 
 // The full professional title everyone sees — never truncated anywhere in the UI
 export const personaTitle = (p?: any) => {
@@ -158,7 +156,7 @@ export function useCountUp(value?: any, ms: any = 640) {
   return v;
 }
 
-export const Money = ({ n, size = "text-[32px]", unit = "ج.م / شهر", className = "" }: any) => { const v = useCountUp(n); return <span className={`inline-flex items-baseline gap-2 flex-wrap ${className}`}><Num className={`${size} font-semibold tracking-[-0.04em] leading-none`}>{fmt(v)}</Num><span className="text-[12px] text-ink-2">{unit}</span></span>; };
+export const Money = ({ n, size = "text-[32px]", unit = "ج.م صافي / شهر", className = "" }: any) => { const v = useCountUp(n); return <span className={`inline-flex items-baseline gap-2 flex-wrap ${className}`}><Num className={`${size} font-semibold tracking-[-0.04em] leading-none`}>{fmt(v)}</Num><span className="text-[12px] text-ink-2">{unit}</span></span>; };
 
 
 // Brand sigil kept for the design board; identities in the app use Avatar

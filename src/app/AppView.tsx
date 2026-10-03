@@ -11,7 +11,7 @@ import { JOBS, NOTIFS0, POSTS0, R0 } from "../data/seed";
 import { TOOLS } from "../data/tools";
 import { accIdOf, authorAccId, authorKey, authorOf, cleanName, hasSession, loadAccount, memberAccId, normalizeSeedPosts, sameAuthor, saveAccount, setSession } from "../domain/identity";
 import { AUDIT0, MOD0, MOD_CONFIG0, REPORT_KINDS, actGate, ckey, fileReport, jobStats0, seedReports, standingOf, threadsFor0, threadsKind } from "../domain/moderation";
-import { SUPERVISOR_DENY, SUPERVISOR_NOTIFS, blockedFor, dmRule, toolOpen, isCompanyRole, maskMoney, moneyAccess, repLevel, roleTitle, tabsFor } from "../domain/taxonomy";
+import { SUPERVISOR_NOTIFS, blockedFor, closedTitleFor, denyFor, dmRule, toolOpen, isCompanyRole, maskMoney, moneyAccess, repLevel, roleTitle, tabsFor } from "../domain/taxonomy";
 import { screenLanguage } from "../domain/text-guard";
 import { AuthScreen, Registration, Welcome } from "../features/auth/auth";
 import { GuideScreen, LanguageScreen, SettingsScreen, Tour, tourSeen } from "../features/settings/settings";
@@ -32,7 +32,7 @@ import { fmt } from "../ui/theme";
 import { ScreenLoading } from "./ScreenLoading";
 import { isCloud } from "../backend/config";
 import { profilePatch } from "../backend/map";
-import { NATIVE, setBackHandler } from "../native/native";
+import { NATIVE, setBackHandler, takePendingAuth } from "../native/native";
 import * as cloud from "../backend/cloud";
 
 // The CV review (parser, engineering knowledge base, audit, report) is the largest feature; it loads on first open, and
@@ -96,7 +96,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   useEffect(() => { setSalaryLog(loadDevice("salarylog", persona && persona.pid, { at: 0, log: [] })); }, [persona && persona.pid]);
   // role scope: which tabs, screens and content this member may see, and how much of money
   const access = moneyAccess(profile); const blocked = blockedFor(profile); const tabs = tabsFor(profile); const curTab = tabs.some((t) => t.id === tab) ? tab : tabs[0].id;
-  const deny = () => setMsg(SUPERVISOR_DENY);
+  const deny = () => setMsg(denyFor(profile));
   const visiblePosts = blocked.posts.length || blocked.rooms.length ? posts.filter((x) => !blocked.posts.includes(x.type) && !blocked.rooms.includes(x.room)) : posts;
   const visibleNotifs = access === "none" ? notifs.filter((n) => SUPERVISOR_NOTIFS.includes(n.kind)) : notifs;
   const myAcc = memberAccId(profile); const standing = standingOf(mod, myAcc); const gate = actGate(standing, config); const isGone = (k?: any) => !!(mod.content[k] && mod.content[k].hidden);
@@ -208,7 +208,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
       if (r && r.confirmedElsewhere && !hasSession()) { setMsg("تم تأكيد بريدك — سجّل الدخول للمتابعة"); setAuthView("signin"); }
       authLink(!!(r && r.reset) || cloud.resetLinkOpened());
     });
-    const on = (e?: any) => authLink(e.detail && e.detail.reset); window.addEventListener("engspace:auth", on); return () => window.removeEventListener("engspace:auth", on);
+    // the native app: Google / Apple / e-mail links come back through app.engspace://auth-callback (src/native/native.ts)
+    const take = () => { const r = takePendingAuth(); if (!r) return; if (r.error) { setMsg(r.error); return; } authLink(r.reset); };
+    take(); window.addEventListener("engspace:auth", take); return () => window.removeEventListener("engspace:auth", take);
   }, []);
   // back to the app (tab switch, phone unlocked): fetch what changed
   useEffect(() => { if (!CLOUD) return; const on = () => { if (!document.hidden && persona) hydrate().catch(() => {}); }; document.addEventListener("visibilitychange", on); return () => document.removeEventListener("visibilitychange", on); }, [!!persona]);
@@ -346,7 +348,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   if (editing) return wrap(<div className={frameCls} style={frameStyle}><Registration app={app} mode="edit" initial={profile} /></div>);
   if (welcome) return wrap(<div className={frameCls} style={frameStyle}><Welcome app={app} /></div>);
   const top = stack[stack.length - 1];
-  const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title="غير متاح لحساب مشرف الموقع" body={SUPERVISOR_DENY} action="رجوع" onAction={app.pop} /></div>
+  const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
     : top
     ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : curTab === "home" ? <HomeScreen app={app} /> : curTab === "community" ? <CommunityScreen app={app} /> : curTab === "jobs" ? <JobsScreen app={app} /> : curTab === "market" ? <MarketScreen app={app} /> : curTab === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;

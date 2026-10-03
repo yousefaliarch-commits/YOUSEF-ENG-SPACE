@@ -48,4 +48,22 @@ jobs:
         run: |
           sudo apt-get install -y -qq postgresql-client >/dev/null
           out=$(echo "select public.bootstrap_admin(:'email');" | psql "$(cat supabase/.temp/pooler-url)" -XAt -v ON_ERROR_STOP=1 -v email="$ADMIN_EMAIL" 2>&1) && echo "::notice::$ADMIN_EMAIL is now an administrator ($out)" \
-            || echo "::warning::Administrator not set: $(echo "$out" | grep -o 'ERROR:.*' | head -1) — sign up in the app with $ADMIN_EMAIL, then run this workflow again"
+            || { err=$(echo "$out" | grep -o 'ERROR:.*' | head -1); case "$err" in *"already exists"*) echo "::notice::An administrator already exists — staff roles are managed in the admin console (Members → staff role)";; *) echo "::warning::Administrator not set: $err — sign up in the app with $ADMIN_EMAIL, then run this workflow again";; esac; }
+      # read-only: who holds a staff role, and how each of those accounts signs in (e-mail, Google, phone…)
+      - name: Staff accounts
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          sudo apt-get install -y -qq postgresql-client >/dev/null
+          echo "select u.email, p.staff, p.role, p.onboarded, coalesce((select string_agg(i.provider, '+' order by i.provider) from auth.identities i where i.user_id = u.id), '-') as sign_in, (select count(*) from auth.users u2 where lower(u2.email) = lower(u.email)) as accounts_with_this_email from public.profiles p join auth.users u on u.id = p.id where p.staff <> 'member' or lower(u.email) = lower(:'email');" \
+            | psql "$(cat supabase/.temp/pooler-url)" -XAt -F ' | ' -v ON_ERROR_STOP=1 -v email="${{ inputs.admin_email }}" \
+            | while read -r row; do echo "::notice title=Staff account (email | staff | role | onboarded | sign-in | accounts with this email)::$row"; done
+      # read-only: the sign-in redirect settings (Authentication → URL Configuration) and which providers are on
+      - name: Auth URL settings
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          curl -fsS -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" "https://api.supabase.com/v1/projects/$PROJECT_REF/config/auth" \
+            | jq -r '"site_url=\(.site_url) | redirect_urls=\(.uri_allow_list // "") | google=\(.external_google_enabled) | apple=\(.external_apple_enabled) | phone=\(.external_phone_enabled) | email_confirm=\(.mailer_autoconfirm|not)"' \
+            | while read -r row; do echo "::notice title=Auth URL settings::$row"; done
+

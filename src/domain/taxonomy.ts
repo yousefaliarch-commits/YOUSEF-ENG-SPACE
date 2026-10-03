@@ -211,7 +211,13 @@ export const tabsFor = (p?: any) => (p && p.role === "supervisor" ? TABS.filter(
 export const NO_BLOCKS = { stack: [], sheets: [], rooms: [], posts: [], toolsOnly: null as string[] | null };
 export const toolOpen = (b?: any, id?: any) => !b || !b.toolsOnly || b.toolsOnly.includes(id);
 
-export const blockedFor = (p?: any) => (p && p.role === "supervisor" ? { stack: ["company", "job", "postjob", "cvreview"], sheets: ["contribute", "review", "methodology", "logo"], rooms: ["nego"], posts: ["reveal", "vote"], toolsOnly: SITE_TOOLS } : NO_BLOCKS);
+// HR accounts: the Tools tab holds the CV review only — no site tools, checklists, calculators or tax methodology
+export const HR_DENY = "حساب الموارد البشرية: من قسم الأدوات تتاح أداة مراجعة السير الذاتية فقط";
+export const blockedFor = (p?: any) => (p && p.role === "supervisor" ? { stack: ["company", "job", "postjob", "cvreview"], sheets: ["contribute", "review", "methodology", "logo"], rooms: ["nego"], posts: ["reveal", "vote"], toolsOnly: SITE_TOOLS }
+  : p && p.role === "hr" ? { stack: ["checklists", "inspection"], sheets: ["methodology"], rooms: [], posts: [], toolsOnly: [] as string[] } : NO_BLOCKS);
+// what a refused action says, and the title of a closed screen, for the member's role
+export const denyFor = (p?: any) => (p && p.role === "hr" ? HR_DENY : SUPERVISOR_DENY);
+export const closedTitleFor = (p?: any) => (p && p.role === "hr" ? "غير متاح لحساب الموارد البشرية" : "غير متاح لحساب مشرف الموقع");
 
 // Messaging rule. me/them = { anon, role, dm, companyId, openToRecruiters }. ctx = { job, post }
 export function dmRule(me?: any, them?: any, ctx: any = {}) {

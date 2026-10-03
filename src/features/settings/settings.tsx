@@ -109,7 +109,7 @@ export function SettingsScreen({ app }: any) {
 export const GUIDE_PULL = L3("اسحب الشاشة لأسفل للتحديث.", "اسحبي الشاشة لأسفل للتحديث.", "Pull down to refresh.");
 
 export function guideSections(app?: any) {
-  const co = app.isCo, sup = app.moneyAccess === "none", eng = !co && !sup; const S: any = [];
+  const co = app.isCo, sup = app.moneyAccess === "none", eng = !co && !sup, hr = app.profile && app.profile.role === "hr"; const S: any = [];
   S.push({ id: "start", icon: VenetianMask, title: L3("البداية: هويتان منفصلتان", null, "Getting started: two separate identities"), points: [
     L3("لك هويتان: علنية باسمك وصورتك، ومجهولة بمعرّف مثل ‎#a3f9 وشخصية تمثّل تخصصك. لا يستطيع أي عضو أو صاحب عمل الربط بينهما.", null, "You have two identities: a public one with your name and photo, and an anonymous one with an ID like #a3f9 and a character that represents your discipline. No member or employer can link one to the other."),
     L3("قبل كل منشور أو رد أو تقييم أو مشاركة راتب تختار الهوية لتلك المشاركة وحدها.", "قبل كل منشور أو رد أو تقييم أو مشاركة راتب تختارين الهوية لتلك المشاركة وحدها.", "Before every post, reply, review or salary share, you choose the identity for that contribution alone."),
@@ -159,13 +159,16 @@ export function guideSections(app?: any) {
     L3("التقديم خارج المنصة: افتح بيانات التواصل وأرسل سيرتك الذاتية مباشرة إلى صاحب العمل.", "التقديم خارج المنصة: افتحي بيانات التواصل وأرسلي سيرتك الذاتية مباشرة إلى صاحب العمل.", "Apply off the platform: open the contact details and send your CV directly to the employer."),
     L3("احفظ الوظائف لتعود إليها، ودقّق سيرتك الذاتية بمدقق السيرة الهندسية قبل التقديم.", "احفظي الوظائف لتعودي إليها، ودقّقي سيرتك الذاتية بمدقق السيرة الهندسية قبل التقديم.", "Save jobs to come back to, and run your CV through the engineering CV audit before applying."),
   ], action: [L3("افتح الوظائف", "افتحي الوظائف", "Open Jobs"), () => app.setTab("jobs")] });
-  S.push({ id: "site", icon: Calculator, title: L3("أدوات الموقع والمكتب الفني", null, "Site and technical office tools"), points: [
+  if (hr) S.push({ id: "cv", icon: Calculator, title: L3("الأدوات: مراجعة السير الذاتية", null, "Tools: CV review"), points: [
+    L3("حساب الموارد البشرية يرى من الأدوات مراجعة السير الذاتية فقط: افحص سيرة المرشح بمعايير المقاولين والاستشاريين على جهازك، دون رفعها لأي خادم.", null, "An HR account sees only the CV review among the tools: check a candidate's CV against contractor and consultant standards on your device, without uploading it anywhere."),
+  ], action: [L3("افتح الأدوات", "افتحي الأدوات", "Open Tools"), () => app.setTab("tools")] });
+  if (!hr) S.push({ id: "site", icon: Calculator, title: L3("أدوات الموقع والمكتب الفني", null, "Site and technical office tools"), points: [
     L3("حصر الخرسانة (الحجم والأسمنت والرمل والزلط)، وأوزان الحديد وعدد أسياخ الـ 12 م، وحصر الطوب والبلوك، وتحويل الوحدات ومنها الفدان والقيراط.", null, "Concrete take-off (volume, cement, sand, gravel), rebar weights and 12 m bars to order, brick and block take-off, and unit conversion including feddan and qirat."),
     L3("قوائم فحص واستلام الأعمال (QA/QC): تُحفظ على جهازك أثناء الملء وتُصدَّر تقرير PDF للتوقيع والمشاركة.", null, "Work inspection checklists (QA/QC): saved on your device as you fill them in and exported as a PDF report to sign and share."),
     L3("كلها تقديرات — المرجع دائمًا اللوحات والمواصفات المعتمدة للمشروع.", null, "All are estimates — the approved project drawings and specifications always govern."),
   ], action: [L3("افتح الأدوات", "افتحي الأدوات", "Open Tools"), () => app.setTab("tools")] });
-  if (!sup) S.push({ id: "tools", icon: Calculator, title: L3("الأدوات", null, "Tools"), points: [
-    L3("حاسبة الصافي: من الإجمالي إلى ما يصل حسابك بعد الضرائب والتأمينات.", null, "Net calculator: from gross to what reaches your account after tax and social insurance."),
+  if (!sup && !hr) S.push({ id: "tools", icon: Calculator, title: L3("الأدوات", null, "Tools"), points: [
+    L3("كل أرقام الرواتب في التطبيق صافية — ما يصل حسابك بعد الضرائب والتأمينات. حاسبة الصافي والإجمالي تحوّل بينهما عند الحاجة.", null, "Every salary figure in the app is net — what reaches your account after tax and social insurance. The net ⇄ gross calculator converts when you need it."),
     L3("مقارن العروض وسكريبت التفاوض وتوقيت الزيادة: قرارات مبنية على أرقام.", null, "Offer comparer, negotiation script and raise timing: decisions built on numbers."),
     L3("خريطة المسار، وفاحص العقد، وتكلفة الانتقال، والعلاوة مقابل التضخم.", null, "Career path map, contract checker, relocation cost, and raise vs inflation."),
   ], action: [L3("افتح الأدوات", "افتحي الأدوات", "Open Tools"), () => app.goMarket("tools")] });
@@ -237,7 +240,7 @@ export function GuideScreen({ app }: any) {
 
 // ---- the interactive tour: a spotlight that walks across the real interface, switching tabs as it explains them ----
 export function tourSteps(app?: any) {
-  const co = app.isCo, sup = app.moneyAccess === "none";
+  const co = app.isCo, sup = app.moneyAccess === "none", hr = app.profile && app.profile.role === "hr";
   const TAB: any = {
     home: [L3("الرئيسية", null, "Home"), co ? L3("ملخّص حساب شركتك: إعلاناتك النشطة ومدى وصولها، ونبض السوق في التخصصات التي توظّف لها.", "ملخّص حساب شركتك: إعلاناتك النشطة ومدى وصولها، ونبض السوق في التخصصات التي توظّفين لها.", "A summary of your company account: your active ads and their reach, and the market pulse in the disciplines you hire for.")
       : L3("ملخّص مرتّب حسب تخصصك ومكانك وهدفك: نطاق راتبك المتوقع، والوظائف المطابقة لك، والنقاشات الأنشط في مجالك.", null, "A summary arranged around your discipline, location and goal: your expected salary range, jobs matching you, and the most active discussions in your field.")],
@@ -247,7 +250,7 @@ export function tourSteps(app?: any) {
       : L3("إعلانات مصنّفة بالتخصص والمسار والمستوى والمحافظة، ولكل إعلان نطاق راتب تقديري. وتقدّم مباشرة لدى صاحب العمل.", "إعلانات مصنّفة بالتخصص والمسار والمستوى والمحافظة، ولكل إعلان نطاق راتب تقديري. وتقدّمين مباشرة لدى صاحب العمل.", "Ads classified by discipline, track, level and governorate, each with an estimated salary range. You apply directly with the employer.")],
     market: co ? [L3("السوق — رؤية إجمالية", null, "Market — aggregated view"), L3("نطاقات السوق الإجمالية فقط — لا يظهر أي راتب فردي أبدًا — ونطاقات مسمّيات شركتك متى توفرت 30 مشاركة على الأقل.", null, "Aggregated market ranges only — no individual salary is ever shown — plus ranges for your company’s job titles once there are at least 30 contributions.")]
       : [L3("السوق: الرواتب والشركات", null, "Market: salaries & companies"), L3("الشريط من الشريحة المئوية 10 إلى 90، والنقطة هي الوسيط. رشِّح بتخصصك ومسارك ومستواك ومحافظتك، وشارك راتبك دون كشف هويتك لتفتح التفاصيل.", "الشريط من الشريحة المئوية 10 إلى 90، والنقطة هي الوسيط. رشِّحي بتخصصك ومسارك ومستواك ومحافظتك، وشاركي راتبك دون كشف هويتك لتفتحي التفاصيل.", "The bar runs from the 10th to the 90th percentile and the dot is the median. Filter by your discipline, track, level and governorate, and share your salary anonymously to unlock the details.")],
-    tools: sup ? [L3("أدوات الموقع", null, "Site tools"), L3("حصر الخرسانة والحديد والمباني، وتحويل الوحدات، وقوائم فحص واستلام الأعمال مع تقرير PDF للتوقيع.", null, "Concrete, rebar and masonry take-off, unit conversion, and work inspection checklists with a PDF report for signature.")] : [L3("الأدوات", null, "Tools"), L3("حاسبة الصافي، ومقارن العروض، وسكريبت التفاوض، وتوقيت الزيادة، وغيرها — قرارات مبنية على أرقام.", null, "Net calculator, offer comparer, negotiation script, raise timing and more — decisions built on numbers.")],
+    tools: hr ? [L3("الأدوات", null, "Tools"), L3("مراجعة السير الذاتية للمرشحين بمعايير السوق الهندسي — على جهازك.", null, "Review candidates' CVs against engineering-market standards — on your device.")] : sup ? [L3("أدوات الموقع", null, "Site tools"), L3("حصر الخرسانة والحديد والمباني، وتحويل الوحدات، وقوائم فحص واستلام الأعمال مع تقرير PDF للتوقيع.", null, "Concrete, rebar and masonry take-off, unit conversion, and work inspection checklists with a PDF report for signature.")] : [L3("الأدوات", null, "Tools"), L3("حاسبة الصافي، ومقارن العروض، وسكريبت التفاوض، وتوقيت الزيادة، وغيرها — قرارات مبنية على أرقام.", null, "Net calculator, offer comparer, negotiation script, raise timing and more — decisions built on numbers.")],
     inbox: [L3("الرسائل", null, "Messages"), L3("رسائل خاصة ضمن قواعد واضحة تحمي الطرفين، وإشعارات الردود والوظائف المطابقة. الهوية التي تبدأ بها المحادثة تثبت بعد أول رسالة.", "رسائل خاصة ضمن قواعد واضحة تحمي الطرفين، وإشعارات الردود والوظائف المطابقة. الهوية التي تبدئين بها المحادثة تثبت بعد أول رسالة.", "Direct messages under clear rules that protect both sides, plus notifications for replies and matching jobs. The identity you start a chat with is fixed after the first message.")],
   };
   const steps: any = [{ id: "hello", icon: Compass, title: L3("أهلًا بك في EngSpace", "أهلًا بكِ في EngSpace", "Welcome to EngSpace"), body: L3("جولة قصيرة على أهم الأقسام — أقل من دقيقة. يمكنك تخطيها الآن وإعادتها في أي وقت من الإعدادات.", "جولة قصيرة على أهم الأقسام — أقل من دقيقة. يمكنكِ تخطيها الآن وإعادتها في أي وقت من الإعدادات.", "A short tour of the main sections — under a minute. You can skip it now and replay it anytime from Settings.") }];

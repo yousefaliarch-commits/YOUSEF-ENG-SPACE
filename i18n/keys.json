@@ -182,11 +182,6 @@
   "p": "app/AppView.tsx",
   "n": 1
  },
- "غير متاح لحساب مشرف الموقع": {
-  "k": "s",
-  "p": "app/AppView.tsx",
-  "n": 2
- },
  "رجوع": {
   "k": "s",
   "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,ui/chrome.tsx",
@@ -280,8 +275,8 @@
  },
  "لوحة الإدارة": {
   "k": "s",
-  "p": "app/TopBar.tsx,features/admin/AdminView.tsx",
-  "n": 2
+  "p": "app/TopBar.tsx,features/admin/AdminView.tsx,ui/chrome.tsx",
+  "n": 4
  },
  "الإدارة": {
   "k": "s",
@@ -384,6 +379,11 @@
   "k": "s",
   "p": "backend/cloud.ts",
   "n": 1
+ },
+ "تعذّر إكمال تسجيل الدخول — أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts,native/native.ts",
+  "n": 2
  },
  "استلام حديد التسليح": {
   "k": "s",
@@ -2447,7 +2447,7 @@
   "n": 1,
   "x": "c.name"
  },
- "إجمالي شهري (أساسي + بدلات ثابتة) · قطاع خاص · القاهرة الكبرى = 1.00": {
+ "صافي شهري — ما يصل الحساب بعد ضريبة الدخل والتأمينات (أساسي + بدلات ثابتة، دون مكافآت سنوية). النموذج معايَر على مراجع إجمالية (الحد الأدنى للأجور وسقف التأمينات) ثم محوَّل للصافي بقانون الضريبة الساري · قطاع خاص · القاهرة الكبرى = 1.00": {
   "k": "s",
   "p": "data/geo.ts",
   "n": 1
@@ -5540,17 +5540,17 @@
   "p": "data/tools.ts",
   "n": 1
  },
- "صافيه ومكانه من السوق ورقمك المضاد": {
+ "مكانه من السوق بالصافي ورقمك المضاد": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
  },
- "حاسبة الصافي": {
+ "الصافي والإجمالي": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
  },
- "الصافي، والعكس: كم أطلب لأقبض؟": {
+ "حوّل بين الصافي والإجمالي": {
   "k": "s",
   "p": "data/tools.ts",
   "n": 1
@@ -7864,6 +7864,21 @@
   "n": 1
  },
  "حساب مشرف الموقع: المجتمع وأدوات الموقع وقوائم الفحص فقط — الرواتب والوظائف والشركات غير متاحة له": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 1
+ },
+ "حساب الموارد البشرية: من قسم الأدوات تتاح أداة مراجعة السير الذاتية فقط": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 1
+ },
+ "غير متاح لحساب الموارد البشرية": {
+  "k": "s",
+  "p": "domain/taxonomy.ts",
+  "n": 1
+ },
+ "غير متاح لحساب مشرف الموقع": {
   "k": "s",
   "p": "domain/taxonomy.ts",
   "n": 1
@@ -10498,7 +10513,7 @@
  "ج.م": {
   "k": "x",
   "p": "features/admin/AdminView.tsx,features/market/live-salary.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
-  "n": 20
+  "n": 19
  },
  "{0} ج.م": {
   "k": "r",
@@ -13454,10 +13469,10 @@
   "p": "features/market/raise-tracker.tsx",
   "n": 1
  },
- "الراتب الإجمالي": {
+ "الراتب الصافي": {
   "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 2
+  "p": "features/market/raise-tracker.tsx,features/sheets/sheets.tsx",
+  "n": 4
  },
  "إضافة": {
   "k": "x",
@@ -13805,6 +13820,11 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
  },
+ "بنود مخصصة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
  "المشروع": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
@@ -13846,6 +13866,21 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
+ "حذف البند": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "ما المطلوب تصحيحه؟": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "ملاحظة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
  "اسم المشروع": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
@@ -13856,13 +13891,13 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "ما المطلوب تصحيحه؟": {
+ "بند إضافي تريد فحصه — مثال: نظافة فتحات الصرف": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
-  "n": 1
+  "n": 2
  },
- "ملاحظة": {
-  "k": "s",
+ "إضافة بند مخصص": {
+  "k": "x",
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
@@ -14140,7 +14175,7 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "راتبك": {
+ "صافي راتبك": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -14155,7 +14190,7 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "راتبك {0} ج.م {1} لهذه الخبرة. {2} اكتملت المحاكاة محليًا ولم يُرسل شيء.": {
+ "صافي راتبك {0} ج.م {1} لهذه الخبرة. {2} اكتملت المحاكاة محليًا ولم يُرسل شيء.": {
   "k": "r",
   "p": "features/sheets/sheets.tsx",
   "n": 1,
@@ -14211,7 +14246,7 @@
  "الراتب": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
-  "n": 3
+  "n": 1
  },
  "الخطوات": {
   "k": "s",
@@ -14269,12 +14304,12 @@
   "n": 1,
   "x": "company(payload.company)?.name"
  },
- "الراتب الإجمالي الشهري": {
+ "صافي الراتب الشهري": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
-  "n": 4
+  "n": 2
  },
- "قبل الضرائب والاستقطاعات، دون مكافآت سنوية. المتوسط لمثل خبرتك في": {
+ "الصافي: ما يصل حسابك شهريًا بعد الضرائب والتأمينات، دون مكافآت سنوية. وسط الصافي لمثل خبرتك في": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -14284,7 +14319,7 @@
   "p": "features/sheets/sheets.tsx",
   "n": 3
  },
- "قبل الضرائب والاستقطاعات، دون مكافآت سنوية. المتوسط لمثل خبرتك في {0}: {1} ج.م.": {
+ "الصافي: ما يصل حسابك شهريًا بعد الضرائب والتأمينات، دون مكافآت سنوية. وسط الصافي لمثل خبرتك في {0}: {1} ج.م.": {
   "k": "r",
   "p": "features/sheets/sheets.tsx",
   "n": 1,
@@ -14355,7 +14390,23 @@
   "p": "features/sheets/sheets.tsx,ui/feed.tsx",
   "n": 4
  },
- "الغرفة": {
+ "أين يُنشر؟": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "أين يُنشر؟ {0}": {
+  "k": "r",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1,
+  "x": "EL <span className=\"text-ink-3\">· الغرفة اختيارية</span>"
+ },
+ "· الغرفة اختيارية": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
+ "منشور عام": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -14812,20 +14863,25 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
+ "من الصافي إلى الإجمالي": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
  "من الإجمالي إلى الصافي": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "كم أطلب لأقبض…؟": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "الصافي الذي تحتاجه شهريًا": {
+ "الراتب الإجمالي الشهري": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
+ },
+ "الصافي الشهري": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx",
+  "n": 4
  },
  "أشهر مكافأة في السنة": {
   "k": "s",
@@ -14837,7 +14893,7 @@
   "p": "features/sheets/sheets.tsx",
   "n": 6
  },
- "اطلب إجماليًا": {
+ "الإجمالي المقابل": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -14847,7 +14903,7 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "اطلب إجماليًا {0} ج.م شهريًا": {
+ "الإجمالي المقابل {0} ج.م شهريًا": {
   "k": "r",
   "p": "features/sheets/sheets.tsx",
   "n": 1,
@@ -14903,32 +14959,27 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "قيّم عرض عمل بهذا الرقم": {
+ "قيّم عرض عمل بهذا الصافي": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "الأساسي الشهري": {
+ "الصافي الأساسي الشهري": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
  },
- "بدلات شهرية": {
+ "بدلات شهرية (صافي)": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
  },
- "يصل حسابك في الشهر العادي": {
+ "صافي العرض في الشهر (أساسي + بدلات)": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "الإجمالي الشهري (أساسي + بدلات)": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "صافي السنة كاملة (مع المكافآت)": {
+ "صافي السنة كاملة (مع المكافآت، تقريبًا)": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 1
@@ -15058,15 +15109,15 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "الأساسي": {
+ "الصافي الأساسي": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
  },
- "بدلات": {
+ "بدلات (صافي)": {
   "k": "s",
-  "p": "features/sheets/sheets.tsx,lib/search.ts",
-  "n": 3
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
  },
  "المواصلات (دقيقة/اتجاه)": {
   "k": "s",
@@ -15116,7 +15167,7 @@
  "العرض": {
   "k": "x",
   "p": "features/sheets/sheets.tsx,features/sitetools/site-tools.tsx",
-  "n": 7
+  "n": 5
  },
  "{0} العرض {1} {2}": {
   "k": "r",
@@ -15178,7 +15229,12 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "وسط السوق": {
+ "العرض (صافي)": {
+  "k": "s",
+  "p": "features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "وسط السوق (صافي)": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
@@ -15209,7 +15265,7 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "راتبك الحالي": {
+ "راتبك الصافي الحالي": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 4
@@ -15446,7 +15502,7 @@
   "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,lib/search.ts",
   "n": 4
  },
- "العرض هناك": {
+ "العرض هناك (صافي)": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
@@ -15468,8 +15524,8 @@
  },
  "ج.م / شهر": {
   "k": "x",
-  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,lib/helpers.tsx,ui/chrome.tsx",
-  "n": 4
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
  },
  "إيجار": {
   "k": "x",
@@ -16099,11 +16155,6 @@
   "p": "features/stack/stack.tsx,features/tabs/tabs.tsx,lib/search.ts",
   "n": 4
  },
- "الراتب الشهري": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 2
- },
  "فاوضت": {
   "k": "s",
   "p": "features/stack/stack.tsx",
@@ -16329,17 +16380,17 @@
   "n": 1,
   "x": "quality(c.reports)[0]"
  },
- "متوسط المهندسين": {
+ "متوسط الصافي": {
   "k": "s",
-  "p": "features/stack/stack.tsx,ui/feed.tsx",
-  "n": 2
+  "p": "features/stack/stack.tsx",
+  "n": 1
  },
  "ينصحون بها": {
   "k": "s",
   "p": "features/stack/stack.tsx,ui/feed.tsx",
   "n": 2
  },
- "نطاق الرواتب المسجّل": {
+ "نطاق الصافي المسجّل": {
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1
@@ -16414,6 +16465,11 @@
   "n": 1,
   "x": "ROLE[d]"
  },
+ "ج.م صافي / شهر": {
+  "k": "x",
+  "p": "features/stack/stack.tsx,lib/helpers.tsx,ui/chrome.tsx",
+  "n": 3
+ },
  "نفس الوظيفة هنا (≈": {
   "k": "x",
   "p": "features/stack/stack.tsx",
@@ -16441,7 +16497,7 @@
   "p": "features/stack/stack.tsx",
   "n": 1
  },
- "متوسط الراتب حسب المسمى": {
+ "متوسط الصافي حسب المسمى": {
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1
@@ -16667,18 +16723,18 @@
   "p": "features/stack/stack.tsx",
   "n": 1
  },
- "ج.م ±15%.": {
+ "ج.م صافي ±15%.": {
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1
  },
- "لم تكتب الشركة رقمًا — والمنصة لا تسمح بذلك. النطاق محسوب من بيانات السوق للتصنيف نفسه، والوسط {0} ج.م ±15%.": {
+ "لم تكتب الشركة رقمًا — والمنصة لا تسمح بذلك. النطاق محسوب من بيانات السوق للتصنيف نفسه، والوسط {0} ج.م صافي ±15%.": {
   "k": "r",
   "p": "features/stack/stack.tsx",
   "n": 1,
   "x": "EL <Num className=\"text-ink\">{fmt(e.mid)}</Num>"
  },
- "الصافي من الوسط": {
+ "الإجمالي المقابل للوسط": {
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1
@@ -18407,8 +18463,8 @@
  },
  "ج.م ·": {
   "k": "x",
-  "p": "features/tabs/tabs.tsx,ui/feed.tsx",
-  "n": 2
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
  },
  "— تقريبية، تُحدَّث شهريًا.": {
   "k": "x",
@@ -18451,12 +18507,12 @@
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
- "إجمالي شهري بالجنيه قبل الضرائب · نموذج": {
+ "صافي شهري بالجنيه — ما يصل حسابك بعد الضرائب والتأمينات · نموذج": {
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
- "إجمالي شهري بالجنيه قبل الضرائب · نموذج {0}": {
+ "صافي شهري بالجنيه — ما يصل حسابك بعد الضرائب والتأمينات · نموذج {0}": {
   "k": "e",
   "p": "features/tabs/tabs.tsx",
   "n": 1,
@@ -18504,16 +18560,10 @@
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
- "صافي المتوسط تقريبًا": {
+ "الإجمالي المقابل؟ حاسبة الصافي والإجمالي": {
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
- },
- "صافي المتوسط تقريبًا {0} ج.م": {
-  "k": "r",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1,
-  "x": "EL <Num className=\"text-ink\">{fmt(net.net)}</Num>"
  },
  "حسب المسمّى الدقيق": {
   "k": "x",
@@ -18619,6 +18669,11 @@
   "n": 1
  },
  "حصر الخرسانة والحديد والمباني، تحويل الوحدات، وقوائم فحص واستلام الأعمال — كله على جهازك.": {
+  "k": "s",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "راجع السير الذاتية للمرشحين بمعايير المقاولين والاستشاريين — على جهازك، دون رفع الملف لأي خادم.": {
   "k": "s",
   "p": "features/tabs/tabs.tsx",
   "n": 1
@@ -19384,6 +19439,11 @@
   "n": 1
  },
  "بدل": {
+  "k": "s",
+  "p": "lib/search.ts",
+  "n": 1
+ },
+ "بدلات": {
   "k": "s",
   "p": "lib/search.ts",
   "n": 1
@@ -20199,7 +20259,12 @@
   "p": "ui/feed.tsx",
   "n": 1
  },
- "الوسط المتوقع {0} ج.م · {1} تقرير": {
+ "ج.م صافي ·": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "الوسط المتوقع {0} ج.م صافي · {1} تقرير": {
   "k": "r",
   "p": "ui/feed.tsx",
   "n": 1,
@@ -20248,6 +20313,11 @@
   "p": "ui/feed.tsx",
   "n": 1,
   "x": "EL <div className=\"text-ink-3\">متوسط المهندسين</div> | EL <Num className=\"text-[14px] font-semibold text-ink\">{fmt(c.m"
+ },
+ "متوسط المهندسين": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
  },
  "تقارير ·": {
   "k": "x",

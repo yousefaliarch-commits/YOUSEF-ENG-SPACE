@@ -68,7 +68,7 @@ export function RaiseTracker({ app }: any) {
 
     <section><h4 className="text-[13px] font-medium mb-2">سجل راتبك</h4>
       <div className="space-y-2"><Field label="الشهر" value={month} onChange={setMonth} type="month" unit="" />
-        <div className="flex gap-2 items-end"><div className="flex-1 min-w-0"><Field label="الراتب الإجمالي" value={sal} onChange={setSal} /></div><Primary onClick={add} className="h-12 px-4 press shrink-0"><Plus size={16} /> إضافة</Primary></div></div>
+        <div className="flex gap-2 items-end"><div className="flex-1 min-w-0"><Field label="الراتب الصافي" value={sal} onChange={setSal} /></div><Primary onClick={add} className="h-12 px-4 press shrink-0"><Plus size={16} /> إضافة</Primary></div></div>
       {log.length > 0 && <ul className="mt-2 divide-y divide-line rounded-xl border border-line bg-surface">{[...log].sort((a, b) => (a.month < b.month ? 1 : -1)).map((x) => { const s = h.steps.find((t) => t.to === x.month); return (
         <li key={x.month} className="px-3 py-2.5 flex items-center justify-between gap-2 text-[12.5px]">
           <span className="min-w-0"><span className="block text-ink">{monthLabel(x.month)} · <Num>{fmt(x.salary)}</Num></span>{s && <span className="block text-[11px] text-ink-3">زيادة <Num>{pct(s.nominal)}</Num> · التضخم <Num>{pct(s.inflation)}</Num> · <span className={s.real >= 0 ? "text-good" : "text-warn"}>حقيقية <Num>{pct(s.real)}</Num></span></span>}</span>

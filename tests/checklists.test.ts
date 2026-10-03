@@ -1,6 +1,6 @@
 // src/data/checklists.ts + src/lib/report-pdf.ts — QA/QC templates, tally, device/server merge, the PDF container
 import { describe, expect, it } from "vitest";
-import { TEMPLATES, itemsOf, mergeInspections, newInspection, tally } from "../src/data/checklists";
+import { TEMPLATES, customKey, itemsOf, mergeInspections, newCustom, newInspection, tally } from "../src/data/checklists";
 import { pdfFromJpegs } from "../src/lib/report-pdf";
 
 describe("checklists", () => {
@@ -14,6 +14,13 @@ describe("checklists", () => {
     const all = Object.fromEntries(keys.map((k) => [k, "pass"])); expect(tally(t, all).suggested).toBe("accepted");
     expect(tally(t, { ...all, [keys[1]]: "na" }).suggested).toBe("accepted");
     expect(tally(t, { [keys[0]]: "fail" }).suggested).toBe("rejected");
+  });
+  it("custom items count like the template's own: open until marked, a failure rejects", () => {
+    const t = TEMPLATES[0]; const all = Object.fromEntries(itemsOf(t).map((k) => [k, "pass"])); const extra = newCustom("  نظافة فتحات الصرف  ");
+    expect(extra.text).toBe("نظافة فتحات الصرف"); expect(itemsOf(t, [extra])).toContain(customKey(extra));
+    expect(tally(t, all, [extra]).suggested).toBe(""); expect(tally(t, all, [extra]).total).toBe(itemsOf(t).length + 1);
+    expect(tally(t, { ...all, [customKey(extra)]: "fail" }, [extra]).suggested).toBe("rejected");
+    expect(newInspection(t).custom).toEqual([]);
   });
   it("device and server copies merge: newer edit wins, nothing dropped", () => {
     const a = { ...newInspection(TEMPLATES[0]), id: "a", at: 10, project: "old" }; const b = { ...newInspection(TEMPLATES[1]), id: "b", at: 5 };
