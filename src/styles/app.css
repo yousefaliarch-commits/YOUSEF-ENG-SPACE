@@ -236,9 +236,16 @@ html[data-glass="lite"] .glass { -webkit-backdrop-filter: none; backdrop-filter:
 .tab-ind { background: rgb(var(--accent) / .13); box-shadow: inset 0 0 0 1px rgb(var(--accent) / .16); transform: translate3d(calc(var(--i) * 100% * var(--dx, 1)), 0, 0);
   transition: transform .34s var(--spring); will-change: transform; }
 [dir="rtl"] .tab-ind { --dx: -1; }
+/* a pushed screen (post, chat, company, forms) hides the bar, like iOS detail screens: its own action bar takes the bottom.
+   transform/opacity only — the bar keeps its layer, so showing it again is a composite, not a repaint */
+.tabbar { transition: transform .32s var(--spring), opacity .2s ease; }
+.tabbar.is-off { transform: translate3d(0, calc(100% + 16px + var(--sab)), 0); opacity: 0; pointer-events: none; }
+.pushed { --tabbar-space: 0px; }
+/* …and the screen keeps clear of the home indicator itself, unless its own bottom bar (.foot) already pads for it */
+.pushed .screen-body { padding-bottom: var(--sab); }
+.pushed .screen-body:has(.foot) { padding-bottom: 0; }
 @media (prefers-reduced-motion: reduce) { .tab-ind { transition: none; } }
 
-/* kept-alive tab panes: shown with flex only when not [hidden]; a short composited fade replays each time a pane is shown */
 /* kept-alive tab panes: the visible one is in the flow; the others sit out of it, unpainted and unhittable, with their
    rendering state kept (content-visibility:hidden), at the same width so showing them needs no new layout */
 .tab-pane { display: flex; flex-direction: column; min-height: 100%; }

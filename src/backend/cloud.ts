@@ -388,6 +388,11 @@ export const admin = {
     const db = await supabase(); ok(await db.rpc("admin_set_account", { p_ref: ref, p_role: patch.role ?? null, p_verified: patch.verified ?? null, p_suspend_days: patch.suspendDays ?? null, p_lift: !!patch.lift }));
   },
   async warn(ref: string, text: string) { const db = await supabase(); ok(await db.rpc("admin_warn", { p_ref: ref, p_text: text })); },
+  // admins only: deletes the item for good (replies, reactions and authorship links with it), then its image in Storage
+  async deleteContent(kind: string, id: string) {
+    const db = await supabase(); const r: any = ok(await db.rpc("admin_delete_content", { p_kind: kind, p_item: id }));
+    if (r && r.image) await db.storage.from("media").remove([r.image]).catch(() => {});
+  },
   async setHidden(kind: string, id: string, hidden: boolean) { const db = await supabase(); ok(await db.rpc("admin_set_hidden", { p_kind: kind, p_item: id, p_hidden: hidden })); },
   async config() { const db = await supabase(); const r = ok(await db.from("app_config").select("value").eq("key", "mod").maybeSingle()) as any; return r ? r.value : null; },
   async setConfig(patch: any) { const db = await supabase(); return ok(await db.rpc("admin_set_config", { p_patch: patch })); },

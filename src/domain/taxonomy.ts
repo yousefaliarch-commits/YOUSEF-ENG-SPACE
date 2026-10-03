@@ -221,6 +221,8 @@ export const closedTitleFor = (p?: any) => (p && p.role === "hr" ? "غير مت�
 
 // Messaging rule. me/them = { anon, role, dm, companyId, openToRecruiters }. ctx = { job, post }
 export function dmRule(me?: any, them?: any, ctx: any = {}) {
+  // a team thread (either side): the platform talks to every member, and every member can answer it — whatever the roles
+  if (ctx.team || (them && them.team)) return { ok: true, why: "فريق المنصة" };
   if (!them || (them.as === "public" ? !!me.pid && them.pid === me.pid : !!me.anon && them.anon === me.anon)) return { ok: false, why: "هذا أنت" };
   const meCo = isCompanyRole(me.role), themCo = isCompanyRole(them.role);
   if (me.role === "supervisor" && themCo) return { ok: false, why: "حساب مشرف الموقع للمجتمع فقط — لا مراسلة مع جهات العمل" };

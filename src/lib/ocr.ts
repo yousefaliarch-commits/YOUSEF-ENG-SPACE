@@ -18,9 +18,15 @@ export function ocrWorkerShim() {
 let OCR_WORKER_URL = null;
 const ocrWorkerUrl = () => OCR_WORKER_URL || (OCR_WORKER_URL = URL.createObjectURL(new Blob(["(" + ocrWorkerShim.toString() + ")();importScripts(" + JSON.stringify(abs(OCR_ASSETS.worker)) + ");"], { type: "application/javascript" })));
 
+// The models ship as *.traineddata.gz, but Android's APK packager strips «.gz» from asset names (and inflates them), so
+// inside the Android app only *.traineddata exists — ask once which name is there (Tesseract reads either form).
+let GZ: Promise<boolean> | null = null;
+const modelsGzipped = () => GZ || (GZ = fetch(abs(`${OCR_ASSETS.lang}/eng.traineddata.gz`), { method: "HEAD" }).then((r) => r.ok, () => false)
+  .then((ok) => ok || fetch(abs(`${OCR_ASSETS.lang}/eng.traineddata`), { method: "HEAD" }).then((r) => !r.ok, () => true)));
+
 export async function ocrOpen(langs?: any, onStep?: any) {
   const T = await loadTesseract(); if (!T || !T.createWorker) throw new Error("ocr_unavailable");
-  const opts: any = { workerPath: ocrWorkerUrl(), workerBlobURL: false, corePath: abs(OCR_ASSETS.core), langPath: abs(OCR_ASSETS.lang), cacheMethod: "none", gzip: true, logger: (m?: any) => { try { if (onStep) onStep(m); } catch (e) {} }, errorHandler: () => {} };
+  const opts: any = { workerPath: ocrWorkerUrl(), workerBlobURL: false, corePath: abs(OCR_ASSETS.core), langPath: abs(OCR_ASSETS.lang), cacheMethod: "none", gzip: await modelsGzipped(), logger: (m?: any) => { try { if (onStep) onStep(m); } catch (e) {} }, errorHandler: () => {} };
   const w: any = await withTimeout(T.createWorker(langs, 1, opts, { debug_file: "/dev/null" }), 90000);
   await w.setParameters({ preserve_interword_spaces: "1", user_defined_dpi: "300" }); return w;
 }

@@ -6555,6 +6555,11 @@
   "p": "domain/moderation.ts",
   "n": 1
  },
+ "حذف نهائي": {
+  "k": "s",
+  "p": "domain/moderation.ts,features/stack/stack.tsx",
+  "n": 2
+ },
  "تحذير": {
   "k": "s",
   "p": "domain/moderation.ts,features/admin/AdminView.tsx,features/admin/kit.tsx,features/stack/stack.tsx",
@@ -7897,6 +7902,11 @@
   "k": "s",
   "p": "domain/taxonomy.ts",
   "n": 1
+ },
+ "فريق المنصة": {
+  "k": "s",
+  "p": "domain/taxonomy.ts,features/stack/stack.tsx,features/tabs/tabs.tsx",
+  "n": 5
  },
  "هذا أنت": {
   "k": "s",
@@ -9304,6 +9314,11 @@
   "p": "features/admin/AdminView.tsx",
   "n": 2
  },
+ "حُذف المحتوى نهائيًا": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
+ },
  "أُرسل التحذير إلى {0}": {
   "k": "t",
   "p": "features/admin/AdminView.tsx",
@@ -9752,7 +9767,7 @@
  "الكل": {
   "k": "s",
   "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/tabs/tabs.tsx",
-  "n": 6
+  "n": 7
  },
  "كل الأنواع": {
   "k": "s",
@@ -9914,7 +9929,7 @@
  "افتحه في التطبيق": {
   "k": "x",
   "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "n": 1
  },
  "إشارات آلية": {
   "k": "s",
@@ -9966,7 +9981,7 @@
  "إخفاء": {
   "k": "x",
   "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts",
-  "n": 2
+  "n": 3
  },
  "عن الجميع": {
   "k": "x",
@@ -10818,16 +10833,10 @@
   "p": "features/admin/AdminView.tsx",
   "n": 2
  },
- "عنصر ·": {
-  "k": "x",
+ "ظاهر": {
+  "k": "s",
   "p": "features/admin/AdminView.tsx",
-  "n": 1
- },
- "{0} عنصر · {1} مخفي": {
-  "k": "r",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1,
-  "x": "EL <Num>{list.length}</Num> | EL <Num>{list.filter((x) => (A.mod.content[x.key] || {}).hidden"
+  "n": 2
  },
  "مخفي تلقائيًا": {
   "k": "s",
@@ -10839,20 +10848,66 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
- "ظاهر": {
+ "يُحذف": {
   "k": "x",
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
- "إعادة إظهار": {
+ "من قاعدة البيانات ولا يمكن استرجاعه. للإخفاء المؤقت استخدم «إخفاء».": {
   "k": "x",
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
- "إخفاء عن الجميع": {
+ "{0} يُحذف {1} من قاعدة البيانات ولا يمكن استرجاعه. للإخفاء المؤقت استخدم «إخفاء».": {
+  "k": "r",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1,
+  "x": "EL <b className=\"text-bad\">حذف نهائي؟</b> | tab === \"posts\" ? \"المنشور وكل الردود عليه\" : tab === \"comme"
+ },
+ "حذف نهائي؟": {
   "k": "x",
   "p": "features/admin/AdminView.tsx",
   "n": 1
+ },
+ "المنشور وكل الردود عليه": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "الرد وكل ما تحته": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "العنصر": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "احذف نهائيًا": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx",
+  "n": 2
+ },
+ "إلغاء": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/support/support.tsx,ui/moderation.tsx",
+  "n": 4
+ },
+ "إظهار": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 1
+ },
+ "حذف": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx,features/market/raise-tracker.tsx",
+  "n": 3
+ },
+ "فتح": {
+  "k": "x",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
  },
  "إعلان عام في رئيسية التطبيق": {
   "k": "s",
@@ -10956,11 +11011,6 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1,
   "x": "v ? \"فتح\" : \"إغلاق\" | r.name"
- },
- "فتح": {
-  "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1
  },
  "إغلاق": {
   "k": "s",
@@ -12066,11 +12116,6 @@
   "k": "x",
   "p": "features/auth/auth.tsx",
   "n": 1
- },
- "إلغاء": {
-  "k": "x",
-  "p": "features/auth/auth.tsx,features/support/support.tsx,ui/moderation.tsx",
-  "n": 3
  },
  "لديك حساب؟ دخول": {
   "k": "x",
@@ -13840,11 +13885,6 @@
   "p": "features/market/raise-tracker.tsx",
   "n": 1,
   "x": "EL <Num>{pct(s.real)}</Num>"
- },
- "حذف": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 2
  },
  "ساعد غيرك: شارك نسبة زيادتك الأخيرة (": {
   "k": "x",
@@ -17222,11 +17262,6 @@
   "p": "features/stack/stack.tsx",
   "n": 2
  },
- "فريق المنصة": {
-  "k": "x",
-  "p": "features/stack/stack.tsx,features/tabs/tabs.tsx",
-  "n": 3
- },
  "إبلاغ عن المحادثة": {
   "k": "s",
   "p": "features/stack/stack.tsx",
@@ -17648,17 +17683,7 @@
   "p": "features/stack/stack.tsx",
   "n": 1
  },
- "حذف نهائي": {
-  "k": "x",
-  "p": "features/stack/stack.tsx",
-  "n": 1
- },
  "يُحذف حسابك وملفك ومشاركاتك وتفاعلاتك من هذا الجهاز نهائيًا، ولا يمكن التراجع.": {
-  "k": "x",
-  "p": "features/stack/stack.tsx",
-  "n": 1
- },
- "احذف نهائيًا": {
   "k": "x",
   "p": "features/stack/stack.tsx",
   "n": 1
@@ -19254,6 +19279,22 @@
   "n": 1
  },
  "من يستطيع مراسلة من؟": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "راسل فريق EngSpace": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "راسل فريق EngSpace {0}": {
+  "k": "r",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1,
+  "x": "EL <span className=\"inline-flex items-center gap-1 h-5 px-2 rou"
+ },
+ "سؤال أو مشكلة أو اقتراح — يصل لفريق الإدارة وتتابع الرد هنا": {
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1

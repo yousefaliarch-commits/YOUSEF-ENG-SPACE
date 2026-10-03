@@ -26,6 +26,8 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 - Money by role: engineers individual figures; HR/owner aggregates (≥ 5 reports per cell); field staff none — their Tools tab
   shows only the site tools + checklists (`blockedFor(...).toolsOnly`, `toolOpen`). HR's Tools tab: CV review only.
 - Staff (`profiles.staff` moderator/admin; `role` stays engineer) reach the console from the header on every device.
+  Moderators hide/restore; only admins delete for good (`admin_delete_content` — replies, reactions, authorship and the
+  post image go too). Every member can answer a team thread and reach the team from Messages (support tickets).
 - Admin member directory (`admin_directory`, admins only) is keyed by pid and NEVER shows mod_ref or moderation state; the
   mod_ref list (`admin_accounts`) carries only moderation fields — so names can't be joined to anonymous reports. Team messages
   (`admin_message`) arrive as «فريق EngSpace». Support tickets: `support_tickets`/`ticket_messages`, private `support` bucket.
@@ -55,6 +57,8 @@ CI: check, database (pgTAP + cloud e2e on local Supabase), android (debug APK ar
 - No infinite/idle animation below 64 px or inside bars and lists; no backdrop blur over scrolling content.
 - Animate transform/opacity only; gestures write styles directly, never React state per touchmove.
 - Long lists render through `ui/windowed.tsx`.
+- Pushed screens (post, chat, forms) hide the tab bar (`.pushed`, `--tabbar-space: 0`); a bottom action bar carries `.foot`
+  and pads for the home indicator itself.
 - Glass (`.glass`): only the floating tab bar; Android without headroom gets `html[data-glass=lite]` (no live blur). The tour
   animates opacity/transform only and suppresses view transitions (`liveState().tourOn`).
 
