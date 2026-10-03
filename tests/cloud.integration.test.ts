@@ -96,6 +96,15 @@ run("cloud backend (local Supabase)", () => {
     expect((await cloud.latestShares("civil", "3-5", "cairo")).some((r: any) => r.salary === 18000)).toBe(true);
   });
 
+  it("a double tap is one report: the repeat is accepted as «already recorded», and the status says unlocked", async () => {
+    expect(await cloud.salaryUnlocked()).toBe(true);
+    const share = { disc: "civil", exp: "3-5", salary: 20000 + (Date.now() % 997), gov: "cairo", track: "tech", as: "anon" };
+    await cloud.contribute(share);
+    await expect(cloud.contribute(share)).resolves.toBeUndefined();
+    expect((await cloud.latestShares("civil", "3-5", "cairo")).filter((r: any) => r.salary === share.salary).length).toBe(1);
+  });
+
+
   it("company scorecard: factor ratings stay private; under 5 reviewers only counts come back", async () => {
     const co = "cloudtest-" + tag;
     await cloud.addReview(co, { stars: 4, text: "تقييم تجريبي للشركة من الاختبار", as: "anon", scores: { pay: 3, ontime: 5 } });

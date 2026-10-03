@@ -6,8 +6,8 @@ import {
 import { loadInspections, mergeInspections, storeInspections } from "../data/checklists";
 import { SupportScreen, TicketScreen } from "../features/support/support";
 import { loadDevice, storeDevice } from "../lib/device-store";
-import { ROOMS } from "../data/companies";
-import { TABS } from "../data/geo";
+import { ROOMS, company } from "../data/companies";
+import { TABS, govName } from "../data/geo";
 import { JOBS, NOTIFS0, POSTS0, R0 } from "../data/seed";
 import { TOOLS } from "../data/tools";
 import { accIdOf, authorAccId, authorKey, authorOf, cleanName, hasSession, loadAccount, memberAccId, normalizeSeedPosts, sameAuthor, saveAccount, setSession } from "../domain/identity";
@@ -33,7 +33,8 @@ import { fmt } from "../ui/theme";
 import { ScreenLoading } from "./ScreenLoading";
 import { isCloud } from "../backend/config";
 import { profilePatch } from "../backend/map";
-import { NATIVE, setBackHandler, takePendingAuth } from "../native/native";
+import { NATIVE, setBackHandler, setPendingOpen, shareContent, takePendingAuth, takePendingOpen } from "../native/native";
+import { SHAREABLE, linkFor, snippet } from "../lib/share";
 import * as cloud from "../backend/cloud";
 
 // The CV review (parser, engineering knowledge base, audit, report) is the largest feature; it loads on first open, and
@@ -197,10 +198,13 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // ---- cloud: load the member's real data, keep it fresh, and send every change to the server ----
   // writes stay optimistic (the screen updates at once); a failure shows its reason and the next refresh restores the truth
   const sync = (call?: any, onOk?: any) => { if (!CLOUD) return; Promise.resolve().then(call).then(onOk, (e) => setMsg(e && e.message ? e.message : String(e))); };
-  const hydrated = useRef(false);
+  const hydrated = useRef(false); const contributing = useRef(false); const sharing = useRef(false); const shareOkAt = useRef(0);
   const hydrate = async () => {
     const d = await cloud.loadAll(); hydrated.current = false;
     setPosts(d.posts); setJobs(d.jobs); setJobStats(Object.fromEntries(d.jobs.map((j) => [j.id, j.stats]))); setNotifs(d.notifs); setThreads((ts) => d.threads.map((t) => { const old = ts.find((x) => x.id === t.id); return old ? { ...t, messages: old.messages } : t; }));
+    // give-to-get comes from the server, so a fresh install or another phone is unlocked the same way (a share made seconds ago
+    // may not be in a read that started before it — keep the local answer for a minute)
+    if (d.contributed || Date.now() - shareOkAt.current > 60000) { setContributed((c) => (isCompanyRole(persona && persona.role) ? c || !!d.contributed : !!d.contributed)); updateProfileLocal({ contributed: !!d.contributed || (isCompanyRole(persona && persona.role) && !!profile.contributed) }); }
     setReviews(d.reviews); setReacts(d.reacts); setVotes(d.votes); setVoteAs(d.voteAs); setSaved(d.saved); setFollows(d.follows); setRoomFollows(d.roomFollows); setHidden(d.hidden); setContacted(d.contacted);
     setInspections((mine) => mergeInspections(mine, d.inspections));
     // the whole history is one value stamped with its last edit: the newer copy wins, so a deletion on one device sticks everywhere
@@ -211,6 +215,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   };
   const refreshMe = () => cloud.currentPersona().then((p) => { if (!p) { app.signOut(true); return; } savePersona(p); setPersona((pp) => ({ ...(pp || {}), ...p })); setProfileRaw((s) => ({ ...s, ...p })); });
   useEffect(() => { if (!CLOUD || !persona) return; refreshMe(); hydrate().catch((e) => setMsg(e.message)); }, [!!persona]);
+  // a shared link: the phone app gets app.engspace://open/<type>/<id>; the web gets #app/<type>/<id>. Signed out, it waits for the sign-in.
+  useEffect(() => { if (!persona && !embed && init.stack.length === 1 && init.stack[0].id && SHAREABLE.includes(init.stack[0].type)) setPendingOpen(init.stack[0]); }, []);
+  useEffect(() => { if (!persona || embed) return; const go = () => { const o = takePendingOpen(); if (o) app.push({ type: o.type, id: o.id }); }; go(); window.addEventListener("engspace:open", go); return () => window.removeEventListener("engspace:open", go); }, [!!persona]);
   // An auth link finished (web: on load; app: the native URL handler): a reset link opens «new password»; otherwise a server
   // session without a member on this device (e-mail just confirmed, storage cleared) signs the member in.
   const authLink = (reset?: any) => cloud.currentPersona().then((p) => {
@@ -263,8 +270,33 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; startTransition(() => { setDir("tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; nav("push", () => { setDir(vtOK ? "vt" : "push"); setStack((st) => [...st, s]); }); if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => { navKind.current = "pop"; nav("pop", () => { setDir(vtOK ? "vt" : "pop"); setStack((st) => st.slice(0, -1)); }); }, scrolled,
     lang, setLang, langChosen, startTour: () => { setSheet(null); setViewer(null); if (stack.length) { navKind.current = "tab"; setStack([]); } setTourOn(true); },
     market, setMarket, goMarket: (m?: any) => { if (!tabs.some((x) => x.id === "market")) { deny(); return; } nav("tab", () => { setDir(vtOK ? "vt" : "tab"); if (m === "tools") { setTabRaw("tools"); } else { setMarket(m); setTabRaw("market"); } setStack([]); }); },
+    // the header's share button: the phone's share sheet (or the browser's), else the link is copied — with a toast that says which
+    share: async (type?: any, id?: any) => {
+      if (sharing.current || !SHAREABLE.includes(type)) return;
+      const what: any = type === "post" ? (() => { const p = posts.find((x) => x.id === id); return p && !isGone(ckey("post", p.id)) ? { title: tr("منشور على EngSpace"), text: snippet(app.money(p.body)) } : null; })()
+        : type === "job" ? (() => { const j = jobs.find((x) => x.id === id); return j ? { title: j.title, text: [(company(j.co) || { name: j.coName }).name, j.gov ? govName(j.gov) : ""].filter(Boolean).join(" · ") } : null; })()
+        : type === "company" ? (() => { const c = company(id); return c ? { title: c.name, text: tr("تقييمات الموظفين ورواتبهم على EngSpace") } : null; })()
+        : (() => { const r = ROOMS.find((x) => x.id === id); return r ? { title: r.name, text: tr("غرفة نقاش على EngSpace") } : null; })();
+      if (!what) { setMsg("تعذّرت المشاركة — العنصر غير موجود"); return; }
+      sharing.current = true;
+      try {
+        const r = await shareContent({ ...what, url: linkFor(type, id, { native: NATIVE, publicUrl: (import.meta as any).env.VITE_PUBLIC_URL, page: location.origin + location.pathname }) });
+        if (r === "copied") setMsg("تم نسخ الرابط"); else if (r === "failed") setMsg("تعذّر نسخ الرابط");
+      } finally { sharing.current = false; }
+    },
     viewImage: (image?: any) => setViewer(image || null), sheet, openSheet: (type?: any, payload: any = {}) => { if (blocked.sheets.includes(type) || (type === "tool" && !toolOpen(blocked, payload.id))) { deny(); return; } if (["compose", "review", "contribute"].includes(type) && !gate.ok) { setMsg(gate.why); return; } setSheet({ type, payload }); }, closeSheet: () => setSheet(null), toast: setMsg, pts, addPts,
-    contributed, contribute: (share?: any) => { setContributed(true); addPts(50); setProfile((p) => ({ ...p, contributions: (p.contributions || 0) + 1, contributed: true })); if (share) { setShares((x) => [{ id: "s" + Date.now(), when: "الآن", ...share, as: asOf(share.as) }, ...x]); sync(() => cloud.contribute({ ...share, as: asOf(share.as) }), () => setSalaryRev((r) => r + 1)); } },
+    // A salary report: one at a time (a second tap while the first is on its way is ignored), and the member is only «unlocked»
+    // once it is recorded — the sheet gets { ok, error } back and stays on the form when the server said no.
+    contributed, contribute: async (share?: any) => {
+      if (contributing.current) return { ok: false, error: "" }; contributing.current = true;
+      try {
+        if (share && CLOUD) { try { await cloud.contribute({ ...share, as: asOf(share.as) }); } catch (e: any) { return { ok: false, error: e && e.message ? e.message : String(e) }; } shareOkAt.current = Date.now(); }
+        setContributed(true); addPts(50); setProfile((p) => ({ ...p, contributions: (p.contributions || 0) + 1, contributed: true }));
+        if (share) setShares((x) => [{ id: "s" + Date.now(), when: "الآن", ...share, as: asOf(share.as) }, ...x]);
+        if (share && CLOUD) setSalaryRev((r) => r + 1);
+        return { ok: true, error: "" };
+      } finally { contributing.current = false; }
+    },
     // bumps after a share reaches the server, so the live explorer reloads (and unlocks — give-to-get)
     salaryRev,
     shares,

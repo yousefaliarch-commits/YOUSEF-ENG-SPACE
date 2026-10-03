@@ -20,18 +20,19 @@ import { fmt } from "../../ui/theme";
 
 // live = { loading, data (the explorer's answer), wide (true when widened to all of Egypt), shares (individual reports) }
 export function useLiveSalary(disc?: any, exp?: any, g?: any, rev: any = 0) {
-  const [live, setLive] = useState<any>({ loading: isCloud(), data: null, wide: false, shares: [] });
+  const [live, setLive] = useState<any>({ loading: isCloud(), data: null, wide: false, shares: [], rev });
   useEffect(() => {
     if (!isCloud()) return; let gone = false; setLive((l) => ({ ...l, loading: true }));
     (async () => {
       let data = await cloud.salaryExplorer(disc, exp, g); let wide = false;
       if (data.access !== "none" && data.n < data.min && g) { const all = await cloud.salaryExplorer(disc, exp, null); if (all.n >= all.min) { data = all; wide = true; } }
       const shares = data.access === "full" ? await cloud.latestShares(disc, exp, wide ? null : g) : [];
-      if (!gone) setLive({ loading: false, data, wide, shares });
-    })().catch((e) => { if (!gone) setLive({ loading: false, data: null, wide: false, shares: [], error: e.message }); });
+      if (!gone) setLive({ loading: false, data, wide, shares, rev });
+    })().catch((e) => { if (!gone) setLive({ loading: false, data: null, wide: false, shares: [], error: e.message, rev }); });
     return () => { gone = true; };
   }, [disc, exp, g, rev]);
-  return live;
+  // «loading» is true in the very render where the inputs changed (a share was recorded), not one effect later — no frame of stale lock
+  return live.rev !== rev ? { ...live, loading: true } : live;
 }
 
 const Row = ({ l, r, me = false }: any) => (
@@ -47,7 +48,8 @@ export function LiveSalaryPanel({ app, live, disc, exp, g, track }: any) {
   const where = `${label(EXP, exp)} · ${live.wide ? "كل مصر" : govName(g)}`;
   const head = <div className="flex items-center justify-between gap-2"><span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-good"><Radio size={14} /> من تقارير الأعضاء — حيّ</span>{d && d.n > 0 && <Chip tone="good" className="h-6 px-2 text-[10.5px] shrink-0"><Num>{d.n}</Num> تقرير</Chip>}</div>;
   if (live.error) return <Panel className="p-4">{head}<p className="mt-2 text-[12.5px] text-ink-2">{live.error}</p></Panel>;
-  if (live.loading && !d) return <Panel className="p-4">{head}<div className="mt-3 h-12 rounded-xl bg-canvas/60 animate-pulse" /></Panel>;
+  // right after a share the old «teaser» answer is still on screen while the new one loads: show a skeleton, not the lock
+  if (live.loading && (!d || (app.contributed && d.access === "teaser"))) return <Panel className="p-4">{head}<div className="mt-3 h-12 rounded-xl bg-canvas/60 animate-pulse" /></Panel>;
   if (!d || d.access === "none") return null;
   // not enough reports yet, even across Egypt: say how far the cell is, and invite a share
   if (d.n < d.min) return (

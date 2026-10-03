@@ -20,12 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- auth links (confirm e-mail, reset password): app.engspace://auth-callback -->
+            <!-- auth links (confirm e-mail, reset password): app.engspace://auth-callback; shared posts and jobs: app.engspace://open/<type>/<id> -->
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="app.engspace" android:host="auth-callback" />
+                <data android:scheme="app.engspace" android:host="open" />
             </intent-filter>
         </activity>
 

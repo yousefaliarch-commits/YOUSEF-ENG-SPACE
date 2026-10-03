@@ -227,7 +227,8 @@ export function SalariesBody({ app }: any) {
   const thin = app.isCo && n < COMPANY_MIN_SAMPLE; // company accounts: a cell with too few reports could point at individuals
   // cloud: live member reports above the model; give-to-get comes from the server's answer, not from this device
   const live = useLiveSalary(disc, exp, g, app.salaryRev); const CLOUD = isCloud();
-  const unlocked = CLOUD ? !!(live.data && live.data.access === "full") : can(pr, "bands"); const rlist = CLOUD ? live.shares : reports;
+  // a share just recorded: the answer on screen is the old «teaser» until the refetch lands — show it as loading, not as locked
+  const unlocked = CLOUD ? !!(live.data && (live.data.access === "full" || (live.loading && app.contributed && live.data.access === "teaser"))) : can(pr, "bands"); const rlist = CLOUD ? live.shares : reports;
   return (
     <div className="space-y-4">
       {app.isCo && <div className="p-3.5 rounded-2xl border border-accent/20 bg-wash text-[12px] leading-relaxed"><p className="font-medium inline-flex items-center gap-1.5"><Scale size={14} className="text-accent" /> حدود اطلاع حسابات الشركات</p><p className="mt-1 text-ink-2">متوسطات ونطاقات السوق فقط — لتعرض أرقامًا عادلة. لا أرقام فردية، ولا تفاصيل مسميات لشركات غير شركتك.</p></div>}
@@ -255,7 +256,8 @@ export function SalariesBody({ app }: any) {
       <section>
         <SectionTitle>{unlocked ? "أحدث التقارير" : "أحدث التقارير · مقفلة"}</SectionTitle>
         <div className="relative space-y-2">
-          {CLOUD && unlocked && rlist.length === 0 && <p className="p-3.5 rounded-2xl bg-surface border border-line text-[12.5px] text-ink-2">لا تقارير فردية في هذه الخلية بعد.</p>}
+          {CLOUD && unlocked && rlist.length === 0 && live.loading && <div className="h-16 rounded-2xl bg-surface border border-line animate-pulse" />}
+          {CLOUD && unlocked && rlist.length === 0 && !live.loading && <p className="p-3.5 rounded-2xl bg-surface border border-line text-[12.5px] text-ink-2">لا تقارير فردية في هذه الخلية بعد.</p>}
           {/* locked in the cloud: the server sends no rows, so the blurred cards are the model's, never anyone's real number */}
           {(CLOUD && !unlocked ? reports : rlist).map((r) => <Panel key={r.id} className="p-3.5"><div className={unlocked ? "" : "blur-[6px] select-none"} aria-hidden={!unlocked}>
             <div className="flex items-center gap-2 flex-wrap text-[11.5px] text-ink-2"><AnonChip id={r.anon} spec={disc} /><span>{r.title} · {r.years} سنوات</span>{r.verified && <ShieldCheck size={13} className="text-good shrink-0" />}<span className="ms-auto shrink-0 text-ink-3">{r.when}</span></div>
