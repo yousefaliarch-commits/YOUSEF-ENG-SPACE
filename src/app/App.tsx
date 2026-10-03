@@ -11,7 +11,7 @@ import { ModeCtx, PlatformCtx, liveState, reducedMotion, storeFor, usePeek } fro
 import { isCloud } from "../backend/config";
 import { loadPersona } from "../lib/helpers";
 import { hasSession } from "../domain/identity";
-import { NATIVE, PLATFORM, setNativeMode } from "../native/native";
+import { NATIVE, PLATFORM, setBackHandler, setNativeMode } from "../native/native";
 import { Primary } from "../ui/primitives";
 import { ACCENTS } from "../ui/theme";
 
@@ -53,6 +53,8 @@ export function App() {
   // anyone else lands on the home feed. The demo has no accounts, so it keeps the console as a showcase.
   const member = usePeek(storeFor("app"), "persona", null) || (hasSession() ? loadPersona() : null);
   const staffOk = !isCloud() || !!(member && (member.staff === "admin" || member.staff === "moderator"));
+  // in the Android app the system back button leaves the console for the member app (AppView sets its own handler again on mount)
+  useEffect(() => { if (NATIVE && view === "admin") setBackHandler(() => { setView("app"); return true; }); }, [view]);
   useEffect(() => { if (view === "admin" && !staffOk) { setView("app"); try { history.replaceState(null, "", "#app/home"); } catch (e) {} } }, [view, staffOk]);
   useEffect(() => { try { const mq = matchMedia("(prefers-color-scheme: dark)"); const on = () => setSys(systemMode()); mq.addEventListener("change", on); const mo = new MutationObserver(on); mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }); return () => { mq.removeEventListener("change", on); mo.disconnect(); }; } catch (e) {} }, []);
   useEffect(() => { try { document.documentElement.dataset.mode = mode; document.documentElement.style.colorScheme = mode; const m = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null; if (m) m.content = mode === "light" ? "#fafafa" : "#09090b"; } catch (e) {} }, [mode]);
@@ -65,7 +67,7 @@ export function App() {
       {/* the preview's top bar (app ⇄ admin console, theme, language) — the native apps open straight into the member app */}
       <div className={NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}><TopBar view={view} setView={setView} staff={staffOk} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
       {view === "admin" && staffOk ? <Suspense fallback={<ScreenLoading />}><AdminView init={init} openApp={() => setView("app")} /></Suspense>
-        : <AppView onAdmin={staffOk && !NATIVE ? () => setView("admin") : null} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
+        : <AppView onAdmin={staffOk ? () => setView("admin") : null} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
       <div role="status" aria-live="polite" className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-elevated border border-line-2 text-[13px] shadow-float transition-all ${toastMsg ? "opacity-100" : "opacity-0 translate-y-3 pointer-events-none"}`}>{toastMsg && <><CircleCheck size={17} className="text-accent" /><span>{toastMsg}</span></>}</div>
     </div></LangCtx.Provider></ModeCtx.Provider></PlatformCtx.Provider>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  BadgeCheck, Bell, ChevronLeft, Eye, Flag, MapPin, Moon, Search, Settings, Share2, ShieldAlert, Star, Sun, X
+  BadgeCheck, Bell, ChevronLeft, Eye, Flag, MapPin, Moon, Search, Settings, Share2, ShieldAlert, ShieldCheck, Star, Sun, X
 } from "lucide-react";
 import { company, room } from "../data/companies";
 import { GOVS, KIND, REGIONS, TABS, citiesOf, gov, govName } from "../data/geo";
@@ -93,6 +93,8 @@ export function AppHeader({ app }: any) {
     <header className={glass}><div className="h-14 ps-4 pe-2 flex items-center justify-between">
       <div className="flex items-center gap-2"><ArchMark size={22} /><Wordmark size="text-[17px]" /></div>
       <div className="flex items-center">
+        {/* staff (moderators, administrators) reach the console from every screen size, the Android app included */}
+        {app.openAdmin && <RoundButton label="لوحة الإدارة" onClick={app.openAdmin} className="press w-10 text-accent"><ShieldCheck size={19} /></RoundButton>}
         <ThemeQuick app={app} />
         <RoundButton label="الإعدادات" data-tour="settings" onClick={() => app.push({ type: "settings" })} className="press w-10"><Settings size={19} /></RoundButton>
         <RoundButton label={`الإشعارات${app.unread ? ` · ${app.unread} غير مقروء` : ""}`} data-tour="notifs" onClick={() => app.push({ type: "notifications" })} className="relative press w-10">
