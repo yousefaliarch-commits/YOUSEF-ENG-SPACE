@@ -170,7 +170,7 @@ export async function saveProfile(persona: any) {
 // ---------------------------------------------------------------- everything the member's app shows
 export async function loadAll() {
   const db = await supabase(); const now = Date.now();
-  const [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts] = await Promise.all([
+  const [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary] = await Promise.all([
     db.from("posts").select("*").order("created_at", { ascending: false }).limit(FEED_LIMIT),
     db.from("reactions").select("kind,item_id,agree,disagree,useful"),
     db.from("ballots").select("post_id,choice,author_mode"),
@@ -183,8 +183,9 @@ export async function loadAll() {
     db.from("reports").select("ref,kind,item_id,status,created_at"),
     db.from("verification_requests").select("ref,kinds,status,decision,created_at,decided_at").order("created_at", { ascending: false }).limit(1),
     db.from("job_contacts").select("job_id"),
+    db.rpc("my_salary_status"),
   ]);
-  for (const r of [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts]) if (r.error) throw friendly(r.error);
+  for (const r of [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary]) if (r.error) throw friendly(r.error);
   const postRows = posts.data || [];
   const comments = postRows.length ? ok(await db.from("comments").select("*").in("post_id", postRows.map((p: any) => p.id))) as any[] : [];
 
@@ -207,6 +208,7 @@ export async function loadAll() {
     reviews: reviewsOut, config: cfg.data ? cfg.data.value : null,
     saved: st.saved || {}, follows: st.follows || {}, roomFollows: st.roomFollows || {}, hidden: st.hidden || {}, inspections: st.inspections || [], salaryLog: st.salaryLog || null, contacted,
     myReports: reports.data || [], verification: (verif.data || [])[0] || null,
+    contributed: !!salary.data && (salary.data as any).access === "full",
   };
 }
 
@@ -250,7 +252,15 @@ export async function vote(postId: string, type: string, choice: any, as: string
   ok(await db.from("ballots").upsert({ account_id: user.id, post_id: postId, choice: ballotOf(type, choice), author_mode: as === "public" ? "public" : "anon" }));
 }
 
-export async function contribute(share: any) { const db = await supabase(); ok(await db.from("salary_shares").insert(shareRow(share))); }
+// A repeated report is refused by the server (23505, supabase/migrations/…_salary_share_dedupe.sql): the first one went through,
+// so for the member that is the same as success.
+export async function contribute(share: any) {
+  const db = await supabase(); const r = await db.from("salary_shares").insert(shareRow(share));
+  if (r.error && (r.error.code === "23505" || /duplicate share/i.test(r.error.message || ""))) return;
+  ok(r);
+}
+// give-to-get, as the server sees it: true while the member has a share from the last 12 months
+export async function salaryUnlocked() { const db = await supabase(); const r: any = ok(await db.rpc("my_salary_status")); return !!r && r.access === "full"; }
 // The live explorer (supabase/migrations/…_salary_explorer.sql): one cell and its breakdowns, shaped by give-to-get
 export async function salaryExplorer(disc: string, exp: string, gov: string | null, track: string | null = null) {
   const db = await supabase(); const [lo, hi] = yearsRange(exp);

@@ -1,3 +1,4 @@
+import MARK from "./brand-mark.json";
 import {
   ArrowLeft, ArrowRight, Check
 } from "lucide-react";
@@ -14,11 +15,11 @@ export const Forward = ({ size = 16 }: any) => <ArrowRight size={size} className
 export const Back = ({ size = 20 }: any) => <ArrowLeft size={size} className="rtl:-scale-x-100" />;
 
 
+// The EngSpace mark (E+S emblem) — the same two polygons as the app icon (src/ui/brand-mark.json); `size` is its width
 export const ArchMark = ({ size = 30 }: any) => (
-  <span aria-hidden="true" className="relative inline-block" style={{ width: size, height: size * 1.1 }}>
-    <span className="absolute bottom-0 start-0 border-accent" style={{ width: size * 0.7, height: size * 0.97, borderWidth: 3, borderBottom: 0, borderRadius: `${size * 0.47}px ${size * 0.47}px 0 0` }} />
-    <span className="absolute bottom-0 border-accent opacity-50" style={{ insetInlineStart: size * 0.3, width: size * 0.7, height: size * 0.77, borderWidth: 3, borderBottom: 0, borderRadius: `${size * 0.47}px ${size * 0.47}px 0 0` }} />
-  </span>
+  <svg aria-hidden="true" viewBox={`${MARK.box.x} ${MARK.box.y} ${MARK.box.w} ${MARK.box.h}`} width={size} height={Math.round((size * MARK.box.h) / MARK.box.w)} fill="currentColor" className="text-accent shrink-0 inline-block">
+    <polygon points={MARK.s.map((q: any) => q.join(",")).join(" ")} /><polygon points={MARK.bar.map((q: any) => q.join(",")).join(" ")} />
+  </svg>
 );
 
 export const Wordmark = ({ size = "text-[22px]" }: any) => (

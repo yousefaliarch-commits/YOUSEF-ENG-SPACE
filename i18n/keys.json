@@ -65,6 +65,36 @@
   "p": "app/AppView.tsx",
   "n": 1
  },
+ "منشور على EngSpace": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "تقييمات الموظفين ورواتبهم على EngSpace": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "غرفة نقاش على EngSpace": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "تعذّرت المشاركة — العنصر غير موجود": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "تم نسخ الرابط": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "تعذّر نسخ الرابط": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
  "هذا الحساب موقوف مؤقتًا بقرار من فريق المجتمع — لا يستقبل رسائل الآن": {
   "k": "s",
   "p": "app/AppView.tsx",
@@ -14745,6 +14775,11 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
+ "جارٍ التسجيل…": {
+  "k": "x",
+  "p": "features/sheets/sheets.tsx",
+  "n": 1
+ },
  "تأكيد المشاركة": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
@@ -20563,11 +20598,6 @@
   "k": "s",
   "p": "ui/chrome.tsx",
   "n": 2
- },
- "تم نسخ الرابط": {
-  "k": "s",
-  "p": "ui/chrome.tsx",
-  "n": 1
  },
  "إبلاغ عن المنشور": {
   "k": "s",

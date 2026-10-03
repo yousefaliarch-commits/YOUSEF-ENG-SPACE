@@ -82,7 +82,7 @@ export function AppHeader({ app }: any) {
       <header className={glass}><div className="min-h-14 py-1.5 px-1.5 flex items-center gap-1">
         <RoundButton label="رجوع" onClick={app.pop} className="press shrink-0">{pf === "ios" ? <ChevronLeft size={26} strokeWidth={2.2} className="rtl:-scale-x-100" /> : <Back />}</RoundButton>
         <h1 className="min-w-0 flex-1 text-[15px] font-medium leading-snug">{titles[top.type] || ""}</h1>
-        {!closed && ["post", "job", "company", "room"].includes(top.type) && <RoundButton label="مشاركة الرابط" onClick={() => app.toast("تم نسخ الرابط")}><Share2 size={18} /></RoundButton>}
+        {!closed && ["post", "job", "company", "room"].includes(top.type) && <RoundButton label="مشاركة الرابط" onClick={() => app.share(top.type, top.id)}><Share2 size={18} /></RoundButton>}
         {!closed && top.type === "post" && !(app.posts.find((x) => x.id === top.id) || { mine: true }).mine && <RoundButton label="إبلاغ عن المنشور" onClick={() => app.openSheet("report", { kind: "post", id: top.id })} className="hover:text-bad"><Flag size={18} /></RoundButton>}
         {!closed && top.type === "job" && (() => { const j = app.jobs.find((x) => x.id === top.id); return j && !j.mine && !(app.isCo && j.co === app.profile.companyId) ? <RoundButton label="إبلاغ عن الإعلان" onClick={() => app.openSheet("report", { kind: "job", id: top.id })} className="hover:text-bad"><Flag size={18} /></RoundButton> : null; })()}
         {top.type === "profile" && <RoundButton label="الإعدادات" onClick={() => app.push({ type: "settings" })} className="press"><Settings size={19} /></RoundButton>}

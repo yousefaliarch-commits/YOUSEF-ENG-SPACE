@@ -34,6 +34,15 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 - Verification documents: private bucket, own folder only, deleted at decision/withdrawal, **7 days max** (pg_cron +
   `purge-verification` sweep). Employer accounts are never verified.
 - Deleting an account deletes everything it wrote.
+- One tap = one salary report: the client sends once (button locked, `contribute` guarded) and the server refuses an identical
+  report from the same member within 10 minutes (23505, treated as «already recorded»). Give-to-get (`contributed`) is read
+  from `my_salary_status()` on every hydrate, so a new phone or install is unlocked like the old one.
+- Brand: the E+S mark lives in `src/ui/brand-mark.json` (polygons in the 1024 space of `assets/icon-only.png`, the owner's master
+  icon — never redraw it). `scripts/brand/render.mjs` (adaptive layers, splash) + `web.mjs` (favicon, apple-touch) +
+  `npx @capacitor/assets generate` (delete the `icons/` and `public/manifest.webmanifest` it also writes) make every size.
+- Sharing (header button on post/job/company/room): `shareContent()` in native.ts — phone share sheet → `navigator.share` → copy
+  link. Links: `https://<VITE_PUBLIC_URL>/#app/<type>/<id>` when set, else the web hash route, else `app.engspace://open/<type>/<id>`
+  (Android filter host `open`); a link opened signed-out waits for the sign-in (`takePendingOpen`).
 - Member-written text is never translated; every new Arabic UI string needs English in `i18n/en/*.tsv`
   (`npm run i18n`, then `node scripts/i18n/build.mjs todo`). CI fails if `i18n/keys.json` / `src/i18n/en.generated.json`
   are not committed and current.

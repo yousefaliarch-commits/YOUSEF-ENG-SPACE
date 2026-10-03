@@ -5,6 +5,7 @@
 //  · Status bar follows the light / dark mode; the web view draws under it (safe-area insets are already in the CSS).
 //  · The splash screen hides once the first screen has painted.
 // =====================================================================
+import { parseOpenLink } from "../lib/share";
 import { Capacitor } from "@capacitor/core";
 import { handleAuthUrl } from "../backend/cloud";
 
@@ -17,6 +18,33 @@ let pendingAuth: any = null;
 export const takePendingAuth = () => { const r = pendingAuth; pendingAuth = null; return r; };
 export const setBackHandler = (fn: () => boolean) => { back = fn; };
 
+// a shared link (app.engspace://open/post/<id>) waits here until a signed-in member can be taken to it
+let pendingOpen: any = null;
+export const setPendingOpen = (o: any) => { pendingOpen = o; };
+export const takePendingOpen = () => { const o = pendingOpen; pendingOpen = null; return o; };
+
+// copies text; resolves true only when it really reached the clipboard
+export async function copyToClipboard(text: string): Promise<boolean> {
+  try { if (navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(text); return true; } } catch (e) { /* denied or insecure page: try the old way */ }
+  try { const t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.cssText = "position:fixed;top:0;opacity:0"; document.body.appendChild(t); t.select(); t.setSelectionRange(0, text.length); const ok = document.execCommand("copy"); t.remove(); return !!ok; } catch (e) { return false; }
+}
+
+// The phone's own share sheet (Capacitor Share) → the browser's (navigator.share) → copy the link.
+// "cancelled" = the member closed the sheet: nothing to say.
+export type ShareResult = "shared" | "copied" | "cancelled" | "failed";
+const closed = (e: any) => !!e && (e.name === "AbortError" || /cancel/i.test(String(e.message || e)));
+export async function shareContent(c: { title: string; text: string; url: string }): Promise<ShareResult> {
+  if (NATIVE) {
+    try { const { Share } = await import("@capacitor/share"); const can = await Share.canShare(); if (can.value) { await Share.share({ title: c.title, text: c.text, url: c.url, dialogTitle: c.title }); return "shared"; } }
+    catch (e) { if (closed(e)) return "cancelled"; }
+  }
+  const nav: any = navigator;
+  if (typeof nav.share === "function" && (typeof nav.canShare !== "function" || nav.canShare({ title: c.title, text: c.text, url: c.url }))) {
+    try { await nav.share({ title: c.title, text: c.text, url: c.url }); return "shared"; } catch (e) { if (closed(e)) return "cancelled"; }
+  }
+  return (await copyToClipboard(c.url)) ? "copied" : "failed";
+}
+
 export async function initNative() {
   if (!NATIVE) return;
   // liquid glass: iPhones always get the live blur; an Android phone only when it has the headroom (8+ cores, 6+ GB) —
@@ -28,6 +56,7 @@ export async function initNative() {
   // auth links: while the app runs (appUrlOpen) and when the link itself started the app (Android may have closed it while the
   // member was in Google's page). The result waits in pendingAuth until AppView takes it, so it is never lost to timing.
   const finish = async (url?: string) => {
+    const open = parseOpenLink(url); if (open) { pendingOpen = open; window.dispatchEvent(new CustomEvent("engspace:open", { detail: open })); return; }
     if (!url || !/^app\.engspace:\/\/auth-callback/.test(url)) return;
     let r: any; try { r = await handleAuthUrl(url); } catch (e: any) { r = { error: (e && e.message) || "تعذّر إكمال تسجيل الدخول — أعد المحاولة" }; }
     if (!r) return; pendingAuth = r; window.dispatchEvent(new CustomEvent("engspace:auth", { detail: r }));
