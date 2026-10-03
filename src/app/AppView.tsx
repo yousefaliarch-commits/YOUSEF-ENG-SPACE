@@ -21,7 +21,7 @@ import { ChatScreen, CompanyScreen, JobScreen, PermissionsScreen, PostJobScreen,
 import { CommunityScreen, HomeScreen, InboxScreen, JobsScreen, MarketScreen, ToolsScreen } from "../features/tabs/tabs";
 import { dropOwnRequest, newVerifyRequest, purgeRequest, saveOwnRequest, verifs0, verifySummary } from "../features/verify/verify";
 import { L2, say, tr } from "../i18n/i18n";
-import { onOtaState } from "../native/updater";
+import { UpdateBanner } from "../ui/update-banner";
 import { DEMO_PERSONA, estimateFor, loadPersona, reachFor, savePersona } from "../lib/helpers";
 import { ImageViewer } from "../lib/media";
 import { applyReaction, mergeLocalPosts } from "../lib/posts";
@@ -164,9 +164,6 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     if (kind === "push") delete scrollMem.current[screenKey];
   }, [screenKey]);
   useEffect(() => { if (!msg) return; const t = setTimeout(() => setMsg(""), 2600); return () => clearTimeout(t); }, [msg]);
-  // a web update finished downloading in the background (native shells): say so once per version; it applies at the next launch or from Settings
-  const otaShown = useRef<any>(null);
-  useEffect(() => onOtaState((o) => { if (o.status === "ready" && o.pending && otaShown.current !== o.pending.version) { otaShown.current = o.pending.version; setMsg("تم تنزيل تحديث جديد — يُطبَّق عند الفتح التالي، أو من الإعدادات"); } }), []);
   // the route lives in the hash; signed out it is just #app, so a reload of the sign-up/sign-in screens never lands in the demo member
   useEffect(() => { if (embed && !embed.hash) return; const top = stack[stack.length - 1]; try { history.replaceState(null, "", !persona ? (embed ? "#devices" : "#app") : (embed ? "#devices/" : "#app/") + (top ? (top.id ? `${top.type}/${top.id}` : top.type) : curTab === "market" ? `market/${market}` : curTab)); } catch (e) {} }, [curTab, stack, market, persona]);
   // Pull-to-refresh always lets go: when the data arrives, when it fails, or after 12 s on a connection that never answers (the spinner
@@ -510,6 +507,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         <div className="contents" {...(sheet || viewer || tourOn ? { inert: "" } : {})}>
         <AppHeader app={app} />
         {!gate.ok && <div role="status" className="shrink-0 px-4 py-2 flex items-start gap-2 text-[11.5px] leading-snug bg-warn/10 text-warn border-b border-warn/20"><ShieldAlert size={14} className="shrink-0 mt-px" /><span>{gate.why}</span></div>}
+        <UpdateBanner />
         <div className={`relative flex-1 min-h-0 ${top ? "pushed" : ""}`}>
           <div ref={pullEl} aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] flex justify-center pointer-events-none will-change-transform" style={{ transform: `translate3d(0,${refreshing ? 12 : -44}px,0)`, opacity: refreshing ? 1 : 0, transition: `transform .3s ${EASE}, opacity .3s` }}><span ref={pullIcon} className={`grid place-items-center w-9 h-9 rounded-full bg-surface border border-line-2 shadow-float ${refreshing ? "spin" : ""}`}><ArchMark size={16} /></span></div>
           <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} relative px-4 pb-[var(--tabbar-space)] ${vtOK ? "vt-screen" : ""}`}>
