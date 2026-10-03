@@ -57,5 +57,6 @@ jobs:
         run: |
           sudo apt-get install -y -qq postgresql-client >/dev/null
           echo "select u.email, p.staff, p.role, p.onboarded, coalesce((select string_agg(i.provider, '+' order by i.provider) from auth.identities i where i.user_id = u.id), '-') as sign_in, (select count(*) from auth.users u2 where lower(u2.email) = lower(u.email)) as accounts_with_this_email from public.profiles p join auth.users u on u.id = p.id where p.staff <> 'member' or lower(u.email) = lower(:'email');" \
-            | psql "$(cat supabase/.temp/pooler-url)" -X -v ON_ERROR_STOP=1 -v email="${{ inputs.admin_email }}"
+            | psql "$(cat supabase/.temp/pooler-url)" -XAt -F ' | ' -v ON_ERROR_STOP=1 -v email="${{ inputs.admin_email }}" \
+            | while read -r row; do echo "::notice title=Staff account (email | staff | role | onboarded | sign-in | accounts with this email)::$row"; done
 
