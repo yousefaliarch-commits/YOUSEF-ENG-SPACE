@@ -389,13 +389,13 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         <div className="contents" {...(sheet || viewer || tourOn ? { inert: "" } : {})}>
         <AppHeader app={app} />
         {!gate.ok && <div role="status" className="shrink-0 px-4 py-2 flex items-start gap-2 text-[11.5px] leading-snug bg-warn/10 text-warn border-b border-warn/20"><ShieldAlert size={14} className="shrink-0 mt-px" /><span>{gate.why}</span></div>}
-        <div className="relative flex-1 min-h-0">
+        <div className={`relative flex-1 min-h-0 ${top ? "pushed" : ""}`}>
           <div ref={pullEl} aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] flex justify-center pointer-events-none will-change-transform" style={{ transform: `translate3d(0,${refreshing ? 12 : -44}px,0)`, opacity: refreshing ? 1 : 0, transition: `transform .3s ${EASE}, opacity .3s` }}><span ref={pullIcon} className={`grid place-items-center w-9 h-9 rounded-full bg-surface border border-line-2 shadow-float ${refreshing ? "spin" : ""}`}><ArchMark size={16} /></span></div>
           <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} relative px-4 pb-[var(--tabbar-space)] ${vtOK ? "vt-screen" : ""}`}>
-            {top && <div key={`${top.type}-${top.id || ""}`} className={`${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>}
+            {top && <div key={`${top.type}-${top.id || ""}`} className={`screen-body ${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>}
             {visited.filter((id) => tabs.some((x) => x.id === id)).map((id) => <TabPane key={id} active={!top && id === curTab} render={() => tabScreen(id)} />)}
           </div>
-          <TabBar tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} />
+          <TabBar tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} off={!!top} />
         </div>
         </div>
         {viewer && <ImageViewer image={viewer} onClose={() => setViewer(null)} />}

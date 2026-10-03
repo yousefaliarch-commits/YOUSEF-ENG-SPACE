@@ -3,6 +3,7 @@
 //  (reports → cases, account directory, moderation state, audit log, verification queue, analytics).
 //  Every action goes to a staff-only database function that re-checks the caller's role; the console then reloads.
 // =====================================================================
+import { flatten } from "../../lib/posts";
 import { admin, loadAll } from "../../backend/cloud";
 import { authorFields } from "../../backend/map";
 import { discTitle, roleTitle } from "../../domain/taxonomy";
@@ -66,7 +67,12 @@ export async function verifsOf(rows: any[]) {
 
 export async function loadAdmin() {
   const [cases, accounts, audit, verifs, analytics, config, app] = await Promise.all([admin.cases("all"), admin.accounts(), admin.audit(), admin.verifQueue(), admin.analytics(30), admin.config(), loadAll()]);
-  const accs = accountsOf(accounts);
-  return { reports: reportsOf(cases), mod: modOf(cases, accs), accounts: accs, audit: auditOf(audit), verifs: await verifsOf(verifs), live: analytics, config,
+  const accs = accountsOf(accounts); const mod = modOf(cases, accs);
+  // an item hidden by hand (no report behind it) is hidden too — read the flag from the rows so the console offers «إظهار»
+  const flag = (key: string, on: boolean) => { if (on && !mod.content[key]) mod.content[key] = { hidden: true, by: "mod", at: null }; };
+  for (const p of app.posts) { flag(`post:${p.id}`, p.hiddenByMod); for (const c of flatten(p.comments || [])) flag(`comment:${c.id}`, c.hiddenByMod); }
+  for (const j of app.jobs) flag(`job:${j.id}`, j.hiddenByMod);
+  for (const list of Object.values(app.reviews || {}) as any[]) for (const r of list) flag(`review:${r.id}`, r.hiddenByMod);
+  return { reports: reportsOf(cases), mod, accounts: accs, audit: auditOf(audit), verifs: await verifsOf(verifs), live: analytics, config,
     posts: app.posts, jobs: app.jobs, reviews: app.reviews };
 }

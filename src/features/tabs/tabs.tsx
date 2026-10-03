@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowUpDown, BadgeCheck, Bookmark, Briefcase, Building2, ChevronDown, CircleCheck, ClipboardCheck, Clock, Coins, FileCheck, 
   FileSearch, LockKeyhole, MapPin, Megaphone, MessageCircle, MessageCircleWarning, Plus, Scale, Search, 
-  ShieldCheck, Sparkles, TrendingUp, X
+  LifeBuoy, ShieldCheck, Sparkles, TrendingUp, X
 } from "lucide-react";
 import { CATS, CAT_DESC, COMPANIES, GENERAL_ROOM, catName } from "../../data/companies";
 import { DATASET, REGIONS, gov, govName, placeMult, placeName, regionName } from "../../data/geo";
@@ -321,6 +321,8 @@ export function InboxScreen({ app }: any) {
       {sub === "threads" ? (
         <div className="space-y-2 stagger">
           <div className="p-3 rounded-xl bg-wash border border-accent/20 text-[11.5px] leading-relaxed text-ink-2 flex gap-2"><ShieldCheck size={15} className="text-accent shrink-0 mt-0.5" /><span>أرقام الهواتف والبريد والروابط مسموح بها في الخاص. يُحجب السباب والإهانة والتهديد والتحرّش فقط. <button type="button" onClick={() => app.push({ type: "permissions" })} className="inline-block py-1 -my-1 text-accent hover:underline underline-offset-4">من يستطيع مراسلة من؟</button></span></div>
+          {/* the platform team is always reachable — whatever the member's role (tickets keep the history and a status) */}
+          <Panel className="p-3.5"><button type="button" onClick={() => app.push({ type: "support" })} className="press w-full flex items-center gap-2.5 text-start rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><span className="grid place-items-center w-10 h-10 shrink-0 rounded-full bg-wash text-accent"><LifeBuoy size={18} /></span><span className="min-w-0 flex-1"><span className="flex items-center gap-1.5 text-[12.5px] font-medium">راسل فريق EngSpace <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-wash text-accent text-[10.5px] font-normal"><ShieldCheck size={11} /> فريق المنصة</span></span><span className="block mt-0.5 text-[11.5px] text-ink-2 leading-snug">سؤال أو مشكلة أو اقتراح — يصل لفريق الإدارة وتتابع الرد هنا</span></span><span className="text-ink-3 shrink-0"><Forward size={16} /></span></button></Panel>
           {threads.length === 0 && <Empty icon={MessageCircle} title="لا محادثات بعد" body="ابدأ من ملف عضو أو من صفحة وظيفة — حسب قواعد العلاقة." />}
           {threads.map((t) => { const last = t.messages[t.messages.length - 1]; return (
             <Panel key={t.id} className="p-3.5"><button type="button" onClick={() => app.push({ type: "chat", id: t.id })} className="press block w-full text-start rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">

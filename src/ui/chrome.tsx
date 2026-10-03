@@ -116,12 +116,12 @@ export function AppHeader({ app }: any) {
 // layer has content to blur. One indicator slides under the active tab with transform only (composited), the icons do not
 // re-layout, and the layer is promoted once (translateZ). Android draws the same glass without the live blur when the
 // device cannot afford it (html[data-glass="lite"], set by src/native/native.ts) — see the .glass rules in app.css.
-export function TabBar({ tabs = TABS, active: current, onChange, badge = {} }: any) {
+export function TabBar({ tabs = TABS, active: current, onChange, badge = {}, off = false }: any) {
   // the tapped tab lights up at once (only this bar re-renders); the app switches screens in a concurrent render after it
   const [tap, setTap] = useState<any>(null); useEffect(() => { setTap(null); }, [current]); const active = tap || current;
   const idx = Math.max(0, tabs.findIndex((t) => t.id === active)); const n = tabs.length;
   return (
-    <nav aria-label="التنقل الرئيسي" data-tour="tabbar" className="absolute inset-x-3 z-20 bottom-[calc(8px+var(--sab))] glass glass-bar rounded-[26px]">
+    <nav aria-label="التنقل الرئيسي" data-tour="tabbar" {...(off ? { inert: "", "aria-hidden": true } : {})} className={`tabbar absolute inset-x-3 z-20 bottom-[calc(8px+var(--sab))] glass glass-bar rounded-[26px] ${off ? "is-off" : ""}`}>
       <ul className="relative grid h-[64px] p-1.5" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
         <span aria-hidden="true" className="tab-ind absolute top-1.5 bottom-1.5 rounded-[20px]" style={{ width: `calc((100% - 12px) / ${n})`, insetInlineStart: 6, ["--i" as any]: idx }} />
         {tabs.map((t) => { const on = t.id === active; const Icon = t.icon; const b = badge[t.id]; return (

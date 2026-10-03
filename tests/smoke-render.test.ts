@@ -47,9 +47,13 @@ const setups: [string, string, () => void, string][] = [
   ["settings deep link", "#app/settings", () => signIn("ar"), "SettingsScreen"],
   ["CV review deep link (lazy chunk)", "#app/cvreview", () => signIn("ar"), "CVReviewScreen"],
   ["admin console (lazy chunk)", "#admin", () => signIn("ar"), "AdminView"],
+  // company accounts carry no discipline — the post screen's reply box once read TITLES[undefined][0] and crashed for them
+  ["a post, as HR", "#app/post/p1", () => signInAs({ role: "hr", disc: null, companyName: "ريدكون" }), "ReplyBox"],
+  ["a post, as an employer", "#app/post/p1", () => signInAs({ role: "owner", disc: null, companyName: "ريدكون" }), "ReplyBox"],
 ];
 // a stored session: account record (test values) + profile + session flag
 const signIn = (lang: string) => { localStorage.setItem("engspace.lang", lang); C.saveAccount({ email: "demo@example.test", hash: "test-hash", salt: "test-salt" }); C.savePersona({ ...C.DEMO_PERSONA }); C.setSession(true); };
+const signInAs = (over: any) => { signIn("ar"); C.savePersona({ ...C.DEMO_PERSONA, ...over }); };
 // each starting point is a fresh page: empty storage, no address, Arabic, and none of the app's state stores
 const freshPage = () => { for (const k of Object.keys(store)) delete store[k]; location.hash = ""; C.I18N.lang = "ar"; C.liveState().stores = {}; };
 

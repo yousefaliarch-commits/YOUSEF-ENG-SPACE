@@ -3,7 +3,8 @@ import {
   Activity, BadgeCheck, Ban, Briefcase, ChartColumn, CheckCheck, CircleCheck, Contact, Copy, ExternalLink, Eye, EyeOff, 
   Flag, Gavel, Hourglass, IdCard, Layers, LayoutDashboard, LifeBuoy, LockKeyhole, Megaphone, MessageSquare, 
   MousePointerClick, RotateCcw, Scale, ScanSearch, ScrollText, Settings2, ShieldCheck, Siren, SlidersHorizontal, 
-  Smartphone, TrendingUp, TriangleAlert, Undo2, UserCog, Users
+  Smartphone, TrendingUp, TriangleAlert, Undo2, UserCog, Users,
+  Trash2,
 } from "lucide-react";
 import { COMPANIES, ROOMS, company, room } from "../../data/companies";
 import { GOVS, govName } from "../../data/geo";
@@ -66,7 +67,7 @@ export function AdminView({ init, openApp }: any) {
   const patchMember = (patch?: any) => { const base = persona || DEMO_PERSONA; const next: any = { ...base, ...patch }; const flip = patch.role && threadsKind({ role: patch.role }) !== threadsKind(base); store.set("persona", next); if (store.has("profile")) store.set("profile", (p) => ({ ...p, ...patch })); if (flip && store.has("threads")) store.set("threads", threadsFor0(next)); if (hasSession()) savePersona(next); };
   const A: any = {
     section, go: (s?: any, f: any = null) => { setSection(s); if (s === "queue") setFocus(f); if (s === "users") setFocusUser(f); if (s === "verify") setFocusVerify(f); }, toast: setMsg, now,
-    reports: reports_, cases, mod: mod_, audit: audit_, config: config_, posts, jobs, reviews, jobStats, accounts, profile, memberAcc, cloud: CLOUD, live: L && L.live, focus, setFocus, focusUser, setFocusUser, verifs, focusVerify, setFocusVerify,
+    reports: reports_, cases, mod: mod_, audit: audit_, config: config_, posts, jobs, reviews, jobStats, accounts, profile, memberAcc, cloud: CLOUD, isAdmin: !CLOUD || (persona || {}).staff === "admin", live: L && L.live, focus, setFocus, focusUser, setFocusUser, verifs, focusVerify, setFocusVerify,
     // ---- verification: a reviewer's decision. The documents are purged in the same step — here and in the member's browser. ----
     decideVerify: (r?: any, d?: any) => {
       const now = Date.now(); const ok = !!d.approve; const n = (r.docs || []).length; const dv = ok && d.division ? divOf(d.division) : null;
@@ -96,6 +97,15 @@ export function AdminView({ init, openApp }: any) {
     },
     reopen: (c?: any) => { setReports((rs) => reopenCase(rs, c.key)); log("reopen", c.key, "أُعيدت القضية إلى قائمة البلاغات"); setMsg("أُعيد فتح القضية"); },
     setContent: (key?: any, hidden?: any, label?: any) => { setMod((m) => ({ ...m, content: { ...m.content, [key]: hidden ? { ...(m.content[key] || {}), hidden: true, by: "mod", at: Date.now(), reason: "قرار المشرف" } : { hidden: false, cleared: true, at: Date.now() } } })); log(hidden ? "hide" : "restore", key, label || ""); setMsg(hidden ? "أُخفي المحتوى عن الجميع" : "أُعيد المحتوى"); },
+    // demo: the item leaves the app's own store (a seeded company review cannot be removed from the bundle — it is hidden)
+    deleteContent: (key?: any, label?: any) => {
+      const [kind, ...rest] = String(key).split(":"); const id = rest.join(":"); const drop = (cs?: any) => (cs || []).filter((c) => c.id !== id).map((c) => ({ ...c, replies: drop(c.replies) }));
+      if (kind === "post") store.set("posts", (ps) => (ps || []).filter((p) => p.id !== id));
+      else if (kind === "comment") store.set("posts", (ps) => (ps || []).map((p) => ({ ...p, comments: drop(p.comments) })));
+      else if (kind === "job") store.set("jobs", (js) => (js || []).filter((j) => j.id !== id));
+      else if (kind === "review") { if (id.includes("#")) { A.setContent(key, true, label); return; } store.set("reviews", (rv) => Object.fromEntries(Object.entries(rv || {}).map(([c, l]: any) => [c, (l || []).filter((r) => r.id !== id)]))); }
+      setMod((m) => { const c = { ...m.content }; delete c[key]; return { ...m, content: c }; }); log("delete", key, label || ""); setMsg("حُذف المحتوى نهائيًا");
+    },
     warnUser: (acc?: any, text?: any) => { setMod((m) => { const u = (m.users || {})[acc.id] || {}; return modUser(m, acc.id, { warnings: (u.warnings || 0) + 1, lastWarning: text, status: u.status === "suspended" ? "suspended" : "warned" }); }); log("warn", acc.id, text); if (acc.member) notifyMember({ kind: "mod", title: "تحذير من فريق المجتمع", body: `«${text}»` }); setMsg(`أُرسل التحذير إلى ${accName(acc)}`); },
     suspend: (acc?: any, days?: any) => { setMod((m) => modUser(m, acc.id, { status: "suspended", permanent: !days, until: days ? Date.now() + days * DAY : null })); log("suspend", acc.id, `إيقاف ${suspendText(days)}`); if (acc.member) notifyMember({ kind: "mod", title: "أُوقف حسابك", body: days ? `أُوقف حسابك ${suspendText(days)} بقرار من فريق المجتمع — حتى ${fmtDay(Date.now() + days * DAY)}. يمكنك التصفح والقراءة فقط.` : "أُوقف حسابك نهائيًا بقرار من فريق المجتمع. يمكنك التصفح والقراءة فقط." }); setMsg(`أُوقف حساب ${accName(acc)}`); },
     unsuspend: (acc?: any) => { setMod((m) => modUser(m, acc.id, { status: (acc.warnings || 0) > 0 ? "warned" : "active", until: null, permanent: false })); log("unsuspend", acc.id, "رُفع الإيقاف"); if (acc.member) notifyMember({ kind: "mod", title: "رُفع الإيقاف عن حسابك", body: "يمكنك النشر والرد والمراسلة من جديد." }); setMsg(`رُفع الإيقاف عن ${accName(acc)}`); },
@@ -116,6 +126,7 @@ export function AdminView({ init, openApp }: any) {
     decide: (c?: any, d?: any) => act(cloud.admin.decide(c.kind, c.key.slice(c.kind.length + 1), { accept: !!d.accept, hide: d.hide !== false, warn: d.warn || null, suspendDays: d.suspendDays ?? null, note: d.note || "" }), d.accept ? "نُفّذ القرار — أُبلغ العضو والمُبلّغون" : "رُفض البلاغ — أُبلغ المُبلّغون بالنتيجة"),
     reopen: (c?: any) => act(cloud.admin.reopen(c.kind, c.key.slice(c.kind.length + 1)), "أُعيد فتح القضية"),
     setContent: (key?: any, hidden?: any) => { const [kind, ...rest] = String(key).split(":"); return act(cloud.admin.setHidden(kind, rest.join(":"), !!hidden), hidden ? "أُخفي المحتوى" : "أُعيد المحتوى"); },
+    deleteContent: (key?: any) => { const [kind, ...rest] = String(key).split(":"); return act(cloud.admin.deleteContent(kind, rest.join(":")), "حُذف المحتوى نهائيًا"); },
     warnUser: (acc?: any, text?: any) => act(cloud.admin.warn(acc.id, text), "أُرسل التحذير"),
     suspend: (acc?: any, days?: any) => act(cloud.admin.setAccount(acc.id, { suspendDays: days || 0 }), `أُوقف الحساب ${suspendText(days)}`),
     unsuspend: (acc?: any) => act(cloud.admin.setAccount(acc.id, { lift: true }), "رُفع الإيقاف"),
@@ -385,7 +396,7 @@ function ModelAnalytics({ A }: any) {
 
 // ---- content & rooms & announcements ----
 export function ContentSection({ A }: any) {
-  const [tab, setTab] = useState<any>("posts"); const [q, setQ] = useState<any>(""); const [limit, setLimit] = useState(20);
+  const [tab, setTab] = useState<any>("posts"); const [q, setQ] = useState<any>(""); const [limit, setLimit] = useState(20); const [show, setShow] = useState<any>("all"); const [confirm, setConfirm] = useState<any>(null);
   const items = useMemo<any>(() => {
     if (tab === "posts") return A.posts.map((p) => ({ key: ckey("post", p.id), text: p.body, a: p, meta: (room(p.room) || {}).name || "", link: { type: "post", id: p.id } }));
     if (tab === "comments") return A.posts.flatMap((p) => flatten(p.comments || []).map((c) => ({ key: ckey("comment", c.id), text: c.text, a: c, meta: "على:", on: String(p.body), link: { type: "post", id: p.id } })));
@@ -393,19 +404,25 @@ export function ContentSection({ A }: any) {
     if (tab === "jobs") return A.jobs.map((j) => ({ key: ckey("job", j.id), text: `${j.title} — ${j.desc}`, a: null, meta: (company(j.co) || { name: j.coName || "شركة" }).name, link: { type: "job", id: j.id } }));
     return [];
   }, [tab, A.posts, A.reviews, A.jobs]);
-  const nq = q.trim().toLowerCase(); const list = items.filter((x) => !nq || x.text.toLowerCase().includes(nq) || x.meta.toLowerCase().includes(nq) || (x.on || "").toLowerCase().includes(nq));
+  const nq = q.trim().toLowerCase(); const hiddenOf = (x?: any) => !!(A.mod.content[x.key] || {}).hidden;
+  const list = items.filter((x) => (show === "all" || (show === "hidden") === hiddenOf(x)) && (!nq || x.text.toLowerCase().includes(nq) || x.meta.toLowerCase().includes(nq) || (x.on || "").toLowerCase().includes(nq)));
   const ann = A.config.announce || MOD_CONFIG0.announce; const [annText, setAnnText] = useState(ann.text || ""); const [annTone, setAnnTone] = useState(ann.tone || "info");
   return (
     <div className="space-y-4">
       <Seg value={tab} onChange={(t) => { setTab(t); setLimit(20); setQ(""); }} items={[["posts", "المنشورات"], ["comments", "الردود"], ["reviews", "التقييمات"], ["jobs", "الوظائف"], ["rooms", "الغرف والإعلانات"]]} />
       {tab !== "rooms" ? <>
         <SearchBox value={q} onChange={(v) => { setQ(v); setLimit(20); }} placeholder="ابحث في النص" />
-        <p className="text-[11.5px] text-ink-3"><Num>{list.length}</Num> عنصر · <Num>{list.filter((x) => (A.mod.content[x.key] || {}).hidden).length}</Num> مخفي</p>
+        <div className="flex items-center gap-1.5 flex-wrap">{[["all", "الكل", items.length], ["shown", "ظاهر", items.filter((x) => !hiddenOf(x)).length], ["hidden", "مخفي", items.filter(hiddenOf).length]].map(([k, l, n]: any) => <FilterChip key={k} on={show === k} onClick={() => { setShow(k); setLimit(20); }}>{l} · <Num>{n}</Num></FilterChip>)}</div>
         <ul className="space-y-2">{list.slice(0, limit).map((x) => { const st = A.mod.content[x.key] || {}; return (
           <li key={x.key}><Panel className={`p-3.5 ${st.hidden ? "border-warn/30" : ""}`}>
             <div className="flex items-center gap-1.5 flex-wrap text-[11px]">{st.hidden ? <ToneChip tone="warn"><EyeOff size={11} /> {st.by === "auto" ? "مخفي تلقائيًا" : "أزاله مشرف"}</ToneChip> : <ToneChip tone="good">ظاهر</ToneChip>}{x.a && <span className="text-ink-2">{x.a.as === "public" ? displayName(x.a) : <Num>#{x.a.anon}</Num>}</span>}{x.a && x.a.mine && <ToneChip tone="accent">حسابك</ToneChip>}<span className="text-ink-3 truncate">· {x.meta}{x.on && <> <bdi {...UGC}>{x.on}</bdi></>}</span></div>
             <p {...UGC} className="mt-1.5 text-[13px] leading-relaxed line-clamp-2 text-start">{x.text}</p>
-            <div className="mt-2 flex gap-2 flex-wrap">{st.hidden ? <Secondary onClick={() => A.setContent(x.key, false, x.text.slice(0, 60))} className="h-9 px-3 text-[12.5px]"><Eye size={14} /> إعادة إظهار</Secondary> : <Secondary onClick={() => A.setContent(x.key, true, x.text.slice(0, 60))} className="h-9 px-3 text-[12.5px]"><EyeOff size={14} /> إخفاء عن الجميع</Secondary>}<Quiet onClick={() => A.openApp(x.link)} className="h-9 px-2 text-[12.5px] text-accent"><ExternalLink size={14} /> افتحه في التطبيق</Quiet></div>
+            {/* hide / restore is reversible (moderators and admins); delete is permanent and for admins, behind a second tap */}
+            {confirm === x.key ? <div className="mt-2.5 p-3 rounded-xl bg-bad/10 border border-bad/25"><p className="text-[12px] leading-relaxed text-ink"><b className="text-bad">حذف نهائي؟</b> يُحذف {tab === "posts" ? "المنشور وكل الردود عليه" : tab === "comments" ? "الرد وكل ما تحته" : "العنصر"} من قاعدة البيانات ولا يمكن استرجاعه. للإخفاء المؤقت استخدم «إخفاء».</p>
+              <div className="mt-2 grid grid-cols-2 gap-2"><button type="button" onClick={() => { setConfirm(null); A.deleteContent(x.key, x.text.slice(0, 60)); }} className="press h-10 rounded-xl bg-bad text-canvas text-[12.5px] font-medium inline-flex items-center justify-center gap-1.5"><Trash2 size={14} /> احذف نهائيًا</button><Secondary onClick={() => setConfirm(null)} className="h-10 text-[12.5px]">إلغاء</Secondary></div></div>
+            : <div className={`mt-2.5 grid gap-2 ${A.isAdmin ? "grid-cols-3" : "grid-cols-2"}`}>{st.hidden ? <Secondary onClick={() => A.setContent(x.key, false, x.text.slice(0, 60))} className="h-10 !px-2 text-[12px] text-good"><Eye size={14} /> إظهار</Secondary> : <Secondary onClick={() => A.setContent(x.key, true, x.text.slice(0, 60))} className="h-10 !px-2 text-[12px] text-warn"><EyeOff size={14} /> إخفاء</Secondary>}
+              {A.isAdmin && <Secondary onClick={() => setConfirm(x.key)} className="h-10 !px-2 text-[12px] text-bad"><Trash2 size={14} /> حذف</Secondary>}
+              <Secondary onClick={() => A.openApp(x.link)} className="h-10 !px-2 text-[12px] text-accent"><ExternalLink size={14} /> فتح</Secondary></div>}
           </Panel></li>); })}</ul>
         {list.length > limit && <Secondary onClick={() => setLimit((n) => n + 20)} className="w-full h-10 text-[13px]">عرض المزيد (<Num>{list.length - limit}</Num>)</Secondary>}
       </> : <div className="grid lg:grid-cols-2 gap-4">
