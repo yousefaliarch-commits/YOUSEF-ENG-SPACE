@@ -64,6 +64,12 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   Hosted: Actions → **Seed test accounts** (`seed` / `remove` — remove them before launch); local/CI: `npm run db:seed`. Passwords are never in the repo
   (bcrypt hashes only). E2E: `npm run e2e` (Playwright, iPhone 15 + Pixel 7 profiles; `E2E_LIVE=1` adds the signed-in suite; `E2E_WEBKIT=1` real WebKit).
 
+- v0.1.9: **author controls on posts** — `edit_my_post()` (own post only, not hidden / suspended, counts only real text changes in the server-set
+  `posts.edit_count` / `edited_at`) and `delete_my_post()` (replies, reactions, authorship go too; the image is removed from Storage — `media: read own`
+  select policy makes that work). Which posts are mine comes from `my_posts()` on every hydrate (`mine` is never guessed from the client). Every edited
+  post shows «معدّل · مرة / مرتان / N مرات» (`EditedBadge`); the feed gets an `edit` event (id only). Delete always asks first. Tests: pgTAP 16,
+  `tests/post-author.test.ts`, the cloud suite, `e2e/posts.spec.ts` (every seeded role + cross-role live checks).
+
 ## How the code is organised
 - `src/app/AppView.tsx` holds member-app state (one store, keys like posts/jobs/threads) and every handler; handlers update
   locally, then `sync(() => cloud.x())` in cloud mode. Demo mode (no `VITE_SUPABASE_*`) must keep working unchanged.

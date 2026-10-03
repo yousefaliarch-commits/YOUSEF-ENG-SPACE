@@ -154,6 +154,27 @@ run("cloud backend (local Supabase)", () => {
     await expect(cloud.admin.cases()).rejects.toThrow("ليست لديك صلاحية");
   });
 
+  it("author controls: only the author edits (and the count is the server's), edits show to others, delete takes everything with it", async () => {
+    await cloud.signOut(); await cloud.signIn(A.email, A.pw);
+    let mine = (await cloud.loadAll()).posts.find((x: any) => x.id === postId);
+    expect(mine.mine).toBe(true); expect(mine.edits).toBe(0); expect(mine.editedAt).toBeNull();
+    const e1 = await cloud.editPost(postId, "سؤال تجريبي بعد التعديل"); expect(e1).toMatchObject({ body: "سؤال تجريبي بعد التعديل", edits: 1 }); expect(e1.editedAt).toBeGreaterThan(0);
+    expect((await cloud.editPost(postId, " سؤال تجريبي بعد التعديل ")).edits).toBe(1);   // same text: not an edit
+    expect((await cloud.editPost(postId, "سؤال تجريبي بعد التعديل الثاني")).edits).toBe(2);
+    await expect(cloud.editPost(postId, "   ")).rejects.toThrow("نص المنشور");
+    // another member: sees the edit and the count, is not the owner, cannot edit or delete
+    await cloud.signOut(); await cloud.signIn(B.email, B.pw);
+    const seen = (await cloud.loadAll()).posts.find((x: any) => x.id === postId);
+    expect(seen.body).toBe("سؤال تجريبي بعد التعديل الثاني"); expect(seen.edits).toBe(2); expect(seen.mine).toBeUndefined();
+    await expect(cloud.editPost(postId, "سطو")).rejects.toThrow("ليس منشورك"); await expect(cloud.deletePost(postId)).rejects.toThrow("ليس منشورك");
+    // the author deletes it: post, replies and the image go
+    await cloud.signOut(); await cloud.signIn(A.email, A.pw);
+    const img = (await cloud.loadAll()).posts.find((x: any) => x.id === postId).image; expect(img).toBeTruthy();
+    await cloud.deletePost(postId);
+    const after = await cloud.loadAll(); expect(after.posts.find((x: any) => x.id === postId)).toBeUndefined();
+    expect((await fetch(img.src)).headers.get("content-type") || "").not.toMatch(/^image\//);
+  });
+
   it("the author reads the reply notification-free feed and their thread", async () => {
     await cloud.signOut(); await cloud.signIn(A.email, A.pw);
     const ts = await cloud.threads(); expect(ts[0].unread).toBe(2); // «أهلًا» and the realtime test's message

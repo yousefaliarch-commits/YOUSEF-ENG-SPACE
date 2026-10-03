@@ -120,6 +120,21 @@
   "p": "app/AppView.tsx",
   "n": 1
  },
+ "انتظر لحظة حتى يكتمل نشر المنشور": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 2
+ },
+ "تم حفظ التعديل": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "حُذف المنشور": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
  "هذا الحساب موقوف مؤقتًا بقرار من فريق المجتمع — لا يستقبل رسائل الآن": {
   "k": "s",
   "p": "app/AppView.tsx",
@@ -391,6 +406,26 @@
   "n": 1
  },
  "محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "أُخفي هذا المنشور من الإدارة — لا يمكن تعديله": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "حسابك موقوف مؤقتًا — لا يمكنك التعديل الآن": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "نص المنشور يجب أن يكون بين حرف و5000 حرف": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "هذا المنشور ليس منشورك": {
   "k": "s",
   "p": "backend/cloud.ts",
   "n": 1
@@ -10976,13 +11011,13 @@
  },
  "احذف نهائيًا": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx,ui/feed.tsx",
+  "n": 3
  },
  "إلغاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/support/support.tsx,ui/moderation.tsx",
-  "n": 4
+  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/support/support.tsx,ui/feed.tsx,ui/moderation.tsx",
+  "n": 6
  },
  "إظهار": {
   "k": "x",
@@ -10991,8 +11026,8 @@
  },
  "حذف": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/market/raise-tracker.tsx",
-  "n": 3
+  "p": "features/admin/AdminView.tsx,features/market/raise-tracker.tsx,ui/feed.tsx",
+  "n": 4
  },
  "فتح": {
   "k": "x",
@@ -21139,6 +21174,82 @@
   "p": "ui/feed.tsx",
   "n": 2,
   "x": "r.title | r.years | r.employer"
+ },
+ "مرة": {
+  "k": "s",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "مرتان": {
+  "k": "s",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "معدّل ·": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "عدّل كاتب المنشور نصه": {
+  "k": "s",
+  "p": "ui/feed.tsx",
+  "n": 2
+ },
+ "مرات": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "{0} مرات": {
+  "k": "r",
+  "p": "ui/feed.tsx",
+  "n": 1,
+  "x": "EL <Num>{n}</Num>"
+ },
+ "اكتب نص المنشور أولًا": {
+  "k": "s",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "تعديل المنشور": {
+  "k": "s",
+  "p": "ui/feed.tsx",
+  "n": 2
+ },
+ "نص المنشور": {
+  "k": "s",
+  "p": "ui/feed.tsx",
+  "n": 2
+ },
+ "يظهر للجميع أن المنشور «معدّل» مع عدد مرات التعديل. الصورة والتصويت والردود تبقى كما هي.": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "حفظ التعديل": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "تأكيد حذف المنشور": {
+  "k": "s",
+  "p": "ui/feed.tsx",
+  "n": 2
+ },
+ "حذف المنشور نهائيًا؟": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "يُحذف المنشور وكل الردود والتفاعلات عليه، ولا يمكن التراجع.": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
+ },
+ "تعديل": {
+  "k": "x",
+  "p": "ui/feed.tsx",
+  "n": 1
  },
  "مباشر": {
   "k": "x",

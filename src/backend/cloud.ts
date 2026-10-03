@@ -24,6 +24,10 @@ export function friendly(e: any): Error {
     : /User already registered|already been registered/i.test(m) ? "هذا البريد مسجّل بالفعل — سجّل الدخول"
     : /Password should be|weak password/i.test(m) ? "كلمة المرور ضعيفة — اختر كلمة أقوى"
     : /rate limit|too many/i.test(m) || code === 429 ? "محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة"
+    : /post is hidden/i.test(m) ? "أُخفي هذا المنشور من الإدارة — لا يمكن تعديله"
+    : /account suspended/i.test(m) ? "حسابك موقوف مؤقتًا — لا يمكنك التعديل الآن"
+    : /body length/i.test(m) ? "نص المنشور يجب أن يكون بين حرف و5000 حرف"
+    : /not your post/i.test(m) ? "هذا المنشور ليس منشورك"
     : /room closed/i.test(m) ? "هذه الغرفة مغلقة مؤقتًا بقرار من الإدارة"
     : /share limit/i.test(m) ? "شاركت 3 رواتب خلال آخر 30 يومًا — يمكنك المشاركة مجددًا لاحقًا"
     : /ticket limit/i.test(m) ? "فتحت 5 تذاكر اليوم — انتظر الرد أو أضف إلى تذكرة مفتوحة"
@@ -170,7 +174,7 @@ export async function saveProfile(persona: any) {
 // ---------------------------------------------------------------- everything the member's app shows
 export async function loadAll() {
   const db = await supabase(); const now = Date.now();
-  const [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary, nprefs] = await Promise.all([
+  const [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary, nprefs, mineIds] = await Promise.all([
     db.from("posts").select("*").order("created_at", { ascending: false }).limit(FEED_LIMIT),
     db.from("reactions").select("kind,item_id,agree,disagree,useful"),
     db.from("ballots").select("post_id,choice,author_mode"),
@@ -185,6 +189,7 @@ export async function loadAll() {
     db.from("job_contacts").select("job_id"),
     db.rpc("my_salary_status"),
     db.rpc("my_notification_prefs"),
+    db.rpc("my_posts"),   // which of these posts are mine (edit / delete) — a failure here only hides those buttons
   ]);
   for (const r of [posts, reacts, ballots, jobs, notifs, threads, reviews, cfg, state, reports, verif, contacts, salary, nprefs]) if (r.error) throw friendly(r.error);
   const postRows = posts.data || [];
@@ -194,7 +199,8 @@ export async function loadAll() {
   const myBallot: Record<string, any> = {}; for (const b of ballots.data || []) myBallot[b.post_id] = b;
   const byPost: Record<string, any[]> = {}; for (const c of comments) (byPost[c.post_id] = byPost[c.post_id] || []).push(c);
 
-  const outPosts = postRows.map((r: any) => postOf(r, commentTree(byPost[r.id] || [], myReacts, now), { reacts: myReacts[r.id], ballot: myBallot[r.id] ? myBallot[r.id].choice : null }, now));
+  const mineSet = new Set<string>(((mineIds && mineIds.data) || []).map((x: any) => (typeof x === "string" ? x : Object.values(x)[0])));
+  const outPosts: any[] = postRows.map((r: any) => ({ ...postOf(r, commentTree(byPost[r.id] || [], myReacts, now), { reacts: myReacts[r.id], ballot: myBallot[r.id] ? myBallot[r.id].choice : null }, now), ...(mineSet.has(r.id) ? { mine: true } : {}) }));
   const votes: Record<string, any> = {}, voteAs: Record<string, any> = {};
   for (const r of postRows) { const b = myBallot[r.id]; if (b) { votes[r.id] = choiceOf(r.type, b.choice); voteAs[r.id] = b.author_mode; } }
   const reactsOut: Record<string, any> = {}; for (const [id, r] of Object.entries(myReacts)) reactsOut[id] = { agree: r.agree, disagree: r.disagree, useful: r.useful };
@@ -232,6 +238,10 @@ export async function addPost(post: any, as: string) {
   const r: any = ok(await db.from("posts").insert(row).select("*").single());
   return postOf(r, []);
 }
+
+// the author's own post: edit the text (the server counts real changes) / delete it for good (replies, reactions, authorship go too)
+export async function editPost(id: string, body: string) { const db = await supabase(); const r: any = ok(await db.rpc("edit_my_post", { p_post: id, p_body: body })); return { body: r.body as string, edits: (r.edit_count || 0) as number, editedAt: r.edited_at ? Date.parse(r.edited_at) : null }; }
+export async function deletePost(id: string) { const db = await supabase(); const r: any = ok(await db.rpc("delete_my_post", { p_post: id })); if (r && r.image) await db.storage.from("media").remove([r.image]).catch(() => {}); }
 
 export async function addComment(postId: string, c: any, parentId: string | null, as: string) {
   const db = await supabase();
@@ -392,7 +402,7 @@ export async function subscribeLive(onEvent: (event: string, payload: any) => vo
     for (const e of events) ch = ch.on("broadcast", { event: e }, (m: any) => onEvent(e, m.payload));
     return ch.subscribe((status: string) => { if (main) onStatus(status === "SUBSCRIBED"); });
   };
-  const chans = [listen(`member:${session.user.id}`, ["message", "notification", "profile"], true), listen("feed", ["post", "comment", "moderation"])];
+  const chans = [listen(`member:${session.user.id}`, ["message", "notification", "profile"], true), listen("feed", ["post", "edit", "comment", "moderation"])];
   if (opts.staff) chans.push(listen("staff", ["report", "moderation"]));
   return () => { for (const c of chans) db.removeChannel(c); };
 }

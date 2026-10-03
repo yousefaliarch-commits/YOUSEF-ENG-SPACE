@@ -277,6 +277,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     hydrateSoon: () => { clearTimeout(hydrateTimer.current); hydrateTimer.current = setTimeout(() => hydrate().catch(() => {}), 600); },
     // a new post by someone else; mine is already on screen (give a post of mine still on its way a moment to finish first)
     pullPost: (id: any) => setTimeout(() => cloud.postById(id).then((p) => { if (p) setPosts((ps) => (ps.some((x) => x.id === p.id) || recentOwn.current[p.id] ? ps : uniqById([p, ...ps]))); }).catch(() => {}), Object.keys(pendingPosts.current).length ? 1500 : 0),
+    // a post's text was edited (by its author, maybe on another device): take the new text and count
+    pullEdit: (id: any) => { cloud.postById(id).then((p) => { if (p) setPosts((ps) => ps.map((x) => (x.id === p.id ? { ...x, body: p.body, edits: p.edits, editedAt: p.editedAt } : x))); }).catch(() => {}); },
     // a new comment under a post the feed holds: re-read that post (its counts and tree)
     pullComments: (postId: any) => { if (!posts.some((x) => x.id === postId)) return; cloud.postById(postId).then((p) => { if (p) setPosts((ps) => ps.map((x) => (x.id === p.id ? { ...x, comments: p.comments, reactions: p.reactions } : x))); }).catch(() => {}); },
   };
@@ -285,6 +287,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     cloud.subscribeLive((event, p) => {
       if (event === "profile") { rt.current.refreshMe(); rt.current.hydrateSoon(); }
       if (event === "post" && p) rt.current.pullPost(p.id);
+      if (event === "edit" && p) rt.current.pullEdit(p.id);
       if (event === "comment" && p) rt.current.pullComments(p.post);
       if (event === "moderation") rt.current.hydrateSoon();
       if (event === "message") { refreshThreads().catch(() => {}); if (p && p.thread === chatRef.current) { loadChat(p.thread).catch(() => {}); cloud.readThread(p.thread).catch(() => {}); } }
@@ -378,6 +381,21 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         // swap the temporary post for the real one — or add it, when a refresh already replaced the feed
         setPosts((ps) => uniqById(ps.some((x) => x.id === tmp.id) ? swapId(ps, tmp.id, { ...srv, comments: [] }) : ps.some((x) => x.id === srv.id) ? ps : [full, ...ps]));
       }, () => { delete pendingPosts.current[tmp.id]; setPosts((ps) => ps.filter((x) => x.id !== tmp.id)); });   // refused: it never existed — the message says why
+    },
+    // the author's own post. Edit: the text changes at once and the server's count replaces the local guess; a refusal puts the old text
+    // back. Delete: gone from the feed at once (and from the merge memory, or the next refresh would bring it back); a refusal restores it.
+    editPost: (pid?: any, body?: any) => {
+      const before = posts.find((x) => x.id === pid); const text = String(body || "").trim(); if (!before || !text || text === before.body) return; if (CLOUD && pendingPosts.current[pid]) { setMsg("انتظر لحظة حتى يكتمل نشر المنشور"); return; }
+      recentOwn.current[pid] && (recentOwn.current[pid] = { ...recentOwn.current[pid], body: text });
+      setPosts((ps) => ps.map((p) => p.id !== pid ? p : { ...p, body: text, edits: (p.edits || 0) + 1, editedAt: Date.now() }));
+      sync(() => cloud.editPost(pid, text), (r: any) => { if (recentOwn.current[pid]) recentOwn.current[pid] = { ...recentOwn.current[pid], body: r.body, edits: r.edits, editedAt: r.editedAt }; setPosts((ps) => ps.map((p) => p.id !== pid ? p : { ...p, body: r.body, edits: r.edits, editedAt: r.editedAt })); },
+        () => { if (recentOwn.current[pid]) recentOwn.current[pid] = { ...recentOwn.current[pid], body: before.body, edits: before.edits || 0, editedAt: before.editedAt || null }; setPosts((ps) => ps.map((p) => p.id !== pid ? p : { ...p, body: before.body, edits: before.edits || 0, editedAt: before.editedAt || null })); });
+      setMsg("تم حفظ التعديل");
+    },
+    deletePost: (pid?: any) => {
+      const before = posts.find((x) => x.id === pid); if (!before) return; if (CLOUD && pendingPosts.current[pid]) { setMsg("انتظر لحظة حتى يكتمل نشر المنشور"); return; } delete recentOwn.current[pid]; delete pendingPosts.current[pid];
+      setPosts((ps) => ps.filter((p) => p.id !== pid)); setMsg("حُذف المنشور");
+      sync(() => cloud.deletePost(pid), undefined, () => setPosts((ps) => (ps.some((p) => p.id === pid) ? ps : [before, ...ps])));
     },
     addComment: (pid?: any, c?: any, parentId?: any, as?: any) => { const node = stamp({ replies: [], dm: !!profile.dm, ...c }, as); setPosts((ps) => ps.map((p) => p.id !== pid ? p : { ...p, comments: parentId ? attach(p.comments, parentId, node) : [...p.comments, node] })); addPts(10); sync(() => cloud.addComment(pid, c, parentId, asOf(as)), (srv) => setPosts((ps) => swapId(ps, node.id, { ...srv, replies: undefined }))); },
     setBest: (pid?: any, cid?: any) => { setPosts((ps) => ps.map((p) => p.id === pid ? { ...p, best: cid } : p)); sync(() => cloud.setBest(pid, cid)); },
