@@ -66,3 +66,19 @@ export async function newMember(page: Page, key: string, admin = false) {
 }
 import { test } from "@playwright/test";
 const test_info_use = () => test.info().project.use;
+
+// Nothing may stick out past the screen edge — also where a parent clips it (that hides the problem from scrollWidth): a long e-mail
+// that stretched a grid column was cut off on the left of the member directory. Elements inside a scrolling strip are fine.
+export async function noClipped(page: Page, where = "") {
+  const bad = await page.evaluate(() => {
+    const vw = document.documentElement.clientWidth; const out: string[] = [];
+    const scrolls = (e: Element | null) => { for (; e && e !== document.body; e = e.parentElement) { const o = getComputedStyle(e).overflowX; if (o === "auto" || o === "scroll") return true; } return false; };
+    for (const e of Array.from(document.querySelectorAll("main *, [data-tour=tabbar] *"))) {
+      const r = e.getBoundingClientRect(); if (!r.width || !r.height) continue; const cs = getComputedStyle(e); if (cs.visibility === "hidden" || cs.display === "none" || cs.position === "fixed") continue;
+      if ((r.left < -1 || r.right > vw + 1) && !scrolls(e) && !e.closest("[inert]")) out.push(`${e.tagName}.${String(e.className).slice(0, 40)} ${Math.round(r.left)}..${Math.round(r.right)} of ${vw}`);
+      if (out.length > 4) break;
+    }
+    return out;
+  });
+  expect(bad, `content outside the screen ${where}`).toEqual([]);
+}
