@@ -9,7 +9,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         // CI numbers each build, so a newer APK always installs over an older one
         versionCode(Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER") ?: "1"))
-        versionName("0.1." + (System.getenv("GITHUB_RUN_NUMBER") ?: "0"))
+        // versionName = "<native line>.<build>": the native line (ota.config.json) says which web bundles this shell can run — see docs/OTA.md
+        versionName(new groovy.json.JsonSlurper().parse(file("../../ota.config.json")).nativeLine + "." + (System.getenv("GITHUB_RUN_NUMBER") ?: "0"))
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

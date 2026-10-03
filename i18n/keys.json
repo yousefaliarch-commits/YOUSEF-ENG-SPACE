@@ -1,12 +1,17 @@
 {
  "حدث خطأ غير متوقع": {
   "k": "s",
-  "p": "app/App.tsx",
-  "n": 1
+  "p": "app/App.tsx,main.tsx",
+  "n": 2
  },
  "إعادة التحميل": {
   "k": "s",
   "p": "app/App.tsx",
+  "n": 1
+ },
+ "تم تنزيل تحديث جديد — يُطبَّق عند الفتح التالي، أو من الإعدادات": {
+  "k": "s",
+  "p": "app/AppView.tsx",
   "n": 1
  },
  "تعذّر التحديث — تحقّق من اتصالك": {
@@ -14765,6 +14770,93 @@
  },
  "تجديد المعرّف المجهول تلقائيًا كل 90 يومًا": {
   "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "لم يُفحص بعد": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "جارٍ فحص التحديثات…": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "جارٍ تنزيل التحديث…": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "تحديث جاهز — يُطبَّق عند الفتح التالي": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "أنت على أحدث نسخة": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "تعذّر فحص التحديث — حاول لاحقًا": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "يلزم تثبيت نسخة جديدة من التطبيق لهذا التحديث": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "التحديثات الفورية": {
+  "k": "x",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "حزمة الواجهة:": {
+  "k": "x",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "حزمة الواجهة: {0} · {1}": {
+  "k": "r",
+  "p": "features/settings/settings.tsx",
+  "n": 1,
+  "x": "EL <span dir=\"ltr\" className=\"text-ink\">{s.bundle}</span> | s.builtin ? \"مدمجة في التطبيق\" : \"محدَّثة عبر الإنترنت\""
+ },
+ "مدمجة في التطبيق": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "محدَّثة عبر الإنترنت": {
+  "k": "s",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "تراجع التطبيق تلقائيًا عن تحديث لم يعمل (": {
+  "k": "x",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ ") وبقي على النسخة السليمة.": {
+  "k": "x",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "تراجع التطبيق تلقائيًا عن تحديث لم يعمل ({0}) وبقي على النسخة السليمة.": {
+  "k": "r",
+  "p": "features/settings/settings.tsx",
+  "n": 1,
+  "x": "EL <span dir=\"ltr\">{s.rolledBack}</span>"
+ },
+ "تحقّق من التحديث": {
+  "k": "x",
+  "p": "features/settings/settings.tsx",
+  "n": 1
+ },
+ "طبّق الآن": {
+  "k": "x",
   "p": "features/settings/settings.tsx",
   "n": 1
  },

@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import {
   Award, Bell, BookOpen, Briefcase, Building2, Calculator, Check, ChevronDown, CircleHelp, Compass, Home, LifeBuoy, 
   Languages, Layers, LockKeyhole, MessageCircle, Moon, Settings, ShieldCheck, SlidersHorizontal, Sparkles, Sun, 
-  UserRound, Users, VenetianMask, Wallet
+  RefreshCw, UserRound, Users, VenetianMask, Wallet
 } from "lucide-react";
 import { gx } from "../../domain/identity";
 import { L3, say } from "../../i18n/i18n";
 import { ArchMark, BTN, Back, Forward, Num, Panel, Primary, Secondary, Toggle, Wordmark } from "../../ui/primitives";
 import { THEMES } from "../../ui/theme";
+import { applyUpdateNow, checkForUpdate, onOtaState, otaState } from "../../native/updater";
 
 // =====================================================================
 //  The language screen (the app's first screen) · Settings · the feature guide · the interactive tour · the header theme switch
@@ -69,6 +70,26 @@ export const SettingsLink = ({ icon: I, title, sub, onClick }: any) => (
 export const SETTINGS_TOGGLES = (app?: any) => { const p = app.profile; return [["dm", "السماح بالرسائل الخاصة من الزملاء"], ...(p.photo ? [["showPhoto", "إظهار صورتي مع اسمي في المشاركات العلنية"]] : []), ...(app.isCo || app.moneyAccess === "none" ? [] : [["openToRecruiters", "متاح لرسائل الشركات عند مطابقة وظيفة"]]), ...(app.moneyAccess === "none" ? [] : [["hide", "إخفاء نشاطي عن الشركات التي أتابعها"]]), ["rotate", "تجديد المعرّف المجهول تلقائيًا كل 90 يومًا"]]; };
 
 
+// Live web updates (native shells): which web bundle runs, and a manual check. The app also checks by itself at launch.
+const OTA_STATUS: any = { idle: "لم يُفحص بعد", checking: "جارٍ فحص التحديثات…", downloading: "جارٍ تنزيل التحديث…", ready: "تحديث جاهز — يُطبَّق عند الفتح التالي", current: "أنت على أحدث نسخة", failed: "تعذّر فحص التحديث — حاول لاحقًا", incompatible: "يلزم تثبيت نسخة جديدة من التطبيق لهذا التحديث" };
+export function LiveUpdate() {
+  const [s, setS] = useState<any>(otaState()); useEffect(() => onOtaState(setS), []);
+  if (!s.supported) return null;
+  const busy = s.status === "checking" || s.status === "downloading";
+  return (
+    <div data-ota={s.status}><Panel className="px-4 py-3">
+      <h2 className="text-[13px] font-medium inline-flex items-center gap-1.5"><RefreshCw size={15} className="text-accent" /> التحديثات الفورية</h2>
+      <p className="mt-1 text-[11.5px] text-ink-2 leading-relaxed">حزمة الواجهة: <span dir="ltr" className="text-ink">{s.bundle}</span> · {s.builtin ? "مدمجة في التطبيق" : "محدَّثة عبر الإنترنت"}</p>
+      <p className="mt-0.5 text-[11.5px] text-ink-3" role="status">{OTA_STATUS[s.status] || ""}{s.pending && s.status === "ready" ? <> · <span dir="ltr">{s.pending.version}</span></> : null}</p>
+      {s.rolledBack && <p className="mt-0.5 text-[11px] text-warn">تراجع التطبيق تلقائيًا عن تحديث لم يعمل (<span dir="ltr">{s.rolledBack}</span>) وبقي على النسخة السليمة.</p>}
+      <div className="mt-2.5 flex gap-2">
+        <Secondary onClick={() => checkForUpdate()} disabled={busy} className="h-10 px-4 flex-1"><RefreshCw size={14} className={busy ? "spin" : ""} /> تحقّق من التحديث</Secondary>
+        {s.status === "ready" && <Primary onClick={() => applyUpdateNow()} className="h-10 px-4 flex-1">طبّق الآن</Primary>}
+      </div>
+    </Panel></div>
+  );
+}
+
 export function SettingsScreen({ app }: any) {
   const p = app.profile; const persist = (patch?: any) => app.updateProfile(patch);
   return (
@@ -102,6 +123,7 @@ export function SettingsScreen({ app }: any) {
         <SettingsLink icon={SlidersHorizontal} title="صلاحياتي" sub="ما يراه حسابك وما لا يراه، ومن يراسل من" onClick={() => app.push({ type: "permissions" })} />
       </Panel>
       <p className="px-1 text-[10.5px] text-ink-3 leading-relaxed text-center"><Wordmark size="text-[11px]" /> · الإصدار <Num>24</Num> · نسخة تجريبية تعمل بالكامل على جهازك</p>
+      <LiveUpdate />
       {/* which build this is — the first thing to check when a fix "is not there" on a phone */}
       <p className="pt-2 pb-1 text-center text-[10.5px] text-ink-4" dir="ltr">EngSpace {__BUILD__.version}{__BUILD__.run ? ` · build ${__BUILD__.run}` : ""} · {__BUILD__.sha} · {__BUILD__.date}</p>
     </div>

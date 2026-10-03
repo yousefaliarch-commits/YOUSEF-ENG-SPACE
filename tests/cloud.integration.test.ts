@@ -154,6 +154,23 @@ run("cloud backend (local Supabase)", () => {
     await expect(cloud.admin.cases()).rejects.toThrow("ليست لديك صلاحية");
   });
 
+  it("live web updates: the publish script puts a verifiable bundle + manifest in the public bucket; clients cannot write there", async () => {
+    const env = (import.meta as any).env; const service = env.ENGSPACE_SERVICE_KEY || process.env.ENGSPACE_SERVICE_KEY; if (!service) return;
+    const { execFileSync } = await import("node:child_process"); const { mkdtempSync, writeFileSync, mkdirSync } = await import("node:fs"); const { tmpdir } = await import("node:os"); const { join } = await import("node:path"); const { createHash } = await import("node:crypto");
+    const { parseManifest, decide } = await import("../src/native/updater-core");
+    const dist = mkdtempSync(join(tmpdir(), "dist-")); writeFileSync(join(dist, "index.html"), "<html><body>EngSpace test bundle</body></html>"); mkdirSync(join(dist, "assets")); writeFileSync(join(dist, "assets", "a.js"), "console.log(1)");
+    const ts = String(Math.floor(Date.now() / 1000));
+    const out = JSON.parse(execFileSync("node", ["scripts/ota/publish.mjs"], { env: { ...process.env, SUPABASE_URL: env.VITE_SUPABASE_URL, SERVICE_KEY: service, CHANNEL: "citest", BUILD_TS: ts, DIST: dist, NOTES: "اختبار" }, encoding: "utf8" }).trim());
+    // what a phone sees: the public manifest (no key), validated by the app's own parser, and a bundle that matches its hash
+    const m = parseManifest(await (await fetch(`${env.VITE_SUPABASE_URL}/storage/v1/object/public/app-updates/citest/manifest.json`)).json(), env.VITE_SUPABASE_URL);
+    expect(m).toMatchObject({ version: out.version, build: Number(ts), nativeLine: 1, notes: "اختبار" });
+    const zip = Buffer.from(await (await fetch(m!.url)).arrayBuffer()); expect(createHash("sha256").update(zip).digest("hex")).toBe(m!.sha256);
+    expect(decide(m!, { runningBuild: Number(ts) - 10, nativeVersion: "1.77", badVersions: [] })).toEqual({ go: true });
+    // no client role may write to the bucket
+    const anon = await fetch(`${env.VITE_SUPABASE_URL}/storage/v1/object/app-updates/citest/evil.zip`, { method: "POST", headers: { apikey: env.VITE_SUPABASE_PUBLISHABLE_KEY, authorization: `Bearer ${env.VITE_SUPABASE_PUBLISHABLE_KEY}`, "content-type": "application/zip" }, body: "x" });
+    expect(anon.ok).toBe(false);
+  });
+
   it("author controls: only the author edits (and the count is the server's), edits show to others, delete takes everything with it", async () => {
     await cloud.signOut(); await cloud.signIn(A.email, A.pw);
     let mine = (await cloud.loadAll()).posts.find((x: any) => x.id === postId);

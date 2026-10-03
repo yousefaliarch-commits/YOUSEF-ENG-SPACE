@@ -4,7 +4,7 @@
 export {};
 declare global {
   // build stamp injected by vite.config.ts (define)
-  const __BUILD__: { version: string; sha: string; run: string; date: string };
+  const __BUILD__: { version: string; sha: string; run: string; date: string; ts: number; line: number };
   interface Window {
     __LIVE?: any;
     __i18n?: any;
