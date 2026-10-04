@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import {
   CircleCheck, LockKeyhole, ShieldAlert
 } from "lucide-react";
-import { loadInspections, mergeInspections, storeInspections } from "../data/checklists";
+import { loadInspections, loadTemplates, mergeInspections, mergeTemplates, storeInspections, storeTemplates } from "../data/checklists";
 import { SupportScreen, TicketScreen } from "../features/support/support";
 import { loadDevice, storeDevice } from "../lib/device-store";
 import { ROOMS, company } from "../data/companies";
@@ -22,6 +22,7 @@ import { CommunityScreen, HomeScreen, InboxScreen, JobsScreen, MarketScreen, Too
 import { dropOwnRequest, newVerifyRequest, purgeRequest, saveOwnRequest, verifs0, verifySummary } from "../features/verify/verify";
 import { L2, say, tr } from "../i18n/i18n";
 import { UpdateBanner } from "../ui/update-banner";
+import { requestUpdate } from "../native/updater";
 import { onOtaToast } from "../native/updater";
 import { DEMO_PERSONA, estimateFor, loadPersona, reachFor, savePersona } from "../lib/helpers";
 import { ImageViewer } from "../lib/media";
@@ -53,15 +54,24 @@ const ChecklistsScreen = lazy(() => import("../features/qaqc/qaqc").then((m) => 
 // A kept-alive tab: an inactive pane is skipped with content-visibility:hidden, which keeps its computed style and layout
 // (display:none would throw them away and showing the tab again would recompute the whole screen). Its content does not
 // re-render while hidden, nor to be hidden; it renders again only as the visible tab.
-const PaneBody = memo(({ render }: any) => render(), (a: any, b: any) => !b.active);
+// Coming back to a tab (back from a post, a job, a company… or switching tabs) used to re-render the whole tab synchronously inside the
+// back transition — the feed's every card, 250–300 ms of main thread on a mid-range phone, felt as a stutter on every «back». A pane now
+// re-renders only when the data it shows changed (`sig`: the store values the tabs read, compared by reference) — on its return and
+// while visible alike, so a toast, a sheet, the header's scroll shadow or the scroll restore after «back» no longer re-render the feed.
+const sameSig = (a?: any[], b?: any[]) => !!a && !!b && a.length === b.length && a.every((x, i) => Object.is(x, b[i]));
+const PaneBody = memo(({ render, sig, seen }: any) => { seen.current = sig; return render(); }, (a: any, b: any) => !b.active || sameSig(b.seen.current, b.sig));
 // a pane built in the background is laid out once (invisible) before it is skipped, so its first appearance is cheap too
-const TabPane = ({ active, render }: any) => {
-  const [warm, setWarm] = useState(active);
+// `covered`: the current tab under a pushed screen stays laid out and visible beneath the screen layer (just hidden from assistive tech),
+// so «back» only removes the layer — no re-layout of the list, no scroll restore, nothing to recompute.
+const TabPane = ({ id, active, covered, render, sig }: any) => {
+  const [warm, setWarm] = useState(active); const seen = useRef<any>(null);
   useEffect(() => { if (warm) return; let id = requestAnimationFrame(() => { id = requestAnimationFrame(() => setWarm(true)); }); return () => cancelAnimationFrame(id); }, []);
-  return <div className={`tab-pane ${active ? "" : warm ? "is-off" : "is-off is-warming"}`} {...(active ? {} : { inert: "", "aria-hidden": true })}><PaneBody active={active} render={render} /></div>;
+  return <div data-pane={id} className={`tab-pane ${active ? "" : warm ? "is-off" : "is-off is-warming"}`} {...(active ? (covered ? { "aria-hidden": true } : {}) : { inert: "", "aria-hidden": true })}><PaneBody active={active} render={render} sig={sig} seen={seen} /></div>;
 };
+// every store value a tab screen reads (navigation-only keys — stack, sheet, msg, dir… — are left out on purpose)
+const PANE_KEYS = ["qcTemplates", "authView", "editing", "welcome", "config", "contacted", "contributed", "follows", "hidden", "inspections", "jobStats", "jobs", "logos", "market", "mod", "notifPrefs", "notifs", "persona", "posts", "profile", "pts", "pushStatus", "reacts", "reports", "reviews", "roomFollows", "salaryLog", "salaryRev", "saved", "shares", "threads", "verifs", "voteAs", "votes"];
 
-export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "ticket"];
+export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "qcbuilder", "ticket"];
 
 export const PLAIN_TYPES = ["notifications", "notifprefs", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists", "support"];
 
@@ -110,6 +120,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // QA/QC inspections live on this device first (sites often have no signal); on the live platform they also go to the member's own state row
   const [inspections, setInspections] = S("inspections", () => loadInspections(persona && persona.pid));
   useEffect(() => { setInspections(loadInspections(persona && persona.pid)); }, [persona && persona.pid]);
+  // the member's own checklists (built from scratch or from a copy of a ready one) — kept like inspections: this phone first, then their account
+  const [qcTemplates, setQcTemplates] = S("qcTemplates", () => loadTemplates(persona && persona.pid));
+  useEffect(() => { setQcTemplates(loadTemplates(persona && persona.pid)); }, [persona && persona.pid]);
   // the salary history behind the raise tracker: private to the member (device first, then their own state row)
   const [salaryLog, setSalaryLog] = S("salaryLog", () => loadDevice("salarylog", persona && persona.pid, { at: 0, log: [] }));
   useEffect(() => { setSalaryLog(loadDevice("salarylog", persona && persona.pid, { at: 0, log: [] })); }, [persona && persona.pid]);
@@ -130,11 +143,12 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     [t.ready, t.updateCallbackDone].forEach((p) => p && p.catch(() => {})); t.finished.then(done, done);
   };
   const [viewer, setViewer] = useState<any>(null); // a post image open full screen
-  const [scrolled, setScrolled] = useState(false); const onScroll = (e?: any) => { const y = e.currentTarget.scrollTop; if (shownKey.current) scrollMem.current[shownKey.current] = y; const s = y > 6; if (s !== scrolled) setScrolled(s); scrollingNow(); };
+  // two scrollers: the tabs' (kept in place under a pushed screen) and the pushed screen's own layer; each remembers its position
+  const [scrolled, setScrolled] = useState(false); const onScroll = (e?: any) => { const el = e.currentTarget; const y = el.scrollTop; if (shownKey.current) scrollMem.current[shownKey.current] = y; const s = y > 6; if (s !== scrolled) setScrolled(s); scrollingNow(el); };
   // .is-scrolling while the list moves: idle animations hold still so every frame goes to the scroll (no React state)
   const scrollIdle = useRef<any>(null);
   // (on the scroller, not <html>: a class on the root would restyle the whole document twice per gesture)
-  const scrollingNow = () => { const el = scroller.current; if (!el) return; if (!el.classList.contains("is-scrolling")) el.classList.add("is-scrolling"); clearTimeout(scrollIdle.current); scrollIdle.current = setTimeout(() => el.classList.remove("is-scrolling"), 180); };
+  const scrollingNow = (el: any = scroller.current) => { if (!el) return; if (!el.classList.contains("is-scrolling")) el.classList.add("is-scrolling"); clearTimeout(scrollIdle.current); scrollIdle.current = setTimeout(() => el.classList.remove("is-scrolling"), 180); };
   // pull-to-refresh is painted straight onto the indicator and the screen (GPU transforms, one write per frame):
   // a React state per touchmove re-rendered the whole app view dozens of times a second during the gesture
   const pull = useRef(0); const pullEl = useRef<any>(null); const pullIcon = useRef<any>(null); const pullRaf = useRef(0); const [refreshing, setRefreshing] = useState(false);
@@ -144,7 +158,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     ind.style.transition = live ? "none" : `transform .3s ${EASE}, opacity .3s`; sc.style.transition = live ? "none" : `transform .3s ${EASE}`;
     if (live) { ind.style.transform = `translate3d(0,${v - 44}px,0)`; ind.style.opacity = String(v / 70); if (ic) ic.style.transform = `rotate(${v * 3}deg)`; sc.style.transform = `translate3d(0,${v * 0.4}px,0)`; }
     else { ind.style.transform = ""; ind.style.opacity = ""; sc.style.transform = ""; }
-  }); }; const touch = useRef<any>(null); const scroller = useRef<any>(null); const timers = useRef<any>([]);
+  }); }; const touch = useRef<any>(null); const scroller = useRef<any>(null); const layer = useRef<any>(null); const swipeReset = useRef<any>(null); const leaving = useRef(false); const timers = useRef<any>([]);
   // Every screen shares one scroller, so each screen's position is remembered: a pushed screen (a post, a job…) always opens at
   // its top, going back returns to where the list was, and each tab keeps its own place. Applied before paint (and inside the
   // View Transition), so a screen never appears scrolled somewhere else first.
@@ -159,9 +173,15 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   useEffect(() => { if (!persona || welcome || editing || embed || !langChosen || tourSeen()) return; const t = setTimeout(() => setTourOn(true), 900); return () => clearTimeout(t); }, [!!persona, welcome, editing, langChosen]);
   const topNow = stack[stack.length - 1]; const screenKey = topNow ? `${topNow.type}-${topNow.id || ""}#${stack.length}` : "tab:" + curTab;
   useLayoutEffect(() => {
-    const el = scroller.current; const prev = shownKey.current; shownKey.current = screenKey; if (!el || prev === screenKey || prev == null) return;
+    if (swipeReset.current) { swipeReset.current(); swipeReset.current = null; }   // a swipe-back just finished: drop the gesture's inline styles in the same frame
+    const prev = shownKey.current; shownKey.current = screenKey; if (prev === screenKey || prev == null) return;
     const kind = navKind.current; navKind.current = "push"; // anything that is not an explicit back / tab switch opens at the top
-    const saved = scrollMem.current[screenKey]; el.scrollTop = (kind === "pop" || kind === "tab") && saved ? saved : 0;
+    const saved = scrollMem.current[screenKey];
+    if (topNow) { const el = layer.current; if (el) el.scrollTop = kind === "pop" && saved ? saved : 0; }   // a pushed screen: its own layer
+    else if (kind === "tab") { const el = scroller.current; if (el) el.scrollTop = saved || 0; }            // another tab: its remembered place
+    // back to the tab under the layer: it never moved — nothing to restore, nothing to lay out again
+    // the header shadow from the remembered position — reading scrollTop here would force a synchronous layout inside the transition
+    const sc = (topNow ? (kind === "pop" && saved) || 0 : scrollMem.current[screenKey] || 0) > 6; if (sc !== scrolled) setScrolled(sc);
     if (kind === "push") delete scrollMem.current[screenKey];
   }, [screenKey]);
   useEffect(() => { if (!msg) return; const t = setTimeout(() => setMsg(""), 2600); return () => clearTimeout(t); }, [msg]);
@@ -227,6 +247,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     if (d.prefs) setNotifPrefs({ ...DEFAULT_PREFS, ...d.prefs });
     setReviews(d.reviews); setReacts(d.reacts); setVotes(d.votes); setVoteAs(d.voteAs); setSaved(d.saved); setFollows(d.follows); setRoomFollows(d.roomFollows); setHidden(d.hidden); setContacted(d.contacted);
     setInspections((mine) => mergeInspections(mine, d.inspections));
+    setQcTemplates((mine) => mergeTemplates(mine, d.qcTemplates || []));
     // the whole history is one value stamped with its last edit: the newer copy wins, so a deletion on one device sticks everywhere
     setSalaryLog((mine) => (d.salaryLog && d.salaryLog.at > (mine.at || 0) ? d.salaryLog : mine));
     if (d.config) setConfig({ ...MOD_CONFIG0, ...d.config });
@@ -245,7 +266,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   useEffect(() => { if (!persona || embed || !CLOUD && !NATIVE || profile.onboarded === false) return; const t = setTimeout(askPush, 7000); return () => clearTimeout(t); }, [!!persona, curTab]);
   // a shared link: the phone app gets app.engspace://open/<type>/<id>; the web gets #app/<type>/<id>. Signed out, it waits for the sign-in.
   useEffect(() => { if (!persona && !embed && init.stack.length === 1 && init.stack[0].id && SHAREABLE.includes(init.stack[0].type)) setPendingOpen(init.stack[0]); }, []);
-  useEffect(() => { if (!persona || embed) return; const go = () => { const o = takePendingOpen(); if (!o) return; if (o.nid) app.markRead(o.nid); if (o.tab) app.setTab(o.tab); else app.push({ type: o.type, id: o.id }); }; go(); window.addEventListener("engspace:open", go); return () => window.removeEventListener("engspace:open", go); }, [!!persona]);
+  // the listener lives for the whole session, so it reads the latest app (the first render's setTab thought its tab was still current)
+  const appNow = useRef<any>(null);
+  useEffect(() => { if (!persona || embed) return; const go = () => { const o = takePendingOpen(); if (!o) return; const a = appNow.current; if (o.nid) a.markRead(o.nid); if (o.tab) a.setTab(o.tab); else a.push({ type: o.type, id: o.id }); if (o.update) requestUpdate(); }; go(); window.addEventListener("engspace:open", go); return () => window.removeEventListener("engspace:open", go); }, [!!persona]);
   // An auth link finished (web: on load; app: the native URL handler): a reset link opens «new password»; otherwise a server
   // session without a member on this device (e-mail just confirmed, storage cleared) signs the member in.
   const authLink = (reset?: any) => cloud.currentPersona().then((p) => {
@@ -306,6 +329,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const persist = (key?: any, value?: any) => { if (!CLOUD || !hydrated.current) return; clearTimeout(saveLater.current[key]); saveLater.current[key] = setTimeout(() => sync(() => cloud.saveState(key, value)), 800); };
   useEffect(() => persist("saved", saved), [saved]); useEffect(() => persist("follows", follows), [follows]); useEffect(() => persist("roomFollows", roomFollows), [roomFollows]); useEffect(() => persist("hidden", hidden), [hidden]);
   useEffect(() => { storeInspections(inspections, persona && persona.pid); persist("inspections", inspections); }, [inspections]);
+  useEffect(() => { storeTemplates(qcTemplates, persona && persona.pid); persist("qcTemplates", qcTemplates); }, [qcTemplates]);
   useEffect(() => { storeDevice("salarylog", persona && persona.pid, salaryLog); persist("salaryLog", salaryLog); }, [salaryLog]);
   const swapId = (list?: any, tmp?: any, item?: any) => list.map((x) => (x.id === tmp ? { ...x, ...item, mine: true } : { ...x, ...(x.replies ? { replies: swapId(x.replies, tmp, item) } : {}), ...(x.comments ? { comments: swapId(x.comments, tmp, item) } : {}) }));
   // A post just published exists only here until the server answers, and for a moment after that a read may not include it yet.
@@ -321,7 +345,16 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   backRef.current = () => { if (viewer) { setViewer(null); return true; } if (sheet) { setSheet(null); return true; } if (stack.length) { app.pop(); return true; } if (persona && curTab !== "home") { app.setTab("home"); return true; } return false; };
   useEffect(() => { if (NATIVE && !embed) setBackHandler(() => backRef.current()); }, []);
   const app: any = {
-    tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; startTransition(() => { setDir("tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; nav("push", () => { setDir(vtOK ? "vt" : "push"); setStack((st) => [...st, s]); }); if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => { navKind.current = "pop"; nav("pop", () => { setDir(vtOK ? "vt" : "pop"); setStack((st) => st.slice(0, -1)); }); }, scrolled,
+    tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; startTransition(() => { setDir("tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; if (leaving.current) { leaving.current = false; if (layer.current) layer.current.classList.remove("is-leaving"); } setDir(stack.length ? "push" : "layer"); setStack((st) => [...st, s]); if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => {
+      // the last screen leaves as a compositor-only fade/slide of its layer, revealing the tab that never moved; deeper screens swap in place.
+      // (A View Transition snapshotted both screens on every «back» — the remaining ~60 ms stall on phones.)
+      if (leaving.current || !stack.length) return; navKind.current = "pop"; const el = layer.current;
+      if (stack.length === 1 && el && !reducedMotion()) {
+        leaving.current = true; el.classList.add("is-leaving");
+        const done = () => { if (!leaving.current) return; leaving.current = false; setDir("none"); setStack([]); };
+        el.addEventListener("animationend", done, { once: true }); setTimeout(done, 320);
+      } else { setDir(stack.length > 1 ? "pop" : "none"); setStack((st) => st.slice(0, -1)); }
+    }, scrolled,
     lang, setLang, langChosen, startTour: () => { setSheet(null); setViewer(null); if (stack.length) { navKind.current = "tab"; setStack([]); } setTourOn(true); },
     market, setMarket, goMarket: (m?: any) => { if (!tabs.some((x) => x.id === "market")) { deny(); return; } nav("tab", () => { setDir(vtOK ? "vt" : "tab"); if (m === "tools") { setTabRaw("tools"); } else { setMarket(m); setTabRaw("market"); } setStack([]); }); },
     // the header's share button: the phone's share sheet (or the browser's), else the link is copied — with a toast that says which
@@ -367,6 +400,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     shares,
     salaryLog: salaryLog.log || [], saveSalaryLog: (log?: any) => setSalaryLog({ at: Date.now(), log: [...log].sort((a, b) => (a.month < b.month ? -1 : 1)).slice(-60) }),
     inspections, saveInspection: (x?: any) => setInspections((l) => [x, ...l.filter((i) => i.id !== x.id)].slice(0, 100)), deleteInspection: (id?: any) => setInspections((l) => l.filter((i) => i.id !== id)),
+    qcTemplates: qcTemplates.filter((t) => !t.deleted), qcTemplatesAll: qcTemplates,
+    saveTemplate: (t?: any) => setQcTemplates((l) => [{ ...t, at: Date.now() }, ...l.filter((x) => x.id !== t.id)].slice(0, 60)),
+    deleteTemplate: (id?: any) => setQcTemplates((l) => [{ id, deleted: true, at: Date.now() } as any, ...l.filter((x) => x.id !== id)]),
     saved, toggleSaved: toggleIn(setSaved), follows, toggleFollow: toggleIn(setFollows), roomFollows, toggleRoom: toggleIn(setRoomFollows),
     // Reactions: «أوافق» and «لا أوافق» exclude each other (picking one clears the other); «مفيد» toggles independently and may sit with either
     reacts, react: (id?: any, k?: any) => { const next = applyReaction(reacts[id], k); setReacts((r) => ({ ...r, [id]: next })); sync(() => cloud.react(kindOf(id), id, next)); },
@@ -474,6 +510,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     },
     withdrawVerification: () => { if (CLOUD) { updateProfile({ pending: false, verifyRef: null }); sync(() => cloud.withdrawVerification()); setMsg(say({ lang, profile }, L2("سُحب الطلب وحُذفت المستندات نهائيًا", "Request withdrawn — the documents were permanently deleted"))); return; } purgeOwn("withdrawn"); setMsg(say({ lang, profile }, L2("سُحب الطلب وحُذفت المستندات نهائيًا", "Request withdrawn — the documents were permanently deleted"))); },
   };
+  appNow.current = app;
   // Frame: the standalone preview draws its own phone-like frame; inside a device mockup the app simply fills the screen
   const frameVars: any = { "--tabh": embed && embed.platform === "android" ? "80px" : "68px" };
   const frameCls = embed ? "relative w-full h-full flex flex-col overflow-hidden bg-canvas" : NATIVE ? "relative w-full h-dvh flex flex-col overflow-hidden bg-canvas" : "relative w-full h-dvh sm:max-w-[390px] sm:h-[min(100dvh_-_9rem,820px)] sm:min-h-[640px] flex flex-col overflow-hidden bg-canvas sm:rounded-[2.5rem] sm:border sm:border-line-2";
@@ -488,7 +525,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const top = stack[stack.length - 1];
   const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
     : top
-    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
+    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" || top.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.type + (top.id || "list")} app={app} id={top.id} kind={top.type} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : null;
   const tabScreen = (id?: any) => id === "home" ? <HomeScreen app={app} /> : id === "community" ? <CommunityScreen app={app} /> : id === "jobs" ? <JobsScreen app={app} /> : id === "market" ? <MarketScreen app={app} /> : id === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" && toolOpen(blocked, sheet.payload.id) ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;
@@ -498,12 +535,38 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     report: [`إبلاغ عن ${REPORT_KINDS[sheet?.payload?.kind] || "محتوى"}`, <ReportSheet app={app} payload={sheet?.payload} />], privacy: ["الخصوصية والأمان", <PrivacyBody />], methodology: ["المنهجية والمصادر", <MethodologySheet app={app} />], verify: ["التوثيق — اختياري", <VerifySheet app={app} />], user: [sheet?.payload?.as === "public" ? "الملف العلني" : "الملف المجهول", <UserSheet app={app} payload={sheet?.payload} />], logo: ["شعار الشركة", <LogoSheet app={app} payload={sheet?.payload} />],
     tool: [toolMeta?.name || "أداة", ToolView ? <ToolView app={app} payload={sheet?.payload || {}} /> : null],
   };
+  const paneSig = [...PANE_KEYS.map((k) => store.get(k)), lang, live, tourOn, langChosen, theme, mode];
   const chatOpen = top && top.type === "chat"; const unreadThreads = threads.reduce((a, t) => a + (t.unread || 0), 0);
   // back swipe starts at the leading edge: the right edge in Arabic, the left edge in English
   const ltr = lang === "en";
-  const onTouchStart = (e?: any) => { if (tourOn) return; const t = e.touches[0]; const el = scroller.current; const rect = el ? el.getBoundingClientRect() : { left: 0, width: 390 }; touch.current = { x: t.clientX, y: t.clientY, edge: ltr ? t.clientX < rect.left + 28 : t.clientX > rect.left + rect.width - 28, top: el ? el.scrollTop <= 0 : false, moved: false }; };
-  const onTouchMove = (e?: any) => { const s = touch.current; if (!s) return; const t = e.touches[0]; const dx = t.clientX - s.x, dy = t.clientY - s.y; if (s.top && !top && dy > 0 && Math.abs(dy) > Math.abs(dx)) { paintPull(Math.min(96, dy * 0.6)); s.moved = true; } };
-  const onTouchEnd = (e?: any) => { const s = touch.current; if (!s) return; const t = e.changedTouches[0]; const dx = t.clientX - s.x; if (s.edge && (ltr ? dx > 80 : dx < -80) && top) app.pop(); if (pull.current > 70) { if (typeof window !== "undefined" && typeof window.__engspaceBuildChanged === "function" && window.__engspaceBuildChanged()) { try { location.reload(); } catch (x) {} } else setRefreshing(true); } if (pull.current) paintPull(0); touch.current = null; };
+  // Swipe back from the leading edge follows the finger: the screen layer moves with it (inline transform, no React state per move) over the
+  // tab that is already in place underneath; let go past a third of the width (or flick) and it finishes the slide and pops, else springs back.
+  const onTouchStart = (e?: any) => { if (tourOn) return; const t = e.touches[0]; const el = scroller.current; const rect = el ? el.getBoundingClientRect() : { left: 0, width: 390 }; const edge = ltr ? t.clientX < rect.left + 28 : t.clientX > rect.left + rect.width - 28; touch.current = { x: t.clientX, y: t.clientY, edge, top: el ? el.scrollTop <= 0 : false, moved: false, swipe: edge && top && !leaving.current ? { w: rect.width, started: false, depth: stack.length, d: 0, v: 0, t: performance.now() } : null }; };
+  const onTouchMove = (e?: any) => {
+    const s = touch.current; if (!s) return; const t = e.touches[0]; const dx = t.clientX - s.x, dy = t.clientY - s.y;
+    if (s.swipe) {
+      const sw = s.swipe; const back = ltr ? dx : -dx; const el = layer.current;
+      if (!sw.started) {
+        if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(dy) * 1.2 || back <= 0) { if (Math.abs(dy) > 12) s.swipe = null; return; }
+        sw.started = true; if (el) { el.style.animation = "none"; el.style.transition = "none"; el.style.willChange = "transform"; el.style.boxShadow = "0 0 28px rgba(0,0,0,.28)"; }
+        if (sw.depth > 1 && scroller.current) scroller.current.style.visibility = "hidden";   // under a deeper screen the tab is not what «back» shows
+      }
+      const d = Math.max(0, back); const now = performance.now(); sw.v = (d - sw.d) / Math.max(1, now - sw.t); sw.d = d; sw.t = now;
+      if (el) el.style.transform = `translate3d(${ltr ? d : -d}px,0,0)`; return;
+    }
+    if (s.top && !top && dy > 0 && Math.abs(dy) > Math.abs(dx)) { paintPull(Math.min(96, dy * 0.6)); s.moved = true; }
+  };
+  const onTouchEnd = (e?: any) => {
+    const s = touch.current; if (!s) return;
+    if (s.swipe && s.swipe.started) {
+      const { d, w, v } = s.swipe; const el = layer.current; const commit = d > w * 0.33 || (v > 0.45 && d > 24);
+      const clear = () => { if (el) { el.style.transform = ""; el.style.transition = ""; el.style.animation = ""; el.style.willChange = ""; el.style.boxShadow = ""; } if (scroller.current) scroller.current.style.visibility = ""; };
+      if (el) { el.style.transition = `transform ${commit ? 0.17 : 0.22}s cubic-bezier(.2,.7,.2,1)`; el.style.transform = commit ? `translate3d(${ltr ? w : -w}px,0,0)` : "translate3d(0,0,0)"; }
+      setTimeout(() => { if (commit) { swipeReset.current = clear; navKind.current = "pop"; setDir("none"); setStack((st) => st.slice(0, -1)); } else clear(); }, commit ? 170 : 220);
+      touch.current = null; return;
+    }
+    if (pull.current > 70) { if (typeof window !== "undefined" && typeof window.__engspaceBuildChanged === "function" && window.__engspaceBuildChanged()) { try { location.reload(); } catch (x) {} } else setRefreshing(true); } if (pull.current) paintPull(0); touch.current = null;
+  };
   return wrap(
       <div className={frameCls} style={frameStyle} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/* while a sheet is open everything behind it is inert: no focus, no clicks, hidden from assistive tech */}
@@ -511,12 +574,15 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
         <AppHeader app={app} />
         {!gate.ok && <div role="status" className="shrink-0 px-4 py-2 flex items-start gap-2 text-[11.5px] leading-snug bg-warn/10 text-warn border-b border-warn/20"><ShieldAlert size={14} className="shrink-0 mt-px" /><span>{gate.why}</span></div>}
         <UpdateBanner />
-        <div className={`relative flex-1 min-h-0 ${top ? "pushed" : ""}`}>
+        <div className="relative flex-1 min-h-0">
           <div ref={pullEl} aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] flex justify-center pointer-events-none will-change-transform" style={{ transform: `translate3d(0,${refreshing ? 12 : -44}px,0)`, opacity: refreshing ? 1 : 0, transition: `transform .3s ${EASE}, opacity .3s` }}><span ref={pullIcon} className={`grid place-items-center w-9 h-9 rounded-full bg-surface border border-line-2 shadow-float ${refreshing ? "spin" : ""}`}><ArchMark size={16} /></span></div>
-          <div ref={scroller} onScroll={onScroll} className={`${chatOpen ? "h-full" : "scroll-area h-full"} relative px-4 pb-[var(--tabbar-space)] ${vtOK ? "vt-screen" : ""}`}>
-            {top && <div key={`${top.type}-${top.id || ""}`} className={`screen-body ${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>}
-            {visited.filter((id) => tabs.some((x) => x.id === id)).map((id) => <TabPane key={id} active={!top && id === curTab} render={() => tabScreen(id)} />)}
+          <div ref={scroller} onScroll={onScroll} className="scroll-area h-full relative px-4 pb-[var(--tabbar-space)]">
+            {visited.filter((id) => tabs.some((x) => x.id === id)).map((id) => <TabPane key={id} id={id} active={id === curTab} covered={!!top} render={() => tabScreen(id)} sig={paneSig} />)}
           </div>
+          {/* a pushed screen is a layer over the tab (which stays where it was): «back» removes the layer and the list is simply there */}
+          {top && <div ref={layer} onScroll={chatOpen ? undefined : onScroll} data-screen-layer className={`pushed screen-layer absolute inset-0 z-[4] bg-canvas px-4 ${chatOpen ? "overflow-hidden" : "scroll-area"}`}>
+            <div key={`${top.type}-${top.id || ""}`} className={`screen-body ${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>
+          </div>}
           <TabBar tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} off={!!top} />
         </div>
         </div>

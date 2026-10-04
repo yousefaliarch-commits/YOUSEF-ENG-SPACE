@@ -1,0 +1,76 @@
+# v0.1.14: QA/QC checklist builder + executive inspection report
+caefdad5	Architecture & finishes
+4fae1d38	Mechanical & plumbing (MEP)
+4a0d3d9f	Site safety
+2d8315e5	{0} — my copy
+613e6fc5	Items
+481641e6	Write the checklist title
+5074d73b	Add at least one item
+d0dc469e	QA/QC checklists for site and technical office — ready-made or your own design, saved on your device at once and exported as a formal PDF report for signature.
+5680b76d	Custom checklist from scratch
+020ff29c	Your title, category, sections and items — for any site element, saved for every use.
+400822dd	My checklists
+e543b6e7	items ·
+c17b7523	sections
+93f07006	{0} items · {1} sections
+efeddc55	Edit checklist
+4c2a2fd5	Start an inspection with this checklist
+0ce35c9e	Ready templates
+aa4c596e	My inspections
+20d74032	No saved inspections yet
+02d6887b	Start from your checklist or a ready template — the inspection saves itself as you fill it.
+fa63c34f	Checklist saved
+68ca9daa	New checklist
+975afe28	Design your checklist: title and category, then the sections and their items. During the inspection each item gets Conforms / Does not conform / N/A with a note.
+58b30c9e	Start from scratch or from a copy of a ready template
+da9a7177	Checklist title *
+f78de82b	e.g. Roof waterproofing acceptance
+93f1d8a0	Checklist title
+3265f1ce	Checklist scope (optional)
+9e3262e6	e.g. Before the flood test — typical floor roofs
+cdf7b9b6	Section {0} title — e.g. Materials
+043a6d44	Section {0} title
+ccc68f6e	Move section up
+a61610fb	Move section down
+d16bb192	Delete section
+ff2d2875	Write the item — e.g. Falls towards the drains achieved
+29ead751	Item {0}
+1a3730aa	Move item up
+df1f6b31	Add item
+486dc976	Add a new section
+dfbf52c1	Save and start the inspection
+7077aa7f	Delete this checklist
+c51f5519	Confirm deleting the checklist
+5961a07c	The checklist is removed from your checklists. Inspections you did with it stay as they are and their reports still work.
+f79430ff	Delete checklist
+13098ef6	Checklist deleted
+835a38fb	Additional items
+f4a830a4	Inspection request no.
+cbaa906d	Contractor
+bdb42897	Consultant / supervision
+5aaee026	Inspection date
+ebd92ec8	Contracting company name
+126bfb45	Consultant name
+112f248e	Additional items for this inspection
+17b0850c	General notes and corrective actions
+d10824b8	e.g. Re-inspect after correcting the concrete cover at grid C
+7c68d643	Delete inspection
+0f601d02	Report generated with the EngSpace app — the official engineers' platform | engspace.org
+81cf467c	Item
+09336069	Result
+48065634	Notes
+3edf1e59	QA/QC Inspection Report
+18665c26	Document no.
+f3be269f	Final result
+4abcf6dd	Not set
+6af021f2	Compliance rate
+76b795be	{0} items
+24ad564f	 · {0} not inspected
+f4bd42c4	Approval and signatures
+37d29404	Contractor's engineer
+e9d89490	Consultant's engineer (supervision)
+9d8caec5	Name:
+0cd2f178	Signature:
+3bfbf96b	Date:
+8da9bb9d	Guidance checklist — the approved project drawings, specifications and code govern.
+921afd37	Page {0} of {1}

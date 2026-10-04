@@ -12,8 +12,10 @@ export const notifPref = (kind?: string): "jobs" | "replies" | "messages" | "sal
 
 // what a tapped notification (or push) may open: a stack screen by id, or one of the member's tabs. Anything else is ignored.
 export const OPEN_TYPES = ["job", "post", "chat", "ticket", "company", "room"];
-export function openTarget(t: any): { stack?: { type: string; id: string }; tab?: "market" | "inbox" | "home" } | null {
+export function openTarget(t: any): { stack?: { type: string; id: string }; tab?: "market" | "inbox" | "home"; update?: boolean } | null {
   if (!t || typeof t.type !== "string") return null;
+  // «تحديث جديد متاح» (v0.1.14): Home, then the update check — the top banner shows its progress and «تحديث الآن»
+  if (t.type === "update") return { tab: "home", update: true };
   if (t.type === "market") return { tab: "market" };
   if (t.type === "notifications") return { tab: "inbox" };
   const id = t.id == null ? "" : String(t.id);

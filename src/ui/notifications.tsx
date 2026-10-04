@@ -1,15 +1,16 @@
 import { useState } from "react";
 import {
-  AtSign, Bell, BellRing, Bookmark, Briefcase, Building2, FileCheck, Flag, IdCard, Lightbulb, LifeBuoy, Mail, MessageCircle, Send,
+  AtSign, Bell, BellRing, Rocket, Bookmark, Briefcase, Building2, FileCheck, Flag, IdCard, Lightbulb, LifeBuoy, Mail, MessageCircle, Send,
   ShieldAlert, ShieldCheck, Sparkles, TrendingUp, Wallet
 } from "lucide-react";
 import { NOTIF_CATEGORIES, notifCategory, openTarget } from "../domain/notifications";
 import { Empty } from "./chrome";
+import { requestUpdate } from "../native/updater";
 import { FilterChip } from "./primitives";
 
 // The notification center: unread counters, mark read (one, or a whole category), filter by الوظائف / المجتمع / الدعم / النظام
 export function NotificationsBody({ app }: any) {
-  const icons: any = { reply: MessageCircle, mention: AtSign, job: Briefcase, match: Sparkles, saved: Bookmark, company: Building2, privacy: ShieldCheck, reaction: Lightbulb, ama: Sparkles, data: FileCheck, message: Send, team: ShieldCheck, support: LifeBuoy, salary: Wallet, inflation: TrendingUp, test: BellRing, contact: Mail, mod: ShieldAlert, report: Flag, verify: IdCard };
+  const icons: any = { reply: MessageCircle, mention: AtSign, job: Briefcase, match: Sparkles, saved: Bookmark, company: Building2, privacy: ShieldCheck, reaction: Lightbulb, ama: Sparkles, data: FileCheck, message: Send, team: ShieldCheck, support: LifeBuoy, salary: Wallet, inflation: TrendingUp, test: BellRing, contact: Mail, mod: ShieldAlert, report: Flag, verify: IdCard, update: Rocket };
   // a notice may carry its own English (n.en) — then it is shown as written, in the interface language
   const en = (n?: any) => app.lang === "en" && !!n.en; const title = (n?: any) => (en(n) ? <span translate="no">{n.en.title}</span> : n.title); const body = (n?: any) => (en(n) ? <span translate="no">{n.en.body}</span> : app.moneyNote(n.body));
   const [onlyUnread, setOnlyUnread] = useState(false); const [cat, setCat] = useState<any>("all");
@@ -20,7 +21,7 @@ export function NotificationsBody({ app }: any) {
   const open = (n?: any) => {
     app.markRead(n.id); const t = n.target; if (!t) return;
     if (t.type === "methodology") { app.openSheet("methodology"); return; }
-    const o = openTarget(t); if (o && o.tab) { app.setTab(o.tab); return; }
+    const o = openTarget(t); if (o && o.tab) { app.setTab(o.tab); if (o.update) requestUpdate(); return; }
     app.push({ type: t.type, ...(t.id ? { id: t.id } : {}) }); if (t.sheet) app.openSheet(t.sheet);
   };
   const shown = unreadIn(cat);

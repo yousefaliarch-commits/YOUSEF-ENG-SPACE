@@ -19,6 +19,7 @@ export type OtaState = {
   status: "idle" | "checking" | "downloading" | "ready" | "current" | "failed" | "incompatible";
   pending?: { id: string; version: string }; lastCheck?: number; note?: string; rolledBack?: string; progress?: number; error?: string;
   plugin?: boolean;   // Capacitor.isPluginAvailable("CapacitorUpdater") on this phone — shown in Settings for diagnosis
+  asked?: number;     // when the member opened an «تحديث جديد متاح» notice: the banner then shows the check and download too
 };
 const state: OtaState = { supported: OTA, bundle: __BUILD__.version, builtin: true, native: "", running: __BUILD__.ts || 0, status: "idle" };
 const listeners = new Set<(s: OtaState) => void>(); const toasts = new Set<(t: string) => void>();
@@ -127,6 +128,14 @@ async function runCheck(): Promise<OtaState> {
   return otaState();
 }
 
+// «تحديث جديد متاح» was tapped (push or notification center): check now and let the top banner show it from the first moment —
+// checking, downloading with progress, then «تحديث الآن». A check that finds nothing ends in the usual toast.
+export function requestUpdate() {
+  emit({ asked: Date.now() });
+  if (import.meta.env.DEV && typeof window !== "undefined" && (window as any).__engspaceOta && !OTA) { (window as any).__engspaceOta.requested++; return; }
+  checkForUpdate({ manual: true });
+}
+
 // Apply the downloaded bundle now (reloads the app on it)
 export async function applyUpdateNow() {
   const p = state.pending; if (!OTA || !p) { if (import.meta.env.DEV && (window as any).__engspaceOta) (window as any).__engspaceOta.applied++; return; }
@@ -144,4 +153,4 @@ export function scheduleChecks() {
 export { nativeLineOf };
 
 // Development only (compiled out of production builds): lets the e2e tests drive the update banner in a browser, where there is no plugin
-if (import.meta.env.DEV && typeof window !== "undefined") (window as any).__engspaceOta = { applied: 0, ready: (version = "0.25.0-test") => emit({ supported: true, status: "ready", pending: { id: "t1", version } }), reset: () => emit({ status: "idle", pending: undefined }) };
+if (import.meta.env.DEV && typeof window !== "undefined") (window as any).__engspaceOta = { applied: 0, requested: 0, downloading: (progress = 40) => emit({ supported: true, status: "downloading", progress }), ready: (version = "0.25.0-test") => emit({ supported: true, status: "ready", pending: { id: "t1", version } }), reset: () => emit({ status: "idle", pending: undefined, asked: undefined }) };

@@ -54,6 +54,16 @@ with it at run time — masked, never printed). Locally against a local Supabase
 `SUPABASE_URL=http://127.0.0.1:54321 SERVICE_KEY=<service role> node scripts/ota/publish.mjs` (after `npm run build`).
 A bundle is ~10 MB (the OCR data dominates); the bucket limit is 50 MB. Old bundles stay in the bucket (cheap) — delete them in the Supabase dashboard if wanted.
 
+## «تحديث جديد متاح» — the lock-screen notice (v0.1.14)
+Tick **broadcast** when running **Publish web update** (title / text inputs default to the standard announcement). After the bundle
+and manifest are live and readable, the workflow calls `public.broadcast_app_update(version, title, body, title_en, body_en)` (service
+role only): one `update` notice (category system, no switch beyond the master one) per member who has the phone app registered and is
+not suspended — once per bundle, so re-running sends nothing twice. `send-push` delivers it like any other notice.
+Tapping it (`{ type: "update", id: <version> }` → `openTarget` → `{ tab: "home", update: true }`) opens Home and calls `requestUpdate()`:
+the top banner appears at once («جارٍ تنزيل التحديث الجديد…» with the percentage), then «تحديث الآن». A dismissed banner comes back.
+Shells running an older bundle don't know the `update` target yet: the tap just opens the app, and the launch / resume check
+(4 s after start, on return after 30 min) downloads the bundle and shows the banner a few seconds later.
+
 ## What OTA cannot do
 Anything native: new Capacitor plugins, permissions, push configuration, the zoom lock in `MainActivity`, icons / splash. Those need a
 new APK / IPA, and `nativeLine` bumped. Store policy: updating the web content that runs inside the app's WebView is allowed (Google Play

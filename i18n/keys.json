@@ -255,7 +255,7 @@
  "رجوع": {
   "k": "s",
   "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/support/support.tsx,ui/chrome.tsx",
-  "n": 20
+  "n": 22
  },
  "الإشعارات": {
   "k": "s",
@@ -1098,17 +1098,17 @@
  "مطابق": {
   "k": "s",
   "p": "data/checklists.ts,lib/report-pdf.ts",
-  "n": 2
+  "n": 3
  },
  "غير مطابق": {
   "k": "s",
   "p": "data/checklists.ts,lib/helpers.tsx,lib/report-pdf.ts",
-  "n": 3
+  "n": 4
  },
  "لا ينطبق": {
   "k": "s",
   "p": "data/checklists.ts,features/stack/stack.tsx,lib/report-pdf.ts",
-  "n": 3
+  "n": 4
  },
  "مقبول": {
   "k": "s",
@@ -1121,6 +1121,62 @@
   "n": 1
  },
  "مرفوض — يعاد الاستلام": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "إنشائي": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 4
+ },
+ "معماري وتشطيبات": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 4
+ },
+ "كهرباء": {
+  "k": "s",
+  "p": "data/checklists.ts,domain/division.ts,domain/taxonomy.ts,lib/search.ts",
+  "n": 4
+ },
+ "ميكانيكا وصحي (MEP)": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "سلامة الموقع": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 2
+ },
+ "مكتب فني": {
+  "k": "s",
+  "p": "data/checklists.ts,domain/taxonomy.ts,lib/search.ts",
+  "n": 3
+ },
+ "أخرى": {
+  "k": "s",
+  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx",
+  "n": 5
+ },
+ "{0} — نسختي": {
+  "k": "t",
+  "p": "data/checklists.ts",
+  "n": 1,
+  "x": "from.title"
+ },
+ "البنود": {
+  "k": "s",
+  "p": "data/checklists.ts,features/qaqc/qaqc.tsx",
+  "n": 3
+ },
+ "اكتب عنوان القائمة": {
+  "k": "s",
+  "p": "data/checklists.ts",
+  "n": 1
+ },
+ "أضف بندًا واحدًا على الأقل": {
   "k": "s",
   "p": "data/checklists.ts",
   "n": 1
@@ -5800,11 +5856,6 @@
   "p": "domain/division.ts",
   "n": 1
  },
- "كهرباء": {
-  "k": "s",
-  "p": "domain/division.ts,domain/taxonomy.ts,lib/search.ts",
-  "n": 3
- },
  "مهندسة كهرباء": {
   "k": "s",
   "p": "domain/division.ts,domain/taxonomy.ts",
@@ -7329,11 +7380,6 @@
   "k": "s",
   "p": "domain/taxonomy.ts",
   "n": 1
- },
- "مكتب فني": {
-  "k": "s",
-  "p": "domain/taxonomy.ts,lib/search.ts",
-  "n": 2
  },
  "تصميم": {
   "k": "s",
@@ -10659,11 +10705,6 @@
   "p": "features/admin/AdminView.tsx",
   "n": 2
  },
- "أخرى": {
-  "k": "s",
-  "p": "features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx",
-  "n": 4
- },
  "لا منشورات بعد.": {
   "k": "x",
   "p": "features/admin/AdminView.tsx",
@@ -11016,8 +11057,8 @@
  },
  "إلغاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/support/support.tsx,ui/feed.tsx,ui/moderation.tsx",
-  "n": 6
+  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/support/support.tsx,ui/feed.tsx,ui/moderation.tsx",
+  "n": 7
  },
  "إظهار": {
   "k": "x",
@@ -13707,6 +13748,26 @@
   "p": "features/cv/extract.ts",
   "n": 1
  },
+ "تاريخ الميلاد أو السن": {
+  "k": "s",
+  "p": "features/cv/hr.ts",
+  "n": 2
+ },
+ "الحالة الاجتماعية": {
+  "k": "s",
+  "p": "features/cv/hr.ts",
+  "n": 2
+ },
+ "الرقم القومي": {
+  "k": "s",
+  "p": "features/cv/hr.ts",
+  "n": 1
+ },
+ "الديانة": {
+  "k": "s",
+  "p": "features/cv/hr.ts",
+  "n": 1
+ },
  "تقرير": {
   "k": "x",
   "p": "features/market/live-salary.tsx,features/stack/stack.tsx,ui/feed.tsx",
@@ -14546,27 +14607,68 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "قوائم QA/QC للموقع والمكتب الفني — تُحفظ على جهازك فورًا، وتُصدَّر تقرير PDF للتوقيع.": {
+ "قوائم QA/QC للموقع والمكتب الفني — جاهزة أو من تصميمك، تُحفظ على جهازك فورًا وتُصدَّر تقرير PDF رسميًا للتوقيع.": {
   "k": "x",
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "قائمة جديدة": {
+ "قائمة فحص مخصصة من الصفر": {
   "k": "x",
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "قوائمي": {
+ "عنوانك وفئتك وأقسامك وبنودك — لأي عنصر في الموقع، تُحفظ لتستخدمها كل مرة.": {
   "k": "x",
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "لا قوائم محفوظة بعد": {
+ "قوائمي المخصصة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "بندًا ·": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "قسم": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "{0} بندًا · {1} قسم": {
+  "k": "r",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "EL <Num>{itemCount(t)}</Num> | EL <Num>{t.sections.length}</Num>"
+ },
+ "تعديل القائمة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 3
+ },
+ "ابدأ فحصًا بهذه القائمة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "قوالب جاهزة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "فحوصاتي": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "لا فحوصات محفوظة بعد": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
  },
- "ابدأ قائمة من الأعلى — تُحفظ تلقائيًا أثناء الملء.": {
+ "ابدأ من قائمتك أو من قالب جاهز — يُحفظ الفحص تلقائيًا أثناء الملء.": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
@@ -14579,17 +14681,160 @@
  "القائمة غير موجودة": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
-  "n": 2
+  "n": 4
  },
  "ربما حُذفت من جهاز آخر.": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
-  "n": 2
+  "n": 4
  },
- "بنود مخصصة": {
+ "حُفظت القائمة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "قائمة فحص جديدة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "صمّم قائمتك: العنوان والفئة، ثم الأقسام وبنود كل قسم. عند الفحص تختار لكل بند مطابق / غير مطابق / لا ينطبق مع ملاحظة.": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "ابدأ من الصفر أو من نسخة قالب جاهز": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "عنوان القائمة *": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "مثال: استلام عزل الأسطح المائي": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
+ },
+ "عنوان القائمة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "الفئة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx,features/stack/stack.tsx",
+  "n": 2
+ },
+ "نطاق القائمة (اختياري)": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "مثال: قبل اختبار الغمر — أسطح الأدوار المتكررة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "عنوان القسم {0} — مثال: المواد": {
+  "k": "t",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "s + 1"
+ },
+ "عنوان القسم {0}": {
+  "k": "t",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "s + 1"
+ },
+ "نقل القسم لأعلى": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "نقل القسم لأسفل": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "حذف القسم": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "اكتب البند — مثال: الميول نحو الصفايات محققة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "البند {0}": {
+  "k": "t",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "i + 1"
+ },
+ "نقل البند لأعلى": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "حذف البند": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 4
+ },
+ "إضافة بند": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "إضافة قسم جديد": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "حفظ وبدء الفحص": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "حفظ": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx",
+  "n": 3
+ },
+ "حذف هذه القائمة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "تأكيد حذف القائمة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "تُحذف القائمة من قوائمك. الفحوصات التي أجريتها بها تبقى كما هي وتقاريرها تعمل.": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "احذف القائمة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "حُذفت القائمة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "بنود إضافية": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
  },
  "المشروع": {
   "k": "s",
@@ -14606,23 +14851,27 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
  },
- "التاريخ": {
+ "رقم طلب الاستلام": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "المقاول": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "الاستشاري / الإشراف": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
  },
  "المهندس المستلم": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 2
+  "p": "features/qaqc/qaqc.tsx,lib/report-pdf.ts",
+  "n": 3
  },
- "مطابق {0} · غير مطابق {1} · لا ينطبق {2} · من {3} بندًا": {
-  "k": "t",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 1,
-  "x": "c.pass | c.fail | c.na | c.total"
- },
- "أُعد على EngSpace — قائمة استرشادية؛ المرجع هو اللوحات والمواصفات المعتمدة للمشروع": {
+ "تاريخ الفحص": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
@@ -14632,17 +14881,12 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "حذف البند": {
-  "k": "s",
+ "ملاحظة": {
+  "k": "x",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
  },
  "ما المطلوب تصحيحه؟": {
-  "k": "s",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 1
- },
- "ملاحظة": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
@@ -14657,15 +14901,40 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
+ "التاريخ": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "اسم شركة المقاولات": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "اسم الاستشاري": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "بنود إضافية لهذا الفحص": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
  "اكتب البند — مثال: نظافة فتحات الصرف": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
  },
- "إضافة بند مخصص": {
+ "ملاحظات عامة والإجراءات التصحيحية": {
   "k": "x",
+  "p": "features/qaqc/qaqc.tsx,lib/report-pdf.ts",
+  "n": 2
+ },
+ "مثال: يعاد الاستلام بعد تصحيح الغطاء الخرساني في المحور C": {
+  "k": "s",
   "p": "features/qaqc/qaqc.tsx",
-  "n": 1
+  "n": 2
  },
  "مطابق ·": {
   "k": "x",
@@ -14708,7 +14977,7 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
- "حذف القائمة": {
+ "حذف الفحص": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
@@ -15632,11 +15901,6 @@
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
- },
- "حفظ": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx",
-  "n": 2
  },
  "تم تحديث شعار الشركة": {
   "k": "s",
@@ -17185,11 +17449,6 @@
   "n": 1
  },
  "ارفع الشعار الرسمي": {
-  "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
- },
- "الفئة": {
   "k": "s",
   "p": "features/stack/stack.tsx",
   "n": 1
@@ -19961,36 +20220,103 @@
   "p": "lib/media.tsx",
   "n": 1
  },
- "EngSpace · تقرير فحص واستلام": {
+ "تم إنشاء التقرير عبر تطبيق EngSpace — منصة المهندسين الرسمية | engspace.org": {
   "k": "s",
   "p": "lib/report-pdf.ts",
   "n": 1
  },
- "صفحة {0}": {
+ "البند": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "النتيجة": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "ملاحظات": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "تقرير فحص واستلام أعمال · QA/QC Inspection Report": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "رقم المستند": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "النتيجة النهائية": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "لم تُحدد": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "نسبة المطابقة": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "عدد البنود {0}": {
   "k": "t",
   "p": "lib/report-pdf.ts",
   "n": 1,
-  "x": "pageNo"
+  "x": "k.total"
  },
- "ملاحظة:": {
+ "· لم يُفحص {0}": {
+  "k": "t",
+  "p": "lib/report-pdf.ts",
+  "n": 1,
+  "x": "k.open"
+ },
+ "الاعتماد والتوقيعات": {
   "k": "s",
   "p": "lib/report-pdf.ts",
   "n": 1
  },
- "النتيجة:": {
+ "مهندس المقاول": {
   "k": "s",
   "p": "lib/report-pdf.ts",
   "n": 1
  },
- "توقيع المهندس المستلم: ____________________": {
+ "مهندس الاستشاري (الإشراف)": {
   "k": "s",
   "p": "lib/report-pdf.ts",
   "n": 1
  },
- "توقيع مهندس التنفيذ: ____________________": {
+ "الاسم:": {
   "k": "s",
   "p": "lib/report-pdf.ts",
   "n": 1
+ },
+ "التوقيع:": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "التاريخ:": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "قائمة استرشادية — المرجع هو اللوحات والمواصفات المعتمدة للمشروع والكود المتبع.": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "صفحة {0} من {1}": {
+  "k": "t",
+  "p": "lib/report-pdf.ts",
+  "n": 1,
+  "x": "i + 1 | total"
  },
  "في": {
   "k": "s",
@@ -21949,6 +22275,16 @@
  "الحدود · black/8": {
   "k": "s",
   "p": "ui/theme.ts",
+  "n": 1
+ },
+ "جارٍ تنزيل التحديث الجديد…": {
+  "k": "s",
+  "p": "ui/update-banner.tsx",
+  "n": 1
+ },
+ "جارٍ البحث عن التحديث…": {
+  "k": "s",
+  "p": "ui/update-banner.tsx",
   "n": 1
  },
  "جارٍ تطبيق التحديث…": {

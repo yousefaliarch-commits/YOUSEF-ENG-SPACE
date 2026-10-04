@@ -48,6 +48,8 @@ describe("opening what a notification points at", () => {
     expect(openTarget({ type: "ticket", id: "abc" })).toEqual({ stack: { type: "ticket", id: "abc" } });
     expect(openTarget({ type: "chat", id: "t1" })?.stack?.type).toBe("chat");
     expect(openTarget({ type: "market" })).toEqual({ tab: "market" }); expect(openTarget({ type: "notifications" })).toEqual({ tab: "inbox" });
+    // v0.1.14: «تحديث جديد متاح» → Home + the update check (the id, a bundle version, is not needed to open it)
+    expect(openTarget({ type: "update", id: "0.26.0-1791200000" })).toEqual({ tab: "home", update: true }); expect(notifCategory("update")).toBe("system"); expect(notifPref("update")).toBeNull();
   });
   it("nothing else — a payload is data, not a command", () => {
     for (const t of [null, {}, { type: "admin", id: "1" }, { type: "job" }, { type: "job", id: "../../x" }, { type: "job", id: "<script>" }, { type: 5, id: "x" }, { type: "post", id: "a".repeat(200) }]) expect(openTarget(t)).toBeNull();
