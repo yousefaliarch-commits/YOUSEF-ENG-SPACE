@@ -22,6 +22,7 @@ import { CommunityScreen, HomeScreen, InboxScreen, JobsScreen, MarketScreen, Too
 import { dropOwnRequest, newVerifyRequest, purgeRequest, saveOwnRequest, verifs0, verifySummary } from "../features/verify/verify";
 import { L2, say, tr } from "../i18n/i18n";
 import { UpdateBanner } from "../ui/update-banner";
+import { requestUpdate } from "../native/updater";
 import { onOtaToast } from "../native/updater";
 import { DEMO_PERSONA, estimateFor, loadPersona, reachFor, savePersona } from "../lib/helpers";
 import { ImageViewer } from "../lib/media";
@@ -265,7 +266,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   useEffect(() => { if (!persona || embed || !CLOUD && !NATIVE || profile.onboarded === false) return; const t = setTimeout(askPush, 7000); return () => clearTimeout(t); }, [!!persona, curTab]);
   // a shared link: the phone app gets app.engspace://open/<type>/<id>; the web gets #app/<type>/<id>. Signed out, it waits for the sign-in.
   useEffect(() => { if (!persona && !embed && init.stack.length === 1 && init.stack[0].id && SHAREABLE.includes(init.stack[0].type)) setPendingOpen(init.stack[0]); }, []);
-  useEffect(() => { if (!persona || embed) return; const go = () => { const o = takePendingOpen(); if (!o) return; if (o.nid) app.markRead(o.nid); if (o.tab) app.setTab(o.tab); else app.push({ type: o.type, id: o.id }); }; go(); window.addEventListener("engspace:open", go); return () => window.removeEventListener("engspace:open", go); }, [!!persona]);
+  // the listener lives for the whole session, so it reads the latest app (the first render's setTab thought its tab was still current)
+  const appNow = useRef<any>(null);
+  useEffect(() => { if (!persona || embed) return; const go = () => { const o = takePendingOpen(); if (!o) return; const a = appNow.current; if (o.nid) a.markRead(o.nid); if (o.tab) a.setTab(o.tab); else a.push({ type: o.type, id: o.id }); if (o.update) requestUpdate(); }; go(); window.addEventListener("engspace:open", go); return () => window.removeEventListener("engspace:open", go); }, [!!persona]);
   // An auth link finished (web: on load; app: the native URL handler): a reset link opens «new password»; otherwise a server
   // session without a member on this device (e-mail just confirmed, storage cleared) signs the member in.
   const authLink = (reset?: any) => cloud.currentPersona().then((p) => {
@@ -507,6 +510,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     },
     withdrawVerification: () => { if (CLOUD) { updateProfile({ pending: false, verifyRef: null }); sync(() => cloud.withdrawVerification()); setMsg(say({ lang, profile }, L2("سُحب الطلب وحُذفت المستندات نهائيًا", "Request withdrawn — the documents were permanently deleted"))); return; } purgeOwn("withdrawn"); setMsg(say({ lang, profile }, L2("سُحب الطلب وحُذفت المستندات نهائيًا", "Request withdrawn — the documents were permanently deleted"))); },
   };
+  appNow.current = app;
   // Frame: the standalone preview draws its own phone-like frame; inside a device mockup the app simply fills the screen
   const frameVars: any = { "--tabh": embed && embed.platform === "android" ? "80px" : "68px" };
   const frameCls = embed ? "relative w-full h-full flex flex-col overflow-hidden bg-canvas" : NATIVE ? "relative w-full h-dvh flex flex-col overflow-hidden bg-canvas" : "relative w-full h-dvh sm:max-w-[390px] sm:h-[min(100dvh_-_9rem,820px)] sm:min-h-[640px] flex flex-col overflow-hidden bg-canvas sm:rounded-[2.5rem] sm:border sm:border-line-2";

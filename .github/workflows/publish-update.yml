@@ -16,6 +16,27 @@ on:
         description: "One line shown in the app's update note (optional)"
         required: false
         default: ""
+      broadcast:
+        description: "Also send the «تحديث جديد متاح» lock-screen notice to every member with the phone app (once per bundle)"
+        required: false
+        default: false
+        type: boolean
+      push_title:
+        description: "Notice title (Arabic)"
+        required: false
+        default: "تحديث جديد متاح لمنصة EngSpace 🚀"
+      push_body:
+        description: "Notice text (Arabic; empty = the notes line)"
+        required: false
+        default: ""
+      push_title_en:
+        description: "Notice title (English)"
+        required: false
+        default: "A new EngSpace update is available 🚀"
+      push_body_en:
+        description: "Notice text (English; empty = the Arabic text)"
+        required: false
+        default: ""
 permissions:
   contents: read
 concurrency: publish-update
@@ -54,6 +75,7 @@ jobs:
           test -n "$key"; echo "::add-mask::$key"
           out=$(SUPABASE_URL="https://$PROJECT_REF.supabase.co" SERVICE_KEY="$key" node scripts/ota/publish.mjs)
           echo "$out"
+          echo "OTA_VERSION=$(echo "$out" | node -p 'JSON.parse(require("fs").readFileSync(0,"utf8")).version')" >> "$GITHUB_ENV"
           echo "::notice title=Published web update::$(echo "$out" | node -p 'const m=JSON.parse(require("fs").readFileSync(0,"utf8"));`${m.version} · native line ${m.nativeLine} · ${(m.size/1048576).toFixed(1)} MB — phones pick it up at their next launch`')"
       # what a phone sees, from outside: the manifest is public and CORS lets the app's WebView origins read it
       # (Android https://localhost, iOS capacitor://localhost) — the update check fails without it
@@ -67,3 +89,20 @@ jobs:
             echo "$h" | grep -qiE "^access-control-allow-origin: (\*|$origin)" || { echo "::error::CORS does not allow $origin"; exit 1; }
           done
           echo "::notice title=Phone check::manifest public, CORS allows https://localhost, capacitor://localhost and http://localhost"
+      # «تحديث جديد متاح» on the lock screen — only after the manifest is live and readable, so a phone opened from the notice finds the
+      # bundle at once. One notice per member and per bundle (public.broadcast_app_update, service role only); send-push delivers it.
+      - name: Broadcast the update notice
+        if: ${{ inputs.broadcast }}
+        env:
+          P_TITLE: ${{ inputs.push_title }}
+          P_BODY: ${{ inputs.push_body }}
+          P_TITLE_EN: ${{ inputs.push_title_en }}
+          P_BODY_EN: ${{ inputs.push_body_en }}
+          NOTES: ${{ inputs.notes }}
+        run: |
+          set -euo pipefail
+          key=$(npx --yes supabase@latest projects api-keys --project-ref "$PROJECT_REF" -o json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const k=JSON.parse(s);const x=k.find(a=>a.name==="service_role")||k.find(a=>a.type==="secret");process.stdout.write(x.api_key)})')
+          test -n "$key"; echo "::add-mask::$key"
+          body=$(node -e 'const e=process.env; process.stdout.write(JSON.stringify({ p_version: e.OTA_VERSION, p_title: e.P_TITLE, p_body: e.P_BODY || e.NOTES || "", p_title_en: e.P_TITLE_EN || null, p_body_en: e.P_BODY_EN || null }))')
+          n=$(curl -sS --fail-with-body -X POST "https://$PROJECT_REF.supabase.co/rest/v1/rpc/broadcast_app_update" -H "apikey: $key" -H "Authorization: Bearer $key" -H "content-type: application/json" -d "$body")
+          echo "::notice title=Update notice::queued for $n member(s) with the phone app (bundle $OTA_VERSION) — send-push delivers within a minute"

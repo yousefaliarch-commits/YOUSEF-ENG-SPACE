@@ -26,6 +26,7 @@ Producers (all in `supabase/migrations/…_push_notifications.sql`, tested in `s
 | Support ticket | the ticket's owner | a reply (existing) and any status change |
 | Inflation month | engineers with «salary» on | when staff add the month (Admin → Settings) |
 | Salary cell reaches 5 reports | engineers who shared in that discipline + governorate (±2 years) | once |
+| Web update published (v0.1.14) | members with the phone app registered, not suspended | only from the Publish web update workflow (service role); once per bundle; opens Home + the update banner (docs/OTA.md) |
 
 Preferences (`notification_prefs` + `profiles.settings.notify`): master, jobs, replies, messages, salary, support. Account and
 moderation notices (`verify`, `mod`, `warn`, `suspend`, `report`…) have no switch.

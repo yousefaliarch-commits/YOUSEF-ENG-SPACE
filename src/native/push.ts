@@ -45,6 +45,14 @@ export async function pushPermission(): Promise<PushPermission> {
   return mapPerm(Notification.permission === "default" ? "prompt" : Notification.permission);
 }
 
+// a tapped push: { type, id, nid } — validated, then opened like a shared link (an «update» notice: Home + the update check + the banner)
+export function onPushTap(d: any) {
+  const t = openTarget({ type: d && d.type, id: d && d.id }); if (!t) return;
+  setPendingOpen({ ...(t.stack || { tab: t.tab }), update: !!t.update, nid: (d && d.nid) || null }); window.dispatchEvent(new CustomEvent("engspace:open"));
+}
+// development only (compiled out of production): e2e taps a push through the same path a phone uses
+if (import.meta.env.DEV && typeof window !== "undefined") (window as any).__engspacePush = { tap: onPushTap };
+
 let wired = false;
 // listeners are attached once per app run
 async function wire() {
@@ -59,10 +67,7 @@ async function wire() {
   // while the app is open the in-app center already heard about it (realtime): just let the app refresh its counters
   PushNotifications.addListener("pushNotificationReceived", () => window.dispatchEvent(new CustomEvent("engspace:push")));
   // a tap: where to go (validated), and which notice to mark read
-  PushNotifications.addListener("pushNotificationActionPerformed", (a: any) => {
-    const d = (a && a.notification && a.notification.data) || {}; const t = openTarget({ type: d.type, id: d.id }); if (!t) return;
-    setPendingOpen({ ...(t.stack || { tab: t.tab }), nid: d.nid || null }); window.dispatchEvent(new CustomEvent("engspace:open"));
-  });
+  PushNotifications.addListener("pushNotificationActionPerformed", (a: any) => onPushTap((a && a.notification && a.notification.data) || {}));
   if (PLATFORM === "android") { try { for (const c of channels(lang === "en")) await PushNotifications.createChannel({ ...c, visibility: 0, vibration: true } as any); } catch { /* channels exist already */ } }
 }
 

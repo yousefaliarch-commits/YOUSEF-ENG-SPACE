@@ -80,6 +80,17 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   **Never resolve a promise with a Capacitor plugin object** (it is a Proxy whose `then` is a native call that never answers): destructure plugins
   from the awaited module (`const { X } = await import(...)`) — never `async () => plugin` / `.then((m) => m.Plugin)`.
 
+- v0.1.14: **navigation** — a pushed screen is a layer (`[data-screen-layer]`) over the kept tab; pop is a compositor-only CSS animation
+  (`.screen-layer.is-leaving`), no View Transitions for push/pop; tab panes are memoised (`PaneBody`) and re-render only when `paneSig`
+  (store keys in `PANE_KEYS` + lang/theme/mode) changes — **add any new store key a tab renders to `PANE_KEYS`**. Layout effects never read
+  `scrollTop` (use `scrollMem`). Edge swipe-back writes transforms directly. Long-lived listeners read the latest `app` via `appNow`.
+  **QA/QC builder**: checklists from scratch (`qcbuilder`, `UserTemplate` in `data/checklists.ts`, synced as member_state `qcTemplates`
+  with tombstones; an inspection keeps a `tpl` snapshot so deleting a checklist never breaks it). Executive A4 report in `lib/report-pdf.ts`
+  (`inspectionPdf`, signatures, footer promo `REPORT_PROMO`). **CV review** (`features/cv/hr.ts`): birth date, marital status, nationality,
+  photo and a local phone are normal — only the national ID is flagged; military-service status is checked for male Egyptian engineers;
+  every report carries the HR director's assessment (`result.hr`) and the regional block (`result.regional`). **Update notice**:
+  Publish web update → broadcast → `broadcast_app_update()` (service role) → `update` notice → tap opens Home + `requestUpdate()` (docs/OTA.md).
+
 ## How the code is organised
 - `src/app/AppView.tsx` holds member-app state (one store, keys like posts/jobs/threads) and every handler; handlers update
   locally, then `sync(() => cloud.x())` in cloud mode. Demo mode (no `VITE_SUPABASE_*`) must keep working unchanged.
