@@ -18,6 +18,7 @@ export type OtaState = {
   supported: boolean; bundle: string; builtin: boolean; native: string; running: number;   // what runs now
   status: "idle" | "checking" | "downloading" | "ready" | "current" | "failed" | "incompatible";
   pending?: { id: string; version: string }; lastCheck?: number; note?: string; rolledBack?: string; progress?: number; error?: string;
+  plugin?: boolean;   // Capacitor.isPluginAvailable("CapacitorUpdater") on this phone — shown in Settings for diagnosis
 };
 const state: OtaState = { supported: OTA, bundle: __BUILD__.version, builtin: true, native: "", running: __BUILD__.ts || 0, status: "idle" };
 const listeners = new Set<(s: OtaState) => void>(); const toasts = new Set<(t: string) => void>();
@@ -42,9 +43,16 @@ export function withTimeout<T>(p: Promise<T>, ms: number, kind: keyof typeof OTA
   return new Promise<T>((res, rej) => { const t = setTimeout(() => rej(new OtaError(kind, `timeout after ${ms} ms`)), ms); p.then((v) => { clearTimeout(t); res(v); }, (e) => { clearTimeout(t); rej(e); }); });
 }
 
-let pluginP: Promise<any> | null = null;
-const plugin = () => (pluginP = pluginP || withTimeout(import("@capgo/capacitor-updater").then((m) => m.CapacitorUpdater), LIMITS.call, "plugin").catch((e) => { pluginP = null; throw e; }));
-const call = <T>(f: (P: any) => Promise<T>) => plugin().then((P) => withTimeout(f(P), LIMITS.call, "plugin"));
+// NEVER resolve a promise with a Capacitor plugin object (v0.1.13): the plugin is a Proxy that answers every property — `then` too — with a
+// native method wrapper, so `async () => plugin` / `.then((m) => m.Plugin)` makes the promise call a native «then» that does not exist and
+// the promise never settles. That was the endless spinner (v0.1.11) and «خدمة التحديث غير متاحة» after the 6 s deadline (v0.1.12) on both
+// phones. Promises carry the MODULE (a namespace object has no `then`); the plugin is only ever read from it synchronously.
+type UpdaterModule = { CapacitorUpdater: any };
+let modP: Promise<UpdaterModule> | null = null;
+const mod = () => (modP = modP || withTimeout(import("@capgo/capacitor-updater") as Promise<UpdaterModule>, LIMITS.call, "plugin").catch((e) => { modP = null; throw e; }));
+// the native side is really there (Capacitor knows the plugin from the shell's registration) — checked before any call
+export const pluginAvailable = () => { try { return Capacitor.isPluginAvailable("CapacitorUpdater"); } catch (e) { return false; } };
+const call = <T>(f: (P: any) => Promise<T>): Promise<T> => { if (!pluginAvailable()) return Promise.reject(new OtaError("plugin", "CapacitorUpdater not registered")); return mod().then((m) => withTimeout(f(m.CapacitorUpdater), LIMITS.call, "plugin")); };
 const bad = (): string[] => { try { return JSON.parse(localStorage.getItem(BAD_KEY) || "[]"); } catch (e) { return []; } };
 const markBad = (v: string) => { try { localStorage.setItem(BAD_KEY, JSON.stringify([...new Set([...bad(), v])].slice(-20))); } catch (e) {} };
 
@@ -52,6 +60,7 @@ const markBad = (v: string) => { try { localStorage.setItem(BAD_KEY, JSON.string
 // Each step is bounded; a failure here never stops the update checks.
 export async function startUpdater(health: () => Parameters<typeof looksHealthy>[0]) {
   if (!OTA) return;
+  emit({ plugin: pluginAvailable() });
   try { if (looksHealthy(health())) await call((P) => P.notifyAppReady()); } catch (e) {}
   try { const failed: any = await call((P) => P.getFailedUpdate()); if (failed && failed.bundle) { markBad(failed.bundle.version); emit({ rolledBack: failed.bundle.version }); } } catch (e) {}
   try { const cur: any = await call((P) => P.current()); emit({ bundle: cur.bundle.version === "builtin" ? __BUILD__.version : cur.bundle.version, builtin: cur.bundle.version === "builtin", native: cur.native }); } catch (e) {}
@@ -92,6 +101,7 @@ function report(s: OtaState, joined: boolean) {
 }
 async function runCheck(): Promise<OtaState> {
   emit({ status: "checking", error: undefined, progress: undefined });
+  if (!pluginAvailable()) throw new OtaError("plugin", "CapacitorUpdater not registered");
   if (typeof navigator !== "undefined" && navigator.onLine === false) throw new OtaError("offline");
   let raw: any;
   const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), LIMITS.manifest);
@@ -110,7 +120,7 @@ async function runCheck(): Promise<OtaState> {
   const list: any = await call((P) => P.list()).catch(() => ({ bundles: [] }));
   const have = ((list && list.bundles) || []).find((b: any) => b.version === m.version && b.status !== "error" && b.status !== "downloading");
   emit({ status: "downloading", note: m.version, progress: have ? 100 : 0 });
-  const P = await plugin();
+  const P = (await mod()).CapacitorUpdater;   // read from the module, never awaited itself (see mod())
   const schedule = async (b: any) => { await withTimeout(P.next({ id: b.id }), LIMITS.call, "plugin"); emit({ status: "ready", pending: { id: b.id, version: m.version }, lastCheck: Date.now(), note: m.notes, progress: undefined, error: undefined }); };
   const b = have || await watchedDownload(P, m, (late) => { schedule(late).catch(() => {}); });
   await schedule(b);
@@ -120,7 +130,7 @@ async function runCheck(): Promise<OtaState> {
 // Apply the downloaded bundle now (reloads the app on it)
 export async function applyUpdateNow() {
   const p = state.pending; if (!OTA || !p) { if (import.meta.env.DEV && (window as any).__engspaceOta) (window as any).__engspaceOta.applied++; return; }
-  try { await withTimeout((await plugin()).set({ id: p.id }), 15000, "plugin"); } catch (e) { emit({ status: "failed", error: OTA_ERRORS.download }); toast("تعذّر تطبيق التحديث الآن — سيُطبَّق عند الفتح التالي"); }
+  try { const P = (await mod()).CapacitorUpdater; await withTimeout(P.set({ id: p.id }), 15000, "plugin"); } catch (e) { emit({ status: "failed", error: OTA_ERRORS.download }); toast("تعذّر تطبيق التحديث الآن — سيُطبَّق عند الفتح التالي"); }
 }
 
 // launch + coming back to the app (at most every 30 minutes)

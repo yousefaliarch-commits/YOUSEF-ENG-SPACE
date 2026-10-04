@@ -43,3 +43,8 @@ test("a post published live appears once without a reload", async ({ page }) => 
   await d.locator("textarea").first().fill(body); await d.getByRole("button", { name: /^نشر/ }).last().click(); await settle(page, 3000);
   await expect(page.getByText(body).locator("visible=true")).toHaveCount(1); await noCrash(page, errs, "post");
 });
+
+test("settings footer: the live app says it is connected to the cloud", async ({ page }) => {
+  await signIn(page, "civil"); await page.getByRole("button", { name: "الإعدادات" }).first().click(); await settle(page, 1200);
+  const f = page.locator("[data-env]"); await expect(f).toHaveAttribute("data-env", "cloud"); await expect(f).toContainText("متصل بمنصة EngSpace السحابية");
+});

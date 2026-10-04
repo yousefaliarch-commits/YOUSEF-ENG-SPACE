@@ -80,3 +80,8 @@ test("admin console fits a phone (demo staff)", async ({ page }) => {
   const sections = ["نظرة عامة", "البلاغات", "المحتوى", "طلبات التوثيق", "دليل الأعضاء", "تذاكر الدعم", "سجل التدقيق", "التحليلات", "الإعدادات"];
   for (const s of sections) { const b = page.getByRole("button", { name: new RegExp(s) }).first(); if (await b.count()) { await b.click(); await settle(page, 700); await noCrash(page, errs, `admin/${s}`); await noOverflow(page, `admin/${s}`); } }
 });
+
+test("settings footer: the demo says it is a demo", async ({ page }) => {
+  await demoAs(page, "engineer", {}, "#app/settings"); const f = page.locator("[data-env]");
+  await expect(f).toHaveAttribute("data-env", "demo"); await expect(f).toContainText("نسخة عرض تجريبية — البيانات على هذا الجهاز فقط");
+});
