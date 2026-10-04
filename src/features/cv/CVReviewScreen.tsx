@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BadgeCheck, Check, ChevronDown, CircleAlert, CircleCheck, CircleX, Clock, Copy, FileSearch, FileText, FileUp, 
   HardHat, Image as ImageIcon, Layers, ListChecks, LoaderCircle, LockKeyhole, PenLine, Plus, RefreshCw, 
-  ScanSearch, Target, TriangleAlert, Wrench
+  ScanSearch, Sparkles, Target, TriangleAlert, UserCheck, Wrench
 } from "lucide-react";
 import { company } from "../../data/companies";
 import { TRACKS, tracksFor } from "../../domain/taxonomy";
@@ -15,8 +15,8 @@ import { Chip, Forward, Num, Panel, Primary, Secondary } from "../../ui/primitiv
 import { fmt } from "../../ui/theme";
 
 // =====================================================================
-//  Engineering CV audit — the screen (v23): intake → one audit on the device → one report.
-//  Report order: score + pillars · critical issues · technical gaps & keywords · line-by-line rewrites ·
+//  Engineering CV audit — the screen (v24): intake → one audit on the device → one report.
+//  Report order: score + pillars · the HR director's assessment + regional personal block (hr.ts) · critical issues · technical gaps & keywords · line-by-line rewrites ·
 //  portfolio & project sheets · full breakdown. All copy is written in both languages (L2) and rendered in the
 //  interface language (translate="no"); rewrites stay in the CV's own language.
 // =====================================================================
@@ -46,7 +46,7 @@ export const AX = {
   reading: L2("جارٍ القراءة والتدقيق…", "Reading and auditing…"), readingSub: L2("كل شيء يحدث على جهازك", "Everything happens on your device"),
   score: L2("التقييم الهندسي لـ ATS", "Engineering ATS score"), of100: L2("من 100", "out of 100"), retrack: L2("دقّق لمسار آخر", "Audit for another track"),
   pDisc: L2("التخصص", "Discipline"), pTarget: L2("المسار المستهدف", "Target track"), pReads: L2("تُقرأ كـ", "Reads as"), pYears: L2("الخبرة", "Experience"), pLevel: L2("المستوى", "Level"), pLen: L2("عدد الكلمات", "Words"),
-  nav: [["crit", L2("العوائق", "Deal-breakers")], ["gaps", L2("الفجوات", "Gaps")], ["rew", L2("إعادة الكتابة", "Rewrites")], ["port", L2("المشاريع", "Portfolio")], ["det", L2("التفاصيل", "Breakdown")]],
+  nav: [["hr", L2("رأي التوظيف", "HR view")], ["crit", L2("العوائق", "Deal-breakers")], ["gaps", L2("الفجوات", "Gaps")], ["rew", L2("إعادة الكتابة", "Rewrites")], ["port", L2("المشاريع", "Portfolio")], ["det", L2("التفاصيل", "Breakdown")]],
   crit: L2("عوائق يجب إصلاحها", "Critical issues — must fix"), critSub: L2("هذه تُسقط السيرة في الفرز الآلي أو من أول نظرة.", "These get a CV rejected by software or at first glance."), critNone: L2("لا عوائق حاسمة — السيرة تعبر الفرز الأول.", "No deal-breakers — the CV clears first screening."), high: L2("أصلحها أيضًا قبل التقديم", "Also fix before applying"), why: L2("لماذا", "Why"), fix: L2("الحل", "Fix"),
   gaps: L2("الفجوات التقنية والكلمات المفتاحية", "Technical gaps & missing keywords"), sw: L2("برامج المسار وعمق استخدامها", "Track software and depth of use"), core: L2("أساسية — يفلتر عليها الـ ATS", "Core — ATS filters on these"), adv: L2("مميّزة — تفرّقك عن غيرك", "Differentiators — set you apart"),
   codes: L2("الأكواد والمعايير والعقود", "Codes, standards & contracts"), applied: L2("مطبّق في الخبرة", "Applied in work"), listed: L2("مذكور فقط", "Listed only"), missingS: L2("ناقص", "Missing"), creds: L2("الشهادات", "Credentials"), prep: L2("قيد الإعداد", "in preparation"), synd: L2("قيد نقابة المهندسين", "Engineers Syndicate registration"),
@@ -55,6 +55,11 @@ export const AX = {
   rew: L2("إعادة كتابة البنود سطرًا بسطر", "Line-by-line bullet rewrites"), rewSub: L2("بلغة سيرتك. استبدل كل [ ] برقمك الحقيقي — لا تخترع أرقامًا.", "In your CV's language. Replace every [ ] with your real figure — never invent one."), sum: L2("الملخص المهني المقترح", "Drafted professional summary"), before: L2("قبل", "Before"), after: L2("بعد", "After"), kept: L2("كلماتك محفوظة", "Your words kept"), copy: L2("نسخ", "Copy"), copied: L2("نُسخ", "Copied"), copyAll: L2("نسخ كل البنود", "Copy all rewrites"), strongN: L2("بنود قوية أبقيناها كما هي:", "Strong bullets left as they are:"), noRew: L2("كل البنود قوية بالفعل — لا حاجة لإعادة كتابة.", "Every bullet is already strong — nothing to rewrite."),
   tags: { verb: L2("فعل إنجاز", "Action verb"), scope: L2("حجم المشروع", "Scope"), result: L2("نتيجة", "Result"), tool: L2("أداة", "Tool"), code: L2("كود", "Code") },
   port: L2("عرض المشاريع وملف الأعمال", "Portfolio & project presentation"), sheet: L2("بطاقة مشروع — انسخها لكل مشروع رئيسي", "Project sheet — copy it for each key project"), ready: L2("مشاريعك: ما هو موجود وما ينقص", "Your projects: what's there, what's missing"), tipsFor: L2("لمسار", "For"), general: L2("قواعد عامة", "General rules"),
+  hr: L2("تقييم مدير التوظيف الهندسي", "Engineering HR director's assessment"), hrSub: L2("كما يقرأ سيرتك مدير موارد بشرية خبير في شركات المقاولات والاستشاريين في مصر والخليج.", "How a seasoned HR director at Egyptian and Gulf contractors and consultants reads your CV."),
+  hrLevel: L2("المستوى الوظيفي", "Career level"), hrFit: L2("الملاءمة والمستوى", "Fit and level"), hrExp: L2("الخبرة العملية (موقع / مكتب فني)", "Practical experience (site / technical office)"), hrSw: L2("إتقان البرامج الهندسية", "Engineering software proficiency"),
+  hrMissing: L2("نواقص تؤثر فعلًا على قرار التعيين", "Gaps that actually affect the hiring decision"), hrMissingNone: L2("لا نواقص حاسمة — ما تبقى تحسينات.", "No decisive gaps — what's left is polish."), hrActions: L2("خطوات عملية مرتبة بالأولوية", "Actionable steps, in priority order"), hrStand: L2("لتتميّز عن باقي المتقدمين", "To stand out from other applicants"),
+  regional: L2("البيانات الشخصية — بالمعايير المحلية", "Personal details — regional standards"), regionalSub: L2("تاريخ الميلاد والحالة الاجتماعية والموقف من التجنيد ورقم الهاتف المحلي معتادة في السير المصرية والخليجية — ليست عيوبًا.", "Date of birth, marital status, military-service status and a local phone number are expected in Egyptian and Gulf CVs — not flaws."),
+  rOk: L2("موجود", "Present"), rMissing: L2("ناقص", "Missing"), rAdvice: L2("يحتاج تعديل", "Needs a tweak"), rNeutral: L2("اختياري", "Optional"),
   det: L2("تفاصيل التقييم", "Full breakdown"), writing: L2("اللغة والإملاء", "Spelling & grammar"),
   copyReport: L2("نسخ التقرير كاملًا", "Copy full report"), again: L2("دقّق سيرة أخرى", "Audit another CV"), reportCopied: L2("نُسخ التقرير", "Report copied"),
   privacy: L2("التدقيق قواعد خبراء تعمل على جهازك — لا يُرفع الملف ولا يُحفظ ولا يُرسل لأي خدمة. راجع النسخة النهائية بعينك قبل الإرسال.", "The audit is expert rules running on your device — the file is never uploaded, stored or sent to any service. Check the final version yourself before sending."),
@@ -89,6 +94,33 @@ export function AuditIssue({ i, t, tone }: any) {
   );
 }
 
+// the HR director's read + the regional personal block — the human assessment on top of the ATS score
+const REGIONAL_TONE = { ok: ["text-good", CircleCheck], missing: ["text-bad", CircleX], advice: ["text-warn", CircleAlert], neutral: ["text-ink-3", CircleAlert] };
+export function HrPanel({ r, t }: any) {
+  const h = r.hr; const Head = ({ children }: any) => <p className="mt-4 text-[12.5px] font-medium">{children}</p>;
+  return (
+    <Panel className="p-4">
+      <h3 className="text-[14px] font-medium inline-flex items-center gap-1.5"><UserCheck size={15} className="text-accent" /> {t(AX.hr)}</h3><p className="mt-1 text-[11.5px] text-ink-3">{t(AX.hrSub)}</p>
+      <div className={`mt-3 p-3 rounded-xl border ${h.verdict.tone === "good" ? "bg-good/10 border-good/25" : h.verdict.tone === "accent" ? "bg-wash border-accent/25" : h.verdict.tone === "warn" ? "bg-warn/10 border-warn/25" : "bg-bad/5 border-bad/25"}`}>
+        <p className={`text-[14px] font-medium leading-snug ${TONE_TXT[h.verdict.tone] || ""}`}>{t(h.verdict.label)}</p>
+        <p className="mt-1 text-[11.5px] text-ink-2"><span className="text-ink-3">{t(AX.hrLevel)}: </span>{t(h.level)}</p>
+      </div>
+      <Head>{t(AX.hrFit)}</Head><p className="mt-1 text-[12.5px] leading-relaxed text-ink-2">{t(h.fit)}</p>
+      <Head>{t(AX.hrExp)}</Head><ul className="mt-1 space-y-1">{h.experience.map((x, i) => <li key={i} className="flex items-start gap-2 text-[12.5px] leading-relaxed text-ink-2"><HardHat size={13} className="shrink-0 mt-1 text-accent" /><span>{t(x)}</span></li>)}</ul>
+      <Head>{t(AX.hrSw)}</Head><p className="mt-1 text-[12.5px] leading-relaxed text-ink-2">{t(h.software)}</p>
+      <Head>{t(AX.hrMissing)}</Head>
+      {h.missing.length ? <ul className="mt-1.5 space-y-1.5">{h.missing.map((m, i) => <li key={i} className="p-2.5 rounded-lg bg-bad/5 border border-bad/20"><p className="text-[12.5px] font-medium text-ink inline-flex items-center gap-1.5"><CircleX size={13} className="shrink-0 text-bad" /> {t(m.title)}</p><p className="mt-0.5 ps-5 text-[12px] leading-relaxed text-ink-2">{t(m.why)}</p></li>)}</ul>
+        : <p className="mt-1.5 p-2.5 rounded-lg bg-good/10 border border-good/25 text-[12.5px] text-good inline-flex items-center gap-2 w-full"><CircleCheck size={14} /> {t(AX.hrMissingNone)}</p>}
+      <Head>{t(AX.hrActions)}</Head><ol className="mt-1 space-y-1">{h.actions.map((a, k) => <li key={k} className="flex gap-2 text-[12.5px] leading-relaxed"><Num className="shrink-0 w-5 text-accent font-semibold">{k + 1}.</Num><span><Bracketed text={t(a)} /></span></li>)}</ol>
+      <Head>{t(AX.hrStand)}</Head><ul className="mt-1 space-y-1">{h.standOut.map((a, k) => <li key={k} className="flex items-start gap-2 text-[12.5px] leading-relaxed text-ink-2"><Sparkles size={13} className="shrink-0 mt-1 text-accent" /><span>{t(a)}</span></li>)}</ul>
+      {r.regional && r.regional.length > 0 && <div className="mt-4 pt-3 border-t border-line" data-cv-regional>
+        <p className="text-[12.5px] font-medium">{t(AX.regional)}</p><p className="mt-0.5 text-[11px] text-ink-3 leading-relaxed">{t(AX.regionalSub)}</p>
+        <ul className="mt-2 divide-y divide-line">{r.regional.map((x) => { const [cl, I]: any = REGIONAL_TONE[x.state] || REGIONAL_TONE.neutral; return <li key={x.key} data-regional={x.key} className="py-2 flex items-start gap-2"><I size={14} className={`shrink-0 mt-0.5 ${cl}`} /><span className="min-w-0 flex-1"><span className="flex items-center justify-between gap-2"><span className="text-[12.5px] text-ink">{t(x.label)}</span><span className={`shrink-0 text-[10.5px] ${cl}`}>{t(x.state === "ok" ? AX.rOk : x.state === "missing" ? AX.rMissing : x.state === "advice" ? AX.rAdvice : AX.rNeutral)}</span></span><span className="block mt-0.5 text-[11.5px] leading-relaxed text-ink-2">{t(x.note)}</span></span></li>; })}</ul>
+      </div>}
+    </Panel>
+  );
+}
+
 
 export function CVReviewScreen({ app }: any) {
   const t = (x?: any) => say(app, x); const en = app.lang === "en";
@@ -109,6 +141,8 @@ export function CVReviewScreen({ app }: any) {
   const copyReport = () => {
     if (!ok) return; const L: any = [];
     L.push(`${t(AX.title)} — EngSpace · ${r.overall}/100 · ${t(r.grade[0])}`, `${t(r.profile.discLabel)} · ${t(r.profile.target)} · ${t(r.profile.posLabel)}`, "");
+    if (r.hr) { L.push(`${t(AX.hr)}: ${t(r.hr.verdict.label)} · ${t(r.hr.level)}`, t(r.hr.fit), ...r.hr.experience.map((x) => `• ${t(x)}`), `${t(AX.hrSw)}: ${t(r.hr.software)}`); if (r.hr.missing.length) { L.push(t(AX.hrMissing) + ":"); r.hr.missing.forEach((m) => L.push(`✖ ${t(m.title)} — ${t(m.why)}`)); } L.push(t(AX.hrActions) + ":", ...r.hr.actions.map((a, k) => `${k + 1}. ${t(a)}`), t(AX.hrStand) + ":", ...r.hr.standOut.map((a) => `★ ${t(a)}`), ""); }
+    if (r.regional && r.regional.length) { L.push(t(AX.regional) + ":"); r.regional.forEach((x) => L.push(`${x.state === "ok" ? "✓" : x.state === "missing" ? "✖" : "•"} ${t(x.label)} — ${t(x.note)}`)); L.push(""); }
     r.pillars.forEach((p) => L.push(`${t(p.label)}: ${p.pts}/${p.max}`)); L.push("");
     if (r.critical.length) { L.push(t(AX.crit) + ":"); r.critical.forEach((i) => { L.push(`✖ ${t(i.title)} — ${t(i.why)}`); i.fix.forEach((f) => L.push(`   • ${t(f)}`)); }); L.push(""); }
     if (r.high.length) { L.push(t(AX.high) + ":"); r.high.forEach((i) => { L.push(`! ${t(i.title)} — ${t(i.why)}`); i.fix.forEach((f) => L.push(`   • ${t(f)}`)); }); L.push(""); }
@@ -152,6 +186,8 @@ export function CVReviewScreen({ app }: any) {
           <label className="mt-3 flex items-center gap-2 text-[12px]"><span className="shrink-0 text-ink-2">{t(AX.pTarget)}</span><select value={r.target} onChange={(e) => setTrack(e.target.value)} aria-label={t(AX.retrack)} className="min-w-0 flex-1 h-10 px-3 rounded-xl bg-canvas border border-line-2 text-[12.5px]">{allowedTracks(r.disc).map((id) => <option key={id} value={id}>{t(trackL2(id, r.disc))}{id === r.detected ? " ✓" : ""}</option>)}</select></label>
         </Panel>
         <nav aria-label={t(AX.det)} className="-mx-4 px-4 flex gap-1.5 overflow-x-auto no-scrollbar">{AX.nav.map(([id, lab]: any) => <button key={id} type="button" onClick={() => go(id)} className="press shrink-0 h-9 px-3 rounded-full bg-surface border border-line text-[12px] text-ink-2 hover:text-ink">{t(lab)}</button>)}</nav>
+
+        {r.hr && <section ref={(el) => { secRefs.current.hr = el; }} data-cv-hr className="scroll-mt-20"><HrPanel r={r} t={t} /></section>}
 
         <section ref={(el) => { secRefs.current.crit = el; }} className="scroll-mt-20"><Panel className="p-4"><h3 className="text-[14px] font-medium inline-flex items-center gap-1.5"><TriangleAlert size={15} className={r.critical.length ? "text-bad" : "text-good"} /> {t(AX.crit)} <Num className="text-ink-3 text-[12px]">({r.critical.length})</Num></h3><p className="mt-1 text-[11.5px] text-ink-3">{t(AX.critSub)}</p>
           {r.critical.length ? <ul className="mt-3 space-y-2">{r.critical.map((i) => <AuditIssue key={i.id} i={i} t={t} tone="bad" />)}</ul> : <p className="mt-3 p-3 rounded-xl bg-good/10 border border-good/25 text-[12.5px] text-good inline-flex items-center gap-2 w-full"><CircleCheck size={15} /> {t(AX.critNone)}</p>}

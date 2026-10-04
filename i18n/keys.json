@@ -13748,6 +13748,26 @@
   "p": "features/cv/extract.ts",
   "n": 1
  },
+ "تاريخ الميلاد أو السن": {
+  "k": "s",
+  "p": "features/cv/hr.ts",
+  "n": 2
+ },
+ "الحالة الاجتماعية": {
+  "k": "s",
+  "p": "features/cv/hr.ts",
+  "n": 2
+ },
+ "الرقم القومي": {
+  "k": "s",
+  "p": "features/cv/hr.ts",
+  "n": 1
+ },
+ "الديانة": {
+  "k": "s",
+  "p": "features/cv/hr.ts",
+  "n": 1
+ },
  "تقرير": {
   "k": "x",
   "p": "features/market/live-salary.tsx,features/stack/stack.tsx,ui/feed.tsx",

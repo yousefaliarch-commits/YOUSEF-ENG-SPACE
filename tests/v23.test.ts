@@ -34,7 +34,7 @@ ok(RA.target === "tech" && RA.disc === "civil" && RA.critical.length === 0 && RA
 ok(RA.high.some((i) => i.id === "drafting") && RA.software.filter((s) => s.tier === "core").every((s) => s.level === "listed"), "…its tools are only listed, never proven in experience → «drafting level only» is flagged");
 ok(RA.creds.find((c) => c.name === "PMP").prep === true && !RA.creds.find((c) => c.name === "PMP").present && !/PMP/.test(RA.summary.after), "…a «PMP (تحضيري)» prep course is not counted as PMP, and the drafted summary doesn't claim it");
 ok(RE.overall < 45 && ["nometrics", "dates", "thin"].every((id) => RE.critical.some((i) => i.id === id)), `weak English site CV: ${RE.overall}/100 with the deal-breakers «no metrics», «no dates», «too thin»`, RE.critical.map((i) => i.id));
-ok(["email", "personal", "syndicate", "tooltypo"].every((id) => RE.high.some((i) => i.id === id)), "…and the high-priority fixes: unprofessional e-mail, personal data, Syndicate, misspelled tool names", RE.high.map((i) => i.id));
+ok(["email", "syndicate", "tooltypo"].every((id) => RE.high.some((i) => i.id === id)) && !RE.high.some((i) => i.id === "personal"), "…and the high-priority fixes: unprofessional e-mail, Syndicate, misspelled tool names — regional personal data (birth date, marital status) is not a flaw (v24)", RE.high.map((i) => i.id));
 ok(RF.disc === "electrical" && RF.target === "design" && RF.fresh && RF.critical.length === 0, `fresh electrical graduate: read as electrical design, ${RF.overall}/100, no deal-breakers`);
 const etap = RF.software.find((s) => s.name === "ETAP"), revm = RF.software.find((s) => s.name === "Revit MEP"), dial = RF.software.find((s) => s.name === "DIALux");
 ok(etap.level === "advanced" && revm.level === "basic" && dial.level !== "basic", "software depth: ETAP advanced (load flow / short circuit), «Revit MEP (basic)» basic — and «basic» doesn't spill onto DIALux on the same line", [etap.level, revm.level, dial.level]);
@@ -77,7 +77,7 @@ const pc = C.parseCV(C.CV_SAMPLE_AR); ok(!pc.experience.some((e) => e.bullets.so
 
 console.log("— ATS gates, target job, the report —");
 const RL = C.auditCV(C.CV_SAMPLE_AR, { layout: { pages: 2, images: 1, columns: true, tables: 1, type: "pdf", glyphs: 0 } });
-ok(RL.critical.some((i) => i.id === "layout") && RL.pillars.find((p) => p.id === "ats").pts < RA.pillars.find((p) => p.id === "ats").pts, "a two-column PDF with a table is a deal-breaker and costs ATS points");
+ok(RL.high.some((i) => i.id === "layout") && !RL.critical.some((i) => i.id === "layout") && RL.pillars.find((p) => p.id === "ats").pts < RA.pillars.find((p) => p.id === "ats").pts, "a two-column PDF with a table is a high-priority fix (portals parse it; local HR reads by eye) and costs ATS points");
 const RS = C.auditCV("", { scanned: true, layout: { pages: 1, images: 1, columns: false, tables: 0, type: "pdf" } });
 ok(RS.empty && RS.scanned && RS.critical[0].id === "scanned" && isL2(RS.critical[0].title), "a scanned PDF returns a single bilingual deal-breaker with the fix");
 const RJ = C.auditCV(C.CV_SAMPLE_AR, { jd: "Technical Office Engineer — 3-5 years. Revit, Navisworks, AutoCAD, shop drawings, BOQ, IPCs, FIDIC, Primavera P6." });
