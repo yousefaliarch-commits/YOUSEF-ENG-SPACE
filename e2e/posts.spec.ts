@@ -45,8 +45,10 @@ test("demo: publish, edit three times, delete — and other members' posts have 
 test("demo: the post's own screen offers the same controls, and deleting leaves it", async ({ page }) => {
   const errs = watch(page); await demoAs(page, "engineer"); const body = `منشور داخل الشاشة ${Date.now()}`; await publish(page, body);
   await card(page, body).getByRole("button").filter({ hasText: body }).first().click(); await settle(page, 900);
-  await expect(page.locator("[data-author-controls]:visible")).toHaveCount(1);
-  await page.locator("[data-author-controls]:visible").getByRole("button", { name: /^حذف$/ }).click(); await page.getByRole("alertdialog").getByRole("button", { name: /احذف نهائيًا/ }).click(); await settle(page, 1200);
+  // the feed stays in place under the post's screen layer; the controls that count are the ones on the screen itself
+  const onScreen = page.locator("[data-screen-layer] [data-author-controls]");
+  await expect(onScreen).toHaveCount(1);
+  await onScreen.getByRole("button", { name: /^حذف$/ }).click(); await page.getByRole("alertdialog").getByRole("button", { name: /احذف نهائيًا/ }).click(); await settle(page, 1200);
   await expect(page.locator("[data-tour=tabbar]")).toBeVisible(); await expect(visible(page, body)).toHaveCount(0); await noCrash(page, errs, "post screen delete");
 });
 const visible = (page: Page, t: string) => page.getByText(t).locator("visible=true");

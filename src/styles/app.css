@@ -250,6 +250,17 @@ html[data-glass="lite"] .glass { -webkit-backdrop-filter: none; backdrop-filter:
 .tabbar { transition: transform .32s var(--spring), opacity .2s ease; }
 .tabbar.is-off { transform: translate3d(0, calc(100% + 16px + var(--sab)), 0); opacity: 0; pointer-events: none; }
 .pushed { --tabbar-space: 0px; }
+/* a pushed screen is a layer over the tab: it slides in when it opens and fades out on «back» (transform / opacity only — the tab underneath
+   never re-lays out). Forward comes from the leading side: the left in Arabic, the right in English. */
+.screen-layer { animation: layer-in .3s cubic-bezier(.2,.7,.2,1) backwards; touch-action: pan-y; }
+.screen-layer.is-leaving { animation: layer-out .2s cubic-bezier(.4,0,1,1) forwards; pointer-events: none; }
+@keyframes layer-in { from { opacity: 0; transform: translate3d(-36px,0,0); } }
+@keyframes layer-out { to { opacity: 0; transform: translate3d(-44px,0,0); } }
+html[dir="ltr"] .screen-layer { animation-name: layer-in-ltr; }
+html[dir="ltr"] .screen-layer.is-leaving { animation-name: layer-out-ltr; }
+@keyframes layer-in-ltr { from { opacity: 0; transform: translate3d(36px,0,0); } }
+@keyframes layer-out-ltr { to { opacity: 0; transform: translate3d(44px,0,0); } }
+@media (prefers-reduced-motion: reduce) { .screen-layer, .screen-layer.is-leaving { animation: none !important; } }
 /* …and the screen keeps clear of the home indicator itself, unless its own bottom bar (.foot) already pads for it */
 .pushed .screen-body { padding-bottom: var(--sab); }
 .pushed .screen-body:has(.foot) { padding-bottom: 0; }
