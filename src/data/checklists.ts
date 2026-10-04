@@ -54,10 +54,13 @@ export const TEMPLATES: Template[] = [
 export const RESULT = { pass: "مطابق", fail: "غير مطابق", na: "لا ينطبق" } as const;
 export const VERDICT = { accepted: "مقبول", conditional: "مقبول بملاحظات", rejected: "مرفوض — يعاد الاستلام" } as const;
 
-// a filled inspection: { id, template, project, zone, ref, inspector, date, marks: { "s.i" | "c.<id>": "pass" | "fail" | "na" }, notes: {}, custom: [], verdict }
+// a filled inspection: { id, template, tpl?, project, zone, ref, irNo, contractor, consultant, inspector, date,
+//   marks: { "s.i" | "c.<id>": "pass" | "fail" | "na" }, notes: {}, general, custom: [], verdict }
+// An inspection started from the member's own checklist carries a snapshot of it (`tpl`): editing or deleting that checklist later
+// never changes or breaks an inspection already filled — or its report.
 export const newInspection = (t: Template, inspector = "") => ({
-  id: "qc-" + Date.now().toString(36), template: t.id, project: "", zone: "", ref: "", inspector, date: new Date().toISOString().slice(0, 10),
-  marks: {} as Record<string, string>, notes: {} as Record<string, string>, custom: [] as Custom[], verdict: "", at: Date.now(),
+  id: "qc-" + Date.now().toString(36), template: t.id, ...(isUserTemplate(t) ? { tpl: cleanTemplate(t) } : {}), project: "", zone: "", ref: "", irNo: "", contractor: "", consultant: "", inspector,
+  date: new Date().toISOString().slice(0, 10), marks: {} as Record<string, string>, notes: {} as Record<string, string>, general: "", custom: [] as Custom[], verdict: "", at: Date.now(),
 });
 // custom items the engineer added to this inspection: [{ id, text }] — their marks and notes live under "c.<id>"
 export type Custom = { id: string; text: string };
@@ -70,6 +73,37 @@ export function tally(t: Template, marks: Record<string, string>, custom: Custom
   const keys = itemsOf(t, custom); const c = { pass: 0, fail: 0, na: 0, open: 0 };
   for (const k of keys) { const m = marks[k]; if (m === "pass" || m === "fail" || m === "na") c[m]++; else c.open++; }
   return { ...c, total: keys.length, suggested: c.fail ? "rejected" : c.open ? "" : "accepted" };
+}
+
+// ---- checklists the member builds from scratch (or from a copy of a ready template) ----
+// { id: "u-…", title, category, scope, sections: [[title, items[]]], custom: true, at, deleted? } — the member's own words, never translated.
+// A deleted checklist stays as a tombstone ({ id, deleted: true, at }) so another phone's older copy cannot bring it back on sync.
+export type UserTemplate = Template & { category: string; custom: true; at: number; deleted?: boolean };
+export const CATEGORIES = ["إنشائي", "معماري وتشطيبات", "كهرباء", "ميكانيكا وصحي (MEP)", "سلامة الموقع", "مكتب فني", "أخرى"];
+const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+export const isUserTemplate = (t: any): t is UserTemplate => !!t && t.custom === true;
+const STD_CATEGORY: Record<string, string> = { rebar: "إنشائي", formwork: "إنشائي", prepour: "إنشائي", blockwork: "معماري وتشطيبات", plaster: "معماري وتشطيبات" };
+export const categoryOf = (t: any) => (isUserTemplate(t) ? t.category : STD_CATEGORY[t && t.id] || (t && /سلامة/.test(t.title || "") ? "سلامة الموقع" : "معماري وتشطيبات"));
+// a blank checklist, or a copy of a ready template to adapt
+export const newTemplate = (from?: Template): UserTemplate => ({
+  id: "u-" + rid(), title: from ? `${from.title} — نسختي` : "", category: from ? categoryOf(from) : "", scope: from ? from.scope : "",
+  sections: from ? from.sections.map(([h, items]) => [h, [...items]] as [string, string[]]) : [["البنود", [""]]], custom: true, at: Date.now(),
+});
+// what is saved and printed: trimmed, length-capped, empty items and empty sections dropped
+export const cleanTemplate = (t: UserTemplate): UserTemplate => ({
+  ...t, title: String(t.title || "").trim().slice(0, 120), category: String(t.category || "").trim().slice(0, 60), scope: String(t.scope || "").trim().slice(0, 200),
+  sections: (t.sections || []).map(([h, items]) => [String(h || "").trim().slice(0, 120) || "البنود", (items || []).map((x) => String(x || "").trim().slice(0, 300)).filter(Boolean).slice(0, 80)] as [string, string[]]).filter(([, items]) => items.length).slice(0, 20),
+});
+export const templateError = (t: UserTemplate): string | null => { const c = cleanTemplate(t); return !c.title ? "اكتب عنوان القائمة" : !c.sections.length ? "أضف بندًا واحدًا على الأقل" : null; };
+export const itemCount = (t: Template) => t.sections.reduce((a, [, items]) => a + items.length, 0);
+// the template an inspection uses: its own snapshot, a ready template, or the member's checklist (in that order)
+export const resolveTemplate = (x: any, mine: UserTemplate[] = []): Template => (x && x.tpl) || TEMPLATES.find((t) => t.id === (x && x.template)) || mine.find((t) => t.id === (x && x.template) && !t.deleted) || TEMPLATES[0];
+const TKEY = (owner = "") => "engspace.qctemplates.v1" + (owner ? "." + owner : "");
+export const loadTemplates = (owner = ""): UserTemplate[] => { try { const v = JSON.parse(localStorage.getItem(TKEY(owner)) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
+export const storeTemplates = (list: UserTemplate[], owner = "") => { try { localStorage.setItem(TKEY(owner), JSON.stringify(list)); } catch (e) { /* the in-memory copy still works */ } };
+export function mergeTemplates(local: UserTemplate[], remote: UserTemplate[]) {
+  const by = new Map<string, UserTemplate>(); for (const x of [...(remote || []), ...(local || [])]) { if (!x || !x.id) continue; const o = by.get(x.id); if (!o || (x.at || 0) > (o.at || 0)) by.set(x.id, x); }
+  return [...by.values()].sort((a, b) => (b.at || 0) - (a.at || 0)).slice(0, 60);
 }
 
 // ---- this device's copy, kept per account (a shared site phone never shows one engineer's inspections to another) ----

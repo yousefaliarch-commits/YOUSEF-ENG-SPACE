@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import {
   CircleCheck, LockKeyhole, ShieldAlert
 } from "lucide-react";
-import { loadInspections, mergeInspections, storeInspections } from "../data/checklists";
+import { loadInspections, loadTemplates, mergeInspections, mergeTemplates, storeInspections, storeTemplates } from "../data/checklists";
 import { SupportScreen, TicketScreen } from "../features/support/support";
 import { loadDevice, storeDevice } from "../lib/device-store";
 import { ROOMS, company } from "../data/companies";
@@ -68,9 +68,9 @@ const TabPane = ({ id, active, covered, render, sig }: any) => {
   return <div data-pane={id} className={`tab-pane ${active ? "" : warm ? "is-off" : "is-off is-warming"}`} {...(active ? (covered ? { "aria-hidden": true } : {}) : { inert: "", "aria-hidden": true })}><PaneBody active={active} render={render} sig={sig} seen={seen} /></div>;
 };
 // every store value a tab screen reads (navigation-only keys — stack, sheet, msg, dir… — are left out on purpose)
-const PANE_KEYS = ["authView", "editing", "welcome", "config", "contacted", "contributed", "follows", "hidden", "inspections", "jobStats", "jobs", "logos", "market", "mod", "notifPrefs", "notifs", "persona", "posts", "profile", "pts", "pushStatus", "reacts", "reports", "reviews", "roomFollows", "salaryLog", "salaryRev", "saved", "shares", "threads", "verifs", "voteAs", "votes"];
+const PANE_KEYS = ["qcTemplates", "authView", "editing", "welcome", "config", "contacted", "contributed", "follows", "hidden", "inspections", "jobStats", "jobs", "logos", "market", "mod", "notifPrefs", "notifs", "persona", "posts", "profile", "pts", "pushStatus", "reacts", "reports", "reviews", "roomFollows", "salaryLog", "salaryRev", "saved", "shares", "threads", "verifs", "voteAs", "votes"];
 
-export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "ticket"];
+export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "qcbuilder", "ticket"];
 
 export const PLAIN_TYPES = ["notifications", "notifprefs", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists", "support"];
 
@@ -119,6 +119,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // QA/QC inspections live on this device first (sites often have no signal); on the live platform they also go to the member's own state row
   const [inspections, setInspections] = S("inspections", () => loadInspections(persona && persona.pid));
   useEffect(() => { setInspections(loadInspections(persona && persona.pid)); }, [persona && persona.pid]);
+  // the member's own checklists (built from scratch or from a copy of a ready one) — kept like inspections: this phone first, then their account
+  const [qcTemplates, setQcTemplates] = S("qcTemplates", () => loadTemplates(persona && persona.pid));
+  useEffect(() => { setQcTemplates(loadTemplates(persona && persona.pid)); }, [persona && persona.pid]);
   // the salary history behind the raise tracker: private to the member (device first, then their own state row)
   const [salaryLog, setSalaryLog] = S("salaryLog", () => loadDevice("salarylog", persona && persona.pid, { at: 0, log: [] }));
   useEffect(() => { setSalaryLog(loadDevice("salarylog", persona && persona.pid, { at: 0, log: [] })); }, [persona && persona.pid]);
@@ -243,6 +246,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     if (d.prefs) setNotifPrefs({ ...DEFAULT_PREFS, ...d.prefs });
     setReviews(d.reviews); setReacts(d.reacts); setVotes(d.votes); setVoteAs(d.voteAs); setSaved(d.saved); setFollows(d.follows); setRoomFollows(d.roomFollows); setHidden(d.hidden); setContacted(d.contacted);
     setInspections((mine) => mergeInspections(mine, d.inspections));
+    setQcTemplates((mine) => mergeTemplates(mine, d.qcTemplates || []));
     // the whole history is one value stamped with its last edit: the newer copy wins, so a deletion on one device sticks everywhere
     setSalaryLog((mine) => (d.salaryLog && d.salaryLog.at > (mine.at || 0) ? d.salaryLog : mine));
     if (d.config) setConfig({ ...MOD_CONFIG0, ...d.config });
@@ -322,6 +326,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const persist = (key?: any, value?: any) => { if (!CLOUD || !hydrated.current) return; clearTimeout(saveLater.current[key]); saveLater.current[key] = setTimeout(() => sync(() => cloud.saveState(key, value)), 800); };
   useEffect(() => persist("saved", saved), [saved]); useEffect(() => persist("follows", follows), [follows]); useEffect(() => persist("roomFollows", roomFollows), [roomFollows]); useEffect(() => persist("hidden", hidden), [hidden]);
   useEffect(() => { storeInspections(inspections, persona && persona.pid); persist("inspections", inspections); }, [inspections]);
+  useEffect(() => { storeTemplates(qcTemplates, persona && persona.pid); persist("qcTemplates", qcTemplates); }, [qcTemplates]);
   useEffect(() => { storeDevice("salarylog", persona && persona.pid, salaryLog); persist("salaryLog", salaryLog); }, [salaryLog]);
   const swapId = (list?: any, tmp?: any, item?: any) => list.map((x) => (x.id === tmp ? { ...x, ...item, mine: true } : { ...x, ...(x.replies ? { replies: swapId(x.replies, tmp, item) } : {}), ...(x.comments ? { comments: swapId(x.comments, tmp, item) } : {}) }));
   // A post just published exists only here until the server answers, and for a moment after that a read may not include it yet.
@@ -392,6 +397,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     shares,
     salaryLog: salaryLog.log || [], saveSalaryLog: (log?: any) => setSalaryLog({ at: Date.now(), log: [...log].sort((a, b) => (a.month < b.month ? -1 : 1)).slice(-60) }),
     inspections, saveInspection: (x?: any) => setInspections((l) => [x, ...l.filter((i) => i.id !== x.id)].slice(0, 100)), deleteInspection: (id?: any) => setInspections((l) => l.filter((i) => i.id !== id)),
+    qcTemplates: qcTemplates.filter((t) => !t.deleted), qcTemplatesAll: qcTemplates,
+    saveTemplate: (t?: any) => setQcTemplates((l) => [{ ...t, at: Date.now() }, ...l.filter((x) => x.id !== t.id)].slice(0, 60)),
+    deleteTemplate: (id?: any) => setQcTemplates((l) => [{ id, deleted: true, at: Date.now() } as any, ...l.filter((x) => x.id !== id)]),
     saved, toggleSaved: toggleIn(setSaved), follows, toggleFollow: toggleIn(setFollows), roomFollows, toggleRoom: toggleIn(setRoomFollows),
     // Reactions: «أوافق» and «لا أوافق» exclude each other (picking one clears the other); «مفيد» toggles independently and may sit with either
     reacts, react: (id?: any, k?: any) => { const next = applyReaction(reacts[id], k); setReacts((r) => ({ ...r, [id]: next })); sync(() => cloud.react(kindOf(id), id, next)); },
@@ -513,7 +521,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const top = stack[stack.length - 1];
   const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
     : top
-    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.id || "list"} app={app} id={top.id} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
+    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" || top.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.type + (top.id || "list")} app={app} id={top.id} kind={top.type} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : null;
   const tabScreen = (id?: any) => id === "home" ? <HomeScreen app={app} /> : id === "community" ? <CommunityScreen app={app} /> : id === "jobs" ? <JobsScreen app={app} /> : id === "market" ? <MarketScreen app={app} /> : id === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" && toolOpen(blocked, sheet.payload.id) ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;

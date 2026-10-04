@@ -213,7 +213,7 @@ export async function loadAll() {
     notifs: (notifs.data || []).map((n: any) => notifOf(n, now)),
     threads: (threads.data || []).map((t: any) => threadOf(t, null, now)),
     reviews: reviewsOut, config: cfg.data ? cfg.data.value : null,
-    saved: st.saved || {}, follows: st.follows || {}, roomFollows: st.roomFollows || {}, hidden: st.hidden || {}, inspections: st.inspections || [], salaryLog: st.salaryLog || null, contacted,
+    saved: st.saved || {}, follows: st.follows || {}, roomFollows: st.roomFollows || {}, hidden: st.hidden || {}, inspections: st.inspections || [], qcTemplates: st.qcTemplates || [], salaryLog: st.salaryLog || null, contacted,
     myReports: reports.data || [], verification: (verif.data || [])[0] || null,
     contributed: !!salary.data && (salary.data as any).access === "full",
     prefs: (nprefs.data || null) as any,
