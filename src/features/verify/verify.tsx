@@ -7,9 +7,9 @@ import { DIVISIONS, discName, divConflict, divOf, divisionForDisc } from "../../
 import { THIS_YEAR, accIdOf, cleanName, gx, hasSession, memberAccId, randHex } from "../../domain/identity";
 import { canVerifyRole, genderOf, roleTitle, tracksFor } from "../../domain/taxonomy";
 import { loadPdf } from "../../lib/vendor";
-import { L2, L3, say, trIn, whenIn } from "../../i18n/i18n";
+import { L2, L3, say, tr, trIn, whenIn } from "../../i18n/i18n";
 import { loadPersona } from "../../lib/helpers";
-import { processImage } from "../../lib/media";
+import { processImage, useCameraShot } from "../../lib/media";
 import { blobToDataUrl, compressCanvas } from "../../lib/compress";
 import { reduced } from "../../lib/runtime";
 import { Chip, Num, Primary, Quiet, RoundButton, Secondary } from "../../ui/primitives";
@@ -224,7 +224,10 @@ export function PrivacyPromise({ app, compact = false }: any) {
 
 export function DocSlot({ app, kind, doc, busy, err, onFile, onRemove }: any) {
   const t = (x?: any) => say(app, x); const S = DOC_SLOTS[kind]; const I = S.icon; const camRef = useRef<any>(null), fileRef = useRef<any>(null);
-  const pick = (e?: any) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (f) onFile(f); };
+  const [note, setNote] = useState("");
+  const pick = (e?: any) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (f) { setNote(""); onFile(f); } };
+  // «صوّر»: the phone's camera after its permission (src/native/camera.ts); in a browser or if that fails, the capture input
+  const shoot = useCameraShot((f) => { setNote(""); onFile(f); }, (n) => setNote(tr(n)), () => camRef.current && camRef.current.click());
   return (
     <div className={`rounded-2xl border p-3 transition-colors ${doc ? "border-good/30 bg-good/[0.04]" : err ? "border-bad/40 bg-surface" : "border-dashed border-line-3 bg-surface"}`}>
       <input ref={camRef} type="file" accept="image/*" capture="environment" onChange={pick} tabIndex={-1} aria-label={`${t(S.title)} — ${t(VX.take)}`} className="sr-only" />
@@ -237,8 +240,9 @@ export function DocSlot({ app, kind, doc, busy, err, onFile, onRemove }: any) {
         </div>
         {doc && <RoundButton label={t(VX.remove)} onClick={onRemove} className="shrink-0"><X size={16} /></RoundButton>}
       </div>
-      {!busy && <div className="mt-2.5 flex gap-2"><Secondary onClick={() => camRef.current && camRef.current.click()} className="flex-1 h-10 text-[12.5px] press"><Camera size={15} /> {t(doc ? VX.retake : VX.take)}</Secondary><Secondary onClick={() => fileRef.current && fileRef.current.click()} className="flex-1 h-10 text-[12.5px] press"><FileUp size={15} /> {t(doc ? VX.replace : VX.pick)}</Secondary></div>}
+      {!busy && <div className="mt-2.5 flex gap-2"><Secondary onClick={shoot} className="flex-1 h-10 text-[12.5px] press"><Camera size={15} /> {t(doc ? VX.retake : VX.take)}</Secondary><Secondary onClick={() => fileRef.current && fileRef.current.click()} className="flex-1 h-10 text-[12.5px] press"><FileUp size={15} /> {t(doc ? VX.replace : VX.pick)}</Secondary></div>}
       {err && <p role="alert" className="mt-2 text-[11.5px] leading-snug text-bad flex items-start gap-1.5"><CircleAlert size={12} className="shrink-0 mt-0.5" /><span>{t(err)}</span></p>}
+      {note && !err && <p role="alert" className="mt-2 text-[11.5px] leading-snug text-warn flex items-start gap-1.5"><CircleAlert size={12} className="shrink-0 mt-0.5" /><span>{note}</span></p>}
     </div>
   );
 }

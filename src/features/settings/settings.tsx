@@ -10,6 +10,7 @@ import { ArchMark, BTN, Back, Forward, Num, Panel, Primary, Secondary, Toggle, W
 import { THEMES } from "../../ui/theme";
 import { isCloud } from "../../backend/config";
 import { applyUpdateNow, checkForUpdate, onOtaState, otaState } from "../../native/updater";
+import { cameraLinked } from "../../native/camera";
 
 // =====================================================================
 //  The language screen (the app's first screen) · Settings · the feature guide · the interactive tour · the header theme switch
@@ -82,7 +83,7 @@ export function LiveUpdate() {
       <h2 className="text-[13px] font-medium inline-flex items-center gap-1.5"><RefreshCw size={15} className="text-accent" /> التحديثات الفورية</h2>
       <p className="mt-1 text-[11.5px] text-ink-2 leading-relaxed">حزمة الواجهة: <span dir="ltr" className="text-ink">{s.bundle}</span> · {s.builtin ? "مدمجة في التطبيق" : "محدَّثة عبر الإنترنت"}</p>
       <p className="mt-0.5 text-[11.5px] text-ink-3" role="status">{s.status === "failed" && s.error ? s.error : OTA_STATUS[s.status] || ""}{s.status === "downloading" && s.progress != null ? <> <Num>{s.progress}%</Num></> : null}{s.pending && s.status === "ready" ? <> · <span dir="ltr">{s.pending.version}</span></> : null}</p>
-      <p className="mt-0.5 text-[10.5px] text-ink-4" dir="ltr">shell {s.native || "?"} · updater {s.plugin === false ? "missing" : s.plugin ? "linked" : "…"}</p>
+      <p className="mt-0.5 text-[10.5px] text-ink-4" dir="ltr">shell {s.native || "?"} · updater {s.plugin === false ? "missing" : s.plugin ? "linked" : "…"} · camera {cameraLinked() ? "linked" : "missing"}</p>
       {s.rolledBack && <p className="mt-0.5 text-[11px] text-warn">تراجع التطبيق تلقائيًا عن تحديث لم يعمل (<span dir="ltr">{s.rolledBack}</span>) وبقي على النسخة السليمة.</p>}
       <div className="mt-2.5 flex gap-2">
         <Secondary onClick={() => checkForUpdate({ manual: true })} disabled={busy} className="h-10 px-4 flex-1"><RefreshCw size={14} className={busy ? "spin" : ""} /> تحقّق من التحديث</Secondary>

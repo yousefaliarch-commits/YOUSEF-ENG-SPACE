@@ -48,4 +48,22 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Android 13+: asking to show notifications is a runtime permission (the primer sheet asks first) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- «التقاط صورة» (posts, profile photo, QA/QC inspection photos, verification): asked at the moment the camera is
+         chosen, never at launch (src/native/camera.ts checks and requests it before the camera opens; the web view's own
+         capture path asks the same way). With CAMERA declared, the camera must never open before it is granted. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- a tablet or phone without a camera can still install the app: photos then come from the gallery -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <!-- Android 11+ hides other apps unless we say what we look for: without this the camera app is "not found" and
+         «التقاط صورة» silently falls back to the file picker (the camera plugin's manifest adds the same entries) -->
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+            <data android:mimeType="image/*" />
+        </intent>
+    </queries>
 </manifest>

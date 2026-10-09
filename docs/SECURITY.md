@@ -53,6 +53,33 @@ phone: pick → src/lib/compress.ts (≤ 1600 px, orientation applied, WebP / JP
 - Inspection photos are removed by their owner (`x-media-action: remove`, checked by `media_removable`) when a photo or an
   inspection is deleted.
 
+## Taking photos in the phone apps (native line 2)
+v0.26.0 crashed on «التقاط صورة»: iOS ends an app that asks for the camera without `NSCameraUsageDescription` (Info.plist had no
+privacy texts at all), and on Android a web view page process that dies (memory, or reclaimed while the camera app is in front) took
+the whole app with it. Now:
+```
+tap «صورة» / «إضافة صورة» / «تغيير صورة الحساب» / «إرفاق صورة»
+  browser            → the file input, as before
+  phone app          → chooser (src/lib/media.tsx): «التقاط صورة» · «اختيار من الصور»
+     camera          → src/native/camera.ts: checkPermissions → requestPermissions(["camera"]) only if not asked yet → getPhoto(Camera)
+                        denied → a note saying where to allow it (Settings → EngSpace → Camera); the camera never opens
+     gallery         → getPhoto(Photos) (no camera permission; Android's system photo picker)
+     either          → the plugin scales to ≤ 1600 px with the orientation applied (resultType uri) → File → compress.ts → upload-media
+     plugin fails    → the plain input takes over (capture="environment" for the camera), offered as a button, and for the rest of the run
+```
+- **iOS** `Info.plist`: `NSCameraUsageDescription`, `NSPhotoLibraryUsageDescription`, `NSPhotoLibraryAddUsageDescription` (Arabic, then English).
+- **Android** manifest: `CAMERA` (asked when the camera is chosen — with it declared, nothing may start the camera before it is granted;
+  the plugin and the web view's capture path both ask first), `android.hardware.camera` not required, `<queries>` for `IMAGE_CAPTURE`
+  (Android 11+ hides the camera app otherwise), FileProvider paths for `getExternalFilesDir` and the cache.
+- **MainActivity** handles `onRenderProcessGone`: the dead web view is removed and destroyed and the screen rebuilt (`recreate()`); three
+  losses within a minute end quietly instead of looping. iOS already reloads the web view itself (Capacitor).
+- **Memory**: `compress.ts` reads the size and EXIF orientation from the file header and asks `createImageBitmap` for the scaled picture
+  (`resizeWidth`), then releases the decoded source before the encode loop — a 50 MP photo no longer sits in the page process at full size.
+- Android keeps the camera app's full-size original in the app's private Pictures folder: `sweepCaptures()` deletes those older than a day
+  at launch.
+- Never `Camera.getPhoto` anywhere but `src/native/camera.ts` (pinned by `tests/native-camera-config.test.ts`); the plugin's logic is pinned by
+  `tests/camera.test.ts`, the chooser by `e2e/media.spec.ts` through the development-only `window.__engspaceCamera` stand-in.
+
 ## Local development
 `npm run db:start` then `npm run db:functions` (serves `upload-media` with `supabase/functions/local.env` — a development-only secret).
 `npm run test:cloud` needs both. The function uses plain `fetch` against the REST endpoints (`_shared/rest.ts`) — no npm download

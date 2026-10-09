@@ -1,7 +1,7 @@
 {
   "name": "engspace",
   "private": true,
-  "version": "0.26.0",
+  "version": "0.27.0",
   "description": "EngSpace — the anonymous career and salary network for Egyptian engineers (web app, packaged for iOS and Android with Capacitor).",
   "type": "module",
   "scripts": {
@@ -34,6 +34,7 @@
   "dependencies": {
     "@capacitor/app": "8.1.2",
     "@capacitor/browser": "8.0.5",
+    "@capacitor/camera": "8.2.5",
     "@capacitor/core": "8.5.2",
     "@capacitor/filesystem": "8.1.4",
     "@capacitor/haptics": "8.0.2",

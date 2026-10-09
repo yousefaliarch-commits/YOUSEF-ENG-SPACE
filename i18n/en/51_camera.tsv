@@ -1,0 +1,19 @@
+# Camera fix: the photo chooser in the phone apps («التقاط صورة» / «اختيار من الصور»), permission notes, fallbacks
+75ae1943	Profile photo
+cb1f9970	Photo for this item
+74d6f570	Photo for the post
+c7acee90	Attach a photo
+beb61ce4	EngSpace isn't allowed to use the camera. Allow it in Settings → EngSpace → Camera, or choose a photo from your gallery.
+a71be4bc	EngSpace isn't allowed to use the camera. Allow it in Settings → Apps → EngSpace → Permissions → Camera, or choose a photo from your gallery.
+2609be9e	EngSpace isn't allowed to access your photos — choose the photo from the device's files, or allow access in the phone's settings.
+f398106a	The camera couldn't be opened from inside the app — open it directly from here.
+60f30335	The photo gallery couldn't be opened from inside the app — choose the photo from the device's files.
+77953e13	Take photo
+b86acf55	Rear camera — permission is asked once
+a940456f	Opening the camera…
+b6457d71	Choose from photos
+9e5ed9db	A photo from your gallery
+427d887d	Opening your photos…
+7098a3ba	Open camera
+5745bfa1	Choose a file from the device
+4f59e570	The photo is resized and its location and camera data are removed before upload

@@ -66,7 +66,7 @@ export function ComposeSheet({ app, payload = {} }: any) {
   const [d, setD] = useState<any>({ title: TITLES[(app.isCo ? "civil" : pr.disc)][0], years: "", salary: "", company: "", q: "", opts: ["", "", ""] });
   // an optional image: re-encoded on the device, then read once for money figures (the result decides who may see it)
   const [img, setImg] = useState<any>(null); const [imgErr, setImgErr] = useState<any>(""); const [scan, setScan] = useState<any>(null); const scanTok = useRef(0);
-  const [imgInput, pickImg] = useImagePicker(async (file) => { setImgErr(""); try { const im = await processImage(file); const tok = ++scanTok.current; setImg({ ...im, alt: "" }); setScan("running"); try { const r = await scanImageForMoney(im.src); if (scanTok.current === tok) setScan(r.money ? "money" : "clean"); } catch (e) { if (scanTok.current === tok) setScan("failed"); } } catch (e) { setImgErr(imageError(e)); } });
+  const [imgInput, pickImg] = useImagePicker(async (file) => { setImgErr(""); try { const im = await processImage(file); const tok = ++scanTok.current; setImg({ ...im, alt: "" }); setScan("running"); try { const r = await scanImageForMoney(im.src); if (scanTok.current === tok) setScan(r.money ? "money" : "clean"); } catch (e) { if (scanTok.current === tok) setScan("failed"); } } catch (e) { setImgErr(imageError(e)); } }, { title: "صورة للمنشور" });
   const dropImg = () => { scanTok.current++; setImg(null); setScan(null); };
   const guard = screenLanguage(text + " " + d.q + " " + d.opts.join(" ") + " " + d.company);
   const valid = text.trim().length >= 10 && !guard.blocked && (type !== "reveal" || Number(d.salary) > 0) && (type !== "poll" || d.opts.filter((o) => o.trim()).length >= 2) && scan !== "running";
