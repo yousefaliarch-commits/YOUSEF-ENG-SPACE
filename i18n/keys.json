@@ -330,8 +330,8 @@
  },
  "جارٍ التحميل…": {
   "k": "x",
-  "p": "app/ScreenLoading.tsx,features/admin/directory-support.tsx,features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 7
+  "p": "app/ScreenLoading.tsx,features/admin/directory-support.tsx,features/admin/images-admin.tsx,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 8
  },
  "طريقة العرض": {
   "k": "s",
@@ -401,6 +401,26 @@
   "n": 1
  },
  "كلمة المرور ضعيفة — اختر كلمة أقوى": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "أرسلت كثيرًا في وقت قصير — انتظر قليلًا ثم أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "يمكن تغيير نوع الحساب مرة واحدة كل 30 يومًا": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "اكتمل إعداد حسابك بالفعل": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "بيانات المزامنة على هذا الحساب كثيرة — تواصل مع فريق EngSpace": {
   "k": "s",
   "p": "backend/cloud.ts",
   "n": 1
@@ -489,6 +509,46 @@
   "k": "s",
   "p": "backend/cloud.ts,native/native.ts",
   "n": 2
+ },
+ "الصورة أكبر من المسموح حتى بعد ضغطها — اختر صورة أصغر": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "صيغة الصورة غير مدعومة — استخدم JPG أو PNG أو WebP": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "أبعاد الصورة غير مناسبة — اختر صورة أخرى": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "رفعت صورًا كثيرة في وقت قصير — انتظر قليلًا ثم أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "امتلأت مساحة الصور المخصصة لحسابك — احذف بعض صور الفحص القديمة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "انتهت جلستك — سجّل الدخول مرة أخرى": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "تعذّر رفع الصورة — أعد المحاولة": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
+ },
+ "انتهت مهلة رفع الصورة — تحقّق من الاتصال": {
+  "k": "s",
+  "p": "backend/cloud.ts",
+  "n": 1
  },
  "فريق إدارة المنصة": {
   "k": "s",
@@ -9290,6 +9350,11 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
+ "مراجعة الصور": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx,features/admin/images-admin.tsx",
+  "n": 3
+ },
  "طلبات التوثيق": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
@@ -11734,6 +11799,66 @@
  "ردّ وأغلق": {
   "k": "x",
   "p": "features/admin/directory-support.tsx",
+  "n": 1
+ },
+ "قراءة الجهاز: بلا أرقام مالية": {
+  "k": "s",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "قراءة الجهاز: فيها أرقام مالية": {
+  "k": "s",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "قراءة الجهاز: لم تكتمل": {
+  "k": "s",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "الصورة متاحة الآن لكل الحسابات": {
+  "k": "s",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "الصورة تبقى مخفية عن حسابات الشركات ومشرفي المواقع": {
+  "k": "s",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "تحديث": {
+  "k": "x",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "حسابات الشركات ومشرفي المواقع لا ترى صورة منشور إلا بعد أن يراجعها الفريق ويتأكد أنها بلا أرقام مالية. المهندسون وصاحب المنشور يرونها فورًا.": {
+  "k": "x",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "لا صور بانتظار المراجعة": {
+  "k": "s",
+  "p": "features/admin/images-admin.tsx",
+  "n": 2
+ },
+ "كل الصور المنشورة رُوجعت.": {
+  "k": "s",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "في الوضع التجريبي لا تُرفع صور إلى الخادم.": {
+  "k": "s",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "بلا أرقام — اعرضها للجميع": {
+  "k": "x",
+  "p": "features/admin/images-admin.tsx",
+  "n": 1
+ },
+ "فيها أرقام": {
+  "k": "x",
+  "p": "features/admin/images-admin.tsx",
   "n": 1
  },
  "اكتب الشهر والنسبة (بين −20 و100)": {
@@ -14602,6 +14727,16 @@
   "p": "features/notifications/prefs.tsx",
   "n": 1
  },
+ "عرض الصورة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx,lib/media.tsx",
+  "n": 4
+ },
+ "حذف الصورة": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
  "فحص واستلام الأعمال": {
   "k": "x",
   "p": "features/qaqc/qaqc.tsx",
@@ -14831,6 +14966,18 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
  },
+ "حتى {0} صور لكل بند": {
+  "k": "t",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "PHOTO_LIMITS.perItem"
+ },
+ "حتى {0} صورة في الفحص الواحد": {
+  "k": "t",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "PHOTO_LIMITS.perInspection"
+ },
  "بنود إضافية": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
@@ -14880,6 +15027,17 @@
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 1
+ },
+ "صورة": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "{0} صورة": {
+  "k": "e",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1,
+  "x": "shooting === k ? <LoaderCircle size={13} /> : <Camera size={13} />"
  },
  "ملاحظة": {
   "k": "x",
@@ -15875,17 +16033,12 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "الشعار أكبر من 2 ميجابايت": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
- "مربّع، PNG أو SVG، حتى 2 ميجابايت. يظهر في بطاقات الشركة والوظائف.": {
+ "مربّع، PNG أو SVG أو JPG — يُصغَّر ويُضغط على جهازك. يظهر في بطاقات الشركة والوظائف.": {
   "k": "x",
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "{0}مربّع، PNG أو SVG، حتى 2 ميجابايت. يظهر في بطاقات الشركة والوظائف.": {
+ "{0}مربّع، PNG أو SVG أو JPG — يُصغَّر ويُضغط على جهازك. يظهر في بطاقات الشركة والوظائف.": {
   "k": "e",
   "p": "features/sheets/sheets.tsx",
   "n": 1,
@@ -20150,7 +20303,7 @@
   "p": "lib/helpers.tsx",
   "n": 1
  },
- "الصورة أكبر من 15 ميجابايت": {
+ "الصورة كبيرة جدًا — اختر صورة أصغر من 25 ميجابايت": {
   "k": "s",
   "p": "lib/media.tsx",
   "n": 1
@@ -20170,7 +20323,17 @@
   "p": "lib/media.tsx",
   "n": 1
  },
+ "صورة يجري تجهيزها — تظهر بعد قليل": {
+  "k": "x",
+  "p": "lib/media.tsx",
+  "n": 1
+ },
  "صورة فيها أرقام مالية": {
+  "k": "s",
+  "p": "lib/media.tsx",
+  "n": 2
+ },
+ "صورة لم يراجعها فريق EngSpace بعد": {
   "k": "s",
   "p": "lib/media.tsx",
   "n": 1
@@ -20189,11 +20352,6 @@
   "k": "x",
   "p": "lib/media.tsx",
   "n": 1
- },
- "عرض الصورة": {
-  "k": "s",
-  "p": "lib/media.tsx",
-  "n": 2
  },
  "صورة من المنشور": {
   "k": "x",
@@ -20308,6 +20466,11 @@
   "n": 1
  },
  "قائمة استرشادية — المرجع هو اللوحات والمواصفات المعتمدة للمشروع والكود المتبع.": {
+  "k": "s",
+  "p": "lib/report-pdf.ts",
+  "n": 1
+ },
+ "ملحق الصور — توثيق البنود": {
   "k": "s",
   "p": "lib/report-pdf.ts",
   "n": 1

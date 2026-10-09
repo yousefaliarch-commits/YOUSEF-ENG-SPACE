@@ -12,6 +12,7 @@ import { screenLanguage } from "../../domain/text-guard";
 import { VerifyCenter } from "../verify/verify";
 import { LevelRing, Money, marketFor, medianFor, personaExp, personaTitle, round500 } from "../../lib/helpers";
 import { PHOTO_MAX, imageError, imageRatio, processImage, scanImageForMoney, useImagePicker } from "../../lib/media";
+import { blobToDataUrl, compressImage } from "../../lib/compress";
 import { flatten } from "../../lib/posts";
 import { characterName, specOf } from "../../ui/characters";
 import { ContactHint, Field, GovPicker, LanguageGuard, Result, RoleBadge, TextInput } from "../../ui/chrome";
@@ -150,10 +151,11 @@ export function UserSheet({ app, payload }: any) {
 
 export function LogoSheet({ app, payload }: any) {
   const c = company(payload.company); const ref = useRef<any>(null); const [preview, setPreview] = useState(app.logos[c.id] || null); const [err, setErr] = useState<any>("");
-  const onFile = (e?: any) => { const f = e.target.files && e.target.files[0]; if (!f) return; if (f.size > 2e6) { setErr("الشعار أكبر من 2 ميجابايت"); return; } const r = new FileReader(); r.onload = () => { setPreview(r.result); setErr(""); }; r.readAsDataURL(f); };
+  // the logo is compressed on the device too (≤ 512 px, transparency kept)
+  const onFile = async (e?: any) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return; try { const z = await compressImage(f, "logo", { minSide: 32 }); setPreview(await blobToDataUrl(z.blob)); setErr(""); } catch (x) { setErr(imageError(x)); } };
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-3"><CompanyLogo c={c} size={64} logo={preview} className="rounded-2xl" /><div className="min-w-0"><p className="text-[14px] font-medium">{c.name}</p><p className="text-[11.5px] text-ink-2 leading-snug">{c.logo ? `الحالي: الشعار الحقيقي من ${logoSourceLabel(c)}. ` : ""}مربّع، PNG أو SVG، حتى 2 ميجابايت. يظهر في بطاقات الشركة والوظائف.</p></div></div>
+      <div className="flex items-center gap-3"><CompanyLogo c={c} size={64} logo={preview} className="rounded-2xl" /><div className="min-w-0"><p className="text-[14px] font-medium">{c.name}</p><p className="text-[11.5px] text-ink-2 leading-snug">{c.logo ? `الحالي: الشعار الحقيقي من ${logoSourceLabel(c)}. ` : ""}مربّع، PNG أو SVG أو JPG — يُصغَّر ويُضغط على جهازك. يظهر في بطاقات الشركة والوظائف.</p></div></div>
       <input ref={ref} type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" onChange={onFile} className="sr-only" />
       <div className="flex gap-2"><Secondary onClick={() => ref.current && ref.current.click()} className="flex-1 h-11"><ImagePlus size={15} /> اختر صورة</Secondary>{preview && <Secondary onClick={() => setPreview(null)} className="h-11 px-3">إزالة</Secondary>}</div>
       {err && <p className="text-[12px] text-bad">{err}</p>}

@@ -13,6 +13,7 @@ begin
   perform public.rate_company(rid, scores);
   reset role; return rid;
 end $$;
+grant execute on function pg_temp.review(uuid, text, jsonb) to public;  -- default-deny since migration 24
 
 select pg_temp.review('00000000-0000-0000-0000-00000000000a', 'redcon', '{"pay":2,"raises":3,"ontime":5,"overtime":2,"site":4}');
 select pg_temp.review('00000000-0000-0000-0000-00000000000a', 'redcon', '{"pay":1,"raises":1,"ontime":1,"overtime":1,"site":1}'); -- A again: only the latest counts
@@ -61,6 +62,7 @@ select ok(not (public.company_scorecard('redcon') -> 'factors' -> 'pay' ? 'avg')
 -- ================= raises =================
 create or replace function pg_temp.raise(uid uuid, pct numeric, kind text default 'annual') returns void language plpgsql as $$
 begin perform pg_temp.as_user(uid); insert into public.raise_reports (disc, track, pct, kind, month) values ('civil', 'tech', pct, kind, date_trunc('month', now() - interval '2 months')::date); reset role; end $$;
+grant execute on function pg_temp.raise(uuid, numeric, text) to public;  -- default-deny since migration 24
 select pg_temp.raise('00000000-0000-0000-0000-00000000000a', 10);
 select pg_temp.raise('00000000-0000-0000-0000-00000000000a', 25, 'promotion');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');

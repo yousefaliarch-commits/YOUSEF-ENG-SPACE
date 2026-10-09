@@ -1,10 +1,13 @@
 // End-to-end through src/backend/cloud.ts against a running local Supabase (npx supabase start), as real members.
 // Skipped unless the run has VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY: `npm run test:cloud` sets them from `supabase status`.
 import { beforeAll, describe, expect, it } from "vitest";
+import sharp from "sharp";
 
 const run = (import.meta as any).env.VITE_SUPABASE_URL && process.env.ENGSPACE_CLOUD_TEST === "1" ? describe : describe.skip;
-// a 1×1 JPEG
-const JPEG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=";
+// real photos, as a phone camera writes them (EXIF with GPS): the server must strip that before storing
+const EXIF = { IFD0: { Make: "PhoneCo", Model: "Camera 9" }, IFD3: { GPSLatitudeRef: "N", GPSLatitude: "30/1 2/1 0/1", GPSLongitudeRef: "E", GPSLongitude: "31/1 14/1 0/1" } };
+const photo = async (w: number, h: number) => "data:image/jpeg;base64," + (await sharp({ create: { width: w, height: h, channels: 3, background: { r: 90, g: 120, b: 150 } } }).jpeg({ quality: 70 }).withMetadata({ exif: EXIF } as any).toBuffer()).toString("base64");
+let JPEG = "", DOC = "";
 
 run("cloud backend (local Supabase)", () => {
   let cloud: any; const tag = Date.now().toString(36);
@@ -14,6 +17,7 @@ run("cloud backend (local Supabase)", () => {
 
   beforeAll(async () => {
     cloud = await import("../src/backend/cloud");
+    JPEG = await photo(640, 480); DOC = await photo(900, 600);
   });
 
   it("signs up two members; the profile comes from the form", async () => {
@@ -26,11 +30,23 @@ run("cloud backend (local Supabase)", () => {
   });
 
   it("posts anonymously with an image in Storage, not inline", async () => {
-    const p = await cloud.addPost({ room: "tech", type: "question", body: "سؤال تجريبي عن المرتبات", image: { src: JPEG, w: 1, h: 1, alt: "" } }, "anon");
+    const p = await cloud.addPost({ room: "tech", type: "question", body: "سؤال تجريبي عن المرتبات", image: { src: JPEG, w: 1, h: 1, alt: "", money: false } }, "anon");
     postId = p.id;
     expect(p.anon).toBe(anonA); expect(p.name).toBeUndefined(); expect(p.ref).toBe(`posts:${p.id}`);
-    expect(p.role).toContain("مهندس"); expect(p.image.src).toMatch(/\/storage\/v1\/object\/public\/media\//);
+    // a random name under p/, never the account id; the real size comes from the bytes; the stored file has no EXIF / GPS
+    expect(p.role).toContain("مهندس"); expect(p.image.src).toMatch(/\/storage\/v1\/object\/public\/media\/p\/[0-9a-f-]{36}\.jpg$/);
+    expect(p.image).toMatchObject({ w: 640, h: 480 });
+    const { supabase } = await import("../src/backend/client"); const { data: { user } } = await (await supabase()).auth.getUser();
+    expect(p.image.src.includes(user!.id)).toBe(false);
     const res = await fetch(p.image.src); expect(res.status).toBe(200);
+    const bytes = Buffer.from(await res.arrayBuffer()); expect(bytes.includes(Buffer.from("PhoneCo"))).toBe(false); expect(bytes.includes(Buffer.from("Exif"))).toBe(false);
+  });
+
+  it("nobody uploads into the public media bucket directly any more", async () => {
+    const { supabase } = await import("../src/backend/client"); const db = await supabase(); const { data: { user } } = await db.auth.getUser();
+    const r = await db.storage.from("media").upload(`${user!.id}/direct.jpg`, await (await fetch(JPEG)).blob(), { contentType: "image/jpeg" });
+    expect(r.error).toBeTruthy();
+    await expect(cloud.uploadMedia("post", "data:image/png;base64," + (await sharp({ create: { width: 64, height: 64, channels: 3, background: "#888" } }).png().toBuffer()).toString("base64"))).rejects.toThrow("صيغة الصورة غير مدعومة");
   });
 
   it("another member sees it, replies, reacts; counts exclude their own reaction", async () => {
@@ -81,7 +97,7 @@ run("cloud backend (local Supabase)", () => {
   });
 
   it("submits verification documents; withdrawing deletes them", async () => {
-    const ref = await cloud.submitVerification([{ kind: "card", src: JPEG }]); expect(ref).toMatch(/^V-/);
+    const ref = await cloud.submitVerification([{ kind: "card", src: DOC }]); expect(ref).toMatch(/^V-/);
     const { supabase } = await import("../src/backend/client"); const db = await supabase();
     const { data: { user } } = await db.auth.getUser();
     expect(((await db.storage.from("verification").list(user!.id)).data || []).length).toBe(1);
@@ -143,9 +159,9 @@ run("cloud backend (local Supabase)", () => {
   });
 
   it("support tickets: a member opens one with an image, reads it back; the member directory is refused to non-admins", async () => {
-    const id = await cloud.openTicket({ category: "technical", subject: "تجربة تذكرة", body: "رسالة اختبار للتذكرة من الاختبار الآلي", image: new Blob([new Uint8Array([0xff, 0xd8, 0xff, 0xd9])], { type: "image/jpeg" }) });
+    const id = await cloud.openTicket({ category: "technical", subject: "تجربة تذكرة", body: "رسالة اختبار للتذكرة من الاختبار الآلي", image: JPEG });
     const mine = await cloud.myTickets(); expect(mine.find((t: any) => t.id === id).status).toBe("open");
-    const msgs = await cloud.ticketMessages(id); expect(msgs[0].attachment).toMatch(/^[0-9a-f-]{36}\/.+\.jpg$/); expect(await cloud.supportFileUrl(msgs[0].attachment)).toMatch(/^http/);
+    const msgs = await cloud.ticketMessages(id); expect(msgs[0].attachment).toMatch(/^[0-9a-f-]{36}\/[0-9a-f-]{36}\.jpg$/); expect(await cloud.supportFileUrl(msgs[0].attachment)).toMatch(/^http/);
     await cloud.closeTicket(id); expect((await cloud.myTickets()).find((t: any) => t.id === id).status).toBe("closed");
     await expect(cloud.admin.directory()).rejects.toThrow("ليست لديك صلاحية");
   });
@@ -190,6 +206,9 @@ run("cloud backend (local Supabase)", () => {
     const img = (await cloud.loadAll()).posts.find((x: any) => x.id === postId).image; expect(img).toBeTruthy();
     await cloud.deletePost(postId);
     const after = await cloud.loadAll(); expect(after.posts.find((x: any) => x.id === postId)).toBeUndefined();
+    // the media janitor (pg_cron every 10 minutes; called here at once) deletes the file of a deleted post
+    const sweep = await fetch(`${(import.meta as any).env.VITE_SUPABASE_URL}/functions/v1/upload-media`, { method: "POST", headers: { "x-media-secret": process.env.ENGSPACE_MEDIA_SECRET || "" } });
+    expect(sweep.status).toBe(200); expect((await sweep.json()).removed).toBeGreaterThanOrEqual(1);
     expect((await fetch(img.src)).headers.get("content-type") || "").not.toMatch(/^image\//);
   });
 

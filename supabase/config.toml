@@ -430,3 +430,7 @@ verify_jwt = false
 
 [functions.send-push]
 verify_jwt = false
+
+# members call it with their JWT (checked inside the function); the media janitor calls it with a secret header
+[functions.upload-media]
+verify_jwt = false

@@ -35,3 +35,5 @@ begin
   perform set_config('request.jwt.claims', '{"role":"anon"}', true);
   execute 'set local role anon';
 end $$;
+-- functions are default-deny since migration 24, temporary helpers included: the switching roles may still call these two
+grant execute on function pg_temp.as_user(uuid), pg_temp.as_anon() to public;

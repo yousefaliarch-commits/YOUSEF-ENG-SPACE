@@ -10,6 +10,7 @@ import { loadPdf } from "../../lib/vendor";
 import { L2, L3, say, trIn, whenIn } from "../../i18n/i18n";
 import { loadPersona } from "../../lib/helpers";
 import { processImage } from "../../lib/media";
+import { blobToDataUrl, compressCanvas } from "../../lib/compress";
 import { reduced } from "../../lib/runtime";
 import { Chip, Num, Primary, Quiet, RoundButton, Secondary } from "../../ui/primitives";
 
@@ -59,11 +60,11 @@ export const credentialL2 = (role?: any, kind?: any) => (role === "supervisor" ?
 export const DEPT_AR = { civil: "الهندسة المدنية", architecture: "الهندسة المعمارية", mechanical: "هندسة القوى الميكانيكية", electrical: "هندسة القوى والآلات الكهربية", chemical: "الهندسة الكيميائية", mining: "هندسة التعدين والبترول", textile: "هندسة الغزل والنسيج" };
 
 
-// ---- one document → a re-encoded JPEG; a PDF → its first page, drawn on this device ----
+// ---- one document → re-encoded on this device (document profile: legibility first, ~250 KB); a PDF → its first page ----
 export async function prepDoc(file?: any) {
-  if (!file) throw new Error("decode"); if (file.size > 15e6) throw new Error("big");
+  if (!file) throw new Error("decode"); if (file.size > 25e6) throw new Error("big");
   const pdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name || "");
-  if (!pdf) { const im = await processImage(file, { max: 1600, quality: 0.85 }); if (Math.min(im.w, im.h) < 500) throw new Error("small"); return { src: im.src, w: im.w, h: im.h }; }
+  if (!pdf) { const im = await processImage(file, { profile: "document" }); if (Math.min(im.w, im.h) < 500) throw new Error("small"); return { src: im.src, w: im.w, h: im.h }; }
   let doc = null;
   try {
     const lib = await loadPdf();
@@ -71,7 +72,7 @@ export async function prepDoc(file?: any) {
     doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()), isEvalSupported: false }).promise; const page = await doc.getPage(1);
     const vp = page.getViewport({ scale: 1 }); const v2 = page.getViewport({ scale: Math.min(4, 1600 / Math.max(vp.width, vp.height)) });
     const c = document.createElement("canvas"); c.width = Math.round(v2.width); c.height = Math.round(v2.height); const x = c.getContext("2d"); x.fillStyle = "#ffffff"; x.fillRect(0, 0, c.width, c.height);
-    await page.render({ canvasContext: x, viewport: v2 }).promise; const out: any = { src: c.toDataURL("image/jpeg", 0.85), w: c.width, h: c.height, pdf: true }; c.width = 0; c.height = 0; return out;
+    await page.render({ canvasContext: x, viewport: v2 }).promise; const z = await compressCanvas(c, "document"); const out: any = { src: await blobToDataUrl(z.blob), w: z.w, h: z.h, pdf: true }; c.width = 0; c.height = 0; return out;
   } catch (e) { throw new Error(e && e.message === "big" ? "big" : "decode"); }
   finally { if (doc) { try { await doc.destroy(); } catch (e) {} } }
 }

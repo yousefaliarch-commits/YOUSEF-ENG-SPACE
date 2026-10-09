@@ -91,6 +91,16 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   every report carries the HR director's assessment (`result.hr`) and the regional block (`result.regional`). **Update notice**:
   Publish web update → broadcast → `broadcast_app_update()` (service role) → `update` notice → tap opens Home + `requestUpdate()` (docs/OTA.md).
 
+- Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
+  `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
+  `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role
+  changes once in 30 days after onboarding; jsonb size caps. **Every image goes through `upload-media`** (Edge Function, plain fetch,
+  logic in `_shared/media*.ts`) after the on-device pipeline `src/lib/compress.ts` (≤ 1600 px, WebP / JPEG, 150–250 KB, no metadata):
+  public files get random names (`p/`, `a/`), private ones stay in the owner's folder; members never write to Storage directly.
+  Post image paths live in `post_images`, handed out by `post_media()`; HR / owner / supervisor see an image only after staff review
+  it clean (Admin → مراجعة الصور). QA/QC items take up to 3 photos (12 per inspection; private bucket `inspections`), printed in the
+  report's photo appendix. Local: `npm run db:functions` serves the functions (`test:cloud` needs it).
+
 ## How the code is organised
 - `src/app/AppView.tsx` holds member-app state (one store, keys like posts/jobs/threads) and every handler; handlers update
   locally, then `sync(() => cloud.x())` in cloud mode. Demo mode (no `VITE_SUPABASE_*`) must keep working unchanged.
@@ -116,6 +126,7 @@ CI: check, database (pgTAP + cloud e2e on local Supabase), android (debug APK ar
   animates opacity/transform only and suppresses view transitions (`liveState().tourOn`).
 
 ## Conventions
-- Match the surrounding style: long single-line handlers, comments explaining *why*, Arabic product copy.
+- Match the surrounding style: comments explaining *why*, Arabic product copy. **New code is multi-line and readable** (approved by the
+  owner, Phase 2.1 adopts Biome and reformats the rest in one mechanical commit) — no more long single-line handlers.
 - Security-definer SQL functions: `set search_path = ''`, fully qualified names, explicit `grant execute ... to authenticated`.
 - Policies use `(select auth.uid())`; index every column a policy filters on.

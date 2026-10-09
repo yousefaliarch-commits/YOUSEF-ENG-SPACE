@@ -45,6 +45,8 @@ export type InspectionReport = {
   title: string; scope: string; category?: string; docNo: string; head: [string, string][]; rows: Row[]; general?: string;
   verdict: string; verdictLabel: string; counts: { pass: number; fail: number; na: number; open: number; total: number };
   names?: { contractor?: string; consultant?: string; inspector?: string };
+  // site photos attached to items: an appendix after the signatures, each captioned with its item number, text and result
+  photos?: { n: number; caption: string; mark: string; image: CanvasImageSource; w: number; h: number }[];
 };
 const C = { brand: "#5B4BC9", brandDark: "#3F33A0", wash: "#F3F1FF", ink: "#18181B", body: "#3F3F46", muted: "#71717A", faint: "#A1A1AA", line: "#E4E4E7", zebra: "#FAFAFA", pass: "#15803D", fail: "#B91C1C", na: "#71717A", amber: "#B45309" };
 const MARK: Record<string, [string, string, string]> = { pass: ["مطابق", C.pass, "#DCFCE7"], fail: ["غير مطابق", C.fail, "#FEE2E2"], na: ["لا ينطبق", C.na, "#F4F4F5"], "": ["—", C.faint, "#FFFFFF"] };
@@ -152,6 +154,22 @@ export async function inspectionPdf(r: InspectionReport) {
     ctx.fillStyle = C.muted; font(400, 16); text(tr("التوقيع:"), off + 18, y + 104); text(tr("التاريخ:"), off + 18, y + 150);
     ctx.strokeStyle = C.faint; ctx.lineWidth = 1.5; for (const yy of [y + 128, y + 174]) { ctx.beginPath(); ctx.moveTo(X(off + 90), yy); ctx.lineTo(X(off + sw - 18), yy); ctx.stroke(); } });
   y += 190 + 24; ctx.fillStyle = C.faint; font(400, 15); text(tr("قائمة استرشادية — المرجع هو اللوحات والمواصفات المعتمدة للمشروع والكود المتبع."), 0, y);
+  // appendix: the photos, two per row, each fitted inside its frame (never cropped: it is evidence)
+  if (r.photos && r.photos.length) {
+    y += 50; const gap = 24, tw = (W - gap) / 2, ih = 330, th = ih + 84;
+    need(60 + th); ctx.fillStyle = C.ink; font(600, 21); text(tr("ملحق الصور — توثيق البنود"), 0, y); y += 44;
+    r.photos.forEach((ph, i) => {
+      const col = i % 2; if (col === 0) need(th + gap); const off = col * (tw + gap);
+      box(off, tw, y, th, "#fff", C.line, 12);
+      const k = Math.min((tw - 24) / ph.w, ih / ph.h); const dw = ph.w * k, dh = ph.h * k;
+      try { ctx.drawImage(ph.image, L(off + 12, tw - 24) + (tw - 24 - dw) / 2, y + 12 + (ih - dh) / 2, dw, dh); } catch (e) { /* an image that failed to load leaves its frame empty */ }
+      const [label, mc] = MARK[ph.mark || ""] || MARK[""];
+      ctx.fillStyle = C.ink; font(500, 17); const cap = wrap(ctx, `${ph.n}. ${ph.caption}`, tw - 150)[0];
+      text(cap.length < `${ph.n}. ${ph.caption}`.length ? cap + "…" : cap, off + 16, y + ih + 30);
+      ctx.fillStyle = mc; font(600, 16); text(tr(label), off + tw - 16, y + ih + 30, "end");
+      if (col === 1 || i === r.photos!.length - 1) y += th + gap;
+    });
+  }
   // every page: a quiet footer with the platform line and «page x of y»
   const total = canvases.length;
   canvases.forEach((cv, i) => {

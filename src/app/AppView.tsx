@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import {
   CircleCheck, LockKeyhole, ShieldAlert
 } from "lucide-react";
-import { loadInspections, loadTemplates, mergeInspections, mergeTemplates, storeInspections, storeTemplates } from "../data/checklists";
+import { loadInspections, loadTemplates, mergeInspections, mergeTemplates, photoPaths, storeInspections, storeTemplates } from "../data/checklists";
 import { SupportScreen, TicketScreen } from "../features/support/support";
 import { loadDevice, storeDevice } from "../lib/device-store";
 import { ROOMS, company } from "../data/companies";
@@ -399,7 +399,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     salaryRev,
     shares,
     salaryLog: salaryLog.log || [], saveSalaryLog: (log?: any) => setSalaryLog({ at: Date.now(), log: [...log].sort((a, b) => (a.month < b.month ? -1 : 1)).slice(-60) }),
-    inspections, saveInspection: (x?: any) => setInspections((l) => [x, ...l.filter((i) => i.id !== x.id)].slice(0, 100)), deleteInspection: (id?: any) => setInspections((l) => l.filter((i) => i.id !== id)),
+    inspections, saveInspection: (x?: any) => setInspections((l) => [x, ...l.filter((i) => i.id !== x.id)].slice(0, 100)), deleteInspection: (id?: any) => { const paths = photoPaths(inspections.find((i) => i.id === id)); if (paths.length) sync(() => cloud.removeMedia(paths)); setInspections((l) => l.filter((i) => i.id !== id)); },
     qcTemplates: qcTemplates.filter((t) => !t.deleted), qcTemplatesAll: qcTemplates,
     saveTemplate: (t?: any) => setQcTemplates((l) => [{ ...t, at: Date.now() }, ...l.filter((x) => x.id !== t.id)].slice(0, 60)),
     deleteTemplate: (id?: any) => setQcTemplates((l) => [{ id, deleted: true, at: Date.now() } as any, ...l.filter((x) => x.id !== id)]),
@@ -496,8 +496,13 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     signOut: (already?: any) => { if (!already) sync(() => (CLOUD ? dropPush().catch(() => {}) : Promise.resolve()).then(() => cloud.signOut())); setSession(false); liveState().noDemo = true; setSheet(null); setStack([]); setEditing(false); setWelcome(false); setTabRaw("home"); setAuthView(loadAccount() ? "signin" : "signup"); setPersona(null); },
     deleteAccount: () => { if (CLOUD && persona) { cloud.deleteAccount().then(() => { savePersona(null); setSession(false); liveState().noDemo = true; store.reset(); }, (e) => setMsg(e.message)); return; } dropOwnRequest(); saveAccount(null); savePersona(null); setSession(false); liveState().noDemo = true; store.reset(); },
     editPersona: () => { setStack([]); setSheet(null); setEditing(true); }, cancelEdit: () => setEditing(false),
-    saveProfile: (p0?: any) => { const p = profile.pending && !p0.pending ? { ...p0, verifyReq: purgeOwn("withdrawn", false) } : p0; const roleChanged = threadsKind(p) !== threadsKind(profile); if (hasSession()) savePersona(p); setPersona(p); setProfileRaw((s) => ({ ...s, ...p })); if (roleChanged) setThreads(threadsFor(p)); setEditing(false); setMsg("حُفظت بياناتك"); sync(() => cloud.saveProfile(p), (srv) => srv && setProfileRaw((s) => ({ ...s, ...srv }))); },
-    updateProfile: (patch?: any) => { updateProfile(patch); if (Object.keys(profilePatch(patch)).length) sync(() => cloud.saveProfile(patch)); }, savePersonaNow: updateProfile, setIdentity: (as?: any) => { updateProfile({ identity: as === "public" ? "public" : "anon" }); sync(() => cloud.saveProfile({ identity: as === "public" ? "public" : "anon" })); },
+    saveProfile: (p0?: any) => { const p = profile.pending && !p0.pending ? { ...p0, verifyReq: purgeOwn("withdrawn", false) } : p0; const roleChanged = threadsKind(p) !== threadsKind(profile); if (hasSession()) savePersona(p); setPersona(p); setProfileRaw((s) => ({ ...s, ...p })); if (roleChanged) setThreads(threadsFor(p)); setEditing(false); setMsg("حُفظت بياناتك"); sync(() => cloud.saveProfile(p), (srv) => srv && setProfileRaw((s) => ({ ...s, ...srv }))); if (p.photo !== profile.photo && !(p.photo && /^https?:/.test(p.photo))) sync(() => cloud.setAvatar(p.photo || null), (url) => url && updateProfile({ photo: url })); },
+    updateProfile: (patch?: any) => {
+      updateProfile(patch);
+      if (Object.keys(profilePatch(patch)).length) sync(() => cloud.saveProfile(patch));
+      // a new or removed profile photo: uploaded as an avatar through upload-media (the preview stays until the URL comes back)
+      if ("photo" in patch && !(patch.photo && /^https?:/.test(patch.photo))) sync(() => cloud.setAvatar(patch.photo || null), (url) => url && updateProfile({ photo: url }));
+    }, savePersonaNow: updateProfile, setIdentity: (as?: any) => { updateProfile({ identity: as === "public" ? "public" : "anon" }); sync(() => cloud.saveProfile({ identity: as === "public" ? "public" : "anon" })); },
     // ---- optional verification: the documents go to the admin review queue; the member only ever sees plain states ----
     verifs,
     submitVerification: (docs?: any) => {

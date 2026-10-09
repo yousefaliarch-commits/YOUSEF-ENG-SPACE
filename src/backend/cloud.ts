@@ -5,7 +5,7 @@
 //  Errors come back as Error objects whose message is ready to show (Arabic; the i18n layer translates it).
 // =====================================================================
 import { Capacitor } from "@capacitor/core";
-import { AUTH_REDIRECT_NATIVE, SUPABASE_KEY, SUPABASE_URL } from "./config";
+import { AUTH_REDIRECT_NATIVE, SUPABASE_KEY, SUPABASE_URL, mediaUrl } from "./config";
 import { supabase } from "./client";
 import {
   ballotOf, choiceOf, commentTree, jobOf, jobRow, notifOf, personaFromProfile, postOf, postRow, profilePatch, reviewOf, reviewRow,
@@ -23,6 +23,10 @@ export function friendly(e: any): Error {
     : /Email not confirmed/i.test(m) ? "أكّد بريدك أولًا — أرسلنا لك رابط التأكيد"
     : /User already registered|already been registered/i.test(m) ? "هذا البريد مسجّل بالفعل — سجّل الدخول"
     : /Password should be|weak password/i.test(m) ? "كلمة المرور ضعيفة — اختر كلمة أقوى"
+    : /rate limited/i.test(m) ? "أرسلت كثيرًا في وقت قصير — انتظر قليلًا ثم أعد المحاولة"
+    : /role change cooldown/i.test(m) ? "يمكن تغيير نوع الحساب مرة واحدة كل 30 يومًا"
+    : /onboarding is complete/i.test(m) ? "اكتمل إعداد حسابك بالفعل"
+    : /too many state keys/i.test(m) ? "بيانات المزامنة على هذا الحساب كثيرة — تواصل مع فريق EngSpace"
     : /rate limit|too many/i.test(m) || code === 429 ? "محاولات كثيرة — انتظر دقيقة ثم أعد المحاولة"
     : /post is hidden/i.test(m) ? "أُخفي هذا المنشور من الإدارة — لا يمكن تعديله"
     : /account suspended/i.test(m) ? "حسابك موقوف مؤقتًا — لا يمكنك التعديل الآن"
@@ -60,6 +64,8 @@ export async function signUp(email: string, password: string, persona: any) {
   if (r.error) throw friendly(r.error);
   // projects that require e-mail confirmation return a user without a session
   if (!r.data.session) return { persona: null, confirm: true };
+  // a photo chosen on the sign-up form goes up as the avatar (best effort: the account exists either way)
+  if (persona && typeof persona.photo === "string" && persona.photo.startsWith("data:")) await setAvatar(persona.photo).catch(() => {});
   return { persona: await myProfile(), confirm: false };
 }
 
@@ -165,6 +171,14 @@ export async function onAuthChange(cb: (signedIn: boolean) => void) {
   return () => data.subscription.unsubscribe();
 }
 
+// a profile photo: uploaded as an avatar (square, small, random name) and set on the profile; null removes it
+export async function setAvatar(image: Blob | string | null): Promise<string> {
+  const db = await supabase(); const { data: { user } } = await db.auth.getUser(); if (!user) throw friendly("not signed in");
+  const path = image ? (await uploadMedia("avatar", image)).path : null;
+  ok(await db.from("profiles").update({ photo_path: path }).eq("id", user.id));
+  return path ? mediaUrl(path) : "";
+}
+
 export async function saveProfile(persona: any) {
   const db = await supabase(); const { data: { user } } = await db.auth.getUser(); if (!user) throw friendly("not signed in");
   ok(await db.from("profiles").update(profilePatch(persona)).eq("id", user.id));
@@ -207,6 +221,7 @@ export async function loadAll() {
   const reviewsOut: Record<string, any[]> = {}; for (const r of reviews.data || []) (reviewsOut[r.company_id] = reviewsOut[r.company_id] || []).push(reviewOf(r, now));
   const st: Record<string, any> = {}; for (const r of state.data || []) st[r.key] = r.value;
   const contacted: Record<string, boolean> = { ...(st.contacted || {}) }; for (const c of contacts.data || []) contacted[c.job_id] = true;
+  await withMedia(db, outPosts);
   return {
     posts: outPosts, reacts: reactsOut, votes, voteAs,
     jobs: (jobs.data || []).map((j: any) => jobOf(j, now)),
@@ -220,28 +235,79 @@ export async function loadAll() {
   };
 }
 
-// ---------------------------------------------------------------- writing
-async function upload(bucket: string, blob: Blob, ext = "jpg") {
-  const db = await supabase(); const { data: { user } } = await db.auth.getUser(); if (!user) throw friendly("not signed in");
-  const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
-  ok(await db.storage.from(bucket).upload(path, blob, { contentType: blob.type || "image/jpeg", upsert: false }));
-  return path;
+// ---------------------------------------------------------------- media (Phase 1.3)
+// Every image goes through the upload-media Edge Function: it re-checks type, size and dimensions, strips metadata and stores
+// the file under a random name (public images) or in the member's private folder (support, verification, inspections).
+// The app has already compressed it on the device (src/lib/compress.ts). Nothing writes to Storage directly any more.
+export type MediaKind = "post" | "avatar" | "support" | "verification" | "inspection";
+export type Uploaded = { path: string; bucket: string; w: number; h: number; bytes: number; mime: string };
+const MEDIA_ERRORS: Record<string, string> = {
+  too_big: "الصورة أكبر من المسموح حتى بعد ضغطها — اختر صورة أصغر",
+  unsupported: "صيغة الصورة غير مدعومة — استخدم JPG أو PNG أو WebP",
+  dimensions: "أبعاد الصورة غير مناسبة — اختر صورة أخرى",
+  rate_limited: "رفعت صورًا كثيرة في وقت قصير — انتظر قليلًا ثم أعد المحاولة",
+  quota: "امتلأت مساحة الصور المخصصة لحسابك — احذف بعض صور الفحص القديمة",
+  auth: "انتهت جلستك — سجّل الدخول مرة أخرى",
+};
+const toBlob = async (x: Blob | string) => (typeof x === "string" ? (await fetch(x)).blob() : x);
+
+export async function uploadMedia(kind: MediaKind, image: Blob | string): Promise<Uploaded> {
+  const db = await supabase(); const { data: { session } } = await db.auth.getSession(); if (!session) throw friendly("not signed in");
+  const blob = await toBlob(image); const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 45_000);
+  try {
+    const r = await fetch(`${SUPABASE_URL}/functions/v1/upload-media`, {
+      method: "POST", body: blob, signal: ctl.signal,
+      headers: { authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY, "x-media-kind": kind, "content-type": blob.type || "application/octet-stream" },
+    });
+    const body: any = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(MEDIA_ERRORS[body.error] || "تعذّر رفع الصورة — أعد المحاولة");
+    return body as Uploaded;
+  } catch (e: any) { throw e && e.name === "AbortError" ? new Error("انتهت مهلة رفع الصورة — تحقّق من الاتصال") : e instanceof Error && !/fetch/i.test(e.message) ? e : friendly(e); }
+  finally { clearTimeout(t); }
 }
-const dataUrlBlob = async (src: string) => (await fetch(src)).blob();
+
+// remove the member's own inspection photos (or an upload never used); the server checks ownership
+export async function removeMedia(paths: string[]) {
+  if (!paths.length) return; const db = await supabase(); const { data: { session } } = await db.auth.getSession(); if (!session) return;
+  await fetch(`${SUPABASE_URL}/functions/v1/upload-media`, { method: "POST", body: JSON.stringify({ paths }),
+    headers: { authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY, "x-media-action": "remove", "content-type": "application/json" } }).catch(() => {});
+}
+
+// an inspection photo (private bucket, owner only): a short-lived signed link
+export async function inspectionPhotoUrl(path: string) { const db = await supabase(); const r: any = ok(await db.storage.from("inspections").createSignedUrl(path, 3600)); return r.signedUrl as string; }
+
+// image paths for posts: the server hands a path only to those allowed to see it (HR / owner / supervisors: after staff review)
+async function withMedia(db: any, posts: any[]) {
+  const ids = posts.filter((p) => p.image && !p.image.src).map((p) => p.id); if (!ids.length) return posts;
+  const byId: Record<string, any> = {};
+  for (let i = 0; i < ids.length; i += 200) {
+    const r = await db.rpc("post_media", { p_ids: ids.slice(i, i + 200) });
+    if (r.error) continue;   // a failure shows «being prepared», never someone else's choice
+    for (const m of r.data || []) byId[m.post_id] = m;
+  }
+  for (const p of posts) if (p.image && !p.image.src) { const m = byId[p.id]; p.image = { ...p.image, state: m ? m.state : "moving", ...(m && m.path ? { src: mediaUrl(m.path), path: m.path } : {}) }; }
+  return posts;
+}
+
+// ---------------------------------------------------------------- writing
 
 export async function addPost(post: any, as: string) {
-  const db = await supabase(); const row: any = postRow(post, as);
-  if (post.image && post.image.src && post.image.src.startsWith("data:")) {
-    const path = await upload("media", await dataUrlBlob(post.image.src));
-    row.data.image = { ...post.image, src: db.storage.from("media").getPublicUrl(path).data.publicUrl, path };
+  const db = await supabase(); const row: any = postRow(post, as); let up: Uploaded | null = null;
+  if (post.image && (post.image.blob || (post.image.src && post.image.src.startsWith("data:")))) {
+    up = await uploadMedia("post", post.image.blob || post.image.src);
+    // the server keeps geometry only and files the path where only allowed viewers get it
+    row.data.image = { path: up.path, tone: post.image.tone, alt: post.image.alt || "", money: post.image.money ?? null };
   }
   const r: any = ok(await db.from("posts").insert(row).select("*").single());
-  return postOf(r, []);
+  const out = postOf(r, []);
+  if (up && out.image) out.image = { ...out.image, src: mediaUrl(up.path), path: up.path, state: "shown" };
+  return out;
 }
 
 // the author's own post: edit the text (the server counts real changes) / delete it for good (replies, reactions, authorship go too)
 export async function editPost(id: string, body: string) { const db = await supabase(); const r: any = ok(await db.rpc("edit_my_post", { p_post: id, p_body: body })); return { body: r.body as string, edits: (r.edit_count || 0) as number, editedAt: r.edited_at ? Date.parse(r.edited_at) : null }; }
-export async function deletePost(id: string) { const db = await supabase(); const r: any = ok(await db.rpc("delete_my_post", { p_post: id })); if (r && r.image) await db.storage.from("media").remove([r.image]).catch(() => {}); }
+// the image goes with the post on the server (post_images cascades); the media janitor deletes the file within 10 minutes
+export async function deletePost(id: string) { const db = await supabase(); ok(await db.rpc("delete_my_post", { p_post: id })); }
 
 export async function addComment(postId: string, c: any, parentId: string | null, as: string) {
   const db = await supabase();
@@ -297,15 +363,15 @@ export async function addReview(companyId: string, r: any) {
 // ---- support tickets (the member's side): their own tickets only, by RLS; an optional image goes to their own folder ----
 export async function myTickets() { const db = await supabase(); return (ok(await db.from("support_tickets").select("id,ref,category,subject,status,created_at,updated_at").order("updated_at", { ascending: false })) as any[]) || []; }
 export async function ticketMessages(id: string) { const db = await supabase(); return (ok(await db.from("ticket_messages").select("id,from_staff,body,attachment,created_at").eq("ticket_id", id).order("created_at")) as any[]) || []; }
-async function uploadSupportImage(file: Blob | null) {
-  if (!file) return null; const db = await supabase(); const { data: { user } } = await db.auth.getUser(); if (!user) throw friendly("not signed in");
-  const path = `${user.id}/${Date.now().toString(36)}.jpg`; ok(await db.storage.from("support").upload(path, file, { contentType: "image/jpeg" })); return path;
+async function uploadSupportImage(file: Blob | string | null) {
+  if (!file) return null;
+  return (await uploadMedia("support", file)).path;   // <member>/<random>.webp in the private support bucket
 }
-export async function openTicket(t: { category: string; subject: string; body: string; image?: Blob | null }) {
+export async function openTicket(t: { category: string; subject: string; body: string; image?: Blob | string | null }) {
   const db = await supabase(); const att = await uploadSupportImage(t.image || null);
   return ok(await db.rpc("open_ticket", { p_category: t.category, p_subject: t.subject, p_body: t.body, p_attachment: att })) as string;
 }
-export async function replyTicket(id: string, body: string, image: Blob | null = null) { const db = await supabase(); const att = await uploadSupportImage(image); ok(await db.rpc("reply_ticket", { p_ticket: id, p_body: body, p_attachment: att })); }
+export async function replyTicket(id: string, body: string, image: Blob | string | null = null) { const db = await supabase(); const att = await uploadSupportImage(image); ok(await db.rpc("reply_ticket", { p_ticket: id, p_body: body, p_attachment: att })); }
 export async function closeTicket(id: string) { const db = await supabase(); ok(await db.rpc("close_my_ticket", { p_ticket: id })); }
 export async function supportFileUrl(path: string) { const db = await supabase(); const r: any = ok(await db.storage.from("support").createSignedUrl(path, 600)); return r.signedUrl as string; }
 
@@ -388,7 +454,9 @@ export async function postById(id: string) {
   if (!p.data) return null;
   const myReacts: Record<string, any> = {}; for (const r of reacts.data || []) myReacts[r.item_id] = r;
   const b = (ballots.data || [])[0];
-  return postOf(p.data, commentTree(c.data || [], myReacts, now), { reacts: myReacts[id], ballot: b ? b.choice : null }, now);
+  const out = postOf(p.data, commentTree(c.data || [], myReacts, now), { reacts: myReacts[id], ballot: b ? b.choice : null }, now);
+  await withMedia(db, [out]);
+  return out;
 }
 
 // Realtime: the member's own private channel (messages, notifications, «profile» — their verification, role, strikes changed), the
@@ -412,7 +480,7 @@ export async function subscribeLive(onEvent: (event: string, payload: any) => vo
 export async function submitVerification(docs: { kind: string; src: string }[]) {
   const paths: string[] = [];
   try {
-    for (const d of docs) paths.push(await upload("verification", await dataUrlBlob(d.src)));
+    for (const d of docs) paths.push((await uploadMedia("verification", d.src)).path);
     const db = await supabase();
     return ok(await db.rpc("submit_verification", { p_kinds: docs.map((d) => d.kind), p_paths: paths })) as string;
   } catch (e) { await removeDocs(paths); throw e; }
@@ -436,6 +504,9 @@ export const admin = {
   async decide(kind: string, id: string, d: { accept: boolean; hide?: boolean; warn?: string | null; suspendDays?: number | null; note?: string }) {
     const db = await supabase(); ok(await db.rpc("decide_case", { p_kind: kind, p_item: id, p_accept: d.accept, p_hide: d.hide !== false, p_warn: d.warn || null, p_suspend_days: d.suspendDays ?? null, p_note: d.note || null }));
   },
+  // images waiting for review (HR / owner / supervisor accounts see an image only after it is reviewed clean)
+  async imageQueue() { const db = await supabase(); const rows = (ok(await db.rpc("staff_image_queue", { p_limit: 50 })) as any[]) || []; return rows.map((r) => ({ ...r, src: mediaUrl(r.path) })); },
+  async reviewImage(postId: string, verdict: "clean" | "money") { const db = await supabase(); ok(await db.rpc("staff_review_image", { p_post: postId, p_verdict: verdict })); },
   async reopen(kind: string, id: string) { const db = await supabase(); ok(await db.rpc("reopen_case", { p_kind: kind, p_item: id })); },
   async accounts(search: string | null = null) { const db = await supabase(); return (ok(await db.rpc("admin_accounts", { p_search: search })) as any[]) || []; },
   async setStaff(ref: string, staff: "member" | "moderator" | "admin") { const db = await supabase(); ok(await db.rpc("admin_set_staff", { p_ref: ref, p_staff: staff })); },
