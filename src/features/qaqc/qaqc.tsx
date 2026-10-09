@@ -153,6 +153,7 @@ function Inspection({ app, id }: any) {
     return t ? newInspection(t, app.profile && app.profile.name) : null;
   });
   const [busy, setBusy] = useState(false); const [focusId, setFocusId] = useState<any>(null); const [noteOpen, setNoteOpen] = useState<any>({}); const [shooting, setShooting] = useState<string | null>(null);
+  const [confirmDel, setConfirmDel] = useState(false);   // deleting an inspection always asks first
   // the photo picker (camera / gallery chooser in the phone apps) — hooks before the early return below; the item it serves is
   // read when the photo arrives, which may be minutes later (the camera app)
   const [shootKey, setShootKey] = useState<string | null>(null); const onShot = useRef<any>(null);
@@ -244,7 +245,18 @@ function Inspection({ app, id }: any) {
         <div className="mt-3 flex gap-1.5 flex-wrap">{Object.entries(VERDICT).map(([k, l]) => <FilterChip key={k} on={x.verdict === k} onClick={() => up({ verdict: x.verdict === k ? "" : k })}>{l}{c.suggested === k && x.verdict !== k ? " ← مقترح" : ""}</FilterChip>)}</div>
       </Panel>
       <div className="flex gap-2"><Primary data-qc-export onClick={exportPdf} disabled={busy} className="flex-1 h-12 press"><FileDown size={16} /> {busy ? "جارٍ إنشاء التقرير…" : "تصدير تقرير PDF"}</Primary>
-        <Secondary onClick={() => { app.deleteInspection(x.id); app.pop(); }} aria-label="حذف الفحص" className="h-12 px-4 text-bad"><Trash2 size={16} /></Secondary></div>
+        <Secondary onClick={() => setConfirmDel(true)} aria-label="حذف الفحص" className="h-12 px-4 text-bad"><Trash2 size={16} /></Secondary></div>
+      {confirmDel && (
+        <div role="alertdialog" aria-label="تأكيد حذف الفحص">
+          <Panel className="p-3.5 border-bad/30">
+            <p className="text-[12.5px] text-ink-2">يُحذف الفحص وصوره نهائيًا من حسابك. التقارير التي صدّرتها من قبل تبقى معك.</p>
+            <div className="mt-2.5 flex gap-2">
+              <Primary onClick={() => { app.deleteInspection(x.id); app.toast("حُذف الفحص"); app.pop(); }} className="flex-1 h-10 !bg-bad !text-white"><Trash2 size={14} /> احذف الفحص</Primary>
+              <Secondary onClick={() => setConfirmDel(false)} className="h-10 px-4">إلغاء</Secondary>
+            </div>
+          </Panel>
+        </div>
+      )}
     </div>
   );
 }
