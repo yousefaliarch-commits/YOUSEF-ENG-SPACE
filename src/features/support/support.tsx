@@ -34,7 +34,7 @@ function useTickets(app?: any) {
 }
 
 function ImagePick({ img, setImg, app }: any) {
-  const [input, pick] = useImagePicker(async (f?: any) => { try { setImg(await processImage(f)); } catch (e) { app.toast(imageError(e)); } });
+  const [input, pick] = useImagePicker(async (f?: any) => { try { setImg(await processImage(f)); } catch (e) { app.toast(imageError(e)); } }, { title: "إرفاق صورة" });
   return (<>{input}{img ? <div className="relative inline-block"><img src={img.src} alt="" className="h-20 rounded-xl border border-line" /><button type="button" aria-label="إزالة الصورة" onClick={() => setImg(null)} className="absolute -top-2 -end-2 grid place-items-center w-6 h-6 rounded-full bg-elevated border border-line-2"><X size={12} /></button></div>
     : <Secondary onClick={pick} className="h-10 px-3 text-[12.5px] press"><ImagePlus size={15} /> إرفاق صورة (اختياري)</Secondary>}</>);
 }

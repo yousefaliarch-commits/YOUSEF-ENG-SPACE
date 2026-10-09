@@ -19,6 +19,8 @@ Settings → **التحديثات الفورية** shows which bundle runs (buil
 - **Native line**: `ota.config.json → nativeLine`. The shell's versionName is `<nativeLine>.<build>`; a bundle is installed only if its
   `nativeLine` equals the shell's. **Bump `nativeLine` whenever a change needs a new shell** (a Capacitor plugin, AndroidManifest,
   Info.plist, google-services, MainActivity / AppDelegate …) and ship a new APK / IPA; older shells then ignore the new bundles.
+  Line history: **1** — the first shells (v0.1.11 …); **2** — v0.27.0: the camera plugin, CAMERA permission / `<queries>`, iOS privacy texts,
+  the renderer-loss handler in `MainActivity` (docs/SECURITY.md → Taking photos). Line-1 phones need the new APK / IPA once.
 - **Newer only**: `manifest.build` (seconds, the build time) must be greater than the running bundle's `__BUILD__.ts`.
 - **Integrity**: the plugin verifies the downloaded zip against `sha256` and refuses a mismatch; the publish script re-checks that the
   public URL serves exactly the hashed bytes. (Manifest signing is not enabled — HTTPS + our bucket + the hash are the chain for now.)

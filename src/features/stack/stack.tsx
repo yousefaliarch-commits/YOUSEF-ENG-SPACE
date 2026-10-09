@@ -274,7 +274,7 @@ export function ChatScreen({ app, id }: any) {
 // the written privacy policy, sign-out and permanent deletion.
 export function ProfileScreen({ app }: any) {
   const p = app.profile; const lv = repLevel(app.pts); const mySpec = specOfPersona(p); const [confirmDel, setConfirmDel] = useState(false); const [photoErr, setPhotoErr] = useState<any>("");
-  const [photoInput, pickPhoto] = useImagePicker(async (file) => { try { const im = await processImage(file, { square: true, size: 256 }); app.updateProfile({ photo: im.src }); setPhotoErr(""); app.toast("حُدّثت صورة حسابك — تظهر في مشاركاتك العلنية فقط"); } catch (e) { setPhotoErr(imageError(e)); } });
+  const [photoInput, pickPhoto] = useImagePicker(async (file) => { try { const im = await processImage(file, { square: true, size: 256 }); app.updateProfile({ photo: im.src }); setPhotoErr(""); app.toast("حُدّثت صورة حسابك — تظهر في مشاركاتك العلنية فقط"); } catch (e) { setPhotoErr(imageError(e)); } }, { title: "صورة الحساب" });
   const pubA = authorOf(p, "public", lv.i), anonA = authorOf(p, "anon", lv.i); const persist = (patch?: any) => app.updateProfile(patch);
   const savedJobs = Object.keys(app.saved).filter((k) => k.startsWith("job:") && app.saved[k]).length; const mine = app.posts.filter((x) => x.mine); const myReplies = app.posts.flatMap((x) => flatten(x.comments).filter((c) => c.mine));
   const count = (list?: any, as?: any) => list.filter((x) => (x.as === "public") === (as === "public")).length;

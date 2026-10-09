@@ -180,9 +180,10 @@ run("cloud backend (local Supabase)", () => {
     const out = JSON.parse(execFileSync("node", ["scripts/ota/publish.mjs"], { env: { ...process.env, SUPABASE_URL: env.VITE_SUPABASE_URL, SERVICE_KEY: service, CHANNEL: "citest", BUILD_TS: ts, DIST: dist, NOTES: "اختبار" }, encoding: "utf8" }).trim());
     // what a phone sees: the public manifest (no key), validated by the app's own parser, and a bundle that matches its hash
     const m = parseManifest(await (await fetch(`${env.VITE_SUPABASE_URL}/storage/v1/object/public/app-updates/citest/manifest.json`)).json(), env.VITE_SUPABASE_URL);
-    expect(m).toMatchObject({ version: out.version, build: Number(ts), nativeLine: 1, notes: "اختبار" });
+    const { default: ota } = await import("../ota.config.json");
+    expect(m).toMatchObject({ version: out.version, build: Number(ts), nativeLine: ota.nativeLine, notes: "اختبار" });
     const zip = Buffer.from(await (await fetch(m!.url)).arrayBuffer()); expect(createHash("sha256").update(zip).digest("hex")).toBe(m!.sha256);
-    expect(decide(m!, { runningBuild: Number(ts) - 10, nativeVersion: "1.77", badVersions: [] })).toEqual({ go: true });
+    expect(decide(m!, { runningBuild: Number(ts) - 10, nativeVersion: `${ota.nativeLine}.77`, badVersions: [] })).toEqual({ go: true });
     // no client role may write to the bucket
     const anon = await fetch(`${env.VITE_SUPABASE_URL}/storage/v1/object/app-updates/citest/evil.zip`, { method: "POST", headers: { apikey: env.VITE_SUPABASE_PUBLISHABLE_KEY, authorization: `Bearer ${env.VITE_SUPABASE_PUBLISHABLE_KEY}`, "content-type": "application/zip" }, body: "x" });
     expect(anon.ok).toBe(false);

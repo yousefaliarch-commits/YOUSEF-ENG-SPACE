@@ -5,7 +5,7 @@
 //  note where needed, set the verdict, export a signed-off A4 PDF. Inspections and the member's own checklists are saved on this
 //  device at once (sites often have no signal) and, on the live platform, synced to the member's own private storage.
 // =====================================================================
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Camera, ClipboardCheck, ClipboardList, Copy, FileDown, ListPlus, LoaderCircle, Pencil, Plus, StickyNote, Trash2, X } from "lucide-react";
 import { CATEGORIES, PHOTO_LIMITS, RESULT, TEMPLATES, VERDICT, categoryOf, cleanTemplate, customKey, isUserTemplate, itemCount, newCustom, newInspection, newTemplate, photoCount, resolveTemplate, tally, templateError } from "../../data/checklists";
 import type { QcPhoto } from "../../data/checklists";
@@ -153,6 +153,13 @@ function Inspection({ app, id }: any) {
     return t ? newInspection(t, app.profile && app.profile.name) : null;
   });
   const [busy, setBusy] = useState(false); const [focusId, setFocusId] = useState<any>(null); const [noteOpen, setNoteOpen] = useState<any>({}); const [shooting, setShooting] = useState<string | null>(null);
+  // the photo picker (camera / gallery chooser in the phone apps) — hooks before the early return below; the item it serves is
+  // read when the photo arrives, which may be minutes later (the camera app)
+  const [shootKey, setShootKey] = useState<string | null>(null); const onShot = useRef<any>(null);
+  // the latest inspection, for a photo that finishes after other edits (never save from inside a state updater: that would
+  // update AppView while this screen renders)
+  const latest = useRef<any>(x); latest.current = x;
+  const [photoInput, pickPhoto] = useImagePicker((f: Blob) => { if (onShot.current) onShot.current(f); }, { title: "صورة للبند" });
   if (!x) return <Empty icon={ClipboardCheck} title="القائمة غير موجودة" body="ربما حُذفت من جهاز آخر." action="رجوع" onAction={app.pop} />;
   const t = resolveTemplate(x, mine); const user = isUserTemplate(t); const custom = x.custom || []; const c = tally(t, x.marks, custom);
   // every change is saved at once (a dropped signal or a closed app never loses a half-filled inspection)
@@ -168,7 +175,8 @@ function Inspection({ app, id }: any) {
       let ph: QcPhoto;
       if (isCloud()) { const u = await cloud.uploadMedia("inspection", im.blob); previews.set(u.path, im.src); ph = { id, path: u.path, w: u.w, h: u.h }; }
       else ph = { id, src: im.src, w: im.w, h: im.h };
-      setX((cur: any) => { const n = { ...cur, photos: { ...(cur.photos || {}), [k]: [...((cur.photos || {})[k] || []), ph] }, at: Date.now() }; app.saveInspection(n); return n; });
+      const cur = latest.current; const n = { ...cur, photos: { ...(cur.photos || {}), [k]: [...((cur.photos || {})[k] || []), ph] }, at: Date.now() };
+      latest.current = n; setX(n); app.saveInspection(n);
     } catch (e: any) { app.toast(e && e.message && !["big", "small", "decode", "none"].includes(e.message) ? e.message : imageError(e)); }
     setShooting(null);
   };
@@ -176,8 +184,7 @@ function Inspection({ app, id }: any) {
     up({ photos: { ...(x.photos || {}), [k]: photos(k).filter((p) => p.id !== ph.id) } });
     if (ph.path) { previews.delete(ph.path); cloud.removeMedia([ph.path]); }
   };
-  const [shootKey, setShootKey] = useState<string | null>(null);
-  const [photoInput, pickPhoto] = useImagePicker((f: Blob) => { if (shootKey) addPhoto(shootKey, f); });
+  onShot.current = (f: Blob) => { if (shootKey) addPhoto(shootKey, f); };
   const exportPdf = async () => {
     setBusy(true);
     try {

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Where a camera app may write the photo it takes for us (FileProvider: content:// URIs, never raw file paths).
+     The camera plugin and the web view both create the file in getExternalFilesDir(Pictures); the cache covers a phone
+     without external storage. -->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-files-path name="captures" path="." />
     <external-path name="my_images" path="." />
     <cache-path name="my_cache_images" path="." />
+    <external-cache-path name="external_cache" path="." />
 </paths>

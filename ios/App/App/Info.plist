@@ -35,6 +35,14 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<!-- Privacy texts iOS shows when the app first asks. Without NSCameraUsageDescription iOS ends the app the moment the camera
+	     is requested («التقاط صورة» in the photo menu) — that was the crash. Arabic first, English after (one string, both languages). -->
+	<key>NSCameraUsageDescription</key>
+	<string>يستخدم EngSpace الكاميرا عندما تختار «التقاط صورة» فقط: صورة منشور أو صورة حسابك أو صور بنود الفحص أو مستند التوثيق. تُزال بيانات الموقع والكاميرا من كل صورة قبل رفعها. — EngSpace uses the camera only when you choose “Take photo”: a post photo, your profile picture, inspection photos or a verification document. Location and camera data are removed from every photo before upload.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>يفتح EngSpace صورك فقط لتختار صورة تضيفها إلى منشور أو حسابك أو فحص أو طلب دعم أو توثيق، ولا يقرأ غيرها. — EngSpace opens your photos only so you can choose one to add to a post, your profile, an inspection, a support request or verification, and reads nothing else.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>يحفظ EngSpace في صورك فقط ما تطلب حفظه بنفسك. — EngSpace saves to your photos only what you ask it to save.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

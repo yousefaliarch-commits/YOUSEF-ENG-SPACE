@@ -91,6 +91,11 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   every report carries the HR director's assessment (`result.hr`) and the regional block (`result.regional`). **Update notice**:
   Publish web update → broadcast → `broadcast_app_update()` (service role) → `update` notice → tap opens Home + `requestUpdate()` (docs/OTA.md).
 
+- v0.27.0 (native line 2): **camera** — every photo point goes through `useImagePicker` (verify: `useCameraShot`); in the phone apps a chooser
+  «التقاط صورة» / «اختيار من الصور» → `src/native/camera.ts` (permission checked / requested BEFORE `getPhoto`, plugin scales to 1600 px, every outcome a
+  value, any failure → the plain input with `capture="environment"`). Info.plist privacy texts, Android CAMERA + `<queries>`, `MainActivity.onRenderProcessGone`
+  rebuilds the screen. Never call `Camera.getPhoto` outside camera.ts. e2e drives the chooser through the dev-only `window.__engspaceCamera`.
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

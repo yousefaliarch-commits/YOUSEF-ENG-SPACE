@@ -8,6 +8,7 @@
 import { parseOpenLink } from "../lib/share";
 import { Capacitor } from "@capacitor/core";
 import { handleAuthUrl } from "../backend/cloud";
+import { sweepCaptures } from "./camera";
 
 export const NATIVE = Capacitor.isNativePlatform();
 export const PLATFORM: "ios" | "android" | "web" = Capacitor.getPlatform() as any;
@@ -17,6 +18,9 @@ let pendingAuth: any = null;
 // AppView takes the latest finished auth link once (on mount, and on each engspace:auth event)
 export const takePendingAuth = () => { const r = pendingAuth; pendingAuth = null; return r; };
 export const setBackHandler = (fn: () => boolean) => { back = fn; };
+// an overlay above everything (the photo chooser) takes the back button before the sheets and screens behind it
+let overlayBack: (() => void) | null = null;
+export const setOverlayBack = (fn: (() => void) | null) => { overlayBack = fn; };
 
 // a shared link (app.engspace://open/post/<id>) waits here until a signed-in member can be taken to it
 let pendingOpen: any = null;
@@ -52,7 +56,12 @@ export async function initNative() {
   const nav: any = navigator; const strong = (nav.hardwareConcurrency || 4) >= 8 && (nav.deviceMemory || 4) >= 6;
   if (PLATFORM === "android" && !strong) document.documentElement.dataset.glass = "lite";
   const [{ App }, { SplashScreen }, { StatusBar }] = await Promise.all([import("@capacitor/app"), import("@capacitor/splash-screen"), import("@capacitor/status-bar")]);
-  App.addListener("backButton", () => { if (!back()) App.minimizeApp(); });
+  App.addListener("backButton", () => {
+    if (overlayBack) { overlayBack(); return; }
+    if (!back()) App.minimizeApp();
+  });
+  // the camera app's full-size originals (Android) don't outlive a day
+  sweepCaptures().catch(() => {});
   // auth links: while the app runs (appUrlOpen) and when the link itself started the app (Android may have closed it while the
   // member was in Google's page). The result waits in pendingAuth until AppView takes it, so it is never lost to timing.
   const finish = async (url?: string) => {

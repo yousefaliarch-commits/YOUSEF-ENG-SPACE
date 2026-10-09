@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
-  Image as ImageIcon, LockKeyhole, X
+  Camera as CameraIcon, FolderOpen, Image as ImageIcon, Images, LockKeyhole, X
 } from "lucide-react";
 import { maskMoney } from "../domain/taxonomy";
 import { UGC, tr } from "../i18n/i18n";
 import { loadImageEl, ocrOpen, ocrPrep, withTimeout } from "./ocr";
 import { MAX_INPUT, blobToDataUrl, compressImage } from "./compress";
+import { markCameraBroken, nativePhoto, nativePhotosReady } from "../native/camera";
+import type { PhotoSource } from "../native/camera";
+import { PLATFORM, setOverlayBack } from "../native/native";
 
 // =====================================================================
 //  Images — community post photos and profile pictures
@@ -73,11 +77,131 @@ export function ImageViewer({ image, onClose }: any) {
   );
 }
 
-// A picker the composer and the account screens share: a hidden file input behind a real button
-export function useImagePicker(onFile?: any) {
-  const ref = useRef<any>(null);
-  const input = <input ref={ref} type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" className="sr-only" tabIndex={-1} aria-hidden="true" onChange={(e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (f) onFile(f); }} />;
-  return [input, () => { if (ref.current) ref.current.click(); }] as const;
+// ---------------------------------------------------------------- choosing a photo
+// Every photo point (post composer, profile photo, QA/QC inspection items, support) shares this picker.
+//  · In a browser: the hidden file input, as before (the browser offers camera / gallery / files itself).
+//  · In the phone apps with the camera plugin: a small chooser — «التقاط صورة» (the camera, only after its permission:
+//    src/native/camera.ts) or «اختيار من الصور» (the system gallery). Both come back scaled to ≤ 1600 px by the plugin.
+//  · Anything unexpected falls back to the plain input — `capture="environment"` for the camera — and the chooser offers it
+//    as a button, so the member is never stuck (a file input may only open from a tap).
+const ACCEPT = "image/jpeg,image/png,image/webp,image/gif,image/avif";
+export const PHOTO_NOTES = {
+  camera: () => (PLATFORM === "ios"
+    ? "لم يُسمح لـ EngSpace باستخدام الكاميرا. اسمح بها من الإعدادات ← EngSpace ← الكاميرا، أو اختر صورة من الصور."
+    : "لم يُسمح لـ EngSpace باستخدام الكاميرا. اسمح بها من الإعدادات ← التطبيقات ← EngSpace ← الأذونات ← الكاميرا، أو اختر صورة من الصور."),
+  photos: () => "لم يُسمح لـ EngSpace بالوصول إلى الصور — اختر الصورة من ملفات الجهاز، أو اسمح بالوصول من إعدادات الهاتف.",
+  failed: () => "تعذّر فتح الكاميرا من داخل التطبيق — افتحها من هنا مباشرة.",
+  failedPhotos: () => "تعذّر فتح معرض الصور من داخل التطبيق — اختر الصورة من ملفات الجهاز.",
+};
+type ChooserState = { busy?: PhotoSource | null; note?: string; fallback?: "camera" | "file" | null };
+
+export function useImagePicker(onFile?: any, { title = "إضافة صورة" }: { title?: string } = {}) {
+  const fileRef = useRef<any>(null); const camRef = useRef<any>(null);
+  const [ui, setUi] = useState<ChooserState | null>(null); const tok = useRef(0);
+  const got = (e?: any) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (f) { tok.current++; setUi(null); onFile(f); } };
+  const close = () => { tok.current++; setUi(null); };
+  const pick = async (source: PhotoSource) => {
+    const mine = ++tok.current; setUi({ busy: source });
+    const r = await nativePhoto(source);
+    if (tok.current !== mine) return;   // the chooser was closed meanwhile: a late answer is dropped
+    if ("file" in r) { setUi(null); onFile(r.file); return; }
+    if ("cancelled" in r) { setUi(null); return; }
+    if ("denied" in r) { setUi(r.denied === "camera" ? { note: PHOTO_NOTES.camera() } : { note: PHOTO_NOTES.photos(), fallback: "file" }); return; }
+    // the plugin failed: the plain input from now on; still inside the tap it may open at once, otherwise the button below
+    markCameraBroken();
+    setUi({ note: source === "camera" ? PHOTO_NOTES.failed() : PHOTO_NOTES.failedPhotos(), fallback: source === "camera" ? "camera" : "file" });
+    try { (source === "camera" ? camRef : fileRef).current?.click(); } catch (e) { /* the button stays */ }
+  };
+  const open = () => {
+    if (ui) return;
+    if (!nativePhotosReady()) { if (fileRef.current) fileRef.current.click(); return; }
+    setUi({});
+  };
+  const input = (
+    <>
+      <input ref={fileRef} type="file" accept={ACCEPT} className="sr-only" tabIndex={-1} aria-hidden="true" onChange={got} />
+      <input ref={camRef} type="file" accept="image/*" capture="environment" className="sr-only" tabIndex={-1} aria-hidden="true" onChange={got} />
+      {ui && <PhotoChooser title={title} state={ui} anchor={fileRef} onPick={pick} onClose={close}
+        onFallback={() => { const el = (ui.fallback === "camera" ? camRef : fileRef).current; if (el) el.click(); }} />}
+    </>
+  );
+  return [input, open] as const;
+}
+
+// The verification screen's own «صوّر» button: straight to the camera (permission first), else its capture input.
+export function useCameraShot(onFile: (f: File) => void, onNote: (note: string) => void, fallbackInput: () => void) {
+  const busy = useRef(false);
+  return async () => {
+    if (busy.current) return;
+    if (!nativePhotosReady()) { fallbackInput(); return; }
+    busy.current = true;
+    try {
+      const r = await nativePhoto("camera");
+      if ("file" in r) onFile(r.file);
+      else if ("denied" in r) onNote(PHOTO_NOTES.camera());
+      else if ("fallback" in r) { markCameraBroken(); onNote(PHOTO_NOTES.failed()); fallbackInput(); }
+    } finally { busy.current = false; }
+  };
+}
+
+// The chooser itself: a bottom action sheet over everything, rendered into the app root (theme, accent and direction follow).
+// Escape, the Android back button and a tap outside close it. While the camera / gallery opens the option says so (no
+// spinner: the native screen covers the app a moment later anyway).
+const OPTIONS: { source: PhotoSource; icon: any; label: string; hint: string; busy: string }[] = [
+  { source: "camera", icon: CameraIcon, label: "التقاط صورة", hint: "الكاميرا الخلفية — تُطلب صلاحيتها مرة واحدة", busy: "جارٍ فتح الكاميرا…" },
+  { source: "photos", icon: Images, label: "اختيار من الصور", hint: "صورة من معرض الهاتف", busy: "جارٍ فتح الصور…" },
+];
+function PhotoChooser({ title, state, anchor, onPick, onClose, onFallback }: any) {
+  const first = useRef<any>(null); const close = useRef<any>(onClose); close.current = onClose;
+  const [host, setHost] = useState<HTMLElement | null>(null);
+  useEffect(() => { setHost((anchor.current && anchor.current.closest("[data-mode]")) || document.body); }, []);
+  useEffect(() => {
+    if (!host) return;
+    const prev = document.activeElement as HTMLElement | null;
+    try { if (first.current) first.current.focus({ preventScroll: true }); } catch (e) {}
+    const onKey = (e?: any) => { if (e.key === "Escape") { e.stopPropagation(); close.current(); } };
+    window.addEventListener("keydown", onKey, true); setOverlayBack(() => close.current());
+    return () => {
+      window.removeEventListener("keydown", onKey, true); setOverlayBack(null);
+      try { if (prev && prev.isConnected && prev.focus) prev.focus({ preventScroll: true }); } catch (e) {}
+    };
+  }, [host]);
+  if (!host) return null;
+  const busy = state.busy;
+  return createPortal(
+    <div data-photo-chooser className="fixed inset-0 z-[70] flex flex-col justify-end" role="dialog" aria-modal="true" aria-label={title}>
+      <button type="button" aria-label="إغلاق" onClick={onClose} className="scrim-in absolute inset-0 bg-scrim/50" />
+      <div className="sheet relative rounded-t-[24px] bg-surface border-t border-line-2 shadow-float px-4 pt-3 pb-[max(1rem,var(--sab))]">
+        <span aria-hidden="true" className="block mx-auto w-9 h-1 rounded-full bg-track mb-3" />
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <h3 className="text-[16px] font-medium">{title}</h3>
+          <button type="button" aria-label="إغلاق" onClick={onClose} className="grid place-items-center w-9 h-9 -me-1 rounded-full text-ink-2 hover:bg-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><X size={18} /></button>
+        </div>
+        <div className="space-y-2">
+          {OPTIONS.map((o, i) => {
+            const Icon = o.icon;
+            return (
+              <button key={o.source} ref={i === 0 ? first : undefined} type="button" data-photo-source={o.source} disabled={!!busy} aria-busy={busy === o.source || undefined} onClick={() => onPick(o.source)}
+                className="press w-full flex items-center gap-3 min-h-[56px] px-4 rounded-2xl bg-canvas/60 border border-line text-start disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+                <span className="grid place-items-center w-10 h-10 rounded-full bg-wash text-accent shrink-0"><Icon size={19} /></span>
+                <span className="min-w-0">
+                  <span className="block text-[14px] font-medium text-ink">{o.label}</span>
+                  <span className="block text-[11.5px] text-ink-3 leading-snug">{busy === o.source ? o.busy : o.hint}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        {state.note && <p role="alert" className="mt-3 p-3 rounded-xl bg-warn/10 border border-warn/20 text-[12px] leading-relaxed text-ink-2">{state.note}</p>}
+        {state.fallback && (
+          <button type="button" data-photo-fallback={state.fallback} onClick={onFallback}
+            className="press mt-2 w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl border border-line-2 text-[13px] text-ink hover:bg-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+            {state.fallback === "camera" ? <><CameraIcon size={16} /> فتح الكاميرا</> : <><FolderOpen size={16} /> اختيار ملف من الجهاز</>}
+          </button>
+        )}
+        <p className="mt-3 text-center text-[10.5px] text-ink-3">تُصغَّر الصورة وتُزال منها بيانات الموقع والكاميرا قبل رفعها</p>
+      </div>
+    </div>, host);
 }
 
 // In place of an individual figure the viewer may not see (company accounts: never an individual's number; supervisors: no money at all)
