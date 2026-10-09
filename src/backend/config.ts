@@ -17,3 +17,6 @@ export const isCloud = () => BACKEND === "cloud";
 
 // where the links in auth e-mails (confirm, reset password) come back to: the native app's scheme, or this page
 export const AUTH_REDIRECT_NATIVE = "app.engspace://auth-callback";
+
+// a media path (p/… post image, a/… profile photo) → its public URL; data:, blob: and full URLs pass through (demo mode, previews)
+export const mediaUrl = (path?: string | null) => (!path ? "" : /^(data:|blob:|https?:)/.test(path) ? path : `${SUPABASE_URL}/storage/v1/object/public/media/${path}`);

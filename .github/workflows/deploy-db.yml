@@ -1,4 +1,4 @@
-# Applies supabase/migrations to the hosted Frankfurt project and deploys the purge-verification and send-push functions.
+# Applies supabase/migrations to the hosted Frankfurt project and deploys the purge-verification, send-push and upload-media functions.
 # Runs when migrations change on main, or by hand (Actions → Deploy database → Run workflow).
 # Needs two repository secrets: SUPABASE_ACCESS_TOKEN (supabase.com → Account → Access Tokens) and
 # SUPABASE_DB_PASSWORD (the database password chosen when the project was created).
@@ -40,6 +40,33 @@ jobs:
       - run: npx supabase db push
       - run: npx supabase functions deploy purge-verification --project-ref "$PROJECT_REF" --use-api
       - run: npx supabase functions deploy send-push --project-ref "$PROJECT_REF" --use-api
+      - run: npx supabase functions deploy upload-media --project-ref "$PROJECT_REF" --use-api
+      # the media janitor (pg_cron → upload-media every 10 minutes): a fresh MEDIA_SECRET for the function and the database's
+      # Vault on every deploy, so nobody has to know it; the database reaches the function at push_url (written below / earlier)
+      - name: Media janitor secret
+        env:
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          secret=$(openssl rand -hex 24); echo "::add-mask::$secret"
+          npx supabase secrets set --project-ref "$PROJECT_REF" MEDIA_SECRET="$secret" >/dev/null
+          sudo apt-get install -y -qq postgresql-client >/dev/null
+          psql "$(cat supabase/.temp/pooler-url)" -XAt -v ON_ERROR_STOP=1 -v url="https://$PROJECT_REF.supabase.co" -v secret="$secret" >/dev/null <<'SQL'
+          select set_config('engspace.tmp_url', :'url', false), set_config('engspace.tmp_secret', :'secret', false);
+          do $$
+          declare u text := current_setting('engspace.tmp_url'); s text := current_setting('engspace.tmp_secret'); sid uuid;
+          begin
+            select v.id into sid from vault.secrets v where v.name = 'push_url';
+            if sid is null then perform vault.create_secret(u, 'push_url'); end if;
+            select v.id into sid from vault.secrets v where v.name = 'media_secret';
+            if sid is null then perform vault.create_secret(s, 'media_secret'); else perform vault.update_secret(sid, s, 'media_secret'); end if;
+          end $$;
+          select set_config('engspace.tmp_secret', '', false);
+          SQL
+          # the proof: one janitor pass (moves pre-1.3 files to random names, deletes orphans)
+          sleep 5
+          answer=$(curl -sS -X POST -H "x-media-secret: $secret" "https://$PROJECT_REF.supabase.co/functions/v1/upload-media" || true)
+          echo "::notice title=Media janitor answered::$answer"
+          echo "$answer" | jq -e 'has("moved") and has("removed")' >/dev/null || { echo "::error::upload-media did not answer the janitor"; exit 1; }
       # Push delivery. The Firebase service account is the repository secret FCM_SERVICE_ACCOUNT (the whole JSON file) — it is never
       # in the repo. PUSH_SECRET is generated here on every deploy and handed to both sides (the function's secrets and the database's
       # Vault), so nobody has to know it. Without the FCM secret this step only warns and Android push stays off.

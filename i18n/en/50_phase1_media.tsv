@@ -1,0 +1,35 @@
+# Phase 1.2 / 1.3: rate limits, role changes, media uploads, image review, inspection photos
+a68f3dd9	You sent a lot in a short time — wait a little and try again
+0497b5fb	The account type can be changed once every 30 days
+23e0fff0	Your account setup is already complete
+a8bd9f9e	This account has too much synced data — contact the EngSpace team
+34b9a11d	The image is still too large after compression — choose a smaller one
+28db39e4	This image format isn't supported — use JPG, PNG or WebP
+3658a71f	The image dimensions don't fit — choose another image
+082be6dc	You uploaded many images in a short time — wait a little and try again
+2481ff2c	Your account's image space is full — delete some old inspection photos
+a2da580a	Your session ended — sign in again
+30df18ca	Couldn't upload the image — try again
+69022a0c	The upload timed out — check your connection
+3d91a688	Image review
+9bafd676	Phone's reading: no money figures
+b059f400	Phone's reading: money figures
+53dfafa8	Phone's reading: incomplete
+ada9c415	The image is now visible to every account
+679380ef	The image stays hidden from company and site-supervisor accounts
+8bd3677a	Company and site-supervisor accounts see a post image only after the team reviews it and confirms it has no money figures. Engineers and the author see it at once.
+f9e457fd	No images awaiting review
+7805c674	Every posted image has been reviewed.
+b718f110	In the demo, no images are uploaded to the server.
+e2d4b10e	No figures — show to everyone
+bfa5e0ed	Has figures
+42186a14	Delete photo
+7ad09232	Up to {0} photos per item
+72ac000b	Up to {0} photos per inspection
+72c1695d	{0} Photo
+83b422d3	Square, PNG, SVG or JPG — resized and compressed on your device. Shown on company and job cards.
+d1b1da66	{0}Square, PNG, SVG or JPG — resized and compressed on your device. Shown on company and job cards.
+ff689091	The image is too large — choose one under 25 MB
+ca898556	Image being prepared — it will appear shortly
+804d6539	An image the EngSpace team hasn't reviewed yet
+f469c606	Photo appendix — item evidence

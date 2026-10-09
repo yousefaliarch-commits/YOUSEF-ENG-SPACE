@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Activity, BadgeCheck, Ban, Briefcase, ChartColumn, CheckCheck, CircleCheck, Contact, Copy, ExternalLink, Eye, EyeOff, 
+  Activity, BadgeCheck, Ban, Briefcase, ChartColumn, CheckCheck, CircleCheck, Contact, Copy, ExternalLink, Eye, EyeOff, Image as ImageIcon, 
   Flag, Gavel, Hourglass, IdCard, Layers, LayoutDashboard, LifeBuoy, LockKeyhole, Megaphone, MessageSquare, 
   MousePointerClick, RotateCcw, Scale, ScanSearch, ScrollText, Settings2, ShieldCheck, Siren, SlidersHorizontal, 
   Smartphone, TrendingUp, TriangleAlert, Undo2, UserCog, Users,
@@ -16,6 +16,7 @@ import { DISC, EXP, REP_LEVELS, canVerifyRole, isCompanyRole, label, roleTitle, 
 import { detectContact, screenLanguage } from "../../domain/text-guard";
 import { BoxRow, Choice, Columns, HBar, Kpi, PanelHead, STATUS_CHIP, SearchBox, SettingRow, SevChip, Stepper, ToneChip, accName, faceOf, usePeek } from "./kit";
 import { VerifySection } from "./verify-admin";
+import { ImagesSection } from "./images-admin";
 import { credentialL2, dropOwnRequest, purgeRequest, rejectOf, seedVerifs, verifs0, verifySummary } from "../verify/verify";
 import { L2, UGC, trIn } from "../../i18n/i18n";
 import { DEMO_PERSONA, loadPersona, marketFor, savePersona } from "../../lib/helpers";
@@ -35,7 +36,7 @@ import { loadAdmin } from "./cloud-admin";
 //  Admin console — moderation queue, members, analytics, content, settings, audit log
 //  It reads and writes the app's own store: a report filed in the app lands here at once, and every decision shows up in the app.
 // =====================================================================
-export const ADMIN_SECTIONS = [["overview", "نظرة عامة", LayoutDashboard], ["queue", "البلاغات", Flag], ["verify", "طلبات التوثيق", IdCard], ["directory", "دليل الأعضاء", Contact], ["support", "تذاكر الدعم", LifeBuoy], ["users", "حسابات الإشراف", Users], ["analytics", "التحليلات", ChartColumn], ["content", "المحتوى", Layers], ["settings", "الإعدادات", SlidersHorizontal], ["audit", "سجل التدقيق", ScrollText]];
+export const ADMIN_SECTIONS = [["overview", "نظرة عامة", LayoutDashboard], ["queue", "البلاغات", Flag], ["images", "مراجعة الصور", ImageIcon], ["verify", "طلبات التوثيق", IdCard], ["directory", "دليل الأعضاء", Contact], ["support", "تذاكر الدعم", LifeBuoy], ["users", "حسابات الإشراف", Users], ["analytics", "التحليلات", ChartColumn], ["content", "المحتوى", Layers], ["settings", "الإعدادات", SlidersHorizontal], ["audit", "سجل التدقيق", ScrollText]];
 
 
 export function AdminView({ init, openApp }: any) {
@@ -157,7 +158,7 @@ export function AdminView({ init, openApp }: any) {
   );
   if (CLOUD && !live) return <main className="rise max-w-xl mx-auto px-4 py-16 text-center text-[13px] text-ink-2">{liveErr || "جارٍ تحميل بيانات المنصة…"}</main>;
   const openCount = cases.filter((c) => c.status === "open").length; const verifyCount = verifs.filter((r) => r.status === "pending").length;
-  const body = section === "queue" ? <QueueSection A={A} /> : section === "verify" ? <VerifySection A={A} /> : section === "directory" ? <DirectorySection A={A} /> : section === "support" ? <TicketsSection A={A} />: section === "users" ? <UsersSection A={A} /> : section === "analytics" ? <AnalyticsSection A={A} /> : section === "content" ? <ContentSection A={A} /> : section === "settings" ? <SettingsSection A={A} /> : section === "audit" ? <AuditSection A={A} /> : <OverviewSection A={A} />;
+  const body = section === "queue" ? <QueueSection A={A} /> : section === "images" ? <ImagesSection A={A} /> : section === "verify" ? <VerifySection A={A} /> : section === "directory" ? <DirectorySection A={A} /> : section === "support" ? <TicketsSection A={A} />: section === "users" ? <UsersSection A={A} /> : section === "analytics" ? <AnalyticsSection A={A} /> : section === "content" ? <ContentSection A={A} /> : section === "settings" ? <SettingsSection A={A} /> : section === "audit" ? <AuditSection A={A} /> : <OverviewSection A={A} />;
   return (
     <main className="rise max-w-7xl mx-auto px-4 md:px-8 py-5 md:py-8" style={{ paddingTop: "calc(var(--sat, 0px) + 1.25rem)" }}>
       <div className="flex items-start justify-between gap-3 flex-wrap mb-5">

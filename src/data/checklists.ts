@@ -64,6 +64,13 @@ export const newInspection = (t: Template, inspector = "") => ({
 });
 // custom items the engineer added to this inspection: [{ id, text }] — their marks and notes live under "c.<id>"
 export type Custom = { id: string; text: string };
+
+// site photos per item: { [item key]: Photo[] } — `path` on the live platform (the member's private «inspections» bucket),
+// `src` (a compressed data URL) on this device in the demo. Kept small on purpose: they sync inside the inspection.
+export type QcPhoto = { id: string; path?: string; src?: string; w: number; h: number };
+export const PHOTO_LIMITS = { perItem: 3, perInspection: 12 };
+export const photoCount = (x: any): number => Object.values((x && x.photos) || {}).reduce((a: number, l: any) => a + (Array.isArray(l) ? l.length : 0), 0) as number;
+export const photoPaths = (x: any): string[] => Object.values((x && x.photos) || {}).flatMap((l: any) => (Array.isArray(l) ? l : []).map((p: QcPhoto) => p.path).filter(Boolean) as string[]);
 export const customKey = (c: Custom) => "c." + c.id;
 export const newCustom = (text = ""): Custom => ({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), text: text.trim().slice(0, 300) });
 // a custom row still being typed (no text yet) does not count and is not printed

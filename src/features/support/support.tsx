@@ -34,7 +34,7 @@ function useTickets(app?: any) {
 }
 
 function ImagePick({ img, setImg, app }: any) {
-  const [input, pick] = useImagePicker(async (f?: any) => { try { setImg(await processImage(f, { max: 1600 })); } catch (e) { app.toast(imageError(e)); } });
+  const [input, pick] = useImagePicker(async (f?: any) => { try { setImg(await processImage(f)); } catch (e) { app.toast(imageError(e)); } });
   return (<>{input}{img ? <div className="relative inline-block"><img src={img.src} alt="" className="h-20 rounded-xl border border-line" /><button type="button" aria-label="إزالة الصورة" onClick={() => setImg(null)} className="absolute -top-2 -end-2 grid place-items-center w-6 h-6 rounded-full bg-elevated border border-line-2"><X size={12} /></button></div>
     : <Secondary onClick={pick} className="h-10 px-3 text-[12.5px] press"><ImagePlus size={15} /> إرفاق صورة (اختياري)</Secondary>}</>);
 }
@@ -46,7 +46,7 @@ export function SupportScreen({ app }: any) {
   const send = async () => {
     if (!ok) return; setBusy(true);
     try {
-      if (isCloud()) { const id = await cloud.openTicket({ category: cat, subject: subject.trim(), body: body.trim(), image: img ? dataUrlBlob(img.src) : null }); await reload(); app.push({ type: "ticket", id }); }
+      if (isCloud()) { const id = await cloud.openTicket({ category: cat, subject: subject.trim(), body: body.trim(), image: img ? img.blob || dataUrlBlob(img.src) : null }); await reload(); app.push({ type: "ticket", id }); }
       else { const id = "t" + Date.now(); setDemo((l: any) => [{ id, ref: "T-" + id.slice(-6).toUpperCase(), category: cat, subject: subject.trim(), status: "open", created_at: Date.now(), updated_at: Date.now(), member: app.profile.name, messages: [{ id: id + "m", from_staff: false, body: body.trim(), image: img && img.src, created_at: Date.now() }] }, ...(l || [])]); app.push({ type: "ticket", id }); }
       setForm(false); setSubject(""); setBody(""); setImg(null); app.toast("وصلت تذكرتك — سنرد عليك هنا وسيصلك إشعار");
     } catch (e: any) { app.toast(e.message); }
@@ -85,7 +85,7 @@ export function TicketScreen({ app, id }: any) {
   const send = async () => {
     if (!text.trim()) return; setBusy(true);
     try {
-      if (isCloud()) { await cloud.replyTicket(id, text.trim(), img ? dataUrlBlob(img.src) : null); await load(); }
+      if (isCloud()) { await cloud.replyTicket(id, text.trim(), img ? img.blob || dataUrlBlob(img.src) : null); await load(); }
       else setDemo((l: any) => l.map((x: any) => (x.id === id ? { ...x, status: "open", updated_at: Date.now(), messages: [...x.messages, { id: "m" + Date.now(), from_staff: false, body: text.trim(), image: img && img.src, created_at: Date.now() }] } : x)));
       setText(""); setImg(null);
     } catch (e: any) { app.toast(e.message); }

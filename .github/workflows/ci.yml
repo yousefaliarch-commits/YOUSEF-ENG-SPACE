@@ -32,9 +32,15 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Start local Supabase (database, auth, storage, API)
-        run: npx supabase start -x studio,logflare,vector,imgproxy,edge-runtime,supavisor,postgres-meta
+        run: npx supabase start -x studio,logflare,vector,imgproxy,supavisor,postgres-meta
       - name: RLS and privacy tests (pgTAP)
         run: npx supabase test db
+      # upload-media (every image goes through it since Phase 1.3) runs in the local edge runtime
+      - name: Serve the Edge Functions
+        run: |
+          nohup npm run db:functions > /tmp/functions.log 2>&1 &
+          for i in $(seq 1 60); do [ "$(curl -s -o /dev/null -w '%{http_code}' -X OPTIONS http://127.0.0.1:54321/functions/v1/upload-media)" = "200" ] && exit 0; sleep 3; done
+          cat /tmp/functions.log; exit 1
       - name: Cloud layer end to end (src/backend/cloud.ts as real members)
         run: npm run test:cloud
 
@@ -53,9 +59,12 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Start local Supabase and seed the test accounts
         run: |
-          npx supabase start -x studio,logflare,vector,imgproxy,edge-runtime,supavisor,postgres-meta
+          npx supabase start -x studio,logflare,vector,imgproxy,supavisor,postgres-meta
           npm run db:env
           npm run db:seed
+          nohup npm run db:functions > /tmp/functions.log 2>&1 &
+          for i in $(seq 1 60); do [ "$(curl -s -o /dev/null -w '%{http_code}' -X OPTIONS http://127.0.0.1:54321/functions/v1/upload-media)" = "200" ] && exit 0; sleep 3; done
+          cat /tmp/functions.log; exit 1
       - name: End-to-end (demo + live, both phone profiles)
         run: E2E_LIVE=1 npm run e2e
       - uses: actions/upload-artifact@v4

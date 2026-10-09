@@ -8,6 +8,7 @@ import { notifCategory } from "../domain/notifications";
 import { agoText } from "../domain/moderation";
 import { THIS_YEAR, anonTitle, publicTitle } from "../domain/identity";
 import { specOfPersona } from "../ui/characters";
+import { mediaUrl } from "./config";
 
 export type Row = Record<string, any>;
 const R0 = () => ({ agree: 0, disagree: 0, useful: 0 });
@@ -27,7 +28,7 @@ export function authorFields(a: Row | null | undefined, ref?: string): Row {
   const base: Row = { ...(ref ? { ref } : {}), as: pub ? "public" : "anon", gender: a.gender, userRole: a.userRole, spec: specOfPersona(p), look: a.look, verified: !!a.verified,
     verifyKind: a.verifyKind || null, division: a.division || null, level: a.level || 0, dm: a.dm !== false };
   return pub
-    ? { ...base, pid: a.pid, name: a.name, age: a.age ?? null, gradYear: a.gradYear ?? null, photo: a.photo, role: publicTitle(p) }
+    ? { ...base, pid: a.pid, name: a.name, age: a.age ?? null, gradYear: a.gradYear ?? null, photo: a.photo ? mediaUrl(a.photo) : undefined, role: publicTitle(p) }
     : { ...base, anon: a.anon, avatar: a.avatar, role: anonTitle(p) };
 }
 
@@ -123,7 +124,7 @@ export function personaOf_(p: Row, email: string) {
   const s = p.settings || {};
   return {
     name: p.name, email, gender: p.gender, age: p.age, gradYear: p.grad_year, role: p.role, disc: p.disc, track: p.track, pos: p.pos, gov: p.gov, city: p.city,
-    goal: p.goal, companyName: p.company_name, companyId: p.company_id, avatar: p.avatar, look: p.look, photo: p.photo_path, identity: p.default_identity,
+    goal: p.goal, companyName: p.company_name, companyId: p.company_id, avatar: p.avatar, look: p.look, photo: p.photo_path ? mediaUrl(p.photo_path) : undefined, identity: p.default_identity,
     verified: !!p.verified, verifyKind: p.verify_kind, division: p.division, pending: false, verifyRef: null, verifyReq: null,
     anon: p.anon, pid: p.pid, modRef: p.mod_ref, staff: p.staff, contributions: p.contributions || 0, strikes: p.strikes || 0,
     suspendedUntil: p.suspended_until, suspendedForever: !!p.suspended_forever, onboarded: p.onboarded !== false,

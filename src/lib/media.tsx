@@ -5,11 +5,12 @@ import {
 import { maskMoney } from "../domain/taxonomy";
 import { UGC, tr } from "../i18n/i18n";
 import { loadImageEl, ocrOpen, ocrPrep, withTimeout } from "./ocr";
+import { MAX_INPUT, blobToDataUrl, compressImage } from "./compress";
 
 // =====================================================================
 //  Images — community post photos and profile pictures
-//  · Every image is re-encoded on the device (canvas → JPEG): it is scaled down and loses its EXIF block, so no location,
-//    camera or date travels with it. Nothing is uploaded anywhere in this preview.
+//  · Every image is re-encoded on the device (src/lib/compress.ts: ≤ 1600 px, WebP / JPEG, ~150–250 KB) and loses its EXIF block,
+//    so no location, camera or date travels with it; the upload-media function strips metadata again on the server.
 //  · Post images are read on the device before publishing: if they show money figures, site supervisors never see them and
 //    company accounts see a notice instead (the same rule as amounts written in text). An image that could not be read is
 //    treated the same way — the safe side.
@@ -18,22 +19,16 @@ import { loadImageEl, ocrOpen, ocrPrep, withTimeout } from "./ocr";
 // =====================================================================
 export const PHOTO_MAX = 48;
 
-export const IMAGE_ERRORS = { big: "الصورة أكبر من 15 ميجابايت", small: "الصورة صغيرة جدًا — 120 بكسل على الأقل في كل اتجاه", decode: "تعذّرت قراءة الصورة — استخدم JPG أو PNG أو WebP", none: "لم تُختر صورة" };
+export const IMAGE_ERRORS = { big: "الصورة كبيرة جدًا — اختر صورة أصغر من 25 ميجابايت", small: "الصورة صغيرة جدًا — 120 بكسل على الأقل في كل اتجاه", decode: "تعذّرت قراءة الصورة — استخدم JPG أو PNG أو WebP", none: "لم تُختر صورة" };
 
 export const imageError = (e?: any) => IMAGE_ERRORS[(e && e.message) || "decode"] || IMAGE_ERRORS.decode;
 
-export async function processImage(file?: any, { max = 1600, square = false, size = 256, quality = 0.86 }: any = {}) {
-  if (!file) throw new Error("none"); if (file.size > 15e6) throw new Error("big");
-  const url = URL.createObjectURL(file); let img;
-  try { img = await loadImageEl(url); } catch (e) { throw new Error("decode"); } finally { URL.revokeObjectURL(url); }
-  const w0 = img.naturalWidth, h0 = img.naturalHeight; if (!w0 || !h0) throw new Error("decode"); if (w0 < 120 || h0 < 120) throw new Error("small");
-  let sx = 0, sy = 0, sw = w0, sh = h0, W, H;
-  if (square) { const s = Math.min(w0, h0); sx = (w0 - s) / 2; sy = (h0 - s) / 2; sw = sh = s; W = H = size; }
-  else { const k = Math.min(1, max / Math.max(w0, h0)); W = Math.round(w0 * k); H = Math.round(h0 * k); }
-  const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"); x.imageSmoothingQuality = "high"; x.fillStyle = "#ffffff"; x.fillRect(0, 0, W, H); x.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
-  const t = document.createElement("canvas"); t.width = t.height = 1; const tx = t.getContext("2d"); tx.drawImage(c, 0, 0, 1, 1); const px = tx.getImageData(0, 0, 1, 1).data;
-  const src = c.toDataURL("image/jpeg", quality); c.width = c.height = 0;
-  return { src, w: W, h: H, tone: `rgb(${px[0]},${px[1]},${px[2]})`, bytes: Math.round(src.length * 0.75) };
+// Every picker goes through here: the on-device pipeline (src/lib/compress.ts) resizes, strips metadata and encodes WebP / JPEG
+// in the 150–250 KB band. The blob is what gets uploaded; the data URL is the preview (and the stored copy in demo mode).
+export async function processImage(file?: any, { square = false, profile }: any = {}) {
+  if (!file) throw new Error("none"); if (file.size > MAX_INPUT) throw new Error("big");
+  const out = await compressImage(file, square ? "avatar" : profile || "photo");
+  return { src: await blobToDataUrl(out.blob), blob: out.blob, mime: out.mime, w: out.w, h: out.h, tone: out.tone, bytes: out.bytes };
 }
 
 // Reads the image once (Arabic + English, sparse text) and keeps only one bit: are there money figures in it?
@@ -44,7 +39,7 @@ export async function scanImageForMoney(src?: any, onStep?: any) {
 }
 
 // "show" or "hidden": engineers see every image; restricted viewers see only images read as free of money figures
-export const imageAccess = (image?: any, access?: any) => (!image ? null : access === "full" || image.money === false ? "show" : "hidden");
+export const imageAccess = (image?: any, access?: any) => (!image ? null : access === "full" || image.money === false || image.state === "shown" ? "show" : "hidden");
 
 export const imageRatio = (image?: any) => Math.min(1.91, Math.max(0.8, (image.w || 4) / (image.h || 3)));
  // 4:5 … 1.91:1, like professional feeds
@@ -52,6 +47,9 @@ export const imageRatio = (image?: any) => Math.min(1.91, Math.max(0.8, (image.w
 // The image inside a post: fixed aspect box (no layout jump), average-colour placeholder, fade-in, tap to view full screen
 export function PostImage({ image, app }: any) {
   const [loaded, setLoaded] = useState(false); const vis = imageAccess(image, app.moneyAccess);
+  // the server decides in cloud mode: no src means this account may not see the image yet (state: unchecked / money / moving)
+  if (!image.src && image.state === "moving") return <div className="mt-3 p-3 rounded-xl bg-canvas/60 border border-line text-[12px] text-ink-2 flex items-center gap-2"><ImageIcon size={13} className="shrink-0 text-ink-3" />صورة يجري تجهيزها — تظهر بعد قليل</div>;
+  if (!image.src) return <HiddenFigure app={app} what={image.state === "money" ? "صورة فيها أرقام مالية" : "صورة لم يراجعها فريق EngSpace بعد"} />;
   if (vis === "hidden") return <HiddenFigure app={app} what={image.money === true ? "صورة فيها أرقام مالية" : "صورة لم يكتمل فحصها"} />;
   const r = imageRatio(image); const cropped = Math.abs(r - (image.w || 4) / (image.h || 3)) > 0.01;
   return (
