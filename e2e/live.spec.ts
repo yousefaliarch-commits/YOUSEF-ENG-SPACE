@@ -22,7 +22,7 @@ for (const [key, tabs] of MEMBERS) {
 
 test("supervisor: site tools only", async ({ page }) => {
   await signIn(page, "supervisor"); await tab(page, "tools"); const t = await page.locator("body").innerText();
-  expect(t).toContain("حصر الخرسانة"); expect(t).not.toContain("تقييم عرض عمل");
+  expect(t).toContain("حصر وصب الخرسانة"); expect(t).not.toContain("تقييم عرض عمل");
 });
 
 for (const key of ["moderator", "admin"]) {

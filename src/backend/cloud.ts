@@ -197,7 +197,8 @@ export async function loadAll() {
     db.rpc("my_threads"),
     db.from("company_reviews").select("*").order("created_at", { ascending: false }).limit(200),
     db.from("app_config").select("value").eq("key", "mod").maybeSingle(),
-    db.from("member_state").select("key,value"),
+    // tool documents load on their own (toolRows): a large shard never slows or fails the feed
+    db.from("member_state").select("key,value").not("key", "like", "tool%"),
     db.from("reports").select("ref,kind,item_id,status,created_at"),
     db.from("verification_requests").select("ref,kinds,status,decision,created_at,decided_at").order("created_at", { ascending: false }).limit(1),
     db.from("job_contacts").select("job_id"),
@@ -228,7 +229,7 @@ export async function loadAll() {
     notifs: (notifs.data || []).map((n: any) => notifOf(n, now)),
     threads: (threads.data || []).map((t: any) => threadOf(t, null, now)),
     reviews: reviewsOut, config: cfg.data ? cfg.data.value : null,
-    saved: st.saved || {}, follows: st.follows || {}, roomFollows: st.roomFollows || {}, hidden: st.hidden || {}, inspections: st.inspections || [], qcTemplates: st.qcTemplates || [], salaryLog: st.salaryLog || null, contacted,
+    saved: st.saved || {}, follows: st.follows || {}, roomFollows: st.roomFollows || {}, hidden: st.hidden || {}, inspections: st.inspections || [], qcTemplates: st.qcTemplates || [], toolProjects: st.siteProjects || [], salaryLog: st.salaryLog || null, contacted,
     myReports: reports.data || [], verification: (verif.data || [])[0] || null,
     contributed: !!salary.data && (salary.data as any).access === "full",
     prefs: (nprefs.data || null) as any,
@@ -391,6 +392,24 @@ export async function deleteItem(table: "posts" | "comments" | "jobs" | "company
 
 export async function countJobView(jobId: string) { const db = await supabase(); await db.rpc("count_job_view", { p_job: jobId }); }
 export async function markContacted(jobId: string) { const db = await supabase(); const { error } = await db.from("job_contacts").insert({ job_id: jobId }); if (error && error.code !== "23505") throw friendly(error); }
+
+// the Tools store's rows (toolIndex · toolShelfA…L): stamps first, then only the keys that changed (src/lib/tool-store.ts)
+export async function toolStamps(): Promise<Record<string, string>> {
+  const db = await supabase();
+  const { data, error } = await db.from("member_state").select("key,updated_at").like("key", "tool%");
+  if (error) throw friendly(error);
+  const out: Record<string, string> = {};
+  for (const r of data || []) out[r.key] = r.updated_at;
+  return out;
+}
+
+export async function toolRows(keys: string[]): Promise<{ key: string; value: any; updated_at: string }[]> {
+  if (!keys.length) return [];
+  const db = await supabase();
+  const { data, error } = await db.from("member_state").select("key,value,updated_at").in("key", keys);
+  if (error) throw friendly(error);
+  return (data || []) as any;
+}
 
 export async function saveState(key: string, value: any) {
   const db = await supabase(); const { data: { user } } = await db.auth.getUser(); if (!user) return;

@@ -2,6 +2,7 @@ import {
   BadgeCheck, Briefcase, Building2, Coins, Eye, GraduationCap, HardHat, ImagePlus, Lightbulb, LockKeyhole, Mail, 
   MapPin, MessageCircle, Reply, Scale, Send, ShieldCheck, Star, TrendingUp, Wallet
 } from "lucide-react";
+import { toolsForRole } from "../tools/gate";
 import { TABS } from "../data/geo";
 
 // ---- Taxonomy: disciplines (civil includes structural) × sub-disciplines (tracks) × exact positions ----
@@ -202,7 +203,8 @@ export const maskMoney = (text?: any) => String(text == null ? "" : text).replac
 // Site supervisors: community, site tools and messages; the screens / sheets / rooms / post types that carry money or employer data
 // are closed to them. Their Tools tab holds only the site tools and the QA/QC checklists — never a salary, offer or net-pay tool.
 export const SUPERVISOR_TABS = ["community", "tools", "inbox"];
-export const SITE_TOOLS = ["concrete", "rebar", "masonry", "units"];
+// every tool a site supervisor may open (the registry's non-money tools, with their old ids)
+export const SITE_TOOLS = toolsForRole("supervisor").flatMap((t) => [t.id, ...(t.aliases || [])]);
 
 export const SUPERVISOR_DENY = "حساب مشرف الموقع: المجتمع وأدوات الموقع وقوائم الفحص فقط — الرواتب والوظائف والشركات غير متاحة له";
 

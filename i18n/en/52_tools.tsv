@@ -1,0 +1,1223 @@
+# Tools suite: document kit, tool screens and reports (concrete, BBS, trade kit, level book, diary, toolbox talk, permits, AC, drains, sprinklers, cables), registry and store
+7ca91669	{0} (conflicted copy)
+3a88aa5c	-
+51600d5c	Straight
+a86d370f	90° bend
+9abbc2ad	Bend with radius
+8f180819	180° hook
+c67c1343	U-shape
+ef469776	U-shape with hook
+50ab930e	Inclined
+52f481ac	Cranked
+46ffc7a8	Three bends
+40ce7281	U-shape with two hooks
+c619ef8d	Four bends
+f575eca2	Closed stirrup
+3c32b8a5	Stirrup with two hooks
+418cd10b	Spiral
+c17be9df	Free sketch
+07261824	Shape {0}
+f091579d	Bend radius
+b3a195cf	Radius below the minimum
+0bd9253c	Difference from the exact centreline
+c9c12476	Dimension {0} is not a multiple of 5
+0bb59828	Site rule (2d per bend) differs
+27d3a5aa	Cut length is incorrect
+a52cabc5	Bond stress
+eb6ff28b	Development length / diameter
+9039cf59	Lap length
+921f2801	Ld (staggered ≤ 50 %)
+b8e20b16	1.3·Ld (all bars at one section)
+c9e7ab94	Lap length is required
+97a977b8	Plain bar / other code
+7a8f6c69	Entered
+92cd602d	Longer than the bar — laps
+1bd347e1	Reinforced concrete
+d53f5a77	Plain concrete
+1dcab54a	Blinding concrete
+e14af97b	Add 10 cm on each side around the footing
+ecbf47f5	Isolated footing
+0650f98f	Sloped footing
+53bbf982	Vertical part
+b8eecf7e	Sloped part
+70c39d53	Top face length
+52262241	Top face width
+b1e8cd97	Raft foundation
+007a83fd	Area (m²)
+41f5efd4	Perimeter
+135828b3	Tie beams
+d4234381	Clear length
+841cd777	Column necks
+606fad59	From footing top to tie-beam top
+8132f2ea	Storey height
+c0bfe98a	Slab thickness
+f364a1ee	Columns up to slab soffit
+ae3664bf	Overall depth
+bf1e8b54	Clear span
+70aa4e91	Drop below the slab only
+1e4a53c3	Solid slab
+d5bc77fd	Openings (m²)
+e65fd70d	Hollow-block slab
+88490d7f	Topping thickness
+ee58e467	Block height
+ad2db7ba	Rib width
+a7276e78	Block width
+3d1d531f	Block length
+4f8d52b5	Stair (flight)
+27955f7f	Number of steps
+13704f77	Riser
+341d6a48	Tread
+81206d29	Stair width
+b3668212	Blinding
+56bd5dcc	Sloped part (prismoidal)
+2061f650	Top face larger than the base
+78fdd6a6	Column height up to slab soffit
+19ad18a7	Column height outside the usual range
+9919c7d0	Column height is incorrect
+788400e4	Beam depth is less than the slab thickness
+d95decc7	Drop below the slab
+33f9280c	(L·B − openings)·t
+042ed5c7	Concrete per m²
+0bc08690	Blocks per m²
+69223250	Clear distance between ribs
+1ad82a2c	Sloped length
+28161a5a	Sloped slab + stairs
+bc51b545	Step rule 2R + G
+3ba34ab9	Extra waste on top of the element waste
+df1b7ec4	Waste is applied once per element
+f9a4eedb	Actual pour rate (the slowest governs)
+12c8e5b1	Order quantity
+a73451b4	Σ V_net·(1+w) + set-up loss
+1cbd7776	Number of mixers
+c26807df	⌈V_order / capacity⌉
+3cb23172	Interval between mixers
+fe398350	capacity / Q · 60
+979edc98	Cycle time
+7a1fc80f	Loading + 2·trip + interval + washout
+6e7d399d	Mixers on the road
+938c4080	⌈cycle / interval⌉ + 1
+aeebd41f	Pour duration
+6ea023e0	Set-up + V/Q·60 + clean-up
+4f5c5252	Striking vertical forms
+dc1be90a	Striking slab edge forms
+c9756fe8	Striking beam soffits
+3299be52	Removing slab props
+6f3404f4	Removing beam props
+9ed9b067	End of curing
+3343c4d0	7-day cube test
+7620de5f	28-day cube test
+baeb234a	Engineering 12√K
+0e703ea1	Precise 4√K
+6d118389	Approximate 24√K
+603230d8	Building site 5√n
+9225e5ad	Egyptian benchmark 6√K ⚑
+4230d2ff	The first reading must be a backsight on the benchmark
+364a1494	Intermediate sight before any backsight ({0})
+24f4116b	BS first
+3c650640	Two backsights with no foresight between them ({0})
+23488094	FS between
+d6f74899	Reading longer than the staff ({0})
+3522c7a7	Long sight line ({0})
+bb3ef0a9	≤ 100 m per sight
+86b2051f	First check
+a9a3d200	ΣBS − ΣFS = last − first
+15d95744	Rise and fall
+8d572426	Σrise − Σfall
+fba70cbf	Second check
+b118b41b	Gradient
+64402d91	Cover
+98ceee89	Distance between manholes
+e909eca4	Area per sprinkler
+699f1f29	Spacing between sprinklers
+34dcccb0	Distance from the wall
+98b840f1	≤ {0} m and ≥ 0.1 m
+7bf0ce2d	Minimum distance between two sprinklers
+92d69aae	Water–cement ratio above 0.55 ⚑
+053f070c	Clay brick 24×11×6
+4d51ae62	Double clay brick 24×11×12
+9efd3408	Cement brick 25×12×6
+37939619	Block 40×20×10
+76725843	Block 40×20×15
+a16f0d47	Block 40×20×20
+9a8f7307	Lightweight AAC 60×20×10
+00276a56	Lightweight AAC 60×20×20
+11668aa8	Internal (dash coat + base coat)
+b720655d	External
+d93922e1	Under tiles
+0532394a	Confirm deleting the inspection
+956c9c57	The inspection and its photos are deleted permanently from your account. Reports you exported earlier stay with you.
+48e24c69	Delete the inspection
+37472dd6	Inspection deleted
+a509268e	Site and technical office tools
+89a619d5	Search: concrete, rebar, levelling, cable…
+b84a6ef0	Recent
+2a18c92b	Untitled
+e3f34e92	No tool with that name.
+98e1c1d0	Cold joint: strip area
+143c884b	(width ≤ {0} m)
+4ee5b9e6	Hot-weather pouring
+4a43bedb	≤ 32 °C — summer pouring precautions
+2986c3c3	Mix {0} output
+6e9a0657	Pour plan
+fa0ad3f3	Floor / building take-off
+114dc15a	Data
+9d40f2fb	Element / zone
+654d00b9	Third-floor slab
+7e966f68	Level
+876a296a	Pour start
+2bc29653	Air temperature
+762fd37c	Grade
+70ff5f7b	Supplier
+6fc42e7a	Target slump
+6d75d467	⚑ per specification
+0fa36a02	Cement type
+6bdeb24b	Ordinary Portland
+51ca320e	Blended / sulphate-resisting
+f1193e5c	Elements
+8134ee05	Add an element
+0e95d555	{0} ×{1} — {2} m³
+884b378b	Description / axis
+b10a6a94	Waste
+71ecfaf2	Default {0} % ⚑
+144e22bc	Cast against soil (no side formwork)
+4a51d6a4	Order from the plant
+0fc11780	m³ {0}
+865585f7	{0} mixers · one every {1} min · {2} on the road · {3} → {4}
+ee85af19	Required volume including waste
+2a569ce8	Net {0} m³ · formwork {1} m²
+3944a9f5	Timber formwork
+7f157eea	Hollow blocks
+9456cc9e	Pour rate (governed by
+2d6cc076	Pump
+19622473	Plant
+e8eed221	Crew
+6788bdcd	m³/h
+a1c78772	{0} h {1} min
+0347a8ad	Order and mixers
+67fce03c	Mixer capacity
+8e226b32	Pump output
+9a9a2044	Plant allocation
+75cb8006	Crew capacity
+7b9b8a84	Trip (one way)
+606734f3	Pump priming loss
+957408c6	Preparation before the pour
+d3742556	Cleaning after the pour
+72422dd4	Mixer arrival times
+e894b1de	… and the full table is in the report (
+42eea133	mixers)
+654b09cd	… and the full table is in the report ({0} mixers)
+baafd25a	Cold joints and cubes
+159d5af2	Layer thickness
+2c7c2af1	Strip area
+5ee18a92	Strip length
+3cc74623	Maximum area before the layer goes cold:
+9e6f9f1d	m² (cover time
+4f6e8e08	min at
+6b5dad0a	Maximum area before the layer goes cold: {0} m² (cover time {1} min at {2} °C ⚑)
+46a72d8e	One set per 50 m³
+2434e9e1	First 50, then every 100 m³
+8f6eea0a	3 spare cubes per set
+b4b9a30b	sets ·
+faf0a97e	cubes (7 and 28 days) ⚑
+af2617d2	{0} sets · {1} cubes (7 and 28 days) ⚑
+ed28cf5c	Striking and curing
+369d6907	Materials (site mixing)
+25d74527	Largest slab span
+09bbb643	Largest beam span
+74ccdc16	Dates are calculated from the document date in the report. ⚑ per the code profile.
+350e9861	Site mixing (+4 % ⚑)
+d134802f	{0} — {1} m³
+1baacbb3	50 kg bag
+c0d00a1a	Crushed stone / gravel
+8f86e36a	Water
+7e97c1c8	Revisions
+80d9e395	An estimate for take-off and pour planning. Values marked ⚑ are assumptions to be checked against the approved specifications, Egyptian Code 203 and the design mix.
+d1703bac	Start → End
+562653d6	Slump
+f0eb5458	Cement
+968a50a9	One mixer every
+1d999159	On the road
+fbd816bd	Duration
+d72beaf0	Net
+774235b3	Required incl. waste
+5800544e	Formwork
+4317c8dd	Element take-off
+e090003f	Dimensions
+413c51af	Total
+27a9df91	Logistics and mixer schedule
+0295dbf6	Governing rate
+6ae39ad7	Actual rate
+e80b6c0b	Mixer arrival schedule
+69e73407	Mixer
+1f2181c9	Arrival time
+9153e09d	Cumulative
+f53a0eb2	Cubes, striking and curing
+f006a904	Cube sets
+955dd201	Number of cubes
+90671e4d	Rule
+ee8fe7a3	One set per 50 m³ ⚑
+f0581a7d	First 50, then every 100 m³ ⚑
+b92d8199	Basis
+795e66c2	Materials by mix
+2f219f9b	Mix
+81714634	Bag
+790c480f	Crushed stone
+bbfc5189	Waste by element
+0a554a58	Site practice
+62eb6c54	Reinforced mix per m³
+ea9f58bb	Egyptian practice
+6898959d	Layer cover time
+b3042434	ACI 304 / practice
+98ffddbc	Cube rule
+e492f33d	Project specifications
+70efe79a	Striking times
+8a86a929	ECP 203 / practice
+99264fb5	Pour {0}
+ab7dfdac	· Level ⁦{0}⁩
+3edbfaa8	Net ⁦{0} m³⁩ · order ⁦{1} m³ {2}⁩
+e8460ae3	⁦{0}⁩ mixers, one every ⁦{1}⁩ min · start ⁦{2}⁩
+121e6f4f	⁦{0}⁩ cube sets
+303fa8f8	Estimate — see the full document
+5583b1dc	Net ⁦{0} m³⁩ · with waste ⁦{1} m³⁩
+5eeb9814	Formwork ⁦{0} m²⁩
+82bfcbf6	Pour plan
+180aa0ac	Concrete take-off
+96d4ca76	Within limit ⚑
+75aafae3	Circuits
+75ff9cf2	Circuit
+74420215	{0} within limit · {1} need review
+86f5a1a2	Source and limits
+e02a289c	Phase voltage U₀
+e2480497	Line voltage U
+a9764843	Allowed voltage drop
+78832885	3 % lighting / 5 % other
+443c965d	Air temperature
+2fcaf378	Soil temperature
+0dc073f9	Soil thermal resistivity
+a4fabd3f	New circuit
+2d30dd69	From → To
+8645843c	Three-phase
+42e49f89	Single-phase
+16bdfcab	Input power kW
+e6ee33a8	Motor output kW
+a57a391e	Current Ib
+c170c6fe	Power
+73e2eee6	Efficiency η
+11db6acb	Breaker In
+b65fba7b	Short-circuit current
+546a0791	Disconnection time
+85ec98d2	Number of grouped circuits
+3e19a5e3	Insulation
+0a7c609a	Installation method
+559a738d	C on a wall
+85f7d9dd	E perforated tray
+02bba61e	D1 buried in conduit
+6da41219	Grouping
+019430d3	Grouped
+aa508a5b	Perforated tray, single layer
+ec620ec8	Protective device
+1a3cd6af	Breaker
+cb89f0b7	Fuse gG
+6cebe1d9	Rating basis
+35b2181d	From table (check) ⚑
+e4421ad8	From the manufacturer's catalogue
+41ecfa6d	Cross-section
+5fcc58c2	It from catalogue
+bd7f54d4	Catalogue reference
+ccfbf09c	Required It
+e53cffce	Required It {0} → {1}
+bd451350	Needs parallel cables
+439e4dae	Coordination In ≤
+73b75792	Coordination In ≤ {0} ({1} A) {2}
+3cc3be92	Voltage drop
+509c28d3	· max length
+9509eac7	Voltage drop {0} · max length {1}
+57d275f0	Time under 0.1 s — enter I²t from the manufacturer
+95404742	Minimum cross-section for short-circuit
+017adf16	Minimum cross-section for short-circuit {0}
+9c240264	The ampacity tables are transcribed from IEC 60364-5-52 and have not been reviewed yet ⚑ — the result is «Within limit ⚑», not «Compliant». For approval, use the manufacturer's catalogue.
+9972a2be	Per IEC 60364-5-52 (2009); it does not decide compliance with the Egyptian code. Not for construction without sign-off by a qualified engineer.
+643645c8	Ampacities
+b64de4fe	IEC — not reviewed ⚑ / catalogue
+7c975107	Voltage
+4054bf88	Air
+f667ecb4	Soil
+85835114	Allowed drop
+670ca0d7	Circuit
+2e9d2b27	Installation
+0a77bffc	Assumptions
+21cdd57c	Ib = P/(√3·U·cosφ·η) · Iz = It·k_temp·k_group·k_soil · gG: In ≤ 1.45/1.6·Iz · Δu = b(ρ·L/S·cosφ + λ·L·sinφ)·Ib, ρ = 0.0225, λ = 0.08 mΩ/m · S ≥ I·√t/k (0.1–5 s). Temperature tables: B.52.14 for air and B.52.15 for buried cables.
+2af55b59	Ampacity tables
+4528ea06	k factor for short-circuit
+412d814b	Cable schedule
+d915fbb0	Cable schedule
+3be63397	Cable schedule · ⁦{0}⁩ circuits
+9610a90b	Within limit ⁦{0}⁩ · review ⁦{1}⁩
+4eeedf53	IEC 60364-5-52 — not for construction without sign-off
+2372a83a	Issued
+8ddd3fae	Superseded
+5f05466a	Cancelled
+31562fdb	This tool is not available for your account type.
+f4ea1af1	Project details
+af0de74d	New project
+2a2fc3b1	All documents
+7de05f6e	New document
+d5530aca	Saved documents
+e5ee838c	Saved documents {0}
+bf8098ec	No documents yet. Everything you write is saved on this device first, then to your account.
+4d755c10	Delete document
+48e94b0e	The document is deleted from this device and from your account on all devices. This cannot be undone.
+fc55a4db	Delete
+bd79c412	Document deleted
+25b0741b	Could not delete — try again
+ec16428e	Could not save on the device — is the storage full?
+0b0ed4c3	The document is large: saved on this device only
+7b91aa72	Could not open the tool
+59d2d537	Check your connection and try again.
+374a2115	Document not found
+ff0e7a29	It may have been deleted from another device.
+6a13b231	Preparing…
+62d68570	Preview failed
+fb7a5d7b	Page {0} of {1}…
+2ba50d04	Export cancelled
+442cbd2f	Could not create the report
+842dbeda	Could not save or share the report
+22a9f82e	Could not share
+a11f2cc8	Document {0} issued
+2b655c09	Document title
+561a4944	No project (GEN)
+091dbdb9	The document number is assigned on issue
+25ed5f93	Issue
+8a18e312	New revision
+2ba36253	This document is from a newer version of the app — shown read-only. Update the app to edit it.
+636197bc	Issue document
+03aa7406	The document gets its number and is frozen with its text, figures and project details exactly as they are now. Any later change becomes a new revision.
+e7346c6b	Issue
+3c09588f	Consultant
+34630bb1	Client
+916a2e4e	Subcontractor
+bce3bba6	Enter the project name
+479cfb42	Project code: 2 to 8 capital English letters or digits
+ac9a2413	Entered once and shown in the title block of every report. No prices or amounts here.
+ca4b5cd4	Project code (used in document numbers)
+f3500dde	Issuing organisation
+c7ddec98	Main contractor
+75124a00	City
+4daee7a1	Contract no. / reference
+16518c2e	Signatures
+3c329da4	Prepared by
+1c1e4bdb	Reviewed by
+556b61c6	Approved by
+bb0233f8	{0} — name
+13ba9c2b	Save project
+a5b86129	Archive project
+a00d6e65	The project disappears from the lists; its documents stay as they are.
+29f9721e	Archive
+ba44a073	Units
+95eeaed8	Unit
+e26c56f6	{0} compliant · {1} need correcting
+16ddd83f	Add the first unit
+f8456003	New unit
+d1d7369e	Model
+77ddd299	Capacity ({0})
+326e314b	From the unit catalogue
+09f19db0	Maximum length
+912cc089	Maximum height difference
+7ac53076	Pre-charged length
+99849528	Additional charge
+76e250d2	Liquid line diameter
+1c5481f5	Gas line diameter
+0e0fb743	As installed
+5905313b	Installed length
+78618451	Height difference
+c869a025	Drain line length
+8b2c84d3	Drain slope
+54b43312	A trap is fitted
+b18919f5	Length {0}
+386b7ff0	Height difference {0}
+49abe2bb	Diameters match the catalogue
+2a15a241	Diameters match the catalogue {0}
+2c9026d9	Drain slope ≥ 1 %
+3cc2d659	· fall
+c91c36e8	mm · minimum diameter
+442f5991	Drain slope ≥ 1 % {0} · fall {1} mm · minimum diameter {2}
+0af9460e	Additional charge:
+7ab81256	Additional charge: {0} g
+2baabe8b	A site check only; the manufacturer's data (diameters, lengths and charge) is the binding reference. A2L refrigerants (such as R32) have charge and room-area limits — see the manufacturer's manual.
+99ee2163	Diameters: installed / catalogue
+77b9f759	Length / maximum
+bacf6365	Height / maximum
+445953b9	Drain
+94341b1a	Trap
+f852eb34	Minimum drain diameter by capacity
+e6cdeb46	Minimum drain slope
+f0266956	Practice
+f2b2d40b	Tons of refrigeration
+ce034bd2	Definition
+a98a1d17	AC installation check
+472e0452	AC installation check
+41281e63	AC installation check · ⁦{0}⁩ units
+d101d99e	Compliant ⁦{0}⁩ · need correcting ⁦{1}⁩
+65ece11d	See the full document
+1067e7ad	Level of the last manhole
+7a9abb54	Depth {0} m · length {1} m
+76f96eb9	Start
+ca783869	Minimum gradients
+fd96e547	Metric (1 % / 0.5 %) ⚑
+a002ca53	Strict IPC
+d679b564	First manhole
+0b96030d	Invert level
+45a8f12e	Ground level
+2b2c0606	Minimum cover
+ab3f5325	Public sewer level
+300e7441	Distances and manholes
+e619fb48	Next manhole
+6994c076	{0} · {1} m · IL {2} · depth {3}{4}
+4b50816e	Length from the previous one
+c618fd6a	Diameter DN
+2019ce2d	Blank = minimum slope {0} %
+765b34fd	Drop inside the manhole
+4d339793	The last level is lower than the public sewer — check the gradients or use a lift.
+a8256c2e	Sight rails and pegs
+c36c9d9e	Traveller length
+714400ab	Peg level
+8df629f2	Excavation peg level
+13ae0950	Design level
+79420992	Sight rail level at
+5c32b4ce	Sight rail level at {0}: {1}{2}
+24dd0fc1	· mark above the peg
+aacb6fad	· mark above the peg {0}
+19815e90	Excavation peg:
+6004d397	Excavation peg: {0}
+e868ef34	Level and setting-out calculation only. Minimum gradients, distances and manhole dimensions follow the selected profile and must be checked against the Egyptian drainage code and the water company's requirements.
+89a4a0b3	Gradients
+71d1a4a1	Metric ⚑
+c8905fa7	Public sewer
+bc5f7761	Cumulative distance
+70c43440	Invert in
+004748d5	Invert out
+5fc15a61	Gradient %
+600c0684	Longitudinal section — ground dashed, invert solid (vertical scale exaggerated)
+88ef68c6	Drain invert schedule
+46191a15	Sanitary
+cb639723	Manhole levels
+b88ee7c0	Drain levels · ⁦{0}⁩ manholes
+359f93ea	Last invert ⁦{0}⁩ · depth ⁦{1}⁩
+4b1a2fd8	All checks pass
+e9c6324d	Some checks do not comply
+5c119a3c	Light
+c121e569	Ordinary 1
+3986b7f8	Ordinary 2
+46740b41	Extra 1
+d210f463	Extra 2
+645c4b9c	Number of sprinklers (design)
+9280d534	Sprinkler
+b9b6954a	{0} rooms do not match on site
+8eb46d0b	{0} rooms
+841bec63	New room
+40868561	Room {0}
+1caeb78e	{0} sprinklers
+faa3ab1b	Hazard class
+8273fecb	Hydraulic calculations
+1c89494d	Pipe schedules
+9d7a1209	Ceiling
+50de1d18	Non-combustible
+0a8fde29	Combustible with obstructions
+29bcc464	(limit
+310cae15	m² /
+59e45203	m)
+85207b3d	{0} (limit {1} m² / {2} m)
+c251c91d	Site check
+0325bec8	Distance X
+0412294c	Distance Y
+72ac2b64	Distance from the wall X
+2c767eff	Distance from the wall Y
+ccf9959c	A check of spacings and counts only — not hydraulic calculations per NFPA 13 Chapter 28. Hazard classification and design are for a licensed engineer, with Civil Protection approval.
+bac163c1	Not hydraulic calculations — a spacing and count check per NFPA 13-2022 Table 10.2.4.2.1 (standard sprinklers).
+43db29b3	Hazard
+9b5d7177	Spacings
+83bea107	m²/sprinkler
+f8542e7a	Limit
+1823a119	Sprinkler spacing check
+01d6926f	Fire
+b368b21e	Sprinkler spacing check
+f67035b7	Sprinkler check · ⁦{0}⁩ rooms
+690c4443	Design ⁦{0}⁩ sprinklers
+fe8b321d	Not hydraulic calculations
+6ace4468	Duplicate mark {0}
+16bf5302	One mark
+a325622b	Not specified (top assumed, to be safe)
+bc3e19ab	Top
+77bc7539	Bottom / other
+c7597530	Schedule data
+9b87328d	Element / group
+55171677	Floor 3 slab beams
+350a9f8d	Drawing and revision
+0e262f63	Concrete fcu
+500d78f1	Rebar grade
+af52f24b	Round cut length up to
+32162a06	25 mm
+6653ffcb	10 mm
+888c5bb6	5 mm
+4a46afc8	None
+3af9c5fb	Add an item
+550d3322	{0} · Ø{1} · [{2}] · {3} × {4} · {5} kg
+0c860283	Mark
+98de472d	Shape (BS 8666)
+9a844db0	Segment {0}
+cb78103a	Deviation angle
+017ef59c	+ segment
+2a804451	Number of elements
+bdce2ddf	Number of bars per element
+7b718840	Bar position (for bond)
+7ff214b8	Laps
+3be54fff	At one section (1.3 Ld)
+7879a19f	Staggered ≤ 50 % (Ld)
+fbccadab	Entered length
+3bceb933	Lap length (from the drawing)
+042814bb	Cut length
+4a447597	Total number
+dae876d9	Laps
+52cffc67	Total steel weight
+69a9332f	Ø{0}: {1} kg
+51b2c680	Cutting plan (12 m bars)
+fe9a4f56	Recalculate
+ce5e975f	Calculate the cutting plan
+63fa9b33	Shortest remnant kept in stock
+8bf9cd16	The items changed after the calculation — recalculate the cutting plan.
+80b2a721	New bar
+aea73041	Ø{0}: {1} new bars {2}
+89cf30f9	· optimal
+ac203444	· within one bar of optimal
+b69daf25	Separate cutting
+6af563b2	· minimum
+304d632f	· waste
+566f4c28	m · remnants
+42749cd1	Separate cutting {0} · minimum {1} · waste {2} m · remnants {3}
+64e7cd1e	· remnant {0}
+30eb43aa	A schedule for execution and ordering from the entered drawing dimensions. Bend and development lengths come from the code profile and must be checked against the approved drawings and Egyptian Code 203.
+eb00ce18	Offcut {0}
+f2225844	Drawing
+14028e03	Rounding
+9e416c3e	Elements
+300dc960	/element
+1d4f0efa	Shape
+1730b833	Sketch
+4d99a886	Weight summary by diameter
+69575b34	Cutting plan
+b240dfef	Ø{0} new bars
+8a9f77c3	Minimum
+f8f0c6d7	Optimal
+5913995b	Within one bar of optimal
+3f69e29c	Saving
+ca21c322	· from {0}
+b0351e1f	· remnant {0} = {1} mm
+aa95e291	· waste {0} mm
+f941ce97	Weight per metre
+6ba00cb0	Weight table
+ea0af5e8	Development length (Ø16 top)
+c467eafc	Default lap
+dd73fc48	Total ⁦{0} t⁩
+79a7fb1c	Bar bending schedule
+7d8c1049	Bar bending schedule
+bfe74af2	Clear
+3d0d408d	Cloudy
+9fcfe897	Wind
+4809de35	Dust storm
+41892f96	Rain
+15fac86e	Extreme heat
+b659f350	Weather
+6d2d5d37	Client information
+b8bed3b1	Utilities
+93d067b7	Materials
+e647e998	Site handover
+13da8e7c	Third party
+4f6c0c69	Add
+93f6a7e9	No previous diary
+09e9195d	Labour and equipment copied from the last diary
+8b61b224	Same as yesterday — copy labour and equipment
+9cfa8738	Today's labour
+ff4dfb29	persons
+8cabfdbf	{0} man-hours{1}{2}
+6f17844f	· pour {0} m³
+5008e5e0	· delay {0} min
+6e34da14	Shift and weather
+5dfaf3cd	Prepare it
+c5306466	Max
+5af5d59f	Min
+1f8c28e4	Work stopped from
+3ee69b67	Labour
+ba52c9bb	{0} · {1} · {2} × {3} h
+6e11b399	Trade
+f509cccb	Trade
+626fc4c8	Carpenters
+204fc7e3	Hours
+ef9edc47	Equipment
+05ec55ce	{0} {1} · {2}/{3}/{4} h
+57bb3210	Equipment
+b9e0535b	No. / plate
+01446d31	Working hours
+a3132543	Idle hours
+299448f2	Breakdown hours
+f872448b	Owned
+3807cd80	Work completed
+3201a3f2	Item
+5bf81414	Activity
+f3369f26	Building / floor / axis
+a9513440	Quantity
+44501491	Unit
+31ebcb4c	Pours
+7685e0f6	{0} · {1} m³ {2}
+931f9151	Element
+883831cc	Deliveries
+bb0532c2	Material
+d6e7dcde	Pending
+94bb67e2	Material
+96aaca92	Delivery note no.
+51797776	Inspections
+d4630f17	Request no.
+46fb5c19	A Accepted
+c137f6f1	B With comments
+b6381772	C Rejected
+22e2c346	Instructions and queries
+72991398	Instructions
+1dd574e2	Affects the duration
+095b214d	Contractual impact
+e001a528	Visitors
+fc4d767f	Purpose
+6470bac3	Toolbox talk topic
+cef25054	Lost-time injury
+4a0075af	First aid
+77c8c552	Near miss
+26f2c8b3	Damage
+43b36db5	Date of last lost-time injury
+8e5fc198	Days without a lost-time injury:
+03232dd0	Days without a lost-time injury: {0}
+809b9a58	Delays
+7b9d0c41	Affected activity
+482095e4	Tomorrow's plan
+3323985f	One line per activity
+1e93ee71	Equipment utilisation
+c44212b9	A contemporaneous daily record prepared by the contractor; the consultant's signature acknowledges receipt only.
+e8680268	Shift
+23fbc18f	Weather
+5d9baf42	Temperature
+b03f54b5	Weather stoppage
+9d0d7da6	Delay
+05263905	Equipment
+ab74e125	Working
+bfc3318b	Idle
+a14c1e21	Breakdown
+8851ffed	Utilisation %
+7853dc52	Quantity m³
+165a85ec	Delivery note
+6f425382	Time impact
+64baa5df	Toolbox talk
+ccc82bd9	First aid
+bc18521e	Days without injury
+a2e93da9	Reason
+06c68be5	Daily report
+83b7c2ec	Daily report
+04b6e358	Daily report{0} · ⁦{1}⁩
+a2e6b20f	Labour ⁦{0}⁩ · ⁦{1}⁩ hours
+f37df4a1	Pour ⁦{0} m³⁩
+c36991d9	Delay ⁦{0}⁩ min
+6a824818	Hot work
+0a73b9d6	Work at height
+5a5ed3a1	Confined spaces
+b0cdfa61	Excavation
+d8d1cd59	Lifting near power lines
+df661134	Electrical isolation
+a6a9d221	Remove combustibles within 11 m or cover them
+7df104ae	Suitable extinguisher at the location
+536a7d63	Fire watch during the work and for 60 minutes after
+411e97f3	Oxygen cylinders kept 6.1 m away from fuel gas
+fcbe590f	Full-body harness with shock-absorbing lanyard
+f9032360	Anchor point ≥ 22.2 kN
+2caed662	Scaffold with a green tag
+b5b73d97	Area below the work secured
+7c652aa4	Gas test before entry (O₂ → LEL → toxics)
+fbf08f5c	Continuous ventilation
+c87b95d5	Attendant outside the opening
+cbf4833c	Rescue plan and equipment ready
+9dae1dc8	Slopes or shoring according to the soil type
+c62103e9	Spoil kept 0.61 m away from the edge
+59edf5bd	A ladder every 15 m of length
+18cd7fb2	Daily inspection by a competent person
+a9cc7ca3	Line voltage confirmed with the distribution company
+b973adc4	Dedicated spotter for clearances
+9c76bfac	Work area marked out with barriers
+8136f987	Inspection of the crane and ropes
+d3c9bc65	Isolate the source, lock out and tag
+fdc33756	Confirm zero voltage
+b3d6d0d2	Temporary earthing when needed
+fe84c70a	Keys held by the person doing the work
+68f5f467	Draft — work not authorised
+03e40d28	Authorised
+939bb494	Valid
+d59687ba	Closed
+d5ecea13	Excavation width at the top
+68ffee49	Slope H:V
+ab4b957b	Number of ladders
+7c323ffc	Spoil distance from the edge ≥
+131a7537	Edge protection system
+542b8f4f	Required from 1.5 m
+3403087f	Designed by a specialist engineer
+d1603068	Gas test before descending
+f89ae72a	Required
+88f659b7	> 1.22 m with possible gas
+7a0e52ed	The excavation is deeper than 6.1 m — it requires a design by a specialist engineer; the calculator is stopped.
+3c28e899	Free fall
+9b8e1c3e	Required clearance below the work surface
+772efcd5	Ladder base
+e0d8ec49	Minimum ladder length
+9a9c5ca9	Available clearance
+fccb2254	Insufficient clearance — use a self-retracting lifeline (SRL) or raise the anchor point.
+fc191d6b	Conservative planning distance
+b172458c	Lifting is prohibited until the distribution company confirms the line voltage.
+df216255	Minimum distance from the line
+4131594f	Distance from the line
+3cd273fe	Removing combustible materials
+3b400936	Fire watch after the work
+f56cf1d2	Permit issuer
+5fdb14e9	Permit receiver
+f49361d4	Paper signature
+e963c1e9	Gas test passed
+204ef85d	Blocked by the calculator
+5c4f3ac2	Permit
+0f2da99f	Work description
+f4c88424	Starts
+0aaf2a07	Hazards and precautions
+12ff61d8	Excavation calculator
+59bdf1ee	Bottom width
+91a8f852	Excavation length
+07643ae1	Stable rock
+7c1413f3	Type A cohesive
+0206c60e	Type C loose
+1f28450c	Water or seepage
+742c12b3	Possible gases
+ab38ce27	Fall and ladder calculator
+2819e714	Lanyard length
+81c4b9e7	Default 1.8
+61535d30	Absorber extension
+aeccdd8a	Default 1.75
+d2ca96d6	Anchor point above the feet
+a74c8ae8	0 = worst case
+06f7b3ff	Available clearance below the work surface
+2cf538a0	Ladder height
+faa5f365	Distance from power lines
+c37f8de5	Line voltage (leave blank if unknown)
+9b9ca0ae	Gas readings
+3d721fc8	New reading
+d8964715	✓ Safe
+7a453be0	✗ Unsafe
+ba6b401d	Time
+a4bbfafc	Each reading is valid for 2 hours ⚑ — a failed reading stops the permit.
+c0e82ebe	Responsible performer
+33f545f9	Permit receiver
+18bb96c7	Signed on paper by all three parties
+9793214a	Permit to work
+dc1c1474	Missing:
+c044119f	Missing: {0}
+47291254	Close the permit
+ed15ef56	Closing notes (site safe and clean)
+a6ed2a71	Completed
+4c79a47d	Not done
+935d8234	Reason for cancellation
+676248fc	Closure
+6c93988c	Permit to work
+80820332	Safety
+dce50c55	Permit to work
+ba566255	Permit to work · {0}
+9775aa96	Valid until ⁦{0}⁩
+b15a6864	Not valid
+0966013d	Heat stress
+da452de1	Drink water every 20 minutes, even if you're not thirsty
+253c56ee	Rest in the shade at midday
+571602d0	If you feel dizzy or get a headache, report it right away
+1abe54cf	Working at height
+9eda1136	Harness always clipped to a strong anchor point
+f78b592b	Every scaffold must carry a green tag
+15e64d10	No standing on the guardrail or the edge
+c3639dbd	Excavation
+7f4d1d56	No going down without shoring or safe slopes
+5e541c8b	Keep spoil at least 60 cm from the edge
+4acde22a	A ladder inside the excavation, within everyone's reach
+1eed2c45	Crane lifting
+64ee77aa	Never stand under a load
+aa82b362	Signals from one known person only
+f1d83b32	Check ropes and shackles before lifting
+fcc940ea	Hot work
+a94485a4	Extinguisher next to the welding spot
+a7ef954f	Move flammable materials 11 metres away
+4c450930	Fire watch for 60 minutes after finishing
+17528f19	Housekeeping
+9161d2b8	Walkways clear of debris
+d7ea7aad	Protruding nails removed or bent over
+8016438e	Waste in its designated places
+5520b71e	Never touch exposed cables
+cc7c90f7	Earth-leakage breaker (RCD) working on every temporary board
+62e6ee20	Isolate and lock out before any maintenance
+c443499e	Manual handling
+2f48cea8	Bend your knees, not your back
+953c7bb6	Ask for help with heavy loads
+f528819c	Carry the load close to your body
+fd046b16	PPE
+f28417f8	Helmet, boots and vest at all times
+ecb44370	Goggles when grinding or breaking concrete
+80e40de4	Damaged PPE is replaced immediately
+9489c209	Scaffolding
+b837f6e2	Green tag before you climb
+1c1c6063	Boards fixed and guardrail complete
+4a06801e	Never alter the scaffold without the specialist
+cdef38b9	Confined spaces
+a0c7a5cd	Gas test before entering
+aaf86174	An attendant outside at all times
+251db8c4	Valid permit to work
+ce9282ac	Equipment and traffic
+cc2f096b	Stay clear of the machine's swing radius
+915cdbf0	Make eye contact with the driver
+87e7ea39	Signal before reversing
+a7a05734	Helmet
+bd608042	Boots
+b78f6748	Vest
+0bc2c751	Gloves
+86c32309	Goggles
+3b47c72d	Harness
+cf012109	Attendance
+f65afd5b	{0} hours · PPE {1}
+c8a75c08	Presenter
+89b68742	Area
+8cd1ef87	Today's tasks and their hazards
+cd0ddf1f	Attendance and PPE
+987504ec	New worker
+5860228e	Name
+734c2da6	ID card number
+87071505	Works at height (harness required)
+3b0975be	Action
+42f3930a	Issued
+a61e8a29	Removed from work
+b586ce58	Action needed:
+4946c556	Action needed: {0}
+75062ada	Duplicate card:
+89e9d0c7	Duplicate card: {0}
+6c2de3e4	A record of toolbox talks and attendance; it does not replace the risk assessment and the approved safety plan. Worker details are stored in your account only.
+4c9e5469	Removed
+62c3bc6f	Hours
+9120ce61	PPE complete
+44c948cc	Key points
+64c41c23	Today's tasks and their hazards: {0}
+75d925b0	Attendance and PPE sheet
+8352b9cf	Toolbox talk
+dd76209e	Toolbox talk
+fed40a25	Toolbox talk · ⁦{0}⁩
+74219b0d	Attendance ⁦{0}⁩ · PPE ⁦{1}⁩
+e5089823	Prepared by
+bd4f4c6a	Checked by
+0bb8cb4f	Approved by
+9563aa27	Contractor
+418d7412	Consultant
+cd64937a	Site engineer
+037b46a9	HSE officer
+b2ce4291	Requested by
+1b307242	Store keeper
+8ccee927	Issuer
+78f7516a	Acceptor
+b3ebe209	Supervisor
+b5ab75a8	Estimating calculations to help the engineer on site and in the technical office; check them against the approved drawings, specifications and the consultant's instructions before execution or ordering. Values marked ⚑ are editable assumptions that need verification.
+15506671	BS backsight
+ba194580	IS intermediate
+1dabdcca	FS foresight
+f68283b3	CP turning point
+dfae2deb	Closure error
+9e34ebf6	Closure error {0} {1}
+bd7b7583	mm · allowed
+674397ce	e = {0} mm · allowed {1} mm
+714d132f	✓ Accepted
+05a7ffc3	✗ Redo the levelling
+1a6c6e50	Benchmark transfer
+c17a5ebd	Natural ground levels
+b84a46ff	Slab levels
+fc8c289a	Road section
+a7dfb062	Instrument (type and serial number)
+d6d7be62	Staff length
+fc9e7ecd	Starting benchmark
+6ad9fcb3	Its level
+af4e50fe	Benchmark source (survey authority / certificate)
+30c6cc15	Closure
+92a87add	On a known benchmark
+088c9d83	Closed loop
+333dae74	Open line
+259278f2	Closing benchmark
+e3e3432b	Its known level
+967e92b2	Allowable error
+ca84ee45	Route length K
+da72288b	Error distribution
+b0028286	By number of setups
+15e9ce12	By distance
+7dae3e3b	Readings ({0})
+c933144a	New reading
+80259a7b	Point
+06fd0ccd	Reading
+ecfabdbe	Negative = inverted staff
+f16d2ede	Setup length (backsight + foresight)
+f5c0b291	The error is larger than allowed — it is not distributed. Redo the levelling.
+aa99eddb	The corrections are applied in the report («Corrected level» column).
+b2f3c528	Two-peg test (collimation adjustment)
+7e414ef3	a₁ (from the midpoint)
+ea0b5970	b₁ (from the midpoint)
+748dbb47	a₂ (near A)
+47e720d1	b₂ (far)
+8a9b0a49	Distance to A
+3af52882	Distance to B
+fa6184be	✗ Needs adjustment
+dbdb3c03	A field book with automatic checks; error limits follow the setting or the project specifications, and it does not replace approval by the responsible surveyor.
+14b4bc79	Inverted
+5ed58226	Natural ground
+30bc75e6	Method
+bf065775	Instrument level
+9eea2c9a	Instrument
+7a466b92	Source
+8adc2d51	Observer
+388b6e0d	Recorder
+a6f465eb	Rise
+e990bd85	Fall
+a374bb89	Distance
+9031e12b	Correction
+dbd6e860	Corrected
+d580902e	Design
+61e7f5fb	Cut/fill
+9e9ec776	Check 1
+b563d2af	Σrise − Σfall
+c035ab5a	R/F check
+811b2a90	Check 2
+20c7de84	Distribution by setups
+33a905b2	Distribution by distance
+7565abe1	Two-peg test
+5cf2b187	Reference point — not an Authority benchmark
+8a4000ad	Engineering practice
+8b9ec3ae	Level book
+c1425ab9	Level book
+ee9a5866	⁦{0} {1} m⁩ · ⁦{2}⁩ points
+3718393c	Closure error ⁦{0} mm⁩ of ⁦{1} mm⁩ {2}
+a42ed793	See the full level book
+bee82640	Mix per bag
+7fcab7d6	Cement per m³
+b7bd4897	Sand per m³
+4d1998e1	Gravel per m³
+188dc943	Water/cement ratio
+ba7288a7	Number of bags
+b1f93df5	buckets of sand · {0} buckets of gravel
+ca5046b0	per {0} bags
+13cda0f6	Mix yield
+c43caa75	Bucket
+3ba8288b	Mix {0} kg/m³
+569643e4	Masonry
+8fc164a9	Brick type
+0816d95d	Half brick
+f0108bfd	One and a half bricks
+f948a9bc	Two bricks
+dfee3231	Wall height
+3e954b8b	Cement per m³ of sand
+51226b8f	{0} m² net · waste {1} %
+88b3839c	Adhesive
+78a7b870	Number / m²
+a4bc29ad	{0} m²
+c8039516	Lightweight-block adhesive
+0e3eeca8	Mortar cement
+8356338f	{0} kg/m³ sand
+94e2f2ed	Mortar sand
+3c154968	Waste 25 % ⚑
+9ce97383	Plaster
+b2b36549	Cement bags
+8efbd798	Sand {0} m³ = {1} buckets
+2dce4160	Plaster cement
+8c286613	Plaster sand
+f7277332	Tiles and grout
+82ccf74e	Tile length
+ade58de2	Tile width
+f6c3875b	Joints
+0f34a804	m² per carton
+b372c783	{0} cartons · exact count {1}
+47745f5e	Grout
+306bf0fa	Tiles {0}×{1}
+b10ea04f	Carton
+0710fc74	{0} m² · waste {1} %
+f0f09aa3	Paints
+08a90f9d	Room length
+bae250e9	Room width
+e1eb42b6	Openings
+810f4d6d	With the ceiling
+7f1b7675	Number of coats
+80eb86d7	Coverage per the product datasheet
+3eba04f5	Pack
+54c168ec	{0} L pack
+c9018508	{0} litres · {1} m²
+9a0616b5	Walls
+68956f70	Paint
+30d1f9f6	{0} L pack
+2d299466	{0} coats · {1} m²
+5c48de6d	Coverage outside 8–14 m²/litre — check the datasheet ⚑
+b0e6c2fe	Formwork timber
+df9e5f54	Columns
+19fe81a8	Beams
+4b4d6428	Walls
+84ad871c	First dimension (or length)
+ca3efdcb	Second dimension (or width)
+a77b14a7	Height / drop
+040e3d79	Plywood sheet 1.22×2.44
+9212e17a	Contact area {0} m²
+a1313fad	Exact
+f93d9c33	Sheet
+a6b379a0	Plywood 1.22×2.44
+1adf4212	{0} m² + {1} %
+2adda280	Rebar layout
+4f00a60a	Spacing between bars
+9974aad8	Bar length in the other direction
+4f0d56b6	Cover at the end
+8a9afc69	Ø{0} @ {1} · {2} mm²/m
+a4121b40	Ø{0} rebar
+be7cf9ab	{0} bars × {1} m
+448d6bdc	Spacing less than 2Ø + 20 mm
+230f9293	Minimum thickness at the drain
+b26bd007	Area (for volume)
+468f3b13	mm level difference
+6987ecd8	Maximum thickness {0} mm · average {1} mm
+8f5f3488	Falls screed volume
+7c7582ba	Falls concrete / mortar
+23640042	{0} % over {1} m
+f83fd183	Electrician
+797c976f	Number of rooms
+2d6fee20	Outlets per room
+3da29cb0	Total route lengths
+b0d70e9d	Metres of wire / conduit
+a5ece619	{0} boxes
+f80bfadf	Wire / conduit
+7eac6b0b	Boxes
+61fb5915	Box
+237f5bb4	For ordering only — cable size comes from the cable tool
+afc2d9d7	Plumber
+77b48d6e	Route lengths (separate with +)
+e7aa224c	Pipe length
+1037d743	{0} m pipe
+c9ae225f	{0} m · {1} fittings
+c796b25f	Pipes
+27d22b40	Pipe
+98be4033	Fittings
+97e23208	Piece
+9ceb77db	1 per 1.5 m ⚑
+c9cba8c6	Drywall
+30738ed4	Partition length
+da3f7503	Sides
+c4e33b58	Two sides
+7432a0c2	One side
+bab1cf37	Board 1.2×2.4
+9e5d11b6	{0} studs · {1} m track
+e4f90eec	Screws
+104ed87e	Drywall boards
+36e35f28	Studs
+227607e3	Stud
+b86616f2	Every 60 cm
+9f9da584	Tracks
+d01fb128	Structural steel
+aa4a312b	Section
+bb1b07c1	{0} × {1} × {2} m · {3} kg/m
+31c1dfd6	{0} × {1} m
+a816aadb	+ Add to material request
+f8d4dc75	Material request ({0})
+574bbbfe	Requested by
+2e83ee6b	Required on
+fe545a21	Manual item
+d86e3c00	How many litres is your bucket?
+9b870b3f	Wheelbarrow
+b8c9b779	An estimate for ordering and site preparation. Mix ratios and waste are common values you can edit and do not replace the approved mix. Bucket and wheelbarrow sizes follow your calibration.
+dae6bc8f	Description and assumptions
+2b781689	50 kg bag · bucket {0} litres ⚑ · wheelbarrow {1} litres ⚑ · mix ratios and waste per the site profile eg-site@1 ⚑
+7666bcf3	Material request
+8cdc403d	Material request
+eba9a478	· draft
+7208ff4d	-
+f1017a1d	-
+56543342	Enter a number only
+30f9836a	The value can't be negative here
+99b55b65	Enter a whole number
+6706be4e	Minimum value {0}
+16401622	Maximum value {0}
+e661ef2d	-
+951f792c	Quick trade tools
+554d1954	Materials for every trade in seconds
+34bb65ab	Concrete and structures
+c2608d02	Take-off and pour plans
+4a1f7f04	Rebar
+93e85e00	Bending schedules, cutting and weights
+caa918b1	Surveying and soil
+f6337e39	Levelling and levels
+977cacfe	Take-off and finishes
+21e5912e	Masonry, plaster and finishes
+93e1e45d	Site and safety
+b3bb1752	Diary, toolbox talks, permits and inspection
+fdd758b9	Mechanical: AC, plumbing and fire
+fe971489	Installation checks, levels and sprinklers
+43ee9953	Cables and voltage drop
+e6f0b7db	Registers and minutes
+60518904	Architecture
+82735a95	Areas and code requirements
+d09596a4	Always net
+64b46c3c	Trade calculator
+7d08665b	Masonry, plaster, tiling, painting, drywall, plumbing and electrical — by the bag and the piece
+44559f75	tradesman trade mason bricklayer brick plastering plaster tiles ceramic paint painter drywall plumbing electrician electrical
+e09afa5c	Concrete take-off and pours
+a801bb49	Element take-off, pour plan, mixer count and materials
+4abe1634	concrete take-off pour mixers slab beam column footing
+27f02872	Bar bending and cutting schedule
+f4490819	BS 8666 shapes, cut lengths, weights and the 12 m cutting plan
+761cf3d8	rebar bar bending schedule reinforcement cutting weights bars laps bbs
+1c276a56	Rise and fall or instrument height, closing error and its distribution
+68666f90	levelling levels benchmark staff level book
+224ae76e	Daily site diary
+cb825cc8	Labour, equipment, work and weather — the day's record in minutes
+96787a12	daily site diary daily report labour equipment site report
+8a89ce02	Toolbox talk and PPE check
+d1667f1e	Topic of the day, hazards, attendance and PPE
+5c9e86ee	toolbox talk safety ppe attendance
+ac46866b	Permits to work
+a5016b46	Hot work, heights, confined spaces — with a clear status and safety calculators
+e76c5e45	permit to work hot work height confined excavation
+8619635a	Inspection and acceptance checklists
+12711bbc	Inspect and accept work with a PDF report
+0e815de6	inspection acceptance quality qa qc checklist
+708c1cd7	Drain slope, pipe length and lift, extra refrigerant charge
+2b625647	ac split hvac installation drain refrigerant copper pipes
+45d988bb	Levels, depths and gradients, from the outfall upstream
+bbf9c8db	drainage sanitary manhole invert levels gradient pipes sewer
+ccb9488d	Sprinkler layout and check
+0999fd7a	Sprinkler count and spacings against NFPA 13 limits
+82bc8d8c	sprinkler fire fighting nfpa spacing
+a6fbbdda	Cable and voltage drop
+1c664e69	Current, factors, cable cross-section and voltage drop for each circuit
+0a2d4e88	cable voltage drop cross-section breaker current electrical ampacity
+67ec58d1	Unit and area conversion
+4e8f5ac1	Engineering units, feddan / qirat / sahm, and slopes
+5e47cb51	unit converter feddan qirat sahm slope
+553003e3	job offer offer
+b0973f76	net gross take-home
+7b81f144	compare offers
+da41ed86	negotiation negotiate
+a16a1106	raise increase
+412cbfb6	path career
+cdf14e4f	contract
+bf60194c	move relocation transfer
+0a1ff99d	inflation
+9b255764	Non-compliant ✗
+00cfd010	Compliant ✓
+db91a4b6	Limit:
+d730a2cf	Limit: {0}
+7358ee1c	How it is calculated
+81a7e1f7	How it is calculated {0}
+dcc26678	Preview
+872a9d1d	PDF report
+c8fe58f8	Share summary
+5657b726	Report preview
+7daee681	Previous
+0e83a8ac	Next
+c6c35ad9	{0} m

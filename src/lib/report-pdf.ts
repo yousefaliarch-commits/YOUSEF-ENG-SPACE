@@ -67,7 +67,9 @@ function drawMark(ctx: CanvasRenderingContext2D, x: number, y: number, size: num
 
 export async function inspectionPdf(r: InspectionReport) {
   const FONT = '"IBM Plex Sans Arabic", system-ui, sans-serif';
-  try { await Promise.all([600, 500, 400].map((w) => (document as any).fonts.load(`${w} 24px ${FONT}`))); } catch (e) { /* system font then */ }
+  // a sample with an Arabic letter: without it only the Latin files of each weight are fetched, and an Arabic weight not yet
+  // used on screen is silently drawn in a system font
+  try { await Promise.all([600, 500, 400].map((w) => (document as any).fonts.load(`${w} 24px ${FONT}`, "ء A1"))); } catch (e) { /* system font then */ }
   const en = isEn(); const M = 72, W = A4.w - 2 * M, FOOT = 120;
   // horizontal positions measured from the reading start (right edge in Arabic, left in English)
   const X = (off: number) => (en ? M + off : A4.w - M - off);                 // a point at `off` from the start edge
@@ -190,7 +192,14 @@ export async function saveOrShare(bytes: Uint8Array, filename: string, title: st
     const [{ Filesystem, Directory }, { Share }] = await Promise.all([import("@capacitor/filesystem"), import("@capacitor/share")]);
     let bin = ""; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
     const w = await Filesystem.writeFile({ path: filename, data: btoa(bin), directory: Directory.Cache });
-    await Share.share({ title, files: [w.uri], dialogTitle: title }); return;
+    // closing the share sheet is the member's choice, not a failed export
+    try {
+      await Share.share({ title, files: [w.uri], dialogTitle: title });
+    } catch (e: any) {
+      if (/cancel/i.test(String((e && e.message) || e))) return;
+      throw e;
+    }
+    return;
   }
   const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: "application/pdf" }));
   const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
