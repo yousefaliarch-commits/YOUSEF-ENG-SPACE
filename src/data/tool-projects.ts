@@ -9,7 +9,7 @@ import type { LogoRef } from "../doc/model";
 
 export type ToolParty = { name: string; nameEn?: string; rep?: string; logo?: LogoRef };
 
-export type SignRole = "prepared" | "checked" | "approved" | "contractorRep" | "consultantRep" | "siteEngineer" | "hseOfficer";
+export type SignRole = "prepared" | "checked" | "approved" | "contractorRep" | "consultantRep" | "siteEngineer" | "hseOfficer" | "requester" | "storeKeeper" | "issuer" | "acceptor" | "supervisor";
 
 export type ToolProject = {
   id: string;

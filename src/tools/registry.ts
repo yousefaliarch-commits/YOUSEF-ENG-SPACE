@@ -29,7 +29,7 @@ export const TOOL_REGISTRY: ToolDef[] = [
   {
     id: "tradeKit", pack: "workforce", name: "حاسبة الصنايعي", desc: "مباني، بياض، بلاط، دهان، جبس بورد، سباكة وكهرباء — بالشكارة والقطعة",
     icon: "HardHat", keywords: "صنايعي مباني طوب بياض محارة بلاط سيراميك دهان نقاشة جبس بورد سباكة كهرباء trade mason tiles paint plaster drywall",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["tradeKit"], aliases: ["masonry"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["tradeKit"], aliases: ["masonry"],
   },
   {
     id: "concrete", pack: "structural", name: "حصر وصب الخرسانة", desc: "حصر العناصر، خطة الصب، عدد العربيات والخامات",

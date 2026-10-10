@@ -98,3 +98,21 @@ test("engineer: bar bending schedule — a U-bar line, the cutting plan, a lands
   expect(all).toContain("/MediaBox [0 0 841.89 595.276]");
   expect((all.match(/\/Type \/Page\b/g) || []).length).toBeGreaterThanOrEqual(3);
 });
+
+test("foreman kit: half-brick wall → 577 bricks, added to a material request, PDF", async ({ page }) => {
+  test.setTimeout(120_000);
+  const errs = watch(page);
+  await demoAs(page, "supervisor", { disc: "civil" }, "#app/tooldoc/tradeKit:new");
+  await page.locator("[data-tool-export]").waitFor();
+  const nums = page.locator('[data-screen-layer] input[inputmode="decimal"]');
+  await nums.nth(0).fill("4");
+  await nums.nth(1).fill("2.5");
+  await settle(page, 400);
+  await expect(page.locator("[data-tool-result=hero]")).toContainText("577");
+  await page.getByRole("button", { name: /أضِف لطلب الخامات/ }).click();
+  await expect(page.getByText(/طلب الخامات \(3\)/)).toBeVisible();
+  await noCrash(page, errs, "trade kit");
+  await noOverflow(page, "trade kit");
+  const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), page.locator("[data-tool-export]").click()]);
+  expect(readFileSync((await dl.path())!).subarray(0, 5).toString("latin1")).toBe("%PDF-");
+});

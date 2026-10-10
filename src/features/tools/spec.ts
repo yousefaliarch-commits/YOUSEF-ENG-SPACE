@@ -27,6 +27,11 @@ const SIGN_LABEL: Record<SignRole, string> = {
   consultantRep: "مهندس الاستشاري · Consultant",
   siteEngineer: "مهندس الموقع · Site engineer",
   hseOfficer: "مسؤول السلامة · HSE officer",
+  requester: "الطالب · Requested by",
+  storeKeeper: "أمين المخزن · Store keeper",
+  issuer: "مُصدِر التصريح · Issuer",
+  acceptor: "مستلم التصريح · Acceptor",
+  supervisor: "المشرف · Supervisor",
 };
 
 export const snapOf = (p: ToolProject): ProjectSnap => ({
