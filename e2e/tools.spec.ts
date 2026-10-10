@@ -116,3 +116,28 @@ test("foreman kit: half-brick wall → 577 bricks, added to a material request, 
   const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), page.locator("[data-tool-export]").click()]);
   expect(readFileSync((await dl.path())!).subarray(0, 5).toString("latin1")).toBe("%PDF-");
 });
+
+test("surveyor: a closed levelling loop shows its misclosure live and prints the field book", async ({ page }) => {
+  test.setTimeout(120_000);
+  const errs = watch(page);
+  await demoAs(page, "engineer", { disc: "survey" }, "#app/tooldoc/levelBook:new");
+  await page.locator("[data-tool-export]").waitFor();
+  await page.getByLabel("منسوبه").first().fill("50");
+  await page.getByRole("button", { name: "حلقة مغلقة" }).click();
+  await page.getByLabel("طول المسار K").fill("0.2");
+  const row = (i: number) => page.locator(`[data-row='${i}']`);
+  await row(0).getByLabel("القراءة").fill("1.5");
+  await page.getByRole("button", { name: /قراءة جديدة/ }).click();
+  await row(1).getByRole("button", { name: /CP/ }).click();
+  await row(1).getByLabel("FS مقدمة").fill("2.0");
+  await row(1).getByLabel("BS مؤخرة").fill("1.2");
+  await page.getByRole("button", { name: /قراءة جديدة/ }).click();
+  await row(2).getByRole("button", { name: /FS مقدمة/ }).click();
+  await row(2).getByLabel("القراءة").fill("0.690");
+  await expect(page.getByText(/e = 10 mm/)).toBeVisible();
+  await expect(page.getByText(/أعد الميزانية/).first()).toBeVisible();
+  await noCrash(page, errs, "level book");
+  await noOverflow(page, "level book");
+  const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), page.locator("[data-tool-export]").click()]);
+  expect(readFileSync((await dl.path())!).toString("latin1")).toContain("/MediaBox [0 0 841.89 595.276]");
+});

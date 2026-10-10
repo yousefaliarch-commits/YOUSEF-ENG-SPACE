@@ -44,7 +44,7 @@ export const TOOL_REGISTRY: ToolDef[] = [
   {
     id: "levelBook", pack: "survey", name: "دفتر الميزانية", desc: "الارتفاع والانخفاض أو منسوب الجهاز، قفل الخطأ وتوزيعه",
     icon: "Ruler", keywords: "ميزانية مناسيب روبير قامة ميزان levelling level book benchmark",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["levelBook"], disciplines: ["civil", "survey"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["levelBook"], disciplines: ["civil", "survey"],
   },
   {
     id: "siteDiary", pack: "hse", name: "يومية الموقع", desc: "العمالة والمعدات والأعمال والطقس — سجل اليوم في دقائق",
