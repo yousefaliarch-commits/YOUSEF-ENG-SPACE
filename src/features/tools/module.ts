@@ -25,4 +25,7 @@ export const TOOL_MODULES: Record<string, () => Promise<ToolModule>> = {
   bbs: () => import("./rebar/bbs").then((m) => m.module),
   tradeKit: () => import("./trade/trade").then((m) => m.module),
   levelBook: () => import("./survey/level-book").then((m) => m.module),
+  siteDiary: () => import("./site/diary").then((m) => m.module),
+  toolboxTalk: () => import("./site/toolbox").then((m) => m.module),
+  workPermit: () => import("./site/permit").then((m) => m.module),
 };

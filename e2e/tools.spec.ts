@@ -141,3 +141,26 @@ test("surveyor: a closed levelling loop shows its misclosure live and prints the
   const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), page.locator("[data-tool-export]").click()]);
   expect(readFileSync((await dl.path())!).toString("latin1")).toContain("/MediaBox [0 0 841.89 595.276]");
 });
+
+for (const kind of ["siteDiary", "toolboxTalk", "workPermit"]) {
+  test(`${kind}: opens for a supervisor, takes input, exports a PDF`, async ({ page }) => {
+    test.setTimeout(120_000);
+    const errs = watch(page);
+    await demoAs(page, "supervisor", { disc: "civil" }, `#app/tooldoc/${kind}:new`);
+    await page.locator("[data-tool-export]").waitFor();
+    const field = page.locator('[data-screen-layer] input[inputmode="decimal"]:visible').first();
+    if (await field.count()) await field.fill("3");
+    await settle(page, 400);
+    await noCrash(page, errs, kind);
+    await noOverflow(page, kind);
+    const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), page.locator("[data-tool-export]").click()]);
+    expect(readFileSync((await dl.path())!).subarray(0, 5).toString("latin1")).toBe("%PDF-");
+  });
+}
+
+test("permit: a draft can never be authorised without names, the paper signature and a passing gas test", async ({ page }) => {
+  await demoAs(page, "supervisor", { disc: "civil" }, "#app/tooldoc/workPermit:new");
+  await page.locator("[data-tool-export]").waitFor();
+  await expect(page.getByText("مسودة — غير مصرّح بالعمل").first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "تصريح العمل" })).toBeDisabled();
+});

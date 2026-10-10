@@ -49,17 +49,17 @@ export const TOOL_REGISTRY: ToolDef[] = [
   {
     id: "siteDiary", pack: "hse", name: "يومية الموقع", desc: "العمالة والمعدات والأعمال والطقس — سجل اليوم في دقائق",
     icon: "NotebookPen", keywords: "يومية الموقع تقرير يومي عمالة معدات daily diary site report",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["siteDiary"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["siteDiary"],
   },
   {
     id: "toolboxTalk", pack: "hse", name: "التوعية الصباحية وتمام المهمات", desc: "موضوع اليوم والمخاطر والحضور ومهمات الوقاية",
     icon: "Megaphone", keywords: "توعية صباحية سلامة مهمات وقاية حضور toolbox talk ppe safety",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["toolboxTalk"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["toolboxTalk"],
   },
   {
     id: "workPermit", pack: "hse", name: "تصاريح العمل", desc: "أعمال ساخنة، ارتفاعات، أماكن مغلقة — بحالة واضحة وحاسبات أمان",
     icon: "ShieldCheck", keywords: "تصريح عمل أعمال ساخنة ارتفاعات أماكن مغلقة حفر permit to work hot work height confined",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["workPermit"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["workPermit"],
   },
   {
     id: "checklists", pack: "hse", name: "قوائم الفحص والاستلام", desc: "فحص واستلام الأعمال بتقرير PDF",
