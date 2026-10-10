@@ -22,9 +22,11 @@ export type DocMeta = {
   dateIso: string;
   lang: DocLang;
   issuer: string;           // the issuing party's name (PDF Author), never "EngSpace"
+  issuerRole: "client" | "consultant" | "contractor" | "subcontractor";
   appVersion: string;
   profileLabel: string;
-  hash: string;
+  engines: string[];        // "concrete@1.0.0", … printed in the colophon
+  hash: string;             // SHA-256 hex of the issued content ("" for a draft)
   qr?: string;
 };
 
@@ -56,6 +58,14 @@ export type DocRow = {
   sketch?: VPath[];
 };
 
+// one line of "how this was calculated": shown under «طريقة الحساب» and printed in the basis block
+export type TraceStep = { label: string; expr: string; value: string; clause?: string };
+
+export type BasisRow = {
+  key: string; label: string; value: string; unit?: string; source: string; clause?: string;
+  conf: "H" | "M" | "L"; flagged: boolean; override?: { value: string; reason: string };
+};
+
 export type SignParty = { role: string; name?: string; title?: string; syndicateNo?: string };
 
 export type DocBlock =
@@ -72,12 +82,13 @@ export type DocBlock =
   | { k: "signatures"; parties: SignParty[]; stamp: boolean; statusBox?: "ABC" }
   | { k: "photos"; items: { ref: PhotoRef; caption: string }[]; grid: "2x3" | "2x2" }
   | { k: "disclaimer"; text: string }
+  | { k: "basis"; rows: BasisRow[]; formulas: TraceStep[] }
   | { k: "pageBreak" };
 
 export type DocSection = { orientation: "portrait" | "landscape"; blocks: DocBlock[] };
 
 export type TitleParty = {
-  role: "client" | "project" | "consultant" | "contractor";
+  role: "client" | "project" | "consultant" | "contractor" | "mainContractor" | "subcontractor";
   name: string;
   nameEn?: string;
   logo?: LogoRef;
