@@ -4,6 +4,10 @@ import {
   CircleCheck, LockKeyhole, ShieldAlert
 } from "lucide-react";
 import { loadInspections, loadTemplates, mergeInspections, mergeTemplates, photoPaths, storeInspections, storeTemplates } from "../data/checklists";
+import { loadProjects, mergeProjects, storeProjects } from "../data/tool-projects";
+import { toolStore as openToolStore, type CloudPort } from "../lib/tool-store";
+import { toolAllowed, toolKindsForRole, toolOfStack, toolRole } from "../tools/gate";
+import { toolById } from "../tools/registry";
 import { SupportScreen, TicketScreen } from "../features/support/support";
 import { loadDevice, storeDevice } from "../lib/device-store";
 import { ROOMS, company } from "../data/companies";
@@ -47,6 +51,8 @@ import * as cloud from "../backend/cloud";
 // pdf.js / mammoth only when a file is picked
 const CVReviewScreen = lazy(() => import("../features/cv/CVReviewScreen").then((m) => ({ default: m.CVReviewScreen })));
 const ChecklistsScreen = lazy(() => import("../features/qaqc/qaqc").then((m) => ({ default: m.ChecklistsScreen })));
+const ToolScreen = lazy(() => import("../features/tools/host").then((m) => ({ default: m.ToolScreen })));
+const ToolDocScreen = lazy(() => import("../features/tools/host").then((m) => ({ default: m.ToolDocScreen })));
 
 // =====================================================================
 //  App view — state, routing, gestures
@@ -69,9 +75,9 @@ const TabPane = ({ id, active, covered, render, sig }: any) => {
   return <div data-pane={id} className={`tab-pane ${active ? "" : warm ? "is-off" : "is-off is-warming"}`} {...(active ? (covered ? { "aria-hidden": true } : {}) : { inert: "", "aria-hidden": true })}><PaneBody active={active} render={render} sig={sig} seen={seen} /></div>;
 };
 // every store value a tab screen reads (navigation-only keys — stack, sheet, msg, dir… — are left out on purpose)
-const PANE_KEYS = ["qcTemplates", "authView", "editing", "welcome", "config", "contacted", "contributed", "follows", "hidden", "inspections", "jobStats", "jobs", "logos", "market", "mod", "notifPrefs", "notifs", "persona", "posts", "profile", "pts", "pushStatus", "reacts", "reports", "reviews", "roomFollows", "salaryLog", "salaryRev", "saved", "shares", "threads", "verifs", "voteAs", "votes"];
+const PANE_KEYS = ["toolIndex", "toolProjects", "activeProject", "qcTemplates", "authView", "editing", "welcome", "config", "contacted", "contributed", "follows", "hidden", "inspections", "jobStats", "jobs", "logos", "market", "mod", "notifPrefs", "notifs", "persona", "posts", "profile", "pts", "pushStatus", "reacts", "reports", "reviews", "roomFollows", "salaryLog", "salaryRev", "saved", "shares", "threads", "verifs", "voteAs", "votes"];
 
-export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "qcbuilder", "ticket"];
+export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "qcbuilder", "ticket", "tool", "tooldoc"];
 
 export const PLAIN_TYPES = ["notifications", "notifprefs", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists", "support"];
 
@@ -119,6 +125,11 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const [verifs, setVerifs] = S("verifs", () => seed(verifs0(), []));
   // QA/QC inspections live on this device first (sites often have no signal); on the live platform they also go to the member's own state row
   const [inspections, setInspections] = S("inspections", () => loadInspections(persona && persona.pid));
+  // Tools (docs/TOOLS-BLUEPRINT.md §5): project profiles (this phone first, then the account row "siteProjects"), the active
+  // project (this device only), and the saved documents' headers mirrored from the tool store (src/lib/tool-store.ts)
+  const [toolProjects, setToolProjects] = S("toolProjects", () => loadProjects(persona && persona.pid));
+  const [activeProject, setActiveProjectRaw] = S("activeProject", () => { try { return localStorage.getItem(`engspace-active-project:${(persona && persona.pid) || "demo"}`) || null; } catch (e) { return null; } });
+  const [toolIndex, setToolIndex] = S("toolIndex", []);
   useEffect(() => { setInspections(loadInspections(persona && persona.pid)); }, [persona && persona.pid]);
   // the member's own checklists (built from scratch or from a copy of a ready one) — kept like inspections: this phone first, then their account
   const [qcTemplates, setQcTemplates] = S("qcTemplates", () => loadTemplates(persona && persona.pid));
@@ -248,6 +259,8 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     setReviews(d.reviews); setReacts(d.reacts); setVotes(d.votes); setVoteAs(d.voteAs); setSaved(d.saved); setFollows(d.follows); setRoomFollows(d.roomFollows); setHidden(d.hidden); setContacted(d.contacted);
     setInspections((mine) => mergeInspections(mine, d.inspections));
     setQcTemplates((mine) => mergeTemplates(mine, d.qcTemplates || []));
+    setToolProjects((mine) => mergeProjects(mine, d.toolProjects || []));
+    openToolStore(persona.pid, toolCloud).then((s) => s.pull());
     // the whole history is one value stamped with its last edit: the newer copy wins, so a deletion on one device sticks everywhere
     setSalaryLog((mine) => (d.salaryLog && d.salaryLog.at > (mine.at || 0) ? d.salaryLog : mine));
     if (d.config) setConfig({ ...MOD_CONFIG0, ...d.config });
@@ -329,6 +342,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const persist = (key?: any, value?: any) => { if (!CLOUD || !hydrated.current) return; clearTimeout(saveLater.current[key]); saveLater.current[key] = setTimeout(() => sync(() => cloud.saveState(key, value)), 800); };
   useEffect(() => persist("saved", saved), [saved]); useEffect(() => persist("follows", follows), [follows]); useEffect(() => persist("roomFollows", roomFollows), [roomFollows]); useEffect(() => persist("hidden", hidden), [hidden]);
   useEffect(() => { storeInspections(inspections, persona && persona.pid); persist("inspections", inspections); }, [inspections]);
+  useEffect(() => { storeProjects(toolProjects, persona && persona.pid); persist("siteProjects", toolProjects); }, [toolProjects]);
   useEffect(() => { storeTemplates(qcTemplates, persona && persona.pid); persist("qcTemplates", qcTemplates); }, [qcTemplates]);
   useEffect(() => { storeDevice("salarylog", persona && persona.pid, salaryLog); persist("salaryLog", salaryLog); }, [salaryLog]);
   const swapId = (list?: any, tmp?: any, item?: any) => list.map((x) => (x.id === tmp ? { ...x, ...item, mine: true } : { ...x, ...(x.replies ? { replies: swapId(x.replies, tmp, item) } : {}), ...(x.comments ? { comments: swapId(x.comments, tmp, item) } : {}) }));
@@ -344,8 +358,29 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const backRef = useRef<any>(null);
   backRef.current = () => { if (viewer) { setViewer(null); return true; } if (sheet) { setSheet(null); return true; } if (stack.length) { app.pop(); return true; } if (persona && curTab !== "home") { app.setTab("home"); return true; } return false; };
   useEffect(() => { if (NATIVE && !embed) setBackHandler(() => backRef.current()); }, []);
+  // the tool store: opened per member, headers mirrored into the store key the Tools tab renders; money kinds never reach a
+  // supervisor's screens (toolKindsForRole); pending writes go up when the app is hidden
+  const toolCloud: CloudPort | null = CLOUD ? { stamps: cloud.toolStamps, rows: cloud.toolRows, save: cloud.saveState } : null;
+  const toolPid = (persona && persona.pid) || "";
+  const toolKinds = toolKindsForRole(toolRole(profile));
+  useEffect(() => {
+    if (!persona) return;
+    let off = () => {};
+    let live = true;
+    openToolStore(toolPid, toolCloud).then((s) => {
+      if (!live) return;
+      const show = () => setToolIndex(s.headers(toolKinds));
+      show();
+      off = s.subscribe(show);
+    });
+    const hidden = () => { if (document.visibilityState === "hidden") openToolStore(toolPid, toolCloud).then((s) => s.flush()); };
+    document.addEventListener("visibilitychange", hidden);
+    return () => { live = false; off(); document.removeEventListener("visibilitychange", hidden); };
+  }, [toolPid, toolKinds.join()]);
+  useEffect(() => { setToolProjects(loadProjects(toolPid)); }, [toolPid]);
+
   const app: any = {
-    tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; startTransition(() => { setDir("tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; if (leaving.current) { leaving.current = false; if (layer.current) layer.current.classList.remove("is-leaving"); } setDir(stack.length ? "push" : "layer"); setStack((st) => [...st, s]); if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => {
+    tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; startTransition(() => { setDir("tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id)) || (toolOfStack(s) != null && !toolAllowed(toolRole(profile), toolOfStack(s)))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; if (leaving.current) { leaving.current = false; if (layer.current) layer.current.classList.remove("is-leaving"); } setDir(stack.length ? "push" : "layer"); setStack((st) => [...st, s]); if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => {
       // the last screen leaves as a compositor-only fade/slide of its layer, revealing the tab that never moved; deeper screens swap in place.
       // (A View Transition snapshotted both screens on every «back» — the remaining ~60 ms stall on phones.)
       if (leaving.current || !stack.length) return; navKind.current = "pop"; const el = layer.current;
@@ -399,6 +434,14 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     salaryRev,
     shares,
     salaryLog: salaryLog.log || [], saveSalaryLog: (log?: any) => setSalaryLog({ at: Date.now(), log: [...log].sort((a, b) => (a.month < b.month ? -1 : 1)).slice(-60) }),
+    toolIndex, toolProjects, activeProject,
+    toolStore: () => openToolStore(toolPid, toolCloud),
+    setActiveProject: (id?: any) => { setActiveProjectRaw(id || null); try { if (id) localStorage.setItem(`engspace-active-project:${toolPid || "demo"}`, id); else localStorage.removeItem(`engspace-active-project:${toolPid || "demo"}`); } catch (e) { /* this device only */ } },
+    saveToolProject: (x?: any) => setToolProjects((l) => mergeProjects([x], l)),
+    // one opener for every tool: the gate, then a pushed screen, the QA/QC screens or the old sheet
+    openTool: (id?: any) => { const t = toolById(id); if (!t || !toolAllowed(toolRole(profile), t.id)) { deny(); return; } if (t.id === "checklists") app.push({ type: "checklists" }); else if (t.surface === "sheet") app.openSheet("tool", { id: t.id }); else app.push({ type: "tool", id: t.id }); },
+    // swap the top screen in place (a new document getting its id): no animation, same gate as push
+    replaceTop: (e?: any) => { const tid = toolOfStack(e); if (tid != null && !toolAllowed(toolRole(profile), tid)) return; setDir("none"); setStack((st) => [...st.slice(0, -1), e]); },
     inspections, saveInspection: (x?: any) => setInspections((l) => [x, ...l.filter((i) => i.id !== x.id)].slice(0, 100)), deleteInspection: (id?: any) => { const paths = photoPaths(inspections.find((i) => i.id === id)); if (paths.length) sync(() => cloud.removeMedia(paths)); setInspections((l) => l.filter((i) => i.id !== id)); },
     qcTemplates: qcTemplates.filter((t) => !t.deleted), qcTemplatesAll: qcTemplates,
     saveTemplate: (t?: any) => setQcTemplates((l) => [{ ...t, at: Date.now() }, ...l.filter((x) => x.id !== t.id)].slice(0, 60)),
@@ -528,9 +571,10 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   if (editing) return wrap(<div className={frameCls} style={frameStyle}><Registration app={app} mode="edit" initial={profile} /></div>);
   if (welcome) return wrap(<div className={frameCls} style={frameStyle}><Welcome app={app} /></div>);
   const top = stack[stack.length - 1];
-  const screen = top && (blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
+  const toolClosed = top && toolOfStack(top) != null && !toolAllowed(toolRole(profile), toolOfStack(top));
+  const screen = top && (toolClosed || blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
     : top
-    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" || top.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.type + (top.id || "list")} app={app} id={top.id} kind={top.type} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
+    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "tool" ? <Suspense fallback={<ScreenLoading />}><ToolScreen key={top.id} app={app} id={top.id} /></Suspense> : top.type === "tooldoc" ? <Suspense fallback={<ScreenLoading />}><ToolDocScreen key={top.id} app={app} id={top.id} /></Suspense> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" || top.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.type + (top.id || "list")} app={app} id={top.id} kind={top.type} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : null;
   const tabScreen = (id?: any) => id === "home" ? <HomeScreen app={app} /> : id === "community" ? <CommunityScreen app={app} /> : id === "jobs" ? <JobsScreen app={app} /> : id === "market" ? <MarketScreen app={app} /> : id === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" && toolOpen(blocked, sheet.payload.id) ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;

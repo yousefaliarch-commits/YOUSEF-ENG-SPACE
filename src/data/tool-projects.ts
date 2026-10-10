@@ -38,3 +38,48 @@ export type ToolProject = {
 export type ProjectSnap = Pick<ToolProject,
   "code" | "name" | "nameEn" | "client" | "consultant" | "contractor" | "subcontractor" | "issuerRole" | "location" | "contractNo" | "signatories"
 > & { at: number };
+
+// ---------------------------------------------------------------------
+//  This phone first (localStorage), then the account (member_state "toolProjects"); merge by id, newest wins,
+//  a deleted project stays deleted (a tombstone is the project with `deleted: true`).
+// ---------------------------------------------------------------------
+const KEY = (pid = "") => `engspace-tool-projects:${pid || "demo"}`;
+
+export const loadProjects = (pid = ""): ToolProject[] => {
+  try {
+    const v = JSON.parse(localStorage.getItem(KEY(pid)) || "[]");
+    return Array.isArray(v) ? v : [];
+  } catch {
+    return [];
+  }
+};
+
+export const storeProjects = (list: ToolProject[], pid = "") => {
+  try {
+    localStorage.setItem(KEY(pid), JSON.stringify(list));
+  } catch {
+    /* storage full or blocked: the in-memory copy still works */
+  }
+};
+
+export function mergeProjects(local: ToolProject[], remote: ToolProject[] | null | undefined): ToolProject[] {
+  const by = new Map<string, ToolProject>();
+  for (const p of [...(remote || []), ...local]) {
+    if (!p || !p.id) continue;
+    const o = by.get(p.id);
+    if (!o || p.at > o.at) by.set(p.id, p);
+  }
+  return [...by.values()].sort((a, b) => b.at - a.at).slice(0, 200);
+}
+
+export const PROJECT_CODE = /^[A-Z0-9]{2,8}$/;
+
+export function blankProject(id: string): ToolProject {
+  return {
+    id, at: Date.now(), code: "", name: "",
+    client: { name: "" }, consultant: { name: "" }, contractor: { name: "" },
+    issuerRole: "contractor", location: { site: "" },
+    signatories: [{ role: "prepared", name: "" }, { role: "checked", name: "" }, { role: "approved", name: "" }],
+    numbering: { scheme: "simple", counters: {} }, profiles: {}, overrides: [],
+  };
+}

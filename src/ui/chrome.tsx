@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { toolAllowed, toolOfStack, toolRole } from "../tools/gate";
+import { toolById } from "../tools/registry";
 import { tapHaptic } from "../native/native";
 import {
   BadgeCheck, Bell, ChevronLeft, Eye, Flag, MapPin, Moon, Search, Settings, Share2, ShieldAlert, ShieldCheck, Star, Sun, X
@@ -76,8 +78,9 @@ export function AppHeader({ app }: any) {
   const top = app.stack[app.stack.length - 1]; const pf = usePlatform();
   const glass = `shrink-0 pt-[var(--sat)] bg-canvas/[.97] border-b z-10 transition-shadow duration-300 ${app.scrolled ? "header-lift border-line-2" : "border-line"}`;
   if (top) {
-    const closed = app.blocked && (app.blocked.stack.includes(top.type) || (top.type === "room" && app.blocked.rooms.includes(top.id)));
-    const titles: any = { support: "الدعم الفني", ticket: "تذكرة دعم", post: "نقاش", company: company(top.id)?.name, job: "تفاصيل الوظيفة", notifications: "الإشعارات", notifprefs: "إعدادات الإشعارات", profile: "حسابك", rooms: "الغرف", room: room(top.id)?.name, chat: "رسالة خاصة", permissions: "خريطة العلاقات والصلاحيات", postjob: top.like ? "تعديل الإعلان" : "نشر وظيفة", cvreview: "تدقيق السيرة الهندسية", methodology: "المنهجية والمصادر", settings: "الإعدادات", guide: "دليل الاستخدام" };
+    const tid = toolOfStack(top);
+    const closed = (tid != null && !toolAllowed(toolRole(app.profile), tid)) || (app.blocked && (app.blocked.stack.includes(top.type) || (top.type === "room" && app.blocked.rooms.includes(top.id))));
+    const titles: any = { tool: tid != null ? toolById(tid)?.name : "", tooldoc: tid != null ? toolById(tid)?.name : "", support: "الدعم الفني", ticket: "تذكرة دعم", post: "نقاش", company: company(top.id)?.name, job: "تفاصيل الوظيفة", notifications: "الإشعارات", notifprefs: "إعدادات الإشعارات", profile: "حسابك", rooms: "الغرف", room: room(top.id)?.name, chat: "رسالة خاصة", permissions: "خريطة العلاقات والصلاحيات", postjob: top.like ? "تعديل الإعلان" : "نشر وظيفة", cvreview: "تدقيق السيرة الهندسية", methodology: "المنهجية والمصادر", settings: "الإعدادات", guide: "دليل الاستخدام" };
     return (
       <header className={glass}><div className="min-h-14 py-1.5 px-1.5 flex items-center gap-1">
         <RoundButton label="رجوع" onClick={app.pop} className="press shrink-0">{pf === "ios" ? <ChevronLeft size={26} strokeWidth={2.2} className="rtl:-scale-x-100" /> : <Back />}</RoundButton>

@@ -54,3 +54,71 @@ export type ToolHeader = Pick<ToolDoc, "id" | "kind" | "projectId" | "title" | "
 
 // local-only sync state, never uploaded
 export type ToolSyncState = { id: string; base: number; dirty: boolean; verify: boolean };
+
+// ---------------------------------------------------------------------
+//  Ids, shards, headers, size
+// ---------------------------------------------------------------------
+const B32 = "abcdefghijklmnopqrstuvwxyz234567";
+export function newDocId(rand: (n: number) => Uint8Array = (n) => crypto.getRandomValues(new Uint8Array(n))) {
+  return "d" + Array.from(rand(20), (b) => B32[b & 31]).join("");
+}
+
+// 12 account shards (toolShelfA … toolShelfL): a document always lives in the same one
+export const SHARDS = "ABCDEFGHIJKL".split("").map((c) => `toolShelf${c}`);
+export function shardOf(id: string) {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return SHARDS[h % SHARDS.length];
+}
+
+// the size Postgres stores (jsonb prints ": " and ", "), so a guard measured here holds on the server
+export function jsonbBytes(v: unknown) {
+  const s = JSON.stringify(v);
+  let extra = 0, inStr = false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === "\\" && inStr) { i++; continue; }
+    if (c === '"') inStr = !inStr;
+    else if (!inStr && (c === ":" || c === ",")) extra++;
+  }
+  return new TextEncoder().encode(s).length + extra;
+}
+export const SHARD_TARGET = 700 * 1024;
+export const SHARD_GUARD = 900 * 1024;
+export const DOC_GUARD = 200 * 1024;
+export const LOG_CAP = 50;
+
+export function headerOf(d: ToolDoc): ToolHeader {
+  return {
+    id: d.id, kind: d.kind, projectId: d.projectId, title: d.title, dateIso: d.dateIso, docNo: d.docNo, rev: d.rev, status: d.status,
+    at: d.at, until: d.until, shard: shardOf(d.id), bytes: jsonbBytes(d),
+  };
+}
+
+// ---------------------------------------------------------------------
+//  Merge (one document at a time; nothing is sliced or overwritten silently)
+//  · base = the version both sides last agreed on (ToolSyncState.base, 0 for never synced).
+//  · Only one side changed → that side. Both changed → the remote keeps the id, the local edit becomes a conflict copy.
+//  · A tombstone wins over any copy not edited after it.
+// ---------------------------------------------------------------------
+export type MergeOut = { keep: ToolDoc | null; copy: ToolDoc | null; tomb: ToolTomb | null };
+
+export function mergeDoc(local: ToolDoc | null, remote: ToolDoc | null, base: number, tomb: ToolTomb | null, copyId: () => string): MergeOut {
+  const alive = (d: ToolDoc | null) => (d && (!tomb || d.at > tomb.at) ? d : null);
+  const l = alive(local), r = alive(remote);
+  if (!l && !r) return { keep: null, copy: null, tomb: tomb || null };
+  if (!l) return { keep: r, copy: null, tomb: null };
+  if (!r) return { keep: l, copy: null, tomb: null };
+  const same = l.title === r.title && l.status === r.status && JSON.stringify(l.body) === JSON.stringify(r.body);
+  if (l.at === r.at && same) return { keep: r, copy: null, tomb: null };
+  const lChanged = l.at > base, rChanged = r.at > base;
+  if (lChanged && rChanged && !same) {
+    const copy: ToolDoc = {
+      ...l, id: copyId(), docNo: null, status: "draft", issuedAt: undefined, hash: undefined,
+      title: `${l.title} (نسخة متعارضة)`,
+      log: [...l.log, { at: l.at, what: "conflict", note: l.id }].slice(-LOG_CAP),
+    };
+    return { keep: r, copy, tomb: null };
+  }
+  return { keep: l.at > r.at ? l : r, copy: null, tomb: null };
+}

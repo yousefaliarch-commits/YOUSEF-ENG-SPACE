@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { PACKS } from "../../tools/registry";
+import { toolRole, toolsForRole } from "../../tools/gate";
+import type { ToolDef } from "../../tools/types";
+import { TOOL_ICONS } from "../tools/icons";
 import {
   ArrowUpDown, BadgeCheck, Bookmark, Briefcase, Building2, ChevronDown, CircleCheck, ClipboardCheck, Clock, Coins, FileCheck, 
   FileSearch, LockKeyhole, MapPin, Megaphone, MessageCircle, MessageCircleWarning, Plus, Scale, Search, 
@@ -285,6 +289,7 @@ export function ToolsScreen({ app }: any) {
   // what this role may open: site supervisors — site tools + checklists; HR — the CV review only; everyone else — all of it
   const cvOpen = !(b.stack || []).includes("cvreview"), checksOpen = !(b.stack || []).includes("checklists"), methodOpen = !(b.sheets || []).includes("methodology");
   const site = TOOLS.filter((t: any) => t.group === "site" && toolOpen(b, t.id)), money = TOOLS.filter((t: any) => t.group !== "site" && toolOpen(b, t.id));
+  const field = toolsForRole(toolRole(p)).filter((t) => !t.money && t.status !== "soon");
   const intro = !cvOpen ? "حصر الخرسانة والحديد والمباني، تحويل الوحدات، وقوائم فحص واستلام الأعمال — كله على جهازك." : !site.length && !money.length ? "راجع السير الذاتية للمرشحين بمعايير المقاولين والاستشاريين — على جهازك، دون رفع الملف لأي خادم." : "حسابات مصرية بأرقام السوق الحقيقية، ومراجع ذكي لسيرتك الذاتية — كله على جهازك.";
   return (
     <div className="py-4 space-y-3">
@@ -293,10 +298,8 @@ export function ToolsScreen({ app }: any) {
         <span className="grid place-items-center w-12 h-12 shrink-0 rounded-2xl bg-accent text-on-accent shadow-[0_8px_24px_-8px_rgb(var(--accent))]"><FileSearch size={22} /></span>
         <span className="min-w-0 flex-1"><span className="block text-[15px] font-medium">تدقيق السيرة الذاتية الهندسية</span><span className="block text-[12px] text-ink-2 leading-snug">تدقيق واحد بمعايير المقاولين والاستشاريين والشركات الدولية: عمق البرامج، حجم المشاريع بالأرقام، المسار، الأكواد والشهادات، وATS — مع إعادة كتابة بنودك سطرًا بسطر</span></span><span className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full bg-accent text-on-accent text-[10px]">جديد</span>
       </button>}
-      {/* Feature 6 & 7: the technical office and the site */}
-      {(checksOpen || site.length > 0) && <SectionTitle>المكتب الفني والموقع</SectionTitle>}
-      {checksOpen && <button type="button" onClick={() => app.push({ type: "checklists" })} className="press w-full flex items-center gap-3 p-4 rounded-2xl bg-surface border border-line text-start shadow-card"><span className="grid place-items-center w-11 h-11 shrink-0 rounded-xl bg-wash text-accent"><ClipboardCheck size={20} /></span><span className="min-w-0 flex-1"><span className="block text-[14px] font-medium">فحص واستلام الأعمال (QA/QC)</span><span className="block text-[11.5px] text-ink-2 leading-snug">9 قوائم للموقع والمكتب الفني — احفظ، ثم صدّر تقرير PDF للتوقيع</span></span><Forward /></button>}
-      {site.length > 0 && <div className="grid grid-cols-2 gap-3">{site.map((t) => <button key={t.id} type="button" onClick={() => app.openSheet("tool", { id: t.id })} className="press relative p-4 rounded-2xl border text-start shadow-card bg-surface border-line hover:border-line-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><span className="grid place-items-center w-11 h-11 rounded-xl bg-wash text-accent"><t.icon size={20} /></span><span className="block mt-3 text-[14px] font-medium leading-snug">{t.name}</span><span className="block mt-0.5 text-[11.5px] text-ink-2 leading-snug">{t.desc}</span></button>)}</div>}
+      {/* the field tools, by pack (src/tools/registry.ts), with search and the latest documents */}
+      {field.length > 0 && <ToolPacks app={app} tools={field} />}
       {money.length > 0 && <>
       <SectionTitle>الراتب والعروض</SectionTitle>
       <div className="grid grid-cols-2 gap-3 stagger">{money.map((t) => <button key={t.id} type="button" onClick={() => app.openSheet("tool", { id: t.id })} className={`press relative p-4 rounded-2xl border text-start shadow-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${t.id === fav ? "border-accent/40 bg-wash" : "bg-surface border-line hover:border-line-3"}`}>
@@ -333,5 +336,61 @@ export function InboxScreen({ app }: any) {
         </div>
       ) : <NotificationsBody app={app} />}
     </div>
+  );
+}
+
+
+// The field tools grouped by pack: a search box, «الأخيرة» (the latest saved documents) and one grid per pack. Members of a
+// discipline see their pack first.
+function ToolPacks({ app, tools }: { app: any; tools: ToolDef[] }) {
+  const [q, setQ] = useState("");
+  const disc = app.profile && app.profile.disc;
+  const needle = q.trim().toLowerCase();
+  const shown = needle ? tools.filter((t) => `${t.name} ${t.desc} ${t.keywords}`.toLowerCase().includes(needle)) : tools;
+  const packs = PACKS.filter((pk) => pk.id !== "money")
+    .map((pk) => ({ pk, list: shown.filter((t) => t.pack === pk.id) }))
+    .filter((x) => x.list.length)
+    .sort((a, b) => Number(b.list.some((t) => (t.disciplines || []).includes(disc))) - Number(a.list.some((t) => (t.disciplines || []).includes(disc))));
+  const recent = (app.toolIndex || []).slice(0, 3);
+  return (
+    <>
+      <SectionTitle>أدوات الموقع والمكتب الفني</SectionTitle>
+      <label className="flex items-center gap-2 h-11 px-3.5 rounded-xl bg-surface border border-line-2 focus-within:ring-2 focus-within:ring-accent">
+        <Search size={16} className="text-ink-3 shrink-0" />
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث: خرسانة، حديد، ميزانية، كابل…" className="w-full min-w-0 bg-transparent text-[14px] focus:outline-none" />
+      </label>
+      {!needle && recent.length > 0 && (
+        <div className="space-y-1.5">
+          <p className="text-[12px] text-ink-2">الأخيرة</p>
+          {recent.map((h: any) => (
+            <button key={h.id} type="button" onClick={() => app.push({ type: "tooldoc", id: `${h.kind}:${h.id}` })} className="press w-full flex items-center gap-3 min-h-12 px-3.5 rounded-xl bg-surface border border-line text-start">
+              <span className="min-w-0 flex-1 truncate text-[13.5px]" dir="auto">{h.title || "بلا عنوان"}</span>
+              <span className="shrink-0 text-[11px] text-ink-3"><bdi dir="ltr" className="font-grotesk">{h.docNo || h.dateIso}</bdi></span>
+            </button>
+          ))}
+        </div>
+      )}
+      {packs.map(({ pk, list }) => (
+        <section key={pk.id} className="space-y-2">
+          <div className="flex items-baseline justify-between gap-2 pt-1">
+            <h3 className="text-[14px] font-medium">{pk.name}</h3>
+            <span className="text-[11px] text-ink-3">{pk.desc}</span>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {list.map((t) => {
+              const Icon = TOOL_ICONS[t.icon] || FileCheck;
+              return (
+                <button key={t.id} type="button" data-tool-tile={t.id} onClick={() => app.openTool(t.id)} className="press relative p-4 rounded-2xl border text-start shadow-card bg-surface border-line hover:border-line-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+                  <span className="grid place-items-center w-11 h-11 rounded-xl bg-wash text-accent"><Icon size={20} /></span>
+                  <span className="block mt-3 text-[14px] font-medium leading-snug">{t.name}</span>
+                  <span className="block mt-0.5 text-[11.5px] text-ink-2 leading-snug">{t.desc}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+      {needle && !packs.length && <p className="text-center text-[12.5px] text-ink-3 py-4">لا أداة بهذا الاسم.</p>}
+    </>
   );
 }
