@@ -142,7 +142,7 @@ test("surveyor: a closed levelling loop shows its misclosure live and prints the
   expect(readFileSync((await dl.path())!).toString("latin1")).toContain("/MediaBox [0 0 841.89 595.276]");
 });
 
-for (const kind of ["siteDiary", "toolboxTalk", "workPermit"]) {
+for (const kind of ["siteDiary", "toolboxTalk", "workPermit", "acInstall", "drainRun", "sprinklerCheck", "cableCheck"]) {
   test(`${kind}: opens for a supervisor, takes input, exports a PDF`, async ({ page }) => {
     test.setTimeout(120_000);
     const errs = watch(page);

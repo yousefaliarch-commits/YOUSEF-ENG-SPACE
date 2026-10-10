@@ -28,4 +28,8 @@ export const TOOL_MODULES: Record<string, () => Promise<ToolModule>> = {
   siteDiary: () => import("./site/diary").then((m) => m.module),
   toolboxTalk: () => import("./site/toolbox").then((m) => m.module),
   workPermit: () => import("./site/permit").then((m) => m.module),
+  acInstall: () => import("./mep/ac-install").then((m) => m.module),
+  drainRun: () => import("./mep/drain-run").then((m) => m.module),
+  sprinklerCheck: () => import("./mep/sprinkler").then((m) => m.module),
+  cableCheck: () => import("./elec/cable").then((m) => m.module),
 };

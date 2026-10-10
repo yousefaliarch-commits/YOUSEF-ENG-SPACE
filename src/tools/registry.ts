@@ -69,22 +69,22 @@ export const TOOL_REGISTRY: ToolDef[] = [
   {
     id: "acInstall", pack: "mechanical", name: "فحص تركيب التكييف", desc: "ميل الصرف، طول المواسير والرفع، شحنة الفريون الإضافية",
     icon: "AirVent", keywords: "تكييف سبليت تركيب صرف فريون مواسير نحاس ac split hvac installation refrigerant",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["acInstall"], disciplines: ["mechanical", "hvac"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["acInstall"], disciplines: ["mechanical", "hvac"],
   },
   {
     id: "drainRun", pack: "mechanical", name: "مناسيب غرف التفتيش", desc: "المناسيب والأعماق والميول من المصب لأعلى",
     icon: "Waves", keywords: "صرف صحي غرف تفتيش مناسيب ميول مواسير drain manhole invert sewer",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["drainRun"], disciplines: ["mechanical", "plumbing", "civil"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["drainRun"], disciplines: ["mechanical", "plumbing", "civil"],
   },
   {
     id: "sprinklerCheck", pack: "mechanical", name: "توزيع وفحص الرشاشات", desc: "عدد الرشاشات والمسافات بحدود NFPA 13",
     icon: "Droplets", keywords: "رشاشات حريق مكافحة sprinkler fire nfpa spacing",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["sprinklerCheck"], disciplines: ["mechanical", "fire"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["sprinklerCheck"], disciplines: ["mechanical", "fire"],
   },
   {
     id: "cableCheck", pack: "electrical", name: "الكابل وهبوط الجهد", desc: "التيار والمعاملات ومقطع الكابل وهبوط الجهد لكل دائرة",
     icon: "Cable", keywords: "كابل هبوط الجهد مقطع قاطع تيار كهرباء cable voltage drop breaker ampacity",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["cableCheck"], disciplines: ["electrical"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["cableCheck"], disciplines: ["electrical"],
   },
   {
     id: "units", pack: "workforce", name: "تحويل الوحدات والمساحات", desc: "هندسية، وفدان وقيراط وسهم، والميول",
