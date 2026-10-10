@@ -24,15 +24,28 @@ for (const role of ROLES) {
 }
 
 test("engineer: every tool opens and accepts numbers", async ({ page }) => {
-  test.setTimeout(240_000);
+  test.setTimeout(300_000);
   const errs = watch(page); await demoAs(page, "engineer"); await tab(page, "tools");
-  const names = ["حصر الخرسانة", "أوزان الحديد", "حصر المباني", "تحويل الوحدات", "تقييم عرض عمل", "الصافي والإجمالي", "مقارن العروض", "سكريبت التفاوض", "توقيت الزيادة", "خريطة المسار", "فاحص العقد", "تكلفة الانتقال", "الزيادة والتضخم"];
+  // the field tools come from the registry (one tile each); the salary tools keep their sheets
+  const tiles = await page.locator("[data-tool-tile]").evaluateAll((els) => els.map((e) => e.getAttribute("data-tool-tile")));
+  expect(tiles.length).toBeGreaterThanOrEqual(12);
+  let k = 0;
+  for (const id of tiles) {
+    // a pushed tool screen stays on a hash-only navigation: load the page again
+    await page.goto(`/?backend=demo&n=${k++}#app/tools`); await page.locator("[data-tour=tabbar]").waitFor(); await settle(page, 400);
+    await page.locator(`[data-tool-tile="${id}"]`).evaluate((el: HTMLElement) => { el.scrollIntoView({ block: "center" }); el.click(); }); await settle(page, 900);
+    const fresh = page.locator("[data-tool-new]");
+    if (await fresh.count()) { await fresh.click(); await settle(page, 900); }
+    const inputs = page.locator('[data-screen-layer] input[inputmode="decimal"]:visible, [role=dialog] input[inputmode="decimal"]:visible'); const c = Math.min(await inputs.count(), 6);
+    for (let i = 0; i < c; i++) await inputs.nth(i).fill(String(10 + i * 5)).catch(() => {});
+    await settle(page, 400); await noCrash(page, errs, `tool ${id}`); await noOverflow(page, `tool ${id}`);
+  }
+  const names = ["تقييم عرض عمل", "الصافي والإجمالي", "مقارن العروض", "سكريبت التفاوض", "توقيت الزيادة", "خريطة المسار", "فاحص العقد", "تكلفة الانتقال", "الزيادة والتضخم"];
   for (const n of names) {
-    await page.goto("/?backend=demo#app/tools"); await page.locator("[data-tour=tabbar]").waitFor(); await settle(page, 500);
+    await page.goto(`/?backend=demo&n=${k++}#app/tools`); await page.locator("[data-tour=tabbar]").waitFor(); await settle(page, 500);
     const card = page.getByRole("button", { name: new RegExp(n) }).first();
     expect(await card.count(), `tool card ${n}`).toBeGreaterThan(0);
     await card.evaluate((el: HTMLElement) => { el.scrollIntoView({ block: "center" }); el.click(); }); await settle(page, 900);
-    // fill every visible numeric field with a sensible number, then make sure the tool still renders
     const inputs = page.locator('main input[inputmode="decimal"]:visible, main input[type="number"]:visible, [role=dialog] input[inputmode="decimal"]:visible'); const c = Math.min(await inputs.count(), 6);
     for (let i = 0; i < c; i++) await inputs.nth(i).fill(String(10 + i * 5)).catch(() => {});
     await settle(page, 400); await noCrash(page, errs, `tool ${n}`); await noOverflow(page, `tool ${n}`);
@@ -42,7 +55,7 @@ test("engineer: every tool opens and accepts numbers", async ({ page }) => {
 test("supervisor sees only site tools and checklists, no money", async ({ page }) => {
   await demoAs(page, "supervisor", { disc: "civil" }); await tab(page, "tools");
   const t = await page.locator("body").innerText();
-  for (const n of ["حصر الخرسانة", "أوزان الحديد"]) expect(t).toContain(n);
+  for (const id of ["concrete", "bbs", "tradeKit", "levelBook", "workPermit"]) await expect(page.locator(`[data-tool-tile="${id}"]`)).toHaveCount(1);
   for (const n of ["تقييم عرض عمل", "مقارن العروض", "الزيادة والتضخم"]) expect(t).not.toContain(n);
 });
 

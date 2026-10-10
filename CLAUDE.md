@@ -96,6 +96,17 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   value, any failure → the plain input with `capture="environment"`). Info.plist privacy texts, Android CAMERA + `<queries>`, `MainActivity.onRenderProcessGone`
   rebuilds the screen. Never call `Camera.getPhoto` outside camera.ts. e2e drives the chooser through the dev-only `window.__engspaceCamera`.
 
+- v0.28.0: **Tools suite wave 1** (blueprint: docs/TOOLS-BLUEPRINT.md). `src/tools/registry.ts` (pure data, one role allow-list per tool, `aliases`
+  rebar→bbs / masonry→tradeKit) + `gate.ts` (`toolAllowed` / `toolKindsForRole` / `toolOfStack`): supervisors never reach a money tool, HR only the CV
+  review — checked in push, the render switch, AppHeader and `openTool`. Stack types `tool` (#app/tool/<id>) and `tooldoc` (#app/tooldoc/<kind>:<docId|new>;
+  a new document gets its id on the first edit via `app.replaceTop`). **Document kit** `src/doc/`: DocSpec → `docLayout` (pure mm, issuer's title block,
+  running header, one EngSpace footer line, paged tables with «يُرحّل / ما قبله») → raster backend (240 dpi, lossless 16-colour Flate pages, JPEG photos,
+  real PDF metadata; `renderDoc` never rejects). Canvas ignores LRI/PDI: lines without Arabic are drawn LTR. **Tool store** `src/lib/tool-store.ts`:
+  IndexedDB first, member_state shards `toolIndex` + `toolShelfA…L` (loadAll excludes `tool%`; `cloud.toolStamps/toolRows`), per-document merge
+  (conflict copy, tombstones), never rejects. Projects: member_state `siteProjects`. Engines are pure in `src/domain/tools/*` with the blueprint's
+  vectors in `tests/tools-*.test.ts`; screens in `src/features/tools/<family>/` (each a lazy chunk listed in `module.ts`), UI kit `src/ui/kit.tsx`
+  (dialogs portal to <body>). Field tools have no price fields. e2e: `e2e/tools.spec.ts`.
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

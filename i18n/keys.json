@@ -36,8 +36,8 @@
  },
  "النظام": {
   "k": "s",
-  "p": "app/AppView.tsx,domain/moderation.ts,domain/notifications.ts,native/push.ts",
-  "n": 5
+  "p": "app/AppView.tsx,domain/moderation.ts,domain/notifications.ts,features/tools/mep/sprinkler.tsx,native/push.ts",
+  "n": 7
  },
  "العضو": {
   "k": "s",
@@ -254,8 +254,8 @@
  },
  "رجوع": {
   "k": "s",
-  "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/support/support.tsx,ui/chrome.tsx",
-  "n": 22
+  "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/support/support.tsx,features/tools/host.tsx,ui/chrome.tsx",
+  "n": 30
  },
  "الإشعارات": {
   "k": "s",
@@ -330,8 +330,8 @@
  },
  "جارٍ التحميل…": {
   "k": "x",
-  "p": "app/ScreenLoading.tsx,features/admin/directory-support.tsx,features/admin/images-admin.tsx,features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 8
+  "p": "app/ScreenLoading.tsx,features/admin/directory-support.tsx,features/admin/images-admin.tsx,features/market/raise-tracker.tsx,features/support/support.tsx,features/tools/host.tsx",
+  "n": 9
  },
  "طريقة العرض": {
   "k": "s",
@@ -702,8 +702,8 @@
  },
  "السلامة": {
   "k": "s",
-  "p": "data/checklists.ts",
-  "n": 1
+  "p": "data/checklists.ts,features/tools/site/diary.tsx",
+  "n": 4
  },
  "سقالات العمل والحواجز آمنة": {
   "k": "s",
@@ -952,8 +952,8 @@
  },
  "الحماية": {
   "k": "s",
-  "p": "data/checklists.ts",
-  "n": 1
+  "p": "data/checklists.ts,features/tools/elec/cable.tsx",
+  "n": 2
  },
  "طبقة الحماية منفذة فورًا بعد الاستلام": {
   "k": "s",
@@ -1097,8 +1097,8 @@
  },
  "الكهرباء": {
   "k": "s",
-  "p": "data/checklists.ts",
-  "n": 1
+  "p": "data/checklists.ts,features/tools/site/toolbox.tsx,tools/registry.ts",
+  "n": 3
  },
  "المواسير والعلب في أماكنها حسب اللوحات": {
   "k": "s",
@@ -1157,23 +1157,23 @@
  },
  "مطابق": {
   "k": "s",
-  "p": "data/checklists.ts,lib/report-pdf.ts",
-  "n": 3
+  "p": "data/checklists.ts,features/tools/elec/cable.tsx,lib/report-pdf.ts",
+  "n": 4
  },
  "غير مطابق": {
   "k": "s",
-  "p": "data/checklists.ts,lib/helpers.tsx,lib/report-pdf.ts",
-  "n": 4
+  "p": "data/checklists.ts,features/tools/elec/cable.tsx,lib/helpers.tsx,lib/report-pdf.ts",
+  "n": 5
  },
  "لا ينطبق": {
   "k": "s",
-  "p": "data/checklists.ts,features/stack/stack.tsx,lib/report-pdf.ts",
-  "n": 4
+  "p": "data/checklists.ts,features/stack/stack.tsx,features/tools/site/permit.tsx,lib/report-pdf.ts",
+  "n": 5
  },
  "مقبول": {
   "k": "s",
-  "p": "data/checklists.ts",
-  "n": 1
+  "p": "data/checklists.ts,features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
+  "n": 5
  },
  "مقبول بملاحظات": {
   "k": "s",
@@ -1187,8 +1187,8 @@
  },
  "إنشائي": {
   "k": "s",
-  "p": "data/checklists.ts",
-  "n": 4
+  "p": "data/checklists.ts,features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx",
+  "n": 6
  },
  "معماري وتشطيبات": {
   "k": "s",
@@ -1197,8 +1197,8 @@
  },
  "كهرباء": {
   "k": "s",
-  "p": "data/checklists.ts,domain/division.ts,domain/taxonomy.ts,lib/search.ts",
-  "n": 4
+  "p": "data/checklists.ts,domain/division.ts,domain/taxonomy.ts,features/tools/elec/cable.tsx,lib/search.ts",
+  "n": 5
  },
  "ميكانيكا وصحي (MEP)": {
   "k": "s",
@@ -1217,8 +1217,8 @@
  },
  "أخرى": {
   "k": "s",
-  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx",
-  "n": 5
+  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
+  "n": 9
  },
  "{0} — نسختي": {
   "k": "t",
@@ -1228,8 +1228,8 @@
  },
  "البنود": {
   "k": "s",
-  "p": "data/checklists.ts,features/qaqc/qaqc.tsx",
-  "n": 3
+  "p": "data/checklists.ts,features/qaqc/qaqc.tsx,features/tools/rebar/bbs.tsx",
+  "n": 5
  },
  "اكتب عنوان القائمة": {
   "k": "s",
@@ -1243,8 +1243,8 @@
  },
  "المكتب الفني": {
   "k": "s",
-  "p": "data/companies.tsx",
-  "n": 1
+  "p": "data/companies.tsx,tools/registry.ts",
+  "n": 2
  },
  "حصر، مستخلصات، لوحات تنفيذية": {
   "k": "s",
@@ -1253,8 +1253,8 @@
  },
  "الموقع": {
   "k": "s",
-  "p": "data/companies.tsx,features/auth/auth.tsx",
-  "n": 2
+  "p": "data/companies.tsx,features/auth/auth.tsx,features/tools/host.tsx,features/tools/mep/sprinkler.tsx",
+  "n": 5
  },
  "تنفيذ، بدلات، ساعات": {
   "k": "s",
@@ -2307,8 +2307,8 @@
  },
  "أسمنت": {
   "k": "s",
-  "p": "data/companies.tsx,features/sitetools/site-tools.tsx",
-  "n": 2
+  "p": "data/companies.tsx,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
+  "n": 7
  },
  "شنايدر إلكتريك — مصر": {
   "k": "s",
@@ -5721,6 +5721,12 @@
   "p": "data/seed.ts",
   "n": 1
  },
+ "{0} (نسخة متعارضة)": {
+  "k": "t",
+  "p": "data/tool-docs.ts",
+  "n": 1,
+  "x": "l.title"
+ },
  "حصر الخرسانة": {
   "k": "s",
   "p": "data/tools.ts",
@@ -5763,93 +5769,158 @@
  },
  "تقييم عرض عمل": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "مكانه من السوق بالصافي ورقمك المضاد": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "الصافي والإجمالي": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "حوّل بين الصافي والإجمالي": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "مقارن العروض": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "عرضان بالقيمة الحقيقية للساعة": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "سكريبت التفاوض": {
   "k": "s",
-  "p": "data/tools.ts,features/stack/stack.tsx",
-  "n": 2
+  "p": "data/tools.ts,features/stack/stack.tsx,tools/registry.ts",
+  "n": 3
  },
  "كلام جاهز بالأرقام": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "توقيت الزيادة": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "اطلب الآن أم بعد قليل؟": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "خريطة المسار": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "خطوتك القادمة ورقمها": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "فاحص العقد": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "قبل ما تمضي": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "تكلفة الانتقال": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "القاهرة ↔ العاصمة ↔ العلمين": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "الزيادة والتضخم": {
   "k": "s",
-  "p": "data/tools.ts",
-  "n": 1
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
  },
  "سجّل راتبك وقارنه بالتضخم الرسمي والسوق": {
   "k": "s",
-  "p": "data/tools.ts",
+  "p": "data/tools.ts,tools/registry.ts",
+  "n": 2
+ },
+ "ءA1Ø": {
+  "k": "s",
+  "p": "doc/render.ts",
   "n": 1
+ },
+ "يناير": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "فبراير": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "مارس": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "أبريل": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "مايو": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "يونيو": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "يوليو": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "أغسطس": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "سبتمبر": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "أكتوبر": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "نوفمبر": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
+ },
+ "ديسمبر": {
+  "k": "s",
+  "p": "doc/text.ts,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 3
  },
  "الشعبة المدنية": {
   "k": "s",
@@ -5898,8 +5969,8 @@
  },
  "ميكانيكا": {
   "k": "s",
-  "p": "domain/division.ts,domain/taxonomy.ts,lib/search.ts",
-  "n": 3
+  "p": "domain/division.ts,domain/taxonomy.ts,features/tools/mep/ac-install.tsx,lib/search.ts",
+  "n": 4
  },
  "مهندسة ميكانيكا": {
   "k": "s",
@@ -7253,8 +7324,8 @@
  },
  "طوب أحمر 25×12×6": {
   "k": "s",
-  "p": "domain/site-calc.ts",
-  "n": 1
+  "p": "domain/site-calc.ts,domain/tools/trade-calc.ts",
+  "n": 2
  },
  "طوب أسمنتي مصمت 25×12×6": {
   "k": "s",
@@ -7278,8 +7349,8 @@
  },
  "الطول": {
   "k": "s",
-  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx",
-  "n": 6
+  "p": "domain/site-calc.ts,domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/sprinkler.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 21
  },
  "متر": {
   "k": "s",
@@ -7308,13 +7379,13 @@
  },
  "المساحة": {
   "k": "s",
-  "p": "domain/site-calc.ts",
-  "n": 1
+  "p": "domain/site-calc.ts,features/tools/trade/trade.tsx",
+  "n": 2
  },
  "م²": {
   "k": "s",
-  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx",
-  "n": 4
+  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
+  "n": 8
  },
  "فدان": {
   "k": "s",
@@ -7338,13 +7409,13 @@
  },
  "الحجم": {
   "k": "s",
-  "p": "domain/site-calc.ts,features/stack/stack.tsx",
-  "n": 2
+  "p": "domain/site-calc.ts,features/stack/stack.tsx,features/tools/concrete/concrete.tsx",
+  "n": 3
  },
  "م³": {
   "k": "s",
-  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx",
-  "n": 6
+  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/site/diary.tsx",
+  "n": 26
  },
  "لتر": {
   "k": "s",
@@ -7428,8 +7499,8 @@
  },
  "مساحة": {
   "k": "s",
-  "p": "domain/taxonomy.ts,lib/search.ts",
-  "n": 2
+  "p": "domain/taxonomy.ts,features/tools/survey/level-book.tsx,lib/search.ts",
+  "n": 3
  },
  "مساحة وجيوماتكس وGIS": {
   "k": "s",
@@ -7443,8 +7514,8 @@
  },
  "تصميم": {
   "k": "s",
-  "p": "domain/taxonomy.ts",
-  "n": 1
+  "p": "domain/taxonomy.ts,features/tools/mep/sprinkler.tsx,features/tools/site/diary.tsx",
+  "n": 3
  },
  "إشراف استشاري": {
   "k": "s",
@@ -7806,8 +7877,8 @@
  },
  "موقع": {
   "k": "s",
-  "p": "domain/taxonomy.ts,lib/helpers.tsx,lib/search.ts",
-  "n": 3
+  "p": "domain/taxonomy.ts,features/tools/site/diary.tsx,features/tools/trade/trade.tsx,lib/helpers.tsx,lib/search.ts",
+  "n": 5
  },
  "مكتب": {
   "k": "s",
@@ -9340,6 +9411,783 @@
   "p": "domain/text-guard.ts",
   "n": 1
  },
+ "مستقيم": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "زاوية 90°": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "زاوية بنصف قطر": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "خطاف 180°": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "حرف U": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "U بخطاف": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "مائل": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "مكسح": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "ثلاث ثنيات": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "U بخطافين": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "أربع ثنيات": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "كانة مغلقة": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "كانة بخطافين": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "حلزوني": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "رسم حر": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "الشكل {0}": {
+  "k": "t",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1,
+  "x": "shape"
+ },
+ "نصف قطر الثني": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts,features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "نصف قطر أقل من الأدنى": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "الفرق عن خط المنتصف الدقيق": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "البعد {0} ليس من مضاعفات 5": {
+  "k": "t",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1,
+  "x": "k"
+ },
+ "قاعدة الموقع (2d لكل ثنية) تختلف": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "طول القص غير صحيح": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "إجهاد التماسك": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "طول التماسك / القطر": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "طول الوصلة": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "Ld (متخالفة ≤ 50 %)": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "1.3·Ld (كل الأسياخ في قطاع واحد)": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "طول الوصلة مطلوب إدخاله": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "سيخ أملس / كود آخر": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "مُدخل": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "أطول من السيخ — وصلات": {
+  "k": "s",
+  "p": "domain/tools/bbs-calc.ts",
+  "n": 1
+ },
+ "خرسانة مسلحة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "خرسانة عادية": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "خرسانة نظافة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 2
+ },
+ "العرض": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sheets/sheets.tsx,features/sitetools/site-tools.tsx,features/tools/mep/sprinkler.tsx",
+  "n": 15
+ },
+ "السمك": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 7
+ },
+ "تُزاد 10 سم من كل جانب حول القاعدة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "قاعدة منفصلة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الارتفاع": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 10
+ },
+ "قاعدة مشطوفة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الجزء الرأسي": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الجزء المائل": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "طول الوجه العلوي": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "عرض الوجه العلوي": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "لبشة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 2
+ },
+ "المساحة (م²)": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 2
+ },
+ "المحيط": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "سملات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 2
+ },
+ "الطول الصافي": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "العمق": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/mep/drain-run.tsx,features/tools/site/permit.tsx",
+  "n": 5
+ },
+ "رقاب أعمدة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "من سطح القاعدة حتى سطح السملات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "عمود": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "ارتفاع الدور": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 2
+ },
+ "سمك البلاطة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 4
+ },
+ "الأعمدة حتى بطنية البلاطة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 2
+ },
+ "عمود دائري": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "القطر": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 7
+ },
+ "كمرة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "العمق الكلي": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "البحر الصافي": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الجزء الساقط تحت البلاطة فقط": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "بلاطة مصمتة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "فتحات (م²)": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "بلاطة هوردي": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "سمك التغطية": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 2
+ },
+ "ارتفاع البلوك": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "عرض العصب": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 2
+ },
+ "عرض البلوك": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "طول البلوك": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "سلم (قلبة)": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "عدد الدرجات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "القائمة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "النائمة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "عرض السلم": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "حائط خرساني": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "نظافة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "قاعدة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx",
+  "n": 2
+ },
+ "الجزء المائل (منشوري)": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الوجه العلوي أكبر من القاعدة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "ارتفاع العمود حتى بطنية البلاطة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "ارتفاع العمود خارج المعتاد": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "ارتفاع العمود غير صحيح": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "عمق الكمرة أقل من سمك البلاطة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الساقط تحت البلاطة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "بلاطة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 5
+ },
+ "(L·B − فتحات)·t": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "خرسانة لكل م²": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "بلوك لكل م²": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "المسافة الصافية بين الأعصاب": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الطول المائل": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "البلاطة المائلة + الدرج": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "قاعدة الخطوة 2R + G": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "هالك إضافي فوق هالك العناصر": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "يُطبَّق الهالك مرة واحدة لكل عنصر": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "معدل الصب الفعلي (الأبطأ يحكم)": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "كمية الطلب": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "Σ V_net·(1+w) + فاقد التحضير": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "عدد الخلاطات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "⌈V_order / حمولة⌉": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الفاصل بين الخلاطات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "حمولة / Q · 60": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "زمن الدورة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "تحميل + 2·مشوار + فاصل + غسيل": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "الخلاطات على الطريق": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "⌈دورة / فاصل⌉ + 1": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "مدة الصب": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts,features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "تجهيز + V/Q·60 + تنظيف": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "فك الجوانب الرأسية": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "فك جوانب البلاطات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "فك بطنيات الكمرات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "فك قوائم البلاطات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "فك قوائم الكمرات": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "نهاية المعالجة": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "كسر مكعبات 7 أيام": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "كسر مكعبات 28 يومًا": {
+  "k": "s",
+  "p": "domain/tools/concrete-calc.ts",
+  "n": 1
+ },
+ "هندسي 12√K": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "دقيق 4√K": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "تقريبي 24√K": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "موقع مبانٍ 5√n": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "نقطة مرجعية مصرية 6√K ⚑": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "أول قراءة يجب أن تكون مؤخرة على الروبير": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "قراءة متوسطة قبل أي مؤخرة ({0})": {
+  "k": "t",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1,
+  "x": "r.pt"
+ },
+ "BS أولًا": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "مؤخرتان بلا مقدمة بينهما ({0})": {
+  "k": "t",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1,
+  "x": "r.pt"
+ },
+ "FS بينهما": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "قراءة أطول من القامة ({0})": {
+  "k": "t",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1,
+  "x": "r.pt"
+ },
+ "خط نظر طويل ({0})": {
+  "k": "t",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1,
+  "x": "r.pt"
+ },
+ "≤ 100 m لكل خط": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "التحقق الأول": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "ΣBS − ΣFS = آخر − أول": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts,features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "الارتفاع والانخفاض": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts,features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "Σرفع − Σهبوط": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "التحقق الثاني": {
+  "k": "s",
+  "p": "domain/tools/level-calc.ts",
+  "n": 1
+ },
+ "الميل": {
+  "k": "s",
+  "p": "domain/tools/mep-calc.ts,features/tools/mep/drain-run.tsx,features/tools/trade/trade.tsx",
+  "n": 4
+ },
+ "الغطاء": {
+  "k": "s",
+  "p": "domain/tools/mep-calc.ts,features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "المسافة بين غرف التفتيش": {
+  "k": "s",
+  "p": "domain/tools/mep-calc.ts",
+  "n": 1
+ },
+ "المساحة لكل رشاش": {
+  "k": "s",
+  "p": "domain/tools/mep-calc.ts",
+  "n": 1
+ },
+ "المسافة بين الرشاشات": {
+  "k": "s",
+  "p": "domain/tools/mep-calc.ts",
+  "n": 1
+ },
+ "البعد عن الحائط": {
+  "k": "s",
+  "p": "domain/tools/mep-calc.ts",
+  "n": 1
+ },
+ "≤ {0} m و ≥ 0.1 m": {
+  "k": "t",
+  "p": "domain/tools/mep-calc.ts",
+  "n": 1,
+  "x": "(lim.sM / 2).toFixed(2)"
+ },
+ "أقل مسافة بين رشاشين": {
+  "k": "s",
+  "p": "domain/tools/mep-calc.ts,features/tools/mep/sprinkler.tsx",
+  "n": 3
+ },
+ "نسبة الماء للأسمنت أعلى من 0.55 ⚑": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "طفلي 24×11×6": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "طفلي دبل 24×11×12": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "طوب أسمنتي 25×12×6": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "بلوك 40×20×10": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "بلوك 40×20×15": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "بلوك 40×20×20": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "خفاف AAC 60×20×10": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "خفاف AAC 60×20×20": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "داخلي (طرطشة + بطانة)": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "خارجي": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "تحت البلاط": {
+  "k": "s",
+  "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
  "نظرة عامة": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
@@ -9803,8 +10651,8 @@
  },
  "ساعة": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/tools/site/permit.tsx",
+  "n": 4
  },
  "{0} عاجلة · {1} تجاوزت {2} ساعة": {
   "k": "r",
@@ -10078,8 +10926,8 @@
  },
  "،": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/market/raise-tracker.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,i18n/i18n.ts,lib/helpers.tsx,ui/feed.tsx",
-  "n": 11
+  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/market/raise-tracker.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/site/permit.tsx,features/tools/site/toolbox.tsx,i18n/i18n.ts,lib/helpers.tsx,lib/num-input.ts,ui/feed.tsx",
+  "n": 16
  },
  "تنبيه لهجة: {0}": {
   "k": "t",
@@ -10373,8 +11221,8 @@
  },
  "موقوف": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/admin/kit.tsx,features/stack/stack.tsx",
-  "n": 3
+  "p": "features/admin/AdminView.tsx,features/admin/kit.tsx,features/stack/stack.tsx,features/tools/site/permit.tsx",
+  "n": 4
  },
  "التوثيق": {
   "k": "s",
@@ -11112,8 +11960,8 @@
  },
  "العنصر": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 1
+  "p": "features/admin/AdminView.tsx,features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 13
  },
  "احذف نهائيًا": {
   "k": "x",
@@ -11122,8 +11970,8 @@
  },
  "إلغاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/support/support.tsx,ui/feed.tsx,ui/moderation.tsx",
-  "n": 7
+  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/support/support.tsx,features/tools/host.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
+  "n": 11
  },
  "إظهار": {
   "k": "x",
@@ -11132,8 +11980,8 @@
  },
  "حذف": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/market/raise-tracker.tsx,ui/feed.tsx",
-  "n": 4
+  "p": "features/admin/AdminView.tsx,features/market/raise-tracker.tsx,ui/feed.tsx,ui/kit.tsx",
+  "n": 6
  },
  "فتح": {
   "k": "x",
@@ -11245,8 +12093,8 @@
  },
  "إغلاق": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/sheets/sheets.tsx,lib/media.tsx,ui/chrome.tsx,ui/moderation.tsx,ui/update-banner.tsx",
-  "n": 17
+  "p": "features/admin/AdminView.tsx,features/sheets/sheets.tsx,features/tools/site/permit.tsx,lib/media.tsx,ui/chrome.tsx,ui/kit.tsx,ui/moderation.tsx,ui/update-banner.tsx",
+  "n": 20
  },
  "النشر في {0}": {
   "k": "t",
@@ -11483,8 +12331,8 @@
  },
  "مرفوض": {
   "k": "s",
-  "p": "features/admin/directory-support.tsx",
-  "n": 1
+  "p": "features/admin/directory-support.tsx,features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
+  "n": 5
  },
  "سُحب": {
   "k": "s",
@@ -11585,13 +12433,13 @@
  },
  "المكان": {
   "k": "s",
-  "p": "features/admin/directory-support.tsx,features/stack/stack.tsx,lib/helpers.tsx",
-  "n": 6
+  "p": "features/admin/directory-support.tsx,features/stack/stack.tsx,features/tools/mep/ac-install.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,lib/helpers.tsx",
+  "n": 15
  },
  "الشركة": {
   "k": "s",
-  "p": "features/admin/directory-support.tsx,features/stack/stack.tsx",
-  "n": 3
+  "p": "features/admin/directory-support.tsx,features/stack/stack.tsx,features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 8
  },
  "النوع / العمر": {
   "k": "s",
@@ -11778,8 +12626,8 @@
  },
  "الحالة": {
   "k": "s",
-  "p": "features/admin/directory-support.tsx",
-  "n": 2
+  "p": "features/admin/directory-support.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx",
+  "n": 4
  },
  "فريق الدعم": {
   "k": "s",
@@ -12181,8 +13029,8 @@
  },
  "النوع": {
   "k": "x",
-  "p": "features/auth/auth.tsx,features/stack/stack.tsx",
-  "n": 4
+  "p": "features/auth/auth.tsx,features/stack/stack.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,features/tools/trade/trade.tsx",
+  "n": 8
  },
  "اللقب:": {
   "k": "x",
@@ -12420,8 +13268,8 @@
  },
  "من": {
   "k": "x",
-  "p": "features/auth/auth.tsx,features/market/live-salary.tsx,features/market/raise-tracker.tsx,features/settings/settings.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,lib/search.ts",
-  "n": 11
+  "p": "features/auth/auth.tsx,features/market/live-salary.tsx,features/market/raise-tracker.tsx,features/settings/settings.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/site/diary.tsx,lib/search.ts",
+  "n": 17
  },
  "{0} · {1} من {2}": {
   "k": "r",
@@ -12972,8 +13820,8 @@
  },
  "الملخص": {
   "k": "s",
-  "p": "features/cv/extract.ts",
-  "n": 1
+  "p": "features/cv/extract.ts,features/tools/site/diary.tsx",
+  "n": 4
  },
  "الملخص المهني": {
   "k": "s",
@@ -14022,66 +14870,6 @@
   "n": 1,
   "x": "EL <Users size={12} /> | EL <Num>{fmt(d.platform)}</Num> | EL <Num>{d.min}</Num>"
  },
- "يناير": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "فبراير": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "مارس": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "أبريل": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "مايو": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "يونيو": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "يوليو": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "أغسطس": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "سبتمبر": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "أكتوبر": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "نوفمبر": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
- "ديسمبر": {
-  "k": "s",
-  "p": "features/market/raise-tracker.tsx,features/support/support.tsx",
-  "n": 2
- },
  "ترقية": {
   "k": "s",
   "p": "features/market/raise-tracker.tsx",
@@ -14539,8 +15327,8 @@
  },
  "تم": {
   "k": "x",
-  "p": "features/notifications/prefs.tsx,ui/moderation.tsx",
-  "n": 2
+  "p": "features/notifications/prefs.tsx,features/tools/site/permit.tsx,ui/moderation.tsx",
+  "n": 3
  },
  "الإذن مغلق على هذا الجهاز": {
   "k": "s",
@@ -14815,8 +15603,8 @@
  },
  "مسودة": {
   "k": "x",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 1
+  "p": "features/qaqc/qaqc.tsx,features/tools/host.tsx",
+  "n": 2
  },
  "القائمة غير موجودة": {
   "k": "s",
@@ -14995,13 +15783,13 @@
  },
  "المشروع": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 2
+  "p": "features/qaqc/qaqc.tsx,features/tools/host.tsx",
+  "n": 4
  },
  "المنطقة / الدور": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 2
+  "p": "features/qaqc/qaqc.tsx,features/tools/trade/trade.tsx",
+  "n": 5
  },
  "مرجع اللوحة": {
   "k": "s",
@@ -15015,8 +15803,8 @@
  },
  "المقاول": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 2
+  "p": "features/qaqc/qaqc.tsx,features/tools/host.tsx,features/tools/site/diary.tsx",
+  "n": 5
  },
  "الاستشاري / الإشراف": {
   "k": "s",
@@ -15051,8 +15839,8 @@
  },
  "ملاحظة": {
   "k": "x",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 2
+  "p": "features/qaqc/qaqc.tsx,features/tools/survey/level-book.tsx",
+  "n": 4
  },
  "ما المطلوب تصحيحه؟": {
   "k": "s",
@@ -15061,8 +15849,8 @@
  },
  "اسم المشروع": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 1
+  "p": "features/qaqc/qaqc.tsx,features/tools/host.tsx",
+  "n": 3
  },
  "مثال: الدور الثالث — محور B": {
   "k": "s",
@@ -15071,8 +15859,8 @@
  },
  "التاريخ": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 1
+  "p": "features/qaqc/qaqc.tsx,features/tools/concrete/concrete.tsx,features/tools/host.tsx,features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 6
  },
  "اسم شركة المقاولات": {
   "k": "s",
@@ -15121,8 +15909,8 @@
  },
  "لم يُفحص": {
   "k": "x",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 1
+  "p": "features/qaqc/qaqc.tsx,features/tools/site/diary.tsx",
+  "n": 2
  },
  "{0} مطابق · {1} غير مطابق · {2} لا ينطبق · {3} لم يُفحص": {
   "k": "r",
@@ -15137,8 +15925,8 @@
  },
  "جارٍ إنشاء التقرير…": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx",
-  "n": 1
+  "p": "features/qaqc/qaqc.tsx,features/tools/host.tsx",
+  "n": 2
  },
  "تصدير تقرير PDF": {
   "k": "s",
@@ -15149,6 +15937,26 @@
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
+ },
+ "تأكيد حذف الفحص": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 2
+ },
+ "يُحذف الفحص وصوره نهائيًا من حسابك. التقارير التي صدّرتها من قبل تبقى معك.": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "احذف الفحص": {
+  "k": "x",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
+ },
+ "حُذف الفحص": {
+  "k": "s",
+  "p": "features/qaqc/qaqc.tsx",
+  "n": 1
  },
  "واجهة من اليمين إلى اليسار": {
   "k": "s",
@@ -15534,8 +16342,8 @@
  },
  "الجهة": {
   "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
+  "p": "features/sheets/sheets.tsx,features/tools/site/diary.tsx",
+  "n": 4
  },
  "الراتب": {
   "k": "s",
@@ -16425,8 +17233,8 @@
  },
  "د": {
   "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 2
+  "p": "features/sheets/sheets.tsx,features/tools/concrete/concrete.tsx,features/tools/site/toolbox.tsx",
+  "n": 10
  },
  "ساعات/أسبوع": {
   "k": "s",
@@ -16462,11 +17270,6 @@
   "k": "s",
   "p": "features/sheets/sheets.tsx",
   "n": 2
- },
- "العرض": {
-  "k": "x",
-  "p": "features/sheets/sheets.tsx,features/sitetools/site-tools.tsx",
-  "n": 5
  },
  "{0} العرض {1} {2}": {
   "k": "r",
@@ -16798,8 +17601,8 @@
  },
  "إلى": {
   "k": "x",
-  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,lib/search.ts",
-  "n": 4
+  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/tools/site/diary.tsx,lib/search.ts",
+  "n": 8
  },
  "العرض هناك (صافي)": {
   "k": "s",
@@ -16828,8 +17631,8 @@
  },
  "إيجار": {
   "k": "x",
-  "p": "features/sheets/sheets.tsx",
-  "n": 2
+  "p": "features/sheets/sheets.tsx,features/tools/site/diary.tsx",
+  "n": 4
  },
  "إيجار {0} الآن": {
   "k": "e",
@@ -16997,65 +17800,15 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "بلاطة": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
- },
- "السمك": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 3
- },
- "كمرة": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
- },
- "العمق": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
- },
- "عمود": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
- },
- "الارتفاع": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 5
- },
- "عمود دائري": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
- },
- "القطر": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
- },
- "قاعدة": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
- },
- "حائط خرساني": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
- },
  "العدد": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 2
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/mep/sprinkler.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 12
  },
  "م": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 9
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
+  "n": 10
  },
  "هالك %": {
   "k": "s",
@@ -17069,8 +17822,8 @@
  },
  "كجم": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 4
+  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 5
  },
  "حجم الخرسانة مع الهالك": {
   "k": "x",
@@ -17079,8 +17832,8 @@
  },
  "الحجم الصافي": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
+  "n": 2
  },
  "شكائر أسمنت (50 كجم)": {
   "k": "s",
@@ -17094,13 +17847,13 @@
  },
  "رمل": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
+  "n": 6
  },
  "زلط / سن": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 2
  },
  "تقدير للحصر والطلب: نسب الخلطة الشائعة للخرسانة المسلحة في مصر (350 كجم أسمنت، 0.4 م³ رمل، 0.8 م³ زلط لكل م³) — غيّرها حسب تصميم الخلطة المعتمد. الخرسانة الجاهزة تُطلب بالمتر المكعب مباشرة.": {
   "k": "x",
@@ -17114,8 +17867,8 @@
  },
  "طول السيخ": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 2
+  "p": "features/sitetools/site-tools.tsx,features/tools/rebar/bbs.tsx",
+  "n": 5
  },
  "وزن Ø": {
   "k": "x",
@@ -17124,8 +17877,8 @@
  },
  "المطلوب": {
   "k": "x",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
+  "n": 2
  },
  "وزن Ø{0} المطلوب": {
   "k": "e",
@@ -17135,18 +17888,18 @@
  },
  "طن": {
   "k": "x",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/rebar/bbs.tsx",
+  "n": 4
  },
  "الوزن": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 5
  },
  "الطول الكلي": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 4
  },
  "وزن المتر الطولي": {
   "k": "s",
@@ -17165,8 +17918,8 @@
  },
  "سيخ": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 2
  },
  "قطع من كل سيخ 12 م": {
   "k": "s",
@@ -17201,13 +17954,13 @@
  },
  "طول الحائط": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 2
+  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 3
  },
  "مساحة الفتحات": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 2
+  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 3
  },
  "سمك العرموس": {
   "k": "s",
@@ -17221,23 +17974,23 @@
  },
  "طوبة": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 4
  },
  "بلوكة": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
+  "n": 4
  },
  "المساحة الصافية": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 2
  },
  "سمك الحائط": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 1
+  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 2
  },
  "العدد لكل م²": {
   "k": "s",
@@ -17638,8 +18391,8 @@
  },
  "الملكية": {
   "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
+  "p": "features/stack/stack.tsx,features/tools/site/diary.tsx",
+  "n": 2
  },
  "موظف": {
   "k": "x",
@@ -17919,8 +18672,8 @@
  },
  "الرقم": {
   "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
+  "p": "features/stack/stack.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/site/diary.tsx",
+  "n": 10
  },
  "أرسل سيرتك بالبريد": {
   "k": "x",
@@ -18594,8 +19347,8 @@
  },
  "غير متاح": {
   "k": "s",
-  "p": "features/stack/stack.tsx,features/tabs/tabs.tsx",
-  "n": 5
+  "p": "features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/host.tsx",
+  "n": 9
  },
  "الخريطة الكاملة للعلاقات: ما يستطيعه كل دور، ومن يراسل من، وكيف يتم التقديم، وما يُحجب من النص. هذه القواعد نفسها هي التي تُنفَّذ في كل شاشة.": {
   "k": "x",
@@ -18619,8 +19372,8 @@
  },
  "نعم": {
   "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
+  "p": "features/stack/stack.tsx,features/tools/site/diary.tsx",
+  "n": 3
  },
  "بشرط": {
   "k": "s",
@@ -18629,8 +19382,8 @@
  },
  "لا": {
   "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
+  "p": "features/stack/stack.tsx,features/tools/site/diary.tsx",
+  "n": 4
  },
  "من يراسل من؟": {
   "k": "x",
@@ -19167,8 +19920,8 @@
  },
  "الموضوع": {
   "k": "x",
-  "p": "features/support/support.tsx",
-  "n": 1
+  "p": "features/support/support.tsx,features/tools/site/toolbox.tsx",
+  "n": 4
  },
  "مثال: لا أستطيع تغيير بريدي": {
   "k": "s",
@@ -20133,25 +20886,10 @@
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
- "المكتب الفني والموقع": {
-  "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
- },
- "فحص واستلام الأعمال (QA/QC)": {
-  "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
- },
- "9 قوائم للموقع والمكتب الفني — احفظ، ثم صدّر تقرير PDF للتوقيع": {
-  "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
- },
  "الراتب والعروض": {
   "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
+  "p": "features/tabs/tabs.tsx,tools/registry.ts",
+  "n": 2
  },
  "لهدفك": {
   "k": "x",
@@ -20248,10 +20986,5127 @@
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
+ "أدوات الموقع والمكتب الفني": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "ابحث: خرسانة، حديد، ميزانية، كابل…": {
+  "k": "s",
+  "p": "features/tabs/tabs.tsx",
+  "n": 2
+ },
+ "الأخيرة": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "بلا عنوان": {
+  "k": "s",
+  "p": "features/tabs/tabs.tsx,features/tools/host.tsx",
+  "n": 2
+ },
+ "لا أداة بهذا الاسم.": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
+ },
+ "الوصلة الباردة: مساحة الشريحة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "(عرض ≤ {0} m)": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "r(cj.maxWidthM, 1)"
+ },
+ "صب في جو حار": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "≤ 32 °C — احتياطات الصب صيفًا": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ناتج خلطة {0}": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "m.mix.name"
+ },
+ "خطة صب": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "حصر الدور / المبنى": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "البيانات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
+  "n": 6
+ },
+ "العنصر / المنطقة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 3
+ },
+ "سقف الدور الثالث": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "المنسوب": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/survey/level-book.tsx",
+  "n": 4
+ },
+ "بداية الصب": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "حرارة الجو": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "الرتبة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/site/diary.tsx",
+  "n": 6
+ },
+ "المورد": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/site/diary.tsx",
+  "n": 6
+ },
+ "الهبوط المستهدف": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "⚑ حسب المواصفات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "نوع الأسمنت": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "بورتلاندي عادي": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "مخلوط / مقاوم": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "العناصر": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "أضف عنصرًا": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "{0} ×{1} — {2} م³": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "x.label || kindName(x.kind) | x.n || 0 | fmtNum(c.take.rows[i]?.netM3 || 0, 2)"
+ },
+ "الوصف / المحور": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "الهالك": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 8
+ },
+ "افتراضي {0} % ⚑": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "CONC_PROFILE.waste[x.kind]"
+ },
+ "تُصب ملاصقة للتربة (بدون شدة جانبية)": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "اطلب من المحطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "م³ {0}": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "b.grade"
+ },
+ "{0} خلاطة · خلاطة كل {1} د · {2} على الطريق · {3} ← {4}": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "c.pour.trucks | fmtNum(c.pour.intervalMin, 0) | c.pour.fleet | c.pour.startAt | c.pour.endAt"
+ },
+ "الحجم المطلوب بالهالك": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "الصافي {0} م³ · الشدة {1} م²": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "fmtNum(c.take.netM3, 2) | fmtNum(c.take.formworkM2, 1)"
+ },
+ "الشدة الخشبية": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "بلوك الهوردي": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "معدل الصب (يحكمه": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "المضخة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "المحطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "الطاقم": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "م³/س": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 7
+ },
+ "{0} س {1} د": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "Math.floor(c.pour.durationMin / 60) | Math.round(c.pour.durationMin % 60)"
+ },
+ "الطلب والخلاطات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "حمولة الخلاطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 3
+ },
+ "إنتاجية المضخة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "مخصص المحطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "قدرة الطاقم": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "المشوار (ذهاب)": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "فاقد تحضير المضخة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "التجهيز قبل الصب": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "التنظيف بعد الصب": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "مواعيد وصول الخلاطات": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "… والجدول كاملًا في التقرير (": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "خلاطة)": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "… والجدول كاملًا في التقرير ({0} خلاطة)": {
+  "k": "e",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "c.pour.schedule.length"
+ },
+ "الوصلات الباردة والمكعبات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "سمك الطبقة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "مساحة الشريحة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "طول الشريحة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "أقصى مساحة قبل أن تبرد الطبقة:": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "م² (زمن التغطية": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "د عند": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "أقصى مساحة قبل أن تبرد الطبقة: {0} م² (زمن التغطية {1} د عند {2} °C ⚑)": {
+  "k": "e",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "fmtNum(c.cj.aMaxM2, 0) | c.tCover | fmtNum(c.airC, 0)"
+ },
+ "مجموعة لكل 50 م³": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "أول 50 ثم كل 100 م³": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "3 مكعبات احتياطية لكل مجموعة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "مجموعات ·": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "مكعبًا (7 و 28 يومًا) ⚑": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "{0} مجموعات · {1} مكعبًا (7 و 28 يومًا) ⚑": {
+  "k": "e",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "c.cubes.sets | c.cubes.cubes"
+ },
+ "الفك والمعالجة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الخامات (خلط في الموقع)": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "أكبر بحر بلاطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "أكبر بحر كمرة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "تُحسب التواريخ من تاريخ المستند في التقرير ⚑ حسب ملف الكود.": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "خلط في الموقع (+4 % ⚑)": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 3
+ },
+ "{0} — {1} م³": {
+  "k": "e",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "m.mix.name | fmtNum(m.orderM3, 2)"
+ },
+ "شكارة 50 كجم": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "سن / زلط": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ماء": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
+  "n": 3
+ },
+ "المراجعات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/survey/level-book.tsx",
+  "n": 6
+ },
+ "تقدير للحصر وتخطيط الصب؛ القيم المعلَّمة ⚑ افتراضات تُطابق بالمواصفات المعتمدة والكود المصري 203 والخلطة التصميمية.": {
+  "k": "x",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "البداية ← النهاية": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الهبوط": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الأسمنت": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "خلاطة كل": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "على الطريق": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "المدة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/site/permit.tsx,features/tools/site/toolbox.tsx",
+  "n": 7
+ },
+ "الصافي": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "المطلوب بالهالك": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الشدة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "حصر العناصر": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الأبعاد": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "الإجمالي": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx",
+  "n": 4
+ },
+ "اللوجستيات ومواعيد الخلاطات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "يحكم المعدل": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "المعدل الفعلي": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "جدول وصول الخلاطات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الخلاطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "موعد الوصول": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "التراكمي": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ملاحظات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/survey/level-book.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
+  "n": 6
+ },
+ "المكعبات والفك والمعالجة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "مجموعات المكعبات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "عدد المكعبات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "القاعدة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "مجموعة لكل 50 م³ ⚑": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "أول 50 ثم كل 100 م³ ⚑": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "البند": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
+  "n": 8
+ },
+ "الأساس": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الخامات حسب الخلطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الخلطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "شكارة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
+  "n": 5
+ },
+ "سن": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "الهالك حسب العنصر": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ممارسة الموقع": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "خلطة المسلحة لكل م³": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ممارسة مصرية": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "زمن تغطية الطبقة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ACI 304 / ممارسة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "قاعدة المكعبات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "مواصفات المشروع": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "أزمنة الفك": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ECP 203 / ممارسة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "صب {0}": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "b.zone"
+ },
+ "· منسوب ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "b.level"
+ },
+ "صافي ⁦{0} m³⁩ · اطلب ⁦{1} m³ {2}⁩": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "fmtNum(c.take.netM3, 1) | fmtNum(c.pour.vOrderM3, 1) | b.grade"
+ },
+ "⁦{0}⁩ خلاطة كل ⁦{1}⁩ د · البداية ⁦{2}⁩": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "c.pour.trucks | fmtNum(c.pour.intervalMin, 0) | c.pour.startAt"
+ },
+ "⁦{0}⁩ مجموعات مكعبات": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "c.cubes.sets"
+ },
+ "تقدير — راجع المستند الكامل": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 4
+ },
+ "صافي ⁦{0} m³⁩ · بالهالك ⁦{1} m³⁩": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "fmtNum(c.take.netM3, 2) | fmtNum(c.take.orderM3, 2)"
+ },
+ "الشدة ⁦{0} m²⁩": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "fmtNum(c.take.formworkM2, 1)"
+ },
+ "خطة صب · Pour plan": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "كشف حصر الخرسانة والشدات · Concrete take-off": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ضمن الحد ⚑": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "الدوائر": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "دائرة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "{0} ضمن الحد · {1} تحتاج مراجعة": {
+  "k": "t",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1,
+  "x": "b.circuits.length - fails | fails"
+ },
+ "المصدر والحدود": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "جهد الطور U₀": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "جهد الخط U": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "هبوط الجهد المسموح": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "3 % إنارة / 5 % أخرى": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "حرارة الهواء": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "حرارة التربة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "مقاومة التربة الحرارية": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "دائرة جديدة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "من ← إلى": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 3
+ },
+ "ثلاثي الأوجه": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "أحادي": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "قدرة داخلة kW": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "خرج موتور kW": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "تيار Ib": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "القدرة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "الكفاءة η": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "القاطع In": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "تيار القصر": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "زمن الفصل": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "عدد الدوائر المتجمعة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "العزل": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "طريقة التمديد": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "C على حائط": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "E حامل مثقب": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "D1 مدفون في ماسورة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "التجميع": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "متجمعة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "حامل مثقب طبقة واحدة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "جهاز الحماية": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "قاطع": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "فيوز gG": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "أساس السعة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "من الجدول (تحقق) ⚑": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "من كتالوج المصنّع": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "المقطع": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 3
+ },
+ "It من الكتالوج": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "مرجع الكتالوج": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 2
+ },
+ "It المطلوب": {
+  "k": "x",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "It المطلوب {0} → {1}": {
+  "k": "r",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{fmtNum(r.needIt, 2) | r.parallel ? \"يحتاج كابلات متوازية\" : <bdi dir=\"ltr\" classNa"
+ },
+ "يحتاج كابلات متوازية": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "التنسيق In ≤": {
+  "k": "x",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "التنسيق In ≤ {0} ({1} A) {2}": {
+  "k": "e",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1,
+  "x": "c.device === \"gG\" ? \"0.906·Iz\" : \"Iz\" | fmtNum(r.coord.limitA, 1) | r.coord.ok ? \"✓\" : \"✗\""
+ },
+ "هبوط الجهد": {
+  "k": "x",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "· أقصى طول": {
+  "k": "x",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "هبوط الجهد {0} · أقصى طول {1}": {
+  "k": "r",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{fmtNum(r.vd.pct, 3) | EL <bdi dir=\"ltr\" className=\"font-grotesk\">{fmtNum(r.lmax || 0,"
+ },
+ "زمن أقل من 0.1 ث — أدخل I²t من المصنّع": {
+  "k": "x",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "أقل مقطع للقصر": {
+  "k": "x",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "أقل مقطع للقصر {0}": {
+  "k": "r",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{fmtNum(r.sMin || 0,"
+ },
+ "جدول السعات منقول من IEC 60364-5-52 وغير مُراجع بعد ⚑ — النتيجة «ضمن الحد ⚑» وليست «مطابق». للاعتماد استخدم كتالوج المصنّع.": {
+  "k": "x",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "وفق IEC 60364-5-52 (2009)؛ لا يقرر المطابقة للكود المصري. ليس للتنفيذ دون توقيع مهندس مختص.": {
+  "k": "x",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "الكود": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "السعات": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "IEC — غير مُراجعة ⚑ / كتالوج": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "الجهد": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "الهواء": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "التربة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx,features/tools/site/permit.tsx",
+  "n": 3
+ },
+ "هبوط مسموح": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "الدائرة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "التمديد": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "النتيجة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,lib/report-pdf.ts",
+  "n": 6
+ },
+ "الفرضيات": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx,features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "Ib = P/(√3·U·cosφ·η) · Iz = It·k_temp·k_group·k_soil · gG: In ≤ 1.45/1.6·Iz · Δu = b(ρ·L/S·cosφ + λ·L·sinφ)·Ib، ρ = 0.0225، λ = 0.08 mΩ/m · S ≥ I·√t/k (0.1–5 s). جداول الحرارة: B.52.14 للهواء و B.52.15 للمدفون.": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "جداول السعة": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "معامل k للقصر": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "جدول الكابلات · Cable schedule": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "جدول الكابلات": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "جدول الكابلات · ⁦{0}⁩ دائرة": {
+  "k": "t",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1,
+  "x": "res.length"
+ },
+ "ضمن الحد ⁦{0}⁩ · مراجعة ⁦{1}⁩": {
+  "k": "t",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1,
+  "x": "res.filter((r) => r.ok).length | res.filter((r) => !r.ok).length"
+ },
+ "IEC 60364-5-52 — ليس للتنفيذ دون توقيع": {
+  "k": "s",
+  "p": "features/tools/elec/cable.tsx",
+  "n": 1
+ },
+ "صادر": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "مُستبدَل": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "ملغى": {
+  "k": "s",
+  "p": "features/tools/host.tsx,features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "هذه الأداة غير متاحة لنوع حسابك.": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 4
+ },
+ "بيانات المشروع": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "مشروع جديد": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "كل المستندات": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "مستند جديد": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "المستندات المحفوظة": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "المستندات المحفوظة {0}": {
+  "k": "e",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "docs.length > 0 && <Num>({docs.length})</Num>"
+ },
+ "لا مستندات بعد. كل ما تكتبه يُحفظ على هذا الجهاز أولًا، ثم في حسابك.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "حذف المستند": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 4
+ },
+ "يُحذف المستند من هذا الجهاز ومن حسابك على كل الأجهزة. لا يمكن التراجع.": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "احذف": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "حُذف المستند": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تعذّر الحذف — حاول مرة أخرى": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تعذّر الحفظ على الجهاز — المساحة ممتلئة؟": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "المستند كبير: محفوظ على هذا الجهاز فقط": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تعذّر فتح الأداة": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "تحقق من الاتصال ثم حاول مرة أخرى.": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "المستند غير موجود": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "ربما حُذف من جهاز آخر.": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "جارٍ التحضير…": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تعذّرت المعاينة": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "صفحة {0} من {1}…": {
+  "k": "t",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "n | of"
+ },
+ "أُلغي التصدير": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تعذّر إنشاء التقرير": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تعذّر حفظ التقرير أو مشاركته": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "نُسخ الملخص": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "تعذّرت المشاركة": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "صدر المستند {0}": {
+  "k": "t",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "docNo"
+ },
+ "عنوان المستند": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "بدون مشروع (GEN)": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "رقم المستند يُعطى عند الإصدار": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "إصدار": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "مراجعة جديدة": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "هذا المستند من إصدار أحدث من التطبيق — يُعرض للقراءة فقط. حدّث التطبيق لتعديله.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "إصدار المستند": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "يأخذ المستند رقمه ويُجمَّد بنصه وأرقامه وبيانات المشروع كما هي الآن. أي تعديل لاحق يكون مراجعة جديدة.": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "أصدر": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "الاستشاري": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "المالك": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "مقاول الباطن": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "اكتب اسم المشروع": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "رمز المشروع: من 2 إلى 8 حروف إنجليزية كبيرة أو أرقام": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تُكتب مرة واحدة وتظهر في خرطوشة كل تقرير. لا أسعار ولا مبالغ هنا.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "رمز المشروع (يدخل في أرقام المستندات)": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "الجهة المُصدِرة للمستندات": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "المقاول الرئيسي": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "المدينة": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "رقم العقد / المرجع": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "التوقيعات": {
+  "k": "x",
+  "p": "features/tools/host.tsx,features/tools/site/permit.tsx",
+  "n": 3
+ },
+ "أعدّ": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "راجع": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "اعتمد": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "{0} — الاسم": {
+  "k": "t",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "l"
+ },
+ "الوظيفة": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "حفظ المشروع": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "أرشفة المشروع": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 3
+ },
+ "يختفي المشروع من القوائم وتبقى مستنداته كما هي.": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "أرشف": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "الوحدات": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 2
+ },
+ "وحدة": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 2
+ },
+ "{0} مطابقة · {1} تحتاج تصحيح": {
+  "k": "t",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "b.units.length - fails | fails"
+ },
+ "أضف أول وحدة": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "وحدة جديدة": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 2
+ },
+ "الموديل": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 3
+ },
+ "القدرة ({0})": {
+  "k": "t",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "acxHpLabel(N(u.btuh))"
+ },
+ "من كتالوج الوحدة": {
+  "k": "x",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "أقصى طول": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "أقصى فرق ارتفاع": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "الطول المشحون مسبقًا": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "شحنة إضافية": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 2
+ },
+ "قطر السائل": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 2
+ },
+ "قطر الغاز": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 2
+ },
+ "المنفّذ": {
+  "k": "x",
+  "p": "features/tools/mep/ac-install.tsx,features/tools/site/permit.tsx",
+  "n": 3
+ },
+ "الطول المنفذ": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "فرق الارتفاع": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 2
+ },
+ "طول خط الصرف": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "ميل الصرف": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "يوجد سيفون (trap)": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 2
+ },
+ "الطول {0}": {
+  "k": "e",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "r.ls.lenOk ? \"✓\" : \"✗\""
+ },
+ "فرق الارتفاع {0}": {
+  "k": "e",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "r.ls.liftOk ? \"✓\" : \"✗\""
+ },
+ "الأقطار مطابقة للكتالوج": {
+  "k": "x",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "الأقطار مطابقة للكتالوج {0}": {
+  "k": "e",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "r.ls.sizesOk ? \"✓\" : \"✗\""
+ },
+ "ميل الصرف ≥ 1 %": {
+  "k": "x",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "· سقوط": {
+  "k": "x",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "مم · أقل قطر": {
+  "k": "x",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "ميل الصرف ≥ 1 % {0} · سقوط {1} مم · أقل قطر {2}": {
+  "k": "e",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "r.c.slopeOk ? \"✓\" : \"✗\" | Math.round(r.c.fallMm) | r.c.minDrainIn"
+ },
+ "الشحنة الإضافية:": {
+  "k": "x",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "الشحنة الإضافية: {0} g": {
+  "k": "e",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "r.ls.extraG"
+ },
+ "فحص موقعي؛ بيانات المصنّع (الأقطار والأطوال والشحنة) هي المرجع الملزم. وسائط التبريد A2L (مثل R32) لها حدود شحنة ومساحة غرفة — راجع دليل المصنّع.": {
+  "k": "x",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "الأقطار منفذ / كتالوج": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "الطول / الأقصى": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "الارتفاع / الأقصى": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "الصرف": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "سيفون": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "أقل قطر صرف حسب القدرة": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "أقل ميل للصرف": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "ممارسة": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "طن تبريد": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "تعريف": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "فحص تركيب التكييف · AC installation check": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1
+ },
+ "فحص تركيب التكييف": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx,tools/registry.ts",
+  "n": 2
+ },
+ "فحص تركيب التكييف · ⁦{0}⁩ وحدة": {
+  "k": "t",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "doc.body.units.length"
+ },
+ "مطابقة ⁦{0}⁩ · تحتاج تصحيح ⁦{1}⁩": {
+  "k": "t",
+  "p": "features/tools/mep/ac-install.tsx",
+  "n": 1,
+  "x": "res.filter((r) => r.ok).length | res.filter((r) => !r.ok).length"
+ },
+ "راجع المستند الكامل": {
+  "k": "s",
+  "p": "features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/sprinkler.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,features/tools/site/toolbox.tsx",
+  "n": 6
+ },
+ "منسوب آخر غرفة": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "العمق {0} م · الطول {1} م": {
+  "k": "t",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1,
+  "x": "m3(last.depthMm) | last.chainM"
+ },
+ "البداية": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx,features/tools/site/toolbox.tsx",
+  "n": 4
+ },
+ "الميول الدنيا": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "متري (1 % / 0.5 %) ⚑": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "IPC صارم": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "أول غرفة": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 3
+ },
+ "منسوب القاع": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "منسوب الأرض": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 5
+ },
+ "أقل غطاء": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "منسوب المجمع العمومي": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "المسافات والغرف": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "غرفة تالية": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "{0} · {1} م · IL {2} · عمق {3}{4}": {
+  "k": "t",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1,
+  "x": "x.mh | x.len || 0 | m3(r.nodes[i]?.ilInMm) | m3(r.nodes[i]?.depthMm) | r.nodes[i]?.checks.some((c) => c.ok === false) ? \" ✗\" : \"\""
+ },
+ "الغرفة": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx,features/tools/mep/sprinkler.tsx",
+  "n": 7
+ },
+ "الطول من السابقة": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "القطر DN": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "فارغ = أقل ميل {0} %": {
+  "k": "t",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1,
+  "x": "drnMinSlope(numInputParse(x.dn) ?? 150, b.profile)"
+ },
+ "هبوط داخل الغرفة": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "آخر منسوب أوطى من المجمع العمومي — راجع الميول أو استخدم رفع.": {
+  "k": "x",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "المساطر والأوتاد": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "طول المسطرة المتنقلة": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "منسوب الوتد": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "منسوب وتد الحفر": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 2
+ },
+ "المنسوب التصميمي": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx,features/tools/survey/level-book.tsx",
+  "n": 4
+ },
+ "منسوب المسطرة عند": {
+  "k": "x",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "منسوب المسطرة عند {0}: {1}{2}": {
+  "k": "r",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1,
+  "x": "b.startMh | EL <bdi dir=\"ltr\" className=\"font-grotesk\">{m3(rail.railMm)}</b | rail.markAbovePegMm != null && <> · العلامة فوق الوتد <bdi d"
+ },
+ "· العلامة فوق الوتد": {
+  "k": "x",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "· العلامة فوق الوتد {0}": {
+  "k": "r",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{m3(rail.markAbovePe"
+ },
+ "وتد الحفر:": {
+  "k": "x",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "وتد الحفر: {0}": {
+  "k": "r",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{stake.label}</bdi>"
+ },
+ "حساب مناسيب وتوقيع؛ الميول الدنيا والمسافات وأبعاد الغرف حسب الملف المختار ويجب مطابقتها بكود الصرف المصري واشتراطات شركة المياه.": {
+  "k": "x",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "الميول": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx,features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "متري ⚑": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "المجمع العمومي": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "المسافة التراكمية": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "قاع داخل": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "قاع خارج": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "الميل %": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "القطاع الطولي — الأرض متقطع، القاع متصل (رأسي مكبّر)": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "جدول مناسيب الصرف · Drain invert schedule": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "صحي": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "مناسيب غرف التفتيش": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx,tools/registry.ts",
+  "n": 2
+ },
+ "مناسيب الصرف · ⁦{0}⁩ غرفة": {
+  "k": "t",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1,
+  "x": "r.nodes.length"
+ },
+ "آخر قاع ⁦{0}⁩ · عمق ⁦{1}⁩": {
+  "k": "t",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1,
+  "x": "m3(last.ilOutMm) | m3(last.depthMm)"
+ },
+ "كل الفحوص مقبولة": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "توجد فحوص غير مطابقة": {
+  "k": "s",
+  "p": "features/tools/mep/drain-run.tsx",
+  "n": 1
+ },
+ "خفيفة": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "عادية 1": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "عادية 2": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "شديدة 1": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "شديدة 2": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "عدد الرشاشات (التصميم)": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "رشاش": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "{0} غرفة لا تطابق في الموقع": {
+  "k": "t",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1,
+  "x": "fails"
+ },
+ "{0} غرفة": {
+  "k": "t",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1,
+  "x": "b.rooms.length"
+ },
+ "غرفة جديدة": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "غرفة {0}": {
+  "k": "t",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1,
+  "x": "i + 1"
+ },
+ "{0} رشاش": {
+  "k": "t",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1,
+  "x": "res[i].lay!.n"
+ },
+ "درجة الخطورة": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "حسابات هيدروليكية": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "جداول المواسير": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "السقف": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx,features/tools/trade/trade.tsx",
+  "n": 3
+ },
+ "غير قابل للاحتراق": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "قابل للاحتراق بعوائق": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "(الحد": {
+  "k": "x",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "م² /": {
+  "k": "x",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "م)": {
+  "k": "x",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "{0} (الحد {1} م² / {2} م)": {
+  "k": "r",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{x.lay.nx} × {x.lay. | x.lim.areaM2 | x.lim.sM"
+ },
+ "فحص موقع": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "المسافة X": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "المسافة Y": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "البعد عن الحائط X": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "البعد عن الحائط Y": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 2
+ },
+ "فحص مسافات وأعداد فقط — ليست حسابات هيدروليكية وفق NFPA 13 الفصل 28؛ تصنيف الخطورة والتصميم لمهندس مرخّص واعتماد الحماية المدنية.": {
+  "k": "x",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "ليست حسابات هيدروليكية — فحص مسافات وأعداد حسب NFPA 13-2022 جدول 10.2.4.2.1 (رشاشات قياسية).": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "الخطورة": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "المسافات": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "م²/رشاش": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "الحد": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "فحص توزيع الرشاشات · Sprinkler spacing check": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "حريق": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "فحص توزيع الرشاشات": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "فحص الرشاشات · ⁦{0}⁩ غرفة": {
+  "k": "t",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1,
+  "x": "doc.body.rooms.length"
+ },
+ "التصميم ⁦{0}⁩ رشاش": {
+  "k": "t",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1,
+  "x": "res.reduce((a, x) => a + (x.lay ? x.lay.n : 0), 0)"
+ },
+ "ليست حسابات هيدروليكية": {
+  "k": "s",
+  "p": "features/tools/mep/sprinkler.tsx",
+  "n": 1
+ },
+ "علامة مكررة {0}": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "k.split(\"|\")[1]"
+ },
+ "علامة واحدة": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "غير محدد (علوي احتياطًا)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "علوي": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "سفلي / غيره": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "بيانات الجدول": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "العنصر / المجموعة": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "كمرات سقف الدور 3": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "اللوحة والمراجعة": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "fcu الخرسانة": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "رتبة الحديد": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 3
+ },
+ "تقريب طول القص لأعلى": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "25 مم": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "10 مم": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "5 مم": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "بدون": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "أضف بندًا": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx,ui/kit.tsx",
+  "n": 3
+ },
+ "{0} · Ø{1} · [{2}] · {3} × {4} · {5} كجم": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "l.mark | l.d | l.shape | c.out[i]?.totalNo || 0 | c.out[i]?.roundedMm || 0 | fmtNum(c.out[i]?.kg || 0, 2)"
+ },
+ "العلامة": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 3
+ },
+ "الشكل (BS 8666)": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "القطعة {0}": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "j + 1"
+ },
+ "زاوية الانحراف": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "+ قطعة": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "عدد العناصر": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "عدد الأسياخ في العنصر": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "موضع السيخ (للتماسك)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "الوصلات": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "في قطاع واحد (1.3 Ld)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "متخالفة ≤ 50 % (Ld)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "طول مُدخل": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "طول الوصلة (من اللوحة)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "طول القص": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "العدد الكلي": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "وصلات": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "إجمالي وزن الحديد": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "Ø{0}: {1} كجم": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "r.d | fmtNum(r.kg, 1)"
+ },
+ "خطة القص (أسياخ 12 م)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "أعد الحساب": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "احسب خطة القص": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "أقصر باقي يُخزَّن": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 3
+ },
+ "تغيّرت البنود بعد الحساب — أعد حساب خطة القص.": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "سيخ جديد": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "Ø{0}: {1} سيخ جديد {2}": {
+  "k": "e",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "d | p.newBars | p.optimality === \"proven\" ? \"· أمثل\" : p.optimality === \"withinOne\" ? \"· في حدود سيخ من الأمثل\" : \"\""
+ },
+ "· أمثل": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "· في حدود سيخ من الأمثل": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "القص المنفصل": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "· الحد الأدنى": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "· هالك": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "م · بواقي": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "القص المنفصل {0} · الحد الأدنى {1} · هالك {2} م · بواقي {3}": {
+  "k": "e",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "p.naiveBars | p.lowerBound | fmtNum(p.scrapMm / 1000, 2) | p.remnantsMm.length"
+ },
+ "· باقي {0}": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "pt.tag"
+ },
+ "جدول للتنفيذ والطلب من أبعاد اللوحات المدخلة؛ أطوال الثني والتماسك من ملف الكود ويجب مطابقتها باللوحات المعتمدة والكود المصري 203.": {
+  "k": "x",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "هالك {0}": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "pt.offcutMm"
+ },
+ "اللوحة": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "التقريب": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "عناصر": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "/عنصر": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "الشكل": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "الرسم": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "ملخص الأوزان حسب القطر": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "خطة القص": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "Ø{0} أسياخ جديدة": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "d"
+ },
+ "الحد الأدنى": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "أمثل": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "في حدود سيخ من الأمثل": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "وفر": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "· من {0}": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "pt.fromRemnant"
+ },
+ "· باقي {0} = {1} mm": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "pt.tag | pt.offcutMm"
+ },
+ "· هالك {0} mm": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "pt.offcutMm"
+ },
+ "الوزن لكل متر": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "جدول الأوزان": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "طول التماسك (Ø16 علوي)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "الوصلة الافتراضية": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "الإجمالي ⁦{0} t⁩": {
+  "k": "t",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1,
+  "x": "fmtNum(c.sum.kg / 1000, 3)"
+ },
+ "جدول تفريد الحديد · Bar bending schedule": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "جدول تفريد الحديد": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "صافٍ": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "غائم": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "رياح": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "عاصفة ترابية": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "مطر": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "حر شديد": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "طقس": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "معلومات المالك": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "مرافق": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "خامات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "تسليم موقع": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "طرف ثالث": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "أضف": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "لا توجد يومية سابقة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "نُسخت العمالة والمعدات من آخر يومية": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "زي امبارح — انسخ العمالة والمعدات": {
+  "k": "x",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "عمالة اليوم": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "فرد": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 4
+ },
+ "{0} ساعة عمل{1}{2}": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "fmtNum(t.manHours, 0) | t.poursM3 ? ` · صب ${fmtNum(t.poursM3, 1)} م³` : \"\" | t.delayMin ? ` · تأخير ${t.delayMin} د` : \"\""
+ },
+ "· صب {0} م³": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "fmtNum(t.poursM3, 1)"
+ },
+ "· تأخير {0} د": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "t.delayMin"
+ },
+ "الوردية والطقس": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "أعدّها": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "العظمى": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "الصغرى": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "توقف العمل من": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "العمالة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 4
+ },
+ "{0} · {1} · {2} × {3} س": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "m.trade || \"مهنة\" | m.company || \"—\" | m.n || 0 | m.hours || 0"
+ },
+ "مهنة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "المهنة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 6
+ },
+ "نجارين": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "الساعات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "المعدات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "{0} {1} · {2}/{3}/{4} س": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "e.type || \"معدة\" | e.tag | e.work || 0 | e.idle || 0 | e.down || 0"
+ },
+ "معدة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "الرقم / اللوحة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "ساعات تشغيل": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "ساعات توقف": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "ساعات عطل": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "ملك": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "الأعمال المنفذة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "بند": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "النشاط": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "المبنى / الدور / المحور": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "الكمية": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 11
+ },
+ "الوحدة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 9
+ },
+ "الصب": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 4
+ },
+ "{0} · {1} م³ {2}": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "p.element || \"عنصر\" | p.m3 || 0 | p.grade"
+ },
+ "عنصر": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "التوريدات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "خامة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "معلّق": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "الخامة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "رقم إذن التوريد": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "الاستلامات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "رقم الطلب": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "A مقبول": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "B بملاحظات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "C مرفوض": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "التعليمات والاستفسارات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "تعليمات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "تؤثر على المدة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "أثر تعاقدي": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "الزوار": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "الاسم": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 6
+ },
+ "الغرض": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
+  "n": 6
+ },
+ "موضوع التوعية الصباحية": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "إصابة مُعطِّلة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "إسعافات أولية": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "حادث وشيك": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "تلفيات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "تاريخ آخر إصابة مُعطِّلة": {
+  "k": "x",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "أيام بدون إصابة مُعطِّلة:": {
+  "k": "x",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "أيام بدون إصابة مُعطِّلة: {0}": {
+  "k": "e",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "lti"
+ },
+ "التأخيرات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "النشاط المتأثر": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "خطة الغد": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 3
+ },
+ "سطر لكل نشاط": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "استخدام المعدات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "سجل يومي معاصر يعدّه المقاول؛ توقيع الاستشاري يعني الاستلام فقط.": {
+  "k": "x",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "الوردية": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "الطقس": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "الحرارة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "توقف للطقس": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "ساعات العمل": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx,lib/search.ts",
+  "n": 3
+ },
+ "التأخير": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "المعدة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "تشغيل": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "توقف": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "عطل": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "الاستخدام %": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "الكمية م³": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "إذن التوريد": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "أثر زمني": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "التوعية": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "إسعافات": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "أيام بدون إصابة": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "السبب": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "التقرير اليومي · Daily report": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "التقرير اليومي": {
+  "k": "s",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1
+ },
+ "التقرير اليومي{0} · ⁦{1}⁩": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "doc.docNo ? ` · ⁦${doc.docNo}⁩` : \"\" | doc.dateIso"
+ },
+ "عمالة ⁦{0}⁩ · ⁦{1}⁩ ساعة": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "t.heads | fmtNum(t.manHours, 0)"
+ },
+ "صب ⁦{0} m³⁩": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "fmtNum(t.poursM3, 1)"
+ },
+ "تأخير ⁦{0}⁩ د": {
+  "k": "t",
+  "p": "features/tools/site/diary.tsx",
+  "n": 1,
+  "x": "t.delayMin"
+ },
+ "أعمال ساخنة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "عمل على ارتفاع": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "أماكن محصورة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "حفر": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "رفع قرب خطوط كهرباء": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "عزل كهربائي": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "إزالة المواد القابلة للاشتعال 11 م أو تغطيتها": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "طفاية مناسبة في المكان": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مراقب حريق أثناء العمل و60 دقيقة بعده": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "اسطوانات الأكسجين بعيدة 6.1 م عن الغاز": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "حزام كامل مع حبل امتصاص": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "نقطة تثبيت ≥ 22.2 kN": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "سقالة ببطاقة خضراء": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "منطقة أسفل العمل مؤمّنة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "قياس الغاز قبل الدخول (O₂ ← LEL ← سموم)": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "تهوية مستمرة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مراقب خارج الفتحة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "خطة إنقاذ ومعدات جاهزة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "ميول أو سند حسب نوع التربة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الردم بعيد 0.61 م عن الحافة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "سلم كل 15 م من الطول": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "فحص يومي من شخص مختص": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "تأكيد جهد الخط من شركة التوزيع": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مراقب مسافات مخصص": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "منطقة العمل محددة بحواجز": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "فحص الونش والحبال": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "فصل المصدر وقفل وتعليق بطاقة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "التأكد من انعدام الجهد": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "تأريض مؤقت عند الحاجة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "المفاتيح مع المنفّذ": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مسودة — غير مصرّح بالعمل": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مصرّح": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "ساري": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "مغلق": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "عرض الحفر من أعلى": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الميل H:V": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "عدد السلالم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "بُعد الردم عن الحافة ≥": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "نظام حماية للجوانب": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مطلوب من 1.5 m": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "تصميم مهندس متخصص": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "قياس الغاز قبل النزول": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مطلوب": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "> 1.22 m مع احتمال غاز": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الحفر أعمق من 6.1 م — يتطلب تصميمًا من مهندس متخصص؛ الحاسبة متوقفة.": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "السقوط الحر": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "الخلوص المطلوب أسفل سطح العمل": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "قاعدة السلم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "أقل طول للسلم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الخلوص المتاح": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الخلوص غير كافٍ — استخدم حبل ذاتي الارتداد (SRL) أو ارفع نقطة التثبيت.": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مسافة التخطيط المتحفظة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الرفع ممنوع حتى تؤكد شركة التوزيع جهد الخط.": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "أقل مسافة من الخط": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مسافة الخط": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "إزالة المواد القابلة للاشتعال": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مراقب الحريق بعد العمل": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مُصدِر التصريح": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 4
+ },
+ "المستلم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "التوقيع الورقي": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "قياس غاز ناجح": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مانع في الحاسبة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "التصريح": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "وصف العمل": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 3
+ },
+ "يبدأ": {
+  "k": "x",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "المخاطر والاحتياطات": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "حاسبة الحفر": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "عرض القاع": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "طول الحفر": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "صخر ثابت": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "A متماسكة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "C مفككة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مياه أو رشح": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "احتمال غازات": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "حاسبة السقوط والسلالم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "طول الحبل": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "افتراضي 1.8": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "امتداد الممتص": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "افتراضي 1.75": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "نقطة التثبيت فوق القدم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "0 = الأسوأ": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "الخلوص المتاح أسفل سطح العمل": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "ارتفاع السلم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "مسافة خطوط الكهرباء": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "جهد الخط (اتركه فارغًا إن لم يُعرف)": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "قياسات الغاز": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 3
+ },
+ "قياس جديد": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "✓ آمن": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "✗ غير آمن": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الوقت": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 3
+ },
+ "كل قياس صالح ساعتين ⚑ — قياس فاشل يوقف التصريح.": {
+  "k": "x",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "المنفّذ المسؤول": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "مستلم التصريح": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "وُقّع ورقيًا من الأطراف الثلاثة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "تصريح العمل": {
+  "k": "x",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "ينقص:": {
+  "k": "x",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "ينقص: {0}": {
+  "k": "e",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1,
+  "x": "missing.join(\"، \")"
+ },
+ "إغلاق التصريح": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "ملاحظات الإغلاق (الموقع آمن ونظيف)": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "منتهي": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "لم يتم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "سبب الإلغاء": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الإغلاق": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "تصريح عمل · Permit to work": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "سلامة": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx,features/tools/site/toolbox.tsx",
+  "n": 2
+ },
+ "تصريح عمل": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "تصريح عمل · {0}": {
+  "k": "t",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1,
+  "x": "(TYPES.find((t) => t[0] === doc.body.type) || TYPES[0])[1]"
+ },
+ "ساري حتى ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1,
+  "x": "(st as any).untilIso?.slice(11, 16)"
+ },
+ "غير ساري": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "الإجهاد الحراري": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "اشرب ماء كل 20 دقيقة حتى لو مش عطشان": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "استرح في الظل وقت الظهيرة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "لو حسيت بدوخة أو صداع بلّغ فورًا": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "العمل على ارتفاع": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الحزام مربوط في نقطة تثبيت قوية دائمًا": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "السقالة لازم عليها بطاقة خضراء": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "ممنوع الوقوف على الدرابزين أو الحافة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الحفر": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "ممنوع النزول بدون سند أو ميول آمنة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الردم بعيد عن الحافة 60 سم على الأقل": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "السلم داخل الحفر في متناول الكل": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الرفع بالونش": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "ممنوع الوقوف تحت الحمل": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الإشارات من شخص واحد معروف": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "افحص الحبال والشناكل قبل الرفع": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الأعمال الساخنة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "طفاية جنب مكان اللحام": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "شيل المواد القابلة للاشتعال 11 متر": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "مراقب حريق بعد الانتهاء 60 دقيقة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "النظافة والترتيب": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الممرات فاضية من المخلفات": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "المسامير البارزة تتشال أو تتثني": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "المخلفات في أماكنها المحددة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "ممنوع لمس الكابلات المكشوفة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "القاطع الأرضي شغال في كل لوحة مؤقتة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الفصل والإغلاق قبل أي صيانة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الرفع اليدوي": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "اثني ركبك مش ظهرك": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "اطلب مساعدة للأحمال التقيلة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "شيل الحمل قريب من جسمك": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "مهمات الوقاية": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الخوذة والجزمة والسترة طول الوقت": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "النظارة مع الصاروخ والتكسير": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "المهمات التالفة تتغير فورًا": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "السقالات": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "البطاقة الخضراء قبل الطلوع": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الألواح مثبتة والدرابزين كامل": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "ممنوع تعديل السقالة بدون المختص": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الأماكن المحصورة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "قياس الغاز قبل الدخول": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "مراقب برة طول الوقت": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "تصريح عمل ساري": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "المعدات والحركة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "ابعد عن نطاق دوران المعدة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "التواصل بالنظر مع السائق": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الإشارة قبل الرجوع للخلف": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "خوذة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "حذاء": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "سترة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "جوانتي": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "نظارة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "حزام": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "الحضور": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 3
+ },
+ "{0} ساعة · المهمات {1}": {
+  "k": "t",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "fmtNum(s.manHours, 2) | s.ppePct == null ? \"—\" : fmtNum(s.ppePct, 0) + \" %\""
+ },
+ "المقدِّم": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 3
+ },
+ "المنطقة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 3
+ },
+ "مهام اليوم ومخاطرها": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 2
+ },
+ "الحضور والمهمات": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 2
+ },
+ "عامل جديد": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 2
+ },
+ "اسم": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "رقم البطاقة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 2
+ },
+ "يعمل على ارتفاع (حزام مطلوب)": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 2
+ },
+ "الإجراء": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 3
+ },
+ "سُلّمت": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 2
+ },
+ "أُبعد عن العمل": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "محتاجين إجراء:": {
+  "k": "x",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "محتاجين إجراء: {0}": {
+  "k": "e",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "s.missingNoAction.join(\"، \")"
+ },
+ "بطاقة مكررة:": {
+  "k": "x",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "بطاقة مكررة: {0}": {
+  "k": "e",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "s.dupBadges.join(\"، \")"
+ },
+ "سجل توعية وحضور؛ لا يغني عن تقييم المخاطر وخطة السلامة المعتمدة. بيانات العمال محفوظة في حسابك فقط.": {
+  "k": "x",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "أُبعد": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "ساعات": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "المهمات كاملة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "النقاط الرئيسية": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "مهام اليوم ومخاطرها: {0}": {
+  "k": "t",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "b.hazards"
+ },
+ "كشف الحضور والمهمات": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "البطاقة": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "التوعية الصباحية · Toolbox talk": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "التوعية الصباحية": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "التوعية الصباحية · ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "doc.dateIso"
+ },
+ "حضور ⁦{0}⁩ · مهمات ⁦{1}⁩": {
+  "k": "t",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "s.n | s.ppePct == null ? \"—\" : fmtNum(s.ppePct, 0) + \" %\""
+ },
+ "أعدّ · Prepared by": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "راجع · Checked by": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "اعتمد · Approved by": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "مندوب المقاول · Contractor": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "مهندس الاستشاري · Consultant": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "مهندس الموقع · Site engineer": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "مسؤول السلامة · HSE officer": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "الطالب · Requested by": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "أمين المخزن · Store keeper": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "مُصدِر التصريح · Issuer": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "مستلم التصريح · Acceptor": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "المشرف · Supervisor": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "حسابات تقديرية لمساعدة المهندس في الموقع والمكتب الفني؛ تُراجع على اللوحات والمواصفات المعتمدة وتعليمات الاستشاري قبل التنفيذ أو الطلب. القيم المعلَّمة ⚑ افتراضات قابلة للتعديل وتحتاج تحققًا.": {
+  "k": "s",
+  "p": "features/tools/spec.ts",
+  "n": 1
+ },
+ "BS مؤخرة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 3
+ },
+ "IS متوسطة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "FS مقدمة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "CP نقطة دوران": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "خطأ القفل": {
+  "k": "x",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "خطأ القفل {0} {1}": {
+  "k": "r",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">e = {c.mis.eMm} mm · | c.mis.ok ? \"✓ مقبول\" : \"✗ أعد الميزانية\""
+ },
+ "mm · المسموح": {
+  "k": "x",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "e = {0} mm · المسموح {1} mm": {
+  "k": "e",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1,
+  "x": "c.mis.eMm | c.mis.allowMm.toFixed(1)"
+ },
+ "✓ مقبول": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "✗ أعد الميزانية": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "نقل روبير": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "مناسيب أرض طبيعية": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "مناسيب بلاطة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "قطاع طريق": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "الجهاز (النوع والرقم)": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "طول القامة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "روبير البداية": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 3
+ },
+ "منسوبه": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "مصدر الروبير (هيئة المساحة / شهادة)": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "القفل": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 3
+ },
+ "على روبير معلوم": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "حلقة مغلقة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "مسار مفتوح": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "روبير القفل": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "منسوبه المعلوم": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "الخطأ المسموح": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 3
+ },
+ "طول المسار K": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "توزيع الخطأ": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "بعدد الأوضاع": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "بالمسافة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "القراءات ({0})": {
+  "k": "t",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1,
+  "x": "b.rows.length"
+ },
+ "قراءة جديدة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "النقطة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 3
+ },
+ "القراءة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "سالب = قامة مقلوبة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "طول الوضع (مؤخرة + مقدمة)": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "الخطأ أكبر من المسموح — لا يُوزَّع. أعد الميزانية.": {
+  "k": "x",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "تُطبَّق التصحيحات في التقرير (عمود «المنسوب المصحح»).": {
+  "k": "x",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "اختبار الوتدين (ضبط خط النظر)": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 2
+ },
+ "a₁ (من المنتصف)": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "b₁ (من المنتصف)": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "a₂ (قرب A)": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "b₂ (بعيد)": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "المسافة إلى A": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "المسافة إلى B": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "✗ يحتاج ضبط": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "دفتر ميداني بحسابات تحقق آلية؛ حدود الخطأ حسب الإعداد أو مواصفات المشروع، ولا يغني عن اعتماد المساح المختص.": {
+  "k": "x",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "مقلوبة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "أرض طبيعية": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "الطريقة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "منسوب الجهاز": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "الجهاز": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "المصدر": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "الراصد": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "الكاتب": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "ارتفاع": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "انخفاض": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "المسافة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx,features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "تصحيح": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "المصحح": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "التصميمي": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "حفر/ردم": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "تحقق 1": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "Σارتفاع − Σانخفاض": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "تحقق R/F": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "تحقق 2": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "توزيع بالأوضاع": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "توزيع بالمسافة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "اختبار الوتدين": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "نقطة مرجعية — ليست قاعدة الهيئة": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "ممارسة هندسية": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "دفتر الميزانية · Level book": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "دفتر الميزانية": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx,tools/registry.ts",
+  "n": 2
+ },
+ "⁦{0} {1} m⁩ · ⁦{2}⁩ نقطة": {
+  "k": "t",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1,
+  "x": "doc.body.openId | doc.body.openRl | c.red.pts.length"
+ },
+ "خطأ القفل ⁦{0} mm⁩ من ⁦{1} mm⁩ {2}": {
+  "k": "t",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1,
+  "x": "c.mis.eMm | c.mis.allowMm.toFixed(1) | c.mis.ok ? \"مقبول\" : \"مرفوض\""
+ },
+ "راجع الدفتر الكامل": {
+  "k": "s",
+  "p": "features/tools/survey/level-book.tsx",
+  "n": 1
+ },
+ "خلطة الشكارة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أسمنت لكل م³": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "رمل لكل م³": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "زلط لكل م³": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "نسبة الماء/الأسمنت": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عدد الشكاير": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "جردل رمل · {0} جردل زلط": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(b.gravelBuckets * n, 1)"
+ },
+ "لكل {0} شكارة": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "n"
+ },
+ "ناتج الخلطة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الجردل": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "خلطة {0} كجم/م³": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.c"
+ },
+ "المباني": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "نوع الطوب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "نصف طوبة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طوبة ونص": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طوبتين": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "ارتفاع الحائط": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أسمنت لكل م³ رمل": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} م² صافي · هالك {1} %": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(area, 2) | p.waste"
+ },
+ "لاصق": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عدد / م²": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} م²": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 2,
+  "x": "f2(area, 2)"
+ },
+ "لاصق خفاف": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أسمنت مونة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} كجم/م³ رمل": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.mix"
+ },
+ "رمل مونة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "هالك 25 % ⚑": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "البياض": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "شكارة أسمنت": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "رمل {0} م³ = {1} جردل": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(p.sandM3, 2) | f2((p.sandM3 * 1000) / cal.bucketL, 0)"
+ },
+ "أسمنت بياض": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "رمل بياض": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "البلاط والترويب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طول البلاطة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عرض البلاطة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "العراميس": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "م² في الكرتونة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} كرتونة · بدقة {1}": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "t.boxes | f2(t.tilesExact, 1)"
+ },
+ "ترويب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "بلاط {0}×{1}": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.a | v.b"
+ },
+ "كرتونة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} م² · هالك {1} %": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.area | v.w"
+ },
+ "الدهانات": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طول الغرفة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عرض الغرفة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الفتحات": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "مع السقف": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عدد الأوجه": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الفرد من نشرة المنتج": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "العبوة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عبوة {0} لتر": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.pack"
+ },
+ "{0} لتر · {1} م²": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(p.litres, 2) | f2(a.areaM2, 2)"
+ },
+ "الحوائط": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "دهان": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عبوة {0} L": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.pack"
+ },
+ "{0} وجه · {1} م²": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.coats | f2(a.areaM2, 1)"
+ },
+ "معدل الفرد خارج 8–14 م²/لتر — راجع النشرة ⚑": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "خشب الشدة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أعمدة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "كمرات": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "حوائط": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "البعد الأول (أو الطول)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "البعد الثاني (أو العرض)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الارتفاع / الساقط": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "لوح بلاكاش 1.22×2.44": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "مساحة التلامس {0} م²": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(c, 2)"
+ },
+ "بدقة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "لوح": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 3
+ },
+ "بلاكاش 1.22×2.44": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} م² + {1} %": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(c, 1) | v.w"
+ },
+ "تقسيط الحديد": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "المسافة بين الأسياخ": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طول السيخ في الاتجاه الآخر": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الغطاء عند الطرف": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "Ø{0} @ {1} · {2} مم²/م": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.d | v.s | f2(b.asMm2PerM, 0)"
+ },
+ "حديد Ø{0}": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.d"
+ },
+ "{0} سيخ × {1} م": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "b.bars | v.other"
+ },
+ "المسافة أقل من 2Ø + 20 مم": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أقل سمك عند الصفاية": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "المساحة (للحجم)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "مم فرق منسوب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أقصى سمك {0} مم · المتوسط {1} مم": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(f.maxMm, 0) | f2(f.avgMm, 0)"
+ },
+ "حجم الميول": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "خرسانة / مونة ميول": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} % على {1} م": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.slope | v.run"
+ },
+ "الكهربائي": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عدد الغرف": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "مخارج لكل غرفة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "مجموع أطوال المسارات": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "متر سلك / خرطوم": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} علبة": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "e.boxes"
+ },
+ "سلك / خرطوم": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "علب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "علبة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "للتوريد فقط — مقاس الكابل من أداة الكابلات": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "السباك": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أطوال المسارات (افصل بـ +)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طول الماسورة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "ماسورة {0} م": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.len || 4"
+ },
+ "{0} م · {1} وصلة": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(p.totalM, 1) | p.fittings"
+ },
+ "مواسير": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "ماسورة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} متر": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "f2(p.totalM, 1)"
+ },
+ "قطع ووصلات": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "قطعة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "1 لكل 1.5 م ⚑": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الجبس بورد": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طول القاطوع": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الأوجه": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "وجهين": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "وجه": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "لوح 1.2×2.4": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} قائم · {1} م مجرى": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "d.studs | f2(d.trackM, 1)"
+ },
+ "مسامير": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "ألواح جبس بورد": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "قوائم": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "قائم": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "كل 60 سم": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "مجاري": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "حديد الهياكل": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "القطاع": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "{0} × {1} × {2} م · {3} كجم/م": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.n | v.sec | v.len | s.kgPerM"
+ },
+ "{0} × {1} م": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "v.n | v.len"
+ },
+ "+ أضِف لطلب الخامات": {
+  "k": "x",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طلب الخامات ({0})": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "b.lines.length"
+ },
+ "الطالب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 3
+ },
+ "مطلوب يوم": {
+  "k": "x",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "بند يدوي": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "الجردل بتاعك كام لتر؟": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "عربية اليد": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "تقدير للطلب والتجهيز على الموقع؛ نسب الخلطات والهالك قيم شائعة قابلة للتعديل ولا تغني عن الخلطة المعتمدة. أحجام الجردل والعربية حسب معايرتك.": {
+  "k": "x",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الوصف والفرضيات": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "الشكارة 50 كجم · الجردل {0} لتر ⚑ · عربية اليد {1} لتر ⚑ · نسب الخلطات والهالك حسب ملف الموقع eg-site@1 ⚑": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "b.calib.bucketL | b.calib.barrowL"
+ },
+ "طلب خامات · Material request": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طلب خامات": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "· مسودة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "٠١٢٣٤٥٦٧٨٩": {
   "k": "s",
-  "p": "i18n/i18n.ts,lib/search.ts",
-  "n": 2
+  "p": "i18n/i18n.ts,lib/num-input.ts,lib/search.ts",
+  "n": 3
  },
  "([\\d٠-٩][\\d٠-٩.,٫٬]*)": {
   "k": "s",
@@ -20468,22 +26323,49 @@
   "p": "lib/media.tsx",
   "n": 1
  },
+ "۰۱۲۳۴۵۶۷۸۹": {
+  "k": "s",
+  "p": "lib/num-input.ts",
+  "n": 1
+ },
+ "٫": {
+  "k": "s",
+  "p": "lib/num-input.ts",
+  "n": 1
+ },
+ "اكتب رقمًا فقط": {
+  "k": "s",
+  "p": "lib/num-input.ts",
+  "n": 1
+ },
+ "القيمة لا تكون سالبة هنا": {
+  "k": "s",
+  "p": "lib/num-input.ts",
+  "n": 1
+ },
+ "اكتب عددًا صحيحًا": {
+  "k": "s",
+  "p": "lib/num-input.ts",
+  "n": 1
+ },
+ "أقل قيمة {0}": {
+  "k": "t",
+  "p": "lib/num-input.ts",
+  "n": 1,
+  "x": "rule.min"
+ },
+ "أكبر قيمة {0}": {
+  "k": "t",
+  "p": "lib/num-input.ts",
+  "n": 1,
+  "x": "rule.max"
+ },
  "تم إنشاء التقرير عبر تطبيق EngSpace — منصة المهندسين الرسمية | engspace.org": {
   "k": "s",
   "p": "lib/report-pdf.ts",
   "n": 1
  },
- "البند": {
-  "k": "s",
-  "p": "lib/report-pdf.ts",
-  "n": 1
- },
- "النتيجة": {
-  "k": "s",
-  "p": "lib/report-pdf.ts",
-  "n": 1
- },
- "ملاحظات": {
+ "ء A1": {
   "k": "s",
   "p": "lib/report-pdf.ts",
   "n": 1
@@ -21361,11 +27243,6 @@
   "p": "lib/search.ts",
   "n": 1
  },
- "ساعات العمل": {
-  "k": "s",
-  "p": "lib/search.ts",
-  "n": 1
- },
  "شغل": {
   "k": "s",
   "p": "lib/search.ts",
@@ -21489,6 +27366,326 @@
  "تعذّر تطبيق التحديث الآن — سيُطبَّق عند الفتح التالي": {
   "k": "s",
   "p": "native/updater.ts",
+  "n": 1
+ },
+ "أدوات الصنايعية السريعة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "خامات كل صنعة في ثوانٍ": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الخرسانة والإنشاءات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الحصر وخطط الصب": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الحديد": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "التفريد والقص والأوزان": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "المساحة والتربة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الميزانية والمناسيب": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الحصر والتشطيبات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "المباني والبياض والتشطيبات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الموقع والسلامة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "اليومية والتوعية والتصاريح والفحص": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الميكانيكا: تكييف وصحي وحريق": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "فحوص التركيب والمناسيب والرشاشات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الكابلات وهبوط الجهد": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "السجلات والمحاضر": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "العمارة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "المساحات والاشتراطات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "بالصافي دائمًا": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "حاسبة الصنايعي": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "مباني، بياض، بلاط، دهان، جبس بورد، سباكة وكهرباء — بالشكارة والقطعة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "صنايعي مباني طوب بياض محارة بلاط سيراميك دهان نقاشة جبس بورد سباكة كهرباء trade mason tiles paint plaster drywall": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "حصر وصب الخرسانة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "حصر العناصر، خطة الصب، عدد العربيات والخامات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "خرسانة حصر الخرسانة صب عربيات بلاطة كمرة عمود قاعدة concrete pour take-off": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "جدول تفريد وقص الحديد": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "أشكال BS 8666، أطوال القص، الأوزان وخطة قص الـ 12 م": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "حديد تفريد تسليح قص أوزان الحديد أسياخ وصلات bbs rebar bar bending cutting": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الارتفاع والانخفاض أو منسوب الجهاز، قفل الخطأ وتوزيعه": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "ميزانية مناسيب روبير قامة ميزان levelling level book benchmark": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "يومية الموقع": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "العمالة والمعدات والأعمال والطقس — سجل اليوم في دقائق": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "يومية الموقع تقرير يومي عمالة معدات daily diary site report": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "التوعية الصباحية وتمام المهمات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "موضوع اليوم والمخاطر والحضور ومهمات الوقاية": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "توعية صباحية سلامة مهمات وقاية حضور toolbox talk ppe safety": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "تصاريح العمل": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "أعمال ساخنة، ارتفاعات، أماكن مغلقة — بحالة واضحة وحاسبات أمان": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "تصريح عمل أعمال ساخنة ارتفاعات أماكن مغلقة حفر permit to work hot work height confined": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "قوائم الفحص والاستلام": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "فحص واستلام الأعمال بتقرير PDF": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "فحص استلام جودة qa qc checklist inspection": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "ميل الصرف، طول المواسير والرفع، شحنة الفريون الإضافية": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "تكييف سبليت تركيب صرف فريون مواسير نحاس ac split hvac installation refrigerant": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "المناسيب والأعماق والميول من المصب لأعلى": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "صرف صحي غرف تفتيش مناسيب ميول مواسير drain manhole invert sewer": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "توزيع وفحص الرشاشات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "عدد الرشاشات والمسافات بحدود NFPA 13": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "رشاشات حريق مكافحة sprinkler fire nfpa spacing": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الكابل وهبوط الجهد": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "التيار والمعاملات ومقطع الكابل وهبوط الجهد لكل دائرة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "كابل هبوط الجهد مقطع قاطع تيار كهرباء cable voltage drop breaker ampacity": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "تحويل الوحدات والمساحات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "هندسية، وفدان وقيراط وسهم، والميول": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "تحويل الوحدات فدان قيراط سهم ميول units convert": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "عرض عمل offer": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "صافي إجمالي net gross": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "مقارنة عروض compare": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "تفاوض negotiation": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "زيادة raise": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "مسار path career": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "عقد contract": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "انتقال move relocation": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "تضخم inflation": {
+  "k": "s",
+  "p": "tools/registry.ts",
   "n": 1
  },
  "موثّقة": {
@@ -22243,6 +28440,73 @@
  "ثلاثة التزامات لا تتغير — مهما كانت الجهة التي تطلب": {
   "k": "x",
   "p": "ui/identity.tsx",
+  "n": 1
+ },
+ "غير مطابق ✗": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "مطابق ✓": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "الحد:": {
+  "k": "x",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "الحد: {0}": {
+  "k": "r",
+  "p": "ui/kit.tsx",
+  "n": 1,
+  "x": "EL <Num>{c.limit}</Num>"
+ },
+ "طريقة الحساب": {
+  "k": "x",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "طريقة الحساب {0}": {
+  "k": "e",
+  "p": "ui/kit.tsx",
+  "n": 1,
+  "x": "open ? <ChevronUp size={15} /> : <ChevronDown size={15} />"
+ },
+ "تكرار": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
+ "معاينة": {
+  "k": "x",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "تقرير PDF": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "مشاركة الملخص": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
+ "معاينة التقرير": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
+ "السابقة": {
+  "k": "x",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "التالية": {
+  "k": "x",
+  "p": "ui/kit.tsx",
   "n": 1
  },
  "أُخفي {0} مؤقتًا بعد بلاغات من عدة أعضاء — ينتظر مراجعة المشرفين.": {

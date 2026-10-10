@@ -144,7 +144,7 @@ const MODES: { id: Mode; name: string; emoji: string; fields: Field[]; calc: (v:
     calc: (v) => {
       const runs = String(v.runs || "").split(/[+،,\s]+/).map((x) => numInputParse(x) ?? 0).filter((x) => x > 0);
       const p = tradePlumbing({ runsM: runs, lengthM: N(v.len) || 4 });
-      return { hero: [String(p.lengths), `ماسورة ${v.len || 4} م`, `${f2(p.totalM, 1)} م · ${p.fittings} وصلة`], rows: [], lines: [{ label: "مواسير", qty: p.lengths, unit: "ماسورة", desc: `${f2(p.totalM, 1)} م` }, { label: "قطع ووصلات", qty: p.fittings, unit: "قطعة", desc: "1 لكل 1.5 م ⚑" }] };
+      return { hero: [String(p.lengths), `ماسورة ${v.len || 4} م`, `${f2(p.totalM, 1)} م · ${p.fittings} وصلة`], rows: [], lines: [{ label: "مواسير", qty: p.lengths, unit: "ماسورة", desc: `${f2(p.totalM, 1)} متر` }, { label: "قطع ووصلات", qty: p.fittings, unit: "قطعة", desc: "1 لكل 1.5 م ⚑" }] };
     },
   },
   {
