@@ -22,4 +22,5 @@ export type ToolModule<B = any> = ToolModuleMeta & {
 
 export const TOOL_MODULES: Record<string, () => Promise<ToolModule>> = {
   concrete: () => import("./concrete/concrete").then((m) => m.module),
+  bbs: () => import("./rebar/bbs").then((m) => m.module),
 };

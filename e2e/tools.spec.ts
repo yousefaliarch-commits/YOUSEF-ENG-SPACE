@@ -72,3 +72,29 @@ test("HR: no field tool by tab or address", async ({ page }) => {
   await expect(page.locator("[data-tool-export]")).toHaveCount(0);
   await noCrash(page, errs, "hr tool address");
 });
+
+test("engineer: bar bending schedule — a U-bar line, the cutting plan, a landscape PDF", async ({ page }) => {
+  test.setTimeout(180_000);
+  const errs = watch(page);
+  await demoAs(page, "engineer", {}, "#app/tooldoc/bbs:new");
+  await page.locator("[data-tool-export]").waitFor();
+  const card = page.locator("[data-row='0']");
+  await card.getByRole("button", { name: /21/ }).first().click();
+  const nums = card.locator('input[inputmode="decimal"]');
+  await nums.nth(0).fill("300");
+  await nums.nth(1).fill("1500");
+  await nums.nth(2).fill("300");
+  await nums.nth(3).fill("4");
+  await nums.nth(4).fill("6");
+  await settle(page, 500);
+  await expect(page.locator("[data-tool-result=hero]")).toContainText("0.0");
+  await page.getByRole("button", { name: "احسب خطة القص" }).click();
+  await expect(page.getByText(/سيخ جديد/).first()).toBeVisible();
+  await noCrash(page, errs, "bbs");
+  await noOverflow(page, "bbs");
+  const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), page.locator("[data-tool-export]").click()]);
+  if (process.env.E2E_PDF_OUT) await dl.saveAs(process.env.E2E_PDF_OUT.replace(/\.pdf$/, "-bbs.pdf"));
+  const all = readFileSync((await dl.path())!).toString("latin1");
+  expect(all).toContain("/MediaBox [0 0 841.89 595.276]");
+  expect((all.match(/\/Type \/Page\b/g) || []).length).toBeGreaterThanOrEqual(3);
+});

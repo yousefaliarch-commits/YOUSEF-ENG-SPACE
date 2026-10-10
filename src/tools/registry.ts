@@ -39,7 +39,7 @@ export const TOOL_REGISTRY: ToolDef[] = [
   {
     id: "bbs", pack: "rebar", name: "جدول تفريد وقص الحديد", desc: "أشكال BS 8666، أطوال القص، الأوزان وخطة قص الـ 12 م",
     icon: "Spline", keywords: "حديد تفريد تسليح قص أوزان الحديد أسياخ وصلات bbs rebar bar bending cutting",
-    roles: FIELD, money: false, surface: "screen", wave: 1, status: "soon", docKinds: ["bbs"], aliases: ["rebar"], disciplines: ["civil", "structural"],
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["bbs"], aliases: ["rebar"], disciplines: ["civil", "structural"],
   },
   {
     id: "levelBook", pack: "survey", name: "دفتر الميزانية", desc: "الارتفاع والانخفاض أو منسوب الجهاز، قفل الخطأ وتوزيعه",

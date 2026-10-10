@@ -503,7 +503,7 @@ function table(p: Pager, b: TableBlock) {
       const font = row.kind === "total" || row.kind === "subtotal" || ct.w === 600 || ct.w === 700 ? TYPE.cellBold : TYPE.cell;
       return { ls: ct.num ? [ct.text] : wrapText(ct.text, c.w - 2 * PAD, font, m), num: ct.num, w: ct.w };
     });
-    const sk = cols.some((c) => c.sketch) && row.sketch ? 18 : 0;
+    const sk = cols.some((c) => c.sketch) && row.sketch ? 9 : 0;
     return { row, h: Math.max(ROW_MIN, sk + 2 * VPAD, ...cells.map((c) => c.ls.length * lhCell + 2 * VPAD)), cells };
   };
 
