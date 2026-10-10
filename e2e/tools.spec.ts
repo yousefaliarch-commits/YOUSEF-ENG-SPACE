@@ -1,0 +1,74 @@
+import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { demoAs, noCrash, noOverflow, settle, tab, watch } from "./helpers";
+
+// The Tools suite in the demo: a document tool end to end (new → type → result → preview → PDF), documents that survive a
+// reload, and the role gate (supervisors never reach money tools, HR reaches no field tool) from the tab and from typed addresses.
+
+test("engineer: concrete pour plan — type, result, preview, PDF, and it survives a reload", async ({ page }) => {
+  test.setTimeout(180_000);
+  const errs = watch(page);
+  await demoAs(page, "engineer", {}, "#app/tool/concrete");
+  await page.locator("[data-tool-new]").click();
+  await settle(page, 900);
+  const fields = page.locator('[data-screen-layer] input[inputmode="decimal"]:visible');
+  // the first element (a slab): length, width; thickness has a default
+  const card = page.locator("[data-row='0']");
+  const inputs = card.locator('input[inputmode="decimal"]');
+  await inputs.nth(1).fill("20");
+  await inputs.nth(2).fill("12");
+  await settle(page, 600);
+  const hero = page.locator("[data-tool-result=hero]");
+  await expect(hero).toContainText("37.2");
+  expect(await fields.count()).toBeGreaterThan(4);
+  await noCrash(page, errs, "concrete");
+  await noOverflow(page, "concrete");
+
+  await page.locator("[data-tool-preview]").click();
+  await expect(page.getByRole("dialog", { name: "معاينة التقرير" }).locator("canvas")).toBeVisible({ timeout: 20_000 });
+  await page.getByRole("button", { name: "إغلاق" }).click();
+
+  const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), page.locator("[data-tool-export]").click()]);
+  if (process.env.E2E_PDF_OUT) await dl.saveAs(process.env.E2E_PDF_OUT);
+  const bytes = readFileSync((await dl.path())!);
+  const head = bytes.subarray(0, 8).toString("latin1");
+  const all = bytes.toString("latin1");
+  expect(head.startsWith("%PDF-")).toBe(true);
+  expect(all.trimEnd().endsWith("%%EOF")).toBe(true);
+  expect(all).toContain("/Indexed /DeviceRGB 15");
+  expect(all).toContain("/Lang (ar)");
+  const pages = (all.match(/\/Type \/Page\b/g) || []).length;
+  expect(pages).toBeGreaterThanOrEqual(1);
+  expect(bytes.length / pages).toBeLessThan(320_000);
+
+  // the new document got its own address on the first edit, and a reload reopens it from the phone's store
+  expect(page.url()).toMatch(/#app\/tooldoc\/concrete:d[a-z2-7]{20}$/);
+  await page.reload();
+  await page.locator("[data-tool-export]").waitFor({ timeout: 20_000 });
+  await expect(page.locator("[data-tool-result=hero]")).toContainText("37.2");
+  await noCrash(page, errs, "concrete after reload");
+});
+
+test("supervisor: field tools open, money tools never — from the tab or a typed address", async ({ page }) => {
+  const errs = watch(page);
+  await demoAs(page, "supervisor", { disc: "civil" });
+  await tab(page, "tools");
+  await expect(page.locator("[data-tool-tile=concrete]")).toBeVisible();
+  const text = await page.locator("body").innerText();
+  for (const n of ["تقييم عرض عمل", "مقارن العروض", "الزيادة والتضخم"]) expect(text).not.toContain(n);
+  await page.goto("/?backend=demo#app/tool/offer");
+  await settle(page, 900);
+  await expect(page.locator("[data-tool-new]")).toHaveCount(0);
+  await noCrash(page, errs, "supervisor money address");
+});
+
+test("HR: no field tool by tab or address", async ({ page }) => {
+  const errs = watch(page);
+  await demoAs(page, "hr", {}, "#app/tool/concrete");
+  await settle(page, 900);
+  await expect(page.locator("[data-tool-new]")).toHaveCount(0);
+  await page.goto("/?backend=demo#app/tooldoc/concrete:new");
+  await settle(page, 900);
+  await expect(page.locator("[data-tool-export]")).toHaveCount(0);
+  await noCrash(page, errs, "hr tool address");
+});

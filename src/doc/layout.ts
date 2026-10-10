@@ -13,7 +13,7 @@ import type {
   DocBlock, DocCol, DocFont, DocLang, DocLayoutResult, DocMeasurer, DocRow, DocSpec, DrawOp, DrawPage, Ink, RevRow, TitleParty, VPath,
 } from "./model";
 import { MM_PER_PT, TYPE, frame, lineMm } from "./theme";
-import { clampLines, flatText, fmtNum, iso, wrapText } from "./text";
+import { clampLines, flatText, fmtNum, hasArabic, iso, stripIsolates, wrapText } from "./text";
 
 type O = "portrait" | "landscape";
 type Align = "start" | "end" | "center";
@@ -101,7 +101,13 @@ function lines(
 ) {
   ls.forEach((t, i) => {
     if (!t) return;
-    ops.push({ op: "text", x: anchorX(left, w, dir, align, pad), y: baseline(m, top + i * lh, lh, f), f, ink, dir, text: t, align });
+    // canvas ignores LRI/PDI: a line with no Arabic letters is drawn LTR at the same physical anchor («2–5», «48 h ≥ 21 °C»)
+    let d = dir, al = align;
+    if (dir === "rtl" && !hasArabic(t)) {
+      d = "ltr";
+      al = align === "start" ? "end" : align === "end" ? "start" : "center";
+    }
+    ops.push({ op: "text", x: anchorX(left, w, dir, align, pad), y: baseline(m, top + i * lh, lh, f), f, ink, dir: d, text: stripIsolates(t), align: al });
   });
 }
 
@@ -150,7 +156,9 @@ function titleBlock(p: Pager, spec: DocSpec, pageCount: { set: (n: number) => vo
     const x = p.fromStart(off * k, w * k);
     rect(ops, x, y, w * k, h, { stroke: "hair", pt: HAIR });
     rect(ops, x, y, w * k, 3.5, { fill: "fill" });
-    lines(ops, m, [clampLines([label], 1, w * k - 2 * PAD, TYPE.label, m)[0]], x, w * k, y, TYPE.label, "ink60", dir, "start", 3.5);
+    // a bilingual label that does not fit keeps the document's language only
+    const lab = m.width(label, TYPE.label) <= w * k - 2 * PAD ? label : label.split(" · ")[0];
+    lines(ops, m, [clampLines([lab], 1, w * k - 2 * PAD, TYPE.label, m)[0]], x, w * k, y, TYPE.label, "ink60", dir, "start", 3.5);
     const font = o.font || TYPE.value;
     const vd = o.ltr ? "ltr" : dir;
     const ls = clampLines(wrapText(value || "—", w * k - 2 * PAD, font, m), o.maxLines || 1, w * k - 2 * PAD, font, m);

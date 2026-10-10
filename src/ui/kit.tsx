@@ -5,6 +5,7 @@
 //  · The export bar is a `.foot` bar (pads for the home indicator itself); the preview draws the same pages as the PDF.
 // =====================================================================
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, ChevronUp, Copy, Eye, FileDown, Plus, Share2, Trash2, X } from "lucide-react";
 import { numInputProblem, type NumInputRule } from "../lib/num-input";
 import { FilterChip, Num } from "./primitives";
@@ -228,6 +229,9 @@ export function ExportBar({ busy, onPreview, onPdf, onShare, note }: { busy?: st
   );
 }
 
+// dialogs live on <body>: a pushed screen is a transformed layer, which would trap position: fixed under the header
+const onBody = (node: any) => (typeof document !== "undefined" ? createPortal(node, document.body) : node);
+
 // ---- the preview: the PDF's own pages, drawn for the screen (only the visible page and its neighbours exist) ----
 export function DocPreview({ pages, onClose, draw }: { pages: DrawPage[]; onClose: () => void; draw: (c: HTMLCanvasElement, p: DrawPage, pxPerMm: number) => void }) {
   const [i, setI] = useState(0);
@@ -246,8 +250,8 @@ export function DocPreview({ pages, onClose, draw }: { pages: DrawPage[]; onClos
       c.width = c.height = 0;
     };
   }, [i, pages]);
-  return (
-    <div role="dialog" aria-modal="true" aria-label="معاينة التقرير" className="fixed inset-0 z-50 flex flex-col bg-[#3a3a3e]">
+  return onBody(
+    <div role="dialog" aria-modal="true" aria-label="معاينة التقرير" className="fixed inset-0 z-[60] flex flex-col bg-[#3a3a3e]">
       <div className="pt-[var(--sat)] flex items-center gap-2 px-2 h-14 text-white">
         <button type="button" aria-label="إغلاق" onClick={onClose} className="press grid place-items-center w-11 h-11"><X size={22} /></button>
         <span className="flex-1 text-center text-[13px]"><Num>{i + 1} / {pages.length}</Num></span>
@@ -260,14 +264,14 @@ export function DocPreview({ pages, onClose, draw }: { pages: DrawPage[]; onClos
         <button type="button" disabled={i === 0} onClick={() => setI(i - 1)} className="press flex-1 min-h-12 rounded-xl bg-white/10 text-white text-[13.5px] disabled:opacity-40">السابقة</button>
         <button type="button" disabled={i >= pages.length - 1} onClick={() => setI(i + 1)} className="press flex-1 min-h-12 rounded-xl bg-white/10 text-white text-[13.5px] disabled:opacity-40">التالية</button>
       </div>
-    </div>
+    </div>,
   );
 }
 
 // ---- confirm (destructive actions always ask first) ----
 export function ConfirmDialog({ title, body, yes, onYes, onNo }: { title: string; body: string; yes: string; onYes: () => void; onNo: () => void }) {
-  return (
-    <div role="alertdialog" aria-modal="true" aria-label={title} className="fixed inset-0 z-50 grid place-items-end sm:place-items-center bg-black/40 p-3">
+  return onBody(
+    <div role="alertdialog" aria-modal="true" aria-label={title} className="fixed inset-0 z-[60] grid place-items-end sm:place-items-center bg-black/40 p-3">
       <div className="w-full max-w-sm p-5 rounded-2xl bg-elevated border border-line shadow-xl pb-[max(1.25rem,var(--sab))]">
         <h2 className="text-[16px] font-medium">{title}</h2>
         <p className="mt-1.5 text-[13px] text-ink-2 leading-relaxed">{body}</p>
@@ -276,6 +280,6 @@ export function ConfirmDialog({ title, body, yes, onYes, onNo }: { title: string
           <button type="button" onClick={onYes} className="press flex-1 min-h-12 rounded-xl bg-bad text-white text-[14px] font-medium">{yes}</button>
         </div>
       </div>
-    </div>
+    </div>,
   );
 }
