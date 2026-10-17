@@ -558,7 +558,9 @@ export function auditCV(rawText?: any, ctx: any = {}) {
   const result: any = { empty: false, version: 25, overall, grade, pillars, critical, high, layout, words: cv.words, cv, disc, target, detected, allowed, shares: sig.shares, fresh, years,
     profile: { disc, discLabel: discL2(disc), target: trackL2(target, disc), detected: trackL2(detected, disc), years, pos: cv.seniority, posLabel: posL2(cv.seniority), lang, pages: layout.pages, words: cv.words },
     software, codes, creds: credsOut, syndicate, terms, density: density.sort((a, b) => (b.must - a.must) || Number(a.count === 0) - Number(b.count === 0) || b.count - a.count), coverage: Math.round(kwCov * 100), jd, missing,
-    rewrites: rewriteGroups, strongBullets: strongCount, summary, portfolio, writing: wIssues, regional };
+    rewrites: rewriteGroups, strongBullets: strongCount, summary, portfolio, writing: wIssues, regional,
+    // what the summary was drafted from — the rebuilt CV redrafts it in the other language (./rebuild.ts)
+    sumCtx: aSum };
   result.hr = hrAssessment(result, regional, TYPE_EN);
   // v25 · the hiring panel over the same audit: who raised each issue, the four readers, the honesty line, the grade,
   // the interview questions this CV invites and the score once every fix is applied (./panel.ts)

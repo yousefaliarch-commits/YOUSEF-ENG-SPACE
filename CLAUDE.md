@@ -115,7 +115,13 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   has (never a tool, code, certificate or year it lacks). `rebuild.ts`: the rebuilt draft (same facts, rewrites, every gap as `[ADD: …]` / `[أضف: …]`,
   national ID / religion / street address dropped, military made explicit, never the Syndicate), re-screened on a filled copy (`rescreen`), printed
   as A4 through the document kit's **plain letterhead mode** (`meta.plain` + `para` blocks: no title block, revisions, draft band or colophon).
-  Draft numbers must all come from the CV (`tests/cv-panel.test.ts`). cv/panel.ts, rebuild.ts and PanelViews.tsx are NO_DICT in the i18n extractor.
+  The rebuilt CV is **English by default** with an EN ⇄ AR toggle; the other language is built from structure by `translate.ts` (titles, the company
+  dataset's names, places, universities, degrees, grades, dates, personal block, languages, certificates, units; a bullet from its TASK template +
+  measured figures, the result left as a slot; original → rebuilt pairs shown to check). Anything uncertain (an Arabic name, an unknown employer) is an
+  [ADD: … — «original»] slot; the engineer fills every slot in the app (`slotsOf` / `applyFills`) before exporting. **The exported CV is white-label**:
+  plain mode prints no EngSpace mark, credit or document number, and the PDF metadata carries only the engineer's name (no Producer).
+  Draft numbers must all come from the CV in both languages (`tests/cv-panel.test.ts`). cv/panel.ts, rebuild.ts, translate.ts and PanelViews.tsx are
+  NO_DICT in the i18n extractor.
 
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;

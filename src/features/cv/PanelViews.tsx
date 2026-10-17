@@ -9,7 +9,7 @@ import { Bot, Briefcase, ChevronDown, CircleCheck, CircleHelp, CircleX, Copy, Fi
 import { L2 } from "../../i18n/i18n";
 import { Chip, Num, Panel, Secondary } from "../../ui/primitives";
 import { REVIEWERS, type Reviewer, type ReviewerId } from "./panel";
-import { DRAFT_NOTE, draftSpec, draftText, rebuildCV, rescreen } from "./rebuild";
+import { DRAFT_NOTE, applyFills, draftSpec, draftText, rebuildCV, rescreen, slotsOf } from "./rebuild";
 
 export const PX = {
   panel: L2("لجنة التوظيف", "The hiring panel"),
@@ -28,9 +28,14 @@ export const PX = {
   qWhy: L2("لماذا سيُسأل", "Why it comes up"),
   qTip: L2("كيف تجيب", "How to answer"),
   draft: L2("السيرة بعد إعادة البناء", "Your rebuilt CV"),
-  draftSub: L2("نفس الحقائق مع كل الإصلاحات: عمود واحد، عناوين قياسية، ملخص، وبنود معاد صياغتها — وكل ما ينقص في [أضف: …].", "The same facts with every fix: one column, standard headings, a summary and rewritten bullets — and every gap as [ADD: …]."),
-  asks: L2("املأ قبل الإرسال", "Fill in before sending"),
-  pdf: L2("تنزيل المسودة PDF", "Download the draft PDF"),
+  draftSub: L2("نفس الحقائق مع كل الإصلاحات: عمود واحد، عناوين قياسية، ملخص، وبنود معاد صياغتها — بالإنجليزية أو بالعربية، وكل ما ينقص في [أضف: …].", "The same facts with every fix: one column, standard headings, a summary and rewritten bullets — in English or Arabic, with every gap as [ADD: …]."),
+  asks: L2("املأ البيانات الناقصة", "Fill in the missing details"),
+  leftWarn: L2("{n} خانة ما زالت فارغة — ستظهر في الملف كما هي", "{n} field(s) still empty — they will print as they are"),
+  langPick: L2("لغة السيرة", "CV language"),
+  pairsEn: L2("{n} بند أُعيد بناؤه بالإنجليزية من سطورك العربية — راجعه", "{n} bullet(s) rebuilt in English from your Arabic lines — check them"),
+  pairsAr: L2("{n} بند أُعيد بناؤه بالعربية من سطورك الإنجليزية — راجعه", "{n} bullet(s) rebuilt in Arabic from your English lines — check them"),
+  whiteLabel: L2("الملف باسمك فقط — بلا اسم التطبيق ولا علامة مائية. يُنشأ على جهازك.", "The file carries only your name — no app name, no watermark. Built on your device."),
+  pdf: L2("تنزيل السيرة PDF", "Download the CV (PDF)"),
   copy: L2("نسخ النص", "Copy the text"),
   copied: L2("نُسخت المسودة", "Draft copied"),
   pdfBusy: L2("جارٍ إنشاء الملف…", "Building the file…"),
@@ -173,10 +178,30 @@ export function QuestionsCard({ r, t }: any) {
 }
 
 export function DraftCard({ r, t, app, copyPlain, Bracketed }: any) {
-  const d = useMemo(() => rebuildCV(r), [r]);
+  // English by default (Egyptian and Gulf corporate convention); Arabic on request
+  const [lang, setLang] = useState<"en" | "ar">("en");
+  const base = useMemo(() => rebuildCV(r, lang), [r, lang]);
+  const [fills, setFills] = useState<Record<string, Record<string, string>>>({ en: {}, ar: {} });
+  const d = useMemo(() => applyFills(base, fills[lang] || {}), [base, fills, lang]);
+  const slots = useMemo(() => slotsOf(base), [base]);
+  const left = slots.filter((x) => !(fills[lang] || {})[x.id]?.trim()).length;
   const [show, setShow] = useState(false);
+  const [showFill, setShowFill] = useState(false);
+  const [showPairs, setShowPairs] = useState(false);
   const [busy, setBusy] = useState(false);
+  const setFill = (id: string, v: string) => setFills((f) => ({ ...f, [lang]: { ...(f[lang] || {}), [id]: v } }));
+  // one group per line, in reading order
+  const groups = useMemo(() => {
+    const out: { line: string; slots: typeof slots }[] = [];
+    slots.forEach((x) => {
+      const g = out[out.length - 1];
+      if (g && g.line === x.line) g.slots.push(x);
+      else out.push({ line: x.line, slots: [x] });
+    });
+    return out;
+  }, [slots]);
   const pdf = async () => {
+    if (left) app.toast(t(PX.leftWarn).replace("{n}", String(left)));
     setBusy(true);
     try {
       const [{ renderDoc }, { saveOrShare }] = await Promise.all([import("../../doc/render"), import("../../lib/report-pdf")]);
@@ -186,9 +211,9 @@ export function DraftCard({ r, t, app, copyPlain, Bracketed }: any) {
         return;
       }
       const bytes = new Uint8Array(await res.pdf.arrayBuffer());
-      // an ASCII file name: browsers drop non-Latin download names, and it travels safely by WhatsApp or e-mail
+      // an ASCII file name with no app name: browsers drop non-Latin download names, and it travels safely by WhatsApp or e-mail
       const latin = String(d.name).replace(/\[[^\]]*\]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-      await saveOrShare(bytes, `${latin || "EngSpace"}-CV-draft.pdf`, t(PX.draft));
+      await saveOrShare(bytes, `${latin ? `${latin}-` : ""}CV-${lang.toUpperCase()}.pdf`, d.lang === "ar" ? "السيرة الذاتية" : "Curriculum Vitae");
     } catch {
       app.toast(t(PX.pdfFail));
     } finally {
@@ -197,22 +222,69 @@ export function DraftCard({ r, t, app, copyPlain, Bracketed }: any) {
   };
   return (
     <Panel className="p-4">
-      <h3 className="text-[14px] font-medium inline-flex items-center gap-1.5"><FileDown size={15} className="text-accent" /> {t(PX.draft)}</h3>
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="text-[14px] font-medium inline-flex items-center gap-1.5"><FileDown size={15} className="text-accent" /> {t(PX.draft)}</h3>
+        <div role="group" aria-label={t(PX.langPick)} className="shrink-0 inline-flex p-0.5 rounded-full bg-canvas/60 border border-line" data-cv-lang={lang}>
+          {(["en", "ar"] as const).map((l) => (
+            <button key={l} type="button" aria-pressed={lang === l} onClick={() => setLang(l)} data-cv-lang-btn={l}
+              className={`press h-8 min-w-[52px] px-3 rounded-full text-[12px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${lang === l ? "bg-accent text-on-accent" : "text-ink-2"}`}>
+              {l === "en" ? "English" : "عربي"}
+            </button>
+          ))}
+        </div>
+      </div>
       <p className="mt-1 text-[11.5px] text-ink-3 leading-relaxed">{t(PX.draftSub)}</p>
       <p className="mt-3 p-3 rounded-xl bg-warn/10 border border-warn/25 text-[12px] leading-relaxed inline-flex gap-2"><TriangleAlert size={14} className="shrink-0 mt-0.5 text-warn" /><span>{t(DRAFT_NOTE)}</span></p>
-      {d.asks.length > 0 && (
-        <>
-          <p className="mt-3 text-[12.5px] font-medium">{t(PX.asks)} <Num className="text-ink-3">({d.asks.length})</Num></p>
-          <ul className="mt-1.5 flex flex-wrap gap-1.5" data-cv-asks={d.asks.length}>
-            {d.asks.map((a) => <li key={a} dir="auto" translate="no" className="px-2 py-0.5 rounded-lg bg-warn/15 text-[11px] text-ink">{a}</li>)}
-          </ul>
-        </>
+
+      {base.pairs.length > 0 && (
+        <div className="mt-3" data-cv-pairs={base.pairs.length}>
+          <button type="button" onClick={() => setShowPairs((x) => !x)} aria-expanded={showPairs} className="w-full flex items-center justify-between gap-2 min-h-10 text-start text-[12.5px] font-medium">
+            <span>{t(base.lang === "en" ? PX.pairsEn : PX.pairsAr).replace("{n}", String(base.pairs.length))}</span>
+            <ChevronDown size={15} className={`shrink-0 text-ink-3 transition-transform ${showPairs ? "rotate-180" : ""}`} />
+          </button>
+          {showPairs && (
+            <ul className="guide-open mt-1 space-y-2">
+              {base.pairs.map((p, i) => (
+                <li key={i} className="p-2.5 rounded-lg bg-canvas/60 border border-line text-[11.5px] leading-relaxed" translate="no">
+                  <p dir="auto" className="text-ink-3">{p.from}</p>
+                  <p dir="auto" className="mt-1 text-ink"><Bracketed text={p.to} /></p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
-      <button type="button" onClick={() => setShow((x) => !x)} aria-expanded={show} className="mt-3 h-9 text-[12px] text-accent">{t(show ? PX.hideDraft : PX.showDraft)}</button>
+
+      {slots.length > 0 && (
+        <div className="mt-3" data-cv-asks={slots.length} data-cv-left={left}>
+          <button type="button" onClick={() => setShowFill((x) => !x)} aria-expanded={showFill} className="w-full flex items-center justify-between gap-2 min-h-10 text-start text-[12.5px] font-medium">
+            <span>{t(PX.asks)} <Num className={left ? "text-warn" : "text-good"}>({slots.length - left}/{slots.length})</Num></span>
+            <ChevronDown size={15} className={`shrink-0 text-ink-3 transition-transform ${showFill ? "rotate-180" : ""}`} />
+          </button>
+          {showFill && (
+            <ul className="guide-open mt-1 space-y-2.5">
+              {groups.map((g, gi) => (
+                <li key={gi} className="p-2.5 rounded-lg bg-canvas/60 border border-line" translate="no">
+                  <p dir="auto" className="text-[11px] leading-relaxed text-ink-3 line-clamp-3"><Bracketed text={g.line} /></p>
+                  <div className="mt-1.5 space-y-1.5">
+                    {g.slots.map((x) => (
+                      <input key={x.id} dir="auto" value={(fills[lang] || {})[x.id] || ""} onChange={(e) => setFill(x.id, e.target.value)} placeholder={x.hint} aria-label={x.hint} data-cv-slot={x.id}
+                        className="w-full h-10 px-3 rounded-lg bg-surface border border-line-2 text-[13px] text-ink placeholder:text-ink-4 focus:outline-none focus:ring-2 focus:ring-accent" />
+                    ))}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      <button type="button" onClick={() => setShow((x) => !x)} aria-expanded={show} className="mt-2 h-9 text-[12px] text-accent">{t(show ? PX.hideDraft : PX.showDraft)}</button>
       {show && (
-        <pre dir="auto" translate="no" data-cv-draft className="guide-open mt-1 p-3 rounded-xl bg-canvas/60 border border-line whitespace-pre-wrap break-words font-sans text-[12px] leading-[1.75] text-ink"><Bracketed text={draftText(d)} /></pre>
+        <pre dir={d.lang === "ar" ? "rtl" : "ltr"} lang={d.lang} translate="no" data-cv-draft className="guide-open mt-1 p-3 rounded-xl bg-canvas/60 border border-line whitespace-pre-wrap break-words font-sans text-[12px] leading-[1.75] text-ink text-start"><Bracketed text={draftText(d)} /></pre>
       )}
-      <div className="mt-3 flex gap-2">
+      <p className="mt-2 text-[10.5px] text-ink-3 leading-relaxed">{t(PX.whiteLabel)}</p>
+      <div className="mt-2 flex gap-2">
         <Secondary onClick={pdf} disabled={busy} className="flex-1 h-11 press" data-cv-pdf>{busy ? <LoaderCircle size={15} className="spin" /> : <FileDown size={15} />} {t(busy ? PX.pdfBusy : PX.pdf)}</Secondary>
         <Secondary onClick={() => { copyPlain(draftText(d)); app.toast(t(PX.copied)); }} className="flex-1 h-11 press"><Copy size={15} /> {t(PX.copy)}</Secondary>
       </div>

@@ -13,7 +13,8 @@ export type PdfImage =
 // placements in PDF points from the page's bottom-left
 export type PdfPlacement = { img: PdfImage; x: number; y: number; w: number; h: number };
 export type PdfPage = { wPt: number; hPt: number; items: PdfPlacement[] };
-export type PdfInfo = { title: string; author: string; subject?: string; creator: string; lang: "ar" | "en"; created?: Date };
+// producer: null leaves the key out — a personal document (a CV) carries no tool name in its metadata
+export type PdfInfo = { title: string; author: string; subject?: string; creator: string; producer?: string | null; lang: "ar" | "en"; created?: Date };
 
 const enc = new TextEncoder();
 
@@ -110,7 +111,7 @@ export class PdfWriter {
     this.obj(2, () => this.push(`<< /Type /Pages /Kids [${this.kids.map((k) => `${k} 0 R`).join(" ")}] /Count ${this.kids.length} >>`));
     this.obj(3, () =>
       this.push(`<< /Title ${pdfString(i.title)} /Author ${pdfString(i.author)}${i.subject ? ` /Subject ${pdfString(i.subject)}` : ""}` +
-        ` /Creator ${pdfString(i.creator)} /Producer (EngSpace doc kit 1) /CreationDate (${pdfDate(i.created || new Date())}) >>`));
+        ` /Creator ${pdfString(i.creator)}${i.producer === null ? "" : ` /Producer ${pdfString(i.producer || "EngSpace doc kit 1")}`} /CreationDate (${pdfDate(i.created || new Date())}) >>`));
     const xref = this.len;
     const count = this.next;
     let x = `xref\n0 ${count}\n0000000000 65535 f \n`;

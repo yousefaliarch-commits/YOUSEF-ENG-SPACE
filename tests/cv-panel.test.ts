@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 import { CV_SAMPLE_AR, CV_SAMPLE_EN, CV_SAMPLE_FRESH, auditCV } from "../src/features/cv/audit";
 import { ISSUE_OWNERS, gradeOf, topThird } from "../src/features/cv/panel";
-import { addMarks, draftSpec, draftText, filledText, rebuildCV, rescreen } from "../src/features/cv/rebuild";
+import { addMarks, applyFills, draftSpec, draftText, filledText, rebuildCV, rescreen, slotsOf } from "../src/features/cv/rebuild";
 import { docLayout, fixedMeasurer } from "../src/doc/layout";
 
 const run = (t: string, ctx: any = {}) => auditCV(t, ctx);
@@ -201,13 +201,18 @@ describe("the rebuilt draft", () => {
     for (const s of [CV_SAMPLE_AR, CV_SAMPLE_EN, CV_SAMPLE_FRESH, SITE]) {
       // allowed besides the CV's own numbers: the years the audit computes from the role dates, and m² / m³ written as m2 / m3
       const r = run(s);
-      const orig = new Set([...digits(s.replace(/²/g, "2").replace(/³/g, "3")), String(Math.floor(r.years)), String(Math.round(r.years))]);
-      const extra = digits(draftText(rebuildCV(r))).filter((n) => !orig.has(n));
-      expect(extra).toEqual([]);
+      // …and month names written as numbers («Jul 2024» → «07/2024» in the other language)
+      const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+      const months = s.replace(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b/gi, (m) => String(MONTHS.indexOf(m.slice(0, 3).toLowerCase()) + 1).padStart(2, "0") + "/");
+      const orig = new Set([...digits(months.replace(/²/g, "2").replace(/³/g, "3")), ...digits(s), String(Math.floor(r.years)), String(Math.round(r.years))]);
+      for (const lang of ["en", "ar"] as const) {
+        const extra = digits(draftText(rebuildCV(r, lang))).filter((n) => !orig.has(n));
+        expect(extra).toEqual([]);
+      }
     }
   });
   it("every gap is a structured placeholder in the CV's language, listed as a question", () => {
-    const ar = rebuildCV(run(CV_SAMPLE_AR));
+    const ar = rebuildCV(run(CV_SAMPLE_AR), "ar");
     expect(ar.asks.every((a) => a.startsWith("[أضف:"))).toBe(true);
     const en = rebuildCV(run(CV_SAMPLE_EN));
     expect(en.asks.length).toBeGreaterThan(0);
@@ -251,18 +256,74 @@ AutoCAD · Excel`;
     expect(rs.after).toBe("pass");
     expect(filledText(rebuildCV(run(CV_SAMPLE_EN)))).not.toMatch(/\[(ADD|أضف):/);
   });
-  it("prints as a plain A4 letterhead — the name first, no engineering title block, the footer names the draft", () => {
-    for (const s of [CV_SAMPLE_AR, CV_SAMPLE_FRESH]) {
-      const d = rebuildCV(run(s));
+  it("prints as a white-label A4 letterhead — the name first, no title block, no app name, mark or credit anywhere", () => {
+    for (const [s, lang] of [[CV_SAMPLE_AR, "ar"], [CV_SAMPLE_FRESH, "en"], [CV_SAMPLE_AR, "en"]] as const) {
+      const d = rebuildCV(run(s), lang);
       const { pages } = docLayout(draftSpec(d), fixedMeasurer);
       expect(pages.length).toBeGreaterThanOrEqual(1);
       const texts = pages.flatMap((p) => p.ops.filter((o: any) => o.op === "text").map((o: any) => o.text));
       const first = pages[0].ops.find((o: any) => o.op === "text") as any;
       expect(first.text).toBe(d.name);
-      expect(texts.some((t) => /Client · المالك|المالك · Client|Draft — not issued/.test(t))).toBe(false);
-      expect(texts.some((t) => /مسودة سيرة ذاتية|CV draft/.test(t))).toBe(true);
-      expect(texts.some((t) => /Prepared with EngSpace|أُعدّ باستخدام EngSpace/.test(t))).toBe(true);
+      expect(texts.some((t) => /Client · المالك|المالك · Client|Draft — not issued|مسودة/.test(t))).toBe(false);
+      expect(texts.some((t) => /EngSpace/i.test(t))).toBe(false);
+      // no brand mark: the only path op on a CV page would be the E+S mark
+      expect(pages.every((p) => !p.ops.some((o: any) => o.op === "path"))).toBe(true);
+      const spec = draftSpec(d);
+      expect(spec.meta.plain).toBeTruthy();
+      expect(JSON.stringify(spec.meta.plain)).not.toMatch(/EngSpace/);
     }
+  });
+});
+
+describe("the rebuilt CV in either language (structured, on the device)", () => {
+  const AR_LETTERS = /[ء-ي]/;
+  // what is outside the [ADD: …] slots (a slot may quote the original line)
+  const outside = (t: string) => t.replace(/\[(?:ADD|أضف):[^\]]*\]/g, " ");
+  it("English is the default, and an Arabic CV comes out in English with standard terms", () => {
+    const d = rebuildCV(run(CV_SAMPLE_AR));
+    expect(d.lang).toBe("en");
+    const t = draftText(d);
+    expect(AR_LETTERS.test(outside(t))).toBe(false);
+    expect(t).toMatch(/Professional Experience/);
+    expect(t).toMatch(/Technical Office Engineer — Redcon Construction — Cairo · 03\/2022 – Present/);
+    expect(t).toMatch(/Site Engineer — The Arab Contractors — Assiut · 07\/2020 – 02\/2022/);
+    expect(t).toMatch(/B\.Sc\. Civil Engineering — Assiut University · 2020 · Very Good/);
+    expect(t).toMatch(/Military status: Exempt/);
+    expect(t).toMatch(/32,000 m² and EGP 40 million/);
+    expect(t).toMatch(/Member, Egyptian Engineers Syndicate · 2020/);
+    expect(t).toMatch(/PMP \(in preparation\) · 2024/);
+    expect(t).toMatch(/Arabic \(Native\) · English \(Very good/);
+    // the Arabic name is never transliterated by guess: it is asked for, quoting the original
+    expect(d.name).toMatch(/^\[ADD: your name in English — «أحمد محمود عبد الرحمن»\]$/);
+    expect(d.pairs.length).toBeGreaterThan(0);
+    expect(d.pairs.every((p) => AR_LETTERS.test(p.from) && /\[ADD: the result/.test(p.to))).toBe(true);
+  });
+  it("an English CV comes out in Arabic with standard terms, and design speaks the engineer's discipline", () => {
+    const d = rebuildCV(run(CV_SAMPLE_FRESH), "ar");
+    const t = draftText(d);
+    expect(t).toMatch(/الموقف من التجنيد: مؤجل حتى \[أضف: السنة\]/);
+    expect(t).toMatch(/بكالوريوس الهندسة — قسم الهندسة الكهربية — جامعة القاهرة · 2020 – 2025 · بتقدير جيد جدًا مع مرتبة الشرف/);
+    expect(t).toMatch(/متدرب — السويدي إليكتريك/);
+    expect(t).toMatch(/الخبرات العملية/);
+    expect(t).toMatch(/العربية \(اللغة الأم\)/);
+    expect(t).not.toMatch(/النظام الإنشائي/);
+    expect(/[A-Za-z]{4,}/.test(outside(d.headline))).toBe(false);
+  });
+  it("the same language keeps the engineer's own lines (no translation pairs)", () => {
+    expect(rebuildCV(run(CV_SAMPLE_AR), "ar").pairs).toEqual([]);
+    expect(rebuildCV(run(CV_SAMPLE_EN), "en").pairs).toEqual([]);
+  });
+  it("every slot can be filled in the app; empty answers keep the slot", () => {
+    const d = rebuildCV(run(CV_SAMPLE_EN));
+    const slots = slotsOf(d);
+    expect(slots.length).toBe((draftText(d).match(/\[ADD:[^\]]*\]/g) || []).length);
+    const all = Object.fromEntries(slots.map((x, i) => [x.id, `v${i}`]));
+    const full = applyFills(d, all);
+    expect(draftText(full)).not.toMatch(/\[ADD:/);
+    expect(full.asks).toEqual([]);
+    const one = applyFills(d, { [slots[0].id]: "mohamed.ali@gmail.com" });
+    expect(slotsOf(one).length).toBe(slots.length - 1);
+    expect(draftText(d)).toMatch(/\[ADD:/); // the original draft is untouched
   });
 });
 

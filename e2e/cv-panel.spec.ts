@@ -44,7 +44,7 @@ test("hiring panel: four readers, flagged-by on every issue, projection, questio
   await noCrash(page, errs, "cv panel");
 });
 
-test("rebuilt draft: [أضف] placeholders, then a real A4 PDF from the device", async ({ page }, info) => {
+test("rebuilt CV: English by default, EN ⇄ AR toggle, fill-in slots, white-label A4 PDF", async ({ page }, info) => {
   const errs = watch(page);
   await demoAs(page, "engineer", {}, "#app/cvreview");
   await settle(page, 800);
@@ -52,22 +52,45 @@ test("rebuilt draft: [أضف] placeholders, then a real A4 PDF from the device",
   await settle(page, 600);
   const card = page.locator("[data-cv-draftcard]");
   await card.scrollIntoViewIfNeeded();
-  await expect(card.locator("[data-cv-asks]")).toBeVisible();
+  await expect(card.locator("[data-cv-lang]")).toHaveAttribute("data-cv-lang", "en");
+
+  // English draft of an Arabic CV: standard terms, translated lines listed for checking
   await card.getByRole("button", { name: "عرض المسودة" }).click();
   const draft = card.locator("[data-cv-draft]");
-  await expect(draft).toContainText("الخبرات العملية");
-  await expect(draft).toContainText("[أضف:");
-  await expect(draft).not.toContainText("رقم القيد");
-  await page.screenshot({ path: info.outputPath("cv-draft-ar.png") });
+  await expect(draft).toContainText("Professional Experience");
+  await expect(draft).toContainText("Technical Office Engineer — Redcon Construction");
+  await expect(draft).toContainText("[ADD:");
+  await expect(card.locator("[data-cv-pairs]")).toBeVisible();
+
+  // fill the name slot: the preview follows
+  await card.locator("[data-cv-asks] > button").click();
+  await card.locator("[data-cv-slot='name#0']").fill("Ahmed Mahmoud Abdelrahman");
+  await expect(draft).toContainText("Ahmed Mahmoud Abdelrahman");
+  await page.screenshot({ path: info.outputPath("cv-draft-en.png") });
 
   const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), card.locator("[data-cv-pdf]").click()]);
-  expect(dl.suggestedFilename()).toMatch(/CV-draft\.pdf$/);
+  expect(dl.suggestedFilename()).toBe("Ahmed-Mahmoud-Abdelrahman-CV-EN.pdf");
   if (process.env.E2E_PDF_OUT) await dl.saveAs(process.env.E2E_PDF_OUT);
   const all = readFileSync((await dl.path())!).toString("latin1");
   expect(all.startsWith("%PDF-")).toBe(true);
   expect(all.trimEnd().endsWith("%%EOF")).toBe(true);
-  expect(all).toContain("/Lang (ar)");
-  expect((all.match(/\/Type \/Page\b/g) || []).length).toBeGreaterThanOrEqual(1);
+  expect(all).toContain("/Lang (en)");
+  // white-label: no app name anywhere in the file, metadata included
+  expect(all).not.toMatch(/EngSpace/i);
+  expect(all).not.toContain("/Producer");
+
+  // Arabic: the engineer's own lines, Arabic headings
+  await card.locator("[data-cv-lang-btn=ar]").click();
+  await expect(card.locator("[data-cv-lang]")).toHaveAttribute("data-cv-lang", "ar");
+  await expect(draft).toContainText("الخبرات العملية");
+  await expect(draft).toContainText("[أضف:");
+  await expect(draft).not.toContainText("رقم القيد");
+  await expect(card.locator("[data-cv-pairs]")).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath("cv-draft-ar.png") });
+  const [dl2] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), card.locator("[data-cv-pdf]").click()]);
+  const ar = readFileSync((await dl2.path())!).toString("latin1");
+  expect(ar).toContain("/Lang (ar)");
+  expect(ar).not.toMatch(/EngSpace/i);
   await noOverflow(page, "cv draft");
   await noCrash(page, errs, "cv draft");
 });

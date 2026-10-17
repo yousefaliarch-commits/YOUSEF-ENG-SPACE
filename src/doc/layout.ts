@@ -371,6 +371,11 @@ function runningHeader(ops: DrawOp[], o: O, m: DocMeasurer, rtl: boolean, spec: 
 function footer(ops: DrawOp[], o: O, m: DocMeasurer, rtl: boolean, spec: DocSpec, n: number, of: number) {
   const f = frame(o);
   const dir = textDir(rtl);
+  // a plain document is white-label: only the page number, no mark, no credit, no document number
+  if (spec.meta.plain) {
+    if (of > 1) ops.push({ op: "text", x: f.left + f.width / 2, y: f.footerBase, f: TYPE.foot, ink: "ink60", dir, text: L2(`${n} / ${of}`, `${n} / ${of}`), align: "center" });
+    return;
+  }
   hline(ops, f.left, f.right, f.footerRule, HAIR, "hair");
   const mark = brandMarkPath(3.5);
   const base = f.footerBase;
