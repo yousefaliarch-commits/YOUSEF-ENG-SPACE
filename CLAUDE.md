@@ -87,7 +87,7 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   **QA/QC builder**: checklists from scratch (`qcbuilder`, `UserTemplate` in `data/checklists.ts`, synced as member_state `qcTemplates`
   with tombstones; an inspection keeps a `tpl` snapshot so deleting a checklist never breaks it). Executive A4 report in `lib/report-pdf.ts`
   (`inspectionPdf`, signatures, footer promo `REPORT_PROMO`). **CV review** (`features/cv/hr.ts`): birth date, marital status, nationality,
-  photo and a local phone are normal — only the national ID is flagged; military-service status is checked for male Egyptian engineers;
+  photo and a local phone are normal — only the national ID is flagged; Syndicate registration is optional (shown when stated, never scored or flagged — its 3 points are spread over the other codes checks); military-service status is checked for male Egyptian engineers;
   every report carries the HR director's assessment (`result.hr`) and the regional block (`result.regional`). **Update notice**:
   Publish web update → broadcast → `broadcast_app_update()` (service role) → `update` notice → tap opens Home + `requestUpdate()` (docs/OTA.md).
 
