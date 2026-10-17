@@ -273,3 +273,9 @@ html[dir="ltr"] .screen-layer.is-leaving { animation-name: layer-out-ltr; }
 .tab-pane.is-warming { content-visibility: visible; }
 
 @tailwind utilities;
+
+/* Post cards stand out from the feed background: a firmer edge and a deeper lift than other panels
+   (article.post-card outranks the Tailwind bg / border / shadow utilities on the same element). */
+article.post-card { border-color: var(--line-3); box-shadow: 0 1px 0 rgb(255 255 255 / .05) inset, 0 10px 28px -6px rgb(0 0 0 / .55); }
+[data-mode="dark"] article.post-card { background: rgb(30 30 34); }
+[data-mode="light"] article.post-card { border-color: rgb(24 24 27 / .14); box-shadow: 0 1px 3px rgb(24 24 27 / .10), 0 8px 24px -6px rgb(24 24 27 / .14); }

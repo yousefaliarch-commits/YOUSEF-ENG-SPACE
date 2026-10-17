@@ -125,7 +125,7 @@ export function PostCard({ p, app, compact = false, onComments = null }: any) {
   if (gone && !p.mine) return <Removed what="هذا المنشور" info={app.removedInfo(k)} />;
   if (app.hidden[k]) return <HiddenByMe what="المنشور" onUndo={() => app.unhide(k)} />;
   return (
-    <Panel className="p-4">
+    <Panel className="post-card p-4">
       {gone && <RemovedMine what="منشورك" info={app.removedInfo(k)} />}
       <Author a={p} app={app} when={p.when} mine={p.mine} />
         <div className="mt-2 flex items-center gap-1.5 flex-wrap text-[10.5px]"><EditedBadge n={p.edits} />{rm && (inRoom ? <span className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2"><rm.icon size={10} />{rm.name}</span> : <button type="button" onClick={() => app.push({ type: "room", id: rm.id })} className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"><rm.icon size={10} />{rm.name}</button>)}{p.type !== "question" && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-wash text-accent"><TI size={10} />{type[1]}</span>}{p.ama && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-good/15 text-good"><span className="w-1.5 h-1.5 rounded-full bg-good glow-pulse" /> مباشر</span>}{p.best && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-full bg-good/15 text-good"><Award size={10} /> فيه إجابة معتمدة</span>}</div>
