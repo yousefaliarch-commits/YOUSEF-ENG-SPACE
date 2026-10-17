@@ -187,7 +187,7 @@ export async function inspectionPdf(r: InspectionReport) {
 const dataUrlBytes = (u: string) => { const b = atob(u.split(",")[1]); const a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; };
 
 // ---- handing the file to the member ----
-export async function saveOrShare(bytes: Uint8Array, filename: string, title: string) {
+export async function saveOrShare(bytes: Uint8Array, filename: string, title: string, mime = "application/pdf") {
   if (Capacitor.isNativePlatform()) {
     const [{ Filesystem, Directory }, { Share }] = await Promise.all([import("@capacitor/filesystem"), import("@capacitor/share")]);
     let bin = ""; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
@@ -201,7 +201,7 @@ export async function saveOrShare(bytes: Uint8Array, filename: string, title: st
     }
     return;
   }
-  const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: "application/pdf" }));
+  const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: mime }));
   const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 10000);
 }

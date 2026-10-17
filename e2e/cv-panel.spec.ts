@@ -11,11 +11,14 @@ test("hiring panel: four readers, flagged-by on every issue, projection, questio
   await page.getByRole("button", { name: "مهندس موقع · ضعيفة" }).click();
   await settle(page, 600);
 
-  // projection inside the score card: now → after, and the screen's verdict before → after
-  const proj = page.locator("[data-cv-projection]");
-  await expect(proj).toBeVisible();
-  await expect(proj).toContainText("بعد تطبيق التوصيات");
-  await expect(proj.locator("[data-rescreen]")).toHaveAttribute("data-rescreen", "reject>pass");
+  // the executive snapshot: the ring now → projected, the screen's verdict before → after, the top three fixes
+  const snap = page.locator("[data-cv-snapshot]");
+  await expect(snap).toBeVisible();
+  await expect(snap.locator("[data-cv-projection]")).toContainText("بعد تطبيق التوصيات");
+  await expect(snap.locator("[data-rescreen]")).toHaveAttribute("data-rescreen", "reject>pass");
+  await expect(snap.locator("[data-cv-ring]")).toHaveAttribute("data-cv-ring", /^\d+>\d+$/);
+  await expect(snap.locator("[data-top-fix]")).toHaveCount(3);
+  await page.screenshot({ path: info.outputPath("cv-snapshot-ar.png") });
 
   // the panel: four readers in order, the toughest named
   const panel = page.locator("[data-cv-panel]");
@@ -23,13 +26,24 @@ test("hiring panel: four readers, flagged-by on every issue, projection, questio
   await expect(panel.locator("[data-reviewer]")).toHaveCount(4);
   await expect(panel.locator("[data-reviewer=screen]")).toHaveAttribute("data-verdict", "reject");
   await expect(panel.locator("[data-cv-honesty=toughest]")).toContainText("أصعب قارئ");
-  await panel.locator("[data-reviewer=teammate] button").click();
-  await expect(panel.locator("[data-reviewer=teammate]")).toContainText("روح الفريق");
+  // segmented tabs: the toughest reader opens first; switching shows that reader's card
+  await panel.locator("[data-reviewer=teammate]").click();
+  await expect(panel.locator("[data-reviewer=teammate]")).toHaveAttribute("aria-selected", "true");
+  await expect(panel.locator("[data-reviewer-card=teammate]")).toContainText("روح الفريق");
+  // every tab is a comfortable touch target
+  for (const b of await panel.locator("[role=tab]").all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath("cv-panel-ar.png") });
 
-  // every issue names its reader(s)
-  const issues = page.locator("li:has([data-flagged-by])");
-  expect(await issues.count()).toBeGreaterThanOrEqual(5);
+  // the action plan: three collapsible groups, the deal-breakers open; every issue names its reader(s)
+  const plan = page.locator("[data-cv-actions]");
+  await plan.scrollIntoViewIfNeeded();
+  await expect(plan.locator("[data-action-group]")).toHaveCount(3);
+  await expect(plan.locator("[data-action-group=critical] > button")).toHaveAttribute("aria-expanded", "true");
+  await plan.locator("[data-action-group=high] > button").click();
+  await expect(plan.locator("[data-action-group=critical] > button")).toHaveAttribute("aria-expanded", "false");
+  const issues = plan.locator("li:has([data-flagged-by])");
+  expect(await issues.count()).toBeGreaterThanOrEqual(4);
+  await plan.locator("[data-action-group=critical] > button").click();
   await expect(page.locator("[data-flagged-by='screen']").first()).toContainText("الفرز الآلي");
 
   // questions from this CV's own gaps
@@ -78,6 +92,13 @@ test("rebuilt CV: English by default, EN ⇄ AR toggle, fill-in slots, white-lab
   // white-label: no app name anywhere in the file, metadata included
   expect(all).not.toMatch(/EngSpace/i);
   expect(all).not.toContain("/Producer");
+
+  // the same CV as an editable Word document: a real .docx, white-label
+  const [dx] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), card.locator("[data-cv-docx]").click()]);
+  expect(dx.suggestedFilename()).toBe("Ahmed-Mahmoud-Abdelrahman-CV-EN.docx");
+  const zip = readFileSync((await dx.path())!);
+  expect(zip.subarray(0, 2).toString("latin1")).toBe("PK");
+  expect(zip.toString("latin1")).toContain("word/document.xml");
 
   // Arabic: the engineer's own lines, Arabic headings
   await card.locator("[data-cv-lang-btn=ar]").click();

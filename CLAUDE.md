@@ -120,6 +120,10 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   measured figures, the result left as a slot; original → rebuilt pairs shown to check). Anything uncertain (an Arabic name, an unknown employer) is an
   [ADD: … — «original»] slot; the engineer fills every slot in the app (`slotsOf` / `applyFills`) before exporting. **The exported CV is white-label**:
   plain mode prints no EngSpace mark, credit or document number, and the PDF metadata carries only the engineer's name (no Producer).
+  The draft also exports as an **editable .docx** built on the device (`cv/docx.ts`: minimal OOXML zipped with fflate — styles, a real bullet
+  list, A4 / 2 cm, RTL for Arabic, the engineer as author, no docProps/app.xml). The report opens with the **executive snapshot** (dual ring
+  now → projected, screen before → after, top 3 fixes from `actionPlan`), the readers as segmented tabs, and the action plan in collapsible
+  Critical / High / Recommendations groups; touch targets ≥ 44 px.
   Draft numbers must all come from the CV in both languages (`tests/cv-panel.test.ts`). cv/panel.ts, rebuild.ts, translate.ts and PanelViews.tsx are
   NO_DICT in the i18n extractor.
 
