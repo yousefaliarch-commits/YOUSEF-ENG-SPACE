@@ -76,13 +76,16 @@ export function rasterBackend(images?: ImageSource, log: string[] = []): DocBack
   return {
     id: "raster",
     async begin(meta: DocMeta) {
-      writer = new PdfWriter({
-        title: `${meta.docTypeName}${meta.docNo ? ` · ${meta.docNo}` : ""}`,
-        author: meta.issuer,
-        subject: meta.docType,
-        creator: `EngSpace ${meta.appVersion}`,
-        lang: meta.lang,
-      });
+      // a plain (personal) document is white-label: the person is its author and creator, no tool name anywhere
+      writer = new PdfWriter(meta.plain
+        ? { title: `${meta.plain.name} — ${meta.docTypeName}`, author: meta.plain.name, creator: meta.plain.name, producer: null, lang: meta.lang }
+        : {
+            title: `${meta.docTypeName}${meta.docNo ? ` · ${meta.docNo}` : ""}`,
+            author: meta.issuer,
+            subject: meta.docType,
+            creator: `EngSpace ${meta.appVersion}`,
+            lang: meta.lang,
+          });
     },
     async page(p: DrawPage) {
       if (!writer || aborted) return;

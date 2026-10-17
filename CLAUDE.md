@@ -87,7 +87,7 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   **QA/QC builder**: checklists from scratch (`qcbuilder`, `UserTemplate` in `data/checklists.ts`, synced as member_state `qcTemplates`
   with tombstones; an inspection keeps a `tpl` snapshot so deleting a checklist never breaks it). Executive A4 report in `lib/report-pdf.ts`
   (`inspectionPdf`, signatures, footer promo `REPORT_PROMO`). **CV review** (`features/cv/hr.ts`): birth date, marital status, nationality,
-  photo and a local phone are normal — only the national ID is flagged; military-service status is checked for male Egyptian engineers;
+  photo and a local phone are normal — only the national ID is flagged; Syndicate registration is optional (shown when stated, never scored or flagged — its 3 points are spread over the other codes checks); military-service status is checked for male Egyptian engineers;
   every report carries the HR director's assessment (`result.hr`) and the regional block (`result.regional`). **Update notice**:
   Publish web update → broadcast → `broadcast_app_update()` (service role) → `update` notice → tap opens Home + `requestUpdate()` (docs/OTA.md).
 
@@ -106,6 +106,22 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   (conflict copy, tombstones), never rejects. Projects: member_state `siteProjects`. Engines are pure in `src/domain/tools/*` with the blueprint's
   vectors in `tests/tools-*.test.ts`; screens in `src/features/tools/<family>/` (each a lazy chunk listed in `module.ts`), UI kit `src/ui/kit.tsx`
   (dialogs portal to <body>). Field tools have no price fields. e2e: `e2e/tools.spec.ts`.
+
+- v25 CV review: **the hiring panel** (`features/cv/panel.ts`, pure, on the device, no AI). Four readers over the same audit — the ATS screen,
+  the hiring manager, the recruiter (top third of page one ≈ 14 printed rows) and the teammate (coordination across disciplines, the consultant /
+  client / subcontractor interface, team, meetings) — each with a verdict; `ISSUE_OWNERS` names who raised each issue (`i.by`). The honesty line
+  names the reader closest to rejecting a strong CV. `gradeIntel` reads Egyptian grades (امتياز / جيد جدًا [مع مرتبة الشرف] / جيد / مقبول, %, GPA) —
+  advice only, **never scored**. `interviewQuestions` come from the CV's own gaps. `projectScore` = what each check reaches with facts the CV already
+  has (never a tool, code, certificate or year it lacks). `rebuild.ts`: the rebuilt draft (same facts, rewrites, every gap as `[ADD: …]` / `[أضف: …]`,
+  national ID / religion / street address dropped, military made explicit, never the Syndicate), re-screened on a filled copy (`rescreen`), printed
+  as A4 through the document kit's **plain letterhead mode** (`meta.plain` + `para` blocks: no title block, revisions, draft band or colophon).
+  The rebuilt CV is **English by default** with an EN ⇄ AR toggle; the other language is built from structure by `translate.ts` (titles, the company
+  dataset's names, places, universities, degrees, grades, dates, personal block, languages, certificates, units; a bullet from its TASK template +
+  measured figures, the result left as a slot; original → rebuilt pairs shown to check). Anything uncertain (an Arabic name, an unknown employer) is an
+  [ADD: … — «original»] slot; the engineer fills every slot in the app (`slotsOf` / `applyFills`) before exporting. **The exported CV is white-label**:
+  plain mode prints no EngSpace mark, credit or document number, and the PDF metadata carries only the engineer's name (no Producer).
+  Draft numbers must all come from the CV in both languages (`tests/cv-panel.test.ts`). cv/panel.ts, rebuild.ts, translate.ts and PanelViews.tsx are
+  NO_DICT in the i18n extractor.
 
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
