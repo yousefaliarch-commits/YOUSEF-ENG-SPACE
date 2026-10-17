@@ -28,6 +28,9 @@ export type DocMeta = {
   engines: string[];        // "concrete@1.0.0", … printed in the colophon
   hash: string;             // SHA-256 hex of the issued content ("" for a draft)
   qr?: string;
+  // a personal document (a CV draft), not an engineering record: page 1 opens with the person's name and contact lines
+  // instead of the issuer's title block; no revisions, draft band or colophon, and the footer names the document type
+  plain?: { name: string; lines: string[] };
 };
 
 export type DocTextSpan = { t: string; dir?: "ltr" | "rtl" | "auto"; w?: 450 | 600 | 700 };
@@ -83,6 +86,7 @@ export type DocBlock =
   | { k: "photos"; items: { ref: PhotoRef; caption: string }[]; grid: "2x3" | "2x2" }
   | { k: "disclaimer"; text: string }
   | { k: "basis"; rows: BasisRow[]; formulas: TraceStep[] }
+  | { k: "para"; text: string; bullet?: boolean; strong?: boolean; muted?: boolean }
   | { k: "pageBreak" };
 
 export type DocSection = { orientation: "portrait" | "landscape"; blocks: DocBlock[] };

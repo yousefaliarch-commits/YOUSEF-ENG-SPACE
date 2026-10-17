@@ -107,6 +107,16 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   vectors in `tests/tools-*.test.ts`; screens in `src/features/tools/<family>/` (each a lazy chunk listed in `module.ts`), UI kit `src/ui/kit.tsx`
   (dialogs portal to <body>). Field tools have no price fields. e2e: `e2e/tools.spec.ts`.
 
+- v25 CV review: **the hiring panel** (`features/cv/panel.ts`, pure, on the device, no AI). Four readers over the same audit — the ATS screen,
+  the hiring manager, the recruiter (top third of page one ≈ 14 printed rows) and the teammate (coordination across disciplines, the consultant /
+  client / subcontractor interface, team, meetings) — each with a verdict; `ISSUE_OWNERS` names who raised each issue (`i.by`). The honesty line
+  names the reader closest to rejecting a strong CV. `gradeIntel` reads Egyptian grades (امتياز / جيد جدًا [مع مرتبة الشرف] / جيد / مقبول, %, GPA) —
+  advice only, **never scored**. `interviewQuestions` come from the CV's own gaps. `projectScore` = what each check reaches with facts the CV already
+  has (never a tool, code, certificate or year it lacks). `rebuild.ts`: the rebuilt draft (same facts, rewrites, every gap as `[ADD: …]` / `[أضف: …]`,
+  national ID / religion / street address dropped, military made explicit, never the Syndicate), re-screened on a filled copy (`rescreen`), printed
+  as A4 through the document kit's **plain letterhead mode** (`meta.plain` + `para` blocks: no title block, revisions, draft band or colophon).
+  Draft numbers must all come from the CV (`tests/cv-panel.test.ts`). cv/panel.ts, rebuild.ts and PanelViews.tsx are NO_DICT in the i18n extractor.
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

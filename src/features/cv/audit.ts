@@ -2,6 +2,7 @@ import { TRACK_ADJ, posShort, posYears, trackLabel, tracksFor } from "../../doma
 import { AR_MASDAR_PAST, CV_ACTION_AR, CV_ACTION_EN, CV_LANG_LEVEL, CV_LANG_NAMES, CV_PROJECT_TYPES, CV_TOOLS, EN_GERUND_PAST, parseCV, wordsOf } from "./extract";
 import { L2 } from "../../i18n/i18n";
 import { hrAssessment, regionalProfile } from "./hr";
+import { gradeIntel, hiringPanel, honestyLine, interviewQuestions, ownersOf, projectScore } from "./panel";
 
 // =====================================================================
 //  Engineering CV audit — one pass, one report (v24: regional HR layer in ./hr.ts)
@@ -404,8 +405,8 @@ export function draftEngSummary(cv?: any, a?: any) {
   const codes = a.codes.filter((x) => x.state !== "missing" && x.name !== "Egyptian Code").slice(0, 2).map((x) => x.name);
   const creds = a.creds.filter((x) => x.relevant && x.present).map((x) => x.name).slice(0, 2);
   const title = ar ? `${cv.disciplineLabel} — ${trackLabel(a.target, a.disc)}` : `${TITLE_EN[a.disc] || "Civil Engineer"} — ${a.target === "design" ? TRACK_DESIGN_EN[a.disc] || "Design" : TRACK_EN[a.target]}`;
-  if (ar) return `${title}${y ? ` بخبرة ${y}+ سنوات` : a.fresh ? " حديث التخرج" : " بخبرة [العدد]+ سنوات"}${types.length ? ` في مشاريع ${types.map((x) => TYPE_AR_PL[x] || x).join(" و")}` : ""}${area || value ? ` حتى ${[area, value].filter(Boolean).join(" و")}` : " [أكبر مشروع: المساحة م² / القيمة]"}. ${terms.length ? `نطاق العمل: ${terms.join("، ")}` : "[مسؤولياتك الأساسية في المسار]"}${advT.length ? `، بإتقان ${advT.join(" و")}` : ""}${useT.length ? `${advT.length ? " واستخدام" : "، باستخدام"} ${useT.join(" و")}` : ""}${codes.length ? ` وفق ${codes.join(" و")}` : ""}. ${creds.length ? creds.join(" · ") + " · " : ""}${a.syndicate ? "عضو نقابة المهندسين." : "[عضوية نقابة المهندسين ورقم القيد]."}`;
-  return `${title} with ${y ? `${y}+ years` : a.fresh ? "a fresh degree" : "[N]+ years"} on ${types.length ? types.map((x) => TYPE_EN[x] || x).join(" and ") : "[residential / commercial]"} projects${area || value ? ` up to ${[area, value].filter(Boolean).join(" and ")}` : " [largest project: m² BUA / EGP value]"}. ${terms.length ? `Core scope: ${terms.length > 1 ? terms.slice(0, -1).join(", ") + " and " + terms[terms.length - 1] : terms[0]}` : "[your core responsibilities in this track]"}${advT.length ? `; advanced in ${advT.join(", ")}` : ""}${useT.length ? `${advT.length ? " and hands-on with" : "; hands-on with"} ${useT.join(", ")}` : ""}${codes.length ? `, working to ${codes.join(" and ")}` : ""}. ${creds.length ? creds.join(" · ") + " · " : ""}${a.syndicate ? "Member of the Egyptian Engineers Syndicate." : "[Engineers Syndicate membership and number]."}`;
+  if (ar) return `${title}${y ? ` بخبرة ${y}+ سنوات` : a.fresh ? " حديث التخرج" : " بخبرة [العدد]+ سنوات"}${types.length ? ` في مشاريع ${types.map((x) => TYPE_AR_PL[x] || x).join(" و")}` : ""}${area || value ? ` حتى ${[area, value].filter(Boolean).join(" و")}` : " [أكبر مشروع: المساحة م² / القيمة]"}. ${terms.length ? `نطاق العمل: ${terms.join("، ")}` : "[مسؤولياتك الأساسية في المسار]"}${advT.length ? `، بإتقان ${advT.join(" و")}` : ""}${useT.length ? `${advT.length ? " واستخدام" : "، باستخدام"} ${useT.join(" و")}` : ""}${codes.length ? ` وفق ${codes.join(" و")}` : ""}. ${[...creds, ...(a.syndicate ? ["عضو نقابة المهندسين"] : [])].join(" · ")}`.trim();
+  return `${title} with ${y ? `${y}+ years` : a.fresh ? "a fresh degree" : "[N]+ years"} on ${types.length ? types.map((x) => TYPE_EN[x] || x).join(" and ") : "[residential / commercial]"} projects${area || value ? ` up to ${[area, value].filter(Boolean).join(" and ")}` : " [largest project: m² BUA / EGP value]"}. ${terms.length ? `Core scope: ${terms.length > 1 ? terms.slice(0, -1).join(", ") + " and " + terms[terms.length - 1] : terms[0]}` : "[your core responsibilities in this track]"}${advT.length ? `; advanced in ${advT.join(", ")}` : ""}${useT.length ? `${advT.length ? " and hands-on with" : "; hands-on with"} ${useT.join(", ")}` : ""}${codes.length ? `, working to ${codes.join(" and ")}` : ""}. ${[...creds, ...(a.syndicate ? ["Member of the Egyptian Engineers Syndicate"] : [])].join(" · ")}`.trim();
 }
 
 
@@ -554,11 +555,19 @@ export function auditCV(rawText?: any, ctx: any = {}) {
   const sheetProjects = roles.slice(0, 4).map((r) => ({ name: [r.e.title, r.e.company].filter(Boolean).join(" — ") || (lang === "ar" ? "مشروع" : "Project"), known: SHEET_FIELDS.filter((d) => r.dims.has(d)), missing: SHEET_FIELDS.filter((d) => !r.dims.has(d)), hit: r.hit }));
   const portfolio: any = { tips: [...(PORTFOLIO_TIPS[target] || PORTFOLIO_TIPS.site)], general: PORTFOLIO_GENERAL, sheet: projectSheet(lang === "ar"), projects: sheetProjects };
   const missing: any = { core: software.filter((x) => x.tier === "core" && x.level === "missing").map((x) => x.name), adv: software.filter((x) => x.tier === "adv" && x.level === "missing").map((x) => x.name), codes: codes.filter((c) => c.expected && c.state === "missing").map((c) => c.name), creds: credsOut.filter((c) => c.relevant && !c.present).map((c) => c.name), terms: terms.filter((x) => !x.present).map((x) => x.label), jd: jd ? jd.missing : [] };
-  const result: any = { empty: false, version: 24, overall, grade, pillars, critical, high, layout, words: cv.words, cv, disc, target, detected, allowed, shares: sig.shares, fresh, years,
+  const result: any = { empty: false, version: 25, overall, grade, pillars, critical, high, layout, words: cv.words, cv, disc, target, detected, allowed, shares: sig.shares, fresh, years,
     profile: { disc, discLabel: discL2(disc), target: trackL2(target, disc), detected: trackL2(detected, disc), years, pos: cv.seniority, posLabel: posL2(cv.seniority), lang, pages: layout.pages, words: cv.words },
     software, codes, creds: credsOut, syndicate, terms, density: density.sort((a, b) => (b.must - a.must) || Number(a.count === 0) - Number(b.count === 0) || b.count - a.count), coverage: Math.round(kwCov * 100), jd, missing,
     rewrites: rewriteGroups, strongBullets: strongCount, summary, portfolio, writing: wIssues, regional };
   result.hr = hrAssessment(result, regional, TYPE_EN);
+  // v25 · the hiring panel over the same audit: who raised each issue, the four readers, the honesty line, the grade,
+  // the interview questions this CV invites and the score once every fix is applied (./panel.ts)
+  [...critical, ...high].forEach((i) => { i.by = ownersOf(i.id); });
+  result.panel = hiringPanel(result);
+  result.honesty = honestyLine(result, result.panel);
+  result.gradeIntel = gradeIntel(result);
+  result.questions = interviewQuestions(result, result.panel);
+  result.projection = projectScore(result);
   return result;
 }
 

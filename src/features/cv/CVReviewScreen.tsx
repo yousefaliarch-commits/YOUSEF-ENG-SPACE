@@ -8,6 +8,7 @@ import { company } from "../../data/companies";
 import { TRACKS, tracksFor } from "../../domain/taxonomy";
 import { CV_SAMPLE_AR, CV_SAMPLE_EN, CV_SAMPLE_FRESH, DIMS, LEVEL_L, PILLARS, TRACK_EN, auditCV, trackL2 } from "./audit";
 import { extractCV, parseCV, wordsOf } from "./extract";
+import { DraftCard, FlaggedBy, GradeCard, HiringPanelCard, PX, Projection, QuestionsCard } from "./PanelViews";
 import { L2, say, tr } from "../../i18n/i18n";
 import { useCountUp } from "../../lib/helpers";
 import { reduced } from "../../lib/runtime";
@@ -46,7 +47,11 @@ export const AX = {
   reading: L2("جارٍ القراءة والتدقيق…", "Reading and auditing…"), readingSub: L2("كل شيء يحدث على جهازك", "Everything happens on your device"),
   score: L2("التقييم الهندسي لـ ATS", "Engineering ATS score"), of100: L2("من 100", "out of 100"), retrack: L2("دقّق لمسار آخر", "Audit for another track"),
   pDisc: L2("التخصص", "Discipline"), pTarget: L2("المسار المستهدف", "Target track"), pReads: L2("تُقرأ كـ", "Reads as"), pYears: L2("الخبرة", "Experience"), pLevel: L2("المستوى", "Level"), pLen: L2("عدد الكلمات", "Words"),
-  nav: [["hr", L2("رأي التوظيف", "HR view")], ["crit", L2("العوائق", "Deal-breakers")], ["gaps", L2("الفجوات", "Gaps")], ["rew", L2("إعادة الكتابة", "Rewrites")], ["port", L2("المشاريع", "Portfolio")], ["det", L2("التفاصيل", "Breakdown")]],
+  nav: [
+    ["panel", L2("اللجنة", "Panel")], ["hr", L2("رأي التوظيف", "HR view")], ["crit", L2("العوائق", "Deal-breakers")],
+    ["gaps", L2("الفجوات", "Gaps")], ["rew", L2("إعادة الكتابة", "Rewrites")], ["draft", L2("المسودة", "Draft")],
+    ["q", L2("أسئلة المقابلة", "Interview")], ["port", L2("المشاريع", "Portfolio")], ["det", L2("التفاصيل", "Breakdown")],
+  ],
   crit: L2("عوائق يجب إصلاحها", "Critical issues — must fix"), critSub: L2("هذه تُسقط السيرة في الفرز الآلي أو من أول نظرة.", "These get a CV rejected by software or at first glance."), critNone: L2("لا عوائق حاسمة — السيرة تعبر الفرز الأول.", "No deal-breakers — the CV clears first screening."), high: L2("أصلحها أيضًا قبل التقديم", "Also fix before applying"), why: L2("لماذا", "Why"), fix: L2("الحل", "Fix"),
   gaps: L2("الفجوات التقنية والكلمات المفتاحية", "Technical gaps & missing keywords"), sw: L2("برامج المسار وعمق استخدامها", "Track software and depth of use"), core: L2("أساسية — يفلتر عليها الـ ATS", "Core — ATS filters on these"), adv: L2("مميّزة — تفرّقك عن غيرك", "Differentiators — set you apart"),
   codes: L2("الأكواد والمعايير والعقود", "Codes, standards & contracts"), applied: L2("مطبّق في الخبرة", "Applied in work"), listed: L2("مذكور فقط", "Listed only"), missingS: L2("ناقص", "Missing"), creds: L2("الشهادات", "Credentials"), prep: L2("قيد الإعداد", "in preparation"), synd: L2("قيد نقابة المهندسين", "Engineers Syndicate registration"),
@@ -86,6 +91,7 @@ export function AuditIssue({ i, t, tone }: any) {
         {tone === "bad" ? <CircleX size={17} className="shrink-0 mt-0.5 text-bad" /> : <TriangleAlert size={16} className="shrink-0 mt-0.5 text-warn" />}
         <span className="min-w-0 flex-1 text-[13.5px] font-medium leading-snug">{t(i.title)}</span><ChevronDown size={15} className={`shrink-0 mt-0.5 text-ink-3 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
+      {i.by && <div className="px-3 pb-2.5 ps-9 -mt-1"><FlaggedBy by={i.by} t={t} /></div>}
       {open && <div className="guide-open px-3 pb-3 ps-9 space-y-2 text-[12.5px] leading-relaxed">
         <p className="text-ink-2"><span className="text-ink-3">{t(AX.why)}: </span>{t(i.why)}</p>
         {i.fix && i.fix.length > 0 && <div><p className="text-ink-3">{t(AX.fix)}:</p><ol className="mt-1 space-y-1">{i.fix.map((f, k) => <li key={k} className="flex gap-2"><Num className="shrink-0 text-ink-3">{k + 1}.</Num><span>{t(f)}</span></li>)}</ol></div>}
@@ -144,6 +150,15 @@ export function CVReviewScreen({ app }: any) {
     if (r.hr) { L.push(`${t(AX.hr)}: ${t(r.hr.verdict.label)} · ${t(r.hr.level)}`, t(r.hr.fit), ...r.hr.experience.map((x) => `• ${t(x)}`), `${t(AX.hrSw)}: ${t(r.hr.software)}`); if (r.hr.missing.length) { L.push(t(AX.hrMissing) + ":"); r.hr.missing.forEach((m) => L.push(`✖ ${t(m.title)} — ${t(m.why)}`)); } L.push(t(AX.hrActions) + ":", ...r.hr.actions.map((a, k) => `${k + 1}. ${t(a)}`), t(AX.hrStand) + ":", ...r.hr.standOut.map((a) => `★ ${t(a)}`), ""); }
     if (r.regional && r.regional.length) { L.push(t(AX.regional) + ":"); r.regional.forEach((x) => L.push(`${x.state === "ok" ? "✓" : x.state === "missing" ? "✖" : "•"} ${t(x.label)} — ${t(x.note)}`)); L.push(""); }
     r.pillars.forEach((p) => L.push(`${t(p.label)}: ${p.pts}/${p.max}`)); L.push("");
+    if (r.projection) L.push(`${t(PX.now)} ${r.projection.now} → ${t(PX.projected)} ${r.projection.projected}`, "");
+    if (r.panel) {
+      L.push(t(PX.panel) + ":");
+      r.panel.forEach((v) => L.push(`• ${t(v.label)}: ${t(PX.verdict[v.verdict])} (${v.score}/100)${v.reasons.find((x) => !x.good) ? ` — ${t(v.reasons.find((x) => !x.good).text)}` : ""}`));
+      if (r.honesty) L.push(t(r.honesty.text));
+      L.push("");
+    }
+    if (r.gradeIntel) L.push(`${t(PX.grade)}: ${t(r.gradeIntel.advice)}`, "");
+    if (r.questions && r.questions.length) { L.push(t(PX.q) + ":"); r.questions.forEach((q, k) => L.push(`${k + 1}. ${t(q.q)}`)); L.push(""); }
     if (r.critical.length) { L.push(t(AX.crit) + ":"); r.critical.forEach((i) => { L.push(`✖ ${t(i.title)} — ${t(i.why)}`); i.fix.forEach((f) => L.push(`   • ${t(f)}`)); }); L.push(""); }
     if (r.high.length) { L.push(t(AX.high) + ":"); r.high.forEach((i) => { L.push(`! ${t(i.title)} — ${t(i.why)}`); i.fix.forEach((f) => L.push(`   • ${t(f)}`)); }); L.push(""); }
     L.push(t(AX.gaps) + ":", `${t(AX.core)}: ${r.missing.core.join(", ") || "✓"}`, `${t(AX.adv)}: ${r.missing.adv.join(", ") || "✓"}`, `${t(AX.codes)}: ${r.missing.codes.join(", ") || "✓"}`, `${t(AX.creds)}: ${r.missing.creds.join(", ") || "✓"}`, `${t(AX.terms)}: ${r.missing.terms.map(t).join(", ") || "✓"}`, "");
@@ -180,14 +195,18 @@ export function CVReviewScreen({ app }: any) {
       {ok && <>
         <Panel className="p-4">
           <div className="flex items-center gap-4"><ScoreRing value={r.overall} label={t(AX.of100)} tone={r.grade[1]} /><div className="min-w-0 flex-1"><p className="text-[11px] text-ink-3">{t(AX.score)}{src && src.name ? <span dir="auto"> · {src.name}</span> : null}</p><h2 className={`mt-0.5 text-[16px] font-medium leading-snug ${TONE_TXT[r.grade[1]] || ""}`}>{t(r.grade[0])}</h2>
-            <div className="mt-2 flex flex-wrap gap-1.5"><Chip tone={r.critical.length ? "warn" : "verified"} className="h-6 px-2 text-[10.5px]">{r.critical.length ? <CircleX size={11} /> : <CircleCheck size={11} />} {t(AX.nav[0][1])}: <Num>{r.critical.length}</Num></Chip>{r.jd && <Chip tone={r.jd.coverage >= 60 ? "verified" : "warn"} className="h-6 px-2 text-[10.5px]"><Target size={11} /> <Num>{r.jd.coverage}%</Num></Chip>}</div></div></div>
+            <div className="mt-2 flex flex-wrap gap-1.5"><Chip tone={r.critical.length ? "warn" : "verified"} className="h-6 px-2 text-[10.5px]">{r.critical.length ? <CircleX size={11} /> : <CircleCheck size={11} />} {t(AX.nav.find(([id]) => id === "crit")[1])}: <Num>{r.critical.length}</Num></Chip>{r.jd && <Chip tone={r.jd.coverage >= 60 ? "verified" : "warn"} className="h-6 px-2 text-[10.5px]"><Target size={11} /> <Num>{r.jd.coverage}%</Num></Chip>}</div></div></div>
           <ul className="mt-4 space-y-2.5">{r.pillars.map((p) => { const tn = pctTone(p.pct); return <li key={p.id}><div className="flex items-center justify-between gap-2 text-[12.5px]"><span className="text-ink">{t(p.label)}</span><span className="shrink-0 text-[11px] text-ink-3"><Num className={`text-[13px] font-semibold ${TONE_TXT[tn]}`}>{p.pts}</Num> / <Num>{p.max}</Num></span></div><div className="mt-1 h-1.5 rounded-full bg-elevated overflow-hidden"><span className={`block h-full rounded-full ${tn === "good" ? "bg-good" : tn === "accent" ? "bg-accent" : tn === "warn" ? "bg-warn" : "bg-bad"}`} style={{ width: `${p.pct}%`, transition: "width .7s cubic-bezier(.2,.7,.2,1)" }} /></div></li>; })}</ul>
+          <Projection r={r} t={t} ctx={{ profile: app.profile, jd: jdText }} />
           <div className="mt-3 pt-3 border-t border-line flex flex-wrap gap-1.5 text-[10.5px]">{[[AX.pDisc, t(r.profile.discLabel)], [AX.pReads, t(r.profile.detected)], [AX.pYears, r.years ? `≈ ${r.years}` : "—"], [AX.pLevel, t(r.profile.posLabel)], [AX.pLen, `${fmt(r.words)}${r.layout.pages > 1 ? ` · ${r.layout.pages}p` : ""}`]].map(([k, v]: any, i) => <span key={i} className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2"><span className="text-ink-3">{t(k)}:</span> {v}</span>)}</div>
           <label className="mt-3 flex items-center gap-2 text-[12px]"><span className="shrink-0 text-ink-2">{t(AX.pTarget)}</span><select value={r.target} onChange={(e) => setTrack(e.target.value)} aria-label={t(AX.retrack)} className="min-w-0 flex-1 h-10 px-3 rounded-xl bg-canvas border border-line-2 text-[12.5px]">{allowedTracks(r.disc).map((id) => <option key={id} value={id}>{t(trackL2(id, r.disc))}{id === r.detected ? " ✓" : ""}</option>)}</select></label>
         </Panel>
         <nav aria-label={t(AX.det)} className="-mx-4 px-4 flex gap-1.5 overflow-x-auto no-scrollbar">{AX.nav.map(([id, lab]: any) => <button key={id} type="button" onClick={() => go(id)} className="press shrink-0 h-9 px-3 rounded-full bg-surface border border-line text-[12px] text-ink-2 hover:text-ink">{t(lab)}</button>)}</nav>
 
+        <section ref={(el) => { secRefs.current.panel = el; }} data-cv-panel className="scroll-mt-20"><HiringPanelCard r={r} t={t} /></section>
+
         {r.hr && <section ref={(el) => { secRefs.current.hr = el; }} data-cv-hr className="scroll-mt-20"><HrPanel r={r} t={t} /></section>}
+        {r.gradeIntel && <section data-cv-gradecard className="scroll-mt-20"><GradeCard r={r} t={t} /></section>}
 
         <section ref={(el) => { secRefs.current.crit = el; }} className="scroll-mt-20"><Panel className="p-4"><h3 className="text-[14px] font-medium inline-flex items-center gap-1.5"><TriangleAlert size={15} className={r.critical.length ? "text-bad" : "text-good"} /> {t(AX.crit)} <Num className="text-ink-3 text-[12px]">({r.critical.length})</Num></h3><p className="mt-1 text-[11.5px] text-ink-3">{t(AX.critSub)}</p>
           {r.critical.length ? <ul className="mt-3 space-y-2">{r.critical.map((i) => <AuditIssue key={i.id} i={i} t={t} tone="bad" />)}</ul> : <p className="mt-3 p-3 rounded-xl bg-good/10 border border-good/25 text-[12.5px] text-good inline-flex items-center gap-2 w-full"><CircleCheck size={15} /> {t(AX.critNone)}</p>}
@@ -217,6 +236,10 @@ export function CVReviewScreen({ app }: any) {
             <div className="mt-2 flex items-center gap-1.5 flex-wrap">{it.kept && <Chip tone="verified" className="h-5 px-1.5 text-[10px]">{t(AX.kept)}</Chip>}{it.tags.map((tg) => AX.tags[tg] ? <Chip key={tg} className="h-5 px-1.5 text-[10px]">+ {t(AX.tags[tg])}</Chip> : null)}<button type="button" onClick={() => { copyPlain(it.after); app.toast(t(AX.copied)); }} className="press ms-auto h-7 px-2.5 rounded-full bg-elevated text-[11px] text-ink-2 hover:text-ink inline-flex items-center gap-1"><Copy size={11} /> {t(AX.copy)}</button></div></li>)}</ul></div>)}
           {r.strongBullets > 0 && <p className="mt-3 text-[11.5px] text-good inline-flex items-center gap-1.5"><CircleCheck size={13} /> {t(AX.strongN)} <Num>{r.strongBullets}</Num></p>}
         </Panel></section>
+
+        <section ref={(el) => { secRefs.current.draft = el; }} data-cv-draftcard className="scroll-mt-20"><DraftCard r={r} t={t} app={app} copyPlain={copyPlain} Bracketed={Bracketed} /></section>
+
+        <section ref={(el) => { secRefs.current.q = el; }} data-cv-questions className="scroll-mt-20"><QuestionsCard r={r} t={t} /></section>
 
         <section ref={(el) => { secRefs.current.port = el; }} className="scroll-mt-20"><Panel className="p-4"><h3 className="text-[14px] font-medium inline-flex items-center gap-1.5"><Layers size={15} className="text-accent" /> {t(AX.port)}</h3>
           {r.portfolio.projects.length > 0 && <><p className="mt-3 text-[12.5px] font-medium">{t(AX.ready)}</p><ul className="mt-1.5 space-y-2">{r.portfolio.projects.map((p, i) => <li key={i} className="p-3 rounded-xl bg-canvas/60 border border-line"><p dir="auto" className="text-[12.5px] text-ink leading-snug">{p.name}</p><div className="mt-1.5 flex flex-wrap gap-1">{p.known.map((d) => <span key={d} className="inline-flex items-center gap-1 min-h-5 px-1.5 rounded-full bg-good/10 text-good text-[10.5px]"><Check size={10} />{t(DIMS[d])}</span>)}{p.missing.map((d) => <span key={d} className="inline-flex items-center gap-1 min-h-5 px-1.5 rounded-full border border-dashed border-line-3 text-ink-3 text-[10.5px]"><Plus size={10} />{t(DIMS[d])}</span>)}</div></li>)}</ul></>}

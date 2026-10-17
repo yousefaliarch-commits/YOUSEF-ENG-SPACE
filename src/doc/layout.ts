@@ -300,11 +300,64 @@ function draftBand(p: Pager, y: number) {
 }
 
 // ---------------------------------------------------------------------
+//  Letterhead (page 1 of a plain document): the person's name, then their contact lines, closed by the accent rule
+// ---------------------------------------------------------------------
+function letterhead(p: Pager, plain: { name: string; lines: string[] }) {
+  const { m, ops } = p;
+  const f = p.fr;
+  const dir = textDir(p.rtl);
+  let y = f.top;
+  const nameLh = lineMm(TYPE.docTitle, 1.35);
+  const name = clampLines([plain.name], 1, f.width, TYPE.docTitle, m);
+  lines(ops, m, name, f.left, f.width, y, TYPE.docTitle, "ink", dir, "start", nameLh, 0);
+  y += nameLh;
+  const lh = lineMm(TYPE.body, 1.45);
+  plain.lines.filter(Boolean).forEach((t, i) => {
+    const font = i === 0 ? TYPE.h2 : TYPE.caption;
+    const ls = clampLines(wrapText(t, f.width, font, m), 2, f.width, font, m);
+    lines(ops, m, ls, f.left, f.width, y, font, i === 0 ? "accent" : "ink80", dir, "start", lh, 0);
+    y += ls.length * lh;
+  });
+  y += 1.5;
+  rect(ops, f.left, y, f.width, 0.7, { fill: "accent" });
+  return y + 0.7;
+}
+
+// one paragraph or bullet of running text; it breaks across pages line by line
+function para(p: Pager, b: Extract<DocBlock, { k: "para" }>) {
+  const { m } = p;
+  const f = p.fr;
+  const dir = textDir(p.rtl);
+  const font: DocFont = b.strong ? TYPE.cellBold : b.bullet ? TYPE.cell : TYPE.body;
+  const lh = lineMm(font, 1.5);
+  const indent = b.bullet ? 4 : 0;
+  const w = f.width - indent;
+  const ls = wrapText(b.text, w, font, m);
+  p.y += b.strong ? 1.2 : 0.6;
+  // a bold role line keeps its first bullet with it
+  p.need(lh * (b.strong ? 2 : 1));
+  ls.forEach((t, i) => {
+    if (lh > p.room()) p.open(p.o);
+    if (b.bullet && i === 0) {
+      const cx = p.rtl ? f.right - 1.4 : f.left + 1.4;
+      p.ops.push({ op: "rect", x: cx - 0.55, y: p.y + lh / 2 - 0.55, w: 1.1, h: 1.1, fill: "accent" });
+    }
+    lines(p.ops, m, [t], p.fromStart(indent, w), w, p.y, font, b.muted ? "ink60" : "ink", dir, "start", lh, 0);
+    p.y += lh;
+  });
+}
+
+// ---------------------------------------------------------------------
 //  Running header (pages 2+) and the footer (every page)
 // ---------------------------------------------------------------------
 function runningHeader(ops: DrawOp[], o: O, m: DocMeasurer, rtl: boolean, spec: DocSpec) {
   const f = frame(o);
   const dir = textDir(rtl);
+  if (spec.meta.plain) {
+    lines(ops, m, [clampLines([spec.meta.plain.name], 1, f.width / 2, TYPE.label, m)[0]], rtl ? f.right - f.width / 2 : f.left, f.width / 2, f.top, TYPE.label, "ink80", dir, "start", 9, 0);
+    hline(ops, f.left, f.right, f.top + 9, RULE, "rule");
+    return;
+  }
   const third = f.width / 3;
   const shortTitle = clampLines([spec.title.title], 1, third - 2, TYPE.label, m)[0];
   const startX = rtl ? f.right - third : f.left;
@@ -327,8 +380,8 @@ function footer(ops: DrawOp[], o: O, m: DocMeasurer, rtl: boolean, spec: DocSpec
   const cw = 80;
   const creditLeft = rtl ? f.right - mark.w - 1.5 - cw : f.left + mark.w + 1.5;
   ops.push({ op: "text", x: anchorX(creditLeft, cw, dir, "start", 0), y: base, f: TYPE.foot, ink: "ink60", dir, text: credit, align: "start" });
-  const no = `${spec.meta.docNo || L2("مسودة", "Draft")} · Rev ${spec.meta.rev}`;
-  ops.push({ op: "text", x: f.left + f.width / 2, y: base, f: TYPE.foot, ink: "ink60", dir: spec.meta.docNo ? "ltr" : dir, text: no, align: "center" });
+  const no = spec.meta.plain ? spec.meta.docTypeName : `${spec.meta.docNo || L2("مسودة", "Draft")} · Rev ${spec.meta.rev}`;
+  ops.push({ op: "text", x: f.left + f.width / 2, y: base, f: TYPE.foot, ink: "ink60", dir: spec.meta.docNo && !spec.meta.plain ? "ltr" : dir, text: no, align: "center" });
   const pg = L2(`صفحة ${n} من ${of}`, `Page ${n} of ${of}`);
   const endLeft = rtl ? f.left : f.right - 40;
   ops.push({ op: "text", x: anchorX(endLeft, 40, dir, "end", 0), y: base, f: TYPE.foot, ink: "ink60", dir, text: pg, align: "end" });
@@ -854,9 +907,10 @@ export function docLayout(spec: DocSpec, m: DocMeasurer): DocLayoutResult {
   p.o = sections[0].orientation;
   p.firstTop = 0;
   p.open(p.o);
-  let y = titleBlock(p, spec, pageCount);
-  if (spec.revisions.length) y = revisionTable(p, spec.revisions, y + 2);
-  if (spec.meta.status === "draft" || !spec.meta.docNo) y = draftBand(p, y + 1.5);
+  const plain = spec.meta.plain;
+  let y = plain ? letterhead(p, plain) : titleBlock(p, spec, pageCount);
+  if (!plain && spec.revisions.length) y = revisionTable(p, spec.revisions, y + 2);
+  if (!plain && (spec.meta.status === "draft" || !spec.meta.docNo)) y = draftBand(p, y + 1.5);
   p.top = p.firstTop = y + 4;
   p.y = p.top;
 
@@ -899,6 +953,9 @@ export function docLayout(spec: DocSpec, m: DocMeasurer): DocLayoutResult {
         case "photos":
           photos(p, b);
           break;
+        case "para":
+          para(p, b);
+          break;
         case "pageBreak":
           if (!p.atTop()) p.open(p.o);
           break;
@@ -907,7 +964,7 @@ export function docLayout(spec: DocSpec, m: DocMeasurer): DocLayoutResult {
   });
 
   // the full revision history when the title page shows only the latest four
-  if (spec.revisions.length > 4) {
+  if (!plain && spec.revisions.length > 4) {
     p.open(p.o);
     table(p, {
       k: "table", id: "revisions", caption: L2("ملحق المراجعات", "Revision appendix"),
@@ -923,7 +980,7 @@ export function docLayout(spec: DocSpec, m: DocMeasurer): DocLayoutResult {
     });
   }
 
-  colophon(p, spec);
+  if (!plain) colophon(p, spec);
 
   // now the count is known: running headers, footers, «1/N»
   const of = p.pages.length;
