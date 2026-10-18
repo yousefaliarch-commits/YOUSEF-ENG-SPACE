@@ -221,6 +221,12 @@ html[data-vt="lang"]::view-transition-new(root) { animation: vt-lang-in .38s var
 @keyframes theme-swap { from { transform: rotate(-100deg) scale(.4); opacity: 0; } }
 .guide-open { animation: guide-open .32s var(--out) backwards; }
 @keyframes guide-open { from { opacity: 0; transform: translateY(-4px); } }
+/* CV review v25: the reviewer tabs — a sliding thumb (transform only) and the active card easing in */
+.seg-thumb { transition: transform .32s var(--out); will-change: transform; }
+.tab-in { animation: tab-in .28s var(--out) both; }
+@keyframes tab-in { from { opacity: 0; transform: translateY(6px); } }
+details > summary::-webkit-details-marker { display: none; }
+@media (prefers-reduced-motion: reduce) { .seg-thumb { transition: none; } .tab-in { animation: none; } }
 /* the tour: each step's spotlight is a new layer that fades in (opacity — composited); the ring is drawn once and pulses
    twice with opacity only; the card slides with translate3d. No layout property is ever animated. */
 .tour-hole { animation: tour-fade .2s var(--out) backwards; will-change: opacity; }

@@ -8,7 +8,7 @@ import { company } from "../../data/companies";
 import { TRACKS, tracksFor } from "../../domain/taxonomy";
 import { CV_SAMPLE_AR, CV_SAMPLE_EN, CV_SAMPLE_FRESH, DIMS, LEVEL_L, PILLARS, TRACK_EN, auditCV, trackL2 } from "./audit";
 import { extractCV, parseCV, wordsOf } from "./extract";
-import { DraftCard, FlaggedBy, GradeCard, HiringPanelCard, PX, Projection, QuestionsCard } from "./PanelViews";
+import { ActionPlan, DraftCard, ExecutiveSnapshot, FlaggedBy, GradeCard, HiringPanelCard, PX, QuestionsCard } from "./PanelViews";
 import { L2, say, tr } from "../../i18n/i18n";
 import { useCountUp } from "../../lib/helpers";
 import { reduced } from "../../lib/runtime";
@@ -47,8 +47,9 @@ export const AX = {
   reading: L2("جارٍ القراءة والتدقيق…", "Reading and auditing…"), readingSub: L2("كل شيء يحدث على جهازك", "Everything happens on your device"),
   score: L2("التقييم الهندسي لـ ATS", "Engineering ATS score"), of100: L2("من 100", "out of 100"), retrack: L2("دقّق لمسار آخر", "Audit for another track"),
   pDisc: L2("التخصص", "Discipline"), pTarget: L2("المسار المستهدف", "Target track"), pReads: L2("تُقرأ كـ", "Reads as"), pYears: L2("الخبرة", "Experience"), pLevel: L2("المستوى", "Level"), pLen: L2("عدد الكلمات", "Words"),
+  pillars: L2("تفصيل الدرجة حسب المحاور", "Score breakdown by pillar"),
   nav: [
-    ["panel", L2("اللجنة", "Panel")], ["hr", L2("رأي التوظيف", "HR view")], ["crit", L2("العوائق", "Deal-breakers")],
+    ["panel", L2("اللجنة", "Panel")], ["hr", L2("رأي التوظيف", "HR view")], ["crit", L2("خطة الإصلاح", "Action plan")],
     ["gaps", L2("الفجوات", "Gaps")], ["rew", L2("إعادة الكتابة", "Rewrites")], ["draft", L2("المسودة", "Draft")],
     ["q", L2("أسئلة المقابلة", "Interview")], ["port", L2("المشاريع", "Portfolio")], ["det", L2("التفاصيل", "Breakdown")],
   ],
@@ -131,7 +132,7 @@ export function HrPanel({ r, t }: any) {
 export function CVReviewScreen({ app }: any) {
   const t = (x?: any) => say(app, x); const en = app.lang === "en";
   const [phase, setPhase] = useState<any>("idle"); const [src, setSrc] = useState<any>(null); const [err, setErr] = useState<any>(""); const [paste, setPaste] = useState<any>(""); const [showPaste, setShowPaste] = useState(false);
-  const [track, setTrack] = useState<any>(""); const [jd, setJd] = useState<any>(""); const [jobPick, setJobPick] = useState<any>(""); const [showJd, setShowJd] = useState(false); const [showAllKw, setShowAllKw] = useState(false); const [openP, setOpenP] = useState<any>(null);
+  const [track, setTrack] = useState<any>(""); const [jd, setJd] = useState<any>(""); const [jobPick, setJobPick] = useState<any>(""); const [showJd, setShowJd] = useState(false); const [showAllKw, setShowAllKw] = useState(false); const [openP, setOpenP] = useState<any>(null); const [actOpen, setActOpen] = useState<any>(null);
   const inputRef = useRef<any>(null); const secRefs = useRef<any>({}); const rootRef = useRef<any>(null);
   // a new report (or a new CV) opens at its top, not at the scroll position of the intake form
   useEffect(() => { const sc = rootRef.current && rootRef.current.closest(".scroll-area"); if (sc) sc.scrollTop = 0; }, [phase, src]);
@@ -144,6 +145,8 @@ export function CVReviewScreen({ app }: any) {
   const reset = () => { setPhase("idle"); setSrc(null); setTrack(""); };
   const go = (id?: any) => { const el = secRefs.current[id]; if (el) { try { el.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" }); } catch (e) { el.scrollIntoView(); } } };
   const r = phase === "done" ? result : null; const ok = r && !r.empty && !r.error;
+  // a new report opens its most urgent action group
+  useEffect(() => { if (ok) setActOpen(r.critical.length ? "critical" : r.high.length ? "high" : "rec"); }, [result]);
   const copyReport = () => {
     if (!ok) return; const L: any = [];
     L.push(`${t(AX.title)} — EngSpace · ${r.overall}/100 · ${t(r.grade[0])}`, `${t(r.profile.discLabel)} · ${t(r.profile.target)} · ${t(r.profile.posLabel)}`, "");
@@ -194,24 +197,22 @@ export function CVReviewScreen({ app }: any) {
       </>}
       {ok && <>
         <Panel className="p-4">
-          <div className="flex items-center gap-4"><ScoreRing value={r.overall} label={t(AX.of100)} tone={r.grade[1]} /><div className="min-w-0 flex-1"><p className="text-[11px] text-ink-3">{t(AX.score)}{src && src.name ? <span dir="auto"> · {src.name}</span> : null}</p><h2 className={`mt-0.5 text-[16px] font-medium leading-snug ${TONE_TXT[r.grade[1]] || ""}`}>{t(r.grade[0])}</h2>
-            <div className="mt-2 flex flex-wrap gap-1.5"><Chip tone={r.critical.length ? "warn" : "verified"} className="h-6 px-2 text-[10.5px]">{r.critical.length ? <CircleX size={11} /> : <CircleCheck size={11} />} {t(AX.nav.find(([id]) => id === "crit")[1])}: <Num>{r.critical.length}</Num></Chip>{r.jd && <Chip tone={r.jd.coverage >= 60 ? "verified" : "warn"} className="h-6 px-2 text-[10.5px]"><Target size={11} /> <Num>{r.jd.coverage}%</Num></Chip>}</div></div></div>
-          <ul className="mt-4 space-y-2.5">{r.pillars.map((p) => { const tn = pctTone(p.pct); return <li key={p.id}><div className="flex items-center justify-between gap-2 text-[12.5px]"><span className="text-ink">{t(p.label)}</span><span className="shrink-0 text-[11px] text-ink-3"><Num className={`text-[13px] font-semibold ${TONE_TXT[tn]}`}>{p.pts}</Num> / <Num>{p.max}</Num></span></div><div className="mt-1 h-1.5 rounded-full bg-elevated overflow-hidden"><span className={`block h-full rounded-full ${tn === "good" ? "bg-good" : tn === "accent" ? "bg-accent" : tn === "warn" ? "bg-warn" : "bg-bad"}`} style={{ width: `${p.pct}%`, transition: "width .7s cubic-bezier(.2,.7,.2,1)" }} /></div></li>; })}</ul>
-          <Projection r={r} t={t} ctx={{ profile: app.profile, jd: jdText }} />
+          <ExecutiveSnapshot r={r} t={t} ctx={{ profile: app.profile, jd: jdText }} srcName={src && src.name} onFix={(g: any) => { setActOpen(g === "rec" ? "rec" : g); go("crit"); }} />
+          <details className="mt-3 pt-3 border-t border-line group" data-cv-pillars>
+            <summary className="press min-h-11 flex items-center justify-between gap-2 cursor-pointer list-none text-[12.5px] font-medium">{t(AX.pillars)}<ChevronDown size={15} className="shrink-0 text-ink-3 transition-transform duration-300 group-open:rotate-180" /></summary>
+            <ul className="guide-open mt-1 space-y-2.5">{r.pillars.map((p) => { const tn = pctTone(p.pct); return <li key={p.id}><div className="flex items-center justify-between gap-2 text-[12.5px]"><span className="text-ink">{t(p.label)}</span><span className="shrink-0 text-[11px] text-ink-3"><Num className={`text-[13px] font-semibold ${TONE_TXT[tn]}`}>{p.pts}</Num> / <Num>{p.max}</Num></span></div><div className="mt-1 h-1.5 rounded-full bg-elevated overflow-hidden"><span className={`block h-full rounded-full ${tn === "good" ? "bg-good" : tn === "accent" ? "bg-accent" : tn === "warn" ? "bg-warn" : "bg-bad"}`} style={{ width: `${p.pct}%`, transition: "width .7s cubic-bezier(.2,.7,.2,1)" }} /></div></li>; })}</ul>
+          </details>
           <div className="mt-3 pt-3 border-t border-line flex flex-wrap gap-1.5 text-[10.5px]">{[[AX.pDisc, t(r.profile.discLabel)], [AX.pReads, t(r.profile.detected)], [AX.pYears, r.years ? `≈ ${r.years}` : "—"], [AX.pLevel, t(r.profile.posLabel)], [AX.pLen, `${fmt(r.words)}${r.layout.pages > 1 ? ` · ${r.layout.pages}p` : ""}`]].map(([k, v]: any, i) => <span key={i} className="inline-flex items-center gap-1 min-h-6 px-2 rounded-full bg-elevated text-ink-2"><span className="text-ink-3">{t(k)}:</span> {v}</span>)}</div>
           <label className="mt-3 flex items-center gap-2 text-[12px]"><span className="shrink-0 text-ink-2">{t(AX.pTarget)}</span><select value={r.target} onChange={(e) => setTrack(e.target.value)} aria-label={t(AX.retrack)} className="min-w-0 flex-1 h-10 px-3 rounded-xl bg-canvas border border-line-2 text-[12.5px]">{allowedTracks(r.disc).map((id) => <option key={id} value={id}>{t(trackL2(id, r.disc))}{id === r.detected ? " ✓" : ""}</option>)}</select></label>
         </Panel>
-        <nav aria-label={t(AX.det)} className="-mx-4 px-4 flex gap-1.5 overflow-x-auto no-scrollbar">{AX.nav.map(([id, lab]: any) => <button key={id} type="button" onClick={() => go(id)} className="press shrink-0 h-9 px-3 rounded-full bg-surface border border-line text-[12px] text-ink-2 hover:text-ink">{t(lab)}</button>)}</nav>
+        <nav aria-label={t(AX.det)} className="-mx-4 px-4 flex gap-1.5 overflow-x-auto no-scrollbar">{AX.nav.map(([id, lab]: any) => <button key={id} type="button" onClick={() => go(id)} className="press shrink-0 h-11 px-4 rounded-full bg-surface border border-line text-[12.5px] text-ink-2 hover:text-ink">{t(lab)}</button>)}</nav>
 
-        <section ref={(el) => { secRefs.current.panel = el; }} data-cv-panel className="scroll-mt-20"><HiringPanelCard r={r} t={t} /></section>
+        <section ref={(el) => { secRefs.current.panel = el; }} data-cv-panel className="scroll-mt-20"><HiringPanelCard r={r} t={t} rtl={app.lang !== "en"} /></section>
 
         {r.hr && <section ref={(el) => { secRefs.current.hr = el; }} data-cv-hr className="scroll-mt-20"><HrPanel r={r} t={t} /></section>}
         {r.gradeIntel && <section data-cv-gradecard className="scroll-mt-20"><GradeCard r={r} t={t} /></section>}
 
-        <section ref={(el) => { secRefs.current.crit = el; }} className="scroll-mt-20"><Panel className="p-4"><h3 className="text-[14px] font-medium inline-flex items-center gap-1.5"><TriangleAlert size={15} className={r.critical.length ? "text-bad" : "text-good"} /> {t(AX.crit)} <Num className="text-ink-3 text-[12px]">({r.critical.length})</Num></h3><p className="mt-1 text-[11.5px] text-ink-3">{t(AX.critSub)}</p>
-          {r.critical.length ? <ul className="mt-3 space-y-2">{r.critical.map((i) => <AuditIssue key={i.id} i={i} t={t} tone="bad" />)}</ul> : <p className="mt-3 p-3 rounded-xl bg-good/10 border border-good/25 text-[12.5px] text-good inline-flex items-center gap-2 w-full"><CircleCheck size={15} /> {t(AX.critNone)}</p>}
-          {r.high.length > 0 && <><p className="mt-4 text-[12.5px] font-medium">{t(AX.high)} <Num className="text-ink-3">({r.high.length})</Num></p><ul className="mt-2 space-y-2">{r.high.map((i) => <AuditIssue key={i.id} i={i} t={t} tone="warn" />)}</ul></>}
-        </Panel></section>
+        <section ref={(el) => { secRefs.current.crit = el; }} data-cv-actions className="scroll-mt-20"><ActionPlan r={r} t={t} Issue={AuditIssue} open={actOpen} setOpen={setActOpen} /></section>
 
         <section ref={(el) => { secRefs.current.gaps = el; }} className="scroll-mt-20"><Panel className="p-4"><h3 className="text-[14px] font-medium inline-flex items-center gap-1.5"><Wrench size={15} className="text-accent" /> {t(AX.gaps)}</h3>
           <p className="mt-3 text-[12.5px] font-medium">{t(AX.sw)}</p>

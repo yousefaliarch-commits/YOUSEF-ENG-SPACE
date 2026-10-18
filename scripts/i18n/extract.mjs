@@ -17,7 +17,7 @@ const OUT = join(ROOT, "i18n", "keys.json");
 const AR = /[؀-ۿ]/;
 // Files whose text never goes through the dictionary: the CV audit writes its report bilingually (L2) and its rewrites in the
 // CV's own language; verification copy is written in both languages side by side.
-const NO_DICT = new Set(["features/cv/audit.ts", "features/cv/CVReviewScreen.tsx", "features/cv/panel.ts", "features/cv/rebuild.ts", "features/cv/translate.ts", "features/cv/PanelViews.tsx", "features/verify/verify.tsx", "features/admin/verify-admin.tsx"]);
+const NO_DICT = new Set(["features/cv/audit.ts", "features/cv/CVReviewScreen.tsx", "features/cv/panel.ts", "features/cv/rebuild.ts", "features/cv/translate.ts", "features/cv/docx.ts", "features/cv/PanelViews.tsx", "features/verify/verify.tsx", "features/admin/verify-admin.tsx"]);
 
 const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); return statSync(p).isDirectory() ? walk(p) : /\.tsx?$/.test(f) && !/\.d\.ts$/.test(f) ? [p] : []; });
 const keys = new Map(); // key → {k: kind, parts: Set, n, c, x}

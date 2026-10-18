@@ -336,3 +336,43 @@ describe("document kit: running paragraphs", () => {
     pages.forEach((p) => p.ops.filter((o: any) => o.op === "text").forEach((o: any) => expect(o.y).toBeLessThan(297)));
   });
 });
+
+describe("the rebuilt CV as an editable Word document", () => {
+  it("is a valid, white-label OOXML package: styles, a real bullet list, A4 with 2 cm margins, RTL for Arabic", async () => {
+    const { unzipSync, strFromU8 } = await import("fflate");
+    const { draftDocx } = await import("../src/features/cv/docx");
+    for (const lang of ["en", "ar"] as const) {
+      const d = applyFills(rebuildCV(run(CV_SAMPLE_AR), lang), { "name#0": "Ahmed Mahmoud Abdelrahman" });
+      const zip = unzipSync(draftDocx(d, new Date("2026-10-17T10:00:00Z")));
+      expect(Object.keys(zip).sort()).toEqual(["[Content_Types].xml", "_rels/.rels", "docProps/core.xml", "word/_rels/document.xml.rels", "word/document.xml", "word/numbering.xml", "word/styles.xml"]);
+      const doc = strFromU8(zip["word/document.xml"]);
+      const all = Object.values(zip).map((u) => strFromU8(u)).join("\n");
+      expect(all).not.toMatch(/EngSpace/i);
+      expect(zip["docProps/app.xml"]).toBeUndefined();
+      expect(strFromU8(zip["docProps/core.xml"])).toMatch(/<dc:creator>(Ahmed Mahmoud Abdelrahman|أحمد محمود عبد الرحمن)<\/dc:creator>/);
+      expect(doc).toMatch(/w:pgSz w:w="11906" w:h="16838"/);
+      expect(doc).toMatch(/w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"/);
+      expect((doc.match(/<w:pStyle w:val="Heading1"\/>/g) || []).length).toBe(d.sections.length + (d.summary ? 1 : 0));
+      expect((doc.match(/<w:numId w:val="1"\/>/g) || []).length).toBe(d.sections.flatMap((s) => s.items).filter((it) => it.head).reduce((a, it) => a + it.lines.length, 0));
+      expect(doc.includes("<w:bidi/>")).toBe(lang === "ar");
+      // every line of the draft is in the document, escaped
+      draftText(d).split("\n").filter(Boolean).filter((l) => !l.startsWith("- ")).slice(0, 6).forEach((l) => expect(doc).toContain(l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")));
+    }
+  });
+});
+
+describe("the executive snapshot and action plan", () => {
+  it("the top three fixes are the deal-breakers first, then high priority, then the checks with most points left", async () => {
+    const { actionPlan } = await import("../src/features/cv/PanelViews");
+    const r = run(CV_SAMPLE_EN);
+    const p = actionPlan(r);
+    expect(p.critical.map((f) => f.id)).toEqual(r.critical.map((i: any) => i.id));
+    expect(p.top.map((f) => f.id)).toEqual([...r.critical, ...r.high].slice(0, 3).map((i: any) => i.id));
+    expect(p.recs.every((f) => f.sev === "rec" && f.fix[0])).toBe(true);
+    const gaps = p.recs.map((f) => f.gain || 0);
+    expect(gaps.every((g) => g >= 0)).toBe(true);
+    // a CV with no issues still gets three recommendations to act on
+    const strong = actionPlan(run(CV_SAMPLE_FRESH));
+    expect(strong.top.length).toBe(Math.min(3, strong.critical.length + strong.high.length + strong.recs.length));
+  });
+});
