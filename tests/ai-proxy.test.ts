@@ -17,7 +17,7 @@ function fakeDb(o: { user?: boolean; take?: any; salary?: any } = {}) {
       user: async (jwt: string) => (o.user === false || !jwt ? null : { id: "u-1" }),
       rpc: async (fn: string, args: any) => {
         calls.push({ fn, args });
-        if (fn === "ai_take") return { data: o.take ?? { ok: true, remaining: 24, limit: 25, model: "gemini-3.8-flash", model_light: "gemini-3.8-flash" }, error: null };
+        if (fn === "ai_take") return { data: o.take ?? { ok: true, remaining: 24, limit: 25, model: "gemini-3.5-flash-lite", model_light: "gemini-3.5-flash-lite" }, error: null };
         return { data: null, error: null };
       },
       rpcAs: async (jwt: string, fn: string, args: any) => {
@@ -148,6 +148,38 @@ describe("ai pieces", () => {
     const g2 = fakeGemini(sseOf({ ...part("تمام"), candidates: [{ content: { parts: [{ text: "تمام" }] }, finishReason: "STOP" }] }));
     await (await handle(post({ feature: "assistant", messages: [{ role: "user", text: "سؤال" }], context: { noMoney: "yes", discipline: "civil" } }), { db: eng.db, key: KEY, fetch: g2.f })).text();
     expect(lastCtx(g2)).toEqual({ discipline: "civil" });
+  });
+
+  it("a busy or over-quota model hands over to the next fast model; the member sees the answer, nothing is refunded", async () => {
+    const { db, calls } = fakeDb();
+    const seen: string[] = [];
+    const ok = sseOf({ ...part("تمام"), candidates: [{ content: { parts: [{ text: "تمام" }] }, finishReason: "STOP" }] });
+    const f = async (url: string) => {
+      seen.push(url.split("/models/")[1].split(":")[0]);
+      if (seen.length === 1) return new Response("{}", { status: 429 });
+      if (seen.length === 2) return new Response("{}", { status: 503 });
+      return new Response(new ReadableStream({ start(c) { c.enqueue(new TextEncoder().encode(ok)); c.close(); } }), { status: 200 });
+    };
+    const r = await handle(post({ feature: "assistant", messages: [{ role: "user", text: "سؤال" }] }), { db, key: KEY, fetch: f as any });
+    const ev = await events(r);
+    expect(seen).toEqual(["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-3.1-flash-lite"]);
+    expect(ev.filter((e) => e.t === "d").map((e) => e.x).join("")).toBe("تمام");
+    expect(calls.some((c) => c.fn === "ai_refund")).toBe(false);
+  });
+
+  it("every model busy: one «busy» answer and the unit given back; a 400 is never retried", async () => {
+    const busy = fakeDb();
+    let n = 0;
+    const r1 = await handle(post({ feature: "assistant", messages: [{ role: "user", text: "سؤال" }] }), { db: busy.db, key: KEY, fetch: (async () => { n++; return new Response("{}", { status: 503 }); }) as any });
+    expect(r1.status).toBe(503);
+    expect((await r1.json()).error).toBe("busy");
+    expect(n).toBe(3);
+    expect(busy.calls.filter((c) => c.fn === "ai_refund")).toHaveLength(1);
+    const bad = fakeDb();
+    let m = 0;
+    const r2 = await handle(post({ feature: "assistant", messages: [{ role: "user", text: "سؤال" }] }), { db: bad.db, key: KEY, fetch: (async () => { m++; return new Response("{}", { status: 400 }); }) as any });
+    expect((await r2.json()).error).toBe("bad_request");
+    expect(m).toBe(1);
   });
 
   it("scrub removes e-mails, Egyptian / Gulf phones and national IDs", () => {

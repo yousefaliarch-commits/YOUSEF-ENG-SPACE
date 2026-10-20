@@ -23,7 +23,12 @@ app (any screen) ──ask()/askJson()──▶ ai-chat Edge Function ──▶ 
 - **Allowance**: 25 / Cairo day per member across all features (`private.ai_config.daily_limit`, admins change it with
   `admin_ai_set`); `ai_quota()` for the chip; `admin_ai_usage(days)` gives staff aggregates only (never who asked what).
 - **Usage logging**: `private.ai_usage` (account, day, feature, n, tokens) — no text, ever. `ai_rate()` stores 👍 / 👎 per feature.
-- **Model**: `gemini-3.8-flash` (config `model`, `model_light`). Thinking levels `low` / `medium` only — `minimal` is refused (400).
+- **Models** (config `model`, `model_light`; migration 27): `gemini-3.5-flash-lite`. Measured on the live key: first word ≈ 0.5 s,
+  an assistant answer ≈ 2 s, a full CV review ≈ 8.5 s with the same rubric output — `gemini-3.8-flash` took ≈ 38 s to its first word
+  and hit its per-minute quota (429) / «high demand» (503). When the configured model answers 429 / 5xx before any text, the proxy
+  tries `FALLBACK_MODELS` in order (`gemini-flash-lite-latest`, then `gemini-3.1-flash-lite`) — each model has its own per-minute
+  quota at Google; a 400 is never retried. Thinking levels `low` / `medium` only — `minimal` is refused by some models (400).
+  For heavy real use, turn on billing for the key's Google Cloud project (the free tier's per-minute limits are low).
 - **Dev / e2e**: `window.__engspaceAi = { fake: (req) => string | {error}, delay?, remaining? }` replaces the network, only in
   `import.meta.env.DEV` / mode `test`. Every AI e2e test drives it (`e2e/assistant.spec.ts`, `e2e/ai-tools.spec.ts`).
 
