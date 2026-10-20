@@ -434,3 +434,7 @@ verify_jwt = false
 # members call it with their JWT (checked inside the function); the media janitor calls it with a secret header
 [functions.upload-media]
 verify_jwt = false
+
+# members call it with their JWT (checked inside the function, so a bad token gets the bilingual refusal)
+[functions.ai-chat]
+verify_jwt = false
