@@ -83,7 +83,10 @@ export function actionPlan(r: any): { critical: Fix[]; high: Fix[]; recs: Fix[];
     .flatMap((p: any) => p.checks.filter((c: any) => c.status !== "pass" && c.fix).map((c: any) => ({ p, c })))
     .sort((a: any, b: any) => (b.c.max - b.c.pts) - (a.c.max - a.c.pts))
     .map(({ p, c }: any) => ({ id: `chk:${p.id}.${c.id}`, sev: "rec" as const, title: c.label, why: c.detail, fix: [c.fix], gain: Math.min(c.max - c.pts, proj.get(p.id) || 0) }));
-  const top = [...critical, ...high, ...recs].slice(0, 3);
+  // the AI panel names its own top three; the device ranks deal-breakers, then high priority, then the checks with most points left
+  const top = r.aiTop && r.aiTop.length
+    ? r.aiTop.map((x: any, i: number) => ({ id: `ai-top-${i}`, sev: x.severity, title: { ar: x.issue, en: x.issue }, why: { ar: x.fix, en: x.fix }, fix: [{ ar: x.fix, en: x.fix }], by: [x.reviewer] }))
+    : [...critical, ...high, ...recs].slice(0, 3);
   return { critical, high, recs, top };
 }
 
@@ -132,7 +135,9 @@ export function DualRing({ now, projected, tone, size = 116, label }: any) {
 // the top of the report: status, now → projected, the screen before → after, and the three fixes worth doing first
 export function ExecutiveSnapshot({ r, t, ctx, srcName, onFix }: any) {
   const p = r.projection;
-  const rs = useMemo(() => rescreen(r, ctx), [r]);
+  const rs0 = useMemo(() => rescreen(r, ctx), [r]);
+  const aiScreen = r.ai && r.panel ? r.panel.find((v: any) => v.id === "screen") : null;
+  const rs = aiScreen ? { ...rs0, before: aiScreen.verdict } : rs0;
   const plan = useMemo(() => actionPlan(r), [r]);
   return (
     <div data-cv-snapshot>
@@ -313,7 +318,8 @@ export function QuestionsCard({ r, t }: any) {
 export function DraftCard({ r, t, app, copyPlain, Bracketed }: any) {
   // English by default (Egyptian and Gulf corporate convention); Arabic on request
   const [lang, setLang] = useState<"en" | "ar">("en");
-  const base = useMemo(() => rebuildCV(r, lang), [r, lang]);
+  // the AI's rebuilt CV when there is one (already guarded against invented figures), else the device's
+  const base = useMemo(() => (r.aiData && r.aiData.drafts && r.aiData.drafts[lang]) || rebuildCV(r, lang), [r, lang]);
   const [fills, setFills] = useState<Record<string, Record<string, string>>>({ en: {}, ar: {} });
   const d = useMemo(() => applyFills(base, fills[lang] || {}), [base, fills, lang]);
   const slots = useMemo(() => slotsOf(base), [base]);

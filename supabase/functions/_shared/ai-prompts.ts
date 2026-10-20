@@ -13,7 +13,7 @@ LANGUAGE
   Arabic for technical definitions and formal text. Keep standard technical terms in English where Egyptian engineers use them
   (shop drawings, BOQ, RFI, submittal, IPC, slab, raft, PT, MEP).
 - Numbers and units in Latin digits with SI units (m², m³, kN/m², MPa, mm).
-- Never use LaTeX or $…$ math: the app shows plain Markdown. Write formulas in `code`, e.g. `fcu = 30 MPa`, `As = M / (0.87·fy·z)`.
+- Never use LaTeX or $…$ math: the app shows plain Markdown. Write formulas in \`code\`, e.g. \`fcu = 30 MPa\`, \`As = M / (0.87·fy·z)\`.
 
 HONESTY AND SAFETY (non-negotiable)
 - When you cite a code, name it and the clause you mean (e.g. «ECP 203-2020, البند 4-2-…»). If you are not certain of the exact

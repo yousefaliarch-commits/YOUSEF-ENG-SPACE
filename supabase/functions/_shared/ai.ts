@@ -47,9 +47,9 @@ export function validate(body: any): { ok: true; req: AiRequest } | { ok: false;
 // defence in depth: the app already strips identifiers (src/services/ai-redact.ts); the proxy strips what still looks like one
 const EMAIL = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
 const NATIONAL_ID = /\b[23]\d{13}\b/g;
-const PHONE = /(?:\+|00)?(?:20|966|971|965|974|973|968)?[\s-]?\(?0?1[0125]\)?[\s-]?\d{3,4}[\s-]?\d{4}\b|(?:\+|00)9\d{2}[\s-]?\d{1,2}[\s-]?\d{3}[\s-]?\d{4}\b/g;
+const PHONE = /(?:\+|00)\d[\d\s()-]{7,16}\d|(?<![\d/.])0\d[\d\s()-]{7,13}\d(?![\d/])/g;
 export function scrub(text: string): string {
-  return String(text || "").replace(EMAIL, "{{EMAIL}}").replace(NATIONAL_ID, "{{NATIONAL_ID}}").replace(PHONE, "{{PHONE}}");
+  return String(text || "").replace(EMAIL, "{{EMAIL}}").replace(NATIONAL_ID, "{{NATIONAL_ID}}").replace(PHONE, (m) => (m.replace(/\D/g, "").length >= 9 ? "{{PHONE}}" : m));
 }
 
 // salary questions: only aggregate keys may travel; the company breakdown and anything individual are dropped
