@@ -10,6 +10,7 @@ import { fmtNum, iso } from "../../../doc/text";
 import type { ToolDoc } from "../../../data/tool-docs";
 import { AreaField, Card, Check, Grid2, Note, NumField, Pick, ResultHero, RowCards, TextField } from "../../../ui/kit";
 import { numInputParse } from "../../../lib/num-input";
+import { AiFillCard, str, strs } from "../../ai/AiFill";
 import type { ToolModule } from "../module";
 import { buildSpec } from "../spec";
 
@@ -31,7 +32,24 @@ const TOPICS: { id: string; name: string; points: string[] }[] = [
 const PPE_LABEL: Record<PpeItem, string> = { helmet: "خوذة", shoes: "حذاء", vest: "سترة", gloves: "جوانتي", glasses: "نظارة", harness: "حزام" };
 
 type Person = { name: string; trade: string; company: string; badge: string; ppe: Partial<Record<PpeItem, boolean>>; needsHarness: boolean; action: "" | "issued" | "sentOff" | "other" };
-type Body = { start: string; duration: string; zone: string; presenter: string; topic: string; hazards: string; attendees: Person[] };
+// `ai`: a topic written by «املأ بالمهندس الذكي» for today's own activity (topic id "ai")
+type AiTopic = { name: string; points: string[]; ppe: string[]; emergency: string[]; key: string };
+type Body = { start: string; duration: string; zone: string; presenter: string; topic: string; hazards: string; attendees: Person[]; ai?: AiTopic };
+
+const topicOf = (b: Body) => (b.topic === "ai" && b.ai ? { id: "ai", name: b.ai.name, points: b.ai.points } : TOPICS.find((x) => x.id === b.topic) || TOPICS[0]);
+
+export function toolboxFromAi(b: Body, d: any): Body {
+  const points = [...strs(d && d.precautions, 6, 200)];
+  const name = str(d && d.topic, 120) || str(d && d.activity, 120);
+  if (!name || !points.length) return b;
+  const hazards = strs(d && d.hazards, 10, 200);
+  return {
+    ...b,
+    topic: "ai",
+    ai: { name, points, ppe: strs(d && d.ppe, 10, 80), emergency: strs(d && d.emergency, 6, 200), key: str(d && d.keyMessage, 240) },
+    hazards: [str(d && d.activity, 300), hazards.length ? `المخاطر: ${hazards.join("، ")}` : ""].filter(Boolean).join(" — ") || b.hazards,
+  };
+}
 
 const blank = (): Body => ({ start: "07:00", duration: "15", zone: "", presenter: "", topic: "heat", hazards: "", attendees: [] });
 
@@ -46,13 +64,29 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
   const ro = ctx.readOnly;
   const put = (p: Partial<Body>) => !ro && set({ ...b, ...p });
   const s = tbtSummary({ attendees: b.attendees as TbtAttendee[], durationMin: numInputParse(b.duration) ?? 15, presenter: b.presenter, startIso: "1970-01-01T00:00:00Z" }, new Date().toISOString());
-  const topic = TOPICS.find((x) => x.id === b.topic) || TOPICS[0];
+  const topic = topicOf(b);
+  const items = TOPICS.map((x) => [x.id, x.name] as [string, string]);
+  if (b.ai) items.unshift(["ai", `✨ ${b.ai.name}`]);
   return (
     <div className="space-y-3">
+      <AiFillCard
+        app={ctx.app}
+        form="toolbox"
+        disabled={ro}
+        project={ctx.project ? { name: ctx.project.name } : null}
+        placeholder={{ ar: "مثال: النهارده صب سقف الدور الرابع بالمضخة، وفيه شغل على الحافة وتركيب سقالات…", en: "e.g. today we pump the fourth-floor slab, with work at the edge and scaffold erection…" }}
+        onFill={(d) => {
+          const next = toolboxFromAi(b, d);
+          if (ctx.fill) ctx.fill(next);
+          else set(next);
+        }}
+      />
       <ResultHero label="الحضور" value={String(s.n)} unit="فرد" sub={`${fmtNum(s.manHours, 2)} ساعة · المهمات ${s.ppePct == null ? "—" : fmtNum(s.ppePct, 0) + " %"}`} tone={s.missingNoAction.length || s.dupBadges.length ? "bad" : "accent"} />
       <Card title="الموضوع">
-        <Pick items={TOPICS.map((x) => [x.id, x.name] as [string, string])} value={b.topic} onChange={(topic) => put({ topic })} />
-        <ul className="mt-2 space-y-1 text-[13px] list-disc ps-5">{topic.points.map((p) => <li key={p}>{p}</li>)}</ul>
+        <Pick items={items} value={b.topic} onChange={(topic) => put({ topic })} />
+        <ul dir="auto" className="mt-2 space-y-1 text-[13px] list-disc ps-5">{topic.points.map((p) => <li key={p}>{p}</li>)}</ul>
+        {b.topic === "ai" && b.ai && b.ai.ppe.length > 0 && <p dir="auto" className="mt-2 text-[12px] text-ink-2">مهمات الوقاية: {b.ai.ppe.join("، ")}</p>}
+        {b.topic === "ai" && b.ai && b.ai.key && <p dir="auto" className="mt-1 text-[12.5px] font-medium">«{b.ai.key}»</p>}
       </Card>
       <Card title="البيانات">
         <Grid2>
@@ -104,7 +138,8 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
 function build(doc: ToolDoc<Body>, project: any) {
   const b = doc.body;
   const s = summary(doc);
-  const topic = TOPICS.find((x) => x.id === b.topic) || TOPICS[0];
+  const topic = topicOf(b);
+  const extra = b.topic === "ai" && b.ai ? b.ai : null;
   const actionWord = { issued: "سُلّمت", sentOff: "أُبعد", other: "أخرى", "": "" } as const;
   const blocks: DocBlock[] = [
     { k: "kv", cols: 3, rows: [
@@ -115,7 +150,10 @@ function build(doc: ToolDoc<Body>, project: any) {
       { label: "الحضور", value: String(s.n) }, { label: "ساعات", value: fmtNum(s.manHours, 2) },
       { label: "المهمات كاملة", value: s.ppePct == null ? "—" : fmtNum(s.ppePct, 1), unit: "%", mark: s.missingNoAction.length ? "fail" : undefined },
     ] },
-    { k: "notes", title: "النقاط الرئيسية", text: topic.points.map((p) => `• ${p}`).join("\n") + (b.hazards ? `\n\nمهام اليوم ومخاطرها: ${b.hazards}` : "") },
+    { k: "notes", title: "النقاط الرئيسية", text: topic.points.map((p) => `• ${p}`).join("\n") + (b.hazards ? `\n\nمهام اليوم ومخاطرها: ${b.hazards}` : "")
+      + (extra && extra.ppe.length ? `\n\nمهمات الوقاية: ${extra.ppe.join("، ")}` : "")
+      + (extra && extra.emergency.length ? `\n\nفي الطوارئ:\n${extra.emergency.map((x) => `• ${x}`).join("\n")}` : "")
+      + (extra && extra.key ? `\n\nالرسالة: «${extra.key}»` : "") },
     {
       k: "table", id: "att", caption: "كشف الحضور والمهمات", grid: true,
       cols: [

@@ -12,6 +12,7 @@ import type { DocBlock } from "../../../doc/model";
 import { fmtNum, iso } from "../../../doc/text";
 import type { ToolDoc } from "../../../data/tool-docs";
 import { AreaField, Card, Check, Checks, Grid2, Note, NumField, Pick, RowCards, Rows, TextField } from "../../../ui/kit";
+import { AiFillCard, str, strs } from "../../ai/AiFill";
 import type { ToolModule } from "../module";
 import { buildSpec } from "../spec";
 
@@ -25,6 +26,9 @@ type Body = {
   calc: Record<string, string>;
   gas: Gas[];
   closeNote: string;
+  // from «املأ بالمهندس الذكي»: the activity's own hazards, precautions and PPE, printed with the permit (the fixed controls
+  // above still need a tick each — the AI never authorises anything)
+  extra?: { hazards: string[]; precautions: string[]; ppe: string[] };
 };
 
 const N = (s: string | undefined) => numInputParse(s || "");
@@ -87,6 +91,22 @@ function status(doc: ToolDoc<Body>) {
   return ptwStatus({ state: b.state, startIso: `${doc.dateIso}T${b.start || "07:00"}:00`, hours: N(b.hours) ?? 8, gasOk: last ? gasOf(last).ok : null }, new Date().toISOString());
 }
 
+const AI_TYPE: Record<string, PType> = { hot: "hot", height: "height", confined: "confined", excavation: "excavation", lifting: "lifting", electrical: "electrical" };
+
+export function permitFromAi(b: Body, d: any): Body {
+  const type = AI_TYPE[str(d && d.type)] || b.type;
+  const hours = Number(d && d.durationHours);
+  return {
+    ...b,
+    type,
+    controls: type === b.type ? b.controls : {},
+    location: str(d && d.location, 200) || b.location,
+    work: str(d && d.description, 1200) || b.work,
+    hours: hours >= 0.5 && hours <= 24 ? String(hours) : b.hours,
+    extra: { hazards: strs(d && d.hazards, 12), precautions: strs(d && d.precautions, 16), ppe: strs(d && d.ppe, 12) },
+  };
+}
+
 function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx: any }) {
   const ro = ctx.readOnly;
   const put = (p: Partial<Body>) => !ro && set({ ...b, ...p });
@@ -99,6 +119,18 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
   const live = b.state === "draft" ? STATE_WORD.draft : STATE_WORD[b.state];
   return (
     <div className="space-y-3">
+      <AiFillCard
+        app={ctx.app}
+        form="permit"
+        disabled={ro || b.state !== "draft"}
+        project={ctx.project ? { name: ctx.project.name } : null}
+        placeholder={{ ar: "مثال: لحام كانات حديد في سقف الدور الثالث بالقرب من خشب الشدات، 4 ساعات…", en: "e.g. welding steel brackets on the third-floor slab near timber formwork, 4 hours…" }}
+        onFill={(d) => {
+          const next = permitFromAi(b, d);
+          if (ctx.fill) ctx.fill(next);
+          else set(next);
+        }}
+      />
       <div className={`p-3 rounded-xl border text-[13px] font-medium ${b.state === "authorised" ? "border-good/40 bg-good/5 text-good" : b.state === "draft" ? "border-warn/40 bg-warn/5 text-warn" : "border-line bg-surface"}`}>{live}</div>
       <Card title="التصريح">
         <div className="space-y-2.5">
@@ -125,6 +157,17 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
           ))}
         </div>
       </Card>
+      {b.extra && (b.extra.hazards.length + b.extra.precautions.length + b.extra.ppe.length > 0) && (
+        <Card title="مخاطر واحتياطات النشاط (المهندس الذكي)">
+          {[["المخاطر", b.extra.hazards], ["الاحتياطات", b.extra.precautions], ["مهمات الوقاية", b.extra.ppe]].map(([t, list]: any) => list.length > 0 && (
+            <div key={t} className="mt-1.5 first:mt-0">
+              <p className="text-[12px] font-medium text-ink-2">{t}</p>
+              <ul dir="auto" className="mt-1 space-y-1 text-[13px] list-disc ps-5">{list.map((x: string, i: number) => <li key={i}>{x}</li>)}</ul>
+            </div>
+          ))}
+          <Note>راجعها وعدّلها بما يناسب الموقع — القائمة الأساسية أعلاه مطلوبة كما هي.</Note>
+        </Card>
+      )}
       {b.type === "excavation" && <Card title="حاسبة الحفر">
         <Grid2>
           <NumField label="العمق" unit="m" value={cv("depth")} onChange={setC("depth")} />
@@ -203,6 +246,11 @@ function build(doc: ToolDoc<Body>, project: any) {
     ] },
     { k: "checks", rows: CONTROLS[b.type].map((x) => ({ label: x, value: b.controls[x] === "y" ? "تم" : b.controls[x] === "n" ? "لم يتم" : b.controls[x] === "na" ? "لا ينطبق" : "—", limit: "مطلوب", clause: "PTW", ok: b.controls[x] === "y" ? true : b.controls[x] === "n" ? false : null })) },
   ];
+  const ex = b.extra;
+  if (ex && ex.hazards.length + ex.precautions.length + ex.ppe.length > 0) {
+    const part = (t: string, list: string[]) => (list.length ? `${t}:\n${list.map((x) => `• ${x}`).join("\n")}` : "");
+    blocks.push({ k: "notes", title: "مخاطر واحتياطات النشاط", text: [part("المخاطر", ex.hazards), part("الاحتياطات", ex.precautions), part("مهمات الوقاية", ex.ppe)].filter(Boolean).join("\n\n") });
+  }
   if (c.rows.length) blocks.push({ k: "kv", cols: 2, rows: c.rows.map(([l, v, u]) => ({ label: l, value: iso(u ? `${v} ${u}` : v) })) });
   if (c.checks.length) blocks.push({ k: "checks", rows: (c.checks as any[]).map((x) => ({ label: x.label, value: x.value, limit: x.limit, clause: x.clause || "OSHA / EN", ok: x.ok })) });
   if (b.gas.length)

@@ -127,6 +127,16 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   Draft numbers must all come from the CV in both languages (`tests/cv-panel.test.ts`). cv/panel.ts, rebuild.ts, translate.ts and PanelViews.tsx are
   NO_DICT in the i18n extractor.
 
+- v0.29.0: **«المهندس الذكي»** (docs/AI.md) — Gemini Flash only through the `ai-chat` Edge Function (key = function secret
+  `GEMINI_API_KEY`, never in the client; prompts / JSON schemas server-side in `_shared/ai-prompts.ts` / `ai-schemas.ts`; bump
+  `PROMPT_VERSION`). Every call: auth → validate → `ai_take` (25 / Cairo day, `private.ai_config`) → SSE → `ai_refund` on an early
+  failure → `ai_tokens` (counts, never text). Client door `src/services/ai-service.ts` (`ask` / `askJson`, quota store, dev fake
+  `window.__engspaceAi`). CV text is redacted on the phone (`ai-redact.ts`) and the on-device rule engine stays the fallback; salary
+  insights get only `salary_explorer` aggregates fetched AS the member (`rpcAs`, `marketOnly`); supervisors' `noMoney` comes from
+  `ai_take`, never the app. New «المساعد» tab (`features/ai/AssistantScreen.tsx`), smart forms (`AiFillCard`; office tools rfi /
+  submittal / custody + toolbox / permit), 💡 tool tips, Word export for every tool doc (`src/doc/docx.ts`). Thinking levels:
+  `low` / `medium` only (`minimal` → 400).
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

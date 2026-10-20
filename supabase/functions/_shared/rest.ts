@@ -19,6 +19,9 @@ export function restClient(url: string, key: string, fetchFn: Fetch = fetch) {
       const r = await fetchFn(`${base}/auth/v1/user`, { headers: { apikey: key, authorization: `Bearer ${jwt}` } });
       if (!r.ok) return null; const u = await r.json().catch(() => null); return u && u.id ? { id: String(u.id) } : null;
     },
+    // the same call as the member (their JWT decides auth.uid() and every access rule), not as the service role
+    rpcAs: async <T = unknown>(jwt: string, fn: string, args: Record<string, unknown>) =>
+      read<T>(await fetchFn(`${base}/rest/v1/rpc/${fn}`, { method: "POST", headers: { apikey: key, authorization: `Bearer ${jwt}`, "content-type": "application/json" }, body: JSON.stringify(args) })),
     rpc: async <T = unknown>(fn: string, args: Record<string, unknown>) =>
       read<T>(await fetchFn(`${base}/rest/v1/rpc/${fn}`, { method: "POST", headers: { ...svc, "content-type": "application/json" }, body: JSON.stringify(args) })),
     upload: async (bucket: string, path: string, bytes: Uint8Array, mime: string, cache: string) =>

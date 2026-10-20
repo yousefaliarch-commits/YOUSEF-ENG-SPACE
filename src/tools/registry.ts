@@ -92,6 +92,22 @@ export const TOOL_REGISTRY: ToolDef[] = [
     roles: FIELD, money: false, surface: "sheet", wave: 1, status: "live",
   },
   // ---- the salary and offer tools: money, unchanged ----
+  // ---- the technical office's paperwork, with «املأ بالمهندس الذكي» (docs/AI.md → smart forms) ----
+  {
+    id: "rfi", pack: "office", name: "طلب استيضاح فني RFI", desc: "السؤال والمراجع والحل المقترح وموعد الرد — جاهز للاستشاري",
+    icon: "FileQuestion", keywords: "استيضاح استفسار سؤال للاستشاري تعارض لوحات rfi request for information query clash",
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["rfi"],
+  },
+  {
+    id: "submittal", pack: "office", name: "اعتماد خامة", desc: "الخامة والمصنّع والخصائص والمرفقات وكود الاستشاري",
+    icon: "PackageCheck", keywords: "اعتماد خامة عينة كتالوج مواد submittal material approval sample datasheet",
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["submittal"],
+  },
+  {
+    id: "custody", pack: "office", name: "محضر تسليم عهدة", desc: "بنود العهدة بالكمية والحالة والرقم — توقيع الطرفين",
+    icon: "Handshake", keywords: "عهدة تسليم استلام معدات أدوات مخزن custody handover equipment store",
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["custody"],
+  },
   { id: "offer", pack: "money", name: "تقييم عرض عمل", desc: "مكانه من السوق بالصافي ورقمك المضاد", icon: "BadgeDollarSign", keywords: "عرض عمل offer", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
   { id: "net", pack: "money", name: "الصافي والإجمالي", desc: "حوّل بين الصافي والإجمالي", icon: "Calculator", keywords: "صافي إجمالي net gross", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
   { id: "compare", pack: "money", name: "مقارن العروض", desc: "عرضان بالقيمة الحقيقية للساعة", icon: "Scale", keywords: "مقارنة عروض compare", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },

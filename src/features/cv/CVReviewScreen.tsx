@@ -8,6 +8,9 @@ import { company } from "../../data/companies";
 import { TRACKS, tracksFor } from "../../domain/taxonomy";
 import { CV_SAMPLE_AR, CV_SAMPLE_EN, CV_SAMPLE_FRESH, DIMS, LEVEL_L, PILLARS, TRACK_EN, auditCV, trackL2 } from "./audit";
 import { extractCV, parseCV, wordsOf } from "./extract";
+import { AiBadge, AiConsentCard, AiErrorCard, AiInsightsCard, AiRunningCard } from "./AiReviewViews";
+import { overlay, reviewWithAi } from "./ai-review";
+import { aiAvailable, refreshQuota } from "../../services/ai-service";
 import { ActionPlan, DraftCard, ExecutiveSnapshot, FlaggedBy, GradeCard, HiringPanelCard, PX, QuestionsCard } from "./PanelViews";
 import { L2, say, tr } from "../../i18n/i18n";
 import { useCountUp } from "../../lib/helpers";
@@ -129,6 +132,8 @@ export function HrPanel({ r, t }: any) {
 }
 
 
+const AIX_RUN = L2("حلّل بالمهندس الذكي", "Analyse with the Smart Engineer");
+
 export function CVReviewScreen({ app }: any) {
   const t = (x?: any) => say(app, x); const en = app.lang === "en";
   const [phase, setPhase] = useState<any>("idle"); const [src, setSrc] = useState<any>(null); const [err, setErr] = useState<any>(""); const [paste, setPaste] = useState<any>(""); const [showPaste, setShowPaste] = useState(false);
@@ -144,9 +149,30 @@ export function CVReviewScreen({ app }: any) {
   const txtMeta = (name?: any) => ({ name, size: 0, layout: { pages: 1, images: 0, columns: false, tables: 0, type: "txt", glyphs: 0 }, lines: null, scanned: false });
   const reset = () => { setPhase("idle"); setSrc(null); setTrack(""); };
   const go = (id?: any) => { const el = secRefs.current[id]; if (el) { try { el.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" }); } catch (e) { el.scrollIntoView(); } } };
-  const r = phase === "done" ? result : null; const ok = r && !r.empty && !r.error;
+  const base = phase === "done" ? result : null; const ok = base && !base.empty && !base.error;
+  // ---- the AI panel (v26): once per CV × track × job ad, after a one-time consent; the device result stays the fallback
+  const aiKey = ok && src ? `${src.name || ""}|${src.text.length}|${base.target}|${(jdText || "").length}` : "";
+  const [aiConsent, setAiConsent] = useState<string>(() => { try { return localStorage.getItem("engspace.ai.cvConsent") || ""; } catch { return ""; } });
+  const [aiRuns, setAiRuns] = useState<Record<string, any>>({});
+  const [aiBusy, setAiBusy] = useState<number>(-1);
+  const [aiErr, setAiErr] = useState<any>(null);
+  const [showDevice, setShowDevice] = useState(false);
+  const aiOn = ok && aiAvailable() && aiConsent === "yes";
+  const consent = (v: string) => { setAiConsent(v); try { localStorage.setItem("engspace.ai.cvConsent", v); } catch { /* per session then */ } };
+  const runAi = async () => {
+    if (!ok || aiBusy >= 0) return;
+    setAiErr(null); setAiBusy(0);
+    const res = await reviewWithAi(base, { uiLang: en ? "en" : "ar", jd: jdText, onProgress: (n) => setAiBusy(n) });
+    setAiBusy(-1);
+    if (res.ok === true) { const ai = res.ai; setAiRuns((m) => ({ ...m, [aiKey]: ai })); setShowDevice(false); refreshQuota(); }
+    else setAiErr(res.error);
+  };
+  useEffect(() => { if (aiOn && aiKey && !aiRuns[aiKey] && aiBusy < 0 && !aiErr) runAi(); }, [aiOn, aiKey]);
+  useEffect(() => { if (aiAvailable()) refreshQuota(); }, []);
+  const aiRes = aiKey ? aiRuns[aiKey] : null;
+  const r = ok && aiRes && !showDevice ? overlay(base, aiRes) : base;
   // a new report opens its most urgent action group
-  useEffect(() => { if (ok) setActOpen(r.critical.length ? "critical" : r.high.length ? "high" : "rec"); }, [result]);
+  useEffect(() => { if (ok) setActOpen(r.critical.length ? "critical" : r.high.length ? "high" : "rec"); }, [result, aiRes, showDevice]);
   const copyReport = () => {
     if (!ok) return; const L: any = [];
     L.push(`${t(AX.title)} — EngSpace · ${r.overall}/100 · ${t(r.grade[0])}`, `${t(r.profile.discLabel)} · ${t(r.profile.target)} · ${t(r.profile.posLabel)}`, "");
@@ -196,6 +222,11 @@ export function CVReviewScreen({ app }: any) {
         <Secondary onClick={reset} className="w-full h-11 press"><RefreshCw size={15} /> {t(AX.again)}</Secondary>
       </>}
       {ok && <>
+        {aiAvailable() && !aiConsent && <AiConsentCard t={t} onYes={() => consent("yes")} onNo={() => consent("no")} />}
+        {aiAvailable() && aiConsent === "no" && !aiRes && <Secondary onClick={() => consent("yes")} className="w-full h-11 press" data-ai-run>{t(AIX_RUN)}</Secondary>}
+        {aiBusy >= 0 && <AiRunningCard t={t} chars={aiBusy} />}
+        {aiErr && aiBusy < 0 && <AiErrorCard t={t} error={aiErr} onRetry={runAi} />}
+        {aiRes && <AiBadge t={t} showDevice={showDevice} onToggle={() => setShowDevice((v) => !v)} />}
         <Panel className="p-4">
           <ExecutiveSnapshot r={r} t={t} ctx={{ profile: app.profile, jd: jdText }} srcName={src && src.name} onFix={(g: any) => { setActOpen(g === "rec" ? "rec" : g); go("crit"); }} />
           <details className="mt-3 pt-3 border-t border-line group" data-cv-pillars>
@@ -211,6 +242,7 @@ export function CVReviewScreen({ app }: any) {
 
         {r.hr && <section ref={(el) => { secRefs.current.hr = el; }} data-cv-hr className="scroll-mt-20"><HrPanel r={r} t={t} /></section>}
         {r.gradeIntel && <section data-cv-gradecard className="scroll-mt-20"><GradeCard r={r} t={t} /></section>}
+        {r.ai && <AiInsightsCard r={r} t={t} />}
 
         <section ref={(el) => { secRefs.current.crit = el; }} data-cv-actions className="scroll-mt-20"><ActionPlan r={r} t={t} Issue={AuditIssue} open={actOpen} setOpen={setActOpen} /></section>
 

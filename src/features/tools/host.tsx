@@ -19,6 +19,7 @@ import { drawPage } from "../../doc/draw";
 import { canvasMeasurer, loadDocFonts, renderDoc } from "../../doc/render";
 import type { DrawPage } from "../../doc/model";
 import { saveOrShare } from "../../lib/report-pdf";
+import { ToolTipCard } from "../ai/ToolTip";
 import { ConfirmDialog, DocPreview, ExportBar, Pick, TextField } from "../../ui/kit";
 import { Empty } from "../../ui/chrome";
 import { Num } from "../../ui/primitives";
@@ -234,6 +235,20 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
       setBusy(null);
     }
   };
+  // the same document as an editable Word file; the writer is loaded only when asked, so the tool chunks stay small
+  const docx = async () => {
+    setBusy("جارٍ إنشاء ملف Word…");
+    try {
+      const { specDocx, DOCX_MIME } = await import("../../doc/docx");
+      const bytes = specDocx(spec());
+      const name = `${(doc.docNo || `${mod.docType}-draft`).replace(/[^\w.-]+/g, "_")}-Rev${doc.rev}.docx`;
+      await saveOrShare(bytes, name, doc.title, DOCX_MIME);
+    } catch {
+      app.toast("تعذّر إنشاء ملف Word");
+    } finally {
+      setBusy(null);
+    }
+  };
   const share = async () => {
     const text = mod.summary(doc);
     try {
@@ -297,9 +312,10 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
             : <button type="button" onClick={revise} className="press shrink-0 min-h-10 px-3.5 rounded-lg bg-surface border border-line-2 text-[12.5px]">مراجعة جديدة</button>}
         </div>
         {doc.v > mod.v && <p className="text-[12px] text-warn">هذا المستند من إصدار أحدث من التطبيق — يُعرض للقراءة فقط. حدّث التطبيق لتعديله.</p>}
-        <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly }} />
+        <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }) }} />
+        {!readOnly && <ToolTipCard app={app} kind={doc.kind} summary={mod.summary(doc)} />}
       </div>
-      <ExportBar busy={busy} onPreview={preview} onPdf={pdf} onShare={share} />
+      <ExportBar busy={busy} onPreview={preview} onPdf={pdf} onDocx={docx} onShare={share} />
       {pages && <DocPreview pages={pages} onClose={() => setPages(null)} draw={(c, p, s) => {
         const land = p.orientation === "landscape";
         c.width = Math.round((land ? 297 : 210) * s);

@@ -16,7 +16,7 @@ console.log("— site supervisors: the community only, no money —");
 ["market", "salaryDetail", "jobs", "reveal", "bands", "review", "contact", "postjob", "dm_co"].forEach((cap) => ok(C.PERMS.supervisor[cap] === 0 && !C.can(sup, cap), `supervisor cannot: ${cap}`));
 ok(C.can(sup, "read") && C.can(sup, "post") && C.can(sup, "dm_peer"), "supervisor can read the community, post, reply and message peers");
 ok(C.moneyAccess(sup) === "none" && C.moneyAccess(hr) === "aggregate" && C.moneyAccess(owner) === "aggregate" && C.moneyAccess(eng) === "full", "money access: supervisor none · HR/owner aggregate · engineer full");
-ok(C.tabsFor(sup).map((t) => t.id).join() === "community,tools,inbox" && C.tabsFor(eng).length === C.TABS.length, "supervisor tabs: community, site tools and messages; engineers keep all six");
+ok(C.tabsFor(sup).map((t) => t.id).join() === "community,ai,tools,inbox" && C.tabsFor(eng).length === C.TABS.length, "supervisor tabs: community, the assistant, site tools and messages; engineers keep all seven");
 const b = C.blockedFor(sup);
 ok(["company", "job", "postjob", "cvreview"].every((x) => b.stack.includes(x)), "company, job, post-a-job and CV-review screens are closed to supervisors");
 ok(["contribute", "review", "methodology", "logo"].every((x) => b.sheets.includes(x)), "salary sharing, company reviews and the tax methodology sheet are closed to supervisors");

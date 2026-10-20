@@ -6,7 +6,7 @@
 // =====================================================================
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, ChevronUp, Copy, Eye, FileDown, Plus, Share2, Trash2, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Copy, Eye, FileDown, FileText, Plus, Share2, Trash2, X } from "lucide-react";
 import { numInputProblem, type NumInputRule } from "../lib/num-input";
 import { FilterChip, Num } from "./primitives";
 import type { DrawPage, TraceStep } from "../doc/model";
@@ -216,13 +216,40 @@ export function RowCards<R>({ rows, onChange, blank, render, summary, addLabel =
 }
 
 // ---- the export bar (bottom of a document screen) ----
-export function ExportBar({ busy, onPreview, onPdf, onShare, note }: { busy?: string | null; onPreview: () => void; onPdf: () => void; onShare?: () => void; note?: string }) {
+// the editable Word copy is a compact labelled button beside the share button: four controls still fit a 360 px phone
+export function ExportBar({
+  busy,
+  onPreview,
+  onPdf,
+  onDocx,
+  onShare,
+  note,
+}: {
+  busy?: string | null;
+  onPreview: () => void;
+  onPdf: () => void;
+  onDocx?: () => void;
+  onShare?: () => void;
+  note?: string;
+}) {
   return (
     <div className="foot sticky bottom-[var(--tabbar-space)] z-[6] mt-auto -mx-4 px-4 pt-2.5 pb-[max(0.75rem,var(--sab))] bg-canvas/[.97] border-t border-line">
       {note && <p className="mb-2 text-[11px] text-ink-3 text-center">{note}</p>}
       <div className="flex gap-2">
         <button type="button" data-tool-preview onClick={onPreview} disabled={!!busy} className="press flex-1 min-h-12 inline-flex items-center justify-center gap-1.5 rounded-xl bg-surface border border-line-2 text-[13.5px]"><Eye size={17} /> معاينة</button>
         <button type="button" data-tool-export onClick={onPdf} disabled={!!busy} className="press flex-[1.4] min-h-12 inline-flex items-center justify-center gap-1.5 rounded-xl btn-primary text-[14px] font-medium"><FileDown size={17} /> {busy || "تقرير PDF"}</button>
+        {onDocx && (
+          <button
+            type="button"
+            data-tool-docx
+            aria-label="ملف Word قابل للتعديل"
+            onClick={onDocx}
+            disabled={!!busy}
+            className="press shrink-0 min-h-12 px-3 inline-flex items-center justify-center gap-1 rounded-xl bg-surface border border-line-2 text-[12.5px]"
+          >
+            <FileText size={16} /> Word
+          </button>
+        )}
         {onShare && <button type="button" aria-label="مشاركة الملخص" onClick={onShare} disabled={!!busy} className="press w-12 min-h-12 grid place-items-center rounded-xl bg-surface border border-line-2"><Share2 size={17} /></button>}
       </div>
     </div>

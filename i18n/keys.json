@@ -1172,8 +1172,8 @@
  },
  "مقبول": {
   "k": "s",
-  "p": "data/checklists.ts,features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
-  "n": 5
+  "p": "data/checklists.ts,features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
+  "n": 6
  },
  "مقبول بملاحظات": {
   "k": "s",
@@ -1187,8 +1187,8 @@
  },
  "إنشائي": {
   "k": "s",
-  "p": "data/checklists.ts,features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx",
-  "n": 6
+  "p": "data/checklists.ts,features/tools/concrete/concrete.tsx,features/tools/office/rfi.tsx,features/tools/rebar/bbs.tsx",
+  "n": 7
  },
  "معماري وتشطيبات": {
   "k": "s",
@@ -1197,8 +1197,8 @@
  },
  "كهرباء": {
   "k": "s",
-  "p": "data/checklists.ts,domain/division.ts,domain/taxonomy.ts,features/tools/elec/cable.tsx,lib/search.ts",
-  "n": 5
+  "p": "data/checklists.ts,domain/division.ts,domain/taxonomy.ts,features/tools/elec/cable.tsx,features/tools/office/rfi.tsx,lib/search.ts",
+  "n": 6
  },
  "ميكانيكا وصحي (MEP)": {
   "k": "s",
@@ -1212,13 +1212,13 @@
  },
  "مكتب فني": {
   "k": "s",
-  "p": "data/checklists.ts,domain/taxonomy.ts,lib/search.ts",
-  "n": 3
+  "p": "data/checklists.ts,domain/taxonomy.ts,features/tools/office/rfi.tsx,features/tools/office/submittal.tsx,lib/search.ts",
+  "n": 5
  },
  "أخرى": {
   "k": "s",
-  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
-  "n": 9
+  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx,features/tools/office/rfi.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
+  "n": 10
  },
  "{0} — نسختي": {
   "k": "t",
@@ -1228,8 +1228,8 @@
  },
  "البنود": {
   "k": "s",
-  "p": "data/checklists.ts,features/qaqc/qaqc.tsx,features/tools/rebar/bbs.tsx",
-  "n": 5
+  "p": "data/checklists.ts,features/qaqc/qaqc.tsx,features/tools/office/custody.tsx,features/tools/rebar/bbs.tsx",
+  "n": 7
  },
  "اكتب عنوان القائمة": {
   "k": "s",
@@ -1253,8 +1253,8 @@
  },
  "الموقع": {
   "k": "s",
-  "p": "data/companies.tsx,features/auth/auth.tsx,features/tools/host.tsx,features/tools/mep/sprinkler.tsx",
-  "n": 5
+  "p": "data/companies.tsx,features/auth/auth.tsx,features/tools/host.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/rfi.tsx",
+  "n": 6
  },
  "تنفيذ، بدلات، ساعات": {
   "k": "s",
@@ -2817,6 +2817,11 @@
   "k": "s",
   "p": "data/geo.ts,domain/notifications.ts,features/admin/AdminView.tsx,features/tabs/tabs.tsx",
   "n": 4
+ },
+ "المساعد": {
+  "k": "s",
+  "p": "data/geo.ts",
+  "n": 1
  },
  "السوق": {
   "k": "s",
@@ -5949,8 +5954,8 @@
  },
  "معماري": {
   "k": "s",
-  "p": "domain/division.ts,domain/taxonomy.ts,lib/search.ts",
-  "n": 3
+  "p": "domain/division.ts,domain/taxonomy.ts,features/tools/office/rfi.tsx,lib/search.ts",
+  "n": 4
  },
  "مهندسة معمارية": {
   "k": "s",
@@ -5969,8 +5974,8 @@
  },
  "ميكانيكا": {
   "k": "s",
-  "p": "domain/division.ts,domain/taxonomy.ts,features/tools/mep/ac-install.tsx,lib/search.ts",
-  "n": 4
+  "p": "domain/division.ts,domain/taxonomy.ts,features/tools/mep/ac-install.tsx,features/tools/office/rfi.tsx,lib/search.ts",
+  "n": 5
  },
  "مهندسة ميكانيكا": {
   "k": "s",
@@ -6337,8 +6342,8 @@
  },
  "الرد": {
   "k": "s",
-  "p": "domain/moderation.ts,features/stack/stack.tsx",
-  "n": 3
+  "p": "domain/moderation.ts,features/stack/stack.tsx,features/tools/office/rfi.tsx",
+  "n": 5
  },
  "التقييم": {
   "k": "s",
@@ -6422,8 +6427,8 @@
  },
  "عادي": {
   "k": "s",
-  "p": "domain/moderation.ts",
-  "n": 1
+  "p": "domain/moderation.ts,features/tools/office/rfi.tsx",
+  "n": 2
  },
  "مهم": {
   "k": "s",
@@ -6432,8 +6437,8 @@
  },
  "عاجل": {
   "k": "s",
-  "p": "domain/moderation.ts",
-  "n": 1
+  "p": "domain/moderation.ts,features/tools/office/rfi.tsx",
+  "n": 2
  },
  "إخفاء المحتوى": {
   "k": "s",
@@ -6472,8 +6477,8 @@
  },
  "يوم": {
   "k": "s",
-  "p": "domain/moderation.ts",
-  "n": 1
+  "p": "domain/moderation.ts,features/tools/office/rfi.tsx",
+  "n": 3
  },
  "يومين": {
   "k": "s",
@@ -8052,8 +8057,8 @@
  },
  "مرجع": {
   "k": "s",
-  "p": "domain/taxonomy.ts",
-  "n": 1
+  "p": "domain/taxonomy.ts,features/tools/office/rfi.tsx",
+  "n": 4
  },
  "تصفّح المجتمع والغرف": {
   "k": "s",
@@ -10927,7 +10932,7 @@
  "،": {
   "k": "s",
   "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/market/raise-tracker.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/site/permit.tsx,features/tools/site/toolbox.tsx,i18n/i18n.ts,lib/helpers.tsx,lib/num-input.ts,ui/feed.tsx",
-  "n": 16
+  "n": 19
  },
  "تنبيه لهجة: {0}": {
   "k": "t",
@@ -11303,8 +11308,8 @@
  },
  "التخصص": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx,features/tools/office/rfi.tsx",
+  "n": 5
  },
  "المحافظة": {
   "k": "s",
@@ -12626,8 +12631,8 @@
  },
  "الحالة": {
   "k": "s",
-  "p": "features/admin/directory-support.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx",
-  "n": 4
+  "p": "features/admin/directory-support.tsx,features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx",
+  "n": 7
  },
  "فريق الدعم": {
   "k": "s",
@@ -14397,8 +14402,8 @@
  },
  "بنية تحتية": {
   "k": "s",
-  "p": "features/cv/extract.ts",
-  "n": 1
+  "p": "features/cv/extract.ts,features/tools/office/rfi.tsx",
+  "n": 2
  },
  "مياه ومحطات": {
   "k": "s",
@@ -15859,8 +15864,8 @@
  },
  "التاريخ": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx,features/tools/concrete/concrete.tsx,features/tools/host.tsx,features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
-  "n": 6
+  "p": "features/qaqc/qaqc.tsx,features/tools/concrete/concrete.tsx,features/tools/host.tsx,features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 7
  },
  "اسم شركة المقاولات": {
   "k": "s",
@@ -17601,8 +17606,8 @@
  },
  "إلى": {
   "k": "x",
-  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/tools/site/diary.tsx,lib/search.ts",
-  "n": 8
+  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/tools/office/rfi.tsx,features/tools/site/diary.tsx,lib/search.ts",
+  "n": 9
  },
  "العرض هناك (صافي)": {
   "k": "s",
@@ -18009,8 +18014,8 @@
  },
  "القيمة": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx",
-  "n": 2
+  "p": "features/sitetools/site-tools.tsx,features/tools/office/submittal.tsx",
+  "n": 4
  },
  "الفدان = 24 قيراطًا ≈ 4,200.83 م² · القيراط = 24 سهمًا ≈ 175.03 م².": {
   "k": "x",
@@ -19546,8 +19551,8 @@
  },
  "الوصف": {
   "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
+  "p": "features/stack/stack.tsx,features/tools/office/custody.tsx",
+  "n": 4
  },
  "التصنيف والتواصل": {
   "k": "s",
@@ -20883,8 +20888,8 @@
  },
  "جديد": {
   "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
+  "p": "features/tabs/tabs.tsx,features/tools/office/custody.tsx",
+  "n": 2
  },
  "الراتب والعروض": {
   "k": "x",
@@ -21050,8 +21055,8 @@
  },
  "البيانات": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
-  "n": 6
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/rfi.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
+  "n": 8
  },
  "العنصر / المنطقة": {
   "k": "s",
@@ -21515,8 +21520,8 @@
  },
  "ملاحظات": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/survey/level-book.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
-  "n": 6
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/custody.tsx,features/tools/office/submittal.tsx,features/tools/survey/level-book.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
+  "n": 14
  },
  "المكعبات والفك والمعالجة": {
   "k": "s",
@@ -22200,6 +22205,16 @@
   "n": 1
  },
  "تعذّر حفظ التقرير أو مشاركته": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "جارٍ إنشاء ملف Word…": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تعذّر إنشاء ملف Word": {
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 1
@@ -23055,6 +23070,451 @@
   "p": "features/tools/mep/sprinkler.tsx",
   "n": 1
  },
+ "جيد": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "يحتاج صيانة": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "مثال: سلّمت لريس النجارين 2 هيلتي بوش جديد، 5 سقالات معدن، و1 ميزان ليزر حالته جيدة رقمه LZ-204، للشغل في البلوك B…": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "بنود العهدة": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 2
+ },
+ "بند": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 7
+ },
+ "إجمالي الكميات {0}": {
+  "k": "t",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1,
+  "x": "fmtNum(totalQty(b), 2)"
+ },
+ "الطرفان": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 2
+ },
+ "المسلِّم": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 3
+ },
+ "صفته": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 4
+ },
+ "المستلِم": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 3
+ },
+ "الغرض / مكان الاستخدام": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 2
+ },
+ "تُرد قبل (اختياري)": {
+  "k": "x",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "عدد": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "الكمية": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx,features/tools/office/submittal.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 15
+ },
+ "الوحدة": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 12
+ },
+ "الرقم التسلسلي / الكود": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 2
+ },
+ "المستلِم مسؤول عن العهدة حتى ردّها أو تسليمها بمحضر. الأسماء محفوظة في حسابك فقط.": {
+  "k": "x",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "الغرض": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
+  "n": 7
+ },
+ "تُرد قبل": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "بنود العهدة · Items": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "الرقم / الكود": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "أقر أنا المستلِم باستلام البنود الموضحة أعلاه بالحالة المبينة، وأتعهد بالمحافظة عليها وردّها عند الطلب.{0}": {
+  "k": "t",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1,
+  "x": "b.remarks.trim() ? `\\n\\nملاحظات: ${b.remarks}` : \"\""
+ },
+ "ملاحظات: {0}": {
+  "k": "t",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1,
+  "x": "b.remarks"
+ },
+ "محضر تسليم عهدة · Custody handover": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "إدارة الموقع": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1
+ },
+ "محضر تسليم عهدة": {
+  "k": "s",
+  "p": "features/tools/office/custody.tsx,tools/registry.ts",
+  "n": 2
+ },
+ "محضر تسليم عهدة · ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1,
+  "x": "doc.docNo || doc.dateIso"
+ },
+ "⁦{0}⁩ بند": {
+  "k": "t",
+  "p": "features/tools/office/custody.tsx",
+  "n": 1,
+  "x": "doc.body.items.length"
+ },
+ "يوقف العمل": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "مثال: منسوب بلاطة الدور الأول في اللوحة الإنشائية S-102 مختلف 15 سم عن المعماري A-201 عند المحور C/4…": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "إلى (الاستشاري / المصمم)": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "الموقع / المحور / الدور": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "الأولوية": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 3
+ },
+ "الاستيضاح": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "السؤال": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "الحل المقترح من المقاول": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "التأثير على المدة / التكلفة": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "الرد مطلوب خلال": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "المراجع (لوحات، بنود مواصفات)": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "المرجع": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "الرد (يملؤه الاستشاري)": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "رد بواسطة": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
+ "الخانات بين [ ] ناقصة — أكملها قبل الإصدار. لا يُرسل للاستشاري إلا ما تكتبه أنت.": {
+  "k": "x",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "تاريخ الطلب": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "الرد مطلوب قبل": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "الاستيضاح · Query": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "المراجع · References": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "الحل المقترح · Proposed solution": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "التأثير · Impact": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "الرد · Reply": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "طلب استيضاح فني · Request for information": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "طلب استيضاح فني": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1
+ },
+ "طلب استيضاح فني · ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1,
+  "x": "doc.docNo || doc.dateIso"
+ },
+ "الموقع: {0}": {
+  "k": "t",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1,
+  "x": "doc.body.location"
+ },
+ "الرد مطلوب قبل ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 1,
+  "x": "dueIso(doc.dateIso, doc.body.days)"
+ },
+ "كتالوج / Datasheet": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "شهادات اختبار": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "عينة": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "شهادة منشأ": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "خطاب الضمان": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "سابقة أعمال": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "مثال: عايز اعتماد بلاط بورسلين 60×60 من شركة ... للممرات في الأدوار المتكررة، حوالي 1200 م²…": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "الخامة": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx,features/tools/site/diary.tsx",
+  "n": 6
+ },
+ "الخامة / البند": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 2
+ },
+ "المصنّع": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 3
+ },
+ "الموديل / الدرجة": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 3
+ },
+ "بلد المنشأ": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 3
+ },
+ "المورّد": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 3
+ },
+ "مكان الاستخدام": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 3
+ },
+ "الكمية التقريبية": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 2
+ },
+ "بند المواصفات": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 3
+ },
+ "الخصائص الفنية": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 2
+ },
+ "خاصية": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 3
+ },
+ "الخاصية": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 3
+ },
+ "المرفقات": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 2
+ },
+ "القيم الفنية من كتالوج المصنّع وشهادات الاختبار فقط — راجع كل خانة بين [ ] قبل الإصدار.": {
+  "k": "x",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "تاريخ التقديم": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "الخصائص الفنية · Technical data": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "القيمة المقدمة": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "المرفقات · Attachments": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "ملاحظات · Remarks": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "قرار الاستشاري · Consultant's action": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "☐ A معتمد ☐ B معتمد بملاحظات ☐ C يُعاد التقديم ☐ D مرفوض الملاحظات:": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "اعتماد خامة · Material approval submittal": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "اعتماد خامة": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx,tools/registry.ts",
+  "n": 2
+ },
+ "اعتماد خامة · ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1,
+  "x": "doc.docNo || doc.dateIso"
+ },
+ "الاستخدام: {0}": {
+  "k": "t",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1,
+  "x": "doc.body.area"
+ },
  "علامة مكررة {0}": {
   "k": "t",
   "p": "features/tools/rebar/bbs.tsx",
@@ -23658,11 +24118,6 @@
   "p": "features/tools/site/diary.tsx",
   "n": 3
  },
- "بند": {
-  "k": "s",
-  "p": "features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 2
- },
  "النشاط": {
   "k": "s",
   "p": "features/tools/site/diary.tsx",
@@ -23672,16 +24127,6 @@
   "k": "s",
   "p": "features/tools/site/diary.tsx",
   "n": 2
- },
- "الكمية": {
-  "k": "s",
-  "p": "features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 11
- },
- "الوحدة": {
-  "k": "s",
-  "p": "features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 9
  },
  "الصب": {
   "k": "s",
@@ -23710,11 +24155,6 @@
   "n": 1
  },
  "معلّق": {
-  "k": "s",
-  "p": "features/tools/site/diary.tsx",
-  "n": 3
- },
- "الخامة": {
   "k": "s",
   "p": "features/tools/site/diary.tsx",
   "n": 3
@@ -23777,11 +24217,6 @@
  "الاسم": {
   "k": "s",
   "p": "features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
-  "n": 6
- },
- "الغرض": {
-  "k": "s",
-  "p": "features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
   "n": 6
  },
  "موضوع التوعية الصباحية": {
@@ -24289,6 +24724,11 @@
   "p": "features/tools/site/permit.tsx",
   "n": 1
  },
+ "مثال: لحام كانات حديد في سقف الدور الثالث بالقرب من خشب الشدات، 4 ساعات…": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
  "التصريح": {
   "k": "s",
   "p": "features/tools/site/permit.tsx",
@@ -24308,6 +24748,31 @@
   "k": "s",
   "p": "features/tools/site/permit.tsx",
   "n": 2
+ },
+ "مخاطر واحتياطات النشاط (المهندس الذكي)": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "المخاطر": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "الاحتياطات": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "مهمات الوقاية": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx,features/tools/site/toolbox.tsx",
+  "n": 3
+ },
+ "راجعها وعدّلها بما يناسب الموقع — القائمة الأساسية أعلاه مطلوبة كما هي.": {
+  "k": "x",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
  },
  "حاسبة الحفر": {
   "k": "s",
@@ -24481,6 +24946,11 @@
   "n": 1
  },
  "لم يتم": {
+  "k": "s",
+  "p": "features/tools/site/permit.tsx",
+  "n": 1
+ },
+ "مخاطر واحتياطات النشاط": {
   "k": "s",
   "p": "features/tools/site/permit.tsx",
   "n": 1
@@ -24682,11 +25152,6 @@
   "p": "features/tools/site/toolbox.tsx",
   "n": 1
  },
- "مهمات الوقاية": {
-  "k": "s",
-  "p": "features/tools/site/toolbox.tsx",
-  "n": 1
- },
  "الخوذة والجزمة والسترة طول الوقت": {
   "k": "s",
   "p": "features/tools/site/toolbox.tsx",
@@ -24792,6 +25257,17 @@
   "p": "features/tools/site/toolbox.tsx",
   "n": 1
  },
+ "المخاطر: {0}": {
+  "k": "t",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "hazards.join(\"، \")"
+ },
+ "مثال: النهارده صب سقف الدور الرابع بالمضخة، وفيه شغل على الحافة وتركيب سقالات…": {
+  "k": "s",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
  "الحضور": {
   "k": "s",
   "p": "features/tools/site/toolbox.tsx",
@@ -24802,6 +25278,17 @@
   "p": "features/tools/site/toolbox.tsx",
   "n": 1,
   "x": "fmtNum(s.manHours, 2) | s.ppePct == null ? \"—\" : fmtNum(s.ppePct, 0) + \" %\""
+ },
+ "مهمات الوقاية:": {
+  "k": "x",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1
+ },
+ "مهمات الوقاية: {0}": {
+  "k": "e",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 2,
+  "x": "b.ai.ppe.join(\"، \")"
  },
  "المقدِّم": {
   "k": "s",
@@ -24910,6 +25397,18 @@
   "p": "features/tools/site/toolbox.tsx",
   "n": 1,
   "x": "b.hazards"
+ },
+ "في الطوارئ: {0}": {
+  "k": "t",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "extra.emergency.map((x) => `• ${x}`).join(\"\\n\")"
+ },
+ "الرسالة: «{0}»": {
+  "k": "t",
+  "p": "features/tools/site/toolbox.tsx",
+  "n": 1,
+  "x": "extra.key"
  },
  "كشف الحضور والمهمات": {
   "k": "s",
@@ -27643,6 +28142,41 @@
   "p": "tools/registry.ts",
   "n": 1
  },
+ "طلب استيضاح فني RFI": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "السؤال والمراجع والحل المقترح وموعد الرد — جاهز للاستشاري": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "استيضاح استفسار سؤال للاستشاري تعارض لوحات rfi request for information query clash": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الخامة والمصنّع والخصائص والمرفقات وكود الاستشاري": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "اعتماد خامة عينة كتالوج مواد submittal material approval sample datasheet": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "بنود العهدة بالكمية والحالة والرقم — توقيع الطرفين": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "عهدة تسليم استلام معدات أدوات مخزن custody handover equipment store": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
  "عرض عمل offer": {
   "k": "s",
   "p": "tools/registry.ts",
@@ -28488,6 +29022,11 @@
   "k": "s",
   "p": "ui/kit.tsx",
   "n": 1
+ },
+ "ملف Word قابل للتعديل": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
  },
  "مشاركة الملخص": {
   "k": "s",

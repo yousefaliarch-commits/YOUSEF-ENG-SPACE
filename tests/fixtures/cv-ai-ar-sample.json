@@ -1,0 +1,191 @@
+{
+  "pillars": [
+    {"id": "software", "pts": 18, "why": "أدوات المكتب الفني الأساسية (Revit وAutoCAD وExcel) مذكورة ومربوطة بمهام حقيقية، لكن ينقص تفصيل استخدام Primavera P6 ومستوى الربط بين البرامج (BIM workflows)."},
+    {"id": "scope", "pts": 23, "why": "أرقام ممتازة من حيث القيمة (120 و40 مليون جنيه)، المساحات (32,000 م²)، والكميات (9,000 م³)، مع وجود نقطة واحدة ضعيفة بصيغة المسؤوليات العامة بحاجة لإعادة صياغة."},
+    {"id": "track", "pts": 14, "why": "مسار المكتب الفني واضح جداً ومدعوم بخلفية موقع واقعية وممتازة كقاعدة للانتقال للمكتب الفني، وسنوات الخبرة متطابقة مع المسميات."},
+    {"id": "codes", "pts": 10, "why": "ذُكر الكود المصري بشكل عام دون تحديد الكود أو تخصيص تطبيقاته (مثل ECP 203)، ودورة PMP غير معتمدة (تحضيري فقط)."},
+    {"id": "ats", "pts": 18, "why": "هيكل قياسي ممتاز وعناوين واضحة وبيانات اتصال مكتملة وموقف التجنيد واضح، مع وجود بعض المهارات الشخصية الحشوية."}
+  ],
+  "projectedScore": 92,
+  "verdict": "سيرة ذاتية متينة ومقنعة لمهندس مكتب فني، تحتاج صياغة أقوى للمهام المبهمة وضبط الأكواد.",
+  "reviewers": [
+    {"id": "screen", "verdict": "pass", "score": 88, "findings": [{"issue": "مهارات شخصية تقليدية تضعف فاعلية قراءة الكلمات المفتاحية", "severity": "rec", "cvLine": "تحمل ضغط العمل · روح الفريق", "fix": "استبدل المهارات الشخصية غير القابلة للقياس بمهارات فنية مثل تسعير المناقصات أو إعداد المطالبات وتفقيط اللوحات."}]},
+    {"id": "manager", "verdict": "pass", "score": 83, "findings": [
+      {"issue": "صيغة مسؤولية إنشائية ضعيفة لا تعكس آلية التنسيق الفعلي والـ RFI", "severity": "high", "cvLine": "مسؤول عن التنسيق بين الموقع والتصميم.", "fix": "حوّلها لصيغة إنجاز فني: 'أدرت التنسيق بين الموقع والمصمم وأصدرت وأغلقت طلبات المعلومات (RFIs) لتجنب التعارضات الإنشائية والمعمارية.'"},
+      {"issue": "ذكر الكود المصري بدون تحديد رقم الكود وتخصصه", "severity": "rec", "cvLine": "الكود المصري", "fix": "حدد الكود صراحة: كود الخرسانة المسلحة ECP 203 واشتراطات التفاصيل الإنشائية."}
+    ]},
+    {"id": "recruiter", "verdict": "pass", "score": 90, "findings": [{"issue": "ذكر PMP كدورة تحضيرية دون الحصول على الشهادة الاحترافية", "severity": "rec", "cvLine": "دورة إدارة المشروعات PMP (تحضيري) · 2024", "fix": "حدد الساعات التدريبية (35 Contact Hours) بدلاً من كلمة تحضيري لإعطائها مصداقية أعلى."}]},
+    {"id": "teammate", "verdict": "pass", "score": 82, "findings": [{"issue": "غياب تفاصيل التعاون مع تخصص الكهروميكانيك (MEP) في البرج الإداري", "severity": "high", "cvLine": "راجعت اللوحات التنفيذية لبرج إداري 32,000 م² وأغلقت 180 ملاحظة استشاري خلال 3 أشهر.", "fix": "أضف بوضوح دورك في التنسيق المعماري/الإنشائي/الكهروميكانيكي (Shop Drawings & MEP Coordination)."}]}
+  ],
+  "top3": [
+    {"issue": "صيغة المسؤولية العامة في التنسيق بين الموقع والمكتب الفني", "severity": "high", "fix": "تحويلها إلى إنجاز يوضح إدارة الـ RFIs وحل تعارضات Shop Drawings والموقع.", "reviewer": "manager"},
+    {"issue": "إغفال التنسيق متكامل التخصصات (MEP / Architecture) في مشروع البرج", "severity": "high", "fix": "توضيح مراجعة وتنسيق اللوحات التنفيذية والتداخلات مع مهندسي الأعمال الكهروميكانيكية.", "reviewer": "teammate"},
+    {"issue": "ذكر أدوات مثل Primavera P6 دون ظهورها في نقاط الخبرة", "severity": "rec", "fix": "إبراز استخدامها في متابعة المستخلصات والبرنامج الزمني لربط التدفقات المالية بالتنفيذ.", "reviewer": "screen"}
+  ],
+  "interviewQuestions": [
+    {"question": "كيف قلّصت زمن مراجعة مستخلصات مقاولي الباطن من 10 أيام إلى 6 أيام عملياً؟", "why": "رقم محدد وممتاز ويحتاج التحقق من أسلوب العمل ونماذج الإكسيل أو الـ Workflow المستخدم.", "howToAnswer": "اشرح الخطوات: عمل شيتات حصر معيارية ومطابقة بنود التعاقد بالـ BOQ مقدماً ومراجعة الدفاتر اليومية أولاً بأول."},
+    {"question": "ما طبيعة الـ 180 ملاحظة التي أغلقتها مع الاستشاري في البرج الإداري وما أكبر تعارض واجهك؟", "why": "قياس عمق فهمك للـ Shop Drawings ومطابقة متطلبات الكود والمواصفات.", "howToAnswer": "اذكر أمثلة واقعية: تعارض مسارات فتحات الـ MEP مع كمرات خرسانية، أو اشتراطات طول التماسك وتكثيف الكانات بالـ ECP 203."},
+    {"question": "كيف ساعدتك خبرتك الميدانية بمشروع الإسكان في مهامك بالمكتب الفني بريدكون؟", "why": "اختبار ترابط المسار المهني والاستفادة من فهم طبيعة التنفيذ في دقة الحصر وتفاصيل اللوحات.", "howToAnswer": "وضّح أن تجربة التنفيذ تجعلك تفهم قابلية اللوحات للبناء (Constructability) ولا تحصر أو تخرج لوحة غير قابلة للتطبيق عملياً."}
+  ],
+  "honestyLine": "السيرة ذاتية قوية ومتماسكة ومن بين الأفضل لمهندس مكتب فني؛ المهندس الفني باللجنة هو الأصعب لتدقيقه في تفاصيل التنسيق وإغلاق الـ RFIs.",
+  "rebuilt": {
+    "en": {
+      "headline": "Technical Office Engineer | Civil Engineer",
+      "personal": ["Military Service: Exempted", "Syndicate of Engineers: Registered (2020)"],
+      "summary": "Civil Engineer with 4 years of solid experience in technical office operations and site coordination across commercial and residential developments. Proven track record at Redcon Construction in submittal reviews, cost control, quantification, and IPC processing exceeding EGP 120M using Revit, AutoCAD, and advanced Excel.",
+      "sections": [
+        {
+          "id": "experience",
+          "title": "Professional Experience",
+          "items": [
+            {
+              "head": "Technical Office Engineer — Redcon Construction — Cairo · 03/2022 – Present",
+              "lines": [
+                "Prepared accurate BOQ quantification and processed monthly IPCs for 4 subcontractors valued at EGP 40M, cutting review cycle from 10 to 6 days.",
+                "Reviewed structural shop drawings for a 32,000 m² administrative tower, successfully resolving and closing 180 consultant comments within 3 months.",
+                "Managed site-to-design technical coordination, raising RFIs and mitigating structural/architectural clash points ahead of execution."
+              ]
+            },
+            {
+              "head": "Site Engineer — Arab Contractors — Assiut · 07/2020 – 02/2022",
+              "lines": [
+                "Supervised pouring 9,000 m³ of reinforced concrete across 12 residential buildings within a national housing program, leading a team of 3 engineers.",
+                "Monitored subcontractors' performance, managed concrete test cubes, and drafted daily/weekly progress and material inspection reports (WIR/MIR)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "education",
+          "title": "Education",
+          "items": [
+            {
+              "head": "B.Sc. in Civil Engineering — Assiut University · 2020",
+              "lines": ["Overall Grade: Very Good"]
+            }
+          ]
+        },
+        {
+          "id": "skills",
+          "title": "Technical Skills",
+          "items": [
+            {
+              "head": "",
+              "lines": [
+                "Software: Autodesk Revit (Structure), AutoCAD, Advanced Excel, Primavera P6",
+                "Technical Office: Quantity Surveying (BOQ), Monthly IPC Submittals, Shop Drawings Review, RFI Generation",
+                "Codes & Standards: Egyptian Code of Practice for Concrete Structures (ECP 203)"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "certs",
+          "title": "Certifications & Training",
+          "items": [
+            {
+              "head": "",
+              "lines": [
+                "Autodesk Certified User: Revit Structure · 2023",
+                "Project Management Professional (PMP) Training Course (35 Contact Hours) · 2024"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "languages",
+          "title": "Languages",
+          "items": [
+            {
+              "head": "",
+              "lines": ["Arabic: Native", "English: Very Good (B2)"]
+            }
+          ]
+        }
+      ]
+    },
+    "ar": {
+      "headline": "مهندس مكتب فني | مهندس مدني",
+      "personal": ["الموقف من التجنيد: معاف", "عضوية نقابة المهندسين: مسجل (2020)"],
+      "summary": "مهندس مدني بخبرة 4 سنوات في أعمال المكتب الفني والدعم الهندسي الميداني بالمشاريع الإدارية والسكنية. خبرة عملية لدى شركة ريدكون للإنشاءات في مراجعة وتجهيز لوحات الـ Shop Drawings، والحصر الفعلي، وإعداد المستخلصات الشهرية IPCs لمشاريع وعقود تتجاوز 120 مليون جنيه، بإتقان برامج Revit وAutoCAD وExcel ووفق الكود المصري ECP 203.",
+      "sections": [
+        {
+          "id": "experience",
+          "title": "الخبرات العملية",
+          "items": [
+            {
+              "head": "مهندس مكتب فني — شركة ريدكون للإنشاءات — القاهرة · 03/2022 – حتى الآن",
+              "lines": [
+                "إعداد الحصر الهندسي الدقيق والمستخلصات الشهرية (IPCs) لـ 4 مقاولي باطن بقيمة 40 مليون جنيه، وتقليص دورة مراجعة واعتماد المستخلص من 10 أيام إلى 6 أيام.",
+                "مراجعة وتدقيق اللوحات التنفيذية الإنشائية لبرج إداري بمساحة 32,000 م²، وإغلاق 180 ملاحظة استشاري بنجاح خلال 3 أشهر.",
+                "إدارة التنسيق الهندسي بين المكتب الفني والموقع وحل التعارضات التصميمية وإصدار طلبات المعلومات (RFIs)."
+              ]
+            },
+            {
+              "head": "مهندس موقع — المقاولون العرب — أسيوط · 07/2020 – 02/2022",
+              "lines": [
+                "الإشراف الميداني على صب 9,000 م³ خرسانة مسلحة لمشروع إسكان اجتماعي يضم 12 عمارة سكنية، ضمن فريق عمل يضم 3 مهندسين.",
+                "متابعة أعمال مقاولي الباطن واستلام حديد التسليح والنجارة وتقديم طلبات فحص الأعمال (WIR) وإعداد التقارير الفنية اليومية."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "education",
+          "title": "التعليم",
+          "items": [
+            {
+              "head": "بكالوريوس الهندسة المدنية — جامعة أسيوط · 2020",
+              "lines": ["التقدير العام: جيد جداً"]
+            }
+          ]
+        },
+        {
+          "id": "skills",
+          "title": "المهارات الفنية",
+          "items": [
+            {
+              "head": "",
+              "lines": [
+                "البرامج الهندسية: Revit Structure، AutoCAD، Advanced Excel، Primavera P6",
+                "أعمال المكتب الفني: حصر الكميات والمستخلصات (BOQ & IPCs)، مراجعة Shop Drawings، إعداد الـ RFIs",
+                "الأكواد والمواصفات: الكود المصري لتصميم وتنفيذ المنشآت الخرسانية (ECP 203)"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "certs",
+          "title": "الشهادات والدورات التدريبية",
+          "items": [
+            {
+              "head": "",
+              "lines": [
+                "شهادة معتمدة من أوتوديسك: Revit Structure — Autodesk Certified User · 2023",
+                "دورة إدارة المشروعات الاحترافية PMP (35 ساعة تدريبية) · 2024"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "languages",
+          "title": "اللغات",
+          "items": [
+            {
+              "head": "",
+              "lines": ["العربية: اللغة الأم", "الإنجليزية: جيد جداً (B2)"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "inconsistencies": [],
+  "knownProjects": [
+    {
+      "name": "مشروع إسكان اجتماعي أسيوط",
+      "context": "مشروع تابع لوزارة الإسكان المصرية تنفيذ شركة المقاولون العرب لإنشاء عمارات سكنية نموذجية لمحدودي الدخل.",
+      "confidence": "high"
+    }
+  ]
+}
