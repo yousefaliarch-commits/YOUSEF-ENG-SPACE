@@ -46,7 +46,7 @@ ok(C.flatten(C.POSTS0.flatMap((p) => p.comments)).every((c) => Object.keys(c.rea
 console.log("— jobs: off-platform contact —");
 ok(C.JOBS.every((j) => j.contact && (j.contact.email || j.contact.phone) && j.screening === undefined), "every job has contact, no screening");
 ok(C.THREADS0.engineer.every((t) => !t.messages.some((m) => m.blocked)) && /example\.com/.test(JSON.stringify(C.THREADS0)), "threads share contact freely, no blocked seeds");
-ok(C.TABS.map((t) => t.id).join() === "home,community,jobs,market,tools,inbox", "six tabs incl. tools");
+ok(C.TABS.map((t) => t.id).join() === "home,community,jobs,ai,market,tools,inbox", "seven tabs incl. the assistant and tools");
 ok(C.whenMinutes("منذ يوم") === 1440 && C.whenMinutes("منذ 3 أيام") === 4320 && C.whenMinutes("منذ أسبوعين") === 20160 && C.whenMinutes("منذ ساعتين") === 120 && C.whenMinutes("منذ 11 يومًا") === 15840, "relative time parsing");
 // (v23) the CV reviewer was replaced by the engineering CV audit — its tests live in logic-test-v23.js
 console.log("— estimate, match, data (carried over from v10) —");

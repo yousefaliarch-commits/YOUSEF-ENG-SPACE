@@ -3,10 +3,13 @@
 //  badge with the device ⇄ AI switch, the rating, the allowance left today, and the notes the rule engine can't make
 //  (inconsistencies, known projects to verify, how many invented figures were caught).
 // =====================================================================
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CircleAlert, Cpu, RefreshCw, ShieldCheck, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Num, Panel, Primary, Secondary } from "../../ui/primitives";
-import { onQuota, quotaNow, rateAnswer } from "../../services/ai-service";
+import { rateAnswer } from "../../services/ai-service";
+import { useQuota } from "../ai/quota";
+
+export { useQuota };
 import { AIX } from "./ai-review";
 
 export function AiConsentCard({ t, onYes, onNo }: any) {
@@ -46,17 +49,6 @@ export function AiErrorCard({ t, error, onRetry }: any) {
       )}
     </Panel>
   );
-}
-
-export function useQuota() {
-  const [q, setQ] = useState(quotaNow());
-  useEffect(() => {
-    const off = onQuota(setQ);
-    return () => {
-      off();
-    };
-  }, []);
-  return q;
 }
 
 export function AiBadge({ t, showDevice, onToggle }: any) {

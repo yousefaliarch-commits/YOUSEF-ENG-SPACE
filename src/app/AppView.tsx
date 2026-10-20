@@ -52,6 +52,7 @@ import * as cloud from "../backend/cloud";
 const CVReviewScreen = lazy(() => import("../features/cv/CVReviewScreen").then((m) => ({ default: m.CVReviewScreen })));
 const ChecklistsScreen = lazy(() => import("../features/qaqc/qaqc").then((m) => ({ default: m.ChecklistsScreen })));
 const ToolScreen = lazy(() => import("../features/tools/host").then((m) => ({ default: m.ToolScreen })));
+const AssistantScreen = lazy(() => import("../features/ai/AssistantScreen").then((m) => ({ default: m.AssistantScreen })));
 const ToolDocScreen = lazy(() => import("../features/tools/host").then((m) => ({ default: m.ToolDocScreen })));
 
 // =====================================================================
@@ -576,7 +577,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     : top
     ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "tool" ? <Suspense fallback={<ScreenLoading />}><ToolScreen key={top.id} app={app} id={top.id} /></Suspense> : top.type === "tooldoc" ? <Suspense fallback={<ScreenLoading />}><ToolDocScreen key={top.id} app={app} id={top.id} /></Suspense> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" || top.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.type + (top.id || "list")} app={app} id={top.id} kind={top.type} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
     : null;
-  const tabScreen = (id?: any) => id === "home" ? <HomeScreen app={app} /> : id === "community" ? <CommunityScreen app={app} /> : id === "jobs" ? <JobsScreen app={app} /> : id === "market" ? <MarketScreen app={app} /> : id === "tools" ? <ToolsScreen app={app} /> : <InboxScreen app={app} />;
+  const tabScreen = (id?: any) => id === "home" ? <HomeScreen app={app} /> : id === "community" ? <CommunityScreen app={app} /> : id === "jobs" ? <JobsScreen app={app} /> : id === "market" ? <MarketScreen app={app} /> : id === "tools" ? <ToolsScreen app={app} /> : id === "ai" ? <Suspense fallback={<ScreenLoading />}><AssistantScreen app={app} /></Suspense> : <InboxScreen app={app} />;
   const toolMeta = sheet?.type === "tool" && toolOpen(blocked, sheet.payload.id) ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;
   const sheets: any = {
     pushprimer: ["الإشعارات", <PushPrimerSheet app={app} />],

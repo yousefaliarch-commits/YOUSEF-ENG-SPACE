@@ -3,7 +3,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 \ir ../_fixtures.psql
-select plan(19);
+select plan(21);
 
 delete from private.ai_usage; delete from private.ai_feedback;
 update private.ai_config set value = '3' where key = 'daily_limit';
@@ -27,6 +27,8 @@ select is((public.ai_take('00000000-0000-0000-0000-00000000000a', 'assistant') -
 select is(public.ai_take('00000000-0000-0000-0000-00000000000a', 'assistant') ->> 'reason', 'quota', 'the fourth is refused: quota');
 select is(public.ai_take('00000000-0000-0000-0000-00000000000a', 'hack') ->> 'reason', 'feature', 'an unknown feature is refused');
 select is((public.ai_take('00000000-0000-0000-0000-00000000000b', 'assistant') ->> 'ok')::boolean, true, 'another member has their own allowance');
+select is((public.ai_take('00000000-0000-0000-0000-00000000000b', 'assistant') ->> 'money')::boolean, true, 'an engineer may talk pay with the assistant');
+select is((public.ai_take('00000000-0000-0000-0000-00000000000f', 'assistant') ->> 'money')::boolean, false, 'a site supervisor never does (the proxy tells the model)');
 -- a failed model call gives the unit back
 select public.ai_refund('00000000-0000-0000-0000-00000000000a', 'assistant');
 select is((public.ai_take('00000000-0000-0000-0000-00000000000a', 'assistant') ->> 'ok')::boolean, true, 'after a refund one more unit is available');

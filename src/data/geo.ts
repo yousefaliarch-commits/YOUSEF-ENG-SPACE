@@ -1,5 +1,5 @@
 import {
-  Briefcase, Calculator, Home, MessageCircle, Users, Wallet
+  Briefcase, Calculator, Home, MessageCircle, Sparkles, Users, Wallet
 } from "lucide-react";
 
 // =====================================================================
@@ -24,7 +24,7 @@ export const DATASET = {
 
 export const TABS = [
   { id: "home", label: "الرئيسية", icon: Home }, { id: "community", label: "المجتمع", icon: Users },
-  { id: "jobs", label: "الوظائف", icon: Briefcase }, { id: "market", label: "السوق", icon: Wallet }, { id: "tools", label: "الأدوات", icon: Calculator }, { id: "inbox", label: "الرسائل", icon: MessageCircle },
+  { id: "jobs", label: "الوظائف", icon: Briefcase }, { id: "ai", label: "المساعد", icon: Sparkles }, { id: "market", label: "السوق", icon: Wallet }, { id: "tools", label: "الأدوات", icon: Calculator }, { id: "inbox", label: "الرسائل", icon: MessageCircle },
 ];
 
 

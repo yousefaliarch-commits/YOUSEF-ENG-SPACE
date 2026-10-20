@@ -66,6 +66,9 @@ export async function handle(req: Request, deps: AiDeps): Promise<Response> {
   if (take.error || !take.data) return fail("server");
   if (!take.data.ok) return fail(take.data.reason === "quota" ? "quota" : take.data.reason === "disabled" ? "disabled" : "feature", { remaining: 0 });
   const remaining = Number(take.data.remaining) || 0;
+  // a site supervisor's account never gets pay talk, whatever the app sent
+  if (take.data.money === false) ai.context = { ...ai.context, noMoney: true };
+  else if (ai.context.noMoney !== true) delete ai.context.noMoney;
   const model = String((LIMITS[ai.feature].light ? take.data.model_light : take.data.model) || "gemini-3.8-flash").replace(/[^a-z0-9.-]/gi, "");
   const refund = () => deps.db.rpc("ai_refund", { p_account: user.id, p_feature: ai.feature });
 

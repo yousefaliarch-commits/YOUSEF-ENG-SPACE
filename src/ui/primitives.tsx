@@ -26,8 +26,8 @@ export const Wordmark = ({ size = "text-[22px]" }: any) => (
   <span dir="ltr" className={`font-grotesk font-bold tracking-[-0.03em] text-ink ${size}`}>EngSpace<span className="text-accent">.</span></span>
 );
 
-export const Panel = ({ children, className = "", onClick }: any) => (
-  <article onClick={onClick} className={`rounded-2xl bg-surface border border-line shadow-card ${className}`}>{children}</article>
+export const Panel = ({ children, className = "", onClick, ...rest }: any) => (
+  <article {...rest} onClick={onClick} className={`rounded-2xl bg-surface border border-line shadow-card ${className}`}>{children}</article>
 );
 
 export const Chip = ({ children, tone = "default", className = "" }: any) => {

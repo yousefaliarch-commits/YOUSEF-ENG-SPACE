@@ -86,8 +86,10 @@ begin
   if used >= lim then return jsonb_build_object('ok', false, 'reason', 'quota', 'limit', lim, 'remaining', 0); end if;
   insert into private.ai_usage (account_id, day, feature, n) values (p_account, private.ai_today(), p_feature, 1)
   on conflict (account_id, day, feature) do update set n = private.ai_usage.n + 1;
+  -- «money»: a site supervisor's assistant never talks pay (the proxy tells the model so — the app's flag is not trusted)
   return jsonb_build_object('ok', true, 'limit', lim, 'remaining', lim - used - 1,
-    'model', private.ai_cfg('model'), 'model_light', private.ai_cfg('model_light'));
+    'model', private.ai_cfg('model'), 'model_light', private.ai_cfg('model_light'),
+    'money', not exists (select 1 from public.profiles p where p.id = p_account and p.role = 'supervisor'));
 end $$;
 
 -- a unit given back when the model failed before answering (so an outage doesn't eat the day)

@@ -200,9 +200,9 @@ export const MONEY_RE = /(?<![\d٠-٩])(?:\d{1,3}(?:[,٬]\d{3})+|\d{4,7})(?![\d�
 
 export const maskMoney = (text?: any) => String(text == null ? "" : text).replace(MONEY_RE, (m) => { const t = m.trim(); return /^\d{4}$/.test(t) && +t >= 1950 && +t <= 2040 ? m : "•••"; });
 
-// Site supervisors: community, site tools and messages; the screens / sheets / rooms / post types that carry money or employer data
+// Site supervisors: community, the assistant (never about pay — enforced by the AI proxy), site tools and messages; the screens / sheets / rooms / post types that carry money or employer data
 // are closed to them. Their Tools tab holds only the site tools and the QA/QC checklists — never a salary, offer or net-pay tool.
-export const SUPERVISOR_TABS = ["community", "tools", "inbox"];
+export const SUPERVISOR_TABS = ["community", "ai", "tools", "inbox"];
 // every tool a site supervisor may open (the registry's non-money tools, with their old ids)
 export const SITE_TOOLS = toolsForRole("supervisor").flatMap((t) => [t.id, ...(t.aliases || [])]);
 

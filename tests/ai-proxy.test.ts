@@ -138,6 +138,18 @@ describe("ai-chat proxy", () => {
 });
 
 describe("ai pieces", () => {
+  it("a site supervisor's assistant is told «noMoney» by the account, and the app cannot switch it off", async () => {
+    const lastCtx = (g: any) => JSON.parse(JSON.parse(g.seen[0].init.body).contents.at(-1).parts[0].text.split("```json\n")[1].split("\n```")[0]);
+    const sup = fakeDb({ take: { ok: true, remaining: 3, limit: 25, model: "m", model_light: "m", money: false } });
+    const g1 = fakeGemini(sseOf({ ...part("تمام"), candidates: [{ content: { parts: [{ text: "تمام" }] }, finishReason: "STOP" }] }));
+    await (await handle(post({ feature: "assistant", messages: [{ role: "user", text: "مرتب مهندس موقع كام؟" }], context: { noMoney: false } }), { db: sup.db, key: KEY, fetch: g1.f })).text();
+    expect(lastCtx(g1).noMoney).toBe(true);
+    const eng = fakeDb({ take: { ok: true, remaining: 3, limit: 25, model: "m", model_light: "m", money: true } });
+    const g2 = fakeGemini(sseOf({ ...part("تمام"), candidates: [{ content: { parts: [{ text: "تمام" }] }, finishReason: "STOP" }] }));
+    await (await handle(post({ feature: "assistant", messages: [{ role: "user", text: "سؤال" }], context: { noMoney: "yes", discipline: "civil" } }), { db: eng.db, key: KEY, fetch: g2.f })).text();
+    expect(lastCtx(g2)).toEqual({ discipline: "civil" });
+  });
+
   it("scrub removes e-mails, Egyptian / Gulf phones and national IDs", () => {
     const t = scrub("me ahmed.m@gmail.com +20 100 123 4567 / 01012345678 / 0096650 123 4567 id 29601011234567");
     expect(t).not.toMatch(/gmail|1234567|29601011234567/);
