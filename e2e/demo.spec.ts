@@ -3,7 +3,7 @@ import { demoAs, tab, watch, noCrash, noOverflow, settle } from "./helpers";
 
 // The demo (no backend) in each member role, on both phone profiles: every tab and every tool opens, takes numbers, and nothing crashes.
 const ROLES = ["engineer", "supervisor", "hr", "owner"] as const;
-const TABS: Record<string, string[]> = { engineer: ["home", "community", "jobs", "market", "tools", "inbox"], supervisor: ["community", "tools", "inbox"], hr: ["home", "community", "jobs", "market", "tools", "inbox"], owner: ["home", "community", "jobs", "market", "tools", "inbox"] };
+const TABS: Record<string, string[]> = { engineer: ["home", "community", "jobs", "ai", "market", "tools", "inbox"], supervisor: ["community", "ai", "tools", "inbox"], hr: ["home", "community", "jobs", "ai", "market", "tools", "inbox"], owner: ["home", "community", "jobs", "ai", "market", "tools", "inbox"] };
 
 test("pinch-zoom is locked in the page", async ({ page }) => {
   await demoAs(page);

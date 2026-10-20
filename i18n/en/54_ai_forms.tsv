@@ -1,0 +1,101 @@
+# «المهندس الذكي» smart forms: RFI, material submittal, custody handover, and the AI parts of the toolbox talk and the permit
+c4242fc2	Good
+7f3468d2	Needs repair
+59419a76	e.g. handed the carpentry foreman 2 new Bosch hammer drills, 5 steel scaffold frames and 1 laser level (good, LZ-204) for block B…
+d85e597f	Custody items
+974bd2c6	Total quantity {0}
+175a21a6	The two parties
+b61684a9	Handed over by
+a220bb93	Position
+8f5ad583	Received by
+b4e5dd4f	Purpose / where it is used
+fea2bbef	Return by (optional)
+8bc43dce	No.
+afa39d32	Serial no. / code
+65b9f2c9	The receiver is responsible for the items until they are returned or handed over by record. Names stay in your account only.
+5424027c	Return by
+4b72a502	Items
+d7199676	No. / code
+f8fc78e6	I, the receiver, acknowledge receiving the items above in the condition stated, and undertake to look after them and return them on request.{0}
+9813e06d	Remarks: {0}
+b77e281e	Custody handover
+6c8799da	Site management
+0f3c07a4	Custody handover
+dccba621	Custody handover · ⁦{0}⁩
+80c73556	⁦{0}⁩ items
+da1c2a5e	Stops work
+bea3f9c4	e.g. the first-floor slab level on structural S-102 differs by 15 cm from architectural A-201 at grid C/4…
+2cb69733	To (consultant / designer)
+d77d4e1c	Location / grid / floor
+303856bc	Priority
+32dfcc6b	Query
+b4d38d55	Question
+bf4009cd	Contractor's proposed solution
+8d0875df	Impact on time / cost
+2f5e071f	Reply needed within
+2d2f0d4b	References (drawings, specification clauses)
+adb22f33	Reply (by the consultant)
+2642f77f	Replied by
+70a0959a	Fields in [ ] are missing — complete them before issuing. Only what you write goes to the consultant.
+6048a015	Request date
+f4167259	Reply needed by
+497af4bd	Query
+195c2292	References
+857a9e72	Proposed solution
+6f37c05c	Impact
+19df4519	Reply
+02035835	Request for information
+f61fb65f	Request for information
+a9ea4099	Request for information · ⁦{0}⁩
+7d8e6978	Location: {0}
+29a38daf	Reply needed by ⁦{0}⁩
+10c6f368	Catalogue / Datasheet
+dbf284b5	Test certificates
+b31e4238	Sample
+6c2625fd	Certificate of origin
+035729cd	Warranty letter
+9b732f03	Reference projects
+a7693159	e.g. approval for 60×60 porcelain tiles from … for the typical-floor corridors, about 1,200 m²…
+61cb6e98	Material / item
+969f8134	Manufacturer
+c3240a09	Model / grade
+4e0fa87e	Country of origin
+dd0abd40	Supplier
+94ad214a	Area of use
+0f77ce5f	Approximate quantity
+657bee1a	Specification clause
+d16253a9	Technical data
+0df7ef25	Property
+b506ed4c	Property
+6fce6d0e	Attachments
+cec044bf	Technical values from the manufacturer's catalogue and test certificates only — check every field in [ ] before issuing.
+942cb461	Submission date
+e3f288ba	Technical data
+26d59c3b	Value submitted
+6fdf396b	Attachments
+25f8b98f	Remarks
+7854c82f	Consultant's action
+bc3e7c89	☐ A Approved ☐ B Approved as noted ☐ C Revise and resubmit ☐ D Rejected Remarks:
+1119074b	Material approval submittal
+c94c5335	Material submittal
+e835ba47	Material submittal · ⁦{0}⁩
+6eb4f2fa	Use: {0}
+f534db1d	e.g. welding steel brackets on the third-floor slab near timber formwork, 4 hours…
+43f7b482	Activity hazards and precautions (Smart Engineer)
+287b1ebf	Hazards
+13f7d5d4	Precautions
+cb039373	Review and adapt them to the site — the core list above is still required as it is.
+f3adade5	Activity hazards and precautions
+fd9ec51a	Hazards: {0}
+2f697669	e.g. today we pump the fourth-floor slab, with work at the edge and scaffold erection…
+bbe6fa9d	PPE:
+c9842716	PPE: {0}
+1609b5a4	In an emergency: {0}
+fc6a5857	Message: «{0}»
+db4a4cae	RFI — request for information
+d1ba8245	The question, references, proposed solution and reply date — ready for the consultant
+837ee66b	query consultant drawing clash rfi request for information
+6d373c8e	Material, manufacturer, properties, attachments and the consultant's code
+297bacc2	material approval sample catalogue submittal datasheet
+9a1bbdc4	Custody items with quantity, condition and number — signed by both sides
+0b4f810c	custody handover equipment tools store

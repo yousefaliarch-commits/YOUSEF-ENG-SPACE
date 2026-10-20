@@ -28,6 +28,7 @@ import { fmt } from "../../ui/theme";
 import { Windowed } from "../../ui/windowed";
 import { isCloud } from "../../backend/config";
 import { LiveSalaryPanel, useLiveSalary } from "../market/live-salary";
+import { SalaryInsightCard } from "../ai/SalaryInsight";
 
 export const engagement = (p?: any) => (p.reactions.agree || 0) + (p.reactions.disagree || 0) + (p.reactions.useful || 0) + countComments(p.comments) * 3;
 
@@ -245,6 +246,7 @@ export function SalariesBody({ app }: any) {
         {showPlace && <div className="screen-tab p-4 rounded-2xl bg-surface border border-line-2 -mx-1"><GovPicker gov={g} city={city} onChange={(gg, cc) => { setG(gg); setCity(cc); }} /></div>}
       </div>
       <LiveSalaryPanel app={app} live={live} disc={disc} exp={exp} g={g} track={track} />
+      <SalaryInsightCard app={app} disc={disc} exp={exp} gov={live.wide ? null : g} track={track} unlocked={unlocked && !thin && (!CLOUD || (live.data && live.data.n >= live.data.min))} />
       <Panel className="p-4">
         {CLOUD && <p className="mb-1 text-[11px] font-medium text-ink-3">النموذج المرجعي — تقدير من مصادر السوق، ليس من تقارير الأعضاء</p>}
         <div className="flex items-start justify-between gap-2"><span className="text-[11px] text-ink-2 leading-snug">{ROLE[disc]} · {trackLabel(track, disc)} · {label(EXP, exp)} · {placeName(g, city)}</span><Chip tone={q[1]} className="h-6 px-2 text-[10.5px] shrink-0">{q[0]} · <Num>{n}</Num></Chip></div>

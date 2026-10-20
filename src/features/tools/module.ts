@@ -8,7 +8,8 @@ import type { ProjectSnap, ToolProject } from "../../data/tool-projects";
 import type { ToolRole } from "../../tools/types";
 import type { ToolModuleMeta } from "./spec";
 
-export type ToolCtx = { app: any; project: ToolProject | null; role: ToolRole; readOnly: boolean };
+// `fill`: a smart form's AI answer replaces the body and (when it brings one) the title in one change
+export type ToolCtx = { app: any; project: ToolProject | null; role: ToolRole; readOnly: boolean; fill?: (body: any, title?: string) => void };
 
 export type ToolModule<B = any> = ToolModuleMeta & {
   v: number;
@@ -32,4 +33,7 @@ export const TOOL_MODULES: Record<string, () => Promise<ToolModule>> = {
   drainRun: () => import("./mep/drain-run").then((m) => m.module),
   sprinklerCheck: () => import("./mep/sprinkler").then((m) => m.module),
   cableCheck: () => import("./elec/cable").then((m) => m.module),
+  rfi: () => import("./office/rfi").then((m) => m.module),
+  submittal: () => import("./office/submittal").then((m) => m.module),
+  custody: () => import("./office/custody").then((m) => m.module),
 };

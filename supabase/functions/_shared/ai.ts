@@ -14,12 +14,12 @@ export type Msg = { role: "user" | "model"; text: string };
 export type AiRequest = { feature: Feature; messages: Msg[]; context: Record<string, any> };
 
 // per feature: how much may go in, how much may come out, JSON or prose, how hard the model thinks
-export const LIMITS: Record<Feature, { turns: number; chars: number; maxOut: number; json: boolean; thinking: "minimal" | "low" | "medium"; temperature: number; light?: boolean }> = {
+export const LIMITS: Record<Feature, { turns: number; chars: number; maxOut: number; json: boolean; thinking: "low" | "medium"; temperature: number; light?: boolean }> = {
   assistant: { turns: 20, chars: 24_000, maxOut: 2_048, json: false, thinking: "low", temperature: 0.4 },
   "cv-review": { turns: 1, chars: 40_000, maxOut: 16_384, json: true, thinking: "low", temperature: 0.2 },
   "form-fill": { turns: 1, chars: 4_000, maxOut: 3_072, json: true, thinking: "low", temperature: 0.2 },
   "salary-insights": { turns: 6, chars: 6_000, maxOut: 1_200, json: false, thinking: "low", temperature: 0.3 },
-  "tool-tip": { turns: 1, chars: 8_000, maxOut: 500, json: false, thinking: "minimal", temperature: 0.3, light: true },
+  "tool-tip": { turns: 1, chars: 8_000, maxOut: 500, json: false, thinking: "low", temperature: 0.3, light: true }, // "minimal" is refused by the Flash model (400)
 };
 export const MAX_BODY = 120_000; // bytes
 
