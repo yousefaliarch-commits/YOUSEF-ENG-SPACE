@@ -23,6 +23,12 @@ export const LIMITS: Record<Feature, { turns: number; chars: number; maxOut: num
 };
 export const MAX_BODY = 120_000; // bytes
 
+// models (docs/AI.md → Models): the default when the config row is missing, and the fast fallbacks tried in order when the
+// configured model is busy or over its per-minute quota. All accept the thinking levels in LIMITS.
+export const DEFAULT_MODEL = "gemini-3.5-flash-lite";
+export const FALLBACK_MODELS = ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-3.1-flash-lite"];
+export const RETRY_STATUS = [429, 500, 503, 504];
+
 export const isFeature = (f: unknown): f is Feature => typeof f === "string" && f in LIMITS;
 
 // the shape check: anything unexpected is refused before a model or a quota unit is touched

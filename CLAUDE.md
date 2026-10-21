@@ -135,7 +135,8 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   insights get only `salary_explorer` aggregates fetched AS the member (`rpcAs`, `marketOnly`); supervisors' `noMoney` comes from
   `ai_take`, never the app. New «المساعد» tab (`features/ai/AssistantScreen.tsx`), smart forms (`AiFillCard`; office tools rfi /
   submittal / custody + toolbox / permit), 💡 tool tips, Word export for every tool doc (`src/doc/docx.ts`). Thinking levels:
-  `low` / `medium` only (`minimal` → 400).
+  `low` / `medium` only (`minimal` → 400). Model `gemini-3.5-flash-lite` (migration 27; 3.8-flash was ~38 s to the first word);
+  on 429 / 5xx the proxy falls back through `FALLBACK_MODELS` (`_shared/ai.ts`) — measure on the live key before changing models.
 
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;

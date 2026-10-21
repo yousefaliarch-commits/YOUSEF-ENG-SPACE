@@ -5,7 +5,7 @@
 //   → 4xx / 5xx JSON { error, ar, en } when nothing was streamed (auth, validation, quota, upstream refusal)
 // The Gemini key never leaves this function; the quota unit is taken before the model call and given back if the model fails
 // before answering; token totals are recorded after it (counts only, never text).
-import { CORS, ERRORS, LIMITS, MAX_BODY, geminiBody, marketOnly, parseSse, upstreamError, validate } from "./ai.ts";
+import { CORS, DEFAULT_MODEL, ERRORS, FALLBACK_MODELS, LIMITS, MAX_BODY, RETRY_STATUS, geminiBody, marketOnly, parseSse, upstreamError, validate } from "./ai.ts";
 import type { AiRequest } from "./ai.ts";
 import type { RestClient } from "./rest.ts";
 
@@ -69,29 +69,43 @@ export async function handle(req: Request, deps: AiDeps): Promise<Response> {
   // a site supervisor's account never gets pay talk, whatever the app sent
   if (take.data.money === false) ai.context = { ...ai.context, noMoney: true };
   else if (ai.context.noMoney !== true) delete ai.context.noMoney;
-  const model = String((LIMITS[ai.feature].light ? take.data.model_light : take.data.model) || "gemini-3.8-flash").replace(/[^a-z0-9.-]/gi, "");
+  const model = String((LIMITS[ai.feature].light ? take.data.model_light : take.data.model) || DEFAULT_MODEL).replace(/[^a-z0-9.-]/gi, "");
+  // the configured model first, then the fast fallbacks (each model has its own per-minute quota at Google)
+  const models = [model, ...FALLBACK_MODELS.filter((m) => m !== model)].slice(0, 3);
   const refund = () => deps.db.rpc("ai_refund", { p_account: user.id, p_feature: ai.feature });
 
   // ---- the model
   const f = deps.fetch || fetch;
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), deps.timeoutMs ?? (ai.feature === "cv-review" ? 150_000 : 75_000));
-  let up: Response;
-  try {
-    up = await f(`${deps.base || GEMINI}/models/${model}:streamGenerateContent?alt=sse`, {
-      method: "POST", signal: ctl.signal,
-      headers: { "content-type": "application/json", "x-goog-api-key": deps.key },
-      body: JSON.stringify(geminiBody(ai, { market })),
-    });
-  } catch {
-    clearTimeout(timer);
-    await refund();
-    return fail("busy");
+  const payload = JSON.stringify(geminiBody(ai, { market }));
+  // busy (503), over the per-minute quota (429) or a 5xx before any text: the next model answers instead — the member only
+  // sees an error when every model refused
+  let up: Response | null = null;
+  let lastStatus = 0;
+  for (const m of models) {
+    try {
+      const r = await f(`${deps.base || GEMINI}/models/${m}:streamGenerateContent?alt=sse`, {
+        method: "POST", signal: ctl.signal,
+        headers: { "content-type": "application/json", "x-goog-api-key": deps.key },
+        body: payload,
+      });
+      if (r.ok && r.body) {
+        up = r;
+        break;
+      }
+      lastStatus = r.status;
+      if (!RETRY_STATUS.includes(r.status)) break;
+    } catch {
+      // the overall time limit ran out: no point trying another model
+      if (ctl.signal.aborted) break;
+      lastStatus = 503;
+    }
   }
-  if (!up.ok || !up.body) {
+  if (!up || !up.body) {
     clearTimeout(timer);
     await refund();
-    return fail(upstreamError(up.status));
+    return fail(lastStatus ? upstreamError(lastStatus) : "busy");
   }
 
   // ---- stream the text through, nothing else
