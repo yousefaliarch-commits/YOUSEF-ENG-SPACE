@@ -13,3 +13,17 @@ supabase/.branches/
 # Playwright
 test-results/
 playwright-report/
+
+# graphify knowledge graph (CLAUDE.md → Knowledge graph): the graph, report, manifest, community labels, build config and
+# the doc-extraction cache are committed; the code-parse cache, the HTML view, run temp files and machine paths are rebuilt on demand
+graphify-out/cache/ast/
+graphify-out/cache/stat-index.json
+graphify-out/graph.html
+graphify-out/.graphify_*
+!graphify-out/.graphify_build.json
+!graphify-out/.graphify_labels.json
+graphify-out/.cloud-cta-shown
+graphify-out/.needs_update
+graphify-out/cache/last_query_stamp
+# `graphify update` backs up the previous graph in a dated folder
+graphify-out/20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]/

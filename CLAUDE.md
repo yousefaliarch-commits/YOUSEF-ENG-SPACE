@@ -156,6 +156,17 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
 - `src/native/native.ts` Capacitor glue. `supabase/migrations/` schema + RLS (add new files; never edit applied ones
   once the hosted project exists). `tests/` Vitest with stub React (`tests/harness.ts`).
 
+## Knowledge graph (graphify)
+- `graphify-out/graph.json` + `GRAPH_REPORT.md` map the repo: every TS / SQL / workflow symbol (AST), the docs as concepts linked to
+  the code and SQL they describe, 171 named communities. For a codebase question run `graphify query "<question>"` (or
+  `graphify path "<A>" "<B>"`, `graphify explain "<X>"`) before grepping or reading files, and tell subagents that explore code to
+  do the same; read raw files only for the lines the graph located. No CLI in the session → `pip install "graphifyy[sql]==0.9.97"`.
+- After code changes: `graphify update .` (AST only, free, seconds) and commit `graphify-out/` with the change — a large graph.json
+  diff is expected. Changed docs need the `/graphify . --update` skill run (`graphify install` adds the skill); unchanged docs come
+  from the committed extraction cache `graphify-out/cache/semantic/`.
+- `graphify-out/.graphify_build.json` excludes images and `prototype/`; SQL needs the `[sql]` extra (without it the migrations
+  contribute nothing). `graphify export html` rebuilds the browser view (not committed).
+
 ## Commands
 `npm run check` (typecheck + tests + build = CI gate) · `npm run live` (laptop + phone preview, rebuild on save) ·
 `npm run db:start | db:reset | db:test | db:env | db:admin -- email` · `npm run test:cloud` · `npm run cap:sync`.
