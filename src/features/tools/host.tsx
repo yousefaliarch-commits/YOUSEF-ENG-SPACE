@@ -8,10 +8,11 @@
 //  Saves are debounced (400 ms) and flushed when the screen closes; the store syncs on its own.
 // =====================================================================
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, FilePlus2, FolderOpen, Pencil, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, FilePlus2, FolderOpen, MapPin, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toolById } from "../../tools/registry";
 import { toolAllowed, toolRole } from "../../tools/gate";
-import { newDocId, type ToolDoc, type ToolHeader } from "../../data/tool-docs";
+import { newDocId, wbsPath, type DocWbs, type ToolDoc, type ToolHeader } from "../../data/tool-docs";
+import { searchDocs, zonesOf } from "../../tools/doc-search";
 import { PROJECT_CODE, blankProject, type ToolProject } from "../../data/tool-projects";
 import { contentHash } from "../../doc/hash";
 import { docLayout } from "../../doc/layout";
@@ -20,7 +21,7 @@ import { canvasMeasurer, loadDocFonts, renderDoc } from "../../doc/render";
 import type { DrawPage } from "../../doc/model";
 import { saveOrShare } from "../../lib/report-pdf";
 import { ToolTipCard } from "../ai/ToolTip";
-import { ConfirmDialog, DocPreview, ExportBar, Pick, TextField } from "../../ui/kit";
+import { Card, ConfirmDialog, DocPreview, ExportBar, Grid2, Pick, RowCards, TextField } from "../../ui/kit";
 import { Empty } from "../../ui/chrome";
 import { Num } from "../../ui/primitives";
 import { TOOL_ICONS } from "./icons";
@@ -56,11 +57,15 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
   const t = toolById(id);
   const [editing, setEditing] = useState<ToolProject | null>(null);
   const [del, setDel] = useState<ToolHeader | null>(null);
+  const [q, setQ] = useState("");
+  const [zone, setZone] = useState<string | null>(null);
   if (!t || !toolAllowed(toolRole(app.profile), t.id)) return <div className="pt-4"><Empty title="غير متاح" body="هذه الأداة غير متاحة لنوع حسابك." action="رجوع" onAction={app.pop} /></div>;
   const Icon = TOOL_ICONS[t.icon] || FolderOpen;
   const projects: ToolProject[] = (app.toolProjects || []).filter((p: ToolProject) => !p.deleted && !p.archived);
   const active = projects.find((p) => p.id === app.activeProject) || null;
-  const docs: ToolHeader[] = (app.toolIndex || []).filter((h: ToolHeader) => (t.docKinds || []).includes(h.kind) && (!active || h.projectId === active.id));
+  const all: ToolHeader[] = searchDocs(app.toolIndex || [], "", { kinds: t.docKinds || [], projectId: active?.id || null });
+  const zones = zonesOf(all);
+  const docs: ToolHeader[] = searchDocs(all, q, { zone: zone && zones.includes(zone) ? zone : null });
   if (editing) return <ProjectEditor app={app} project={editing} onDone={() => setEditing(null)} />;
   return (
     <div className="py-4 space-y-4" data-tool={t.id}>
@@ -95,13 +100,31 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
       </button>
 
       <section>
-        <h2 className="text-[13px] text-ink-2 mb-2">المستندات المحفوظة {docs.length > 0 && <Num>({docs.length})</Num>}</h2>
-        {!docs.length && <p className="p-4 rounded-2xl border border-dashed border-line-2 text-[12.5px] text-ink-3 text-center leading-relaxed">لا مستندات بعد. كل ما تكتبه يُحفظ على هذا الجهاز أولًا، ثم في حسابك.</p>}
+        <h2 className="text-[13px] text-ink-2 mb-2">المستندات المحفوظة {all.length > 0 && <Num>({docs.length === all.length ? all.length : `${docs.length} / ${all.length}`})</Num>}</h2>
+        {all.length > 3 && (
+          <label className="mb-2 flex items-center gap-2 h-11 px-3.5 rounded-xl bg-surface border border-line-2 focus-within:ring-2 focus-within:ring-accent">
+            <Search size={16} className="text-ink-3 shrink-0" />
+            <input value={q} onChange={(e) => setQ(e.target.value)} data-doc-search placeholder="ابحث: عنوان، رقم، مبنى، دور، عنصر…" className="w-full min-w-0 bg-transparent text-[14px] focus:outline-none" />
+          </label>
+        )}
+        {zones.length > 0 && (
+          <div className="-mx-4 px-4 mb-2 flex gap-2 overflow-x-auto no-scrollbar">
+            <button type="button" onClick={() => setZone(null)} aria-pressed={!zone} className={`shrink-0 h-9 px-3.5 rounded-full border text-[12.5px] ${!zone ? "bg-wash border-accent/40" : "bg-surface border-line-2 text-ink-2"}`}>كل المواقع</button>
+            {zones.map((z) => (
+              <button key={z} type="button" data-zone={z} onClick={() => setZone(zone === z ? null : z)} aria-pressed={zone === z} className={`shrink-0 h-9 px-3.5 rounded-full border text-[12.5px] ${zone === z ? "bg-wash border-accent/40" : "bg-surface border-line-2 text-ink-2"}`}>
+                <MapPin size={13} className="inline me-1" />{z}
+              </button>
+            ))}
+          </div>
+        )}
+        {!!all.length && !docs.length && <p className="p-4 rounded-2xl border border-dashed border-line-2 text-[12.5px] text-ink-3 text-center">لا مستند يطابق البحث.</p>}
+        {!all.length && <p className="p-4 rounded-2xl border border-dashed border-line-2 text-[12.5px] text-ink-3 text-center leading-relaxed">لا مستندات بعد. كل ما تكتبه يُحفظ على هذا الجهاز أولًا، ثم في حسابك.</p>}
         <ul className="space-y-2">
           {docs.map((h) => (
             <li key={h.id} className="flex items-center rounded-2xl bg-surface border border-line">
               <button type="button" onClick={() => app.push({ type: "tooldoc", id: `${h.kind}:${h.id}` })} className="press min-w-0 flex-1 min-h-14 px-3.5 py-2 text-start">
                 <span className="block text-[14px] leading-snug truncate" dir="auto">{h.title || "بلا عنوان"}</span>
+                {wbsPath(h.wbs) && <span className="block text-[11.5px] text-ink-2 truncate" dir="auto" data-doc-wbs><MapPin size={11} className="inline me-1" />{wbsPath(h.wbs)}</span>}
                 <span className="block mt-0.5 text-[11.5px] text-ink-3">
                   {h.docNo ? <bdi dir="ltr" className="font-grotesk">{h.docNo} · Rev {h.rev}</bdi> : STATUS[h.status]} · <bdi dir="ltr" className="font-grotesk">{h.dateIso}</bdi>
                 </span>
@@ -128,6 +151,55 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
         />
       )}
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+//  Where a document belongs (W3): zone / building · level · element. The project's breakdown and the names already used in
+//  its documents are suggested; anything can be typed (a site rarely matches the drawings' breakdown exactly).
+// ---------------------------------------------------------------------
+const uniq = (xs: string[]) => [...new Set(xs.map((x) => x.trim()).filter(Boolean))];
+
+function WbsCard({ app, doc, project, readOnly, onChange }: { app: any; doc: ToolDoc; project: ToolProject | null; readOnly: boolean; onChange: (w: DocWbs) => void }) {
+  const w = doc.wbs || {};
+  const siblings: ToolHeader[] = (app.toolIndex || []).filter((h: ToolHeader) => h.projectId === doc.projectId && h.id !== doc.id);
+  const pz = project?.wbs?.zones || [];
+  const zones = uniq([...pz.map((z) => z.name), ...zonesOf(siblings)]);
+  const levels = uniq([...(pz.find((z) => z.name === w.zone)?.levels || []), ...siblings.filter((h) => h.wbs?.zone === w.zone).map((h) => h.wbs?.level || "")]);
+  const elements = uniq(siblings.filter((h) => h.wbs?.zone === w.zone && h.wbs?.level === w.level).map((h) => h.wbs?.element || ""));
+  const set = (patch: DocWbs) => !readOnly && onChange({ ...w, ...patch });
+  const id = `wbs-${doc.id}`;
+  return (
+    <Card title="الموقع في المشروع (WBS)">
+      <Grid2>
+        <TextField label="المنطقة / المبنى" list={`${id}-z`} value={w.zone || ""} onChange={(v) => set({ zone: v })} readOnly={readOnly} placeholder="برج A" data-wbs="zone" />
+        <TextField label="الدور / المنسوب" list={`${id}-l`} value={w.level || ""} onChange={(v) => set({ level: v })} readOnly={readOnly} placeholder="الدور 02" data-wbs="level" />
+      </Grid2>
+      <div className="mt-2.5">
+        <TextField label="العنصر" list={`${id}-e`} value={w.element || ""} onChange={(v) => set({ element: v })} readOnly={readOnly} placeholder="بلاطة S-04، عمود C12، شقة 3…" data-wbs="element" />
+      </div>
+      <datalist id={`${id}-z`}>{zones.map((z) => <option key={z} value={z} />)}</datalist>
+      <datalist id={`${id}-l`}>{levels.map((z) => <option key={z} value={z} />)}</datalist>
+      <datalist id={`${id}-e`}>{elements.map((z) => <option key={z} value={z} />)}</datalist>
+    </Card>
+  );
+}
+
+// the project's breakdown, typed once: each zone / building with its levels («B1، الأرضي، 01، 02، السطح»)
+function WbsEditor({ value, onChange }: { value: { name: string; levels: string[] }[]; onChange: (v: { name: string; levels: string[] }[]) => void }) {
+  const split = (s: string) => s.split(/[,،;\n]+/).map((x) => x.trim().slice(0, 40)).filter(Boolean).slice(0, 80);
+  return (
+    <RowCards<{ name: string; levels: string[] }>
+      rows={value} onChange={onChange} max={60} addLabel="منطقة / مبنى"
+      blank={() => ({ name: "", levels: [] })}
+      summary={(z) => `${z.name || "منطقة"}${z.levels.length ? ` — ${z.levels.length} دور` : ""}`}
+      render={(z, setZ) => (
+        <>
+          <TextField label="اسم المنطقة / المبنى" value={z.name} onChange={(v) => setZ({ ...z, name: v })} placeholder="برج A، المبنى الإداري، المرحلة 2" />
+          <TextField label="الأدوار (افصل بفاصلة)" value={z.levels.join("، ")} onChange={(v) => setZ({ ...z, levels: split(v) })} placeholder="B1، الأرضي، 01، 02، السطح" />
+        </>
+      )}
+    />
   );
 }
 
@@ -317,6 +389,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
     <div className="pt-3 flex flex-col min-h-full" data-tool={kind}>
       <div className="space-y-3 pb-4">
         <TextField label="عنوان المستند" value={doc.title} onChange={(v) => !readOnly && update({ ...doc, title: v })} readOnly={readOnly} />
+        <WbsCard app={app} doc={doc} project={project} readOnly={readOnly} onChange={(wbs) => update({ ...doc, wbs })} />
         <div className="grid grid-cols-2 gap-2.5">
           <label className="block">
             <span className="block text-[12px] text-ink-2 mb-1">التاريخ</span>
@@ -402,6 +475,9 @@ export function ProjectEditor({ app, project, onDone }: { app: any; project: Too
       <TextField label="الموقع" value={p.location.site} onChange={(v) => setP({ ...p, location: { ...p.location, site: v } })} />
       <TextField label="المدينة" value={p.location.city || ""} onChange={(v) => setP({ ...p, location: { ...p.location, city: v } })} />
       <TextField label="رقم العقد / المرجع" dir="ltr" value={p.contractNo || ""} onChange={(v) => setP({ ...p, contractNo: v })} />
+      <h2 className="pt-2 text-[13.5px] font-medium">تقسيم المشروع (WBS)</h2>
+      <p className="text-[11.5px] text-ink-3 leading-relaxed">المناطق والمباني وأدوارها — تُقترح عند حفظ أي مستند في مكانه من المشروع.</p>
+      <WbsEditor value={p.wbs?.zones || []} onChange={(zones) => setP({ ...p, wbs: { zones } })} />
       <h2 className="pt-2 text-[13.5px] font-medium">التوقيعات</h2>
       {([["prepared", "أعدّ"], ["checked", "راجع"], ["approved", "اعتمد"]] as const).map(([r, l]) => (
         <div key={r} className="grid grid-cols-2 gap-2">

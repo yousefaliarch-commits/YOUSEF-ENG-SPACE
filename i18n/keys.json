@@ -9387,18 +9387,18 @@
  },
  "ا": {
   "k": "s",
-  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts",
-  "n": 4
+  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts,tools/doc-search.ts",
+  "n": 5
  },
  "ي": {
   "k": "s",
-  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts",
-  "n": 6
+  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts,tools/doc-search.ts",
+  "n": 7
  },
  "ه": {
   "k": "s",
-  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts",
-  "n": 4
+  "p": "domain/text-guard.ts,features/stack/stack.tsx,lib/search.ts,tools/doc-search.ts",
+  "n": 5
  },
  "ك": {
   "k": "s",
@@ -11129,8 +11129,8 @@
  },
  "،": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/market/raise-tracker.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/site/permit.tsx,features/tools/site/toolbox.tsx,i18n/i18n.ts,lib/helpers.tsx,lib/num-input.ts,ui/feed.tsx",
-  "n": 19
+  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/market/raise-tracker.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/host.tsx,features/tools/site/permit.tsx,features/tools/site/toolbox.tsx,i18n/i18n.ts,lib/helpers.tsx,lib/num-input.ts,ui/feed.tsx",
+  "n": 20
  },
  "تنبيه لهجة: {0}": {
   "k": "t",
@@ -12163,8 +12163,8 @@
  },
  "العنصر": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 13
+  "p": "features/admin/AdminView.tsx,features/tools/concrete/concrete.tsx,features/tools/host.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 15
  },
  "احذف نهائيًا": {
   "k": "x",
@@ -21189,12 +21189,17 @@
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
+ "بلا عنوان": {
+  "k": "s",
+  "p": "features/tabs/tabs.tsx,features/tools/host.tsx",
+  "n": 2
+ },
  "أدوات الموقع والمكتب الفني": {
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
- "ابحث: خرسانة، حديد، ميزانية، كابل…": {
+ "ابحث في الأدوات والمستندات: خرسانة، برج A، الدور 02…": {
   "k": "s",
   "p": "features/tabs/tabs.tsx",
   "n": 2
@@ -21204,10 +21209,10 @@
   "p": "features/tabs/tabs.tsx",
   "n": 1
  },
- "بلا عنوان": {
-  "k": "s",
-  "p": "features/tabs/tabs.tsx,features/tools/host.tsx",
-  "n": 2
+ "مستندات محفوظة": {
+  "k": "x",
+  "p": "features/tabs/tabs.tsx",
+  "n": 1
  },
  "لا أداة بهذا الاسم.": {
   "k": "x",
@@ -22314,7 +22319,22 @@
   "k": "e",
   "p": "features/tools/host.tsx",
   "n": 1,
-  "x": "docs.length > 0 && <Num>({docs.length})</Num>"
+  "x": "all.length > 0 && <Num>({docs.length === all.length ? all.length : `${docs.length} / ${all.length}`})</Num>"
+ },
+ "ابحث: عنوان، رقم، مبنى، دور، عنصر…": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "كل المواقع": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "لا مستند يطابق البحث.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
  },
  "لا مستندات بعد. كل ما تكتبه يُحفظ على هذا الجهاز أولًا، ثم في حسابك.": {
   "k": "x",
@@ -22345,6 +22365,72 @@
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 1
+ },
+ "الموقع في المشروع (WBS)": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "المنطقة / المبنى": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "برج A": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "الدور / المنسوب": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "الدور 02": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "بلاطة S-04، عمود C12، شقة 3…": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "منطقة / مبنى": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "منطقة": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "— {0} دور": {
+  "k": "t",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "z.levels.length"
+ },
+ "اسم المنطقة / المبنى": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "برج A، المبنى الإداري، المرحلة 2": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "الأدوار (افصل بفاصلة)": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "B1، الأرضي، 01، 02، السطح": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
  },
  "تعذّر الحفظ على الجهاز — المساحة ممتلئة؟": {
   "k": "s",
@@ -22542,6 +22628,16 @@
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 2
+ },
+ "تقسيم المشروع (WBS)": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "المناطق والمباني وأدوارها — تُقترح عند حفظ أي مستند في مكانه من المشروع.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
  },
  "التوقيعات": {
   "k": "x",

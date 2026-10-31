@@ -33,6 +33,8 @@ export type ToolProject = {
   overrides: { key: string; value: number | string; reason: string; at: number }[];
   crewId?: string;
   remnantStoreId?: string;
+  // the project's breakdown — zones / buildings and their levels — suggested when a document is filed (W3)
+  wbs?: { zones: { name: string; levels: string[] }[] };
 };
 
 export type ProjectSnap = Pick<ToolProject,

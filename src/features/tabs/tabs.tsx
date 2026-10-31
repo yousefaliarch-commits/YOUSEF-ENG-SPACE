@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { PACKS } from "../../tools/registry";
-import { toolRole, toolsForRole } from "../../tools/gate";
+import { toolAllowed, toolRole, toolsForRole } from "../../tools/gate";
+import { searchDocs } from "../../tools/doc-search";
+import { wbsPath } from "../../data/tool-docs";
 import type { ToolDef } from "../../tools/types";
 import { TOOL_ICONS } from "../tools/icons";
 import {
@@ -354,22 +356,35 @@ function ToolPacks({ app, tools }: { app: any; tools: ToolDef[] }) {
     .filter((x) => x.list.length)
     .sort((a, b) => Number(b.list.some((t) => (t.disciplines || []).includes(disc))) - Number(a.list.some((t) => (t.disciplines || []).includes(disc))));
   const recent = (app.toolIndex || []).slice(0, 3);
+  // saved documents matching the words typed (title, number, zone · level · element, tool) — only of tools this role may open
+  const role = toolRole(app.profile);
+  const docHits = needle ? searchDocs(app.toolIndex || [], q).filter((h) => toolAllowed(role, h.kind)).slice(0, 8) : [];
+  const docRow = (h: any) => (
+    <button key={h.id} type="button" data-doc-hit={h.id} onClick={() => app.push({ type: "tooldoc", id: `${h.kind}:${h.id}` })} className="press w-full flex items-center gap-3 min-h-12 px-3.5 py-1.5 rounded-xl bg-surface border border-line text-start">
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[13.5px]" dir="auto">{h.title || "بلا عنوان"}</span>
+        {wbsPath(h.wbs) && <span className="block truncate text-[11px] text-ink-2" dir="auto"><MapPin size={10} className="inline me-1" />{wbsPath(h.wbs)}</span>}
+      </span>
+      <span className="shrink-0 text-[11px] text-ink-3"><bdi dir="ltr" className="font-grotesk">{h.docNo || h.dateIso}</bdi></span>
+    </button>
+  );
   return (
     <>
       <SectionTitle>أدوات الموقع والمكتب الفني</SectionTitle>
       <label className="flex items-center gap-2 h-11 px-3.5 rounded-xl bg-surface border border-line-2 focus-within:ring-2 focus-within:ring-accent">
         <Search size={16} className="text-ink-3 shrink-0" />
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث: خرسانة، حديد، ميزانية، كابل…" className="w-full min-w-0 bg-transparent text-[14px] focus:outline-none" />
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث في الأدوات والمستندات: خرسانة، برج A، الدور 02…" className="w-full min-w-0 bg-transparent text-[14px] focus:outline-none" />
       </label>
       {!needle && recent.length > 0 && (
         <div className="space-y-1.5">
           <p className="text-[12px] text-ink-2">الأخيرة</p>
-          {recent.map((h: any) => (
-            <button key={h.id} type="button" onClick={() => app.push({ type: "tooldoc", id: `${h.kind}:${h.id}` })} className="press w-full flex items-center gap-3 min-h-12 px-3.5 rounded-xl bg-surface border border-line text-start">
-              <span className="min-w-0 flex-1 truncate text-[13.5px]" dir="auto">{h.title || "بلا عنوان"}</span>
-              <span className="shrink-0 text-[11px] text-ink-3"><bdi dir="ltr" className="font-grotesk">{h.docNo || h.dateIso}</bdi></span>
-            </button>
-          ))}
+          {recent.map(docRow)}
+        </div>
+      )}
+      {docHits.length > 0 && (
+        <div className="space-y-1.5" data-doc-hits>
+          <p className="text-[12px] text-ink-2">مستندات محفوظة</p>
+          {docHits.map(docRow)}
         </div>
       )}
       {packs.map(({ pk, list }) => (
@@ -392,7 +407,7 @@ function ToolPacks({ app, tools }: { app: any; tools: ToolDef[] }) {
           </div>
         </section>
       ))}
-      {needle && !packs.length && <p className="text-center text-[12.5px] text-ink-3 py-4">لا أداة بهذا الاسم.</p>}
+      {needle && !packs.length && !docHits.length && <p className="text-center text-[12.5px] text-ink-3 py-4">لا أداة بهذا الاسم.</p>}
     </>
   );
 }
