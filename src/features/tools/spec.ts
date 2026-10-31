@@ -1,7 +1,7 @@
 // =====================================================================
 //  Tool documents → DocSpec: the parts every tool's PDF shares (title block from the project, signatures, basis,
 //  disclaimer, colophon), so a tool only writes its own sections.
-//  · The title block belongs to the issuer (the project's issuing party); EngSpace signs only the footer line.
+//  · The title block belongs to the issuer (the project's issuing party); the document carries no app mark or credit.
 //  · Drafts print «مسودة» and no fingerprint; issued documents carry their number, revision and SHA-256.
 // =====================================================================
 import type { BasisRow, DocBlock, DocSection, DocSpec, SignParty, TitleParty, TraceStep } from "../../doc/model";

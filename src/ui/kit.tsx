@@ -6,7 +6,7 @@
 // =====================================================================
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, ChevronUp, Copy, Eye, FileDown, FileText, Plus, Share2, Trash2, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Copy, Eye, FileDown, FileSpreadsheet, FileText, Plus, Share2, Trash2, X } from "lucide-react";
 import { numInputProblem, type NumInputRule } from "../lib/num-input";
 import { FilterChip, Num } from "./primitives";
 import type { DrawPage, TraceStep } from "../doc/model";
@@ -216,12 +216,31 @@ export function RowCards<R>({ rows, onChange, blank, render, summary, addLabel =
 }
 
 // ---- the export bar (bottom of a document screen) ----
-// the editable Word copy is a compact labelled button beside the share button: four controls still fit a 360 px phone
+// The export triad: the A4 PDF is the wide primary action; preview, the editable Word copy, the live Excel workbook and the
+// share summary are 48 px icon buttons with a caption under the icon — five controls in one row on a 360 px phone.
+function BarIcon({ label, caption, onClick, busy, children, ...p }: { label: string; caption: string; onClick: () => void; busy?: string | null; children: any; [k: string]: any }) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      onClick={onClick}
+      disabled={!!busy}
+      className="press shrink-0 w-12 min-h-12 flex flex-col items-center justify-center gap-0.5 rounded-xl bg-surface border border-line-2 text-ink-2 disabled:opacity-50"
+      {...p}
+    >
+      {children}
+      <span className="text-[10px] leading-none">{caption}</span>
+    </button>
+  );
+}
+
 export function ExportBar({
   busy,
   onPreview,
   onPdf,
   onDocx,
+  onXlsx,
   onShare,
   note,
 }: {
@@ -229,6 +248,7 @@ export function ExportBar({
   onPreview: () => void;
   onPdf: () => void;
   onDocx?: () => void;
+  onXlsx?: () => void;
   onShare?: () => void;
   note?: string;
 }) {
@@ -236,21 +256,33 @@ export function ExportBar({
     <div className="foot sticky bottom-[var(--tabbar-space)] z-[6] mt-auto -mx-4 px-4 pt-2.5 pb-[max(0.75rem,var(--sab))] bg-canvas/[.97] border-t border-line">
       {note && <p className="mb-2 text-[11px] text-ink-3 text-center">{note}</p>}
       <div className="flex gap-2">
-        <button type="button" data-tool-preview onClick={onPreview} disabled={!!busy} className="press flex-1 min-h-12 inline-flex items-center justify-center gap-1.5 rounded-xl bg-surface border border-line-2 text-[13.5px]"><Eye size={17} /> معاينة</button>
-        <button type="button" data-tool-export onClick={onPdf} disabled={!!busy} className="press flex-[1.4] min-h-12 inline-flex items-center justify-center gap-1.5 rounded-xl btn-primary text-[14px] font-medium"><FileDown size={17} /> {busy || "تقرير PDF"}</button>
+        <BarIcon label="معاينة" caption="معاينة" onClick={onPreview} busy={busy} data-tool-preview>
+          <Eye size={17} />
+        </BarIcon>
+        <button
+          type="button"
+          data-tool-export
+          onClick={onPdf}
+          disabled={!!busy}
+          className="press flex-1 min-w-0 min-h-12 inline-flex items-center justify-center gap-1.5 rounded-xl btn-primary text-[14px] font-medium"
+        >
+          <FileDown size={17} className="shrink-0" /> <span className="truncate">{busy || "تقرير PDF"}</span>
+        </button>
         {onDocx && (
-          <button
-            type="button"
-            data-tool-docx
-            aria-label="ملف Word قابل للتعديل"
-            onClick={onDocx}
-            disabled={!!busy}
-            className="press shrink-0 min-h-12 px-3 inline-flex items-center justify-center gap-1 rounded-xl bg-surface border border-line-2 text-[12.5px]"
-          >
-            <FileText size={16} /> Word
-          </button>
+          <BarIcon label="ملف Word قابل للتعديل" caption="Word" onClick={onDocx} busy={busy} data-tool-docx>
+            <FileText size={17} />
+          </BarIcon>
         )}
-        {onShare && <button type="button" aria-label="مشاركة الملخص" onClick={onShare} disabled={!!busy} className="press w-12 min-h-12 grid place-items-center rounded-xl bg-surface border border-line-2"><Share2 size={17} /></button>}
+        {onXlsx && (
+          <BarIcon label="ملف Excel بمعادلات حية" caption="Excel" onClick={onXlsx} busy={busy} data-tool-xlsx>
+            <FileSpreadsheet size={17} />
+          </BarIcon>
+        )}
+        {onShare && (
+          <BarIcon label="مشاركة الملخص" caption="مشاركة" onClick={onShare} busy={busy}>
+            <Share2 size={17} />
+          </BarIcon>
+        )}
       </div>
     </div>
   );

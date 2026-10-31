@@ -301,16 +301,16 @@ function build(doc: ToolDoc<Body>, project: any) {
       cols: [
         { key: "member", label: "العنصر", wMm: 38, align: "start" }, { key: "mark", label: "العلامة", wMm: 12, align: "center" },
         { key: "d", label: "القطر", wMm: 16, align: "center" }, { key: "nm", label: "عناصر", wMm: 11, align: "end", num: { dp: 0 } },
-        { key: "ne", label: "/عنصر", wMm: 11, align: "end", num: { dp: 0 } }, { key: "tn", label: "العدد", wMm: 12, align: "end", num: { dp: 0 } },
+        { key: "ne", label: "/عنصر", wMm: 11, align: "end", num: { dp: 0 } }, { key: "tn", label: "العدد", wMm: 12, align: "end", num: { dp: 0 }, xl: { f: "{nm}*{ne}" } },
         { key: "shape", label: "الشكل", wMm: 10, align: "center" },
         { key: "A", label: "A", wMm: 12, align: "end", num: { dp: 0 } }, { key: "B", label: "B", wMm: 12, align: "end", num: { dp: 0 } },
         { key: "C", label: "C", wMm: 12, align: "end", num: { dp: 0 } }, { key: "D", label: "D", wMm: 12, align: "end", num: { dp: 0 } },
         { key: "E", label: "E/R", wMm: 12, align: "end", num: { dp: 0 } },
         { key: "sk", label: "الرسم", wMm: 22, align: "center", sketch: true },
         { key: "cut", label: "طول القص", unit: "mm", wMm: 15, align: "end", num: { dp: 0 } },
-        { key: "tm", label: "الطول الكلي", unit: "m", wMm: 16, align: "end", num: { dp: 2 } },
+        { key: "tm", label: "الطول الكلي", unit: "m", wMm: 16, align: "end", num: { dp: 2 }, xl: { f: "{tn}*{cut}/1000" } },
         { key: "kgm", label: "kg/m", wMm: 12, align: "end", num: { dp: 3 } },
-        { key: "kg", label: "الوزن", unit: "kg", wMm: 18, align: "end", num: { dp: 2 } },
+        { key: "kg", label: "الوزن", unit: "kg", wMm: 18, align: "end", num: { dp: 2 }, xl: { f: "{tm}*{kgm}" } },
         { key: "rev", label: "R", wMm: 8, align: "center" },
       ],
       rows,
@@ -320,10 +320,10 @@ function build(doc: ToolDoc<Body>, project: any) {
   const summary: DocBlock[] = [
     { k: "heading", num: "A", text: "ملخص الأوزان حسب القطر" },
     {
-      k: "table", id: "sum", caption: "", cols: [
+      k: "table", id: "sum", caption: "", carry: { sumCols: ["m", "kg", "t"] }, cols: [
         { key: "d", label: "القطر", wMm: 30, align: "center" }, { key: "m", label: "الطول", unit: "m", wMm: 40, align: "end", num: { dp: 2 } },
-        { key: "kgm", label: "kg/m", wMm: 30, align: "end", num: { dp: 3 } }, { key: "kg", label: "الوزن", unit: "kg", wMm: 40, align: "end", num: { dp: 3 } },
-        { key: "t", label: "طن", wMm: 34, align: "end", num: { dp: 3 } },
+        { key: "kgm", label: "kg/m", wMm: 30, align: "end", num: { dp: 3 } }, { key: "kg", label: "الوزن", unit: "kg", wMm: 40, align: "end", num: { dp: 3 }, xl: { f: "{m}*{kgm}" } },
+        { key: "t", label: "طن", wMm: 34, align: "end", num: { dp: 3 }, xl: { f: "{kg}/1000" } },
       ],
       rows: c.sum.rows.map((r) => ({ cells: { d: iso(`Ø${r.d}`), m: r.totalM, kgm: r.kgPerM, kg: r.kg, t: r.t } })),
       totals: { cells: { d: "الإجمالي", kg: c.sum.kg, t: c.sum.kg / 1000 } },

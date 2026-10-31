@@ -1,16 +1,15 @@
 // =====================================================================
 //  Document kit — layout: DocSpec → DrawPages (pure arithmetic, mm from each page's top-left)
 //  · The page count is known before anything is drawn, so a backend draws, encodes and releases each page in one pass.
-//  · Page 1 carries the issuer's title block (خرطوشة); pages 2+ a running header; every page the footer line, the only
-//    EngSpace attribution. The colophon closes the last page.
+//  · Page 1 carries the issuer's title block (خرطوشة); pages 2+ a running header; every page a white-label footer line
+//    (document type · number · page — no app mark or credit). The colophon closes the last page.
 //  · Reading direction is decided here only: fromStart() places a box from the reading start (the right edge in Arabic).
 //  · Layout never throws on content: long words break, over-wide tables are scaled down and reported in `warnings`.
 //  · Tables repeat their header on every page and, with `carry`, print «يُرحّل» / «ما قبله» sums at each break.
 //  See docs/TOOLS-BLUEPRINT.md §5a.
 // =====================================================================
-import MARK_SHAPE from "../ui/brand-mark.json";
 import type {
-  DocBlock, DocCol, DocFont, DocLang, DocLayoutResult, DocMeasurer, DocRow, DocSpec, DrawOp, DrawPage, Ink, RevRow, TitleParty, VPath,
+  DocBlock, DocCol, DocFont, DocLang, DocLayoutResult, DocMeasurer, DocRow, DocSpec, DrawOp, DrawPage, Ink, RevRow, TitleParty,
 } from "./model";
 import { MM_PER_PT, TYPE, frame, lineMm } from "./theme";
 import { clampLines, flatText, fmtNum, hasArabic, iso, stripIsolates, wrapText } from "./text";
@@ -119,15 +118,6 @@ const hline = (ops: DrawOp[], x1: number, x2: number, y: number, pt: number, ink
 
 const vline = (ops: DrawOp[], x: number, y1: number, y2: number, pt: number, ink: Ink = "hair") =>
   ops.push({ op: "rule", x1: x, y1, x2: x, y2, pt, ink });
-
-// the E+S mark from its master polygons (src/ui/brand-mark.json, never redrawn), as a path `hMm` tall
-export function brandMarkPath(hMm: number): { paths: VPath[]; w: number } {
-  const mk: any = MARK_SHAPE;
-  const k = hMm / mk.box.h;
-  const poly = (pts: number[][]) =>
-    pts.map(([x, y], i) => `${i ? "L" : "M"}${((x - mk.box.x) * k).toFixed(3)} ${((y - mk.box.y) * k).toFixed(3)}`).join(" ") + " Z";
-  return { paths: [{ d: poly(mk.s), fill: true }, { d: poly(mk.bar), fill: true }], w: mk.box.w * k };
-}
 
 // ---------------------------------------------------------------------
 //  Title block (page 1) — §5a: rows A parties · B title · C control · D basis + the fingerprint cell
@@ -377,14 +367,13 @@ function footer(ops: DrawOp[], o: O, m: DocMeasurer, rtl: boolean, spec: DocSpec
     return;
   }
   hline(ops, f.left, f.right, f.footerRule, HAIR, "hair");
-  const mark = brandMarkPath(3.5);
+  // white-label: the issuer's document carries no app mark or credit — the document type at the start, its number in the
+  // middle, the page count at the end
   const base = f.footerBase;
-  const markX = rtl ? f.right - mark.w : f.left;
-  ops.push({ op: "path", x: markX, y: base - 3, scale: 1, d: mark.paths, ink: "ink60", pt: 0 });
-  const credit = L2("أُعدّ باستخدام EngSpace · Prepared with EngSpace", "Prepared with EngSpace · أُعدّ باستخدام EngSpace");
-  const cw = 80;
-  const creditLeft = rtl ? f.right - mark.w - 1.5 - cw : f.left + mark.w + 1.5;
-  ops.push({ op: "text", x: anchorX(creditLeft, cw, dir, "start", 0), y: base, f: TYPE.foot, ink: "ink60", dir, text: credit, align: "start" });
+  const typeW = f.width / 3 - 4;
+  const typeLeft = rtl ? f.right - typeW : f.left;
+  const type = clampLines([spec.meta.docTypeName], 1, typeW, TYPE.foot, m)[0];
+  ops.push({ op: "text", x: anchorX(typeLeft, typeW, dir, "start", 0), y: base, f: TYPE.foot, ink: "ink60", dir, text: type, align: "start" });
   const no = spec.meta.plain ? spec.meta.docTypeName : `${spec.meta.docNo || L2("مسودة", "Draft")} · Rev ${spec.meta.rev}`;
   ops.push({ op: "text", x: f.left + f.width / 2, y: base, f: TYPE.foot, ink: "ink60", dir: spec.meta.docNo && !spec.meta.plain ? "ltr" : dir, text: no, align: "center" });
   const pg = L2(`صفحة ${n} من ${of}`, `Page ${n} of ${of}`);

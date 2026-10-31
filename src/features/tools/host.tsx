@@ -249,6 +249,19 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
       setBusy(null);
     }
   };
+  const xlsx = async () => {
+    setBusy("جارٍ إنشاء ملف Excel…");
+    try {
+      const { specXlsx, XLSX_MIME } = await import("../../doc/xlsx");
+      const bytes = specXlsx(spec());
+      const name = `${(doc.docNo || `${mod.docType}-draft`).replace(/[^\w.-]+/g, "_")}-Rev${doc.rev}.xlsx`;
+      await saveOrShare(bytes, name, doc.title, XLSX_MIME);
+    } catch {
+      app.toast("تعذّر إنشاء ملف Excel");
+    } finally {
+      setBusy(null);
+    }
+  };
   const share = async () => {
     const text = mod.summary(doc);
     try {
@@ -315,7 +328,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
         <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }) }} />
         {!readOnly && <ToolTipCard app={app} kind={doc.kind} summary={mod.summary(doc)} />}
       </div>
-      <ExportBar busy={busy} onPreview={preview} onPdf={pdf} onDocx={docx} onShare={share} />
+      <ExportBar busy={busy} onPreview={preview} onPdf={pdf} onDocx={docx} onXlsx={xlsx} onShare={share} />
       {pages && <DocPreview pages={pages} onClose={() => setPages(null)} draw={(c, p, s) => {
         const land = p.orientation === "landscape";
         c.width = Math.round((land ? 297 : 210) * s);

@@ -83,7 +83,9 @@ export function rasterBackend(images?: ImageSource, log: string[] = []): DocBack
             title: `${meta.docTypeName}${meta.docNo ? ` · ${meta.docNo}` : ""}`,
             author: meta.issuer,
             subject: meta.docType,
-            creator: `EngSpace ${meta.appVersion}`,
+            // white-label: the issuer made the document; no tool name in Creator, no Producer
+            creator: meta.issuer,
+            producer: null,
             lang: meta.lang,
           });
     },
