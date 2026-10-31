@@ -5,7 +5,7 @@
 //  · Drafts print «مسودة» and no fingerprint; issued documents carry their number, revision and SHA-256.
 // =====================================================================
 import type { BasisRow, DocBlock, DocSection, DocSpec, SignParty, TitleParty, TraceStep } from "../../doc/model";
-import type { ToolDoc } from "../../data/tool-docs";
+import { wbsPath, type ToolDoc } from "../../data/tool-docs";
 import type { ProjectSnap, SignRole, ToolProject } from "../../data/tool-projects";
 
 declare const __BUILD__: { version: string };
@@ -96,7 +96,8 @@ export function buildSpec(o: {
 }): DocSpec {
   const { doc, meta, project } = o;
   const issuer = issuerName(project) || "—";
-  const loc = project ? [project.location.site, project.location.city, project.location.governorate].filter(Boolean).join(" · ") : "";
+  const site = project ? [project.location.site, project.location.city, project.location.governorate].filter(Boolean).join(" · ") : "";
+  const loc = [wbsPath(doc.wbs), site].filter(Boolean).join(" — ");
   const tail: DocBlock[] = [];
   if (o.basis && (o.basis.rows.length || o.basis.formulas.length)) tail.push({ k: "basis", rows: o.basis.rows, formulas: o.basis.formulas });
   tail.push({ k: "disclaimer", text: DISCLAIMER });

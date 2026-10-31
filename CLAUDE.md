@@ -153,6 +153,14 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   `workbook()` (custom live Excel: parameter cells, cross-row formulas, cached values resolved by `evalFormula`, which now knows
   IF and comparisons); tests re-evaluate every formula and match the sheet's totals to the engine (`tests/office-workbooks.test.ts`).
 
+- v0.32.0: **project WBS** — every tool document files under zone / building · level · element (`ToolDoc.wbs`, kept by NAME so it
+  stays readable when the project's list changes; `wbsPath()`; the index header carries it only when set). A project may list its
+  zones and their levels (`ToolProject.wbs`, ProjectEditor → «تقسيم المشروع (WBS)»); `WbsCard` suggests those plus the names its
+  documents already use (datalists — anything can be typed). The path prints first in the title block's location (`buildSpec`:
+  «WBS — site»), so PDF / Word / Excel all say where the work is. Search is `src/tools/doc-search.ts` (pure: every word must match
+  title · number · WBS · tool name · date, Arabic normalised — أ إ آ → ا, ة → ه, ى → ي, no tashkeel / kashida): the tool's list has a
+  search box (> 3 documents) and zone chips; the Tools tab search also lists saved documents (only kinds `toolAllowed` for the role).
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role
