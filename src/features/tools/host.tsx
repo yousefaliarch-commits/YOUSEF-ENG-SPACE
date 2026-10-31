@@ -249,11 +249,25 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
       setBusy(null);
     }
   };
+  // a new document of this kind in the same project, saved and opened (the next payment certificate from this one…)
+  const spawn = async (body: any, title: string) => {
+    const s = await app.toolStore();
+    const d: ToolDoc = {
+      id: newDocId(), kind, v: mod.v, at: 0, createdAt: Date.now(), projectId: doc.projectId, title,
+      dateIso: today(), docNo: null, rev: "00", status: "draft", profile: mod.profile, body, photos: {}, log: [],
+    };
+    const r = await s.save(d);
+    if (r.status === "failed") {
+      app.toast("تعذّر الحفظ على الجهاز — المساحة ممتلئة؟");
+      return;
+    }
+    app.push({ type: "tooldoc", id: `${kind}:${r.doc.id}` });
+  };
   const xlsx = async () => {
     setBusy("جارٍ إنشاء ملف Excel…");
     try {
-      const { specXlsx, XLSX_MIME } = await import("../../doc/xlsx");
-      const bytes = specXlsx(spec());
+      const { specXlsx, workbookXlsx, XLSX_MIME } = await import("../../doc/xlsx");
+      const bytes = mod.workbook ? workbookXlsx(mod.workbook(doc, projectFor(doc, projects))) : specXlsx(spec());
       const name = `${(doc.docNo || `${mod.docType}-draft`).replace(/[^\w.-]+/g, "_")}-Rev${doc.rev}.xlsx`;
       await saveOrShare(bytes, name, doc.title, XLSX_MIME);
     } catch {
@@ -325,7 +339,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
             : <button type="button" onClick={revise} className="press shrink-0 min-h-10 px-3.5 rounded-lg bg-surface border border-line-2 text-[12.5px]">مراجعة جديدة</button>}
         </div>
         {doc.v > mod.v && <p className="text-[12px] text-warn">هذا المستند من إصدار أحدث من التطبيق — يُعرض للقراءة فقط. حدّث التطبيق لتعديله.</p>}
-        <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }) }} />
+        <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }), spawn }} />
         {!readOnly && <ToolTipCard app={app} kind={doc.kind} summary={mod.summary(doc)} />}
       </div>
       <ExportBar busy={busy} onPreview={preview} onPdf={pdf} onDocx={docx} onXlsx={xlsx} onShare={share} />

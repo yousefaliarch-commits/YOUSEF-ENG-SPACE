@@ -108,6 +108,16 @@ export const TOOL_REGISTRY: ToolDef[] = [
     icon: "Handshake", keywords: "عهدة تسليم استلام معدات أدوات مخزن custody handover equipment store",
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["custody"],
   },
+  {
+    id: "qto", pack: "quantities", name: "حصر الكميات", desc: "بنود بموقعها في المشروع، أبعادها، وخصم الفتحات بقاعدة قياس معلنة",
+    icon: "Ruler", keywords: "حصر كميات مباني بياض محارة دهان بلاط عزل وزرة حفر ردم خصم الفتحات qto quantity take-off boq measurement",
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["qto"],
+  },
+  {
+    id: "ipc", pack: "office", name: "المستخلص الجاري", desc: "السابق والحالي والإجمالي، التأمين، استهلاك الدفعة المقدمة والضريبة",
+    icon: "Receipt", keywords: "مستخلص جاري ختامي فاتورة شهادة دفع تأمين محجوز دفعة مقدمة ضريبة قيمة مضافة ipc interim payment certificate invoice retention advance vat",
+    roles: MONEY, money: true, surface: "screen", wave: 1, status: "live", docKinds: ["ipc"],
+  },
   { id: "offer", pack: "money", name: "تقييم عرض عمل", desc: "مكانه من السوق بالصافي ورقمك المضاد", icon: "BadgeDollarSign", keywords: "عرض عمل offer", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
   { id: "net", pack: "money", name: "الصافي والإجمالي", desc: "حوّل بين الصافي والإجمالي", icon: "Calculator", keywords: "صافي إجمالي net gross", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
   { id: "compare", pack: "money", name: "مقارن العروض", desc: "عرضان بالقيمة الحقيقية للساعة", icon: "Scale", keywords: "مقارنة عروض compare", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },

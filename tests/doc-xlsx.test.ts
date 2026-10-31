@@ -80,6 +80,13 @@ describe("evalFormula — the check that keeps formulas honest", () => {
     expect(evalFormula("SUBTOTAL(9,A2:A4)", get)).toBe(60);
     expect(evalFormula("MAX(A1,C1,B1)", get)).toBe(4);
   });
+  it("IF with comparisons (lazy branches), as the payment certificate's FIDIC recovery uses", () => {
+    expect(evalFormula("IF(A2>A1,1,2)", get)).toBe(1);
+    expect(evalFormula("IF(A2<=A1,1,2)", get)).toBe(2);
+    expect(evalFormula("IF(C1=4,B1*2,0)", get)).toBe(7);
+    expect(evalFormula("IF(A1<>2,1)", get)).toBe(0);
+    expect(evalFormula("A3+IF(A4>25,MIN(0.25*A2,A3-A1),0)", get)).toBe(22.5);
+  });
   it("refuses what it cannot evaluate instead of guessing", () => {
     expect(evalFormula("VLOOKUP(A1,B1:C1,2)", get)).toBeNull();
     expect(evalFormula("A1/0", get)).toBeNull();

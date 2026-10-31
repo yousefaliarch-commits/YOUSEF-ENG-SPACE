@@ -145,6 +145,14 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   rows). **White-label**: no app mark, credit or name in any export (PDF footer = type · number · page; PDF Creator = issuer, no Producer;
   inspection report headed by the issuing party). `ExportBar`: PDF primary + 48 px Preview / Word / Excel / Share (fits 360 px).
 
+- v0.31.0: **technical office** — `qto` (حصر الكميات, quantities pack, field roles, no prices; engine `domain/tools/qto-calc.ts`: kind
+  geometry, openings deducted per a rule **profile** — IS 1200 · deduct-all · contract thresholds, never claimed as an Egyptian code
+  clause; every deduction states its rule) and `ipc` (المستخلص الجاري, **money tool** — never supervisors; engine `ipc-calc.ts`:
+  previous · current · total, retention with cap, advance recovery proportional or FIDIC 1999 14.2 (history carried in `advPrev`),
+  VAT 14 % since Law 157/2025 / 5 % legacy / exempt, on gross or net; «المستخلص التالي» via `ctx.spawn`). Modules may supply
+  `workbook()` (custom live Excel: parameter cells, cross-row formulas, cached values resolved by `evalFormula`, which now knows
+  IF and comparisons); tests re-evaluate every formula and match the sheet's totals to the engine (`tests/office-workbooks.test.ts`).
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

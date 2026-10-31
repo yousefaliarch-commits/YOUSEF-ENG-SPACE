@@ -1217,8 +1217,8 @@
  },
  "أخرى": {
   "k": "s",
-  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx,features/tools/office/rfi.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
-  "n": 10
+  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx,features/tools/office/qto.tsx,features/tools/office/rfi.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
+  "n": 11
  },
  "{0} — نسختي": {
   "k": "t",
@@ -1253,8 +1253,8 @@
  },
  "الموقع": {
   "k": "s",
-  "p": "data/companies.tsx,features/auth/auth.tsx,features/tools/host.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/rfi.tsx",
-  "n": 6
+  "p": "data/companies.tsx,features/auth/auth.tsx,features/tools/host.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/office/rfi.tsx",
+  "n": 7
  },
  "تنفيذ، بدلات، ساعات": {
   "k": "s",
@@ -7354,8 +7354,8 @@
  },
  "الطول": {
   "k": "s",
-  "p": "domain/site-calc.ts,domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/sprinkler.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
-  "n": 21
+  "p": "domain/site-calc.ts,domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 24
  },
  "متر": {
   "k": "s",
@@ -7389,8 +7389,8 @@
  },
  "م²": {
   "k": "s",
-  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
-  "n": 8
+  "p": "domain/site-calc.ts,domain/tools/qto-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/qto.tsx",
+  "n": 22
  },
  "فدان": {
   "k": "s",
@@ -7419,8 +7419,8 @@
  },
  "م³": {
   "k": "s",
-  "p": "domain/site-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/site/diary.tsx",
-  "n": 26
+  "p": "domain/site-calc.ts,domain/tools/qto-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/site/diary.tsx",
+  "n": 32
  },
  "لتر": {
   "k": "s",
@@ -9590,13 +9590,13 @@
  },
  "العرض": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts,features/sheets/sheets.tsx,features/sitetools/site-tools.tsx,features/tools/mep/sprinkler.tsx",
-  "n": 15
+  "p": "domain/tools/concrete-calc.ts,features/sheets/sheets.tsx,features/sitetools/site-tools.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx",
+  "n": 21
  },
  "السمك": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx",
-  "n": 7
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/office/qto.tsx",
+  "n": 9
  },
  "تُزاد 10 سم من كل جانب حول القاعدة": {
   "k": "s",
@@ -9610,8 +9610,8 @@
  },
  "الارتفاع": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
-  "n": 10
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/office/qto.tsx,features/tools/trade/trade.tsx",
+  "n": 14
  },
  "قاعدة مشطوفة": {
   "k": "s",
@@ -9650,8 +9650,8 @@
  },
  "المحيط": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts",
-  "n": 1
+  "p": "domain/tools/concrete-calc.ts,features/tools/office/qto.tsx",
+  "n": 2
  },
  "سملات": {
   "k": "s",
@@ -9998,6 +9998,132 @@
   "p": "domain/tools/concrete-calc.ts",
   "n": 1
  },
+ "البند {0}: الكمية التراكمية {1} {2} تتجاوز كمية العقد {3} {4} بنسبة {5}% — تُعتمد الزيادة بأمر تغيير (FIDIC 1999 بند 13) قبل صرفها.": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "it.ref || \"—\" | fmt(qtyTotal) | it.unit | fmt(qtyContract) | it.unit | pct.toFixed(1)"
+ },
+ "البند {0}: الكمية التراكمية سالبة ({1}) — راجع الكمية السابقة أو الحالية.": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "it.ref || \"—\" | fmt(qtyTotal)"
+ },
+ "البند {0}: كمية حالية سالبة ({1}) — تصحيح لكمية سبق صرفها.": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "it.ref || \"—\" | fmt(qtyCur)"
+ },
+ "البند {0}: لا توجد فئة سعر — قيمة البند صفر.": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "it.ref || \"—\""
+ },
+ "إجمالي الأعمال {0} يتجاوز قيمة العقد {1} — تأكد من أوامر التغيير المعتمدة.": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "fmt(Gt) | fmt(C)"
+ },
+ "التأمين المحجوز": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts,features/tools/office/ipc.tsx",
+  "n": 4
+ },
+ "min({0}% × {1} ، {2})": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "(rp * 100).toFixed(2) | fmt(Gt) | fmt(cap)"
+ },
+ "FIDIC 1999 بند 14.3(c)": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1
+ },
+ "بلغ التأمين المحجوز حده الأقصى ({0}% من قيمة العقد = {1}) — لا يُحجز المزيد.": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "t.retentionLimitPct | fmt(cap)"
+ },
+ "استهلاك الدفعة المقدمة (FIDIC)": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1
+ },
+ "min({0}% × {1} ، {2} − {3})": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "(rate * 100).toFixed(0) | fmt(gross.cur) | fmt(adv) | fmt(prev)"
+ },
+ "الإجمالي {0} ≤ {1} ({2}% من العقد) ← لا استهلاك بعد": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "fmt(Gt) | fmt(start) | t.fidicStartPct"
+ },
+ "FIDIC 1999 بند 14.2": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts,features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "استهلاك الدفعة المقدمة (بالتناسب)": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1
+ },
+ "min({0} ÷ {1} × {2} ، {3})": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "fmt(adv) | fmt(C) | fmt(Gt) | fmt(adv)"
+ },
+ "أدخل قيمة العقد: استهلاك الدفعة المقدمة بالتناسب يحتاجها.": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1
+ },
+ "اكتمل استهلاك الدفعة المقدمة.": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1
+ },
+ "ضريبة القيمة المضافة": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts,features/tools/office/ipc.tsx",
+  "n": 5
+ },
+ "الصافي بعد الاستقطاعات": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1
+ },
+ "إجمالي أعمال الفترة": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts,features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "قانون 157 لسنة 2025": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1
+ },
+ "صافي المستحق للمستخلص": {
+  "k": "s",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1
+ },
+ "صافي المستخلص سالب ({0}) — الاستقطاعات تتجاوز أعمال الفترة.": {
+  "k": "t",
+  "p": "domain/tools/ipc-calc.ts",
+  "n": 1,
+  "x": "fmt(payable.cur)"
+ },
  "هندسي 12√K": {
   "k": "s",
   "p": "domain/tools/level-calc.ts",
@@ -10132,6 +10258,78 @@
   "k": "s",
   "p": "domain/tools/mep-calc.ts,features/tools/mep/sprinkler.tsx",
   "n": 3
+ },
+ "م.ط": {
+  "k": "s",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1
+ },
+ "{0} × {1} × {2} × {3} وجه": {
+  "k": "t",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1,
+  "x": "n | f3(L) | f3(H) | it.faces"
+ },
+ "يُخصم عرض الباب من الوزرة": {
+  "k": "s",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1
+ },
+ "{0} م² > {1} م² ← يُخصم": {
+  "k": "t",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 4,
+  "x": "f3(a) | f3(r.masonryMin)"
+ },
+ "{0} م² ≤ {1} م² ← لا يُخصم": {
+  "k": "t",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 4,
+  "x": "f3(a) | f3(r.masonryMin)"
+ },
+ "{0} < {1} م² ≤ {2} م² ← يُخصم من وجه واحد": {
+  "k": "t",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1,
+  "x": "f3(r.finishMin) | f3(a) | f3(r.finishOneFace)"
+ },
+ "{0} م² > {1} م² ← يُخصم من الوجهين": {
+  "k": "t",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1,
+  "x": "f3(a) | f3(r.finishOneFace)"
+ },
+ "فراغ داخل العنصر ← يُخصم": {
+  "k": "s",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1
+ },
+ "أبعاد ناقصة — الكمية صفر": {
+  "k": "s",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1
+ },
+ "الخصومات ({0}) أكبر من الإجمالي ({1}) — راجع أبعاد الفتحات": {
+  "k": "t",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1,
+  "x": "f3(deduct) | f3(g.q)"
+ },
+ "ارتفاع «{0}» ({1} م) أكبر من ارتفاع الحائط ({2} م)": {
+  "k": "t",
+  "p": "domain/tools/qto-calc.ts",
+  "n": 1,
+  "x": "o.label || \"فتحة\" | f3(pos(o.h)) | f3(pos(it.H))"
+ },
+ "فتحة": {
+  "k": "s",
+  "p": "domain/tools/qto-calc.ts,features/tools/office/qto.tsx",
+  "n": 5
+ },
+ "بند": {
+  "k": "s",
+  "p": "domain/tools/qto-calc.ts,features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 10
  },
  "نسبة الماء للأسمنت أعلى من 0.55 ⚑": {
   "k": "s",
@@ -11641,8 +11839,8 @@
  },
  "ج.م": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/market/live-salary.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
-  "n": 19
+  "p": "features/admin/AdminView.tsx,features/market/live-salary.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/office/ipc.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
+  "n": 36
  },
  "{0} ج.م": {
   "k": "r",
@@ -11662,8 +11860,8 @@
  },
  "الفترة": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/tools/office/ipc.tsx",
+  "n": 5
  },
  "90 يومًا": {
   "k": "s",
@@ -13034,8 +13232,8 @@
  },
  "النوع": {
   "k": "x",
-  "p": "features/auth/auth.tsx,features/stack/stack.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,features/tools/trade/trade.tsx",
-  "n": 8
+  "p": "features/auth/auth.tsx,features/stack/stack.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,features/tools/trade/trade.tsx",
+  "n": 10
  },
  "اللقب:": {
   "k": "x",
@@ -15658,8 +15856,8 @@
  },
  "الفئة": {
   "k": "x",
-  "p": "features/qaqc/qaqc.tsx,features/stack/stack.tsx",
-  "n": 2
+  "p": "features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/tools/office/ipc.tsx",
+  "n": 6
  },
  "نطاق القائمة (اختياري)": {
   "k": "x",
@@ -17606,8 +17804,8 @@
  },
  "إلى": {
   "k": "x",
-  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/tools/office/rfi.tsx,features/tools/site/diary.tsx,lib/search.ts",
-  "n": 9
+  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/tools/office/ipc.tsx,features/tools/office/rfi.tsx,features/tools/site/diary.tsx,lib/search.ts",
+  "n": 10
  },
  "العرض هناك (صافي)": {
   "k": "s",
@@ -17807,13 +18005,13 @@
  },
  "العدد": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/mep/sprinkler.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 12
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 19
  },
  "م": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
-  "n": 10
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/qto.tsx",
+  "n": 24
  },
  "هالك %": {
   "k": "s",
@@ -19551,8 +19749,8 @@
  },
  "الوصف": {
   "k": "s",
-  "p": "features/stack/stack.tsx,features/tools/office/custody.tsx",
-  "n": 4
+  "p": "features/stack/stack.tsx,features/tools/office/custody.tsx,features/tools/office/qto.tsx",
+  "n": 6
  },
  "التصنيف والتواصل": {
   "k": "s",
@@ -21455,8 +21653,8 @@
  },
  "الصافي": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx",
-  "n": 2
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx",
+  "n": 6
  },
  "المطلوب بالهالك": {
   "k": "s",
@@ -21480,8 +21678,8 @@
  },
  "الإجمالي": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx",
-  "n": 4
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx",
+  "n": 12
  },
  "اللوجستيات ومواعيد الخلاطات": {
   "k": "s",
@@ -21540,8 +21738,8 @@
  },
  "القاعدة": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx",
-  "n": 1
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/qto.tsx",
+  "n": 2
  },
  "مجموعة لكل 50 م³ ⚑": {
   "k": "s",
@@ -21555,8 +21753,8 @@
  },
  "البند": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
-  "n": 8
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
+  "n": 10
  },
  "الأساس": {
   "k": "s",
@@ -22151,7 +22349,7 @@
  "تعذّر الحفظ على الجهاز — المساحة ممتلئة؟": {
   "k": "s",
   "p": "features/tools/host.tsx",
-  "n": 1
+  "n": 2
  },
  "المستند كبير: محفوظ على هذا الجهاز فقط": {
   "k": "s",
@@ -22632,8 +22830,8 @@
  },
  "راجع المستند الكامل": {
   "k": "s",
-  "p": "features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/sprinkler.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,features/tools/site/toolbox.tsx",
-  "n": 6
+  "p": "features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,features/tools/site/toolbox.tsx",
+  "n": 8
  },
  "منسوب آخر غرفة": {
   "k": "s",
@@ -23100,11 +23298,6 @@
   "p": "features/tools/office/custody.tsx",
   "n": 2
  },
- "بند": {
-  "k": "s",
-  "p": "features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 7
- },
  "إجمالي الكميات {0}": {
   "k": "t",
   "p": "features/tools/office/custody.tsx",
@@ -23153,8 +23346,8 @@
  },
  "الوحدة": {
   "k": "s",
-  "p": "features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 12
+  "p": "features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 20
  },
  "الرقم التسلسلي / الكود": {
   "k": "s",
@@ -23224,6 +23417,787 @@
   "p": "features/tools/office/custody.tsx",
   "n": 1,
   "x": "doc.body.items.length"
+ },
+ "إجمالي الأعمال المنفذة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "يُخصم: التأمين المحجوز": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "يُخصم: استهلاك الدفعة المقدمة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 5
+ },
+ "الصافي قبل الضريبة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "يُضاف: ضريبة القيمة المضافة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "يُخصم: {0}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2,
+  "x": "d.name || \"استقطاع\""
+ },
+ "استقطاع": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 5
+ },
+ "صافي المستحق": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "البيان": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx,features/tools/office/qto.tsx",
+  "n": 9
+ },
+ "السابق": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 5
+ },
+ "الحالي": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "صافي المستحق — المستخلص رقم {0}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "b.certNo || \"—\""
+ },
+ "أعمال الفترة {0} · التراكمي {1}{2}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "money(r.s.gross.cur) | money(r.s.gross.total) | progress != null ? ` · ${fmtNum(progress, 1)}% من قيمة العقد` : \"\""
+ },
+ "· {0}% من قيمة العقد": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "fmtNum(progress, 1)"
+ },
+ "بيانات المستخلص": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "رقم المستخلص": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "مرجع العقد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "الفترة من": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "شروط العقد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "قيمة العقد (بدون ضريبة)": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "حد التأمين (اختياري)": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "% من العقد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 4
+ },
+ "فارغ = بدون حد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "الدفعة المقدمة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 4
+ },
+ "استهلاك الدفعة المقدمة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "بالتناسب مع الأعمال": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "يبدأ بعد اعتماد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "معدل الاستهلاك": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "% من المستخلص": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "المستهلك حتى المستخلص السابق": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "14% — قانون 157/2025": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "5% — عقد على ضريبة الجدول": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "معفى": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "وعاء الضريبة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "الصافي بعد التأمين والدفعة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "بنود الأعمال ({0})": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "b.items.length"
+ },
+ "بند جديد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx,features/tools/office/qto.tsx",
+  "n": 4
+ },
+ "{0} · {1} — {2} {3} · {4} ج.م{5}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "it.ref || \"—\" | it.desc || \"بند\" | l ? fmtNum(l.qtyTotal, 2) : \"0\" | it.unit | l ? whole(l.amtTotal) : \"0\" | l?.overrun ? \" ⚠\" : \"\""
+ },
+ "رقم البند": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "القسم (اختياري)": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "بيان الأعمال": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 4
+ },
+ "كمية العقد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 4
+ },
+ "الكمية السابقة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 4
+ },
+ "كمية الفترة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 4
+ },
+ "· قيمة الفترة": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "· الإجمالية": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "الإجمالي {0} {1}{2} · قيمة الفترة {3} · الإجمالية {4}": {
+  "k": "r",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "EL <Num>{fmtNum(l.qtyTotal, 2)}</Num> | it.unit | l.progress != null && <> · الإنجاز <Num>{fmtNum(l.progress * | EL <Num>{money(l.amtCur)}</Num> | EL <Num>{money(l.amtTotal)}</Num>"
+ },
+ "· الإنجاز": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "· الإنجاز {0}": {
+  "k": "r",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "EL <Num>{fmtNum(l.progress * 100, 1)}%</Num>"
+ },
+ "استقطاعات أخرى": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "{0}% من إجمالي الأعمال": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "d.pct || 0"
+ },
+ "{0} ج.م للفترة": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "money(N(d.cur))"
+ },
+ "مثال: ضريبة الخصم من المنبع، غرامة، تشوينات": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "نسبة من إجمالي الأعمال": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "مبلغ ثابت": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "النسبة حسب العقد / القانون": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "النسب حسب العقد والقانون الساري — لا يفترض التطبيق أي نسبة استقطاع.": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "ملخص المستخلص": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 3
+ },
+ "إنشاء المستخلص التالي (رقم": {
+  "k": "x",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "إنشاء المستخلص التالي (رقم {0})": {
+  "k": "e",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "nextNo(b.certNo)"
+ },
+ "المستخلص رقم {0}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2,
+  "x": "nextNo(b.certNo)"
+ },
+ "حتى {0}% من العقد": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "b.retLimit"
+ },
+ "{0} ج.م — {1}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "money(N(b.adv)) | b.advMethod === \"fidic\" ? `FIDIC 14.2 (يبدأ بعد ${b.fStart}% بمعدل ${b.fRate}%)` : \"بالتناسب مع الأعمال\""
+ },
+ "FIDIC 14.2 (يبدأ بعد {0}% بمعدل {1}%)": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "b.fStart | b.fRate"
+ },
+ "لا يوجد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "{0}% على {1}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "b.vat || 0 | b.vatOn === \"net\" ? \"الصافي\" : \"إجمالي الأعمال\""
+ },
+ "إجمالي الأعمال": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "قيمة العقد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "بدون قسم": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "بنود الأعمال": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "الكمية الإجمالية": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "القيمة السابقة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "قيمة الفترة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "القيمة الإجمالية": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "صافي المستحق لهذا المستخلص": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "الإنجاز من قيمة العقد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "رصيد الدفعة المقدمة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "ملاحظات المراجعة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx,features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "مستخلص جاري رقم {0} · الفترة {1} → {2}{3}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "b.certNo || \"—\" | b.from || \"—\" | b.to || \"—\" | b.contractRef ? ` · ${b.contractRef}` : \"\""
+ },
+ "نسبة التأمين المحجوز": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "حد التأمين المحجوز (٪ من العقد)": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "بدون حد": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "طريقة الاستهلاك": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "بداية الاستهلاك (FIDIC)": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "معدل الاستهلاك (FIDIC)": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "نسبة الإنجاز": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "مستخلص {0}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "b.certNo || \"\""
+ },
+ "مستخلص جاري · Interim payment certificate": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "مكتب فني · تعاقدات": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "مستخلص جاري رقم ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "doc.body.certNo || \"—\""
+ },
+ "أعمال الفترة ⁦{0}⁩ ج.م": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "money(r.s.gross.cur)"
+ },
+ "صافي المستحق ⁦{0}⁩ ج.م": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1,
+  "x": "money(r.s.payable.cur)"
+ },
+ "حفر": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx,features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "ردم": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "إحلال / تربة": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "خرسانة": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "مباني": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "بياض / محارة": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "دهانات": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "بلاط / أرضيات": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "مونة / سيراميك أرضي": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "عزل": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "وزرة": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "IS 1200 — المباني: تُخصم الفتحات > 0.1 م² · البياض والدهان: ≤ 0.5 م² لا يُخصم، 0.5–3 م² وجه واحد، > 3 م² الوجهان": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "خصم كل الفتحات بالكامل": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "حسب طريقة القياس في العقد": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "الموقع (WBS): مبنى / دور / عنصر": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "برج A / الدور 02 / حوائط الشقة 3": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "سقف (طول × عرض)": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "القياس بالمتر المسطح (بدون سمك)": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "العمق / الارتفاع": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "الرفرف (الرجوع على الحوائط)": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "الأوجه المقاسة": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "وجه واحد": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "الوجهان": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "الأبواب (يُخصم عرضها)": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "الفتحات": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx,features/tools/trade/trade.tsx",
+  "n": 2
+ },
+ "باب": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "باب D1، شباك W2…": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "{0} بند · {1} نوع أعمال": {
+  "k": "t",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1,
+  "x": "b.lines.length | r.totals.length"
+ },
+ "قواعد القياس والخصم": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "خصم كل الفتحات": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "حسب العقد": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "المباني: لا يُخصم ما دون": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "البياض/الدهان: لا يُخصم ما دون": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "وجه واحد حتى": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "الأرضيات/العزل: لا يُخصم ما دون": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "طرق القياس تختلف بين العقود — راجع طريقة القياس المعتمدة في عقدك قبل الإصدار.": {
+  "k": "x",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "البنود ({0})": {
+  "k": "t",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1,
+  "x": "b.lines.length"
+ },
+ "الصافي {0} {1}": {
+  "k": "r",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\">{q3(res.net)}</bdi> | res.unit"
+ },
+ "الإجماليات حسب نوع الأعمال": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 3
+ },
+ "{0} ({1} بند)": {
+  "k": "t",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1,
+  "x": "kindName(t.kind) | t.lines"
+ },
+ "قواعد القياس": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "عدد البنود": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "بنود الحصر": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "السمك/الأوجه": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "الخصم": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 3
+ },
+ "تفاصيل الخصومات وقاعدتها": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "الفتحة": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "المساحة/العرض": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "المضاعف": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "نوع الأعمال": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "الكمية الصافية": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
+ "قواعد القياس: {0}": {
+  "k": "t",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1,
+  "x": "RULE_NAME[b.rules]"
+ },
+ "الموقع (WBS)": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "الارتفاع / الرفرف": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "السمك / الأوجه": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "حصر الكميات": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx,tools/registry.ts",
+  "n": 2
+ },
+ "حصر كميات · Quantity take-off": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "مكتب فني · حصر": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "حصر كميات": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
  },
  "يوقف العمل": {
   "k": "s",
@@ -24435,11 +25409,6 @@
   "n": 1
  },
  "أماكن محصورة": {
-  "k": "s",
-  "p": "features/tools/site/permit.tsx",
-  "n": 1
- },
- "حفر": {
   "k": "s",
   "p": "features/tools/site/permit.tsx",
   "n": 1
@@ -26133,11 +27102,6 @@
   "n": 1
  },
  "عرض الغرفة": {
-  "k": "s",
-  "p": "features/tools/trade/trade.tsx",
-  "n": 1
- },
- "الفتحات": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -28178,6 +29142,31 @@
   "n": 1
  },
  "عهدة تسليم استلام معدات أدوات مخزن custody handover equipment store": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "بنود بموقعها في المشروع، أبعادها، وخصم الفتحات بقاعدة قياس معلنة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "حصر كميات مباني بياض محارة دهان بلاط عزل وزرة حفر ردم خصم الفتحات qto quantity take-off boq measurement": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "المستخلص الجاري": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "السابق والحالي والإجمالي، التأمين، استهلاك الدفعة المقدمة والضريبة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "مستخلص جاري ختامي فاتورة شهادة دفع تأمين محجوز دفعة مقدمة ضريبة قيمة مضافة ipc interim payment certificate invoice retention advance vat": {
   "k": "s",
   "p": "tools/registry.ts",
   "n": 1
