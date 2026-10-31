@@ -2,7 +2,6 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { CATEGORIES, TEMPLATES, categoryOf, cleanTemplate, itemCount, mergeTemplates, newInspection, newTemplate, resolveTemplate, tally, templateError } from "../src/data/checklists";
-import { REPORT_PROMO } from "../src/lib/report-pdf";
 
 describe("a checklist from scratch", () => {
   it("starts blank with one empty section, marked as the member's own", () => { const t = newTemplate(); expect(t).toMatchObject({ title: "", category: "", custom: true }); expect(t.id).toMatch(/^u-/); expect(t.sections).toEqual([["البنود", [""]]]); });
@@ -48,9 +47,9 @@ describe("sync between phones", () => {
 
 describe("the executive report", () => {
   const src = readFileSync(new URL("../src/lib/report-pdf.ts", import.meta.url), "utf8");
-  it("carries the platform line in every page footer, exactly as worded", () => { expect(REPORT_PROMO).toBe("تم إنشاء التقرير عبر تطبيق EngSpace — منصة المهندسين الرسمية | engspace.org"); expect(src).toMatch(/canvases\.forEach\(\(cv, i\) => \{[\s\S]*tr\(REPORT_PROMO\)[\s\S]*صفحة \$\{i \+ 1\} من \$\{total\}/); });
-  it("has the consultant layout: letterhead mark, project table, summary, inspection table, three signature blocks", () => {
-    expect(src).toMatch(/drawMark\(ctx/); expect(src).toMatch(/MARK_SHAPE from "\.\.\/ui\/brand-mark\.json"/);
+  it("is white-label: no app mark, name or promo line; every page footer carries the document number and «page x of y»", () => { expect(src).not.toMatch(/EngSpace|engspace\.org|drawMark|REPORT_PROMO/); expect(src).toMatch(/canvases\.forEach\(\(cv, i\) => \{[\s\S]*fillText\(r\.docNo[\s\S]*صفحة \$\{i \+ 1\} من \$\{total\}/); });
+  it("has the consultant layout: white-label letterhead, project table, summary, inspection table, three signature blocks", () => {
+    expect(src).toMatch(/const issuer = r\.names\?\.contractor \|\| r\.names\?\.consultant/);   // the issuing party heads the report
     for (const s of ["رقم المستند", "النتيجة النهائية", "نسبة المطابقة", "مهندس المقاول", "مهندس الاستشاري (الإشراف)", "المهندس المستلم", "الاعتماد والتوقيعات", "ملاحظات عامة والإجراءات التصحيحية"]) expect(src).toContain(s);
     expect(src).toMatch(/if \(inTable && canvases\.length > 1\) tableHead\(\)/);   // the table header repeats on every page
   });

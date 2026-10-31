@@ -280,7 +280,7 @@ function build(doc: ToolDoc<Body>, project: any) {
       { key: "dims", label: "الأبعاد", unit: "م", wMm: 36, align: "start" },
       { key: "net", label: "الصافي", unit: "م³", wMm: 19, align: "end", num: { dp: 3 } },
       { key: "w", label: "الهالك", unit: "%", wMm: 13, align: "end", num: { dp: 0 } },
-      { key: "ord", label: "المطلوب", unit: "م³", wMm: 19, align: "end", num: { dp: 3 } },
+      { key: "ord", label: "المطلوب", unit: "م³", wMm: 19, align: "end", num: { dp: 3 }, xl: { f: "{net}*(1+{w}/100)" } },
       { key: "fw", label: "الشدة", unit: "م²", wMm: 23, align: "end", num: { dp: 2 } },
     ],
     rows,

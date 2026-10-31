@@ -86,7 +86,7 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   `scrollTop` (use `scrollMem`). Edge swipe-back writes transforms directly. Long-lived listeners read the latest `app` via `appNow`.
   **QA/QC builder**: checklists from scratch (`qcbuilder`, `UserTemplate` in `data/checklists.ts`, synced as member_state `qcTemplates`
   with tombstones; an inspection keeps a `tpl` snapshot so deleting a checklist never breaks it). Executive A4 report in `lib/report-pdf.ts`
-  (`inspectionPdf`, signatures, footer promo `REPORT_PROMO`). **CV review** (`features/cv/hr.ts`): birth date, marital status, nationality,
+  (`inspectionPdf`, signatures; white-label since v0.30: the issuing party heads it, no app mark or promo). **CV review** (`features/cv/hr.ts`): birth date, marital status, nationality,
   photo and a local phone are normal — only the national ID is flagged; Syndicate registration is optional (shown when stated, never scored or flagged — its 3 points are spread over the other codes checks); military-service status is checked for male Egyptian engineers;
   every report carries the HR director's assessment (`result.hr`) and the regional block (`result.regional`). **Update notice**:
   Publish web update → broadcast → `broadcast_app_update()` (service role) → `update` notice → tap opens Home + `requestUpdate()` (docs/OTA.md).
@@ -100,7 +100,7 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   rebar→bbs / masonry→tradeKit) + `gate.ts` (`toolAllowed` / `toolKindsForRole` / `toolOfStack`): supervisors never reach a money tool, HR only the CV
   review — checked in push, the render switch, AppHeader and `openTool`. Stack types `tool` (#app/tool/<id>) and `tooldoc` (#app/tooldoc/<kind>:<docId|new>;
   a new document gets its id on the first edit via `app.replaceTop`). **Document kit** `src/doc/`: DocSpec → `docLayout` (pure mm, issuer's title block,
-  running header, one EngSpace footer line, paged tables with «يُرحّل / ما قبله») → raster backend (240 dpi, lossless 16-colour Flate pages, JPEG photos,
+  running header, a white-label footer (document type · number · page — no app mark or credit since v0.30), paged tables with «يُرحّل / ما قبله») → raster backend (240 dpi, lossless 16-colour Flate pages, JPEG photos,
   real PDF metadata; `renderDoc` never rejects). Canvas ignores LRI/PDI: lines without Arabic are drawn LTR. **Tool store** `src/lib/tool-store.ts`:
   IndexedDB first, member_state shards `toolIndex` + `toolShelfA…L` (loadAll excludes `tool%`; `cloud.toolStamps/toolRows`), per-document merge
   (conflict copy, tombstones), never rejects. Projects: member_state `siteProjects`. Engines are pure in `src/domain/tools/*` with the blueprint's
@@ -137,6 +137,13 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   submittal / custody + toolbox / permit), 💡 tool tips, Word export for every tool doc (`src/doc/docx.ts`). Thinking levels:
   `low` / `medium` only (`minimal` → 400). Model `gemini-3.5-flash-lite` (migration 27; 3.8-flash was ~38 s to the first word);
   on 429 / 5xx the proxy falls back through `FALLBACK_MODELS` (`_shared/ai.ts`) — measure on the live key before changing models.
+
+- v0.30.0: **export triad** — every tool document exports A4 PDF · editable Word (`src/doc/docx.ts`) · live Excel (`src/doc/xlsx.ts`:
+  SpreadsheetML zipped with fflate; summary sheet + one sheet per table with a frozen, filterable, print-repeated header, typed numbers,
+  RTL for Arabic, `fullCalcOnLoad`). A column's `xl.f` template (`{key}` = same row) becomes a real formula only when `evalFormula`
+  reproduces the engine's value at the printed decimals; summed columns (`carry.sumCols`) end in `SUM` (`SUBTOTAL(9,…)` with subtotal
+  rows). **White-label**: no app mark, credit or name in any export (PDF footer = type · number · page; PDF Creator = issuer, no Producer;
+  inspection report headed by the issuing party). `ExportBar`: PDF primary + 48 px Preview / Word / Excel / Share (fits 360 px).
 
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;

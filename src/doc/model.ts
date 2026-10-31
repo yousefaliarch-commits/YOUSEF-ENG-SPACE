@@ -2,7 +2,7 @@
 //  Document kit — the document model (pure data, no DOM, no side effects)
 //  · A tool builds a DocSpec; layout.ts turns it into DrawPages (physical mm from the page's top-left, page count known up
 //    front); a backend (raster now, vector later) draws those pages. The on-screen preview draws the same pages.
-//  · The title block belongs to the ISSUER (the member's firm), never EngSpace; EngSpace signs one footer line.
+//  · The title block belongs to the ISSUER (the member's firm), never EngSpace, and no export carries an app mark or credit.
 //  · Numbers, units, codes and dates are LTR spans; Latin digits everywhere in reports.
 //  See docs/TOOLS-BLUEPRINT.md §5a.
 // =====================================================================
@@ -52,6 +52,9 @@ export type DocCol = {
   num?: { dp: number };
   mark?: boolean;
   sketch?: boolean;
+  // the Excel export (../doc/xlsx.ts): the formula that reproduces this column from the same row's other columns, with {key}
+  // placeholders — e.g. "ROUND({n}*{len}*{kgm},3)". Written only when it matches the engine's value at the printed decimals.
+  xl?: { f: string };
 };
 
 export type DocRow = {

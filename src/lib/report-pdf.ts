@@ -6,7 +6,6 @@
 // =====================================================================
 import { Capacitor } from "@capacitor/core";
 import { isEn, tr } from "../i18n/i18n";
-import MARK_SHAPE from "../ui/brand-mark.json";
 
 const A4 = { w: 1240, h: 1754 }; // 150 dpi
 const PT = { w: 595.28, h: 841.89 };
@@ -36,10 +35,10 @@ export function pdfFromJpegs(pages: Uint8Array[]) {
 }
 
 // ---- drawing the report ----
-// An executive A4 inspection report in the style consultants issue: EngSpace letterhead with the E+S mark, document number and date,
+// An executive A4 inspection report in the style consultants issue, white-label: the report title and the issuing party, document number and date,
 // the project block as a ruled table, a summary strip (result + counts + compliance), the inspection table (# · item · result · notes)
 // with its header repeated on every page, general notes, three signature blocks (contractor · consultant · receiving engineer), and a
-// quiet footer on every page: the platform line and «page x of y». Arabic reads from the right edge, English from the left.
+// quiet footer on every page: the document number and «page x of y» (no app mark or credit). Arabic reads from the right edge, English from the left.
 type Row = { section?: string; text?: string; mark?: string; note?: string };
 export type InspectionReport = {
   title: string; scope: string; category?: string; docNo: string; head: [string, string][]; rows: Row[]; general?: string;
@@ -51,20 +50,12 @@ export type InspectionReport = {
 const C = { brand: "#5B4BC9", brandDark: "#3F33A0", wash: "#F3F1FF", ink: "#18181B", body: "#3F3F46", muted: "#71717A", faint: "#A1A1AA", line: "#E4E4E7", zebra: "#FAFAFA", pass: "#15803D", fail: "#B91C1C", na: "#71717A", amber: "#B45309" };
 const MARK: Record<string, [string, string, string]> = { pass: ["مطابق", C.pass, "#DCFCE7"], fail: ["غير مطابق", C.fail, "#FEE2E2"], na: ["لا ينطبق", C.na, "#F4F4F5"], "": ["—", C.faint, "#FFFFFF"] };
 const VERDICT_COLOR: Record<string, [string, string]> = { accepted: [C.pass, "#DCFCE7"], conditional: [C.amber, "#FEF3C7"], rejected: [C.fail, "#FEE2E2"], "": [C.muted, "#F4F4F5"] };
-export const REPORT_PROMO = "تم إنشاء التقرير عبر تطبيق EngSpace — منصة المهندسين الرسمية | engspace.org";
 
 function wrap(ctx: CanvasRenderingContext2D, text: string, width: number) {
   const words = String(text || "").split(/\s+/).filter(Boolean); const lines: string[] = []; let cur = "";
   for (const w of words) { const t = cur ? cur + " " + w : w; if (ctx.measureText(t).width > width && cur) { lines.push(cur); cur = w; } else cur = t; }
   if (cur) lines.push(cur); return lines.length ? lines : [""];
 }
-// the E+S mark from its master polygons (src/ui/brand-mark.json — never redrawn by hand), `size` px tall
-function drawMark(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, color: string) {
-  const m: any = MARK_SHAPE; const k = size / m.box.h; ctx.save(); ctx.fillStyle = color;
-  for (const poly of [m.s, m.bar]) { ctx.beginPath(); poly.forEach(([px, py]: number[], i: number) => { const X = x + (px - m.box.x) * k, Y = y + (py - m.box.y) * k; if (i) ctx.lineTo(X, Y); else ctx.moveTo(X, Y); }); ctx.closePath(); ctx.fill(); }
-  ctx.restore(); return m.box.w * k;
-}
-
 export async function inspectionPdf(r: InspectionReport) {
   const FONT = '"IBM Plex Sans Arabic", system-ui, sans-serif';
   // a sample with an Arabic letter: without it only the Latin files of each weight are fetched, and an Arabic weight not yet
@@ -91,10 +82,11 @@ export async function inspectionPdf(r: InspectionReport) {
   const page = () => {
     const cv = document.createElement("canvas"); cv.width = A4.w; cv.height = A4.h; canvases.push(cv); ctx = cv.getContext("2d")!;
     ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, A4.w, A4.h); ctx.direction = en ? "ltr" : "rtl"; ctx.textBaseline = "top";
-    // letterhead: mark + wordmark at the start, document number and date at the end, a brand rule beneath
-    const mw = drawMark(ctx, en ? M : A4.w - M - 64 * (666 / 645), 44, 64, C.brand);
-    ctx.fillStyle = C.ink; font(600, 34); ctx.direction = "ltr"; ctx.textAlign = en ? "left" : "right"; ctx.fillText("EngSpace", en ? M + mw + 18 : A4.w - M - mw - 18, 44); ctx.direction = en ? "ltr" : "rtl";
-    ctx.fillStyle = C.muted; font(400, 18); ctx.textAlign = en ? "left" : "right"; ctx.fillText(tr("تقرير فحص واستلام أعمال · QA/QC Inspection Report"), en ? M + mw + 18 : A4.w - M - mw - 18, 88); ctx.textAlign = "start";
+    // letterhead (white-label): the report title and the issuing party at the start, document number and date at the end
+    const issuer = r.names?.contractor || r.names?.consultant || "";
+    ctx.fillStyle = C.ink; font(600, 30); ctx.textAlign = en ? "left" : "right"; ctx.fillText(tr("تقرير فحص واستلام أعمال · QA/QC Inspection Report"), en ? M : A4.w - M, 44);
+    if (issuer) { ctx.fillStyle = C.muted; font(400, 18); ctx.fillText(issuer, en ? M : A4.w - M, 88); }
+    ctx.textAlign = "start";
     font(400, 16); ctx.fillStyle = C.muted; text(tr("رقم المستند"), W, 46, "end"); font(600, 21); ctx.fillStyle = C.ink; ctx.direction = "ltr"; ctx.textAlign = en ? "right" : "left"; ctx.fillText(r.docNo, en ? A4.w - M : M, 70); ctx.textAlign = "start"; ctx.direction = en ? "ltr" : "rtl";   // a Latin number, anchored to the page's end edge
     ctx.fillStyle = C.brand; ctx.fillRect(M, 128, W, 4); ctx.fillStyle = C.line; ctx.fillRect(M, 132, W, 1);
     y = 160; if (inTable && canvases.length > 1) tableHead();
@@ -172,13 +164,12 @@ export async function inspectionPdf(r: InspectionReport) {
       if (col === 1 || i === r.photos!.length - 1) y += th + gap;
     });
   }
-  // every page: a quiet footer with the platform line and «page x of y»
+  // every page: a quiet footer with the document number and «page x of y»
   const total = canvases.length;
   canvases.forEach((cv, i) => {
     ctx = cv.getContext("2d")!; ctx.direction = en ? "ltr" : "rtl"; ctx.textBaseline = "top";
     const fy = A4.h - 82; ctx.fillStyle = C.line; ctx.fillRect(M, fy - 16, W, 1.5);
-    const mw = drawMark(ctx, en ? M : A4.w - M - 22 * (666 / 645), fy, 22, C.brand);
-    ctx.fillStyle = C.muted; font(400, 15); ctx.textAlign = en ? "left" : "right"; ctx.fillText(tr(REPORT_PROMO), en ? M + mw + 10 : A4.w - M - mw - 10, fy + 2); ctx.textAlign = "start";
+    ctx.fillStyle = C.muted; font(400, 15); ctx.direction = "ltr"; ctx.textAlign = en ? "left" : "right"; ctx.fillText(r.docNo, en ? M : A4.w - M, fy + 2); ctx.textAlign = "start"; ctx.direction = en ? "ltr" : "rtl";
     ctx.fillStyle = C.faint; font(400, 15); text(tr(`صفحة ${i + 1} من ${total}`), W, fy + 2, "end");
   });
   return pdfFromJpegs(canvases.map((cv) => dataUrlBytes(cv.toDataURL("image/jpeg", 0.9))));

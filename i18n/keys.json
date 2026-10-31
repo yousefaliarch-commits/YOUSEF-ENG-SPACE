@@ -22219,6 +22219,16 @@
   "p": "features/tools/host.tsx",
   "n": 1
  },
+ "جارٍ إنشاء ملف Excel…": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "تعذّر إنشاء ملف Excel": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
  "نُسخ الملخص": {
   "k": "s",
   "p": "features/tools/host.tsx",
@@ -26859,11 +26869,6 @@
   "n": 1,
   "x": "rule.max"
  },
- "تم إنشاء التقرير عبر تطبيق EngSpace — منصة المهندسين الرسمية | engspace.org": {
-  "k": "s",
-  "p": "lib/report-pdf.ts",
-  "n": 1
- },
  "ء A1": {
   "k": "s",
   "p": "lib/report-pdf.ts",
@@ -29014,9 +29019,9 @@
   "n": 2
  },
  "معاينة": {
-  "k": "x",
+  "k": "s",
   "p": "ui/kit.tsx",
-  "n": 1
+  "n": 4
  },
  "تقرير PDF": {
   "k": "s",
@@ -29028,7 +29033,17 @@
   "p": "ui/kit.tsx",
   "n": 2
  },
+ "ملف Excel بمعادلات حية": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
  "مشاركة الملخص": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
+ "مشاركة": {
   "k": "s",
   "p": "ui/kit.tsx",
   "n": 2

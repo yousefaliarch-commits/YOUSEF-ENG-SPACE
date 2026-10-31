@@ -51,7 +51,9 @@ describe("layout: pages, title block, footer", () => {
     expect(t).toContain("صفحة 1 من 1");
     expect(t).toContain("1/1");
     expect(t).toContain("7F3A 91C2");
-    expect(t.some((s) => s.includes("Prepared with EngSpace"))).toBe(true);
+    // white-label: the issuer's document carries no app credit or mark — the footer shows the document type instead
+    expect(t.some((s) => /EngSpace/.test(s))).toBe(false);
+    expect(pages[0].ops.some((o) => o.op === "path")).toBe(false);
     // no old promo line
     expect(t.some((s) => s.includes("منصة المهندسين الرسمية"))).toBe(false);
   });
