@@ -186,6 +186,16 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   holds no unsaved edit («وصل تعديل من جهاز آخر»; deleted elsewhere → missing). Dev-only `window.__engspaceTools.store()` for e2e.
   e2e project `desktop` (1440 × 900): `desktop.spec.ts` + the tool suites.
 
+- v0.35.0: **registers** — the RFI, submittal and VO logs are built from the documents themselves (`domain/tools/registers.ts`,
+  pure: docs + today → rows, counts, overdue, average turnaround, VO money). RFI: due = date + reply days, `answeredOn` / `closed`;
+  submittal: consultant code A·B·C·D + `codeOn`, review period `days` (14); a **draft is listed but never late**. Shown under the tool
+  («المستندات | السجل», `RegisterView` in `features/tools/register.tsx`) and exported through the triad by `registerSpec` (a dated
+  `<code>-<TYPE>-LOG`, status issued, no hash → no draft band, no fingerprint; landscape; the VO log ends in live SUMs). A status
+  is a state, not a verdict: register columns never use `mark` (it would print «مطابق / غير مطابق»). New **`vo`** tool (أوامر
+  التغيير, office, **money** — never supervisors; `vo-calc.ts`): priced additions and omissions (omissions are negative lines),
+  net, share of the contract against the contract's own alert % (never a figure claimed for a law), extra time, the engineer's
+  decision. Kit: `DateField`.
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

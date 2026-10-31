@@ -106,12 +106,12 @@ export const TOOL_REGISTRY: ToolDef[] = [
   // ---- the salary and offer tools: money, unchanged ----
   // ---- the technical office's paperwork, with «املأ بالمهندس الذكي» (docs/AI.md → smart forms) ----
   {
-    id: "rfi", pack: "office", name: "طلب استيضاح فني RFI", desc: "السؤال والمراجع والحل المقترح وموعد الرد — جاهز للاستشاري",
+    id: "rfi", pack: "office", name: "طلب استيضاح فني RFI", desc: "السؤال والمراجع والحل المقترح وموعد الرد — وسجل الاستيضاحات بالمتأخر منها",
     icon: "FileQuestion", keywords: "استيضاح استفسار سؤال للاستشاري تعارض لوحات rfi request for information query clash",
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["rfi"],
   },
   {
-    id: "submittal", pack: "office", name: "اعتماد خامة", desc: "الخامة والمصنّع والخصائص والمرفقات وكود الاستشاري",
+    id: "submittal", pack: "office", name: "اعتماد خامة", desc: "الخامة والمصنّع والخصائص والمرفقات وكود الاستشاري — وسجل الاعتمادات",
     icon: "PackageCheck", keywords: "اعتماد خامة عينة كتالوج مواد submittal material approval sample datasheet",
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["submittal"],
   },
@@ -129,6 +129,11 @@ export const TOOL_REGISTRY: ToolDef[] = [
     id: "ipc", pack: "office", name: "المستخلص الجاري", desc: "السابق والحالي والإجمالي، التأمين، استهلاك الدفعة المقدمة والضريبة",
     icon: "Receipt", keywords: "مستخلص جاري ختامي فاتورة شهادة دفع تأمين محجوز دفعة مقدمة ضريبة قيمة مضافة ipc interim payment certificate invoice retention advance vat",
     roles: MONEY, money: true, surface: "screen", wave: 1, status: "live", docKinds: ["ipc"],
+  },
+  {
+    id: "vo", pack: "office", name: "أوامر التغيير", desc: "الإضافات والإلغاءات بالفئات، المدة الإضافية، قرار المهندس — وسجل أوامر التغيير",
+    icon: "FileDiff", keywords: "أمر تغيير أوامر تغيير أعمال إضافية إلغاء بنود مدة إضافية variation order change order vo extra works omission",
+    roles: MONEY, money: true, surface: "screen", wave: 1, status: "live", docKinds: ["vo"],
   },
   { id: "offer", pack: "money", name: "تقييم عرض عمل", desc: "مكانه من السوق بالصافي ورقمك المضاد", icon: "BadgeDollarSign", keywords: "عرض عمل offer", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
   { id: "net", pack: "money", name: "الصافي والإجمالي", desc: "حوّل بين الصافي والإجمالي", icon: "Calculator", keywords: "صافي إجمالي net gross", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
