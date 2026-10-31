@@ -8,7 +8,7 @@
 //  Saves are debounced (400 ms) and flushed when the screen closes; the store syncs on its own.
 // =====================================================================
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, FilePlus2, FolderOpen, MapPin, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronLeft, Eye, FilePlus2, FolderOpen, MapPin, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toolById } from "../../tools/registry";
 import { toolAllowed, toolRole } from "../../tools/gate";
 import { newDocId, wbsPath, type DocWbs, type ToolDoc, type ToolHeader } from "../../data/tool-docs";
@@ -119,7 +119,7 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
         )}
         {!!all.length && !docs.length && <p className="p-4 rounded-2xl border border-dashed border-line-2 text-[12.5px] text-ink-3 text-center">لا مستند يطابق البحث.</p>}
         {!all.length && <p className="p-4 rounded-2xl border border-dashed border-line-2 text-[12.5px] text-ink-3 text-center leading-relaxed">لا مستندات بعد. كل ما تكتبه يُحفظ على هذا الجهاز أولًا، ثم في حسابك.</p>}
-        <ul className="space-y-2">
+        <ul className="desk-grid space-y-2" data-doc-list>
           {docs.map((h) => (
             <li key={h.id} className="flex items-center rounded-2xl bg-surface border border-line">
               <button type="button" onClick={() => app.push({ type: "tooldoc", id: `${h.kind}:${h.id}` })} className="press min-w-0 flex-1 min-h-14 px-3.5 py-2 text-start">
@@ -150,6 +150,89 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
           }}
         />
       )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+//  The live A4 preview (W5): a document in a wide desktop pane draws its own PDF pages beside the editor, a moment after the
+//  last edit (the same layout and drawing as «معاينة» and the exported file). Only on a desktop — a phone never pays for it.
+// ---------------------------------------------------------------------
+function usePaneWide(ref: { current: HTMLElement | null }, min: number, ready: boolean) {
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const pane = ref.current && (ref.current.closest(".desk-col") as HTMLElement | null);
+    if (!pane || typeof ResizeObserver === "undefined") {
+      setWide(false);
+      return;
+    }
+    const ro = new ResizeObserver(() => setWide(pane.clientWidth >= min));
+    ro.observe(pane);
+    setWide(pane.clientWidth >= min);
+    return () => ro.disconnect();
+  }, [ready, min]);
+  return wide;
+}
+
+const LIVE_PAGES = 8;
+
+function LivePreview({ make, dep, project }: { make: () => any; dep: unknown; project: unknown }) {
+  const [pages, setPages] = useState<DrawPage[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let live = true;
+    const t = setTimeout(async () => {
+      try {
+        await loadDocFonts();
+        if (!live) return;
+        setPages(docLayout(make(), canvasMeasurer).pages);
+        setFailed(false);
+      } catch {
+        if (live) setFailed(true);
+      }
+    }, 600);
+    return () => {
+      live = false;
+      clearTimeout(t);
+    };
+  }, [dep, project]);
+  return (
+    <div data-live-preview className="sticky top-4 max-h-[calc(100dvh-8rem)] overflow-y-auto pb-4 space-y-3">
+      <p className="flex items-center gap-1.5 text-[12px] text-ink-2">
+        <Eye size={14} /> معاينة حية {pages && <span>· <Num>{pages.length}</Num> صفحة</span>}
+      </p>
+      {failed && <p className="text-[12px] text-warn">تعذّرت المعاينة — تُحدَّث مع التعديل التالي.</p>}
+      {!pages && !failed && <div className="skeleton aspect-[210/297] w-full rounded-sm" />}
+      {pages && pages.slice(0, LIVE_PAGES).map((p, i) => <PageCanvas key={i} page={p} />)}
+      {pages && pages.length > LIVE_PAGES && <p className="text-[12px] text-ink-3 text-center">والصفحات الباقية في ملف PDF</p>}
+    </div>
+  );
+}
+
+function PageCanvas({ page }: { page: DrawPage }) {
+  const box = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    const c = ref.current, b = box.current;
+    if (!c || !b) return;
+    const land = page.orientation === "landscape";
+    const wMm = land ? 297 : 210, hMm = land ? 210 : 297;
+    const cssW = b.clientWidth || 480;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const s = (cssW * dpr) / wMm;
+    c.width = Math.round(wMm * s);
+    c.height = Math.round(hMm * s);
+    c.style.width = `${cssW}px`;
+    c.style.height = `${(cssW * hMm) / wMm}px`;
+    const ctx = c.getContext("2d");
+    if (ctx) drawPage(ctx, page, s);
+    return () => {
+      c.width = c.height = 0;
+    };
+  }, [page]);
+  return (
+    <div ref={box} className="w-full">
+      <canvas ref={ref} data-live-page className="block bg-white rounded-sm border border-line shadow-card" />
     </div>
   );
 }
@@ -218,6 +301,9 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
   const timer = useRef<any>(null);
   const role = toolRole(app.profile);
   const t = toolById(kind);
+  // a desktop pane wide enough (focus mode) shows the PDF beside the editor
+  const rootEl = useRef<HTMLDivElement | null>(null);
+  const wide = usePaneWide(rootEl, 1100, !!mod && !!doc);
 
   useEffect(() => {
     if (!mod) return;
@@ -256,11 +342,43 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
     }
     if (r.status === "tooBig") app.toast("المستند كبير: محفوظ على هذا الجهاز فقط");
     saved.current = r.doc;
+    // nothing typed since: hold the stored copy, so a later edit from another device can be recognised as newer
+    if (latest.current === d) setDoc(r.doc);
     if (docId === "new") app.replaceTop({ type: "tooldoc", id: `${kind}:${r.doc.id}` });
   };
   const latest = useRef<ToolDoc | null>(null);
   latest.current = doc;
   useEffect(() => () => void flush(latest.current), []);
+
+  // live sync (W5): the same document saved on another device (the phone, engspace.org on a desktop) appears here at once —
+  // but only while this screen holds no unsaved edit of its own; deleted elsewhere → «المستند غير موجود»
+  const loaded = !!doc;
+  useEffect(() => {
+    if (!loaded || docId === "new") return;
+    let off = () => {};
+    let live = true;
+    app.toolStore().then((s: any) => {
+      if (!live) return;
+      off = s.subscribe(() => {
+        const base = saved.current;
+        if (!base) return;
+        const remote: ToolDoc | null = s.get(base.id);
+        if (!remote) {
+          setMissing(true);
+          return;
+        }
+        if (latest.current === base && remote.at > base.at) {
+          saved.current = remote;
+          setDoc(remote);
+          app.toast("وصل تعديل من جهاز آخر");
+        }
+      });
+    });
+    return () => {
+      live = false;
+      off();
+    };
+  }, [loaded, docId]);
 
   const update = (next: ToolDoc) => {
     setDoc(next);
@@ -386,8 +504,9 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
 
   const Editor = mod.Editor;
   return (
-    <div className="pt-3 flex flex-col min-h-full" data-tool={kind}>
-      <div className="space-y-3 pb-4">
+    <div ref={rootEl} className="pt-3 flex flex-col min-h-full" data-tool={kind}>
+      <div className="doc-split">
+      <div className="space-y-3 pb-4 min-w-0">
         <TextField label="عنوان المستند" value={doc.title} onChange={(v) => !readOnly && update({ ...doc, title: v })} readOnly={readOnly} />
         <WbsCard app={app} doc={doc} project={project} readOnly={readOnly} onChange={(wbs) => update({ ...doc, wbs })} />
         <div className="grid grid-cols-2 gap-2.5">
@@ -414,6 +533,8 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
         {doc.v > mod.v && <p className="text-[12px] text-warn">هذا المستند من إصدار أحدث من التطبيق — يُعرض للقراءة فقط. حدّث التطبيق لتعديله.</p>}
         <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }), spawn }} />
         {!readOnly && <ToolTipCard app={app} kind={doc.kind} summary={mod.summary(doc)} />}
+      </div>
+      <aside className="doc-live">{wide && <LivePreview make={spec} dep={doc} project={project} />}</aside>
       </div>
       <ExportBar busy={busy} onPreview={preview} onPdf={pdf} onDocx={docx} onXlsx={xlsx} onShare={share} />
       {pages && <DocPreview pages={pages} onClose={() => setPages(null)} draw={(c, p, s) => {

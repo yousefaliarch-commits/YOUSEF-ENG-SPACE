@@ -39,6 +39,7 @@ import { ArchMark } from "../ui/primitives";
 import { NotificationPrefsScreen, PushPrimerSheet } from "../features/notifications/prefs";
 import { fmt } from "../ui/theme";
 import { ScreenLoading } from "./ScreenLoading";
+import { DeskNav, DeskTabBar, FocusToggle, useDesk, useDeskFocus } from "./desk";
 import { isCloud } from "../backend/config";
 import { profilePatch } from "../backend/map";
 import { NATIVE, setBackHandler, setPendingOpen, shareContent, takePendingAuth, takePendingOpen } from "../native/native";
@@ -80,6 +81,8 @@ const PANE_KEYS = ["toolIndex", "toolProjects", "activeProject", "qcTemplates", 
 
 export const STACK_TYPES = ["post", "company", "job", "room", "chat", "inspection", "qcbuilder", "ticket", "tool", "tooldoc"];
 
+const TOOLS_TAB_TYPES = ["tool", "tooldoc", "inspection", "qcbuilder", "checklists", "cvreview"];
+
 export const PLAIN_TYPES = ["notifications", "notifprefs", "profile", "rooms", "permissions", "postjob", "cvreview", "settings", "guide", "checklists", "support"];
 
 export function parseHash() {
@@ -88,6 +91,9 @@ export function parseHash() {
   if (TABS.some((t) => t.id === parts[1])) { tab = parts[1]; if (tab === "market" && ["salaries", "companies"].includes(parts[2])) market = parts[2]; if (tab === "market" && parts[2] === "tools") tab = "tools"; }
   else if (STACK_TYPES.includes(parts[1]) && parts[2]) stack = [{ type: parts[1], id: parts[2] }];
   else if (PLAIN_TYPES.includes(parts[1])) stack = [{ type: parts[1] }];
+  // a link to a tool, a document, a checklist or the CV review sits on the Tools tab: «back» lands there, and on a desktop the
+  // left pane shows it beside the open screen
+  if (stack.length && TOOLS_TAB_TYPES.includes(stack[0].type)) tab = "tools";
   else if (parts[1] === "companies") { tab = "market"; market = "companies"; } else if (parts[1] === "salaries") { tab = "market"; market = "salaries"; }
   return { view, tab, stack, market, skipOnboarding: parts[1] != null, section: view === "admin" ? parts[1] || null : null };
 }
@@ -147,6 +153,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   // Screen changes run as View Transitions in the standalone app (directional slides for push / pop, a lift for tabs); the device
   // previews and browsers without the API keep the class-based entrances. Reduced motion turns both off.
   const vtOK = !embed && typeof document !== "undefined" && typeof document.startViewTransition === "function" && !reducedMotion();
+  // engspace.org on a desktop (./desk.tsx): never the phone apps, never inside a device mockup
+  const desk = useDesk(!embed && !NATIVE);
+  const [deskFocus, setDeskFocus] = useDeskFocus();
   const nav = (kind?: any, fn?: any) => {
     const root = document.documentElement; const L = liveState(); if (!vtOK || L.vtBusy || L.tourOn || kind === "tab") { fn(); return; } // under the tour the screen changes at once: a view transition behind the scrim only costs frames
     L.vtBusy = true; root.dataset.vt = kind; let t = null;
@@ -310,12 +319,22 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const loadChat = (tid?: any) => cloud.messages(tid).then((msgs) => setThreads((ts) => ts.map((t) => (t.id === tid ? { ...t, messages: msgs, unread: 0 } : t))));
   const refreshThreads = () => cloud.threads().then((ts) => setThreads((old) => ts.map((t) => { const o = old.find((x) => x.id === t.id); return o ? { ...t, messages: o.messages, unread: t.id === chatRef.current ? 0 : t.unread } : t; })));
   // the realtime handlers outlive a render: they always call the latest functions through this ref
-  const rt = useRef<any>({}); const hydrateTimer = useRef<any>(null);
+  const rt = useRef<any>({}); const hydrateTimer = useRef<any>(null); const toolsTimer = useRef<any>(null);
   const uniqById = (ps: any[]) => { const seen = new Set(); return ps.filter((p) => !seen.has(p.id) && seen.add(p.id)); };
   rt.current = {
     refreshMe: () => refreshMe().catch(() => {}),
     // moderation and other bulk changes: one refresh shortly after the last event
     hydrateSoon: () => { clearTimeout(hydrateTimer.current); hydrateTimer.current = setTimeout(() => hydrate().catch(() => {}), 600); },
+    // «tools»: this member saved a tool document or a project on another device (or this one — the store knows its own
+    // stamps, so that echo costs one small read). Documents: the store pulls the changed shards; projects: the one row.
+    toolsSoon: (key: any) => {
+      if (key === "siteProjects") {
+        cloud.toolRows(["siteProjects"]).then((rows) => { const r = rows[0]; if (r && Array.isArray(r.value)) setToolProjects((mine) => mergeProjects(mine, r.value)); }).catch(() => {});
+        return;
+      }
+      clearTimeout(toolsTimer.current);
+      toolsTimer.current = setTimeout(() => { openToolStore(toolPid, toolCloud).then((s) => s.pull()).catch(() => {}); }, 800);
+    },
     // a new post by someone else; mine is already on screen (give a post of mine still on its way a moment to finish first)
     pullPost: (id: any) => setTimeout(() => cloud.postById(id).then((p) => { if (p) setPosts((ps) => (ps.some((x) => x.id === p.id) || recentOwn.current[p.id] ? ps : uniqById([p, ...ps]))); }).catch(() => {}), Object.keys(pendingPosts.current).length ? 1500 : 0),
     // a post's text was edited (by its author, maybe on another device): take the new text and count
@@ -331,6 +350,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
       if (event === "edit" && p) rt.current.pullEdit(p.id);
       if (event === "comment" && p) rt.current.pullComments(p.post);
       if (event === "moderation") rt.current.hydrateSoon();
+      if (event === "tools") rt.current.toolsSoon(p && p.key);
       if (event === "message") { refreshThreads().catch(() => {}); if (p && p.thread === chatRef.current) { loadChat(p.thread).catch(() => {}); cloud.readThread(p.thread).catch(() => {}); } }
       if (event === "notification" && p) { setNotifs((ns) => (ns.some((n) => n.id === p.id) ? ns : [{ id: p.id, kind: p.kind, title: p.title, body: p.body, target: p.target || undefined, read: false, when: "الآن", category: p.category || notifCategory(p.kind), ...(p.en && p.en.title ? { en: p.en } : {}) }, ...ns])); pushNative(p.title, p.body, p.kind); if (["verify", "mod", "warn", "suspend"].includes(p.kind)) rt.current.refreshMe(); }
     }, setLive, { staff: !!persona && (persona.staff === "moderator" || persona.staff === "admin") }).then((f) => { if (gone) f(); else off = f; }).catch(() => {});
@@ -379,9 +399,19 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     return () => { live = false; off(); document.removeEventListener("visibilitychange", hidden); };
   }, [toolPid, toolKinds.join()]);
   useEffect(() => { setToolProjects(loadProjects(toolPid)); }, [toolPid]);
+  // dev / e2e only (never in a production build): stand in for «another device» saving into this member's document store
+  useEffect(() => {
+    if (!import.meta.env.DEV || !toolPid) return;
+    (window as any).__engspaceTools = { store: () => openToolStore(toolPid, toolCloud) };
+    return () => { delete (window as any).__engspaceTools; };
+  }, [toolPid]);
 
   const app: any = {
-    tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; startTransition(() => { setDir("tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id)) || (toolOfStack(s) != null && !toolAllowed(toolRole(profile), toolOfStack(s)))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; if (leaving.current) { leaving.current = false; if (layer.current) layer.current.classList.remove("is-leaving"); } setDir(stack.length ? "push" : "layer"); setStack((st) => [...st, s]); if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => {
+    tab: curTab, tabs, blocked, setTab: (t?: any) => { if (!tabs.some((x) => x.id === t)) { deny(); return; } if (t === curTab && !stack.length) { const el = scroller.current; if (el && el.scrollTop > 0) { try { el.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" }); } catch (e) { el.scrollTop = 0; } } return; } navKind.current = "tab"; startTransition(() => { setDir("tab"); setTabRaw(t); setStack([]); }); }, stack, push: (s?: any, o: any = {}) => { if (blocked.stack.includes(s.type) || (s.type === "room" && blocked.rooms.includes(s.id)) || (toolOfStack(s) != null && !toolAllowed(toolRole(profile), toolOfStack(s)))) { deny(); return; } if (s.type === "postjob" && !gate.ok) { setMsg(gate.why); return; } navKind.current = "push"; if (leaving.current) { leaving.current = false; if (layer.current) layer.current.classList.remove("is-leaving"); }
+      // desktop, two panes: a screen opened from the left pane — or one of the same kind as the open one (the next certificate) —
+      // takes the right pane's place instead of stacking, so the left pane stays the list it is
+      const beside = desk.split && !deskFocus && stack.length > 0 && (o.beside || stack[stack.length - 1].type === s.type);
+      if (beside) { setDir("push"); setStack((st) => (st.length ? [...st.slice(0, -1), s] : [s])); } else { setDir(stack.length ? "push" : "layer"); setStack((st) => [...st, s]); } if (s.type === "job" && s.id && jobStats[s.id]) setJobStats((st) => ({ ...st, [s.id]: { ...st[s.id], views: st[s.id].views + 1 } })); if (s.type === "job" && s.id) sync(() => cloud.countJobView(s.id)); }, pop: () => {
       // the last screen leaves as a compositor-only fade/slide of its layer, revealing the tab that never moved; deeper screens swap in place.
       // (A View Transition snapshotted both screens on every «back» — the remaining ~60 ms stall on phones.)
       if (leaving.current || !stack.length) return; navKind.current = "pop"; const el = layer.current;
@@ -560,6 +590,14 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     withdrawVerification: () => { if (CLOUD) { updateProfile({ pending: false, verifyRef: null }); sync(() => cloud.withdrawVerification()); setMsg(say({ lang, profile }, L2("سُحب الطلب وحُذفت المستندات نهائيًا", "Request withdrawn — the documents were permanently deleted"))); return; } purgeOwn("withdrawn"); setMsg(say({ lang, profile }, L2("سُحب الطلب وحُذفت المستندات نهائيًا", "Request withdrawn — the documents were permanently deleted"))); },
   };
   appNow.current = app;
+  // the desktop shell carries the brand, account, theme and language itself: the web page's preview bar steps aside (App.tsx)
+  const deskShell = desk.on && !!persona && langChosen && !editing && !welcome && !(CLOUD && profile.onboarded === false);
+  useEffect(() => {
+    const el = document.documentElement;
+    if (deskShell) el.setAttribute("data-desk-shell", "");
+    else el.removeAttribute("data-desk-shell");
+    return () => el.removeAttribute("data-desk-shell");
+  }, [deskShell]);
   // Frame: the standalone preview draws its own phone-like frame; inside a device mockup the app simply fills the screen
   const frameVars: any = { "--tabh": embed && embed.platform === "android" ? "80px" : "68px" };
   const frameCls = embed ? "relative w-full h-full flex flex-col overflow-hidden bg-canvas" : NATIVE ? "relative w-full h-dvh flex flex-col overflow-hidden bg-canvas" : "relative w-full h-dvh sm:max-w-[390px] sm:h-[min(100dvh_-_9rem,820px)] sm:min-h-[640px] flex flex-col overflow-hidden bg-canvas sm:rounded-[2.5rem] sm:border sm:border-line-2";
@@ -572,12 +610,19 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   if (editing) return wrap(<div className={frameCls} style={frameStyle}><Registration app={app} mode="edit" initial={profile} /></div>);
   if (welcome) return wrap(<div className={frameCls} style={frameStyle}><Welcome app={app} /></div>);
   const top = stack[stack.length - 1];
-  const toolClosed = top && toolOfStack(top) != null && !toolAllowed(toolRole(profile), toolOfStack(top));
-  const screen = top && (toolClosed || blocked.stack.includes(top.type) || (top.type === "room" && blocked.rooms.includes(top.id))) ? <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={app.pop} /></div>
-    : top
-    ? top.type === "post" ? <PostScreen app={app} id={top.id} /> : top.type === "company" ? <CompanyScreen app={app} id={top.id} /> : top.type === "job" ? <JobScreen app={app} id={top.id} /> : top.type === "room" ? <RoomScreen app={app} id={top.id} /> : top.type === "rooms" ? <RoomsScreen app={app} /> : top.type === "notifications" ? <NotificationsScreen app={app} /> : top.type === "notifprefs" ? <NotificationPrefsScreen app={app} /> : top.type === "chat" ? <ChatScreen app={app} id={top.id} /> : top.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={app} /></Suspense> : top.type === "support" ? <SupportScreen app={app} /> : top.type === "tool" ? <Suspense fallback={<ScreenLoading />}><ToolScreen key={top.id} app={app} id={top.id} /></Suspense> : top.type === "tooldoc" ? <Suspense fallback={<ScreenLoading />}><ToolDocScreen key={top.id} app={app} id={top.id} /></Suspense> : top.type === "ticket" ? <TicketScreen key={top.id} app={app} id={top.id} /> : top.type === "checklists" || top.type === "inspection" || top.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={top.type + (top.id || "list")} app={app} id={top.id} kind={top.type} /></Suspense> : top.type === "permissions" ? <PermissionsScreen app={app} /> : top.type === "postjob" ? <PostJobScreen app={app} like={top.like} /> : top.type === "settings" ? <SettingsScreen app={app} /> : top.type === "guide" ? <GuideScreen app={app} /> : <ProfileScreen app={app} />
-    : null;
-  const tabScreen = (id?: any) => id === "home" ? <HomeScreen app={app} /> : id === "community" ? <CommunityScreen app={app} /> : id === "jobs" ? <JobsScreen app={app} /> : id === "market" ? <MarketScreen app={app} /> : id === "tools" ? <ToolsScreen app={app} /> : id === "ai" ? <Suspense fallback={<ScreenLoading />}><AssistantScreen app={app} /></Suspense> : <InboxScreen app={app} />;
+  // one pushed screen for a stack entry; `a` is the app it talks to (on a desktop the left pane gets one whose push opens beside)
+  const screenFor = (e: any, a: any) => {
+    const closed = toolOfStack(e) != null && !toolAllowed(toolRole(profile), toolOfStack(e));
+    if (closed || blocked.stack.includes(e.type) || (e.type === "room" && blocked.rooms.includes(e.id))) return <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={a.pop} /></div>;
+    return e.type === "post" ? <PostScreen app={a} id={e.id} /> : e.type === "company" ? <CompanyScreen app={a} id={e.id} /> : e.type === "job" ? <JobScreen app={a} id={e.id} /> : e.type === "room" ? <RoomScreen app={a} id={e.id} /> : e.type === "rooms" ? <RoomsScreen app={a} /> : e.type === "notifications" ? <NotificationsScreen app={a} /> : e.type === "notifprefs" ? <NotificationPrefsScreen app={a} /> : e.type === "chat" ? <ChatScreen app={a} id={e.id} /> : e.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={a} /></Suspense> : e.type === "support" ? <SupportScreen app={a} /> : e.type === "tool" ? <Suspense fallback={<ScreenLoading />}><ToolScreen key={e.id} app={a} id={e.id} /></Suspense> : e.type === "tooldoc" ? <Suspense fallback={<ScreenLoading />}><ToolDocScreen key={e.id} app={a} id={e.id} /></Suspense> : e.type === "ticket" ? <TicketScreen key={e.id} app={a} id={e.id} /> : e.type === "checklists" || e.type === "inspection" || e.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={e.type + (e.id || "list")} app={a} id={e.id} kind={e.type} /></Suspense> : e.type === "permissions" ? <PermissionsScreen app={a} /> : e.type === "postjob" ? <PostJobScreen app={a} like={e.like} /> : e.type === "settings" ? <SettingsScreen app={a} /> : e.type === "guide" ? <GuideScreen app={a} /> : <ProfileScreen app={a} />
+    ;
+  };
+  const screen = top ? screenFor(top, app) : null;
+  const tabScreen = (id?: any, a: any = app) => id === "home" ? <HomeScreen app={a} /> : id === "community" ? <CommunityScreen app={a} /> : id === "jobs" ? <JobsScreen app={a} /> : id === "market" ? <MarketScreen app={a} /> : id === "tools" ? <ToolsScreen app={a} /> : id === "ai" ? <Suspense fallback={<ScreenLoading />}><AssistantScreen app={a} /></Suspense> : <InboxScreen app={a} />;
+  // desktop, two panes: the left pane is the screen under the top one (or the tab); what it opens replaces the right pane, and
+  // its «back» leaves both (the right pane shows what the left one opened)
+  const splitOn = desk.split && !!top && !deskFocus;
+  const masterApp = splitOn ? { ...app, push: (s?: any) => app.push(s, { beside: true }), pop: () => { navKind.current = "pop"; setDir("none"); setStack((st) => st.slice(0, Math.max(0, st.length - 2))); } } : app;
   const toolMeta = sheet?.type === "tool" && toolOpen(blocked, sheet.payload.id) ? TOOLS.find((t) => t.id === sheet.payload.id) : null; const ToolView = toolMeta ? TOOL_VIEWS[toolMeta.id] : null;
   const sheets: any = {
     pushprimer: ["الإشعارات", <PushPrimerSheet app={app} />],
@@ -585,7 +630,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     report: [`إبلاغ عن ${REPORT_KINDS[sheet?.payload?.kind] || "محتوى"}`, <ReportSheet app={app} payload={sheet?.payload} />], privacy: ["الخصوصية والأمان", <PrivacyBody />], methodology: ["المنهجية والمصادر", <MethodologySheet app={app} />], verify: ["التوثيق — اختياري", <VerifySheet app={app} />], user: [sheet?.payload?.as === "public" ? "الملف العلني" : "الملف المجهول", <UserSheet app={app} payload={sheet?.payload} />], logo: ["شعار الشركة", <LogoSheet app={app} payload={sheet?.payload} />],
     tool: [toolMeta?.name || "أداة", ToolView ? <ToolView app={app} payload={sheet?.payload || {}} /> : null],
   };
-  const paneSig = [...PANE_KEYS.map((k) => store.get(k)), lang, live, tourOn, langChosen, theme, mode];
+  const paneSig = [...PANE_KEYS.map((k) => store.get(k)), lang, live, tourOn, langChosen, theme, mode, splitOn];
   const chatOpen = top && top.type === "chat"; const unreadThreads = threads.reduce((a, t) => a + (t.unread || 0), 0);
   // back swipe starts at the leading edge: the right edge in Arabic, the left edge in English
   const ltr = lang === "en";
@@ -617,6 +662,64 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     }
     if (pull.current > 70) { if (typeof window !== "undefined" && typeof window.__engspaceBuildChanged === "function" && window.__engspaceBuildChanged()) { try { location.reload(); } catch (x) {} } else setRefreshing(true); } if (pull.current) paintPull(0); touch.current = null;
   };
+  const overlays = (
+    <>
+      {viewer && <ImageViewer image={viewer} onClose={() => setViewer(null)} />}
+      {tourOn && !sheet && !viewer && <Tour app={app} onClose={() => setTourOn(false)} />}
+      {sheet && sheets[sheet.type] && <Sheet title={sheets[sheet.type][0]} onClose={app.closeSheet} tall={["compose", "contract", "methodology", "move", "contribute", "verify", "inflation"].includes(sheet.type === "tool" ? sheet.payload.id : sheet.type)}>{sheets[sheet.type][1]}</Sheet>}
+      <div role="status" aria-live="polite" className={`absolute bottom-[calc(var(--tabbar-space)+8px)] inset-x-4 z-30 flex justify-center transition-all ${msg ? "opacity-100" : "opacity-0 translate-y-2 pointer-events-none"}`}>{msg && <span key={msg} className="toast-in inline-flex items-start gap-2 max-w-full px-4 py-2.5 rounded-2xl bg-elevated/95 backdrop-blur border border-line-2 text-[12.5px] leading-snug shadow-float"><CircleCheck size={15} className="react-pop text-accent shrink-0 mt-0.5" /><span>{msg}</span></span>}</div>
+    </>
+  );
+  // ---- engspace.org on a desktop (./desk.tsx): sidebar · the tab (or the screen under the top one) · the open screen ----
+  if (desk.on) {
+    const master = splitOn && stack.length > 1 ? stack[stack.length - 2] : null;
+    const tabTitle = (tabs.find((x) => x.id === curTab) || { label: "" }).label;
+    const wideTab = curTab === "tools" || curTab === "market";
+    const focusBtn = desk.split && top ? <FocusToggle focus={deskFocus} onChange={setDeskFocus} /> : null;
+    // a document in focus mode takes the room for its live A4 preview; every other screen keeps a readable column
+    const screenCol = top && top.type === "tooldoc" ? "max-w-[1480px]" : "max-w-[880px]";
+    const layerEl = top && (
+      <div ref={layer} onScroll={chatOpen ? undefined : onScroll} data-screen-layer className={`pushed screen-layer absolute inset-0 z-[4] bg-canvas px-6 ${chatOpen ? "overflow-hidden" : "scroll-area"}`}>
+        <div key={`${top.type}-${top.id || ""}`} className={`screen-body desk-col mx-auto w-full ${screenCol} ${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>
+      </div>
+    );
+    return (
+      <div data-desk={splitOn ? "split" : "single"} className="desk relative w-full h-dvh flex overflow-hidden bg-canvas" style={{ ...frameVars, ["--tabbar-space" as any]: "24px" }}>
+        <div className="contents" {...(sheet || viewer || tourOn ? { inert: "" } : {})}>
+          <DeskNav app={app} tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} />
+          <div className="relative flex-1 min-w-0 flex flex-col">
+            {!gate.ok && <div role="status" className="shrink-0 px-6 py-2 flex items-start gap-2 text-[12px] leading-snug bg-warn/10 text-warn border-b border-warn/20"><ShieldAlert size={14} className="shrink-0 mt-px" /><span>{gate.why}</span></div>}
+            <UpdateBanner />
+            <div className="relative flex-1 min-h-0 flex">
+              <section data-desk-pane="master" className={`desk-pane relative min-w-0 flex flex-col ${splitOn ? "w-[420px] 2xl:w-[480px] shrink-0 border-e border-line" : "flex-1"}`}>
+                {top && !splitOn ? <AppHeader app={app} extra={focusBtn} /> : master ? <AppHeader app={{ ...masterApp, stack: stack.slice(0, -1) }} noBack /> : <DeskTabBar title={tabTitle} />}
+                <div className="relative flex-1 min-h-0">
+                  <div ref={scroller} onScroll={onScroll} className="scroll-area h-full relative px-6 pb-10">
+                    <div className={`desk-col mx-auto w-full ${splitOn ? "" : wideTab ? "max-w-[1120px]" : "max-w-[760px]"}`}>
+                      {visited.filter((id) => tabs.some((x) => x.id === id)).map((id) => <TabPane key={id} id={id} active={id === curTab} covered={!!top && !(splitOn && !master)} render={() => tabScreen(id, splitOn ? masterApp : app)} sig={paneSig} />)}
+                    </div>
+                  </div>
+                  {master && (
+                    <div data-desk-master-screen className="absolute inset-0 z-[3] scroll-area bg-canvas px-6 pb-10">
+                      <div key={`${master.type}-${master.id || ""}`} className="desk-col min-h-full flex flex-col">{screenFor(master, masterApp)}</div>
+                    </div>
+                  )}
+                  {!splitOn && layerEl}
+                </div>
+              </section>
+              {splitOn && (
+                <section data-desk-pane="detail" className="desk-pane relative flex-1 min-w-0 flex flex-col">
+                  <AppHeader app={app} extra={focusBtn} />
+                  <div className="relative flex-1 min-h-0">{layerEl}</div>
+                </section>
+              )}
+            </div>
+          </div>
+        </div>
+        {overlays}
+      </div>
+    );
+  }
   return wrap(
       <div className={frameCls} style={frameStyle} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/* while a sheet is open everything behind it is inert: no focus, no clicks, hidden from assistive tech */}
@@ -636,10 +739,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
           <TabBar tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} off={!!top} />
         </div>
         </div>
-        {viewer && <ImageViewer image={viewer} onClose={() => setViewer(null)} />}
-        {tourOn && !sheet && !viewer && <Tour app={app} onClose={() => setTourOn(false)} />}
-        {sheet && sheets[sheet.type] && <Sheet title={sheets[sheet.type][0]} onClose={app.closeSheet} tall={["compose", "contract", "methodology", "move", "contribute", "verify", "inflation"].includes(sheet.type === "tool" ? sheet.payload.id : sheet.type)}>{sheets[sheet.type][1]}</Sheet>}
-        <div role="status" aria-live="polite" className={`absolute bottom-[calc(var(--tabbar-space)+8px)] inset-x-4 z-30 flex justify-center transition-all ${msg ? "opacity-100" : "opacity-0 translate-y-2 pointer-events-none"}`}>{msg && <span key={msg} className="toast-in inline-flex items-start gap-2 max-w-full px-4 py-2.5 rounded-2xl bg-elevated/95 backdrop-blur border border-line-2 text-[12.5px] leading-snug shadow-float"><CircleCheck size={15} className="react-pop text-accent shrink-0 mt-0.5" /><span>{msg}</span></span>}</div>
+        {overlays}
       </div>,
       <p className="hidden sm:block text-[11px] text-ink-3 text-center max-w-[48ch] leading-relaxed">معاينة تفاعلية كاملة · أنشئ حسابك (يُحفظ على جهازك فقط)، واختر في كل مشاركة: علنًا باسمك أو مجهولًا. اسحب من حافة البداية للرجوع.</p>
   );

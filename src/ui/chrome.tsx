@@ -74,7 +74,9 @@ export function ContactHint({ text, as = "anon", className = "" }: any) {
 }
 
 
-export function AppHeader({ app }: any) {
+// `extra`: an action the desktop adds to a pushed screen's header (the «توسيع» / «إظهار القائمة» toggle, app/desk.tsx);
+// `noBack`: the desktop's left pane — its title only (the right pane's «رجوع» and the sidebar do the going back)
+export function AppHeader({ app, extra = null, noBack = false }: any) {
   const top = app.stack[app.stack.length - 1]; const pf = usePlatform();
   const glass = `shrink-0 pt-[var(--sat)] bg-canvas/[.97] border-b z-10 transition-shadow duration-300 ${app.scrolled ? "header-lift border-line-2" : "border-line"}`;
   if (top) {
@@ -83,8 +85,9 @@ export function AppHeader({ app }: any) {
     const titles: any = { tool: tid != null ? toolById(tid)?.name : "", tooldoc: tid != null ? toolById(tid)?.name : "", support: "الدعم الفني", ticket: "تذكرة دعم", post: "نقاش", company: company(top.id)?.name, job: "تفاصيل الوظيفة", notifications: "الإشعارات", notifprefs: "إعدادات الإشعارات", profile: "حسابك", rooms: "الغرف", room: room(top.id)?.name, chat: "رسالة خاصة", permissions: "خريطة العلاقات والصلاحيات", postjob: top.like ? "تعديل الإعلان" : "نشر وظيفة", cvreview: "تدقيق السيرة الهندسية", methodology: "المنهجية والمصادر", settings: "الإعدادات", guide: "دليل الاستخدام" };
     return (
       <header className={glass}><div className="min-h-14 py-1.5 px-1.5 flex items-center gap-1">
-        <RoundButton label="رجوع" onClick={app.pop} className="press shrink-0">{pf === "ios" ? <ChevronLeft size={26} strokeWidth={2.2} className="rtl:-scale-x-100" /> : <Back />}</RoundButton>
+        {noBack ? <span className="w-3 shrink-0" /> : <RoundButton label="رجوع" onClick={app.pop} className="press shrink-0">{pf === "ios" ? <ChevronLeft size={26} strokeWidth={2.2} className="rtl:-scale-x-100" /> : <Back />}</RoundButton>}
         <h1 className="min-w-0 flex-1 text-[15px] font-medium leading-snug">{titles[top.type] || ""}</h1>
+        {extra}
         {!closed && ["post", "job", "company", "room"].includes(top.type) && <RoundButton label="مشاركة الرابط" onClick={() => app.share(top.type, top.id)}><Share2 size={18} /></RoundButton>}
         {!closed && top.type === "post" && !(app.posts.find((x) => x.id === top.id) || { mine: true }).mine && <RoundButton label="إبلاغ عن المنشور" onClick={() => app.openSheet("report", { kind: "post", id: top.id })} className="hover:text-bad"><Flag size={18} /></RoundButton>}
         {!closed && top.type === "job" && (() => { const j = app.jobs.find((x) => x.id === top.id); return j && !j.mine && !(app.isCo && j.co === app.profile.companyId) ? <RoundButton label="إبلاغ عن الإعلان" onClick={() => app.openSheet("report", { kind: "job", id: top.id })} className="hover:text-bad"><Flag size={18} /></RoundButton> : null; })()}
@@ -150,9 +153,9 @@ export function Sheet({ title, onClose, children, tall = false }: any) {
   const onMove = (e?: any) => { const d = drag.current; if (!d || !panel.current) return; d.dy = Math.max(0, e.clientY - d.y); panel.current.style.transition = "none"; panel.current.style.transform = `translateY(${d.dy}px)`; };
   const onUp = () => { const d = drag.current; drag.current = null; const el = panel.current; if (!d || !el) return; const v = d.dy / Math.max(1, performance.now() - d.t); if (d.dy > 110 || (d.dy > 30 && v > 0.6)) { el.style.transition = "transform .22s cubic-bezier(.4,0,1,1)"; el.style.transform = "translateY(105%)"; leaving.current = true; setTimeout(() => { if (alive.current) onClose(); }, 210); } else { el.style.transition = "transform .42s cubic-bezier(.22,1.2,.36,1)"; el.style.transform = ""; } };
   return (
-    <div className="absolute inset-0 z-20 flex flex-col justify-end" role="dialog" aria-modal="true" aria-label={title}>
+    <div className="sheet-host absolute inset-0 z-20 flex flex-col justify-end" role="dialog" aria-modal="true" aria-label={title}>
       <button ref={scrim} type="button" aria-label="إغلاق" onClick={dismiss} className="scrim-in absolute inset-0 bg-scrim/50 backdrop-blur-sm" />
-      <div ref={panel} tabIndex={-1} className={`sheet relative focus:outline-none ${tall ? "h-[92%]" : "max-h-[90%]"} flex flex-col ${corner} bg-surface border-t border-line-2 shadow-float`}>
+      <div ref={panel} tabIndex={-1} className={`sheet relative focus:outline-none ${tall ? "sheet-tall h-[92%]" : "max-h-[90%]"} flex flex-col ${corner} bg-surface border-t border-line-2 shadow-float`}>
         <div className="sheet-grab px-5 pt-3" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}><span aria-hidden="true" className={`block mx-auto rounded-full bg-track mb-3 ${pf === "ios" ? "w-9 h-[5px]" : "w-8 h-1"}`} />
           <div className="flex items-center justify-between gap-3 mb-3"><h3 className="text-[18px] font-medium leading-snug">{title}</h3><RoundButton label="إغلاق" onClick={dismiss} className="w-9 h-9 -me-2 shrink-0"><X size={18} /></RoundButton></div></div>
         <div className="scroll-area flex-1 px-5 pb-[max(1.25rem,var(--sab))]">{children}</div>
