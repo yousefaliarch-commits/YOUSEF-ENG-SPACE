@@ -307,3 +307,34 @@ article.post-card { border-color: var(--line-3); box-shadow: 0 1px 0 rgb(255 255
 .msg-in { animation: msg-in .28s cubic-bezier(.2,.7,.2,1) backwards; }
 @keyframes msg-in { from { opacity: 0; transform: translate3d(0, 10px, 0); } }
 @media (prefers-reduced-motion: reduce) { .msg-in { animation: none; } }
+
+/* ---------------------------------------------------------------------
+   engspace.org on a desktop (W5, src/app/desk.tsx): readable columns, centred dialogs, panes that size their own grids
+   (container queries on the column itself — a list in the 420 px left pane stays one column, the same list across a wide
+   column gets two or three)
+   --------------------------------------------------------------------- */
+html[data-desk-shell] .web-topbar { display: none !important; }
+.desk .desk-col { position: relative; container-type: inline-size; }
+.desk .tab-pane.is-off { left: 0; right: 0; }
+.desk .tab-pane, .desk .screen-body { padding-top: 1rem; }
+/* sheets: a dialog in the middle of the window, never a 1900 px-wide bottom sheet */
+.desk .sheet-host { justify-content: center; align-items: center; padding: 2rem; }
+.desk .sheet { width: min(600px, 100%); max-height: min(88vh, 920px); border: 1px solid rgb(var(--line-2)); border-radius: 22px; animation-name: desk-dialog; }
+.desk .sheet.sheet-tall { height: min(88vh, 920px); }
+.desk .sheet-out { animation: desk-dialog-out .18s cubic-bezier(.4,0,1,1) forwards !important; }
+@keyframes desk-dialog { from { opacity: 0; transform: translate3d(0, 16px, 0) scale(.98); } }
+@keyframes desk-dialog-out { to { opacity: 0; transform: translate3d(0, 12px, 0) scale(.98); } }
+/* the left pane under a two-pane layout: no slide, it is already there */
+.desk[data-desk="split"] [data-desk-pane="detail"] .screen-layer { animation-duration: .22s; }
+/* wide grids: tool tiles and saved documents spread with the pane that holds them */
+@container (min-width: 720px) { .desk-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; } .desk-grid > * { margin: 0 !important; } }
+@container (min-width: 1040px) { .desk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* the Tools tab: packs side by side, two tiles each, so a pack of one tool never leaves a row of empty space */
+@container (min-width: 900px) { .desk-packs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 1.5rem; align-items: start; } .desk-packs > * { margin: 0 !important; } }
+@container (min-width: 1400px) { .desk-packs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* a document in focus mode: the editor and its live A4 preview side by side */
+@container (min-width: 1100px) {
+  .doc-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 46%); gap: 1.5rem; align-items: start; }
+  .doc-split > .doc-live { display: block; }
+}
+.doc-live { display: none; }

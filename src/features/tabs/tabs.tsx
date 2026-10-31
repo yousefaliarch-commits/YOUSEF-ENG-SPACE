@@ -306,7 +306,7 @@ export function ToolsScreen({ app }: any) {
       {field.length > 0 && <ToolPacks app={app} tools={field} />}
       {money.length > 0 && <>
       <SectionTitle>الراتب والعروض</SectionTitle>
-      <div className="grid grid-cols-2 gap-3 stagger">{money.map((t) => <button key={t.id} type="button" onClick={() => app.openSheet("tool", { id: t.id })} className={`press relative p-4 rounded-2xl border text-start shadow-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${t.id === fav ? "border-accent/40 bg-wash" : "bg-surface border-line hover:border-line-3"}`}>
+      <div className="desk-tiles grid grid-cols-2 gap-3 stagger">{money.map((t) => <button key={t.id} type="button" onClick={() => app.openSheet("tool", { id: t.id })} className={`press relative p-4 rounded-2xl border text-start shadow-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${t.id === fav ? "border-accent/40 bg-wash" : "bg-surface border-line hover:border-line-3"}`}>
         {t.id === fav && <span className="absolute top-3 end-3 text-[9.5px] text-accent">لهدفك</span>}
         <span className={`grid place-items-center w-11 h-11 rounded-xl ${t.id === fav ? "bg-accent text-on-accent" : "bg-wash text-accent"}`}><t.icon size={20} /></span>
         <span className="block mt-3 text-[14px] font-medium leading-snug">{t.name}</span><span className="block mt-0.5 text-[11.5px] text-ink-2 leading-snug">{t.desc}</span>
@@ -387,13 +387,14 @@ function ToolPacks({ app, tools }: { app: any; tools: ToolDef[] }) {
           {docHits.map(docRow)}
         </div>
       )}
+      <div className="desk-packs space-y-4">
       {packs.map(({ pk, list }) => (
         <section key={pk.id} className="space-y-2">
           <div className="flex items-baseline justify-between gap-2 pt-1">
             <h3 className="text-[14px] font-medium">{pk.name}</h3>
             <span className="text-[11px] text-ink-3">{pk.desc}</span>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="desk-tiles grid grid-cols-2 gap-3">
             {list.map((t) => {
               const Icon = TOOL_ICONS[t.icon] || FileCheck;
               return (
@@ -407,6 +408,7 @@ function ToolPacks({ app, tools }: { app: any; tools: ToolDef[] }) {
           </div>
         </section>
       ))}
+      </div>
       {needle && !packs.length && !docHits.length && <p className="text-center text-[12.5px] text-ink-3 py-4">لا أداة بهذا الاسم.</p>}
     </>
   );

@@ -478,7 +478,8 @@ export async function postById(id: string) {
   return out;
 }
 
-// Realtime: the member's own private channel (messages, notifications, «profile» — their verification, role, strikes changed), the
+// Realtime: the member's own private channel (messages, notifications, «profile» — their verification, role, strikes changed;
+// «tools» — one of their tool rows or project profiles was saved, key and time only: …_tools_live_sync.sql), the
 // shared «feed» (a new post / comment, moderation of anything — ids only), and for staff the «staff» topic (reports, decisions).
 // onEvent("message" | "notification" | "profile" | "post" | "comment" | "moderation" | "report", payload) · onStatus(true | false)
 export async function subscribeLive(onEvent: (event: string, payload: any) => void, onStatus: (live: boolean) => void = () => {}, opts: { staff?: boolean } = {}) {
@@ -489,7 +490,7 @@ export async function subscribeLive(onEvent: (event: string, payload: any) => vo
     for (const e of events) ch = ch.on("broadcast", { event: e }, (m: any) => onEvent(e, m.payload));
     return ch.subscribe((status: string) => { if (main) onStatus(status === "SUBSCRIBED"); });
   };
-  const chans = [listen(`member:${session.user.id}`, ["message", "notification", "profile"], true), listen("feed", ["post", "edit", "comment", "moderation"])];
+  const chans = [listen(`member:${session.user.id}`, ["message", "notification", "profile", "tools"], true), listen("feed", ["post", "edit", "comment", "moderation"])];
   if (opts.staff) chans.push(listen("staff", ["report", "moderation"]));
   return () => { for (const c of chans) db.removeChannel(c); };
 }

@@ -108,6 +108,8 @@ export class ToolStore {
   private timers = new Map<string, ReturnType<typeof setTimeout>>();
   private pending = new Set<string>();
   private pushing: Promise<void> | null = null;
+  // a pull (resume, or a «tools» ping from another device) never runs beside a push: each waits for the other
+  private pulling: Promise<{ status: "ok" | "failed"; error?: string }> | null = null;
   lastError = "";
 
   constructor(public readonly pid: string, private a: ToolAdapter, public cloud: CloudPort | null) {}
@@ -218,6 +220,7 @@ export class ToolStore {
   // push every pending shard now (on pop, when the app is hidden, before sign-out)
   async flush(): Promise<void> {
     if (!this.cloud) return;
+    if (this.pulling) await this.pulling;
     if (this.pushing) return this.pushing;
     this.timers.forEach((t) => clearTimeout(t));
     this.timers.clear();
@@ -240,13 +243,20 @@ export class ToolStore {
   // pull everything that changed on the account (after sign-in, on resume)
   async pull(): Promise<{ status: "ok" | "failed"; error?: string }> {
     if (!this.cloud) return { status: "ok" };
-    try {
-      await this.sync([]);
-      return { status: "ok" };
-    } catch (e) {
-      this.lastError = String((e as any)?.message || e);
-      return { status: "failed", error: this.lastError };
-    }
+    if (this.pulling) return this.pulling;
+    this.pulling = (async () => {
+      try {
+        if (this.pushing) await this.pushing;
+        await this.sync([]);
+        return { status: "ok" as const };
+      } catch (e) {
+        this.lastError = String((e as any)?.message || e);
+        return { status: "failed" as const, error: this.lastError };
+      } finally {
+        this.pulling = null;
+      }
+    })();
+    return this.pulling;
   }
 
   private applyRemote(rows: { key: string; value: any; updated_at: string }[]) {

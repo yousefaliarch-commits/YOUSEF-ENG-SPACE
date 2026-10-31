@@ -259,8 +259,8 @@
  },
  "الإشعارات": {
   "k": "s",
-  "p": "app/AppView.tsx,ui/chrome.tsx",
-  "n": 2
+  "p": "app/AppView.tsx,app/desk.tsx,ui/chrome.tsx",
+  "n": 3
  },
  "شارك راتبك": {
   "k": "s",
@@ -350,8 +350,8 @@
  },
  "لوحة الإدارة": {
   "k": "s",
-  "p": "app/TopBar.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
-  "n": 5
+  "p": "app/TopBar.tsx,app/desk.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
+  "n": 6
  },
  "الإدارة": {
   "k": "s",
@@ -365,13 +365,13 @@
  },
  "التبديل إلى العربية": {
   "k": "s",
-  "p": "app/TopBar.tsx",
-  "n": 1
+  "p": "app/TopBar.tsx,app/desk.tsx",
+  "n": 2
  },
  "العربية": {
   "k": "s",
-  "p": "app/TopBar.tsx,features/cv/extract.ts,features/settings/settings.tsx,i18n/i18n.ts",
-  "n": 6
+  "p": "app/TopBar.tsx,app/desk.tsx,features/cv/extract.ts,features/settings/settings.tsx,i18n/i18n.ts",
+  "n": 7
  },
  "المظهر: {0} — اضغط للتبديل": {
   "k": "t",
@@ -384,6 +384,31 @@
   "p": "app/TopBar.tsx",
   "n": 1,
   "x": "tLabel"
+ },
+ "التنقل الرئيسي": {
+  "k": "s",
+  "p": "app/desk.tsx,ui/chrome.tsx",
+  "n": 4
+ },
+ "الإعدادات": {
+  "k": "x",
+  "p": "app/desk.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
+  "n": 9
+ },
+ "حسابك": {
+  "k": "s",
+  "p": "app/desk.tsx,features/admin/AdminView.tsx,ui/chrome.tsx",
+  "n": 8
+ },
+ "إظهار القائمة": {
+  "k": "s",
+  "p": "app/desk.tsx",
+  "n": 2
+ },
+ "توسيع": {
+  "k": "s",
+  "p": "app/desk.tsx",
+  "n": 2
  },
  "البريد أو كلمة المرور غير صحيحة": {
   "k": "s",
@@ -10893,11 +10918,6 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1
  },
- "الإعدادات": {
-  "k": "s",
-  "p": "features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
-  "n": 8
- },
  "سجل التدقيق": {
   "k": "s",
   "p": "features/admin/AdminView.tsx",
@@ -11914,11 +11934,6 @@
   "p": "features/admin/AdminView.tsx",
   "n": 1,
   "x": "EL <Num>{list.length}</Num>"
- },
- "حسابك": {
-  "k": "x",
-  "p": "features/admin/AdminView.tsx,ui/chrome.tsx",
-  "n": 5
  },
  "عرض المزيد (": {
   "k": "x",
@@ -23163,6 +23178,32 @@
   "p": "features/tools/host.tsx",
   "n": 1
  },
+ "معاينة حية": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "صفحة": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "· {0} صفحة": {
+  "k": "r",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "EL <Num>{pages.length}</Num>"
+ },
+ "تعذّرت المعاينة — تُحدَّث مع التعديل التالي.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "والصفحات الباقية في ملف PDF": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
  "الموقع في المشروع (WBS)": {
   "k": "s",
   "p": "features/tools/host.tsx",
@@ -23235,6 +23276,11 @@
   "n": 2
  },
  "المستند كبير: محفوظ على هذا الجهاز فقط": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "وصل تعديل من جهاز آخر": {
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 1
@@ -30598,11 +30644,6 @@
   "p": "ui/chrome.tsx",
   "n": 1,
   "x": "app.unread"
- },
- "التنقل الرئيسي": {
-  "k": "s",
-  "p": "ui/chrome.tsx",
-  "n": 2
  },
  "المدينة / المركز / الحي في": {
   "k": "x",

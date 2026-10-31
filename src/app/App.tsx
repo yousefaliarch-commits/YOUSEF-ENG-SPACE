@@ -65,7 +65,7 @@ export function App() {
   return (
     <PlatformCtx.Provider value={PLATFORM}><ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
       {/* the preview's top bar (app ⇄ admin console, theme, language) — the native apps open straight into the member app */}
-      <div className={NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}><TopBar view={view} setView={setView} staff={staffOk} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
+      <div className={`web-topbar ${NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}`}><TopBar view={view} setView={setView} staff={staffOk} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
       {/* the iOS app turns off page scrolling (ios.scrollEnabled: false — no rubber-band on the member app, which scrolls inside its own
           container); the console scrolls the page, so in the apps it gets a scroll container of its own */}
       {view === "admin" && staffOk ? <div className={NATIVE ? "fixed inset-0 overflow-y-auto overflow-x-hidden overscroll-contain scroll-area" : ""}><Suspense fallback={<ScreenLoading />}><AdminView init={init} openApp={() => setView("app")} /></Suspense></div>

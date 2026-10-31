@@ -55,6 +55,8 @@ C.I18N.lang = "ar";
 console.log("— settings, guide, tour, routes —");
 ok(C.PLAIN_TYPES.includes("settings") && C.PLAIN_TYPES.includes("guide"), "Settings and User guide are screens with their own routes (#app/settings, #app/guide)");
 location.hash = "#app/settings"; ok(C.parseHash().stack[0].type === "settings", "a deep link opens Settings directly"); location.hash = "";
+location.hash = "#app/tooldoc/concrete:dabc"; ok(C.parseHash().tab === "tools" && C.parseHash().stack[0].type === "tooldoc", "a document link sits on the Tools tab"); location.hash = "";
+location.hash = "#app/post/p1"; ok(C.parseHash().tab === "home", "other links keep the Home tab"); location.hash = "";
 const mk = (role, access, isCo) => ({ profile: { ...C.DEMO_PERSONA, role }, moneyAccess: access, isCo, tabs: C.tabsFor({ role }), push() {}, setTab() {}, goMarket() {}, openSheet() {} });
 const eng = C.tourSteps(mk("engineer", "full", false)), sup = C.tourSteps(mk("supervisor", "none", false)), hr = C.tourSteps(mk("hr", "aggregate", true));
 ok(eng.length === 13 && eng.filter((s) => s.tab).length === 7, "engineer tour: welcome, tab bar, all 7 sections, theme, settings, account, done");
