@@ -48,4 +48,5 @@ export const TOOL_MODULES: Record<string, () => Promise<ToolModule>> = {
   ipc: () => import("./office/ipc").then((m) => m.module),
   rcSection: () => import("./design/rc-section").then((m) => m.module),
   ductSizer: () => import("./mep/duct").then((m) => m.module),
+  vo: () => import("./office/vo").then((m) => m.module),
 };

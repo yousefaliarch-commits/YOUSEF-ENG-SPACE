@@ -54,6 +54,16 @@ export function TextField({ label, value, onChange, placeholder, dir, ...p }: { 
   );
 }
 
+// a date (ISO, Latin digits) — empty stays empty, never «today» by surprise
+export function DateField({ label, value, onChange, readOnly = false, ...p }: { label: string; value: string; onChange: (v: string) => void; readOnly?: boolean; [k: string]: any }) {
+  return (
+    <label className="block min-w-0">
+      <span className="block text-[12px] text-ink-2 mb-1">{label}</span>
+      <input {...p} type="date" dir="ltr" value={value || ""} readOnly={readOnly} onChange={(e) => !readOnly && onChange(e.target.value)} className="w-full h-12 px-3 rounded-xl bg-canvas border border-line-2 font-grotesk text-[15px] text-ink focus:outline-none focus:ring-2 focus:ring-accent" />
+    </label>
+  );
+}
+
 export function AreaField({ label, value, onChange, placeholder, rows = 3 }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; rows?: number }) {
   return (
     <label className="block">

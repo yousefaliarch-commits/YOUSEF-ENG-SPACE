@@ -652,8 +652,8 @@
  },
  "المستندات": {
   "k": "s",
-  "p": "data/checklists.ts",
-  "n": 1
+  "p": "data/checklists.ts,features/tools/host.tsx",
+  "n": 2
  },
  "شهادات المصنع ونتائج اختبار عينات الحديد متوفرة ومقبولة": {
   "k": "s",
@@ -1237,13 +1237,13 @@
  },
  "مكتب فني": {
   "k": "s",
-  "p": "data/checklists.ts,domain/taxonomy.ts,features/tools/office/rfi.tsx,features/tools/office/submittal.tsx,lib/search.ts",
-  "n": 5
+  "p": "data/checklists.ts,domain/taxonomy.ts,features/tools/office/rfi.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx,features/tools/register.tsx,lib/search.ts",
+  "n": 7
  },
  "أخرى": {
   "k": "s",
-  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx,features/tools/office/qto.tsx,features/tools/office/rfi.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
-  "n": 11
+  "p": "data/checklists.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/support/support.tsx,features/tools/office/qto.tsx,features/tools/office/rfi.tsx,features/tools/office/vo.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
+  "n": 12
  },
  "{0} — نسختي": {
   "k": "t",
@@ -6502,8 +6502,8 @@
  },
  "يوم": {
   "k": "s",
-  "p": "domain/moderation.ts,features/tools/office/rfi.tsx",
-  "n": 3
+  "p": "domain/moderation.ts,features/tools/office/rfi.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx,features/tools/register.tsx",
+  "n": 14
  },
  "يومين": {
   "k": "s",
@@ -7444,8 +7444,8 @@
  },
  "م³": {
   "k": "s",
-  "p": "domain/site-calc.ts,domain/tools/qto-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/site/diary.tsx",
-  "n": 32
+  "p": "domain/site-calc.ts,domain/tools/qto-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx",
+  "n": 33
  },
  "لتر": {
   "k": "s",
@@ -10423,8 +10423,8 @@
  },
  "بند": {
   "k": "s",
-  "p": "domain/tools/qto-calc.ts,features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 10
+  "p": "domain/tools/qto-calc.ts,features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 12
  },
  "بسيطة الارتكاز": {
   "k": "s",
@@ -10818,6 +10818,66 @@
   "p": "domain/tools/rc-calc.ts",
   "n": 1
  },
+ "مسودة": {
+  "k": "s",
+  "p": "domain/tools/registers.ts,features/qaqc/qaqc.tsx,features/tools/host.tsx,features/tools/office/vo.tsx",
+  "n": 4
+ },
+ "بانتظار الرد": {
+  "k": "s",
+  "p": "domain/tools/registers.ts,features/tools/register.tsx",
+  "n": 2
+ },
+ "متأخر": {
+  "k": "s",
+  "p": "domain/tools/registers.ts,features/tools/register.tsx",
+  "n": 3
+ },
+ "تم الرد": {
+  "k": "s",
+  "p": "domain/tools/registers.ts,features/support/support.tsx,features/tools/register.tsx",
+  "n": 3
+ },
+ "مغلق": {
+  "k": "s",
+  "p": "domain/tools/registers.ts,features/tools/site/permit.tsx",
+  "n": 2
+ },
+ "تحت المراجعة": {
+  "k": "s",
+  "p": "domain/tools/registers.ts",
+  "n": 1
+ },
+ "معتمد (A)": {
+  "k": "s",
+  "p": "domain/tools/registers.ts",
+  "n": 1
+ },
+ "معتمد بملاحظات (B)": {
+  "k": "s",
+  "p": "domain/tools/registers.ts",
+  "n": 1
+ },
+ "يُعدَّل ويُعاد (C)": {
+  "k": "s",
+  "p": "domain/tools/registers.ts",
+  "n": 1
+ },
+ "مرفوض (D)": {
+  "k": "s",
+  "p": "domain/tools/registers.ts",
+  "n": 1
+ },
+ "مقدَّم": {
+  "k": "s",
+  "p": "domain/tools/registers.ts,features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "معتمد جزئيًا": {
+  "k": "s",
+  "p": "domain/tools/registers.ts,features/tools/office/vo.tsx",
+  "n": 2
+ },
  "نسبة الماء للأسمنت أعلى من 0.55 ⚑": {
   "k": "s",
   "p": "domain/tools/trade-calc.ts",
@@ -10876,6 +10936,33 @@
  "تحت البلاط": {
   "k": "s",
   "p": "domain/tools/trade-calc.ts",
+  "n": 1
+ },
+ "البند {0}: بدون فئة": {
+  "k": "t",
+  "p": "domain/tools/vo-calc.ts",
+  "n": 1,
+  "x": "l.item || i + 1"
+ },
+ "صافي التغيير من قيمة العقد": {
+  "k": "s",
+  "p": "domain/tools/vo-calc.ts",
+  "n": 1
+ },
+ "≤ {0} % (حد العقد)": {
+  "k": "t",
+  "p": "domain/tools/vo-calc.ts",
+  "n": 1,
+  "x": "t.alertPct"
+ },
+ "حد التنبيه كما في شروط العقد": {
+  "k": "s",
+  "p": "domain/tools/vo-calc.ts",
+  "n": 1
+ },
+ "القيمة المعتمدة أكبر من المطلوبة": {
+  "k": "s",
+  "p": "domain/tools/vo-calc.ts",
   "n": 1
  },
  "نظرة عامة": {
@@ -11535,8 +11622,8 @@
  },
  "الكل": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/tabs/tabs.tsx,ui/notifications.tsx",
-  "n": 8
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/tabs/tabs.tsx,features/tools/register.tsx,ui/notifications.tsx",
+  "n": 9
  },
  "كل الأنواع": {
   "k": "s",
@@ -11744,8 +11831,8 @@
  },
  "القرار": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/tools/office/vo.tsx",
+  "n": 3
  },
  "إخفاء": {
   "k": "x",
@@ -12316,13 +12403,13 @@
  },
  "ج.م": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/market/live-salary.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/office/ipc.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
-  "n": 36
+  "p": "features/admin/AdminView.tsx,features/market/live-salary.tsx,features/sheets/sheets.tsx,features/stack/stack.tsx,features/tabs/tabs.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx,features/tools/register.tsx,ui/chrome.tsx,ui/feed.tsx,ui/primitives.tsx",
+  "n": 50
  },
  "{0} ج.م": {
   "k": "r",
-  "p": "features/admin/AdminView.tsx,ui/primitives.tsx",
-  "n": 3,
+  "p": "features/admin/AdminView.tsx,features/tools/register.tsx,ui/primitives.tsx",
+  "n": 4,
   "x": "EL <Num>{fmt(v.median)}</Num>"
  },
  "لا مشاركات رواتب بعد.": {
@@ -12650,8 +12737,8 @@
  },
  "إلغاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/support/support.tsx,features/tools/host.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
-  "n": 11
+  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/support/support.tsx,features/tools/host.tsx,features/tools/office/vo.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
+  "n": 12
  },
  "إظهار": {
   "k": "x",
@@ -13011,8 +13098,8 @@
  },
  "مرفوض": {
   "k": "s",
-  "p": "features/admin/directory-support.tsx,features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
-  "n": 5
+  "p": "features/admin/directory-support.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/survey/level-book.tsx",
+  "n": 7
  },
  "سُحب": {
   "k": "s",
@@ -13306,8 +13393,8 @@
  },
  "الحالة": {
   "k": "s",
-  "p": "features/admin/directory-support.tsx,features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx",
-  "n": 7
+  "p": "features/admin/directory-support.tsx,features/tools/office/custody.tsx,features/tools/office/vo.tsx,features/tools/register.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx",
+  "n": 12
  },
  "فريق الدعم": {
   "k": "s",
@@ -15640,8 +15727,8 @@
  },
  "إضافة": {
   "k": "x",
-  "p": "features/market/raise-tracker.tsx",
-  "n": 1
+  "p": "features/market/raise-tracker.tsx,features/tools/office/vo.tsx",
+  "n": 2
  },
  "زيادة": {
   "k": "x",
@@ -16281,11 +16368,6 @@
   "p": "features/qaqc/qaqc.tsx",
   "n": 2
  },
- "مسودة": {
-  "k": "x",
-  "p": "features/qaqc/qaqc.tsx,features/tools/host.tsx",
-  "n": 2
- },
  "القائمة غير موجودة": {
   "k": "s",
   "p": "features/qaqc/qaqc.tsx",
@@ -16333,8 +16415,8 @@
  },
  "الفئة": {
   "k": "x",
-  "p": "features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/tools/office/ipc.tsx",
-  "n": 6
+  "p": "features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
+  "n": 9
  },
  "نطاق القائمة (اختياري)": {
   "k": "x",
@@ -16539,8 +16621,8 @@
  },
  "التاريخ": {
   "k": "s",
-  "p": "features/qaqc/qaqc.tsx,features/tools/concrete/concrete.tsx,features/tools/host.tsx,features/tools/office/custody.tsx,features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
-  "n": 7
+  "p": "features/qaqc/qaqc.tsx,features/tools/concrete/concrete.tsx,features/tools/host.tsx,features/tools/office/custody.tsx,features/tools/office/vo.tsx,features/tools/register.tsx,features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 9
  },
  "اسم شركة المقاولات": {
   "k": "s",
@@ -18281,8 +18363,8 @@
  },
  "إلى": {
   "k": "x",
-  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/tools/office/ipc.tsx,features/tools/office/rfi.tsx,features/tools/site/diary.tsx,lib/search.ts",
-  "n": 10
+  "p": "features/sheets/sheets.tsx,features/stack/stack.tsx,features/tools/office/ipc.tsx,features/tools/office/rfi.tsx,features/tools/register.tsx,features/tools/site/diary.tsx,lib/search.ts",
+  "n": 11
  },
  "العرض هناك (صافي)": {
   "k": "s",
@@ -18482,8 +18564,8 @@
  },
  "العدد": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/design/rc-section.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 21
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/design/rc-section.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/register.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 23
  },
  "م": {
   "k": "s",
@@ -18557,8 +18639,8 @@
  },
  "المطلوب": {
   "k": "x",
-  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
-  "n": 2
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/register.tsx",
+  "n": 3
  },
  "وزن Ø{0} المطلوب": {
   "k": "e",
@@ -18689,8 +18771,8 @@
  },
  "القيمة": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx,features/tools/office/submittal.tsx",
-  "n": 4
+  "p": "features/sitetools/site-tools.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx",
+  "n": 6
  },
  "الفدان = 24 قيراطًا ≈ 4,200.83 م² · القيراط = 24 سهمًا ≈ 175.03 م².": {
   "k": "x",
@@ -19352,8 +19434,8 @@
  },
  "الرقم": {
   "k": "s",
-  "p": "features/stack/stack.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/site/diary.tsx",
-  "n": 10
+  "p": "features/stack/stack.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/register.tsx,features/tools/site/diary.tsx",
+  "n": 11
  },
  "أرسل سيرتك بالبريد": {
   "k": "x",
@@ -20558,11 +20640,6 @@
   "p": "features/support/support.tsx",
   "n": 1
  },
- "تم الرد": {
-  "k": "s",
-  "p": "features/support/support.tsx",
-  "n": 1
- },
  "مغلقة": {
   "k": "s",
   "p": "features/support/support.tsx",
@@ -20600,8 +20677,8 @@
  },
  "الموضوع": {
   "k": "x",
-  "p": "features/support/support.tsx,features/tools/site/toolbox.tsx",
-  "n": 4
+  "p": "features/support/support.tsx,features/tools/register.tsx,features/tools/site/toolbox.tsx",
+  "n": 5
  },
  "مثال: لا أستطيع تغيير بريدي": {
   "k": "s",
@@ -21735,8 +21812,8 @@
  },
  "البيانات": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/office/rfi.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
-  "n": 8
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/rfi.tsx,features/tools/office/vo.tsx,features/tools/site/toolbox.tsx,features/tools/survey/level-book.tsx",
+  "n": 10
  },
  "العنصر / المنطقة": {
   "k": "s",
@@ -22135,8 +22212,8 @@
  },
  "الصافي": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx",
-  "n": 6
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx",
+  "n": 7
  },
  "المطلوب بالهالك": {
   "k": "s",
@@ -22160,8 +22237,8 @@
  },
  "الإجمالي": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/mep/duct.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx",
-  "n": 14
+  "p": "features/tools/concrete/concrete.tsx,features/tools/mep/duct.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/register.tsx,features/tools/site/diary.tsx",
+  "n": 15
  },
  "اللوجستيات ومواعيد الخلاطات": {
   "k": "s",
@@ -22235,8 +22312,8 @@
  },
  "البند": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
-  "n": 10
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
+  "n": 11
  },
  "الأساس": {
   "k": "s",
@@ -22413,8 +22490,8 @@
  },
  "الكود": {
   "k": "s",
-  "p": "features/tools/design/rc-section.tsx,features/tools/elec/cable.tsx",
-  "n": 4
+  "p": "features/tools/design/rc-section.tsx,features/tools/elec/cable.tsx,features/tools/office/submittal.tsx",
+  "n": 6
  },
  "مقاومة الخرسانة f′c (أسطوانة)": {
   "k": "s",
@@ -23119,6 +23196,11 @@
  },
  "مستند جديد": {
   "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "السجل": {
+  "k": "s",
   "p": "features/tools/host.tsx",
   "n": 1
  },
@@ -24550,13 +24632,13 @@
  },
  "الكمية": {
   "k": "s",
-  "p": "features/tools/office/custody.tsx,features/tools/office/submittal.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 15
+  "p": "features/tools/office/custody.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 18
  },
  "الوحدة": {
   "k": "s",
-  "p": "features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 20
+  "p": "features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 23
  },
  "الرقم التسلسلي / الكود": {
   "k": "s",
@@ -24670,8 +24752,8 @@
  },
  "البيان": {
   "k": "x",
-  "p": "features/tools/office/ipc.tsx,features/tools/office/qto.tsx",
-  "n": 9
+  "p": "features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx",
+  "n": 12
  },
  "السابق": {
   "k": "x",
@@ -24825,8 +24907,8 @@
  },
  "رقم البند": {
   "k": "s",
-  "p": "features/tools/office/ipc.tsx",
-  "n": 3
+  "p": "features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
+  "n": 5
  },
  "القسم (اختياري)": {
   "k": "s",
@@ -24980,8 +25062,8 @@
  },
  "قيمة العقد": {
   "k": "s",
-  "p": "features/tools/office/ipc.tsx",
-  "n": 1
+  "p": "features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
+  "n": 4
  },
  "بدون قسم": {
   "k": "s",
@@ -25468,6 +25550,16 @@
   "p": "features/tools/office/rfi.tsx",
   "n": 2
  },
+ "تاريخ الرد": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx,features/tools/office/submittal.tsx,features/tools/register.tsx",
+  "n": 5
+ },
+ "أُغلق الاستيضاح": {
+  "k": "s",
+  "p": "features/tools/office/rfi.tsx",
+  "n": 2
+ },
  "الخانات بين [ ] ناقصة — أكملها قبل الإصدار. لا يُرسل للاستشاري إلا ما تكتبه أنت.": {
   "k": "x",
   "p": "features/tools/office/rfi.tsx",
@@ -25535,6 +25627,31 @@
   "p": "features/tools/office/rfi.tsx",
   "n": 1,
   "x": "dueIso(doc.dateIso, doc.body.days)"
+ },
+ "لم يُرد": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "A معتمد": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "B بملاحظات": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx,features/tools/site/diary.tsx",
+  "n": 2
+ },
+ "C يُعاد": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "D مرفوض": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
  },
  "كتالوج / Datasheet": {
   "k": "s",
@@ -25636,6 +25753,16 @@
   "p": "features/tools/office/submittal.tsx",
   "n": 2
  },
+ "رد الاستشاري": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 2
+ },
+ "مدة المراجعة": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 2
+ },
  "القيم الفنية من كتالوج المصنّع وشهادات الاختبار فقط — راجع كل خانة بين [ ] قبل الإصدار.": {
   "k": "x",
   "p": "features/tools/office/submittal.tsx",
@@ -25671,10 +25798,32 @@
   "p": "features/tools/office/submittal.tsx",
   "n": 1
  },
- "☐ A معتمد ☐ B معتمد بملاحظات ☐ C يُعاد التقديم ☐ D مرفوض الملاحظات:": {
+ "{0}{1} الملاحظات:": {
+  "k": "t",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1,
+  "x": "CODES.slice(1).map(([c]) => `${b.code === c ? \"☑\" : \"☐\"} ${c} ${c === \"A\" ? \"معتمد\" : c === \"B\" ? \"معتمد بملاحظات\" : c === \"C\" ? \"يُعاد التقديم\" : \"مرفوض\"}`).jo"
+ },
+ "معتمد": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx,features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "معتمد بملاحظات": {
   "k": "s",
   "p": "features/tools/office/submittal.tsx",
   "n": 1
+ },
+ "يُعاد التقديم": {
+  "k": "s",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1
+ },
+ "بتاريخ {0}": {
+  "k": "t",
+  "p": "features/tools/office/submittal.tsx",
+  "n": 1,
+  "x": "iso(b.codeOn)"
  },
  "اعتماد خامة · Material approval submittal": {
   "k": "s",
@@ -25697,6 +25846,182 @@
   "p": "features/tools/office/submittal.tsx",
   "n": 1,
   "x": "doc.body.area"
+ },
+ "طلب المالك": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "تعديل تصميم": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "ظروف موقع": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "إلغاء أعمال": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "صافي التغيير": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 3
+ },
+ "إضافات {0} · إلغاءات {1}{2}": {
+  "k": "t",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1,
+  "x": "money(vo.additions) | money(vo.omissions) | vo.pct != null ? ` · ${fmtNum(vo.pct, 2)} % من العقد` : \"\""
+ },
+ "· {0} % من العقد": {
+  "k": "t",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1,
+  "x": "fmtNum(vo.pct, 2)"
+ },
+ "سبب التغيير": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 3
+ },
+ "مرجع التعليمات": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 3
+ },
+ "SI-014 / خطاب الاستشاري": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "حد التنبيه (من العقد)": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "كما في شروط العقد": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "المدة الإضافية المطلوبة": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "وصف التغيير وسببه": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "القيمة {0}": {
+  "k": "r",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{money(vo.lines[i]?."
+ },
+ "قرار المهندس": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 3
+ },
+ "القيمة المعتمدة": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 3
+ },
+ "المدة المعتمدة": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 3
+ },
+ "تاريخ الاعتماد": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "مرجع الاعتماد": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 2
+ },
+ "الإضافة تُقيَّم بفئات العقد أو بفئة جديدة متفق عليها؛ الإلغاء يُخصم بفئة العقد. أمر التغيير لا يُنفَّذ قبل تعليمات مكتوبة من المهندس.": {
+  "k": "x",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "المدة المطلوبة": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "{0} يوم": {
+  "k": "t",
+  "p": "features/tools/office/vo.tsx,features/tools/register.tsx",
+  "n": 4,
+  "x": "N(b.daysReq)"
+ },
+ "وصف التغيير وسببه · Description and reason": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "البنود · Items (الإلغاء بقيمة سالبة)": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "الإضافات": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "الإلغاءات": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "من العقد": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "التاريخ والمرجع": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "☐ معتمد ☐ معتمد جزئيًا ☐ مرفوض": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "أمر تغيير · Variation order": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "أمر تغيير": {
+  "k": "s",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1
+ },
+ "أمر تغيير · ⁦{0}⁩": {
+  "k": "t",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1,
+  "x": "doc.docNo || doc.dateIso"
+ },
+ "الصافي ⁦{0}⁩ ج.م · {1}": {
+  "k": "t",
+  "p": "features/tools/office/vo.tsx",
+  "n": 1,
+  "x": "money(vo.net) | word(VO_STATUS, doc.body.status)"
  },
  "علامة مكررة {0}": {
   "k": "t",
@@ -26091,6 +26416,144 @@
   "p": "features/tools/rebar/bbs.tsx",
   "n": 1
  },
+ "سجل طلبات الاستيضاح": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "سجل طلبات الاستيضاح · RFI log": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "سجل اعتمادات الخامات": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "سجل اعتمادات الخامات · Submittal log": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "سجل أوامر التغيير": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "سجل أوامر التغيير · Variation order log": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "· {0} يوم تأخير": {
+  "k": "t",
+  "p": "features/tools/register.tsx",
+  "n": 1,
+  "x": "x.late"
+ },
+ "المعتمد": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 2
+ },
+ "مدة مطلوبة": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "مدة معتمدة": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "الخامة / المصنّع": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "الرد قبل": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "أيام": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "حتى تاريخ": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "المعتمد / المطلوب": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "متوسط مدة الرد": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "قراءة السجل": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "المطلوب = صافي الإضافات والإلغاءات في كل أمر تغيير؛ المعتمد كما في قرار المهندس (المرفوض صفر). المسودات لم تُقدَّم بعد.": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "الرد قبل = تاريخ الطلب + مدة الرد المحددة فيه. «متأخر» = لم يُرد بعد وتجاوز موعده؛ المسودات لم تُرسل بعد فلا تُحسب متأخرة. الأيام = من التاريخ حتى الرد (أو حتى اليوم).": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "{0} — حتى {1}": {
+  "k": "t",
+  "p": "features/tools/register.tsx",
+  "n": 1,
+  "x": "m.title | today"
+ },
+ "مسودات": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "تعذّر تصدير السجل": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "متوسط الرد": {
+  "k": "x",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "جارٍ…": {
+  "k": "s",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "لا مستندات في هذا التصنيف.": {
+  "k": "x",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "تأخير": {
+  "k": "x",
+  "p": "features/tools/register.tsx",
+  "n": 1
+ },
+ "تأخير {0} يوم": {
+  "k": "r",
+  "p": "features/tools/register.tsx",
+  "n": 1,
+  "x": "EL <Num>{x.late}</Num>"
+ },
  "صافٍ": {
   "k": "s",
   "p": "features/tools/site/diary.tsx",
@@ -26358,11 +26821,6 @@
   "n": 3
  },
  "A مقبول": {
-  "k": "s",
-  "p": "features/tools/site/diary.tsx",
-  "n": 1
- },
- "B بملاحظات": {
   "k": "s",
   "p": "features/tools/site/diary.tsx",
   "n": 1
@@ -26756,11 +27214,6 @@
   "k": "s",
   "p": "features/tools/site/permit.tsx",
   "n": 2
- },
- "مغلق": {
-  "k": "s",
-  "p": "features/tools/site/permit.tsx",
-  "n": 1
  },
  "عرض الحفر من أعلى": {
   "k": "s",
@@ -30325,7 +30778,7 @@
   "p": "tools/registry.ts",
   "n": 1
  },
- "السؤال والمراجع والحل المقترح وموعد الرد — جاهز للاستشاري": {
+ "السؤال والمراجع والحل المقترح وموعد الرد — وسجل الاستيضاحات بالمتأخر منها": {
   "k": "s",
   "p": "tools/registry.ts",
   "n": 1
@@ -30335,7 +30788,7 @@
   "p": "tools/registry.ts",
   "n": 1
  },
- "الخامة والمصنّع والخصائص والمرفقات وكود الاستشاري": {
+ "الخامة والمصنّع والخصائص والمرفقات وكود الاستشاري — وسجل الاعتمادات": {
   "k": "s",
   "p": "tools/registry.ts",
   "n": 1
@@ -30376,6 +30829,21 @@
   "n": 1
  },
  "مستخلص جاري ختامي فاتورة شهادة دفع تأمين محجوز دفعة مقدمة ضريبة قيمة مضافة ipc interim payment certificate invoice retention advance vat": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "أوامر التغيير": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الإضافات والإلغاءات بالفئات، المدة الإضافية، قرار المهندس — وسجل أوامر التغيير": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "أمر تغيير أوامر تغيير أعمال إضافية إلغاء بنود مدة إضافية variation order change order vo extra works omission": {
   "k": "s",
   "p": "tools/registry.ts",
   "n": 1

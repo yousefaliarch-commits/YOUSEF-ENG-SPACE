@@ -26,6 +26,7 @@ import { Empty } from "../../ui/chrome";
 import { Num } from "../../ui/primitives";
 import { TOOL_ICONS } from "./icons";
 import { TOOL_MODULES, type ToolModule } from "./module";
+import { REGISTER_OF, RegisterView } from "./register";
 import { nextDocNo, projectFor, snapOf } from "./spec";
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -59,6 +60,8 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
   const [del, setDel] = useState<ToolHeader | null>(null);
   const [q, setQ] = useState("");
   const [zone, setZone] = useState<string | null>(null);
+  // the RFI, submittal and VO tools also show their log (register.tsx)
+  const [view, setView] = useState<"docs" | "log">("docs");
   if (!t || !toolAllowed(toolRole(app.profile), t.id)) return <div className="pt-4"><Empty title="غير متاح" body="هذه الأداة غير متاحة لنوع حسابك." action="رجوع" onAction={app.pop} /></div>;
   const Icon = TOOL_ICONS[t.icon] || FolderOpen;
   const projects: ToolProject[] = (app.toolProjects || []).filter((p: ToolProject) => !p.deleted && !p.archived);
@@ -99,6 +102,12 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
         <FilePlus2 size={19} /> مستند جديد
       </button>
 
+      {REGISTER_OF[t.id] && (
+        <div data-register-switch>
+          <Pick<"docs" | "log"> items={[["docs", "المستندات"], ["log", "السجل"]]} value={view} onChange={(v) => setView(v)} />
+        </div>
+      )}
+      {REGISTER_OF[t.id] && view === "log" ? <RegisterView app={app} kind={REGISTER_OF[t.id]} project={active} today={today()} /> : (
       <section>
         <h2 className="text-[13px] text-ink-2 mb-2">المستندات المحفوظة {all.length > 0 && <Num>({docs.length === all.length ? all.length : `${docs.length} / ${all.length}`})</Num>}</h2>
         {all.length > 3 && (
@@ -135,6 +144,7 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
           ))}
         </ul>
       </section>
+      )}
       {del && (
         <ConfirmDialog
           title="حذف المستند"

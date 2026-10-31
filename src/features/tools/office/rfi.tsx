@@ -6,7 +6,7 @@
 import type { DocBlock } from "../../../doc/model";
 import { iso } from "../../../doc/text";
 import type { ToolDoc } from "../../../data/tool-docs";
-import { AreaField, Card, Grid2, Note, NumField, Pick, RowCards, TextField } from "../../../ui/kit";
+import { AreaField, Card, Check, DateField, Grid2, Note, NumField, Pick, RowCards, TextField } from "../../../ui/kit";
 import { numInputParse } from "../../../lib/num-input";
 import { AiFillCard, str, strs } from "../../ai/AiFill";
 import type { ToolModule } from "../module";
@@ -20,9 +20,11 @@ type Body = {
   to: string; discipline: string; location: string; priority: string;
   question: string; refs: Ref[]; proposal: string; impact: string; days: string;
   answer: string; answeredBy: string;
+  // the register (W7): when the reply came, and whether the query is closed (older documents have neither)
+  answeredOn?: string; closed?: boolean;
 };
 
-const blank = (): Body => ({ to: "", discipline: "civil", location: "", priority: "normal", question: "", refs: [], proposal: "", impact: "", days: "7", answer: "", answeredBy: "" });
+const blank = (): Body => ({ to: "", discipline: "civil", location: "", priority: "normal", question: "", refs: [], proposal: "", impact: "", days: "7", answer: "", answeredBy: "", answeredOn: "", closed: false });
 
 const DISC_OF: Record<string, string> = { structural: "civil", civil: "civil", architectural: "arch", architecture: "arch", mechanical: "mech", mep: "mech", electrical: "elec", infrastructure: "infra" };
 const discOf = (s: string) => {
@@ -92,7 +94,11 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
       </Card>
       <Card title="الرد (يملؤه الاستشاري)">
         <AreaField label="الرد" value={b.answer} onChange={(v) => put({ answer: v })} rows={3} />
-        <div className="mt-2.5"><TextField label="رد بواسطة" value={b.answeredBy} onChange={(v) => put({ answeredBy: v })} /></div>
+        <div className="mt-2.5"><Grid2>
+          <TextField label="رد بواسطة" value={b.answeredBy} onChange={(v) => put({ answeredBy: v })} />
+          <DateField label="تاريخ الرد" value={b.answeredOn || ""} onChange={(v) => put({ answeredOn: v })} readOnly={ro} data-rfi-answered-on />
+        </Grid2></div>
+        <div className="mt-2"><Check label="أُغلق الاستيضاح" on={!!b.closed} onChange={(closed) => put({ closed })} /></div>
       </Card>
       <Note>الخانات بين [ ] ناقصة — أكملها قبل الإصدار. لا يُرسل للاستشاري إلا ما تكتبه أنت.</Note>
     </div>
@@ -121,7 +127,7 @@ function build(doc: ToolDoc<Body>, project: any) {
       : []),
     ...(b.proposal.trim() ? [{ k: "notes", title: "الحل المقترح · Proposed solution", text: b.proposal } as DocBlock] : []),
     ...(b.impact.trim() ? [{ k: "notes", title: "التأثير · Impact", text: b.impact } as DocBlock] : []),
-    { k: "notes", title: "الرد · Reply", text: b.answer.trim() ? `${b.answer}${b.answeredBy ? `\n— ${b.answeredBy}` : ""}` : "\n\n\n" },
+    { k: "notes", title: "الرد · Reply", text: b.answer.trim() ? `${b.answer}${b.answeredBy ? `\n— ${b.answeredBy}` : ""}${b.answeredOn ? ` · ${iso(b.answeredOn)}` : ""}` : "\n\n\n" },
   ];
   return buildSpec({ doc, meta: module, project, sections: [{ orientation: "portrait", blocks }], signRoles: ["contractorRep", "consultantRep"] });
 }
