@@ -164,6 +164,19 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
   );
 }
 
+// the shape of a document screen while its tool loads (no spinner, no «loading» text: the layout is already there)
+function DocSkeleton() {
+  return (
+    <div className="pt-3 space-y-3" aria-busy="true" aria-label="جارٍ التحميل" data-doc-skeleton>
+      <div className="skeleton h-12 rounded-xl" />
+      <div className="skeleton h-32 rounded-2xl" />
+      <div className="grid grid-cols-2 gap-2.5"><div className="skeleton h-12 rounded-xl" /><div className="skeleton h-12 rounded-xl" /></div>
+      <div className="skeleton h-24 rounded-2xl" />
+      <div className="skeleton h-40 rounded-2xl" />
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------------
 //  The live A4 preview (W5): a document in a wide desktop pane draws its own PDF pages beside the editor, a moment after the
 //  last edit (the same layout and drawing as «معاينة» and the exported file). Only on a desktop — a phone never pays for it.
@@ -399,7 +412,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
   if (err) return <div className="pt-4"><Empty title="تعذّر فتح الأداة" body="تحقق من الاتصال ثم حاول مرة أخرى." action="رجوع" onAction={app.pop} /></div>;
   if (!t || !toolAllowed(role, kind)) return <div className="pt-4"><Empty title="غير متاح" body="هذه الأداة غير متاحة لنوع حسابك." action="رجوع" onAction={app.pop} /></div>;
   if (missing) return <div className="pt-4"><Empty title="المستند غير موجود" body="ربما حُذف من جهاز آخر." action="رجوع" onAction={app.pop} /></div>;
-  if (!mod || !doc) return <div className="py-16 text-center text-[13px] text-ink-3">جارٍ التحميل…</div>;
+  if (!mod || !doc) return <DocSkeleton />;
 
   const projects: ToolProject[] = app.toolProjects || [];
   const project = projects.find((p) => p.id === doc.projectId && !p.deleted) || null;
