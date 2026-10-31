@@ -2,10 +2,10 @@
 // bundle carries just these). A test checks every registry icon is here.
 import {
   AirVent, BadgeDollarSign, Cable, Calculator, ClipboardCheck, Cylinder, Droplets, FileCheck, FileQuestion, Handshake, HardHat, Map as MapIcon, Megaphone,
-  MessageSquare, NotebookPen, PackageCheck, Percent, Repeat, Route, Ruler, Scale, ShieldCheck, Spline, Timer, Waves,
+  MessageSquare, NotebookPen, PackageCheck, Percent, Receipt, Repeat, Route, Ruler, Scale, ShieldCheck, Spline, Timer, Waves,
 } from "lucide-react";
 
 export const TOOL_ICONS: Record<string, any> = {
   AirVent, BadgeDollarSign, Cable, Calculator, ClipboardCheck, Cylinder, Droplets, FileCheck, FileQuestion, Handshake, HardHat, Map: MapIcon, Megaphone,
-  MessageSquare, NotebookPen, PackageCheck, Percent, Repeat, Route, Ruler, Scale, ShieldCheck, Spline, Timer, Waves,
+  MessageSquare, NotebookPen, PackageCheck, Percent, Receipt, Repeat, Route, Ruler, Scale, ShieldCheck, Spline, Timer, Waves,
 };

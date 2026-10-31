@@ -1,0 +1,189 @@
+# Technical office: quantity take-off (QTO) and the interim payment certificate (IPC) — screens, documents, engine diagnostics
+b11310ae	Item {0}: the cumulative quantity {1} {2} exceeds the contract quantity {3} {4} by {5}% — the increase is approved by a variation order (FIDIC 1999 Clause 13) before it is paid.
+3b027824	Item {0}: the cumulative quantity is negative ({1}) — check the previous or current quantity.
+4984cc5c	Item {0}: negative current quantity ({1}) — a correction to a quantity already paid.
+2b3977b6	Item {0}: no unit rate — the item's value is zero.
+c8caf61e	Total work done {0} exceeds the contract amount {1} — check the approved variation orders.
+f0cfc864	Retention
+08bf3cab	min({0}% × {1} , {2})
+3ae5978c	FIDIC 1999 Sub-Clause 14.3(c)
+89c4ba25	Retention has reached its limit ({0}% of the contract amount = {1}) — nothing more is retained.
+62d5b219	Advance payment recovery (FIDIC)
+7d230798	min({0}% × {1} , {2} − {3})
+e25b0c73	Total {0} ≤ {1} ({2}% of the contract) → no recovery yet
+d24914c1	FIDIC 1999 Sub-Clause 14.2
+480716c2	Advance payment recovery (proportional)
+a932ee8e	min({0} ÷ {1} × {2} , {3})
+d0c237cb	Enter the contract amount: proportional advance recovery needs it.
+b17facd7	The advance payment is fully recovered.
+566de37a	VAT
+1fe7ace8	net after deductions
+ed01b894	gross work of the period
+e746ce3d	Law 157 of 2025
+1ed11d79	Net amount due for the certificate
+593621b6	The certificate's net is negative ({0}) — deductions exceed the period's work.
+3706758a	lm
+b9d87bd2	{0} × {1} × {2} × {3} face(s)
+4e5a4546	The door width is deducted from the skirting
+6e36c64e	{0} m² > {1} m² → deducted
+e89c8e1d	{0} m² ≤ {1} m² → not deducted
+135dee74	{0} < {1} m² ≤ {2} m² → deducted from one face
+3c8f7df3	{0} m² > {1} m² → deducted from both faces
+7d57ffb1	Void inside the element → deducted
+ab40b971	Missing dimensions — quantity is zero
+b08b9171	Deductions ({0}) exceed the gross ({1}) — check the opening sizes
+e642e47f	The height of «{0}» ({1} m) exceeds the wall height ({2} m)
+1557ce0b	opening
+8159d1ce	Total work done
+cd6c6a2f	Less: retention
+d265c824	Less: advance payment recovery
+f0a1790e	Net before VAT
+7947b04f	Add: VAT
+b4a34704	Less: {0}
+d8dd61ff	deduction
+0f58c3a8	Net amount due
+9d5be16e	Item
+327aae31	Current
+56c1b03c	Net amount due — certificate no. {0}
+afc87406	Period work {0} · cumulative {1}{2}
+1ca5718f	 · {0}% of the contract amount
+685a15fe	Certificate details
+609f986d	Certificate no.
+5761b7e4	Contract reference
+1342abab	Period from
+1c1f78ed	Contract terms
+d86f2b6d	Contract amount (excl. VAT)
+884bb8bf	Retention limit (optional)
+97dd5295	% of contract
+0ae67c17	empty = no limit
+b85b5157	Advance payment
+3ed9f8d1	Advance payment recovery
+1a433d6a	Proportional to the work done
+59856a2a	Starts after certifying
+a0cb1e43	Recovery rate
+20025ec2	% of the certificate
+25950203	Recovered up to the previous certificate
+50b791db	14% — Law 157/2025
+0ac935a6	5% — contract on the schedule tax
+bcb89160	Exempt
+6a3b3bda	VAT base
+0e1c8fd2	Net after retention and advance
+6c66c636	Work items ({0})
+b66e5396	New item
+ea5981e9	{0} · {1} — {2} {3} · EGP {4}{5}
+d1af8f4c	Item no.
+93a9e871	Section (optional)
+97e7bd40	Description of work
+50e39f12	Contract qty
+cd52e81e	Previous qty
+22bdea3d	Period qty
+a1325099	· period value
+01951173	· total value
+fb6d8ce5	Total {0} {1}{2} · period value {3} · total value {4}
+8082ed0b	· progress
+d4589a21	· progress {0}
+5a948787	Other deductions
+49a8d6e0	{0}% of the total work
+3c647b10	EGP {0} for the period
+559b1b6a	e.g. withholding tax, delay penalty, materials on site
+012b8f23	% of the total work
+98046ae9	Fixed amount
+e2f517f4	Rate per contract / law
+5d37814a	Rates follow the contract and the law in force — the app assumes no deduction rate.
+27647e7b	Certificate summary
+3d60408e	Create the next certificate (no.
+99a8c887	Create the next certificate (no. {0})
+fc6a0692	Certificate no. {0}
+80e59ec1	up to {0}% of the contract
+4b08ea18	EGP {0} — {1}
+1cba44c5	FIDIC 14.2 (starts after {0}% at {1}%)
+87e8e1d5	None
+00584a3a	{0}% on {1}
+a8bd42c7	the total work
+d0197be7	Contract amount
+df333ef2	No section
+04637558	Work items
+94ad5128	Total qty
+c813e3c1	Previous value
+1af6a81b	Period value
+bdaabc8f	Total value
+160eaee0	Net amount due for this certificate
+819d3eb6	Progress of the contract amount
+2131774c	Advance payment balance
+288473e3	Review notes
+86612348	Interim certificate no. {0} · period {1} → {2}{3}
+ee3ad0ef	Retention rate
+4fd4c351	Retention limit (% of contract)
+7b9dba3c	No limit
+096e660f	Recovery method
+63d9b125	Recovery starts at (FIDIC)
+186e655c	Recovery rate (FIDIC)
+b5d9f343	Progress
+4e530f80	Certificate {0}
+6560794e	Interim payment certificate
+1afd5c22	Technical office · contracts
+a3fd974b	Interim certificate no. ⁦{0}⁩
+e20b0855	Period work EGP ⁦{0}⁩
+fc9ae2ed	Net amount due EGP ⁦{0}⁩
+70ce3f6d	Backfill
+008e77fb	Replacement / soil
+bfee2e09	Concrete
+ece76396	Masonry
+43b33cb9	Plaster
+b17fd847	Paint
+61efcff3	Tiles / flooring
+4bba9cef	Screed / floor ceramics
+7d53d646	Waterproofing
+0b40be41	Skirting
+73d48c15	IS 1200 — masonry: openings > 0.1 m² deducted · plaster and paint: ≤ 0.5 m² not deducted, 0.5–3 m² one face, > 3 m² both faces
+eb211ef2	Deduct every opening in full
+f4977fd8	As the contract's method of measurement
+bed90b83	Location (WBS): building / level / element
+5d15988f	Tower A / Level 02 / Apartment 3 walls
+7d7adee5	Ceiling (length × width)
+adda7108	Measured by area (no thickness)
+7cce8476	Depth / height
+a2168846	Upturn (up the walls)
+77d21b33	Faces measured
+9fb6badc	One face
+a35b93d1	Both faces
+b21d9969	Doors (their width is deducted)
+3b25b51a	Door
+d562c1bd	Door D1, window W2…
+3f0cf93d	{0} items · {1} trades
+78a1eb18	Measurement and deduction rules
+4eed610f	Deduct every opening
+3dab954d	Per contract
+b3ac1c4d	Masonry: not deducted up to
+501b8f64	Plaster/paint: not deducted up to
+dfc48e71	One face up to
+640e4ab4	Floors/waterproofing: not deducted up to
+556e78fe	Methods of measurement differ between contracts — check the method approved in your contract before issuing.
+61c1fefe	Items ({0})
+c0b82a1c	Net {0} {1}
+f9b58e04	Totals by trade
+9709d103	{0} ({1} items)
+cc3b264d	Measurement rules
+9b95099b	Number of items
+0db5aeb8	Take-off items
+fa5d6bbb	Thickness/faces
+57092dd2	Deduction
+69bf58db	Deductions and the rule applied
+837a841a	Opening
+90ca9077	Area/width
+02c09b16	Multiplier
+6b62d18d	Trade
+a3136a7a	Net quantity
+f06127e9	Measurement rules: {0}
+6634273d	Location (WBS)
+54d65a5e	Height / upturn
+3696e268	Thickness / faces
+4eab9ca8	Quantity take-off
+963a9600	Quantity take-off
+eda61ed1	Technical office · quantities
+afed2b6e	Quantity take-off
+437b5c46	Items filed by their place in the project, their dimensions, and opening deductions under a stated measurement rule
+d7152e66	quantity take-off masonry plaster paint tiles waterproofing skirting excavation backfill openings qto boq measurement
+c9d1b17a	Interim payment certificate
+72ed2c9d	Previous, current and total; retention, advance recovery and VAT
+dc8e385b	interim final payment certificate invoice retention advance payment vat ipc
