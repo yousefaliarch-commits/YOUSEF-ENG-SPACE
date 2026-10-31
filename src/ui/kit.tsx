@@ -6,7 +6,7 @@
 // =====================================================================
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, ChevronUp, Copy, Eye, FileDown, FileSpreadsheet, FileText, Plus, Share2, Trash2, X } from "lucide-react";
+import { ChevronDown, Copy, Eye, FileDown, FileSpreadsheet, FileText, Plus, Share2, Trash2, X } from "lucide-react";
 import { numInputProblem, type NumInputRule } from "../lib/num-input";
 import { FilterChip, Num } from "./primitives";
 import type { DrawPage, TraceStep } from "../doc/model";
@@ -80,7 +80,25 @@ export function AreaField({ label, value, onChange, placeholder, rows = 3 }: { l
   );
 }
 
+// a few short options (≤ 3, ≤ 36 characters in all) read as one segmented control with a sliding pill; longer sets stay a
+// scrollable row of chips. Both are buttons with aria-pressed, so tests and assistive tech see the same thing.
+export const isSegmented = (items: [string, string][]) => items.length >= 2 && items.length <= 3 && items.reduce((n, [, l]) => n + l.length, 0) <= 36;
+
 export function Pick<T extends string>({ label, items, value, onChange }: { label?: string; items: [T, string][]; value: T; onChange: (v: T) => void }) {
+  if (isSegmented(items)) {
+    const i = Math.max(0, items.findIndex(([id]) => id === value));
+    return (
+      <div>
+        {label && <span className="block text-[12px] text-ink-2 mb-1.5">{label}</span>}
+        <div className="relative grid p-1 rounded-xl bg-surface border border-line-2" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }} data-seg>
+          <span aria-hidden="true" className="seg-ind absolute top-1 bottom-1 rounded-lg bg-canvas border border-line shadow-card" style={{ width: `calc((100% - 8px) / ${items.length})`, insetInlineStart: 4, ["--i" as any]: i }} />
+          {items.map(([id, l]) => (
+            <button key={id} type="button" aria-pressed={value === id} onClick={() => onChange(id)} className={`seg-btn press relative z-[1] min-h-11 px-2 rounded-lg text-[13px] font-medium truncate focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${value === id ? "text-ink" : "text-ink-2 hover:text-ink"}`}>{l}</button>
+          ))}
+        </div>
+      </div>
+    );
+  }
   return (
     <div>
       {label && <span className="block text-[12px] text-ink-2 mb-1.5">{label}</span>}
@@ -125,13 +143,34 @@ export const Note = ({ children, tone = "quiet" }: { children: any; tone?: "quie
 );
 
 // ---- results ----
-export function ResultHero({ label, value, unit, sub, tone = "accent" }: { label: string; value: string; unit?: string; sub?: string; tone?: "accent" | "good" | "bad" }) {
-  const ring = tone === "bad" ? "border-bad/40 bg-bad/5" : tone === "good" ? "border-good/40 bg-good/5" : "border-accent/25 bg-wash";
+// a ring that fills to `value` (0…1, more than 1 shows full in the «bad» colour): utilisation, progress — once, on arrival
+export function ScoreRing({ value, size = 64, tone }: { value: number; size?: number; tone?: "accent" | "good" | "warn" | "bad" }) {
+  const r = (size - 8) / 2;
+  const c = 2 * Math.PI * r;
+  const v = Math.max(0, Math.min(1, Number.isFinite(value) ? value : 0));
+  const t = tone || (value > 1 ? "bad" : value > 0.9 ? "warn" : "good");
+  const colour = t === "bad" ? "text-bad" : t === "warn" ? "text-warn" : t === "good" ? "text-good" : "text-accent";
   return (
-    <div className={`p-4 rounded-2xl border ${ring}`} data-tool-result="hero">
-      <p className="text-[12px] text-ink-2">{label}</p>
-      <p className="mt-1 leading-none"><Num className="text-[34px] font-semibold">{value}</Num>{unit && <span className="ms-1.5 text-[13px] text-ink-2">{unit}</span>}</p>
-      {sub && <p className="mt-2 text-[12px] text-ink-2 leading-snug">{sub}</p>}
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true" className={`shrink-0 -rotate-90 ${colour}`} data-score-ring={Math.round(value * 100)}>
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="currentColor" strokeOpacity=".15" strokeWidth="6" />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" className="ring-arc ring-in"
+        style={{ strokeDasharray: c, strokeDashoffset: c * (1 - v), ["--ring-c" as any]: c }} />
+    </svg>
+  );
+}
+
+// `ring`: a fraction shown as a ScoreRing — utilisation colours itself (≤ 0.9 good · ≤ 1 warn · > 1 bad); `ringTone` fixes the
+// colour when the fraction is progress, not a limit (the certificate's share of the contract)
+export function ResultHero({ label, value, unit, sub, tone = "accent", ring, ringTone }: { label: string; value: string; unit?: string; sub?: string; tone?: "accent" | "good" | "bad"; ring?: number | null; ringTone?: "accent" }) {
+  const box = tone === "bad" ? "border-bad/40 bg-bad/5" : tone === "good" ? "border-good/40 bg-good/5" : "border-accent/25 bg-wash";
+  return (
+    <div className={`p-4 rounded-2xl border ${box} flex items-center gap-4`} data-tool-result="hero">
+      <div className="min-w-0 flex-1">
+        <p className="text-[12px] text-ink-2">{label}</p>
+        <p className="mt-1 leading-none"><Num className="text-[34px] font-semibold">{value}</Num>{unit && <span className="ms-1.5 text-[13px] text-ink-2">{unit}</span>}</p>
+        {sub && <p className="mt-2 text-[12px] text-ink-2 leading-snug">{sub}</p>}
+      </div>
+      {ring != null && <ScoreRing value={ring} tone={ringTone} />}
     </div>
   );
 }
@@ -161,7 +200,10 @@ export function Checks({ items }: { items: CheckLine[] }) {
         <li key={i} data-check={c.ok === false ? (c.level === "warn" ? "warn" : "fail") : c.ok ? (c.unverified ? "flag" : "ok") : "na"} className={`p-3 rounded-xl border text-[12.5px] ${c.ok === false ? (c.level === "warn" ? "border-warn/40 bg-warn/5" : "border-bad/40 bg-bad/5") : c.ok ? "border-line bg-surface" : "border-line-2 bg-canvas"}`}>
           <div className="flex items-start justify-between gap-2">
             <span className="min-w-0 leading-snug">{c.label}</span>
-            <span className={`shrink-0 text-[12px] font-medium ${c.ok === false ? (c.level === "warn" ? "text-warn" : "text-bad") : c.ok ? (c.unverified ? "text-warn" : "text-good") : "text-ink-3"}`}>{checkWord(c)}</span>
+            <span className={`shrink-0 inline-flex items-center gap-1 text-[12px] font-medium ${c.ok === false ? (c.level === "warn" ? "text-warn" : "text-bad") : c.ok ? (c.unverified ? "text-warn" : "text-good") : "text-ink-3"}`}>
+              {c.ok && !c.unverified && <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" className="tick"><path d="M3 8.5l3.2 3.2L13 4.8" pathLength={1} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+              {checkWord(c).replace(" ✓", "")}
+            </span>
           </div>
           <div className="mt-1 flex flex-wrap gap-x-3 text-ink-3 text-[11.5px]">
             <span><Num>{c.value}</Num></span>
@@ -181,10 +223,10 @@ export function Working({ steps }: { steps: TraceStep[] }) {
   return (
     <div>
       <button type="button" onClick={() => setOpen(!open)} className="press inline-flex items-center gap-1 min-h-10 text-[12.5px] text-accent">
-        طريقة الحساب {open ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+        طريقة الحساب <ChevronDown size={15} className={`chev ${open ? "is-open" : ""}`} />
       </button>
       {open && (
-        <ol className="mt-1 space-y-1.5 text-[12px] text-ink-2">
+        <ol className="unfold mt-1 space-y-1.5 text-[12px] text-ink-2">
           {steps.map((s, i) => (
             <li key={i} className="p-2.5 rounded-lg bg-canvas border border-line">
               <span className="block text-ink">{s.label}</span>
@@ -213,10 +255,10 @@ export function RowCards<R>({ rows, onChange, blank, render, summary, addLabel =
             <button type="button" onClick={() => setOpen(open === i ? -1 : i)} className="min-w-0 flex-1 min-h-12 text-start text-[13.5px] leading-snug">
               <span className="text-ink-3 me-1.5 font-grotesk">{i + 1}</span>{summary(r, i)}
             </button>
-            <button type="button" aria-label="تكرار" onClick={() => { onChange([...rows.slice(0, i + 1), structuredClone(r), ...rows.slice(i + 1)]); setOpen(i + 1); }} className="press grid place-items-center w-10 h-10 text-ink-3"><Copy size={16} /></button>
-            <button type="button" aria-label="حذف" onClick={() => { onChange(rows.filter((_, j) => j !== i)); setOpen(-1); }} className="press grid place-items-center w-10 h-10 text-ink-3 hover:text-bad"><Trash2 size={16} /></button>
+            <button type="button" aria-label="تكرار" onClick={() => { onChange([...rows.slice(0, i + 1), structuredClone(r), ...rows.slice(i + 1)]); setOpen(i + 1); }} className="press grid place-items-center w-11 h-11 text-ink-3"><Copy size={16} /></button>
+            <button type="button" aria-label="حذف" onClick={() => { onChange(rows.filter((_, j) => j !== i)); setOpen(-1); }} className="press grid place-items-center w-11 h-11 text-ink-3 hover:text-bad"><Trash2 size={16} /></button>
           </div>
-          {open === i && <div className="px-3.5 pb-3.5 space-y-2.5">{render(r, (x) => set(i, x), i)}</div>}
+          {open === i && <div className="unfold px-3.5 pb-3.5 space-y-2.5">{render(r, (x) => set(i, x), i)}</div>}
         </div>
       ))}
       {rows.length < max && (

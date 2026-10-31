@@ -330,8 +330,8 @@
  },
  "جارٍ التحميل…": {
   "k": "x",
-  "p": "app/ScreenLoading.tsx,features/admin/directory-support.tsx,features/admin/images-admin.tsx,features/market/raise-tracker.tsx,features/support/support.tsx,features/tools/host.tsx",
-  "n": 9
+  "p": "app/ScreenLoading.tsx,features/admin/directory-support.tsx,features/admin/images-admin.tsx,features/market/raise-tracker.tsx,features/support/support.tsx",
+  "n": 8
  },
  "طريقة العرض": {
   "k": "s",
@@ -23260,6 +23260,11 @@
   "p": "features/tools/host.tsx",
   "n": 1
  },
+ "جارٍ التحميل": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
  "معاينة حية": {
   "k": "x",
   "p": "features/tools/host.tsx",
@@ -31672,12 +31677,6 @@
   "k": "x",
   "p": "ui/kit.tsx",
   "n": 1
- },
- "طريقة الحساب {0}": {
-  "k": "e",
-  "p": "ui/kit.tsx",
-  "n": 1,
-  "x": "open ? <ChevronUp size={15} /> : <ChevronDown size={15} />"
  },
  "تكرار": {
   "k": "s",

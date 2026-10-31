@@ -101,6 +101,8 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
         unit="ج.م"
         sub={`أعمال الفترة ${money(r.s.gross.cur)} · التراكمي ${money(r.s.gross.total)}${progress != null ? ` · ${fmtNum(progress, 1)}% من قيمة العقد` : ""}`}
         tone={r.issues.some((i) => i.level === "error") ? "bad" : "accent"}
+        ring={progress != null ? progress / 100 : null}
+        ringTone="accent"
       />
       <Card title="بيانات المستخلص">
         <Grid2>

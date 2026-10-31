@@ -125,6 +125,7 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
         unit="%"
         sub={`${b.members.length} عنصر · ${ready.length - fails} ${aci ? "مطابق" : "ضمن الحد ⚑"} · ${fails} يحتاج مراجعة`}
         tone={fails ? "bad" : "accent"}
+        ring={ready.length ? worst : null}
       />
       <Card title="الكود والمواد">
         <Pick label="الكود" items={[[ACI, "ACI 318-19"], ["ecp203-2020", "ECP 203-2020 ⚑"]]} value={b.code} onChange={switchCode} />

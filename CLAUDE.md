@@ -196,6 +196,16 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   net, share of the contract against the contract's own alert % (never a figure claimed for a law), extra time, the engineer's
   decision. Kit: `DateField`.
 
+- v0.36.0: **craftsmanship** — motion comes from physics, not taste: `src/ui/motion.ts` samples damped springs into CSS `linear()`
+  (`--spring-snap` / `--spring-soft` / `--spring-pop` + `-d` durations, cubic-bezier fallback before an `@supports` block);
+  `tests/motion.test.ts` recomputes the tokens — **change a spring in motion.ts, then paste its new output into app.css**. Kit:
+  `Pick` with ≤ 3 short options (`isSegmented`) is a 44 px segmented control with a sliding pill (`.seg-ind`, transform only;
+  still buttons with aria-pressed); `FilterChip` has a 44 px hit area (`.hit44`); `Checks` draws a tick on a pass (`.tick`);
+  `Working` and `RowCards` unfold (`.unfold`, opacity/transform — layout never animates; chevron `.chev` turns); `ScoreRing` /
+  `ResultHero ring` (utilisation colours itself; `ringTone="accent"` for progress — IPC); document screens load as a skeleton.
+  Arabic is never letter-spaced (`[lang="ar"] :not(bdi)[class*="tracking-"]`), headings `text-wrap: balance`. Every new animation
+  stops under prefers-reduced-motion (pinned by the test).
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role
