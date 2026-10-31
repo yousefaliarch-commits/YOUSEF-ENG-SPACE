@@ -1157,13 +1157,13 @@
  },
  "مطابق": {
   "k": "s",
-  "p": "data/checklists.ts,features/tools/elec/cable.tsx,lib/report-pdf.ts",
-  "n": 4
+  "p": "data/checklists.ts,features/tools/design/rc-section.tsx,features/tools/elec/cable.tsx,lib/report-pdf.ts",
+  "n": 6
  },
  "غير مطابق": {
   "k": "s",
-  "p": "data/checklists.ts,features/tools/elec/cable.tsx,lib/helpers.tsx,lib/report-pdf.ts",
-  "n": 5
+  "p": "data/checklists.ts,features/tools/design/rc-section.tsx,features/tools/elec/cable.tsx,lib/helpers.tsx,lib/report-pdf.ts",
+  "n": 6
  },
  "لا ينطبق": {
   "k": "s",
@@ -1187,8 +1187,8 @@
  },
  "إنشائي": {
   "k": "s",
-  "p": "data/checklists.ts,features/tools/concrete/concrete.tsx,features/tools/office/rfi.tsx,features/tools/rebar/bbs.tsx",
-  "n": 7
+  "p": "data/checklists.ts,features/tools/concrete/concrete.tsx,features/tools/design/rc-section.tsx,features/tools/office/rfi.tsx,features/tools/rebar/bbs.tsx",
+  "n": 8
  },
  "معماري وتشطيبات": {
   "k": "s",
@@ -7354,8 +7354,8 @@
  },
  "الطول": {
   "k": "s",
-  "p": "domain/site-calc.ts,domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
-  "n": 24
+  "p": "domain/site-calc.ts,domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/duct.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 26
  },
  "متر": {
   "k": "s",
@@ -9710,8 +9710,8 @@
  },
  "كمرة": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx",
-  "n": 2
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/design/rc-section.tsx",
+  "n": 4
  },
  "العمق الكلي": {
   "k": "s",
@@ -9845,8 +9845,8 @@
  },
  "بلاطة": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
-  "n": 5
+  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/design/rc-section.tsx,features/tools/trade/trade.tsx",
+  "n": 6
  },
  "(L·B − فتحات)·t": {
   "k": "s",
@@ -9997,6 +9997,76 @@
   "k": "s",
   "p": "domain/tools/concrete-calc.ts",
   "n": 1
+ },
+ "صاج مجلفن (وصلات طولية)": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "PVC / ألومنيوم أملس": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "مجلفن حلزوني": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "مرن مفرود بالكامل": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "القطر المطلوب (احتكاك متساوٍ)": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "القطر المكافئ (هوبشر)": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "الاحتكاك الفعلي": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "السرعة": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 2
+ },
+ "فقد الاستقامات": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "حد التصميم (ضوضاء) — مدخل المهندس": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "الاحتكاك": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "معدل الاحتكاك التصميمي + 10 %": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts",
+  "n": 1
+ },
+ "نسبة الأبعاد": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts,features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "SMACNA — توصية": {
+  "k": "s",
+  "p": "domain/tools/duct-calc.ts,features/tools/mep/duct.tsx",
+  "n": 2
  },
  "البند {0}: الكمية التراكمية {1} {2} تتجاوز كمية العقد {3} {4} بنسبة {5}% — تُعتمد الزيادة بأمر تغيير (FIDIC 1999 بند 13) قبل صرفها.": {
   "k": "t",
@@ -10225,8 +10295,8 @@
  },
  "الغطاء": {
   "k": "s",
-  "p": "domain/tools/mep-calc.ts,features/tools/mep/drain-run.tsx",
-  "n": 2
+  "p": "domain/tools/mep-calc.ts,features/tools/design/rc-section.tsx,features/tools/mep/drain-run.tsx",
+  "n": 3
  },
  "المسافة بين غرف التفتيش": {
   "k": "s",
@@ -10330,6 +10400,398 @@
   "k": "s",
   "p": "domain/tools/qto-calc.ts,features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
   "n": 10
+ },
+ "بسيطة الارتكاز": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "مستمرة من طرف": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "مستمرة من الطرفين": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "كابولي": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "العمق الفعّال d": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "حديد الشد لكل متر As": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "حديد الشد As": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "حديد الضغط A′s": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "كتلة الإجهاد": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts,features/tools/design/rc-section.tsx",
+  "n": 4
+ },
+ "كتلة الإجهاد المستطيلة": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "إجهاد الحديد التصميمي": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "معامل أمان الحديد γs": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts,features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "محور التعادل c (اتزان القوى)": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "انفعال حديد الشد εt": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "المقاومة الاسمية Mn": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "معامل الخفض φ": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "المقاومة التصميمية φMn": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "مقاومة القطاع القصوى Mu,cap": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "تصميم القطاعات بطريقة حالات الحدود": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "مقاومة الانحناء": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "حالة حد المقاومة": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "الحديد المطلوب (قطاع مفرد، φ = 0.9)": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "الحديد المطلوب (قطاع مفرد)": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "تصميم القطاعات": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "المطيلية: انفعال حديد الشد": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "أقصى عمق لمحور التعادل": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts,features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "حدود التسليح القصوى": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "المطيلية: عمق محور التعادل": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "الحد الأدنى للبلاطة": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "الحد الأدنى للكمرة": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "ECP 203 — الحد الأدنى لحديد البلاطات ⚑": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "ECP 203 — الحد الأدنى لحديد الكمرات ⚑": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "الحد الأدنى للتسليح": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "المسافة الصافية بين الأسياخ": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "الأسياخ تتسع في الطبقة": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "ACI 318-19 25.2.1 — لحين التحقق من ECP ⚑": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "أقصى تباعد للتحكم في التشقق": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "تباعد الأسياخ (التشقق)": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "أقصى تباعد لحديد البلاطة": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "ECP 203 — تباعد حديد البلاطات ⚑": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "مقاومة الخرسانة للقص Vc": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "مقاومة الكانات Vs": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "مقاومة القص التصميمية φVn": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "مقاومة القص": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "أبعاد القطاع على القص": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "الحد الأدنى للكانات": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "غير لازم": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "أقصى تباعد للكانات": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "تباعد الكانات المطلوب": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "إجهاد القص qu": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "القص": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "مقاومة الخرسانة qcu": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "مقاومة الخرسانة للقص": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts,features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "أقصى إجهاد قص": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "الحد الأقصى لإجهاد القص": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "مقاومة الكانات": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "تصميم الكانات": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "ECP 203 — الحد الأدنى للكانات ⚑": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "ECP 203 — تباعد الكانات ⚑": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "أقل سُمك بدون حساب الترخيم": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "ECP 203 — جدول البحر / العمق ⚑": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 2
+ },
+ "البحر / العمق (الترخيم)": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "الانحناء: العزم أكبر من المقاومة بنسبة {0} %. الحديد المطلوب {1} مم²/م — مثلًا Ø{2} كل {3} مم، أو زد سُمك البلاطة.": {
+  "k": "t",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1,
+  "x": "r((utilM - 1) * 100, 0) | r(asReq, 0) | i.dT | s"
+ },
+ "الانحناء: العزم أكبر من المقاومة بنسبة {0} %. الحديد المطلوب {1} مم² — مثلًا {2} Ø{3}، أو زد العمق.": {
+  "k": "t",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1,
+  "x": "r((utilM - 1) * 100, 0) | r(asReq, 0) | n | i.dT"
+ },
+ "الانحناء: القطاع أصغر من أن يقاوم العزم بحديد شد فقط — زد العمق أو العرض، أو أضف حديد ضغط وأعد الفحص.": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "المطيلية: القطاع مُسلّح فوق الحد (انهيار قصيف) — زد العمق أو أضف حديد ضغط بدل زيادة حديد الشد.": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "الحد الأدنى: زد حديد الشد إلى {0} مم² على الأقل.": {
+  "k": "t",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1,
+  "x": "r(asMin, 0)"
+ },
+ "التباعد: الأسياخ متقاربة جدًا — استخدم قطرًا أكبر بتباعد أوسع.": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "التباعد: {0} أسياخ Ø{1} لا تتسع في عرض {2} مم — استخدم طبقتين أو قطرًا أكبر بعدد أقل.": {
+  "k": "t",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1,
+  "x": "n1 | i.dT | b"
+ },
+ "التشقق: التباعد أكبر من حد التحكم في عرض الشروخ — استخدم أسياخًا أصغر بعدد أكبر.": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "التباعد: قلّل تباعد حديد البلاطة إلى الحد المسموح.": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "القص: أبعاد القطاع لا تكفي — لا تحلها الكانات؛ زد العرض أو العمق.": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "القص: البلاطة لا تقاوم القص بالخرسانة وحدها — زد السُمك (أو الحديد الطولي) وأعد الفحص.": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
+ },
+ "القص: قلّل تباعد الكانات{0} أو زد عدد الأفرع / القطر.": {
+  "k": "t",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1,
+  "x": "sReq != null ? ` إلى ${Math.max(50, Math.floor(sReq / 25) * 25)} مم` : \"\""
+ },
+ "إلى {0} مم": {
+  "k": "t",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1,
+  "x": "Math.max(50, Math.floor(sReq / 25) * 25)"
+ },
+ "الكانات: التزم بالحد الأدنى للمساحة وأقصى تباعد {0} مم.": {
+  "k": "t",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1,
+  "x": "r(sMax, 0)"
+ },
+ "الترخيم: السُمك أقل من حد الجدول — يلزم حساب الترخيم صراحةً أو زيادة السُمك.": {
+  "k": "s",
+  "p": "domain/tools/rc-calc.ts",
+  "n": 1
  },
  "نسبة الماء للأسمنت أعلى من 0.55 ⚑": {
   "k": "s",
@@ -12163,8 +12625,8 @@
  },
  "العنصر": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/tools/concrete/concrete.tsx,features/tools/host.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 15
+  "p": "features/admin/AdminView.tsx,features/tools/concrete/concrete.tsx,features/tools/design/rc-section.tsx,features/tools/host.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 16
  },
  "احذف نهائيًا": {
   "k": "x",
@@ -13232,8 +13694,8 @@
  },
  "النوع": {
   "k": "x",
-  "p": "features/auth/auth.tsx,features/stack/stack.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,features/tools/trade/trade.tsx",
-  "n": 10
+  "p": "features/auth/auth.tsx,features/stack/stack.tsx,features/tools/design/rc-section.tsx,features/tools/office/qto.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,features/tools/trade/trade.tsx",
+  "n": 11
  },
  "اللقب:": {
   "k": "x",
@@ -13796,8 +14258,8 @@
  },
  "الرمز": {
   "k": "s",
-  "p": "features/auth/auth.tsx",
-  "n": 2
+  "p": "features/auth/auth.tsx,features/tools/mep/duct.tsx",
+  "n": 5
  },
  "{0} دخول": {
   "k": "e",
@@ -16441,8 +16903,8 @@
  },
  "الخطوة": {
   "k": "x",
-  "p": "features/settings/settings.tsx",
-  "n": 1
+  "p": "features/settings/settings.tsx,features/tools/design/rc-section.tsx",
+  "n": 2
  },
  "الخطوة {0} من {1}": {
   "k": "r",
@@ -18005,8 +18467,8 @@
  },
  "العدد": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 19
+  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/design/rc-section.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 21
  },
  "م": {
   "k": "s",
@@ -19749,8 +20211,8 @@
  },
  "الوصف": {
   "k": "s",
-  "p": "features/stack/stack.tsx,features/tools/office/custody.tsx,features/tools/office/qto.tsx",
-  "n": 6
+  "p": "features/stack/stack.tsx,features/tools/mep/duct.tsx,features/tools/office/custody.tsx,features/tools/office/qto.tsx",
+  "n": 9
  },
  "التصنيف والتواصل": {
   "k": "s",
@@ -21323,8 +21785,8 @@
  },
  "العناصر": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx",
-  "n": 2
+  "p": "features/tools/concrete/concrete.tsx,features/tools/design/rc-section.tsx",
+  "n": 3
  },
  "أضف عنصرًا": {
   "k": "s",
@@ -21683,8 +22145,8 @@
  },
  "الإجمالي": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx",
-  "n": 12
+  "p": "features/tools/concrete/concrete.tsx,features/tools/mep/duct.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/site/diary.tsx",
+  "n": 14
  },
  "اللوجستيات ومواعيد الخلاطات": {
   "k": "s",
@@ -21893,9 +22355,354 @@
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
  },
+ "ضمن الحد ⚑ مع تنبيهات": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
  "ضمن الحد ⚑": {
   "k": "s",
-  "p": "features/tools/elec/cable.tsx",
+  "p": "features/tools/design/rc-section.tsx,features/tools/elec/cable.tsx,ui/kit.tsx",
+  "n": 4
+ },
+ "مطابق مع تنبيهات": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "بلاطة (شريحة 1 م)": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "رسم القطاع": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "أعلى نسبة استغلال": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "{0} عنصر · {1} {2} · {3} يحتاج مراجعة": {
+  "k": "t",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1,
+  "x": "b.members.length | ready.length - fails | aci ? \"مطابق\" : \"ضمن الحد ⚑\" | fails"
+ },
+ "الكود والمواد": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "الكود": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx,features/tools/elec/cable.tsx",
+  "n": 4
+ },
+ "مقاومة الخرسانة f′c (أسطوانة)": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "مقاومة الخرسانة fcu (مكعب)": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "إجهاد خضوع الحديد الرئيسي fy": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "إجهاد خضوع الكانات fyt": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "أكبر مقاس للركام": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "قيم ECP 203 في هذه الأداة منقولة ولم تُراجع على النص المطبوع بعد ⚑ — النتيجة «ضمن الحد ⚑» وليست «مطابق». للاعتماد: ACI 318-19 أو مراجعة المهندس الإنشائي.": {
+  "k": "x",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "عنصر جديد": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "رمز العنصر": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "القطاع": {
+  "k": "x",
+  "p": "features/tools/design/rc-section.tsx,features/tools/trade/trade.tsx",
+  "n": 5
+ },
+ "العرض b": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "الارتفاع الكلي h": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "الغطاء للحديد": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "الغطاء للكانة": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "حديد الشد": {
+  "k": "x",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 3
+ },
+ "حديد الشد {0}": {
+  "k": "e",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1,
+  "x": "slab ? \"(لكل متر)\" : \"\""
+ },
+ "(لكل متر)": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "القطر Ø": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "التباعد": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "طبقة واحدة": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "طبقتان": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "حديد الضغط والكانات": {
+  "k": "x",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "حديد ضغط — العدد": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "حديد ضغط — Ø": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "الكانة Ø": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "عدد الأفرع": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "تباعد الكانات": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "القوى التصميمية والبحر": {
+  "k": "x",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "العزم التصميمي Mu": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "القص التصميمي Vu": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "عند القطاع الحرج": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "البحر": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 3
+ },
+ "الارتكاز": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 3
+ },
+ "ملاحظات المراجعة": {
+  "k": "x",
+  "p": "features/tools/design/rc-section.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx",
+  "n": 4
+ },
+ "مراجعة قطاع محدد الأبعاد والتسليح — ليست تصميمًا ولا تغني عن حساب المنشأ. ليس للتنفيذ دون مراجعة وتوقيع المهندس الإنشائي المسؤول.": {
+  "k": "x",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "الطريقة": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx,features/tools/mep/duct.tsx,features/tools/survey/level-book.tsx",
+  "n": 3
+ },
+ "مقاومة القطاع، توافق الانفعالات": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "حالات الحدود القصوى": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "الركام": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "ملخص العناصر": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "الكانات": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "استغلال": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 2
+ },
+ "النتيجة": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,lib/report-pdf.ts",
+  "n": 8
+ },
+ "القطاع ⚑": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "طريقة الحساب — {0}": {
+  "k": "t",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1,
+  "x": "tag"
+ },
+ "المعادلة والتعويض": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "المرجع": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx,features/tools/office/rfi.tsx",
+  "n": 3
+ },
+ "حدود الأداة": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "مراجعة قطاع مستطيل محدد الأبعاد والتسليح (انحناء أحادي أو مزدوج، قص، حدود التسليح والتباعد، البحر / العمق). لا تشمل اللي، القوى المحورية، الترخيم المحسوب، ولا عرض الشروخ وفق ECP. ليس للتنفيذ دون مراجعة وتوقيع المهندس الإنشائي المسؤول.": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "معامل مرونة الحديد Es": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "أقصى انفعال للخرسانة": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "معاملات الخفض φ": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "خرسانة عادية الوزن λ": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "معامل أمان الخرسانة γc": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "ECP 203 (منقول)": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 4
+ },
+ "الحدود الدنيا للتسليح والكانات": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "مراجعة القطاعات الخرسانية · RC section review": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1
+ },
+ "مراجعة القطاعات الخرسانية": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx,tools/registry.ts",
+  "n": 2
+ },
+ "مراجعة القطاعات · ⁦{0}⁩ عنصر · {1}": {
+  "k": "t",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1,
+  "x": "doc.body.members.length | doc.body.code === ACI ? \"ACI 318-19\" : \"ECP 203 ⚑\""
+ },
+ "مطابق ⁦{0}⁩ · يحتاج مراجعة ⁦{1}⁩": {
+  "k": "t",
+  "p": "features/tools/design/rc-section.tsx",
+  "n": 1,
+  "x": "ready.filter((o) => o.ok).length | ready.filter((o) => !o.ok).length"
+ },
+ "ليس للتنفيذ دون توقيع المهندس الإنشائي": {
+  "k": "s",
+  "p": "features/tools/design/rc-section.tsx",
   "n": 1
  },
  "الدوائر": {
@@ -22173,11 +22980,6 @@
   "p": "features/tools/elec/cable.tsx",
   "n": 1
  },
- "الكود": {
-  "k": "s",
-  "p": "features/tools/elec/cable.tsx",
-  "n": 1
- },
  "السعات": {
   "k": "s",
   "p": "features/tools/elec/cable.tsx",
@@ -22195,8 +22997,8 @@
  },
  "الهواء": {
   "k": "s",
-  "p": "features/tools/elec/cable.tsx",
-  "n": 1
+  "p": "features/tools/elec/cable.tsx,features/tools/mep/duct.tsx",
+  "n": 2
  },
  "التربة": {
   "k": "s",
@@ -22217,11 +23019,6 @@
   "k": "s",
   "p": "features/tools/elec/cable.tsx",
   "n": 1
- },
- "النتيجة": {
-  "k": "s",
-  "p": "features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/site/diary.tsx,features/tools/site/permit.tsx,lib/report-pdf.ts",
-  "n": 6
  },
  "الفرضيات": {
   "k": "s",
@@ -23172,6 +23969,276 @@
   "p": "features/tools/mep/drain-run.tsx",
   "n": 1
  },
+ "فقد الضغط على مسار المؤشر": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "{0} مسار · {1} · يشمل الفقود الأخرى {2} Pa": {
+  "k": "t",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1,
+  "x": "b.runs.length | c.warnings ? `${c.warnings} تنبيه` : \"بدون تنبيهات\" | fmtNum(N(b.extra), 0)"
+ },
+ "{0} تنبيه": {
+  "k": "t",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1,
+  "x": "c.warnings"
+ },
+ "بدون تنبيهات": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "أساس التصميم": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "وحدة التصرف": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "معدل الاحتكاك التصميمي": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "0.8 – 1.0 شائع": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "أقصى سرعة": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 4
+ },
+ "أقصى نسبة أبعاد": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 3
+ },
+ "فقود أخرى على المسار": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "ناشر، فلتر، دامبر…": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "مادة الدكت": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "تقريب المقاسات": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "كل 50 مم": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "كل 25 مم": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "مسار جديد": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "· مؤشر": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "الخط الرئيسي — الدور 02": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "التصرف": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "مستطيل": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "دائري": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "الارتفاع (فراغ السقف)": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "فارغ = تلقائي": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 6
+ },
+ "العرض (اختياري)": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "القطر (اختياري)": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "فقد القطع والملحقات": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "على مسار المؤشر (أطول / أصعب مسار)": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 2
+ },
+ "طريقة الاحتكاك المتساوي (Darcy مع Altshul–Tsal، وقطر هوبشر المكافئ). فقد القطع والفلاتر والملفات والضغط الاستاتيكي للمروحة أرقام المهندس — لا تُحسب هنا.": {
+  "k": "x",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "احتكاك متساوٍ": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "معدل الاحتكاك": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "المادة": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "مسار المؤشر — الاستقامات والقطع": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "فقود أخرى": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "جدول المسارات": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "المقاس": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "استقامات": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "قطع": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "مؤشر": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "الفحص": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "المعادلات": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "Δp/L = f/D · ρV²/2 (Darcy–Weisbach) · f′ = 0.11(ε/D + 68/Re)^0.25؛ f = f′ إذا f′ ≥ 0.018 وإلا 0.85f′ + 0.0028 (Altshul–Tsal) · De = 1.30(ab)^0.625/(a + b)^0.25 (Huebscher) · المقاسات تُقرّب لأعلى. فقد القطع والملحقات والفلاتر والملفات أرقام المهندس.": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "كثافة الهواء القياسي": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "اللزوجة الديناميكية": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "خشونة السطح ε": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "ASHRAE — فئات الخشونة": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "مدخل المهندس (اعتبارات الضوضاء)": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "جدول مقاسات الدكت · Duct sizing schedule": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "تكييف": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx,lib/search.ts",
+  "n": 2
+ },
+ "جدول مقاسات الدكت": {
+  "k": "s",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1
+ },
+ "مقاسات الدكت · ⁦{0}⁩ مسار": {
+  "k": "t",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1,
+  "x": "doc.body.runs.length"
+ },
+ "مسار المؤشر ⁦{0}⁩ Pa": {
+  "k": "t",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1,
+  "x": "fmtNum(c.total, 0)"
+ },
+ "⁦{0}⁩ تنبيه": {
+  "k": "t",
+  "p": "features/tools/mep/duct.tsx",
+  "n": 1,
+  "x": "c.warnings"
+ },
  "خفيفة": {
   "k": "s",
   "p": "features/tools/mep/sprinkler.tsx",
@@ -23915,11 +24982,6 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 1
  },
- "ملاحظات المراجعة": {
-  "k": "s",
-  "p": "features/tools/office/ipc.tsx,features/tools/office/qto.tsx",
-  "n": 2
- },
  "مستخلص جاري رقم {0} · الفترة {1} → {2}{3}": {
   "k": "t",
   "p": "features/tools/office/ipc.tsx",
@@ -24346,11 +25408,6 @@
   "n": 2
  },
  "المراجع (لوحات، بنود مواصفات)": {
-  "k": "s",
-  "p": "features/tools/office/rfi.tsx",
-  "n": 2
- },
- "المرجع": {
   "k": "s",
   "p": "features/tools/office/rfi.tsx",
   "n": 2
@@ -26830,11 +27887,6 @@
   "p": "features/tools/survey/level-book.tsx",
   "n": 1
  },
- "الطريقة": {
-  "k": "s",
-  "p": "features/tools/survey/level-book.tsx",
-  "n": 1
- },
  "منسوب الجهاز": {
   "k": "s",
   "p": "features/tools/survey/level-book.tsx",
@@ -27584,11 +28636,6 @@
   "n": 1
  },
  "حديد الهياكل": {
-  "k": "s",
-  "p": "features/tools/trade/trade.tsx",
-  "n": 1
- },
- "القطاع": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -28662,11 +29709,6 @@
   "p": "lib/search.ts",
   "n": 1
  },
- "تكييف": {
-  "k": "s",
-  "p": "lib/search.ts",
-  "n": 1
- },
  "ميكانيكي": {
   "k": "s",
   "p": "lib/search.ts",
@@ -29173,6 +30215,31 @@
   "n": 1
  },
  "رشاشات حريق مكافحة sprinkler fire nfpa spacing": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الانحناء والقص وحدود التسليح والبحر / العمق — بالمعادلات وبنود الكود": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "قطاع خرساني كمرة بلاطة عزم قص تسليح كانات ترخيم مراجعة تصميم rc section beam slab flexure shear aci 318 ecp 203 design check": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "مقاسات الدكت": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الاحتكاك المتساوي، القطر المكافئ، السرعة وفقد الضغط على مسار المؤشر": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "دكت مجاري هواء مقاس سرعة احتكاك فقد ضغط تكييف duct sizing equal friction velocity pressure drop hvac cfm": {
   "k": "s",
   "p": "tools/registry.ts",
   "n": 1
@@ -30064,6 +31131,11 @@
  "ثلاثة التزامات لا تتغير — مهما كانت الجهة التي تطلب": {
   "k": "x",
   "p": "ui/identity.tsx",
+  "n": 1
+ },
+ "تنبيه ⚠": {
+  "k": "s",
+  "p": "ui/kit.tsx",
   "n": 1
  },
  "غير مطابق ✗": {

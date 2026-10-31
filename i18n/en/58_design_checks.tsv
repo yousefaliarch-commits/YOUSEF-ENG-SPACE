@@ -1,0 +1,213 @@
+# Design & review checks (W4): RC section review (ACI 318-19 / ECP 203 ⚑) and the equal-friction duct sizer
+968d505f	Galvanised steel (longitudinal seams)
+b6273016	PVC / smooth aluminium
+36412004	Spiral galvanised
+9437efcc	Flexible, fully extended
+336ade4f	Required diameter (equal friction)
+bda12f8e	Equivalent diameter (Huebscher)
+4b32079d	Actual friction
+1bcf7e91	Velocity
+650f3ed5	Straight-run loss
+9c61dd7a	Design limit (noise) — engineer's input
+43585196	Friction
+93dc8652	Design friction rate + 10 %
+9fd82599	Aspect ratio
+03e11c49	SMACNA — recommendation
+d8e28b79	Simply supported
+515473e8	One end continuous
+95361f4e	Both ends continuous
+d86e5fbf	Cantilever
+369b3563	Effective depth d
+30f415ea	Tension steel per metre As
+833af57e	Tension steel As
+8ca9b086	Compression steel A′s
+8f3f0d04	Stress block
+04f453d5	Rectangular stress block
+2240d673	Design steel stress
+11bfdbe7	Steel safety factor γs
+3b07d820	Neutral axis c (force equilibrium)
+6055571e	Tension steel strain εt
+04d0044c	Nominal strength Mn
+1baedd40	Strength reduction factor φ
+1dd3ac88	Design strength φMn
+38e7f09a	Ultimate section capacity Mu,cap
+34549d2b	Limit-state design of sections
+ecdee3ca	Flexural strength
+5c60ed31	Ultimate limit state
+ef1f75e1	Required steel (singly reinforced, φ = 0.9)
+1375efc3	Required steel (singly reinforced)
+d32e9700	Section design
+ba029b68	Ductility: tension steel strain
+345eeacc	Maximum neutral-axis depth
+964d416a	Maximum reinforcement limits
+fa2792de	Ductility: neutral-axis depth
+d2e96386	Slab minimum
+f713b04b	Beam minimum
+070a2a37	ECP 203 — minimum slab reinforcement ⚑
+7d4e1d77	ECP 203 — minimum beam reinforcement ⚑
+279f844a	Minimum reinforcement
+3b84f056	Clear spacing between bars
+959948c3	Bars fit in the layer
+13d5ab1c	ACI 318-19 25.2.1 — until the ECP value is checked ⚑
+d98d67d4	Maximum spacing for crack control
+0113e912	Bar spacing (cracking)
+f87676c8	Maximum slab bar spacing
+2d097844	ECP 203 — slab bar spacing ⚑
+02ece3c4	Concrete shear strength Vc
+519a6711	Stirrup strength Vs
+f8775ee1	Design shear strength φVn
+f65738e3	Shear strength
+932012a2	Section size for shear
+1fcf0447	Minimum stirrups
+a1c5004b	(not required)
+12d07ebd	Maximum stirrup spacing
+937e8a7a	Required stirrup spacing
+e697bdac	Shear stress qu
+fdf84ebd	Shear
+495800b1	Concrete strength qcu
+e2dd2ce8	Concrete shear strength
+c61015c3	Maximum shear stress
+38843f87	Upper limit of shear stress
+8b8d48a9	Stirrup strength
+8107cf0c	Stirrup design
+5cbff8cc	ECP 203 — minimum stirrups ⚑
+a5dad4b2	ECP 203 — stirrup spacing ⚑
+63e521af	Minimum thickness without a deflection calculation
+5c21fd05	ECP 203 — span / depth table ⚑
+4272e3ca	Span / depth (deflection)
+c9725acc	Flexure: the moment exceeds the strength by {0} %. Steel required {1} mm²/m — e.g. Ø{2} @ {3} mm, or a thicker slab.
+0241b4ab	Flexure: the moment exceeds the strength by {0} %. Steel required {1} mm² — e.g. {2} Ø{3}, or a deeper section.
+ed83ad8c	Flexure: the section is too small to resist the moment with tension steel alone — increase the depth or width, or add compression steel and check again.
+888c7a2a	Ductility: the section is over-reinforced (brittle failure) — increase the depth or add compression steel instead of more tension steel.
+5fa4324a	Minimum: increase the tension steel to at least {0} mm².
+35061ad6	Spacing: the bars are too close — use a larger diameter at a wider spacing.
+2f9eab00	Spacing: {0} Ø{1} bars do not fit in a {2} mm width — use two layers, or fewer bars of a larger diameter.
+c487c691	Cracking: the spacing exceeds the crack-control limit — use smaller bars, more of them.
+6cc8eb30	Spacing: reduce the slab bar spacing to the permitted limit.
+ac46c705	Shear: the section is too small — stirrups will not fix it; increase the width or depth.
+2a764024	Shear: the slab cannot carry the shear by concrete alone — increase the thickness (or the longitudinal steel) and check again.
+98474474	Shear: reduce the stirrup spacing{0} or add legs / a larger diameter.
+9dc17220	 to {0} mm
+fd1e72a0	Stirrups: keep to the minimum area and a maximum spacing of {0} mm.
+7d82e1eb	Deflection: the thickness is below the table limit — calculate the deflection explicitly or increase the thickness.
+47435b09	Within limit ⚑ with warnings
+278fdbb7	Compliant with warnings
+acab6658	Slab (1 m strip)
+7babad6f	Section drawing
+5ec3b320	Highest utilisation
+24b53aea	{0} members · {1} {2} · {3} need review
+c6acd401	Code and materials
+b2fa1d90	Concrete strength f′c (cylinder)
+2e8c3368	Concrete strength fcu (cube)
+680654d8	Main steel yield strength fy
+ccb5f215	Stirrup yield strength fyt
+e9597c7a	Largest aggregate size
+0a9a63cf	The ECP 203 values in this tool are transcribed and not yet checked against the printed code ⚑ — results read «within limit ⚑», not «compliant». For approval use ACI 318-19 or a structural engineer's review.
+898efb2b	New member
+4c0d4e48	Member mark
+b02a2553	Width b
+a94ba25c	Overall depth h
+6568f2cc	Cover to the bars
+632c37f9	Cover to the stirrups
+5b93f66d	Tension steel
+e68ab7b9	Tension steel {0}
+c5d71b80	(per metre)
+29c661ff	Diameter Ø
+ae38cf88	Spacing
+123769ea	One layer
+9eafcb83	Two layers
+6d764a80	Compression steel and stirrups
+c8a0b24d	Compression bars — number
+5f21d325	Compression bars — Ø
+6cab0ca1	Stirrup Ø
+ff7d4949	Number of legs
+34e780df	Stirrup spacing
+4877524e	Design forces and span
+210815f0	Design moment Mu
+cb7dbe6d	Design shear Vu
+7f70a71e	At the critical section
+045f2b0e	Span
+62fc0284	Supports
+9fd3cc1b	A review of a section whose size and steel are given — not a design, and no substitute for the structural analysis. Not for construction without review and signature by the responsible structural engineer.
+8193be0b	Section strength, strain compatibility
+3b91b4f8	Ultimate limit states
+5303dbd9	Aggregate
+20b9e077	Member summary
+c79b738a	Stirrups
+ec94fc3b	Utilisation
+3b4f7f99	Section ⚑
+bedeb6c8	Working — {0}
+70c89ef9	Equation and substitution
+c3c2eba0	Scope of the tool
+45f33687	Review of a rectangular section of given size and steel (singly or doubly reinforced flexure, shear, reinforcement and spacing limits, span / depth). Torsion, axial load, calculated deflection and ECP crack width are not included. Not for construction without review and signature by the responsible structural engineer.
+ccd46623	Steel modulus of elasticity Es
+32d5dc0e	Maximum concrete strain
+249c78ff	Strength reduction factors φ
+37951f62	Normalweight concrete λ
+53be11fe	Concrete safety factor γc
+e5323e6d	ECP 203 (transcribed)
+cf4d47df	Minimum reinforcement and stirrups
+b30527d3	RC section review · مراجعة القطاعات الخرسانية
+6c911083	RC section review
+1c2d03ff	Section review · ⁦{0}⁩ members · {1}
+72b3a23e	Compliant ⁦{0}⁩ · need review ⁦{1}⁩
+be811ae7	Not for construction without the structural engineer's signature
+6215c339	Pressure loss on the index path
+fd70d75f	{0} runs · {1} · includes other losses {2} Pa
+016ded3b	{0} warnings
+33239a2b	No warnings
+b74974e7	Design basis
+8bd75d59	Airflow unit
+c5fe7e0d	Design friction rate
+a6e10154	0.8 – 1.0 is common
+65daafdb	Maximum velocity
+9991d36e	Maximum aspect ratio
+22f9a7f2	Other losses on the path
+91939b23	Diffuser, filter, damper…
+766a9528	Duct material
+1778e1ee	Size rounding
+361c5b28	Every 50 mm
+254b6c3c	Every 25 mm
+25c5839b	New run
+9993556b	 · index
+abdd69e9	Main duct — Level 02
+7f8d52a4	Airflow
+f3310089	Rectangular
+e293d61c	Round
+934ee64c	Height (ceiling void)
+13ac33bc	Blank = automatic
+e2fe1312	Width (optional)
+01ed11ba	Diameter (optional)
+f28e8eb4	Fittings and accessories loss
+e592b0b6	On the index path (longest / hardest run)
+d6fc9b69	Equal-friction method (Darcy with Altshul–Tsal, Huebscher equivalent diameter). Fitting, filter and coil losses and the fan static pressure are the engineer's figures — not calculated here.
+4988de84	Equal friction
+5a0d33c2	Friction rate
+b510d10b	Material
+3515649b	Index path — straights and fittings
+e1844ea4	Other losses
+306fbc4b	Run schedule
+560dc7aa	Size
+35de5f57	Straights
+6b0a0ffe	Fittings
+49356ffb	Index
+4a9fe021	Check
+2dc87f9a	Equations
+a37c6f57	Δp/L = f/D · ρV²/2 (Darcy–Weisbach) · f′ = 0.11(ε/D + 68/Re)^0.25; f = f′ when f′ ≥ 0.018, otherwise 0.85f′ + 0.0028 (Altshul–Tsal) · De = 1.30(ab)^0.625/(a + b)^0.25 (Huebscher) · sizes are rounded up. Fitting, accessory, filter and coil losses are the engineer's figures.
+73c7325f	Standard air density
+0d92e5c1	Dynamic viscosity
+c896e78c	Surface roughness ε
+f191bc04	ASHRAE — roughness categories
+5c4f75dc	Engineer's input (noise considerations)
+a02f3b17	Duct sizing schedule · جدول مقاسات الدكت
+333217e9	Duct sizing schedule
+29f79ace	Duct sizes · ⁦{0}⁩ runs
+f4f17e82	Index path ⁦{0}⁩ Pa
+cc597579	⁦{0}⁩ warnings
+69e22a32	Flexure, shear, reinforcement limits and span / depth — with the equations and code clauses
+29d23130	RC section beam slab flexure shear reinforcement stirrups deflection review design check ACI 318 ECP 203
+81b2733f	Duct sizer
+64dd3c9d	Equal friction, equivalent diameter, velocity and pressure loss on the index path
+c53ba342	duct sizing equal friction velocity pressure drop HVAC CFM ductwork air duct
+a8ed01d5	Warning ⚠
+673a9e2d	Not required

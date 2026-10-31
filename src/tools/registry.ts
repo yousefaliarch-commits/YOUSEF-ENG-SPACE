@@ -9,6 +9,8 @@ import type { ToolDef, ToolPack, ToolRole } from "./types";
 
 const FIELD: ToolRole[] = ["engineer", "owner", "supervisor"];
 const MONEY: ToolRole[] = ["engineer", "owner"];
+// design reviews carry the engineer of record's liability: engineers and owners, never a site supervisor
+const DESIGN: ToolRole[] = ["engineer", "owner"];
 
 export const PACKS: { id: ToolPack; name: string; desc: string }[] = [
   { id: "workforce", name: "أدوات الصنايعية السريعة", desc: "خامات كل صنعة في ثوانٍ" },
@@ -80,6 +82,16 @@ export const TOOL_REGISTRY: ToolDef[] = [
     id: "sprinklerCheck", pack: "mechanical", name: "توزيع وفحص الرشاشات", desc: "عدد الرشاشات والمسافات بحدود NFPA 13",
     icon: "Droplets", keywords: "رشاشات حريق مكافحة sprinkler fire nfpa spacing",
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["sprinklerCheck"], disciplines: ["mechanical", "fire"],
+  },
+  {
+    id: "rcSection", pack: "structural", name: "مراجعة القطاعات الخرسانية", desc: "الانحناء والقص وحدود التسليح والبحر / العمق — بالمعادلات وبنود الكود",
+    icon: "Frame", keywords: "قطاع خرساني كمرة بلاطة عزم قص تسليح كانات ترخيم مراجعة تصميم rc section beam slab flexure shear aci 318 ecp 203 design check",
+    roles: DESIGN, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["rcSection"], disciplines: ["civil", "structural"],
+  },
+  {
+    id: "ductSizer", pack: "mechanical", name: "مقاسات الدكت", desc: "الاحتكاك المتساوي، القطر المكافئ، السرعة وفقد الضغط على مسار المؤشر",
+    icon: "Wind", keywords: "دكت مجاري هواء مقاس سرعة احتكاك فقد ضغط تكييف duct sizing equal friction velocity pressure drop hvac cfm",
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["ductSizer"], disciplines: ["mechanical", "hvac"],
   },
   {
     id: "cableCheck", pack: "electrical", name: "الكابل وهبوط الجهد", desc: "التيار والمعاملات ومقطع الكابل وهبوط الجهد لكل دائرة",

@@ -139,16 +139,19 @@ export function Rows({ rows }: { rows: [string, string, string?][] }) {
   );
 }
 
-export type CheckLine = { label: string; value: string; limit: string; ok: boolean | null; clause?: string };
+// `unverified`: the limit is a transcribed / [L] value — a pass reads «ضمن الحد ⚑», never «مطابق»; `level: "warn"`: printed, never blocks
+export type CheckLine = { label: string; value: string; limit: string; ok: boolean | null; clause?: string; unverified?: boolean; level?: "error" | "warn" };
+
+const checkWord = (c: CheckLine) => (c.ok === false ? (c.level === "warn" ? "تنبيه ⚠" : "غير مطابق ✗") : c.ok ? (c.unverified ? "ضمن الحد ⚑" : "مطابق ✓") : "—");
 
 export function Checks({ items }: { items: CheckLine[] }) {
   return (
     <ul className="space-y-2">
       {items.map((c, i) => (
-        <li key={i} className={`p-3 rounded-xl border text-[12.5px] ${c.ok === false ? "border-bad/40 bg-bad/5" : c.ok ? "border-line bg-surface" : "border-line-2 bg-canvas"}`}>
+        <li key={i} data-check={c.ok === false ? (c.level === "warn" ? "warn" : "fail") : c.ok ? (c.unverified ? "flag" : "ok") : "na"} className={`p-3 rounded-xl border text-[12.5px] ${c.ok === false ? (c.level === "warn" ? "border-warn/40 bg-warn/5" : "border-bad/40 bg-bad/5") : c.ok ? "border-line bg-surface" : "border-line-2 bg-canvas"}`}>
           <div className="flex items-start justify-between gap-2">
             <span className="min-w-0 leading-snug">{c.label}</span>
-            <span className={`shrink-0 text-[12px] font-medium ${c.ok === false ? "text-bad" : c.ok ? "text-good" : "text-ink-3"}`}>{c.ok === false ? "غير مطابق ✗" : c.ok ? "مطابق ✓" : "—"}</span>
+            <span className={`shrink-0 text-[12px] font-medium ${c.ok === false ? (c.level === "warn" ? "text-warn" : "text-bad") : c.ok ? (c.unverified ? "text-warn" : "text-good") : "text-ink-3"}`}>{checkWord(c)}</span>
           </div>
           <div className="mt-1 flex flex-wrap gap-x-3 text-ink-3 text-[11.5px]">
             <span><Num>{c.value}</Num></span>

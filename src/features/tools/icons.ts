@@ -1,11 +1,11 @@
 // The registry names its icons; this map turns each name into a lucide component (explicit named imports only, so the
 // bundle carries just these). A test checks every registry icon is here.
 import {
-  AirVent, BadgeDollarSign, Cable, Calculator, ClipboardCheck, Cylinder, Droplets, FileCheck, FileQuestion, Handshake, HardHat, Map as MapIcon, Megaphone,
-  MessageSquare, NotebookPen, PackageCheck, Percent, Receipt, Repeat, Route, Ruler, Scale, ShieldCheck, Spline, Timer, Waves,
+  AirVent, BadgeDollarSign, Cable, Calculator, ClipboardCheck, Cylinder, Droplets, FileCheck, FileQuestion, Frame, Handshake, HardHat, Map as MapIcon, Megaphone,
+  MessageSquare, NotebookPen, PackageCheck, Percent, Receipt, Repeat, Route, Ruler, Scale, ShieldCheck, Spline, Timer, Waves, Wind,
 } from "lucide-react";
 
 export const TOOL_ICONS: Record<string, any> = {
-  AirVent, BadgeDollarSign, Cable, Calculator, ClipboardCheck, Cylinder, Droplets, FileCheck, FileQuestion, Handshake, HardHat, Map: MapIcon, Megaphone,
-  MessageSquare, NotebookPen, PackageCheck, Percent, Receipt, Repeat, Route, Ruler, Scale, ShieldCheck, Spline, Timer, Waves,
+  AirVent, BadgeDollarSign, Cable, Calculator, ClipboardCheck, Cylinder, Droplets, FileCheck, FileQuestion, Frame, Handshake, HardHat, Map: MapIcon, Megaphone,
+  MessageSquare, NotebookPen, PackageCheck, Percent, Receipt, Repeat, Route, Ruler, Scale, ShieldCheck, Spline, Timer, Waves, Wind,
 };
