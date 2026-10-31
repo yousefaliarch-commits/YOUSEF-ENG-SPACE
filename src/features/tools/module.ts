@@ -46,4 +46,6 @@ export const TOOL_MODULES: Record<string, () => Promise<ToolModule>> = {
   custody: () => import("./office/custody").then((m) => m.module),
   qto: () => import("./office/qto").then((m) => m.module),
   ipc: () => import("./office/ipc").then((m) => m.module),
+  rcSection: () => import("./design/rc-section").then((m) => m.module),
+  ductSizer: () => import("./mep/duct").then((m) => m.module),
 };

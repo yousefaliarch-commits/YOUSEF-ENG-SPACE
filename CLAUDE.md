@@ -161,6 +161,17 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   title · number · WBS · tool name · date, Arabic normalised — أ إ آ → ا, ة → ه, ى → ي, no tashkeel / kashida): the tool's list has a
   search box (> 3 documents) and zone chips; the Tools tab search also lists saved documents (only kinds `toolAllowed` for the role).
 
+- v0.33.0: **design checks that show their working** — `rcSection` (مراجعة القطاعات الخرسانية, structural pack, `DESIGN` roles =
+  engineers + owners, never supervisors; engine `domain/tools/rc-calc.ts`): rectangular beam or one-way slab strip, flexure by strain
+  compatibility (`solveSection`, single or double reinforcement, 1–2 layers), φ by εt (Table 21.2.2), shear (22.5.5.1 (a) / size-effect
+  (c)), As,min, bar fit (25.2.1), crack-control spacing (24.3.2), span / depth (9.3.1.1 / 7.3.1.1) — every TraceStep and Check names
+  its ACI 318-19 clause. **ECP 203-2020 is transcribed, never claimed verified**: every check `unverified`, a pass reads «ضمن الحد ⚑»
+  (kit `Checks` now shows ⚑ passes and `warn` levels), PDF / summary never say «مطابق» under ECP. Failures come with a reviewer's
+  note (`advice`: steel needed + bar count, two layers, «لا تحلها الكانات»…). `ductSizer` (مقاسات الدكت, mechanical, FIELD;
+  `duct-calc.ts`): Darcy + Altshul–Tsal, Huebscher De, standard air ρ 1.20 / μ 18.13 µPa·s, ε 0.09 mm — reproduces the blueprint
+  pins (441.2 mm · 0.907 · 0.840 Pa/m); fittings and unit losses are the engineer's figures. PDF headings never mix Arabic with
+  «a × b» figures (the canvas drops LRI/PDI) — figures go in kv cells.
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role
