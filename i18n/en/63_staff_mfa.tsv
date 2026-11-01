@@ -1,0 +1,42 @@
+# Staff two-factor sign-in (Phase 3a)
+f7f7f1e5	The code is wrong or has expired — enter the current code from the app
+c8b64564	This action needs a session confirmed with two-factor sign-in
+c7cd04f8	Not allowed for this account
+5dd29846	Could not connect — try again
+be8cf7d7	The number of authenticator devices has reached its limit
+1a9cc461	Could not complete two-factor sign-in — try again
+0b04992f	No authenticator app is set up for this account
+e7b6e850	Platform team security
+82f77eb3	Verification code
+599be95a	Open an authenticator app on your phone (Google Authenticator, Microsoft Authenticator, 1Password…).
+93aa9f48	Scan the code, or type the key by hand.
+c88b2e2b	Enter the 6-digit code shown in the app.
+764da3a5	QR code for the authenticator app
+2612ba97	Key:
+b2e8acf7	Key: {0}
+4e2eebc4	Confirm and turn on
+46d3ed26	Enter the verification code
+5593f4ba	Open the authenticator app and enter the current code for EngSpace.
+5d7e4e0d	Two-factor sign-in — platform team
+7ca3ac12	A code from an app on your phone is asked before the admin console opens, so a password alone never reaches the reports and the members.
+a41566d2	On
+439b0d4e	Off
+bbf4603b	The administrators made two-factor sign-in mandatory: without it, moderation powers do not work.
+910deaac	Turn off two-factor sign-in
+ea946f46	Turn on two-factor sign-in
+37452912	Two-factor sign-in is mandatory: turning it off stops this account's moderation powers until you turn it on again.
+c06de199	After turning it off, a password is enough to open the admin console.
+c70d4c25	Confirm with the code before turning it off
+21cc1a46	We recommend two-factor sign-in for your account: in the app → Settings → «Two-factor sign-in — platform team».
+bf2a1285	Two-factor sign-in is mandatory for the platform team. Turn it on now to open the console.
+0537b34b	Could not check the account's status — check the connection and try again.
+e592d2da	Back to the app
+a01a765e	Two-factor sign-in for the platform team:
+f8fca597	Two-factor sign-in for the platform team: {0}
+6fdb936f	Mandatory
+c10b04f7	Optional
+e83ef1e9	When mandatory, the server refuses every moderation and admin power from a session not confirmed with the code — even with a stolen password.
+9759d4fd	This can only be changed from a session confirmed with the code: turn on two-factor sign-in for your account, then open the console again.
+43726aa1	Make it optional
+9ab3712d	Make it mandatory
+2d311c5d	Every moderator and administrator without two-factor sign-in loses their powers at once until they turn it on in Settings. Continue?

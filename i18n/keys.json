@@ -254,8 +254,8 @@
  },
  "رجوع": {
   "k": "s",
-  "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/support/support.tsx,features/tools/host.tsx,ui/chrome.tsx",
-  "n": 30
+  "p": "app/AppView.tsx,features/qaqc/qaqc.tsx,features/settings/two-factor.tsx,features/stack/stack.tsx,features/support/support.tsx,features/tools/host.tsx,ui/chrome.tsx",
+  "n": 31
  },
  "الإشعارات": {
   "k": "s",
@@ -350,8 +350,8 @@
  },
  "لوحة الإدارة": {
   "k": "s",
-  "p": "app/TopBar.tsx,app/desk.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
-  "n": 6
+  "p": "app/TopBar.tsx,app/desk.tsx,features/admin/AdminView.tsx,features/settings/two-factor.tsx,features/stack/stack.tsx,ui/chrome.tsx",
+  "n": 7
  },
  "الإدارة": {
   "k": "s",
@@ -578,6 +578,41 @@
  "فريق إدارة المنصة": {
   "k": "s",
   "p": "backend/map.ts",
+  "n": 1
+ },
+ "الرمز غير صحيح أو انتهت صلاحيته — اكتب الرمز الحالي من التطبيق": {
+  "k": "s",
+  "p": "backend/mfa.ts",
+  "n": 1
+ },
+ "هذا الإجراء يحتاج جلسة مؤكدة بالتحقق بخطوتين": {
+  "k": "s",
+  "p": "backend/mfa.ts",
+  "n": 1
+ },
+ "غير مسموح لهذا الحساب": {
+  "k": "s",
+  "p": "backend/mfa.ts",
+  "n": 1
+ },
+ "تعذّر الاتصال — حاول مرة أخرى": {
+  "k": "s",
+  "p": "backend/mfa.ts",
+  "n": 1
+ },
+ "عدد أجهزة التحقق وصل للحد الأقصى": {
+  "k": "s",
+  "p": "backend/mfa.ts",
+  "n": 1
+ },
+ "تعذّر إكمال التحقق بخطوتين — حاول مرة أخرى": {
+  "k": "s",
+  "p": "backend/mfa.ts",
+  "n": 1
+ },
+ "لا يوجد تطبيق تحقق مفعّل لهذا الحساب": {
+  "k": "s",
+  "p": "backend/mfa.ts",
   "n": 1
  },
  "استلام حديد التسليح": {
@@ -11877,8 +11912,8 @@
  },
  "إخفاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts",
-  "n": 3
+  "p": "features/admin/AdminView.tsx,features/admin/cloud-admin.ts,features/settings/two-factor.tsx",
+  "n": 4
  },
  "عن الجميع": {
   "k": "x",
@@ -12778,8 +12813,8 @@
  },
  "إلغاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/support/support.tsx,features/tools/host.tsx,features/tools/office/vo.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
-  "n": 12
+  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/settings/two-factor.tsx,features/support/support.tsx,features/tools/host.tsx,features/tools/office/vo.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
+  "n": 13
  },
  "إظهار": {
   "k": "x",
@@ -13048,6 +13083,11 @@
   "k": "s",
   "p": "features/admin/AdminView.tsx",
   "n": 1
+ },
+ "أمان فريق الإدارة": {
+  "k": "s",
+  "p": "features/admin/AdminView.tsx",
+  "n": 2
  },
  "بيانات المعاينة": {
   "k": "s",
@@ -14209,8 +14249,8 @@
  },
  "جارٍ التحقق…": {
   "k": "x",
-  "p": "features/auth/auth.tsx",
-  "n": 1
+  "p": "features/auth/auth.tsx,features/settings/two-factor.tsx",
+  "n": 3
  },
  "دخول": {
   "k": "x",
@@ -14469,8 +14509,8 @@
  },
  "تأكيد": {
   "k": "x",
-  "p": "features/auth/auth.tsx",
-  "n": 1
+  "p": "features/auth/auth.tsx,features/settings/two-factor.tsx",
+  "n": 2
  },
  "{0} تأكيد": {
   "k": "e",
@@ -17049,6 +17089,178 @@
   "p": "features/settings/settings.tsx",
   "n": 1,
   "x": "EL <Num>{i + 1}</Num> | EL <Num>{steps.length}</Num>"
+ },
+ "رمز التحقق": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 2
+ },
+ "افتح تطبيق تحقق على هاتفك (Google Authenticator أو Microsoft Authenticator أو 1Password…).": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "امسح الرمز أو اكتب المفتاح يدويًا.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "اكتب الرمز المكوّن من 6 أرقام الظاهر في التطبيق.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "رمز QR لتطبيق التحقق": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 2
+ },
+ "المفتاح:": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "المفتاح: {0}": {
+  "k": "r",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk select-all break-all\""
+ },
+ "تأكيد وتفعيل": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "أدخل رمز التحقق": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "افتح تطبيق التحقق واكتب الرمز الحالي لحساب EngSpace.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "التحقق بخطوتين — فريق الإدارة": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "رمز من تطبيق على هاتفك يُطلب قبل فتح لوحة الإدارة، فلا تكفي كلمة المرور وحدها للوصول إلى البلاغات والأعضاء.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "مفعّل": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "غير مفعّل": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "الإدارة جعلت التحقق بخطوتين إلزاميًا: بدونه لا تعمل صلاحيات الإشراف.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "إيقاف التحقق بخطوتين": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "تفعيل التحقق بخطوتين": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "التحقق بخطوتين إلزامي: إيقافه يوقف صلاحيات الإشراف على هذا الحساب حتى تفعّله من جديد.": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "بعد الإيقاف تكفي كلمة المرور لفتح لوحة الإدارة.": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "إيقاف": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "أكّد بالرمز قبل الإيقاف": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 2
+ },
+ "ننصح بتفعيل التحقق بخطوتين لحسابك: من التطبيق ← الإعدادات ← «التحقق بخطوتين — فريق الإدارة».": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "التحقق بخطوتين إلزامي لفريق الإدارة. فعّله الآن لتفتح اللوحة.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "تعذّر التحقق من حالة الحساب — تحقق من الاتصال ثم حاول مرة أخرى.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "العودة للتطبيق": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "التحقق بخطوتين لفريق الإدارة:": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "التحقق بخطوتين لفريق الإدارة: {0}": {
+  "k": "r",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1,
+  "x": "EL <b className={s.required ? \"text-good\" : \"text-ink-2\"}>{s.re"
+ },
+ "إلزامي": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "اختياري": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "عند جعله إلزاميًا يرفض الخادم كل صلاحيات الإشراف والإدارة من جلسة لم تؤكَّد بالرمز — حتى لو سُرقت كلمة المرور.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "التغيير متاح من جلسة مؤكدة بالرمز فقط: فعّل التحقق بخطوتين لحسابك ثم افتح اللوحة من جديد.": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "اجعله اختياريًا": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
+ },
+ "اجعله إلزاميًا": {
+  "k": "s",
+  "p": "features/settings/two-factor.tsx",
+  "n": 2
+ },
+ "كل مشرف ومسؤول لم يفعّل التحقق بخطوتين يفقد صلاحياته فورًا حتى يفعّله من الإعدادات. متابعة؟": {
+  "k": "x",
+  "p": "features/settings/two-factor.tsx",
+  "n": 1
  },
  "اكتب مسمّاك الوظيفي كما هو في عقدك.": {
   "k": "s",
