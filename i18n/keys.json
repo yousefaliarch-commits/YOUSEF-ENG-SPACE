@@ -6159,8 +6159,8 @@
  },
  "و": {
   "k": "s",
-  "p": "domain/identity.ts,domain/text-guard.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/stack/stack.tsx,lib/search.ts,ui/chrome.tsx",
-  "n": 11
+  "p": "domain/identity.ts,domain/text-guard.ts,features/admin/AdminView.tsx,features/cv/extract.ts,features/stack/stack.tsx,features/tools/office/boq-ui.tsx,lib/search.ts,ui/chrome.tsx",
+  "n": 12
  },
  "أعد كتابة كلمة المرور": {
   "k": "s",
@@ -9597,6 +9597,47 @@
   "k": "s",
   "p": "domain/tools/bbs-calc.ts",
   "n": 1
+ },
+ "لم يُعثر على عمودي البيان والكمية — اختر الأعمدة يدويًا": {
+  "k": "s",
+  "p": "domain/tools/boq.ts",
+  "n": 1
+ },
+ "الصف {0}: الكمية «{1}» ليست رقمًا": {
+  "k": "t",
+  "p": "domain/tools/boq.ts",
+  "n": 1,
+  "x": "row | qRaw"
+ },
+ "الصف {0}: الفئة «{1}» ليست رقمًا": {
+  "k": "t",
+  "p": "domain/tools/boq.ts",
+  "n": 1,
+  "x": "row | rRaw"
+ },
+ "الصف {0}: بدون وحدة": {
+  "k": "t",
+  "p": "domain/tools/boq.ts",
+  "n": 1,
+  "x": "row"
+ },
+ "الصف {0}: بدون فئة": {
+  "k": "t",
+  "p": "domain/tools/boq.ts",
+  "n": 1,
+  "x": "row"
+ },
+ "الصف {0}: رقم البند {1} مكرر (الصف {2})": {
+  "k": "t",
+  "p": "domain/tools/boq.ts",
+  "n": 1,
+  "x": "row | ref | seen.get(ref)"
+ },
+ "الصف {0}: الكمية × الفئة = {1} لا تساوي القيمة {2}": {
+  "k": "t",
+  "p": "domain/tools/boq.ts",
+  "n": 1,
+  "x": "row | Math.round(calc * 100) / 100 | amount"
  },
  "خرسانة مسلحة": {
   "k": "s",
@@ -16415,8 +16456,8 @@
  },
  "الفئة": {
   "k": "x",
-  "p": "features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
-  "n": 9
+  "p": "features/qaqc/qaqc.tsx,features/stack/stack.tsx,features/tools/office/boq-ui.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
+  "n": 11
  },
  "نطاق القائمة (اختياري)": {
   "k": "x",
@@ -18771,8 +18812,8 @@
  },
  "القيمة": {
   "k": "s",
-  "p": "features/sitetools/site-tools.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx",
-  "n": 6
+  "p": "features/sitetools/site-tools.tsx,features/tools/office/boq-ui.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx",
+  "n": 7
  },
  "الفدان = 24 قيراطًا ≈ 4,200.83 م² · القيراط = 24 سهمًا ≈ 175.03 م².": {
   "k": "x",
@@ -22312,8 +22353,8 @@
  },
  "البند": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
-  "n": 11
+  "p": "features/tools/concrete/concrete.tsx,features/tools/office/boq-ui.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx,lib/report-pdf.ts",
+  "n": 12
  },
  "الأساس": {
   "k": "s",
@@ -24574,6 +24615,259 @@
   "p": "features/tools/mep/sprinkler.tsx",
   "n": 1
  },
+ "رقم البند": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
+  "n": 6
+ },
+ "البيان": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx",
+  "n": 14
+ },
+ "الوحدة": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx,features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 25
+ },
+ "الكمية": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx,features/tools/office/custody.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
+  "n": 20
+ },
+ "تعذّرت قراءة ملف Excel — احفظه بصيغة .xlsx أو CSV وأعد المحاولة.": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "الملف فارغ.": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "استيراد جدول الكميات (المقايسة)": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 2
+ },
+ "من Excel أو CSV أو لصق من جدول": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "الملف": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "أو الصق الصفوف من Excel (مع صف العناوين)": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 2
+ },
+ "لصق": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "الورقة": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 2
+ },
+ "بنود": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "أخطاء": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "تنبيهات": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "الأعمدة المستخدمة": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "الأعمدة المستخدمة {0}": {
+  "k": "e",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1,
+  "x": "res.items.length ? \"\" : \"— اخترها يدويًا\""
+ },
+ "— اخترها يدويًا": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "صف العناوين": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "ملاحظات أخرى": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "و {0} ملاحظات أخرى": {
+  "k": "r",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1,
+  "x": "EL <Num>{res.issues.length - 8}</Num>"
+ },
+ "صحّح الأخطاء في الملف ثم أعد الاستيراد — لا يُحفظ شيء قبل ذلك.": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "استبدال البنود": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "إضافة للبنود": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "الاستبدال يحتفظ بالكميات السابقة وكميات الفترة للبنود التي لم يتغير رقمها.": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "حُدِّث المستخلص — {0} بند": {
+  "k": "t",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1,
+  "x": "r.applied.length"
+ },
+ "تعذّر تحديث المستخلص": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "أرسل للمستخلص": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 2
+ },
+ "الكمية المقاسة لكل بند مقايسة تصبح الكمية التراكمية في مستخلص مسودة لنفس المشروع: كمية الفترة = المقاس − السابق.": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "بند مقايسة": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "{0} بند مقايسة{1}": {
+  "k": "r",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1,
+  "x": "EL <Num>{measured.length}</Num> | unassigned ? <> · <Num>{unassigned}</Num> سطر بدون رقم بند</"
+ },
+ "سطر بدون رقم بند": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "· {0} سطر بدون رقم بند": {
+  "k": "r",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1,
+  "x": "EL <Num>{unassigned}</Num>"
+ },
+ "اكتب «بند المقايسة» في سطور الحصر أولًا.": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "لا يوجد مستخلص مسودة في هذا المشروع — أنشئ مستخلصًا من أداة المستخلص الجاري ثم عد هنا.": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "المستخلص": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 2
+ },
+ ": المقاس": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "− السابق": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "{0}: المقاس {1} − السابق {2} = {3}{4}": {
+  "k": "r",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{a.ref}</bdi> | EL <Num>{fmtNum(a.measured, 3)}</Num> | EL <Num>{fmtNum(a.previous, 3)}</Num> | EL <Num>{fmtNum(a.current, 3)}</Num> | a.current < 0 ? \" (تصحيح)\" : \"\""
+ },
+ "(تصحيح)": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ ": الوحدة في المستخلص": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "وفي الحصر": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "— لن يُرسل": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "{0}: الوحدة في المستخلص {1} وفي الحصر {2} — لن يُرسل": {
+  "k": "r",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\">{c.ref}</bdi> | c.boqUnit | c.measuredUnit"
+ },
+ ": غير موجود في المستخلص — لن يُرسل": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "{0}: غير موجود في المستخلص — لن يُرسل": {
+  "k": "r",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\">{m.ref}</bdi>"
+ },
+ "جارٍ…": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx,features/tools/register.tsx",
+  "n": 2
+ },
+ "حدّث المستخلص": {
+  "k": "s",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
+ "افتح المستخلص": {
+  "k": "x",
+  "p": "features/tools/office/boq-ui.tsx",
+  "n": 1
+ },
  "جيد": {
   "k": "s",
   "p": "features/tools/office/custody.tsx",
@@ -24634,16 +24928,6 @@
   "k": "s",
   "p": "features/tools/office/custody.tsx",
   "n": 1
- },
- "الكمية": {
-  "k": "s",
-  "p": "features/tools/office/custody.tsx,features/tools/office/submittal.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 18
- },
- "الوحدة": {
-  "k": "s",
-  "p": "features/tools/office/custody.tsx,features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx,features/tools/trade/trade.tsx",
-  "n": 23
  },
  "الرقم التسلسلي / الكود": {
   "k": "s",
@@ -24754,11 +25038,6 @@
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
   "n": 2
- },
- "البيان": {
-  "k": "x",
-  "p": "features/tools/office/ipc.tsx,features/tools/office/qto.tsx,features/tools/office/vo.tsx",
-  "n": 12
  },
  "السابق": {
   "k": "x",
@@ -24909,11 +25188,6 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 1,
   "x": "it.ref || \"—\" | it.desc || \"بند\" | l ? fmtNum(l.qtyTotal, 2) : \"0\" | it.unit | l ? whole(l.amtTotal) : \"0\" | l?.overrun ? \" ⚠\" : \"\""
- },
- "رقم البند": {
-  "k": "s",
-  "p": "features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
-  "n": 5
  },
  "القسم (اختياري)": {
   "k": "s",
@@ -25270,6 +25544,11 @@
   "p": "features/tools/office/qto.tsx",
   "n": 2
  },
+ "بند المقايسة (اختياري)": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
+ },
  "سقف (طول × عرض)": {
   "k": "s",
   "p": "features/tools/office/qto.tsx",
@@ -25405,6 +25684,11 @@
   "n": 2
  },
  "بنود الحصر": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
+ "بند المقايسة": {
   "k": "s",
   "p": "features/tools/office/qto.tsx",
   "n": 1
@@ -26535,11 +26819,6 @@
  },
  "متوسط الرد": {
   "k": "x",
-  "p": "features/tools/register.tsx",
-  "n": 1
- },
- "جارٍ…": {
-  "k": "s",
   "p": "features/tools/register.tsx",
   "n": 1
  },

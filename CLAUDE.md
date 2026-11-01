@@ -206,6 +206,16 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   Arabic is never letter-spaced (`[lang="ar"] :not(bdi)[class*="tracking-"]`), headings `text-wrap: balance`. Every new animation
   stops under prefers-reduced-motion (pinned by the test).
 
+- v0.37.0: **BOQ in, measured quantities out** (`domain/tools/boq.ts`, pure): `importBoq` reads rows from an .xlsx (`doc/xlsx-read.ts` —
+  fflate + regex, first values only, never throws), a CSV / TSV (UTF-8, else Windows-1256) or a paste; columns found from Arabic /
+  English headers (`detectColumns`) or chosen by hand; section rows label the items under them; numbers with Arabic digits and
+  separators (`toNumber`). Errors (not a number, duplicate code) **block** the import until the file is fixed; warnings (no unit, no
+  rate, qty × rate ≠ amount) are shown. In the certificate (`BoqImportCard` in `office/boq-ui.tsx`): «استبدال البنود» keeps `qp` /
+  `qq` of items whose code is unchanged (`itemsFromBoq`), «إضافة للبنود» appends. QTO lines carry `boq` (BOQ item code, printed when
+  any line has one); **«أرسل للمستخلص»** (`SendToIpc`, only where `toolAllowed(role, "ipc")`) writes current = measured − previous
+  into a **draft** certificate of the same project; a different unit (`unitKey`), an unknown item or a line with no code is listed,
+  never applied. `replaceTop` keeps the screen key (`k`), so a new document taking its id is never remounted (focus and keyboard kept).
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

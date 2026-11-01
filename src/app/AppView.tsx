@@ -472,7 +472,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     // one opener for every tool: the gate, then a pushed screen, the QA/QC screens or the old sheet
     openTool: (id?: any) => { const t = toolById(id); if (!t || !toolAllowed(toolRole(profile), t.id)) { deny(); return; } if (t.id === "checklists") app.push({ type: "checklists" }); else if (t.surface === "sheet") app.openSheet("tool", { id: t.id }); else app.push({ type: "tool", id: t.id }); },
     // swap the top screen in place (a new document getting its id): no animation, same gate as push
-    replaceTop: (e?: any) => { const tid = toolOfStack(e); if (tid != null && !toolAllowed(toolRole(profile), tid)) return; setDir("none"); setStack((st) => [...st.slice(0, -1), e]); },
+    // a new document taking its id on the first save: the entry keeps the screen's key (`k`), so the editor is NOT remounted —
+    // no lost focus, keyboard or open card 400 ms into a new document
+    replaceTop: (e?: any) => { const tid = toolOfStack(e); if (tid != null && !toolAllowed(toolRole(profile), tid)) return; setDir("none"); setStack((st) => { const prev = st[st.length - 1]; return [...st.slice(0, -1), prev && prev.type === e.type ? { ...e, k: prev.k || prev.id } : e]; }); },
     inspections, saveInspection: (x?: any) => setInspections((l) => [x, ...l.filter((i) => i.id !== x.id)].slice(0, 100)), deleteInspection: (id?: any) => { const paths = photoPaths(inspections.find((i) => i.id === id)); if (paths.length) sync(() => cloud.removeMedia(paths)); setInspections((l) => l.filter((i) => i.id !== id)); },
     qcTemplates: qcTemplates.filter((t) => !t.deleted), qcTemplatesAll: qcTemplates,
     saveTemplate: (t?: any) => setQcTemplates((l) => [{ ...t, at: Date.now() }, ...l.filter((x) => x.id !== t.id)].slice(0, 60)),
@@ -614,7 +616,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const screenFor = (e: any, a: any) => {
     const closed = toolOfStack(e) != null && !toolAllowed(toolRole(profile), toolOfStack(e));
     if (closed || blocked.stack.includes(e.type) || (e.type === "room" && blocked.rooms.includes(e.id))) return <div className="pt-4"><Empty icon={LockKeyhole} title={closedTitleFor(profile)} body={denyFor(profile)} action="رجوع" onAction={a.pop} /></div>;
-    return e.type === "post" ? <PostScreen app={a} id={e.id} /> : e.type === "company" ? <CompanyScreen app={a} id={e.id} /> : e.type === "job" ? <JobScreen app={a} id={e.id} /> : e.type === "room" ? <RoomScreen app={a} id={e.id} /> : e.type === "rooms" ? <RoomsScreen app={a} /> : e.type === "notifications" ? <NotificationsScreen app={a} /> : e.type === "notifprefs" ? <NotificationPrefsScreen app={a} /> : e.type === "chat" ? <ChatScreen app={a} id={e.id} /> : e.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={a} /></Suspense> : e.type === "support" ? <SupportScreen app={a} /> : e.type === "tool" ? <Suspense fallback={<ScreenLoading />}><ToolScreen key={e.id} app={a} id={e.id} /></Suspense> : e.type === "tooldoc" ? <Suspense fallback={<ScreenLoading />}><ToolDocScreen key={e.id} app={a} id={e.id} /></Suspense> : e.type === "ticket" ? <TicketScreen key={e.id} app={a} id={e.id} /> : e.type === "checklists" || e.type === "inspection" || e.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={e.type + (e.id || "list")} app={a} id={e.id} kind={e.type} /></Suspense> : e.type === "permissions" ? <PermissionsScreen app={a} /> : e.type === "postjob" ? <PostJobScreen app={a} like={e.like} /> : e.type === "settings" ? <SettingsScreen app={a} /> : e.type === "guide" ? <GuideScreen app={a} /> : <ProfileScreen app={a} />
+    return e.type === "post" ? <PostScreen app={a} id={e.id} /> : e.type === "company" ? <CompanyScreen app={a} id={e.id} /> : e.type === "job" ? <JobScreen app={a} id={e.id} /> : e.type === "room" ? <RoomScreen app={a} id={e.id} /> : e.type === "rooms" ? <RoomsScreen app={a} /> : e.type === "notifications" ? <NotificationsScreen app={a} /> : e.type === "notifprefs" ? <NotificationPrefsScreen app={a} /> : e.type === "chat" ? <ChatScreen app={a} id={e.id} /> : e.type === "cvreview" ? <Suspense fallback={<ScreenLoading />}><CVReviewScreen app={a} /></Suspense> : e.type === "support" ? <SupportScreen app={a} /> : e.type === "tool" ? <Suspense fallback={<ScreenLoading />}><ToolScreen key={e.id} app={a} id={e.id} /></Suspense> : e.type === "tooldoc" ? <Suspense fallback={<ScreenLoading />}><ToolDocScreen key={e.k || e.id} app={a} id={e.id} /></Suspense> : e.type === "ticket" ? <TicketScreen key={e.id} app={a} id={e.id} /> : e.type === "checklists" || e.type === "inspection" || e.type === "qcbuilder" ? <Suspense fallback={<ScreenLoading />}><ChecklistsScreen key={e.type + (e.id || "list")} app={a} id={e.id} kind={e.type} /></Suspense> : e.type === "permissions" ? <PermissionsScreen app={a} /> : e.type === "postjob" ? <PostJobScreen app={a} like={e.like} /> : e.type === "settings" ? <SettingsScreen app={a} /> : e.type === "guide" ? <GuideScreen app={a} /> : <ProfileScreen app={a} />
     ;
   };
   const screen = top ? screenFor(top, app) : null;
@@ -680,7 +682,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     const screenCol = top && top.type === "tooldoc" ? "max-w-[1480px]" : "max-w-[880px]";
     const layerEl = top && (
       <div ref={layer} onScroll={chatOpen ? undefined : onScroll} data-screen-layer className={`pushed screen-layer absolute inset-0 z-[4] bg-canvas px-6 ${chatOpen ? "overflow-hidden" : "scroll-area"}`}>
-        <div key={`${top.type}-${top.id || ""}`} className={`screen-body desk-col mx-auto w-full ${screenCol} ${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>
+        <div key={`${top.type}-${top.k || top.id || ""}`} className={`screen-body desk-col mx-auto w-full ${screenCol} ${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>
       </div>
     );
     return (
@@ -701,7 +703,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
                   </div>
                   {master && (
                     <div data-desk-master-screen className="absolute inset-0 z-[3] scroll-area bg-canvas px-6 pb-10">
-                      <div key={`${master.type}-${master.id || ""}`} className="desk-col min-h-full flex flex-col">{screenFor(master, masterApp)}</div>
+                      <div key={`${master.type}-${master.k || master.id || ""}`} className="desk-col min-h-full flex flex-col">{screenFor(master, masterApp)}</div>
                     </div>
                   )}
                   {!splitOn && layerEl}
@@ -734,7 +736,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
           </div>
           {/* a pushed screen is a layer over the tab (which stays where it was): «back» removes the layer and the list is simply there */}
           {top && <div ref={layer} onScroll={chatOpen ? undefined : onScroll} data-screen-layer className={`pushed screen-layer absolute inset-0 z-[4] bg-canvas px-4 ${chatOpen ? "overflow-hidden" : "scroll-area"}`}>
-            <div key={`${top.type}-${top.id || ""}`} className={`screen-body ${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>
+            <div key={`${top.type}-${top.k || top.id || ""}`} className={`screen-body ${chatOpen ? "h-full" : "min-h-full"} flex flex-col ${dir === "push" ? "screen-push" : dir === "pop" ? "screen-pop" : ""}`}>{screen}</div>
           </div>}
           <TabBar tabs={tabs} active={curTab} onChange={app.setTab} badge={{ inbox: unreadThreads + app.unread }} off={!!top} />
         </div>

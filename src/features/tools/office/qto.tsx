@@ -16,11 +16,14 @@ import type { ToolDoc } from "../../../data/tool-docs";
 import { Card, Check, Grid2, Note, NumField, Pick, ResultHero, RowCards, Rows, TextField } from "../../../ui/kit";
 import { numInputParse } from "../../../lib/num-input";
 import type { ToolModule } from "../module";
+import { toolAllowed } from "../../../tools/gate";
+import { SendToIpc } from "./boq-ui";
 import { buildSpec, issuerName } from "../spec";
 
 type Op = { id: string; label: string; n: string; w: string; h: string };
 type Line = {
   id: string; kind: QtoKind; wbs: string; desc: string;
+  boq?: string;                  // the BOQ item this line measures (W8: «أرسل للمستخلص»)
   n: string; L: string; W: string; H: string; t: string; faces: "1" | "2"; byArea: boolean; upturn: string; ceiling: boolean;
   openings: Op[];
 };
@@ -41,7 +44,7 @@ export const KINDS: [QtoKind, string][] = [
 const kindName = (k: QtoKind) => (KINDS.find((x) => x[0] === k) || KINDS[KINDS.length - 1])[1];
 
 const blankLine = (prev?: Line): Line => ({
-  id: uid(), kind: prev?.kind || "plaster", wbs: prev?.wbs || "", desc: "", n: "1", L: "", W: "", H: prev?.H || "", t: prev?.t || "0.25",
+  id: uid(), kind: prev?.kind || "plaster", wbs: prev?.wbs || "", desc: "", boq: prev?.boq || "", n: "1", L: "", W: "", H: prev?.H || "", t: prev?.t || "0.25",
   faces: prev?.faces || "1", byArea: prev?.byArea || false, upturn: prev?.upturn || "0.3", ceiling: false, openings: [],
 });
 const blank = (): Body => ({ rules: "is1200", custom: { masonryMin: "0.1", finishMin: "0.5", finishOneFace: "3", tilesMin: "0.1" }, lines: [blankLine()] });
@@ -72,6 +75,7 @@ function LineFields({ l, set }: { l: Line; set: (l: Line) => void }) {
       <Pick items={KINDS} value={l.kind} onChange={(kind) => p({ kind })} />
       <TextField label="الموقع (WBS): مبنى / دور / عنصر" value={l.wbs} onChange={(v) => p({ wbs: v })} placeholder="برج A / الدور 02 / حوائط الشقة 3" />
       <TextField label="البيان" value={l.desc} onChange={(v) => p({ desc: v })} />
+      <TextField label="بند المقايسة (اختياري)" dir="ltr" value={l.boq || ""} onChange={(v) => p({ boq: v })} placeholder="2.1" data-qto-boq />
       {(l.kind === "plaster" || l.kind === "paint") && <Check label="سقف (طول × عرض)" on={l.ceiling} onChange={(ceiling) => p({ ceiling })} />}
       {l.kind === "masonry" && <Check label="القياس بالمتر المسطح (بدون سمك)" on={l.byArea} onChange={(byArea) => p({ byArea })} />}
       <Grid2>
@@ -167,6 +171,10 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
         </Card>
       )}
       {r.issues.length > 0 && <Note tone="warn">{r.issues.map((x) => x.text).join(" · ")}</Note>}
+      {/* the certificate is a money tool: only roles that may open it can send to it */}
+      {!ro && toolAllowed(ctx.role, "ipc") && (
+        <SendToIpc app={ctx.app} projectId={ctx.project ? ctx.project.id : null} lines={b.lines.map((l, i) => ({ boq: l.boq, unit: r.lines[i]?.unit || "", net: r.lines[i]?.net || 0 }))} />
+      )}
     </div>
   );
 }
@@ -177,7 +185,7 @@ function build(doc: ToolDoc<Body>, project: any) {
   const lineRows = b.lines.map((l, i) => {
     const res = r.lines[i];
     const third = l.kind === "masonry" && !l.byArea ? N(l.t) : (l.kind === "plaster" || l.kind === "paint") && !l.ceiling ? Number(l.faces) : null;
-    return { cells: { wbs: l.wbs, desc: l.desc, kind: kindName(l.kind), unit: res.unit, n: N(l.n) || 1, L: N(l.L), W: N(l.W) || null, H: l.kind === "waterproof" ? N(l.upturn) : N(l.H) || null, x: third, g: res.gross, d: res.deduct, net: res.net }, mark: res.issues.length ? "fail" as const : undefined };
+    return { cells: { boq: iso(l.boq || ""), wbs: l.wbs, desc: l.desc, kind: kindName(l.kind), unit: res.unit, n: N(l.n) || 1, L: N(l.L), W: N(l.W) || null, H: l.kind === "waterproof" ? N(l.upturn) : N(l.H) || null, x: third, g: res.gross, d: res.deduct, net: res.net }, mark: res.issues.length ? "fail" as const : undefined };
   });
   const dedRows = b.lines.flatMap((l, i) => r.lines[i].deductions.map((d) => ({ cells: { line: `${i + 1}. ${l.desc || kindName(l.kind)}`, op: d.label, n: d.n, a: d.area, f: d.faces, q: d.qty, rule: d.rule } })));
   const blocks: DocBlock[] = [
@@ -186,6 +194,8 @@ function build(doc: ToolDoc<Body>, project: any) {
     {
       k: "table", id: "lines", caption: "", grid: true,
       cols: [
+        // the BOQ item a line measures, printed when any line names one (the sheet then cross-checks against the certificate)
+        ...(b.lines.some((l) => (l.boq || "").trim()) ? [{ key: "boq", label: "بند المقايسة", wMm: 15, align: "center" as const }] : []),
         { key: "wbs", label: "الموقع", wMm: 34, align: "start" }, { key: "desc", label: "البيان", wMm: 46, align: "start" },
         { key: "kind", label: "النوع", wMm: 22, align: "center" }, { key: "unit", label: "الوحدة", wMm: 12, align: "center" },
         { key: "n", label: "العدد", wMm: 12, align: "end", num: { dp: 0 } }, { key: "L", label: "الطول", wMm: 15, align: "end", num: { dp: 2 } },
