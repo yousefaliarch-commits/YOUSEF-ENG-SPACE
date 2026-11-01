@@ -87,7 +87,10 @@ at cold start; its logic lives in `_shared/media.ts` and `_shared/media-handler.
 
 ## Still open (next steps of Phase 1)
 - 1.1 guards: branch protection, CODEOWNERS, gitleaks, CodeQL, Dependabot, pinned actions and CLI, approval-gated production deploys.
-- 1.4 auth: Turnstile, password policy, staff MFA with `aal2` required in `is_staff()` / `is_admin()`.
+- 1.4 auth: Turnstile, password policy. **Staff MFA is in place (migration 29, Phase 3a):** TOTP enrolment in Settings for staff, the
+  console asks for the code first, and `private.security_config.staff_mfa` makes `is_staff()` / `is_admin()` require `aal2`. It
+  ships **off**; an administrator turns it on from Admin → الإعدادات, only from an `aal2` session (`admin_set_staff_mfa`, audited) —
+  enrol every staff account first, or they lose their powers until they do.
 - 1.5 release build: private release keystore in GitHub secrets, `assembleRelease` + R8, no backups, Keystore / Keychain session
   storage, CSP, signed live-update manifest (new native line).
 - Salary figures in `reveal` posts and money amounts in post / comment text are still hidden by the app, not the server: the same

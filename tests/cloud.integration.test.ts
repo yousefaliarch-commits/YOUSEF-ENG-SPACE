@@ -213,6 +213,41 @@ run("cloud backend (local Supabase)", () => {
     expect((await fetch(img.src)).headers.get("content-type") || "").not.toMatch(/^image\//);
   });
 
+  it("staff two-factor: the switch needs a confirmed session; switched on, a password session loses staff powers until the code", async () => {
+    const env = (import.meta as any).env; const service = env.ENGSPACE_SERVICE_KEY || process.env.ENGSPACE_SERVICE_KEY; if (!service) return;
+    const { createHmac } = await import("node:crypto");
+    // RFC 6238 (SHA-1, 30 s, 6 digits) — what an authenticator app shows
+    const totp = (secret: string, ahead = 0) => {
+      const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"; let bits = "";
+      for (const ch of secret.replace(/=+$/, "")) bits += abc.indexOf(ch).toString(2).padStart(5, "0");
+      const key = Buffer.from(bits.match(/.{8}/g)!.map((b) => parseInt(b, 2)));
+      const counter = Buffer.alloc(8); counter.writeBigUInt64BE(BigInt(Math.floor((Date.now() / 1000 + ahead) / 30)));
+      const h = createHmac("sha1", key).update(counter).digest(); const o = h[h.length - 1] & 15;
+      return String((h.readUInt32BE(o) & 0x7fffffff) % 1_000_000).padStart(6, "0");
+    };
+    const mfa = await import("../src/backend/mfa");
+    const C = { email: `c-${tag}@example.com`, pw: "Str0ng!pass-" + tag };
+    await cloud.signOut(); await cloud.signUp(C.email, C.pw, persona("مسؤول الاختبار"));
+    const { supabase } = await import("../src/backend/client"); const { data: { user } } = await (await supabase()).auth.getUser();
+    const up = await fetch(`${env.VITE_SUPABASE_URL}/rest/v1/profiles?id=eq.${user!.id}`, { method: "PATCH", headers: { apikey: service, Authorization: `Bearer ${service}`, "Content-Type": "application/json" }, body: JSON.stringify({ staff: "admin" }) });
+    expect(up.ok).toBe(true);
+    expect(await mfa.staffSecurity()).toMatchObject({ staff: "admin", required: false, aal: "aal1" });
+    await expect(mfa.setStaffMfa(true)).rejects.toThrow("جلسة مؤكدة");                       // not from a password session
+    const e = await mfa.enroll(); expect(e.secret).toMatch(/^[A-Z2-7]+=*$/); expect(e.qr).toMatch(/^data:image\/svg/);
+    await mfa.verify(e.factorId, totp(e.secret));
+    expect((await mfa.assurance()).current).toBe("aal2");
+    expect(await mfa.setStaffMfa(true)).toBe(true);
+    // a new password session: no staff power at all until the code
+    await cloud.signOut(); await cloud.signIn(C.email, C.pw);
+    expect(await mfa.staffSecurity()).toMatchObject({ staff: "admin", required: true, aal: "aal1" });
+    await expect(cloud.admin.directory()).rejects.toBeTruthy();
+    await mfa.stepUp(totp(e.secret, 30));
+    expect(Array.isArray(await cloud.admin.directory())).toBe(true);
+    // leave the project as it was found
+    expect(await mfa.setStaffMfa(false)).toBe(false);
+    await cloud.deleteAccount();
+  });
+
   it("the author reads the reply notification-free feed and their thread", async () => {
     await cloud.signOut(); await cloud.signIn(A.email, A.pw);
     const ts = await cloud.threads(); expect(ts[0].unread).toBe(1 + realtimeSends); // «أهلًا» and the realtime test's message(s)

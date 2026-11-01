@@ -17,6 +17,8 @@ import { ACCENTS } from "../ui/theme";
 
 // The admin console is its own chunk: members never download it (Phase 3 moves it to a separate web app)
 const AdminView = lazy(() => import("../features/admin/AdminView").then((m) => ({ default: m.AdminView })));
+// the console's second-factor step (Phase 3a): live backend only — the demo console opens as before
+const AdminGate = lazy(() => import("../features/settings/two-factor").then((m) => ({ default: m.AdminGate })));
 
 export const loadTheme = () => { try { return localStorage.getItem("engspace.theme") || "system"; } catch (e) { return "system"; } };
 
@@ -68,7 +70,7 @@ export function App() {
       <div className={`web-topbar ${NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}`}><TopBar view={view} setView={setView} staff={staffOk} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
       {/* the iOS app turns off page scrolling (ios.scrollEnabled: false — no rubber-band on the member app, which scrolls inside its own
           container); the console scrolls the page, so in the apps it gets a scroll container of its own */}
-      {view === "admin" && staffOk ? <div className={NATIVE ? "fixed inset-0 overflow-y-auto overflow-x-hidden overscroll-contain scroll-area" : ""}><Suspense fallback={<ScreenLoading />}><AdminView init={init} openApp={() => setView("app")} /></Suspense></div>
+      {view === "admin" && staffOk ? <div className={NATIVE ? "fixed inset-0 overflow-y-auto overflow-x-hidden overscroll-contain scroll-area" : ""}><Suspense fallback={<ScreenLoading />}>{isCloud() ? <AdminGate openApp={() => setView("app")}><AdminView init={init} openApp={() => setView("app")} /></AdminGate> : <AdminView init={init} openApp={() => setView("app")} />}</Suspense></div>
         : <AppView onAdmin={staffOk ? () => setView("admin") : null} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
       <div role="status" aria-live="polite" className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-elevated border border-line-2 text-[13px] shadow-float transition-all ${toastMsg ? "opacity-100" : "opacity-0 translate-y-3 pointer-events-none"}`}>{toastMsg && <><CircleCheck size={17} className="text-accent" /><span>{toastMsg}</span></>}</div>
     </div></LangCtx.Provider></ModeCtx.Provider></PlatformCtx.Provider>

@@ -216,6 +216,15 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   into a **draft** certificate of the same project; a different unit (`unitKey`), an unknown item or a line with no code is listed,
   never applied. `replaceTop` keeps the screen key (`k`), so a new document taking its id is never remounted (focus and keyboard kept).
 
+- v0.38.0 (Phase 3a): **staff two-factor sign-in** (migration 29, `backend/mfa.ts`, `features/settings/two-factor.tsx`). TOTP through
+  Supabase Auth; `private.security_config.staff_mfa` (**off** by default) makes `is_staff()` / `is_admin()` also require JWT `aal = aal2`
+  (`private.staff_mfa_ok()`), so every staff policy, RPC and the «staff» channel refuse a password-only session. `my_staff_security()`
+  gives the app the raw staff role + switch + session level; `admin_set_staff_mfa()` = administrators **from an aal2 session only**,
+  audited. Settings → «التحقق بخطوتين — فريق الإدارة» (staff, cloud) enrols / removes; `AdminGate` (cloud only — the demo console is
+  unchanged) runs `gateState`: aal2 → open · enrolled → code · switch on and not enrolled → enrol · else open with a reminder. Admin →
+  الإعدادات → «أمان فريق الإدارة» flips the switch. Local `config.toml` enables TOTP; tests: pgTAP 22, `tests/staff-mfa.test.ts`, and
+  the cloud suite enrols a real authenticator (RFC 6238 codes) and checks password-only sessions lose staff powers when on.
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

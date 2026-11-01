@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { TwoFactorPanel } from "./two-factor";
 import {
   Award, Bell, BookOpen, Briefcase, Building2, Calculator, Check, ChevronDown, CircleHelp, Compass, Home, LifeBuoy, 
   Languages, Layers, LockKeyhole, MessageCircle, Moon, Settings, ShieldCheck, SlidersHorizontal, Sparkles, Sun, 
@@ -118,6 +119,8 @@ export function SettingsScreen({ app }: any) {
         <SettingsLink icon={Bell} title="إعدادات الإشعارات" sub="الإشعارات الفورية، والوظائف المطابقة، والردود، والرواتب، والدعم" onClick={() => app.push({ type: "notifprefs" })} />
         {SETTINGS_TOGGLES(app).map(([k, l]: any) => <div key={k} className="py-2.5 flex items-center justify-between gap-3 border-t border-line first:border-0"><span className="text-[13px] text-ink leading-snug">{l}</span><Toggle on={!!p[k]} onChange={(v) => { persist({ [k]: v }); app.toast(v ? "تم التفعيل" : "تم الإيقاف"); }} label={l} /></div>)}
       </Panel>
+      {/* the platform team's second factor (live backend only; members never see it) */}
+      {isCloud() && app.openAdmin && <TwoFactorPanel />}
       <Panel className="px-4 py-2"><h2 className="pt-2 pb-1 text-[13px] font-medium inline-flex items-center gap-1.5"><CircleHelp size={15} className="text-accent" /> المساعدة</h2>
         <SettingsLink icon={Compass} title="جولة تعريفية في التطبيق" sub={gx(p.gender, "جولة تفاعلية قصيرة على أهم الأقسام — أعدها متى شئت", "جولة تفاعلية قصيرة على أهم الأقسام — أعيديها متى شئتِ")} onClick={app.startTour} />
         <SettingsLink icon={BookOpen} title="دليل الاستخدام" sub={gx(p.gender, "شرح مفصّل لكل ميزة، وكيف تقرأ أرقام الرواتب وتستفيد منها", "شرح مفصّل لكل ميزة، وكيف تقرئين أرقام الرواتب وتستفيدين منها")} onClick={() => app.push({ type: "guide" })} />
