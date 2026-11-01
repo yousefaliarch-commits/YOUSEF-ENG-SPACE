@@ -1,0 +1,95 @@
+# Registers (W7): RFI / submittal / variation-order logs, and the variation order
+cfad6d71	Awaiting reply
+d129cea1	Overdue
+874fd798	Under review
+2e599395	Approved (A)
+1103fea5	Approved as noted (B)
+8c3d0353	Revise and resubmit (C)
+341e5b23	Rejected (D)
+f50c451f	Submitted
+ffdad91c	Partly approved
+b7452368	Item {0}: no rate
+c6ac81fc	Net change against the contract value
+6aec762f	≤ {0} % (contract limit)
+15692320	Alert threshold as in the contract conditions
+10db3c85	The approved value exceeds the amount claimed
+082eaf20	Log
+bae64c74	Reply date
+05628fda	Query closed
+8e9f0e88	No reply yet
+843876df	A Approved
+dbc024e3	C Resubmit
+5d8f43b4	D Rejected
+abb03560	Consultant's reply
+234b0d33	Review period
+a383835b	{0}{1} Remarks:
+b9e290a2	Approved
+aba4cd73	Approved as noted
+438dfca5	Resubmit
+c5d4061d	on {0}
+8b9951d9	Client request
+ff57ff99	Design change
+59a558a0	Site condition
+1785479e	Omission of works
+bf305141	Net change
+fa918612	Additions {0} · omissions {1}{2}
+14d9cbf0	· {0} % of the contract
+4efa8a9f	Reason for the change
+81f10fee	Instruction reference
+90f7c153	SI-014 / consultant's letter
+04c7d035	Alert threshold (from the contract)
+cf3bb9b1	As in the contract conditions
+d88711b0	Extra time requested
+6deea6cd	Description and reason for the change
+283e4f54	Amount {0}
+c96259cc	Engineer's decision
+46d8ee0b	Approved value
+86870aa9	Approved time
+a7b8e3e4	Approval date
+3e7c517f	Approval reference
+47b01314	Additions are valued at contract rates or a newly agreed rate; omissions are deducted at contract rates. No variation is executed before the engineer's written instruction.
+fa5881b3	Time requested
+8cf5e24a	{0} days
+c8170236	Description and reason · وصف التغيير وسببه
+6a3e4979	Items · البنود (omissions as negative amounts)
+29fed45e	Additions
+0fb967e4	Omissions
+a04e70dc	Of contract
+d10dad52	Date and reference
+6432617e	☐ Approved ☐ Partly approved ☐ Rejected
+3dff1ce2	Variation order · أمر تغيير
+2ad470d7	Variation order
+45497f42	Variation order · ⁦{0}⁩
+c71c5a06	Net ⁦{0}⁩ EGP · {1}
+f1ae4c1f	RFI log
+d5711bd2	RFI log · سجل طلبات الاستيضاح
+d03a1f46	Submittal log
+1a777b00	Submittal log · سجل اعتمادات الخامات
+3488e2f9	Variation order log
+2d79aa06	Variation order log · سجل أوامر التغيير
+7f13513b	· {0} days late
+098d76f9	Approved
+7ebb5489	Time asked
+e08b8aac	Time approved
+f92bb239	Material / manufacturer
+567a3ee7	Reply due
+194c9fc2	Days
+ed2c04c4	As of
+e3127fa8	Approved / claimed
+26b1c29b	Average reply time
+49a1dc8f	Reading the log
+de19b1f2	Claimed = the net of additions and omissions in each variation order; approved = the engineer's decision (rejected = zero). Drafts have not been submitted yet.
+5758993d	Reply due = request date + the reply period it states. «Overdue» = not answered and past its date; drafts have not been sent, so they are never overdue. Days = from the date to the reply (or to today).
+951b8271	{0} — as of {1}
+f646cbae	Drafts
+869d605b	Could not export the log
+6f751c75	Average reply
+33fef773	Working…
+4ccbefce	No documents in this group.
+14bde075	Late
+393e5f78	Late {0} days
+a3d0e57f	The question, references, proposed solution and reply date — with the RFI log and what is overdue
+274a5864	Material, manufacturer, properties, attachments and the consultant's code — with the submittal log
+e2abbe91	Variation orders
+bece1cb3	Priced additions and omissions, extra time, the engineer's decision — with the variation order log
+80e50875	variation order change order VO extra works omission additional works time extension

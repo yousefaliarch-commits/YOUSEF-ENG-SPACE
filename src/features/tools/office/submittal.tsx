@@ -6,7 +6,7 @@
 import type { DocBlock } from "../../../doc/model";
 import { iso } from "../../../doc/text";
 import type { ToolDoc } from "../../../data/tool-docs";
-import { AreaField, Card, Check, Grid2, Note, RowCards, TextField } from "../../../ui/kit";
+import { AreaField, Card, Check, DateField, Grid2, Note, NumField, Pick, RowCards, TextField } from "../../../ui/kit";
 import { AiFillCard, str, strs } from "../../ai/AiFill";
 import type { ToolModule } from "../module";
 import { buildSpec } from "../spec";
@@ -16,13 +16,17 @@ type Att = { name: string; on: boolean };
 type Body = {
   material: string; manufacturer: string; model: string; origin: string; supplier: string;
   specs: Spec[]; area: string; quantity: string; specRef: string; attachments: Att[]; remarks: string;
+  // the register (W7): the review period, the consultant's code and its date (older documents have none)
+  days?: string; code?: "" | "A" | "B" | "C" | "D"; codeOn?: string;
 };
+
+const CODES: ["" | "A" | "B" | "C" | "D", string][] = [["", "لم يُرد"], ["A", "A معتمد"], ["B", "B بملاحظات"], ["C", "C يُعاد"], ["D", "D مرفوض"]];
 
 const ATTACH = ["كتالوج / Datasheet", "شهادات اختبار", "عينة", "شهادة منشأ", "خطاب الضمان", "سابقة أعمال"];
 
 const blank = (): Body => ({
   material: "", manufacturer: "", model: "", origin: "", supplier: "", specs: [], area: "", quantity: "", specRef: "",
-  attachments: ATTACH.map((name, i) => ({ name, on: i === 0 })), remarks: "",
+  attachments: ATTACH.map((name, i) => ({ name, on: i === 0 })), remarks: "", days: "14", code: "", codeOn: "",
 });
 
 export function submittalFromAi(b: Body, d: any): Body & { title?: string } {
@@ -86,6 +90,13 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
         ))}
       </Card>
       <Card title="ملاحظات"><AreaField label="ملاحظات" value={b.remarks} onChange={(v) => put({ remarks: v })} rows={3} /></Card>
+      <Card title="رد الاستشاري">
+        <Pick label="الكود" items={CODES} value={b.code || ""} onChange={(code) => put({ code })} />
+        <div className="mt-2.5"><Grid2>
+          <DateField label="تاريخ الرد" value={b.codeOn || ""} onChange={(v) => put({ codeOn: v })} readOnly={ro} />
+          <NumField label="مدة المراجعة" unit="يوم" value={b.days ?? "14"} onChange={(v) => put({ days: v })} />
+        </Grid2></div>
+      </Card>
       <Note>القيم الفنية من كتالوج المصنّع وشهادات الاختبار فقط — راجع كل خانة بين [ ] قبل الإصدار.</Note>
     </div>
   );
@@ -106,7 +117,7 @@ function build(doc: ToolDoc<Body>, project: any) {
     },
     { k: "notes", title: "المرفقات · Attachments", text: b.attachments.map((a) => `${a.on ? "☑" : "☐"} ${a.name}`).join("\n") },
     ...(b.remarks.trim() ? [{ k: "notes", title: "ملاحظات · Remarks", text: b.remarks } as DocBlock] : []),
-    { k: "notes", title: "قرار الاستشاري · Consultant's action", text: "☐ A معتمد   ☐ B معتمد بملاحظات   ☐ C يُعاد التقديم   ☐ D مرفوض\n\nالملاحظات:\n\n" },
+    { k: "notes", title: "قرار الاستشاري · Consultant's action", text: `${CODES.slice(1).map(([c]) => `${b.code === c ? "☑" : "☐"} ${c} ${c === "A" ? "معتمد" : c === "B" ? "معتمد بملاحظات" : c === "C" ? "يُعاد التقديم" : "مرفوض"}`).join("   ")}${b.codeOn ? `\nبتاريخ ${iso(b.codeOn)}` : ""}\n\nالملاحظات:\n\n` },
   ];
   return buildSpec({ doc, meta: module, project, sections: [{ orientation: "portrait", blocks }], signRoles: ["contractorRep", "consultantRep"] });
 }

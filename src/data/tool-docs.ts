@@ -40,6 +40,9 @@ export type ToolDoc<B = unknown> = {
   revOf?: string;
   supersededBy?: string;
   until?: string;                // e.g. permit expiry, for the Today strip
+  // where the document belongs in the project — zone / building · level · element, kept by name so it stays readable even
+  // when the project's list changes (the project only suggests names)
+  wbs?: DocWbs;
   profile: ProfileSnap;
   body: B;
   photos: Record<string, PhotoRef[]>;
@@ -47,9 +50,14 @@ export type ToolDoc<B = unknown> = {
   log: ToolDocLogEntry[];        // ≤ 50 entries
 };
 
+export type DocWbs = { zone?: string; level?: string; element?: string };
+
+// the WBS path as one line: «برج A · الدور 02 · بلاطة S-04»
+export const wbsPath = (w?: DocWbs | null) => [w?.zone, w?.level, w?.element].map((x) => (x || "").trim()).filter(Boolean).join(" · ");
+
 export type ToolTomb = { id: string; kind: ToolKind; deleted: true; at: number };
 
-export type ToolHeader = Pick<ToolDoc, "id" | "kind" | "projectId" | "title" | "dateIso" | "docNo" | "rev" | "status" | "at" | "until">
+export type ToolHeader = Pick<ToolDoc, "id" | "kind" | "projectId" | "title" | "dateIso" | "docNo" | "rev" | "status" | "at" | "until" | "wbs">
   & { shard: string; bytes: number; deleted?: true };
 
 // local-only sync state, never uploaded
@@ -91,7 +99,7 @@ export const LOG_CAP = 50;
 export function headerOf(d: ToolDoc): ToolHeader {
   return {
     id: d.id, kind: d.kind, projectId: d.projectId, title: d.title, dateIso: d.dateIso, docNo: d.docNo, rev: d.rev, status: d.status,
-    at: d.at, until: d.until, shard: shardOf(d.id), bytes: jsonbBytes(d),
+    at: d.at, until: d.until, ...(wbsPath(d.wbs) ? { wbs: d.wbs } : {}), shard: shardOf(d.id), bytes: jsonbBytes(d),
   };
 }
 

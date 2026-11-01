@@ -307,3 +307,74 @@ article.post-card { border-color: var(--line-3); box-shadow: 0 1px 0 rgb(255 255
 .msg-in { animation: msg-in .28s cubic-bezier(.2,.7,.2,1) backwards; }
 @keyframes msg-in { from { opacity: 0; transform: translate3d(0, 10px, 0); } }
 @media (prefers-reduced-motion: reduce) { .msg-in { animation: none; } }
+
+/* ---------------------------------------------------------------------
+   engspace.org on a desktop (W5, src/app/desk.tsx): readable columns, centred dialogs, panes that size their own grids
+   (container queries on the column itself — a list in the 420 px left pane stays one column, the same list across a wide
+   column gets two or three)
+   --------------------------------------------------------------------- */
+html[data-desk-shell] .web-topbar { display: none !important; }
+.desk .desk-col { position: relative; container-type: inline-size; }
+.desk .tab-pane.is-off { left: 0; right: 0; }
+.desk .tab-pane, .desk .screen-body { padding-top: 1rem; }
+/* sheets: a dialog in the middle of the window, never a 1900 px-wide bottom sheet */
+.desk .sheet-host { justify-content: center; align-items: center; padding: 2rem; }
+.desk .sheet { width: min(600px, 100%); max-height: min(88vh, 920px); border: 1px solid rgb(var(--line-2)); border-radius: 22px; animation-name: desk-dialog; }
+.desk .sheet.sheet-tall { height: min(88vh, 920px); }
+.desk .sheet-out { animation: desk-dialog-out .18s cubic-bezier(.4,0,1,1) forwards !important; }
+@keyframes desk-dialog { from { opacity: 0; transform: translate3d(0, 16px, 0) scale(.98); } }
+@keyframes desk-dialog-out { to { opacity: 0; transform: translate3d(0, 12px, 0) scale(.98); } }
+/* the left pane under a two-pane layout: no slide, it is already there */
+.desk[data-desk="split"] [data-desk-pane="detail"] .screen-layer { animation-duration: .22s; }
+/* wide grids: tool tiles and saved documents spread with the pane that holds them */
+@container (min-width: 720px) { .desk-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; } .desk-grid > * { margin: 0 !important; } }
+@container (min-width: 1040px) { .desk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* the Tools tab: packs side by side, two tiles each, so a pack of one tool never leaves a row of empty space */
+@container (min-width: 900px) { .desk-packs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 1.5rem; align-items: start; } .desk-packs > * { margin: 0 !important; } }
+@container (min-width: 1400px) { .desk-packs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* a document in focus mode: the editor and its live A4 preview side by side */
+@container (min-width: 1100px) {
+  .doc-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 46%); gap: 1.5rem; align-items: start; }
+  .doc-split > .doc-live { display: block; }
+}
+.doc-live { display: none; }
+
+/* ---------------------------------------------------------------------
+   Motion (W6, src/ui/motion.ts): spring curves sampled from a damped oscillator into CSS linear() — generated, never typed
+   by hand (tests/motion.test.ts recomputes them). Older WebViews without linear() get a close cubic-bezier.
+   --------------------------------------------------------------------- */
+:root { --spring-snap: cubic-bezier(.3,1.15,.45,1); --spring-snap-d: 320ms; --spring-soft: cubic-bezier(.25,1.1,.4,1); --spring-soft-d: 480ms; --spring-pop: cubic-bezier(.3,1.5,.5,1); --spring-pop-d: 520ms; }
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --spring-snap: linear(0, 0.028, 0.097, 0.189, 0.292, 0.396, 0.496, 0.588, 0.67, 0.741, 0.801, 0.851, 0.891, 0.924, 0.949, 0.968, 0.982, 0.993, 1, 1.004, 1.007, 1.009, 1.009, 1.009, 1.009, 1.008, 1.007, 1.006, 1.005, 1.004, 1.003, 1.003, 1); --spring-snap-d: 395ms;
+    --spring-soft: linear(0, 0.028, 0.096, 0.187, 0.289, 0.392, 0.491, 0.582, 0.663, 0.733, 0.792, 0.842, 0.883, 0.915, 0.941, 0.961, 0.976, 0.987, 0.995, 1, 1.004, 1.006, 1.007, 1.007, 1.007, 1.007, 1.006, 1.005, 1.004, 1.004, 1.003, 1.003, 1); --spring-soft-d: 620ms;
+    --spring-pop: linear(0, 0.062, 0.215, 0.409, 0.61, 0.791, 0.938, 1.044, 1.11, 1.142, 1.147, 1.133, 1.108, 1.079, 1.049, 1.024, 1.004, 0.99, 0.982, 0.978, 0.979, 0.981, 0.985, 0.99, 0.994, 0.997, 1, 1.002, 1.003, 1.003, 1.003, 1.003, 1); --spring-pop-d: 700ms;
+  }
+}
+/* the segmented control: one pill slides under the chosen option (transform only, like the tab bar's indicator) */
+.seg-ind { transform: translate3d(calc(var(--i) * 100% * var(--dx, 1)), 0, 0); transition: transform var(--spring-snap-d) var(--spring-snap); will-change: transform; }
+[dir="rtl"] .seg-ind { --dx: -1; }
+.seg-btn { transition: color .2s ease; }
+/* a chip keeps its 36 px look but takes a 44 px touch */
+.hit44 { position: relative; }
+.hit44::after { content: ""; position: absolute; inset: -4px 0; }
+/* unfolding: what opens fades and settles into place (no height animation — layout never animates) */
+.unfold { animation: unfold var(--spring-soft-d) var(--spring-soft) backwards; transform-origin: top; }
+@keyframes unfold { from { opacity: 0; transform: translate3d(0, -6px, 0); } }
+.chev { transition: transform var(--spring-snap-d) var(--spring-snap); }
+.chev.is-open { transform: rotate(180deg); }
+/* a passed check draws itself once; a ring fills to its value once */
+.tick path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: tick .42s cubic-bezier(.3,.7,.2,1) .08s forwards; }
+@keyframes tick { to { stroke-dashoffset: 0; } }
+.ring-arc { transition: stroke-dashoffset .9s var(--spring-soft); }
+.ring-in { animation: ring-in .9s cubic-bezier(.2,.7,.2,1) backwards; }
+@keyframes ring-in { from { stroke-dashoffset: var(--ring-c); } }
+@media (prefers-reduced-motion: reduce) {
+  .seg-ind, .chev, .ring-arc { transition: none; }
+  .unfold, .tick path, .ring-in { animation: none !important; }
+  .tick path { stroke-dashoffset: 0; }
+}
+/* typography: Arabic is never letter-spaced (tracking breaks its joining); headings balance, paragraphs avoid orphans */
+[lang="ar"] :not(bdi)[class*="tracking-"] { letter-spacing: normal; }
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }

@@ -145,6 +145,67 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   rows). **White-label**: no app mark, credit or name in any export (PDF footer = type · number · page; PDF Creator = issuer, no Producer;
   inspection report headed by the issuing party). `ExportBar`: PDF primary + 48 px Preview / Word / Excel / Share (fits 360 px).
 
+- v0.31.0: **technical office** — `qto` (حصر الكميات, quantities pack, field roles, no prices; engine `domain/tools/qto-calc.ts`: kind
+  geometry, openings deducted per a rule **profile** — IS 1200 · deduct-all · contract thresholds, never claimed as an Egyptian code
+  clause; every deduction states its rule) and `ipc` (المستخلص الجاري, **money tool** — never supervisors; engine `ipc-calc.ts`:
+  previous · current · total, retention with cap, advance recovery proportional or FIDIC 1999 14.2 (history carried in `advPrev`),
+  VAT 14 % since Law 157/2025 / 5 % legacy / exempt, on gross or net; «المستخلص التالي» via `ctx.spawn`). Modules may supply
+  `workbook()` (custom live Excel: parameter cells, cross-row formulas, cached values resolved by `evalFormula`, which now knows
+  IF and comparisons); tests re-evaluate every formula and match the sheet's totals to the engine (`tests/office-workbooks.test.ts`).
+
+- v0.32.0: **project WBS** — every tool document files under zone / building · level · element (`ToolDoc.wbs`, kept by NAME so it
+  stays readable when the project's list changes; `wbsPath()`; the index header carries it only when set). A project may list its
+  zones and their levels (`ToolProject.wbs`, ProjectEditor → «تقسيم المشروع (WBS)»); `WbsCard` suggests those plus the names its
+  documents already use (datalists — anything can be typed). The path prints first in the title block's location (`buildSpec`:
+  «WBS — site»), so PDF / Word / Excel all say where the work is. Search is `src/tools/doc-search.ts` (pure: every word must match
+  title · number · WBS · tool name · date, Arabic normalised — أ إ آ → ا, ة → ه, ى → ي, no tashkeel / kashida): the tool's list has a
+  search box (> 3 documents) and zone chips; the Tools tab search also lists saved documents (only kinds `toolAllowed` for the role).
+
+- v0.33.0: **design checks that show their working** — `rcSection` (مراجعة القطاعات الخرسانية, structural pack, `DESIGN` roles =
+  engineers + owners, never supervisors; engine `domain/tools/rc-calc.ts`): rectangular beam or one-way slab strip, flexure by strain
+  compatibility (`solveSection`, single or double reinforcement, 1–2 layers), φ by εt (Table 21.2.2), shear (22.5.5.1 (a) / size-effect
+  (c)), As,min, bar fit (25.2.1), crack-control spacing (24.3.2), span / depth (9.3.1.1 / 7.3.1.1) — every TraceStep and Check names
+  its ACI 318-19 clause. **ECP 203-2020 is transcribed, never claimed verified**: every check `unverified`, a pass reads «ضمن الحد ⚑»
+  (kit `Checks` now shows ⚑ passes and `warn` levels), PDF / summary never say «مطابق» under ECP. Failures come with a reviewer's
+  note (`advice`: steel needed + bar count, two layers, «لا تحلها الكانات»…). `ductSizer` (مقاسات الدكت, mechanical, FIELD;
+  `duct-calc.ts`): Darcy + Altshul–Tsal, Huebscher De, standard air ρ 1.20 / μ 18.13 µPa·s, ε 0.09 mm — reproduces the blueprint
+  pins (441.2 mm · 0.907 · 0.840 Pa/m); fittings and unit losses are the engineer's figures. PDF headings never mix Arabic with
+  «a × b» figures (the canvas drops LRI/PDI) — figures go in kv cells.
+
+- v0.34.0: **engspace.org on a desktop** (`src/app/desk.tsx`; web only — `useDesk(!embed && !NATIVE)`, never the phone apps or the
+  device mockups). ≥ 1024 px: `DeskNav` sidebar (carries `data-tour="tabbar"` / `tab-<id>` / `notifs` / `settings` / `profile`, so the tour
+  and every e2e helper work) instead of the tab bar; tabs in centred columns (`.desk-col`, 760 px; Tools / Market 1120 px); the web
+  preview bar hides (`html[data-desk-shell]`); sheets are centred dialogs (`.desk .sheet`). ≥ 1280 px: **two panes** — the left pane is
+  the screen under the top one (or the tab), rendered through `screenFor(entry, masterApp)`; `masterApp.push` = `app.push(s, { beside:
+  true })` replaces the right pane, and pushing the same type as the open screen replaces it too (left pane title only, `noBack`).
+  «توسيع» (`useDeskFocus`, per browser) folds the left pane. Grids size to their **column** (container queries on `.desk-col`:
+  `.desk-packs`, `.desk-grid`); a tool document whose column is ≥ 1100 px shows the **live A4 preview** (`LivePreview`: docLayout +
+  drawPage 600 ms after the last edit, ≤ 8 pages). Tool / document / checklist / CV links open on the Tools tab (`TOOLS_TAB_TYPES`).
+  **Live document sync** (migration 28): a write to `tool%` / `siteProjects` pings «tools» (key + time only) on the member's own
+  channel; `toolsSoon` pulls (the store serialises pull ⇄ push: `pulling`), and an open `ToolDocScreen` takes a newer copy when it
+  holds no unsaved edit («وصل تعديل من جهاز آخر»; deleted elsewhere → missing). Dev-only `window.__engspaceTools.store()` for e2e.
+  e2e project `desktop` (1440 × 900): `desktop.spec.ts` + the tool suites.
+
+- v0.35.0: **registers** — the RFI, submittal and VO logs are built from the documents themselves (`domain/tools/registers.ts`,
+  pure: docs + today → rows, counts, overdue, average turnaround, VO money). RFI: due = date + reply days, `answeredOn` / `closed`;
+  submittal: consultant code A·B·C·D + `codeOn`, review period `days` (14); a **draft is listed but never late**. Shown under the tool
+  («المستندات | السجل», `RegisterView` in `features/tools/register.tsx`) and exported through the triad by `registerSpec` (a dated
+  `<code>-<TYPE>-LOG`, status issued, no hash → no draft band, no fingerprint; landscape; the VO log ends in live SUMs). A status
+  is a state, not a verdict: register columns never use `mark` (it would print «مطابق / غير مطابق»). New **`vo`** tool (أوامر
+  التغيير, office, **money** — never supervisors; `vo-calc.ts`): priced additions and omissions (omissions are negative lines),
+  net, share of the contract against the contract's own alert % (never a figure claimed for a law), extra time, the engineer's
+  decision. Kit: `DateField`.
+
+- v0.36.0: **craftsmanship** — motion comes from physics, not taste: `src/ui/motion.ts` samples damped springs into CSS `linear()`
+  (`--spring-snap` / `--spring-soft` / `--spring-pop` + `-d` durations, cubic-bezier fallback before an `@supports` block);
+  `tests/motion.test.ts` recomputes the tokens — **change a spring in motion.ts, then paste its new output into app.css**. Kit:
+  `Pick` with ≤ 3 short options (`isSegmented`) is a 44 px segmented control with a sliding pill (`.seg-ind`, transform only;
+  still buttons with aria-pressed); `FilterChip` has a 44 px hit area (`.hit44`); `Checks` draws a tick on a pass (`.tick`);
+  `Working` and `RowCards` unfold (`.unfold`, opacity/transform — layout never animates; chevron `.chev` turns); `ScoreRing` /
+  `ResultHero ring` (utilisation colours itself; `ringTone="accent"` for progress — IPC); document screens load as a skeleton.
+  Arabic is never letter-spaced (`[lang="ar"] :not(bdi)[class*="tracking-"]`), headings `text-wrap: balance`. Every new animation
+  stops under prefers-reduced-motion (pinned by the test).
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role

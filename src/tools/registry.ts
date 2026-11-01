@@ -9,6 +9,8 @@ import type { ToolDef, ToolPack, ToolRole } from "./types";
 
 const FIELD: ToolRole[] = ["engineer", "owner", "supervisor"];
 const MONEY: ToolRole[] = ["engineer", "owner"];
+// design reviews carry the engineer of record's liability: engineers and owners, never a site supervisor
+const DESIGN: ToolRole[] = ["engineer", "owner"];
 
 export const PACKS: { id: ToolPack; name: string; desc: string }[] = [
   { id: "workforce", name: "أدوات الصنايعية السريعة", desc: "خامات كل صنعة في ثوانٍ" },
@@ -82,6 +84,16 @@ export const TOOL_REGISTRY: ToolDef[] = [
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["sprinklerCheck"], disciplines: ["mechanical", "fire"],
   },
   {
+    id: "rcSection", pack: "structural", name: "مراجعة القطاعات الخرسانية", desc: "الانحناء والقص وحدود التسليح والبحر / العمق — بالمعادلات وبنود الكود",
+    icon: "Frame", keywords: "قطاع خرساني كمرة بلاطة عزم قص تسليح كانات ترخيم مراجعة تصميم rc section beam slab flexure shear aci 318 ecp 203 design check",
+    roles: DESIGN, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["rcSection"], disciplines: ["civil", "structural"],
+  },
+  {
+    id: "ductSizer", pack: "mechanical", name: "مقاسات الدكت", desc: "الاحتكاك المتساوي، القطر المكافئ، السرعة وفقد الضغط على مسار المؤشر",
+    icon: "Wind", keywords: "دكت مجاري هواء مقاس سرعة احتكاك فقد ضغط تكييف duct sizing equal friction velocity pressure drop hvac cfm",
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["ductSizer"], disciplines: ["mechanical", "hvac"],
+  },
+  {
     id: "cableCheck", pack: "electrical", name: "الكابل وهبوط الجهد", desc: "التيار والمعاملات ومقطع الكابل وهبوط الجهد لكل دائرة",
     icon: "Cable", keywords: "كابل هبوط الجهد مقطع قاطع تيار كهرباء cable voltage drop breaker ampacity",
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["cableCheck"], disciplines: ["electrical"],
@@ -94,12 +106,12 @@ export const TOOL_REGISTRY: ToolDef[] = [
   // ---- the salary and offer tools: money, unchanged ----
   // ---- the technical office's paperwork, with «املأ بالمهندس الذكي» (docs/AI.md → smart forms) ----
   {
-    id: "rfi", pack: "office", name: "طلب استيضاح فني RFI", desc: "السؤال والمراجع والحل المقترح وموعد الرد — جاهز للاستشاري",
+    id: "rfi", pack: "office", name: "طلب استيضاح فني RFI", desc: "السؤال والمراجع والحل المقترح وموعد الرد — وسجل الاستيضاحات بالمتأخر منها",
     icon: "FileQuestion", keywords: "استيضاح استفسار سؤال للاستشاري تعارض لوحات rfi request for information query clash",
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["rfi"],
   },
   {
-    id: "submittal", pack: "office", name: "اعتماد خامة", desc: "الخامة والمصنّع والخصائص والمرفقات وكود الاستشاري",
+    id: "submittal", pack: "office", name: "اعتماد خامة", desc: "الخامة والمصنّع والخصائص والمرفقات وكود الاستشاري — وسجل الاعتمادات",
     icon: "PackageCheck", keywords: "اعتماد خامة عينة كتالوج مواد submittal material approval sample datasheet",
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["submittal"],
   },
@@ -107,6 +119,21 @@ export const TOOL_REGISTRY: ToolDef[] = [
     id: "custody", pack: "office", name: "محضر تسليم عهدة", desc: "بنود العهدة بالكمية والحالة والرقم — توقيع الطرفين",
     icon: "Handshake", keywords: "عهدة تسليم استلام معدات أدوات مخزن custody handover equipment store",
     roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["custody"],
+  },
+  {
+    id: "qto", pack: "quantities", name: "حصر الكميات", desc: "بنود بموقعها في المشروع، أبعادها، وخصم الفتحات بقاعدة قياس معلنة",
+    icon: "Ruler", keywords: "حصر كميات مباني بياض محارة دهان بلاط عزل وزرة حفر ردم خصم الفتحات qto quantity take-off boq measurement",
+    roles: FIELD, money: false, surface: "screen", wave: 1, status: "live", docKinds: ["qto"],
+  },
+  {
+    id: "ipc", pack: "office", name: "المستخلص الجاري", desc: "السابق والحالي والإجمالي، التأمين، استهلاك الدفعة المقدمة والضريبة",
+    icon: "Receipt", keywords: "مستخلص جاري ختامي فاتورة شهادة دفع تأمين محجوز دفعة مقدمة ضريبة قيمة مضافة ipc interim payment certificate invoice retention advance vat",
+    roles: MONEY, money: true, surface: "screen", wave: 1, status: "live", docKinds: ["ipc"],
+  },
+  {
+    id: "vo", pack: "office", name: "أوامر التغيير", desc: "الإضافات والإلغاءات بالفئات، المدة الإضافية، قرار المهندس — وسجل أوامر التغيير",
+    icon: "FileDiff", keywords: "أمر تغيير أوامر تغيير أعمال إضافية إلغاء بنود مدة إضافية variation order change order vo extra works omission",
+    roles: MONEY, money: true, surface: "screen", wave: 1, status: "live", docKinds: ["vo"],
   },
   { id: "offer", pack: "money", name: "تقييم عرض عمل", desc: "مكانه من السوق بالصافي ورقمك المضاد", icon: "BadgeDollarSign", keywords: "عرض عمل offer", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
   { id: "net", pack: "money", name: "الصافي والإجمالي", desc: "حوّل بين الصافي والإجمالي", icon: "Calculator", keywords: "صافي إجمالي net gross", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },

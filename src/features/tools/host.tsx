@@ -8,10 +8,11 @@
 //  Saves are debounced (400 ms) and flushed when the screen closes; the store syncs on its own.
 // =====================================================================
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, FilePlus2, FolderOpen, Pencil, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, Eye, FilePlus2, FolderOpen, MapPin, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toolById } from "../../tools/registry";
 import { toolAllowed, toolRole } from "../../tools/gate";
-import { newDocId, type ToolDoc, type ToolHeader } from "../../data/tool-docs";
+import { newDocId, wbsPath, type DocWbs, type ToolDoc, type ToolHeader } from "../../data/tool-docs";
+import { searchDocs, zonesOf } from "../../tools/doc-search";
 import { PROJECT_CODE, blankProject, type ToolProject } from "../../data/tool-projects";
 import { contentHash } from "../../doc/hash";
 import { docLayout } from "../../doc/layout";
@@ -20,11 +21,12 @@ import { canvasMeasurer, loadDocFonts, renderDoc } from "../../doc/render";
 import type { DrawPage } from "../../doc/model";
 import { saveOrShare } from "../../lib/report-pdf";
 import { ToolTipCard } from "../ai/ToolTip";
-import { ConfirmDialog, DocPreview, ExportBar, Pick, TextField } from "../../ui/kit";
+import { Card, ConfirmDialog, DocPreview, ExportBar, Grid2, Pick, RowCards, TextField } from "../../ui/kit";
 import { Empty } from "../../ui/chrome";
 import { Num } from "../../ui/primitives";
 import { TOOL_ICONS } from "./icons";
 import { TOOL_MODULES, type ToolModule } from "./module";
+import { REGISTER_OF, RegisterView } from "./register";
 import { nextDocNo, projectFor, snapOf } from "./spec";
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -56,11 +58,17 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
   const t = toolById(id);
   const [editing, setEditing] = useState<ToolProject | null>(null);
   const [del, setDel] = useState<ToolHeader | null>(null);
+  const [q, setQ] = useState("");
+  const [zone, setZone] = useState<string | null>(null);
+  // the RFI, submittal and VO tools also show their log (register.tsx)
+  const [view, setView] = useState<"docs" | "log">("docs");
   if (!t || !toolAllowed(toolRole(app.profile), t.id)) return <div className="pt-4"><Empty title="غير متاح" body="هذه الأداة غير متاحة لنوع حسابك." action="رجوع" onAction={app.pop} /></div>;
   const Icon = TOOL_ICONS[t.icon] || FolderOpen;
   const projects: ToolProject[] = (app.toolProjects || []).filter((p: ToolProject) => !p.deleted && !p.archived);
   const active = projects.find((p) => p.id === app.activeProject) || null;
-  const docs: ToolHeader[] = (app.toolIndex || []).filter((h: ToolHeader) => (t.docKinds || []).includes(h.kind) && (!active || h.projectId === active.id));
+  const all: ToolHeader[] = searchDocs(app.toolIndex || [], "", { kinds: t.docKinds || [], projectId: active?.id || null });
+  const zones = zonesOf(all);
+  const docs: ToolHeader[] = searchDocs(all, q, { zone: zone && zones.includes(zone) ? zone : null });
   if (editing) return <ProjectEditor app={app} project={editing} onDone={() => setEditing(null)} />;
   return (
     <div className="py-4 space-y-4" data-tool={t.id}>
@@ -94,14 +102,38 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
         <FilePlus2 size={19} /> مستند جديد
       </button>
 
+      {REGISTER_OF[t.id] && (
+        <div data-register-switch>
+          <Pick<"docs" | "log"> items={[["docs", "المستندات"], ["log", "السجل"]]} value={view} onChange={(v) => setView(v)} />
+        </div>
+      )}
+      {REGISTER_OF[t.id] && view === "log" ? <RegisterView app={app} kind={REGISTER_OF[t.id]} project={active} today={today()} /> : (
       <section>
-        <h2 className="text-[13px] text-ink-2 mb-2">المستندات المحفوظة {docs.length > 0 && <Num>({docs.length})</Num>}</h2>
-        {!docs.length && <p className="p-4 rounded-2xl border border-dashed border-line-2 text-[12.5px] text-ink-3 text-center leading-relaxed">لا مستندات بعد. كل ما تكتبه يُحفظ على هذا الجهاز أولًا، ثم في حسابك.</p>}
-        <ul className="space-y-2">
+        <h2 className="text-[13px] text-ink-2 mb-2">المستندات المحفوظة {all.length > 0 && <Num>({docs.length === all.length ? all.length : `${docs.length} / ${all.length}`})</Num>}</h2>
+        {all.length > 3 && (
+          <label className="mb-2 flex items-center gap-2 h-11 px-3.5 rounded-xl bg-surface border border-line-2 focus-within:ring-2 focus-within:ring-accent">
+            <Search size={16} className="text-ink-3 shrink-0" />
+            <input value={q} onChange={(e) => setQ(e.target.value)} data-doc-search placeholder="ابحث: عنوان، رقم، مبنى، دور، عنصر…" className="w-full min-w-0 bg-transparent text-[14px] focus:outline-none" />
+          </label>
+        )}
+        {zones.length > 0 && (
+          <div className="-mx-4 px-4 mb-2 flex gap-2 overflow-x-auto no-scrollbar">
+            <button type="button" onClick={() => setZone(null)} aria-pressed={!zone} className={`shrink-0 h-9 px-3.5 rounded-full border text-[12.5px] ${!zone ? "bg-wash border-accent/40" : "bg-surface border-line-2 text-ink-2"}`}>كل المواقع</button>
+            {zones.map((z) => (
+              <button key={z} type="button" data-zone={z} onClick={() => setZone(zone === z ? null : z)} aria-pressed={zone === z} className={`shrink-0 h-9 px-3.5 rounded-full border text-[12.5px] ${zone === z ? "bg-wash border-accent/40" : "bg-surface border-line-2 text-ink-2"}`}>
+                <MapPin size={13} className="inline me-1" />{z}
+              </button>
+            ))}
+          </div>
+        )}
+        {!!all.length && !docs.length && <p className="p-4 rounded-2xl border border-dashed border-line-2 text-[12.5px] text-ink-3 text-center">لا مستند يطابق البحث.</p>}
+        {!all.length && <p className="p-4 rounded-2xl border border-dashed border-line-2 text-[12.5px] text-ink-3 text-center leading-relaxed">لا مستندات بعد. كل ما تكتبه يُحفظ على هذا الجهاز أولًا، ثم في حسابك.</p>}
+        <ul className="desk-grid space-y-2" data-doc-list>
           {docs.map((h) => (
             <li key={h.id} className="flex items-center rounded-2xl bg-surface border border-line">
               <button type="button" onClick={() => app.push({ type: "tooldoc", id: `${h.kind}:${h.id}` })} className="press min-w-0 flex-1 min-h-14 px-3.5 py-2 text-start">
                 <span className="block text-[14px] leading-snug truncate" dir="auto">{h.title || "بلا عنوان"}</span>
+                {wbsPath(h.wbs) && <span className="block text-[11.5px] text-ink-2 truncate" dir="auto" data-doc-wbs><MapPin size={11} className="inline me-1" />{wbsPath(h.wbs)}</span>}
                 <span className="block mt-0.5 text-[11.5px] text-ink-3">
                   {h.docNo ? <bdi dir="ltr" className="font-grotesk">{h.docNo} · Rev {h.rev}</bdi> : STATUS[h.status]} · <bdi dir="ltr" className="font-grotesk">{h.dateIso}</bdi>
                 </span>
@@ -112,6 +144,7 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
           ))}
         </ul>
       </section>
+      )}
       {del && (
         <ConfirmDialog
           title="حذف المستند"
@@ -131,6 +164,151 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
   );
 }
 
+// the shape of a document screen while its tool loads (no spinner, no «loading» text: the layout is already there)
+function DocSkeleton() {
+  return (
+    <div className="pt-3 space-y-3" aria-busy="true" aria-label="جارٍ التحميل" data-doc-skeleton>
+      <div className="skeleton h-12 rounded-xl" />
+      <div className="skeleton h-32 rounded-2xl" />
+      <div className="grid grid-cols-2 gap-2.5"><div className="skeleton h-12 rounded-xl" /><div className="skeleton h-12 rounded-xl" /></div>
+      <div className="skeleton h-24 rounded-2xl" />
+      <div className="skeleton h-40 rounded-2xl" />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+//  The live A4 preview (W5): a document in a wide desktop pane draws its own PDF pages beside the editor, a moment after the
+//  last edit (the same layout and drawing as «معاينة» and the exported file). Only on a desktop — a phone never pays for it.
+// ---------------------------------------------------------------------
+function usePaneWide(ref: { current: HTMLElement | null }, min: number, ready: boolean) {
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const pane = ref.current && (ref.current.closest(".desk-col") as HTMLElement | null);
+    if (!pane || typeof ResizeObserver === "undefined") {
+      setWide(false);
+      return;
+    }
+    const ro = new ResizeObserver(() => setWide(pane.clientWidth >= min));
+    ro.observe(pane);
+    setWide(pane.clientWidth >= min);
+    return () => ro.disconnect();
+  }, [ready, min]);
+  return wide;
+}
+
+const LIVE_PAGES = 8;
+
+function LivePreview({ make, dep, project }: { make: () => any; dep: unknown; project: unknown }) {
+  const [pages, setPages] = useState<DrawPage[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let live = true;
+    const t = setTimeout(async () => {
+      try {
+        await loadDocFonts();
+        if (!live) return;
+        setPages(docLayout(make(), canvasMeasurer).pages);
+        setFailed(false);
+      } catch {
+        if (live) setFailed(true);
+      }
+    }, 600);
+    return () => {
+      live = false;
+      clearTimeout(t);
+    };
+  }, [dep, project]);
+  return (
+    <div data-live-preview className="sticky top-4 max-h-[calc(100dvh-8rem)] overflow-y-auto pb-4 space-y-3">
+      <p className="flex items-center gap-1.5 text-[12px] text-ink-2">
+        <Eye size={14} /> معاينة حية {pages && <span>· <Num>{pages.length}</Num> صفحة</span>}
+      </p>
+      {failed && <p className="text-[12px] text-warn">تعذّرت المعاينة — تُحدَّث مع التعديل التالي.</p>}
+      {!pages && !failed && <div className="skeleton aspect-[210/297] w-full rounded-sm" />}
+      {pages && pages.slice(0, LIVE_PAGES).map((p, i) => <PageCanvas key={i} page={p} />)}
+      {pages && pages.length > LIVE_PAGES && <p className="text-[12px] text-ink-3 text-center">والصفحات الباقية في ملف PDF</p>}
+    </div>
+  );
+}
+
+function PageCanvas({ page }: { page: DrawPage }) {
+  const box = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    const c = ref.current, b = box.current;
+    if (!c || !b) return;
+    const land = page.orientation === "landscape";
+    const wMm = land ? 297 : 210, hMm = land ? 210 : 297;
+    const cssW = b.clientWidth || 480;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const s = (cssW * dpr) / wMm;
+    c.width = Math.round(wMm * s);
+    c.height = Math.round(hMm * s);
+    c.style.width = `${cssW}px`;
+    c.style.height = `${(cssW * hMm) / wMm}px`;
+    const ctx = c.getContext("2d");
+    if (ctx) drawPage(ctx, page, s);
+    return () => {
+      c.width = c.height = 0;
+    };
+  }, [page]);
+  return (
+    <div ref={box} className="w-full">
+      <canvas ref={ref} data-live-page className="block bg-white rounded-sm border border-line shadow-card" />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+//  Where a document belongs (W3): zone / building · level · element. The project's breakdown and the names already used in
+//  its documents are suggested; anything can be typed (a site rarely matches the drawings' breakdown exactly).
+// ---------------------------------------------------------------------
+const uniq = (xs: string[]) => [...new Set(xs.map((x) => x.trim()).filter(Boolean))];
+
+function WbsCard({ app, doc, project, readOnly, onChange }: { app: any; doc: ToolDoc; project: ToolProject | null; readOnly: boolean; onChange: (w: DocWbs) => void }) {
+  const w = doc.wbs || {};
+  const siblings: ToolHeader[] = (app.toolIndex || []).filter((h: ToolHeader) => h.projectId === doc.projectId && h.id !== doc.id);
+  const pz = project?.wbs?.zones || [];
+  const zones = uniq([...pz.map((z) => z.name), ...zonesOf(siblings)]);
+  const levels = uniq([...(pz.find((z) => z.name === w.zone)?.levels || []), ...siblings.filter((h) => h.wbs?.zone === w.zone).map((h) => h.wbs?.level || "")]);
+  const elements = uniq(siblings.filter((h) => h.wbs?.zone === w.zone && h.wbs?.level === w.level).map((h) => h.wbs?.element || ""));
+  const set = (patch: DocWbs) => !readOnly && onChange({ ...w, ...patch });
+  const id = `wbs-${doc.id}`;
+  return (
+    <Card title="الموقع في المشروع (WBS)">
+      <Grid2>
+        <TextField label="المنطقة / المبنى" list={`${id}-z`} value={w.zone || ""} onChange={(v) => set({ zone: v })} readOnly={readOnly} placeholder="برج A" data-wbs="zone" />
+        <TextField label="الدور / المنسوب" list={`${id}-l`} value={w.level || ""} onChange={(v) => set({ level: v })} readOnly={readOnly} placeholder="الدور 02" data-wbs="level" />
+      </Grid2>
+      <div className="mt-2.5">
+        <TextField label="العنصر" list={`${id}-e`} value={w.element || ""} onChange={(v) => set({ element: v })} readOnly={readOnly} placeholder="بلاطة S-04، عمود C12، شقة 3…" data-wbs="element" />
+      </div>
+      <datalist id={`${id}-z`}>{zones.map((z) => <option key={z} value={z} />)}</datalist>
+      <datalist id={`${id}-l`}>{levels.map((z) => <option key={z} value={z} />)}</datalist>
+      <datalist id={`${id}-e`}>{elements.map((z) => <option key={z} value={z} />)}</datalist>
+    </Card>
+  );
+}
+
+// the project's breakdown, typed once: each zone / building with its levels («B1، الأرضي، 01، 02، السطح»)
+function WbsEditor({ value, onChange }: { value: { name: string; levels: string[] }[]; onChange: (v: { name: string; levels: string[] }[]) => void }) {
+  const split = (s: string) => s.split(/[,،;\n]+/).map((x) => x.trim().slice(0, 40)).filter(Boolean).slice(0, 80);
+  return (
+    <RowCards<{ name: string; levels: string[] }>
+      rows={value} onChange={onChange} max={60} addLabel="منطقة / مبنى"
+      blank={() => ({ name: "", levels: [] })}
+      summary={(z) => `${z.name || "منطقة"}${z.levels.length ? ` — ${z.levels.length} دور` : ""}`}
+      render={(z, setZ) => (
+        <>
+          <TextField label="اسم المنطقة / المبنى" value={z.name} onChange={(v) => setZ({ ...z, name: v })} placeholder="برج A، المبنى الإداري، المرحلة 2" />
+          <TextField label="الأدوار (افصل بفاصلة)" value={z.levels.join("، ")} onChange={(v) => setZ({ ...z, levels: split(v) })} placeholder="B1، الأرضي، 01، 02، السطح" />
+        </>
+      )}
+    />
+  );
+}
+
 // ---------------------------------------------------------------------
 //  One document
 // ---------------------------------------------------------------------
@@ -146,6 +324,9 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
   const timer = useRef<any>(null);
   const role = toolRole(app.profile);
   const t = toolById(kind);
+  // a desktop pane wide enough (focus mode) shows the PDF beside the editor
+  const rootEl = useRef<HTMLDivElement | null>(null);
+  const wide = usePaneWide(rootEl, 1100, !!mod && !!doc);
 
   useEffect(() => {
     if (!mod) return;
@@ -184,11 +365,43 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
     }
     if (r.status === "tooBig") app.toast("المستند كبير: محفوظ على هذا الجهاز فقط");
     saved.current = r.doc;
+    // nothing typed since: hold the stored copy, so a later edit from another device can be recognised as newer
+    if (latest.current === d) setDoc(r.doc);
     if (docId === "new") app.replaceTop({ type: "tooldoc", id: `${kind}:${r.doc.id}` });
   };
   const latest = useRef<ToolDoc | null>(null);
   latest.current = doc;
   useEffect(() => () => void flush(latest.current), []);
+
+  // live sync (W5): the same document saved on another device (the phone, engspace.org on a desktop) appears here at once —
+  // but only while this screen holds no unsaved edit of its own; deleted elsewhere → «المستند غير موجود»
+  const loaded = !!doc;
+  useEffect(() => {
+    if (!loaded || docId === "new") return;
+    let off = () => {};
+    let live = true;
+    app.toolStore().then((s: any) => {
+      if (!live) return;
+      off = s.subscribe(() => {
+        const base = saved.current;
+        if (!base) return;
+        const remote: ToolDoc | null = s.get(base.id);
+        if (!remote) {
+          setMissing(true);
+          return;
+        }
+        if (latest.current === base && remote.at > base.at) {
+          saved.current = remote;
+          setDoc(remote);
+          app.toast("وصل تعديل من جهاز آخر");
+        }
+      });
+    });
+    return () => {
+      live = false;
+      off();
+    };
+  }, [loaded, docId]);
 
   const update = (next: ToolDoc) => {
     setDoc(next);
@@ -199,7 +412,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
   if (err) return <div className="pt-4"><Empty title="تعذّر فتح الأداة" body="تحقق من الاتصال ثم حاول مرة أخرى." action="رجوع" onAction={app.pop} /></div>;
   if (!t || !toolAllowed(role, kind)) return <div className="pt-4"><Empty title="غير متاح" body="هذه الأداة غير متاحة لنوع حسابك." action="رجوع" onAction={app.pop} /></div>;
   if (missing) return <div className="pt-4"><Empty title="المستند غير موجود" body="ربما حُذف من جهاز آخر." action="رجوع" onAction={app.pop} /></div>;
-  if (!mod || !doc) return <div className="py-16 text-center text-[13px] text-ink-3">جارٍ التحميل…</div>;
+  if (!mod || !doc) return <DocSkeleton />;
 
   const projects: ToolProject[] = app.toolProjects || [];
   const project = projects.find((p) => p.id === doc.projectId && !p.deleted) || null;
@@ -249,11 +462,25 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
       setBusy(null);
     }
   };
+  // a new document of this kind in the same project, saved and opened (the next payment certificate from this one…)
+  const spawn = async (body: any, title: string) => {
+    const s = await app.toolStore();
+    const d: ToolDoc = {
+      id: newDocId(), kind, v: mod.v, at: 0, createdAt: Date.now(), projectId: doc.projectId, title,
+      dateIso: today(), docNo: null, rev: "00", status: "draft", profile: mod.profile, body, photos: {}, log: [],
+    };
+    const r = await s.save(d);
+    if (r.status === "failed") {
+      app.toast("تعذّر الحفظ على الجهاز — المساحة ممتلئة؟");
+      return;
+    }
+    app.push({ type: "tooldoc", id: `${kind}:${r.doc.id}` });
+  };
   const xlsx = async () => {
     setBusy("جارٍ إنشاء ملف Excel…");
     try {
-      const { specXlsx, XLSX_MIME } = await import("../../doc/xlsx");
-      const bytes = specXlsx(spec());
+      const { specXlsx, workbookXlsx, XLSX_MIME } = await import("../../doc/xlsx");
+      const bytes = mod.workbook ? workbookXlsx(mod.workbook(doc, projectFor(doc, projects))) : specXlsx(spec());
       const name = `${(doc.docNo || `${mod.docType}-draft`).replace(/[^\w.-]+/g, "_")}-Rev${doc.rev}.xlsx`;
       await saveOrShare(bytes, name, doc.title, XLSX_MIME);
     } catch {
@@ -300,9 +527,11 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
 
   const Editor = mod.Editor;
   return (
-    <div className="pt-3 flex flex-col min-h-full" data-tool={kind}>
-      <div className="space-y-3 pb-4">
+    <div ref={rootEl} className="pt-3 flex flex-col min-h-full" data-tool={kind}>
+      <div className="doc-split">
+      <div className="space-y-3 pb-4 min-w-0">
         <TextField label="عنوان المستند" value={doc.title} onChange={(v) => !readOnly && update({ ...doc, title: v })} readOnly={readOnly} />
+        <WbsCard app={app} doc={doc} project={project} readOnly={readOnly} onChange={(wbs) => update({ ...doc, wbs })} />
         <div className="grid grid-cols-2 gap-2.5">
           <label className="block">
             <span className="block text-[12px] text-ink-2 mb-1">التاريخ</span>
@@ -325,8 +554,10 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
             : <button type="button" onClick={revise} className="press shrink-0 min-h-10 px-3.5 rounded-lg bg-surface border border-line-2 text-[12.5px]">مراجعة جديدة</button>}
         </div>
         {doc.v > mod.v && <p className="text-[12px] text-warn">هذا المستند من إصدار أحدث من التطبيق — يُعرض للقراءة فقط. حدّث التطبيق لتعديله.</p>}
-        <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }) }} />
+        <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }), spawn }} />
         {!readOnly && <ToolTipCard app={app} kind={doc.kind} summary={mod.summary(doc)} />}
+      </div>
+      <aside className="doc-live">{wide && <LivePreview make={spec} dep={doc} project={project} />}</aside>
       </div>
       <ExportBar busy={busy} onPreview={preview} onPdf={pdf} onDocx={docx} onXlsx={xlsx} onShare={share} />
       {pages && <DocPreview pages={pages} onClose={() => setPages(null)} draw={(c, p, s) => {
@@ -388,6 +619,9 @@ export function ProjectEditor({ app, project, onDone }: { app: any; project: Too
       <TextField label="الموقع" value={p.location.site} onChange={(v) => setP({ ...p, location: { ...p.location, site: v } })} />
       <TextField label="المدينة" value={p.location.city || ""} onChange={(v) => setP({ ...p, location: { ...p.location, city: v } })} />
       <TextField label="رقم العقد / المرجع" dir="ltr" value={p.contractNo || ""} onChange={(v) => setP({ ...p, contractNo: v })} />
+      <h2 className="pt-2 text-[13.5px] font-medium">تقسيم المشروع (WBS)</h2>
+      <p className="text-[11.5px] text-ink-3 leading-relaxed">المناطق والمباني وأدوارها — تُقترح عند حفظ أي مستند في مكانه من المشروع.</p>
+      <WbsEditor value={p.wbs?.zones || []} onChange={(zones) => setP({ ...p, wbs: { zones } })} />
       <h2 className="pt-2 text-[13.5px] font-medium">التوقيعات</h2>
       {([["prepared", "أعدّ"], ["checked", "راجع"], ["approved", "اعتمد"]] as const).map(([r, l]) => (
         <div key={r} className="grid grid-cols-2 gap-2">

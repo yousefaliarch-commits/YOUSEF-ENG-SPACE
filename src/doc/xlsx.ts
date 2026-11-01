@@ -96,6 +96,8 @@ function tokenize(src: string): Tok[] | null {
     if (rng && !/^[A-Z]+\(/.test(s.slice(i))) { out.push({ t: "ref", v: rng[0].replace(/\$/g, "") }); i += rng[0].length; continue; }
     const id = /^[A-Z][A-Z0-9.]*/.exec(s.slice(i));
     if (id) { out.push({ t: "id", v: id[0] }); i += id[0].length; continue; }
+    const cmp = /^(<=|>=|<>|<|>|=)/.exec(s.slice(i));
+    if (cmp) { out.push({ t: "op", v: cmp[0] }); i += cmp[0].length; continue; }
     if ("+-*/^(),".includes(c)) { out.push({ t: "op", v: c }); i++; continue; }
     return null;
   }
@@ -123,7 +125,8 @@ function cellsOf(range: string, get: (r: string) => number | null): (number | nu
   return out;
 }
 
-// numbers, references, + − × ÷ ^, unary minus, brackets and the functions the tools use; null when it cannot evaluate
+// numbers, references, + − × ÷ ^, unary minus, brackets, comparisons, IF and the functions the tools use; null when it cannot
+// evaluate
 export function evalFormula(formula: string, get: (r: string) => number | null): number | null {
   const toks = tokenize(formula);
   if (!toks) return null;
@@ -154,7 +157,7 @@ export function evalFormula(formula: string, get: (r: string) => number | null):
       return v.length === 1 ? v[0] : null;
     }
     if (t.t === "op" && t.v === "(") {
-      const v = expr();
+      const v = cmpExpr();
       if (take()?.v !== ")") throw 0;
       return v;
     }
@@ -163,6 +166,16 @@ export function evalFormula(formula: string, get: (r: string) => number | null):
       return v == null ? null : -v;
     }
     if (t.t === "op" && t.v === "+") return power();
+    if (t.t === "id" && t.v === "IF" && peek()?.v === "(") {
+      take();
+      const c = cmpExpr();
+      if (take()?.v !== ",") throw 0;
+      const a = cmpExpr();
+      let b: number | null = 0;
+      if (peek()?.v === ",") { take(); b = cmpExpr(); }
+      if (take()?.v !== ")") throw 0;
+      return c == null ? null : c !== 0 ? a : b;
+    }
     if (t.t === "id" && FN[t.v] && peek()?.v === "(") {
       take();
       const args: (number | null)[][] = [];
@@ -170,7 +183,7 @@ export function evalFormula(formula: string, get: (r: string) => number | null):
         for (;;) {
           if (peek()?.t === "ref" && toks[p + 1] && (toks[p + 1].v === "," || toks[p + 1].v === ")") && toks[p].v.includes(":")) {
             args.push(cellsOf(take().v, get));
-          } else args.push([expr()]);
+          } else args.push([cmpExpr()]);
           if (peek()?.v === ",") { take(); continue; }
           break;
         }
@@ -207,8 +220,22 @@ export function evalFormula(formula: string, get: (r: string) => number | null):
     }
     return v;
   };
+  // comparisons give 1 / 0, as Excel's TRUE / FALSE do in arithmetic
+  const cmpExpr = (): number | null => {
+    const a = expr();
+    const op = peek()?.v;
+    if (op && ["<", ">", "<=", ">=", "=", "<>"].includes(op)) {
+      take();
+      const b = expr();
+      if (a == null || b == null) return null;
+      const eps = 1e-9;
+      const r = op === "<" ? a < b - eps : op === ">" ? a > b + eps : op === "<=" ? a <= b + eps : op === ">=" ? a >= b - eps : op === "=" ? Math.abs(a - b) <= eps : Math.abs(a - b) > eps;
+      return r ? 1 : 0;
+    }
+    return a;
+  };
   try {
-    const v = expr();
+    const v = cmpExpr();
     if (p !== toks.length) return null;
     return v != null && Number.isFinite(v) ? v : null;
   } catch {

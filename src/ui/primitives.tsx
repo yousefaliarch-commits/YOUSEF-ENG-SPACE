@@ -46,7 +46,7 @@ export const Chip = ({ children, tone = "default", className = "" }: any) => {
 
 export const FilterChip = ({ on, children, onClick }: any) => (
   <button type="button" aria-pressed={on} onClick={onClick}
-    className={`shrink-0 inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full border text-[12.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+    className={`hit44 shrink-0 inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full border text-[12.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
         on ? "bg-wash border-accent/40 text-ink" : "bg-surface border-line-2 text-ink-2 hover:text-ink"}`}>{children}</button>
 );
 

@@ -75,6 +75,25 @@ describe("two phones on one account", () => {
     expect(B.headers().map((h) => h.title)).toEqual(["خطة صب السقف"]);
   });
 
+  it("a live ping's pull never runs beside a push: both finish, nothing is lost, the cloud is asked in turn", async () => {
+    const { port, rows } = fakeCloud();
+    let inFlight = 0, overlap = false;
+    const slow: CloudPort = {
+      stamps: async () => { inFlight++; if (inFlight > 1) overlap = true; await new Promise((r) => setTimeout(r, 5)); inFlight--; return port.stamps(); },
+      rows: port.rows,
+      save: async (k, v) => { inFlight++; if (inFlight > 1) overlap = true; await new Promise((r) => setTimeout(r, 5)); inFlight--; return port.save(k, v); },
+    };
+    const A = await phone(slow);
+    await A.save(doc("يومية الأحد"));
+    const [, pulled] = await Promise.all([A.flush(), A.pull(), A.pull()]);
+    expect(pulled.status).toBe("ok");
+    expect(overlap).toBe(false);
+    expect([...rows.keys()].some((k) => k.startsWith("toolShelf"))).toBe(true);
+    const B = await phone(port);
+    await B.pull();
+    expect(B.headers().map((h) => h.title)).toEqual(["يومية الأحد"]);
+  });
+
   it("a deletion on A is not resurrected by B", async () => {
     const { port } = fakeCloud();
     const A = await phone(port), B = await phone(port);
