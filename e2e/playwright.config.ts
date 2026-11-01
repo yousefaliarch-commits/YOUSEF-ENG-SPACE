@@ -28,7 +28,7 @@ export default defineConfig({
     { name: "ios", testIgnore: /desktop\.spec\.ts/, use: webkit ? { ...devices["iPhone 15"] } : { ...iphoneNoEngine, ...chromiumUse } },
     {
       name: "desktop",
-      testMatch: /(desktop|tools|technical-office|project-wbs|design-checks|export-triad|registers)\.spec\.ts/,
+      testMatch: /(desktop|tools|technical-office|project-wbs|design-checks|export-triad|registers|boq)\.spec\.ts/,
       use: { ...desktop, viewport: { width: 1440, height: 900 }, ...chromiumUse },
     },
   ],

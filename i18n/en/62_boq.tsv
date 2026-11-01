@@ -1,0 +1,53 @@
+# BOQ import into the certificate and «send to the certificate» from the take-off (W8)
+d48fb122	No description and quantity columns were found — choose the columns by hand
+6f010c59	Row {0}: the quantity «{1}» is not a number
+c50ea0da	Row {0}: the rate «{1}» is not a number
+f18a9f22	Row {0}: no unit
+241387f2	Row {0}: no rate
+76c89da7	Row {0}: item code {1} is repeated (row {2})
+a35bbd16	Row {0}: quantity × rate = {1} does not equal the amount {2}
+97176f92	Could not read the Excel file — save it as .xlsx or CSV and try again.
+ccfddf68	The file is empty.
+7e952c14	Import the bill of quantities (BOQ)
+36dbc45c	From Excel, CSV or a paste from a table
+1529edde	File
+c4c24c20	Or paste the rows from Excel (with the header row)
+22f2c949	Paste
+b989cdd3	Sheet
+7dc96daf	items
+f07fc3c4	errors
+409d650c	warnings
+45508bb5	Columns used
+f649903f	Columns used {0}
+b9376228	Header row
+a208204a	more notes
+fffbe55c	and {0} more notes
+4af3ce37	Fix the errors in the file and import again — nothing is saved before that.
+ef8d29bf	Replace the items
+7a5803b4	Add to the items
+d58d933d	Replacing keeps the previous and this-period quantities of items whose code is unchanged.
+7b5c7a76	Certificate updated — {0} items
+e15c7475	Could not update the certificate
+061ed211	Send to the certificate
+d93a7b39	The measured quantity of each BOQ item becomes the cumulative quantity in a draft certificate of the same project: this period = measured − previous.
+66f65efd	BOQ items
+10fe2e23	{0} BOQ items{1}
+20446367	lines with no item code
+fa6d3151	· {0} lines with no item code
+582a6421	Enter the «BOQ item» on the take-off lines first.
+eea739cd	No draft certificate in this project — create one in the interim payment certificate tool, then come back.
+79f0a137	Certificate
+489dbfb7	: measured
+de08861b	− previous
+49371158	{0}: measured {1} − previous {2} = {3}{4}
+ff6f9ba4	(correction)
+de1be92d	: unit in the certificate
+70e16cde	and in the take-off
+ce1f4e0f	— not sent
+8b9355da	{0}: unit in the certificate {1} and in the take-off {2} — not sent
+5f5f834b	: not in the certificate — not sent
+de9a99e8	{0}: not in the certificate — not sent
+bca298aa	Update the certificate
+3bd547ff	Open the certificate
+4c9d800b	BOQ item (optional)
+7a897072	BOQ item

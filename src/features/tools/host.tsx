@@ -341,6 +341,9 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
         if (live) setDoc(d);
         return;
       }
+      // the new document just took its own id (replaceTop keeps this screen mounted): it is already here — reloading the
+      // stored copy could undo a keystroke typed while it was being saved
+      if (saved.current && saved.current.id === docId) return;
       const s = await app.toolStore();
       const d = s.get(docId);
       if (!live) return;

@@ -18,6 +18,8 @@ import { Card, Grid2, Note, NumField, Pick, ResultHero, RowCards, TextField, Wor
 import { numInputParse } from "../../../lib/num-input";
 import { Num } from "../../../ui/primitives";
 import type { ToolModule } from "../module";
+import type { BoqRow } from "../../../domain/tools/boq";
+import { BoqImportCard } from "./boq-ui";
 import { buildSpec, issuerName } from "../spec";
 
 type Item = { id: string; section: string; ref: string; desc: string; unit: string; qc: string; rate: string; qp: string; qq: string };
@@ -34,6 +36,18 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 const N = (s: string | undefined) => numInputParse(s || "") ?? 0;
 const money = (x: number) => fmtNum(x, 2);
 const whole = (x: number) => fmtNum(x, 0);
+
+// a BOQ import (boq-ui.tsx): «replace» keeps what was already certified for every item whose code is unchanged — re-importing
+// a revised BOQ mid-contract never loses progress; «append» adds the rows as new items. A blank «previous» is 0.
+export function itemsFromBoq(items: Item[], rows: BoqRow[], mode: "replace" | "append"): Item[] {
+  const byRef = new Map(items.filter((x) => x.ref.trim()).map((x) => [x.ref.trim(), x]));
+  const fresh = rows.map((r) => {
+    const old = mode === "replace" && r.ref ? byRef.get(r.ref) : undefined;
+    return { id: old ? old.id : uid(), section: r.section, ref: r.ref, desc: r.desc, unit: r.unit, qc: String(r.qty), rate: String(r.rate), qp: old ? old.qp : "0", qq: old ? old.qq : "" };
+  });
+  const kept = items.filter((x) => x.desc.trim() || x.ref.trim() || x.qc.trim());
+  return mode === "replace" ? fresh : [...kept, ...fresh];
+}
 
 const blankItem = (prev?: Item): Item => ({ id: uid(), section: prev?.section || "", ref: "", desc: "", unit: prev?.unit || "م³", qc: "", rate: "", qp: "0", qq: "" });
 const blank = (): Body => ({
@@ -134,6 +148,7 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
           <Pick label="وعاء الضريبة" items={[["gross", "إجمالي أعمال الفترة"], ["net", "الصافي بعد التأمين والدفعة"]]} value={b.vatOn} onChange={(vatOn) => put({ vatOn })} />
         </div>
       </Card>
+      <BoqImportCard ro={ro} onApply={(rows, mode) => put({ items: itemsFromBoq(b.items, rows, mode) })} />
       <Card title={`بنود الأعمال (${b.items.length})`}>
         <RowCards<Item>
           rows={b.items} onChange={(items) => put({ items })} max={500} addLabel="بند جديد"
