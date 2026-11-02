@@ -225,6 +225,10 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   الإعدادات → «أمان فريق الإدارة» flips the switch. Local `config.toml` enables TOTP; tests: pgTAP 22, `tests/staff-mfa.test.ts`, and
   the cloud suite enrols a real authenticator (RFC 6238 codes) and checks password-only sessions lose staff powers when on.
 
+- **Website** (docs/WEB.md): **Deploy website** workflow → Cloudflare Pages (`engspace.pages.dev`; pull requests get
+  `<branch>.engspace.pages.dev`). Secrets `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` (absent → a notice, never a failure); variables
+  `PAGES_PROJECT`, `PUBLIC_URL`. Each deploy adds the site to Supabase Auth redirect URLs (merged, never replaced). `public/_headers` sets caching.
+
 - Phase 1 (docs/SECURITY.md): **default deny** — no function callable by PUBLIC / anon, none by members without an explicit
   `grant execute … to authenticated` in its migration; no TRUNCATE / TRIGGER / REFERENCES for members (pgTAP 18 fails otherwise;
   `pg_temp` test helpers need `grant execute … to public`). Rate limits on every member write path (`private.limit_writes`); role
