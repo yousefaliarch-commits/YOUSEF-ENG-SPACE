@@ -1,0 +1,120 @@
+# The website on Cloudflare Pages — the same build the phones get as a live update, served at https://<project>.pages.dev.
+#  · push to main      → the production address (https://engspace.pages.dev, or the name Cloudflare gave the project)
+#  · a pull request    → its own preview address (https://<branch>.engspace.pages.dev), written in the run's summary
+#  · Run workflow      → deploys the chosen branch by hand
+# Needs two repository secrets: CLOUDFLARE_API_TOKEN (a token with "Cloudflare Pages: Edit") and CLOUDFLARE_ACCOUNT_ID.
+# Without them the run ends with a notice ("not set up yet"), never a red cross. Optional repository variables:
+# PAGES_PROJECT (default engspace) and PUBLIC_URL (e.g. https://engspace.org once the domain points here — share links use it).
+# After a deploy, the site's address is added to Supabase Auth's redirect list (keeps every entry already there), so e-mail
+# links, password reset and Google / Apple sign-in come back to the site instead of being refused.
+name: Deploy website
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["supabase/**", "docs/**", "graphify-out/**", "**/*.md", "android/**", "ios/**"]
+  pull_request:
+    paths-ignore: ["supabase/**", "docs/**", "graphify-out/**", "**/*.md", "android/**", "ios/**"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: deploy-web-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # a pull request from a fork gets no secrets — nothing to deploy with
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      PROJECT_REF: cyziykbqldtxyquqvvkr
+      PAGES_PROJECT: ${{ vars.PAGES_PROJECT || 'engspace' }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Cloudflare credentials
+        id: creds
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::notice title=Website not set up yet::add the repository secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (docs/WEB.md)"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.creds.outputs.ready == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.creds.outputs.ready == 'true'
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+        if: steps.creds.outputs.ready == 'true'
+      - name: Build
+        if: steps.creds.outputs.ready == 'true'
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_PUBLIC_URL: ${{ vars.PUBLIC_URL }}
+        run: |
+          npm run build
+          # the site must talk to the live backend, never fall back to the demo
+          grep -rq "$PROJECT_REF" dist/assets || { echo "::error::the build has no live backend keys (repository secrets VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY)"; exit 1; }
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        if: steps.creds.outputs.ready == 'true'
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          W="npx --yes wrangler@3"
+          # first run: create the project (production branch = main); later runs: it exists, carry on
+          $W pages project create "$PAGES_PROJECT" --production-branch main >/dev/null 2>&1 || true
+          out=$($W pages deploy dist --project-name "$PAGES_PROJECT" --branch "$BRANCH" --commit-dirty=true 2>&1 | tee /dev/stderr)
+          url=$(echo "$out" | grep -oE 'https://[a-zA-Z0-9.-]+\.pages\.dev' | tail -1)
+          test -n "$url"
+          # the stable address: production for main, the branch alias for a pull request
+          sub=$($W pages project list 2>/dev/null | grep -oE "[a-zA-Z0-9-]*${PAGES_PROJECT}[a-zA-Z0-9-]*\.pages\.dev" | head -1 || true)
+          if [ -n "$sub" ] && [ "$BRANCH" = "main" ]; then
+            stable="https://$sub"
+          elif [ -n "$sub" ]; then
+            alias=$(echo "$BRANCH" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-28 | sed -E 's/-+$//')
+            stable="https://$alias.$sub"
+          else
+            stable="$url"
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "stable=$stable" >> "$GITHUB_OUTPUT"
+          echo "sub=$sub" >> "$GITHUB_OUTPUT"
+          {
+            echo "### EngSpace website"
+            echo ""
+            echo "- **Open:** $stable/#app"
+            echo "- Admin console: $stable/#admin"
+            echo "- This exact deploy: $url"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::notice title=Website live::$stable/#app"
+      - name: Allow the site in Supabase Auth redirects
+        if: steps.creds.outputs.ready == 'true' && steps.deploy.outputs.sub != ''
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUB: ${{ steps.deploy.outputs.sub }}
+          PUBLIC_URL: ${{ vars.PUBLIC_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then echo "::notice::no SUPABASE_ACCESS_TOKEN — add https://$SUB/** to Auth → URL Configuration by hand"; exit 0; fi
+          api="https://api.supabase.com/v1/projects/$PROJECT_REF/config/auth"
+          cur=$(curl -fsS "$api" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
+          # keep every entry already there; add the production address, the preview branches and the custom domain (when set)
+          next=$(CUR="$cur" node -e '
+            const c = JSON.parse(process.env.CUR);
+            const have = String(c.uri_allow_list || "").split(",").map((s) => s.trim()).filter(Boolean);
+            const want = [`https://${process.env.SUB}/**`, `https://*.${process.env.SUB}/**`];
+            if (process.env.PUBLIC_URL) want.push(process.env.PUBLIC_URL.replace(/\/+$/, "") + "/**");
+            const add = want.filter((u) => !have.includes(u));
+            process.stdout.write(add.length ? [...have, ...add].join(",") : "");
+          ')
+          if [ -z "$next" ]; then echo "Auth redirects already allow the site"; exit 0; fi
+          body=$(NEXT="$next" node -e 'process.stdout.write(JSON.stringify({ uri_allow_list: process.env.NEXT }))')
+          curl -fsS -X PATCH "$api" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d "$body" >/dev/null
+          echo "::notice title=Supabase Auth::redirects now allow https://$SUB"
