@@ -13,7 +13,7 @@ import { toolById } from "../../tools/registry";
 import { toolAllowed, toolRole } from "../../tools/gate";
 import { newDocId, wbsPath, type DocWbs, type ToolDoc, type ToolHeader } from "../../data/tool-docs";
 import { searchDocs, zonesOf } from "../../tools/doc-search";
-import { PROJECT_CODE, blankProject, type ToolProject } from "../../data/tool-projects";
+import { PROJECT_CODE, blankProject, type SignRole, type ToolProject } from "../../data/tool-projects";
 import { contentHash } from "../../doc/hash";
 import { docLayout } from "../../doc/layout";
 import { drawPage } from "../../doc/draw";
@@ -21,13 +21,15 @@ import { canvasMeasurer, loadDocFonts, renderDoc } from "../../doc/render";
 import type { DrawPage } from "../../doc/model";
 import { saveOrShare } from "../../lib/report-pdf";
 import { ToolTipCard } from "../ai/ToolTip";
-import { Card, ConfirmDialog, DocPreview, ExportBar, Grid2, Pick, RowCards, TextField } from "../../ui/kit";
+import { Advanced, Card, ConfirmDialog, DocPreview, ExportBar, Grid2, Pick, RowCards, TextField } from "../../ui/kit";
 import { Empty } from "../../ui/chrome";
-import { Num } from "../../ui/primitives";
+import { FilterChip, Num } from "../../ui/primitives";
 import { TOOL_ICONS } from "./icons";
 import { TOOL_MODULES, type ToolModule } from "./module";
 import { REGISTER_OF, RegisterView } from "./register";
-import { nextDocNo, projectFor, snapOf } from "./spec";
+import { DocSettings, IssueDialog } from "./doc-settings";
+import { DOCNO_DEFAULT, DOCNO_PRESETS, applyDocControls, controlsForHash, defaultSign, docNoPatternProblem, formatDocNo, nextRev, withRevision } from "../../data/doc-controls";
+import { SIGN_LABEL, nextDocNo, projectFor, snapOf } from "./spec";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -421,7 +423,8 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
   const project = projects.find((p) => p.id === doc.projectId && !p.deleted) || null;
   const readOnly = doc.status !== "draft" || doc.v > mod.v;
   const setBody = (body: any) => !readOnly && update({ ...doc, body });
-  const spec = () => mod.build(doc, projectFor(doc, projects));
+  // the tool's own document, then what the engineer set on this one (revision table, scale, reference, signature boxes)
+  const spec = () => applyDocControls(mod.build(doc, projectFor(doc, projects)), doc);
 
   const preview = async () => {
     setBusy("جارٍ التحضير…");
@@ -511,20 +514,24 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
       }
     }
   };
-  const issue = async () => {
+  const issue = async (desc: string) => {
     setConfirmIssue(false);
-    const { docNo, n } = doc.docNo ? { docNo: doc.docNo, n: 0 } : nextDocNo(project, mod.docType);
+    const { docNo, n } = doc.docNo ? { docNo: doc.docNo, n: 0 } : nextDocNo(project, mod.docType, doc.dateIso);
     const snap = project ? snapOf(project) : undefined;
-    const frozen = { ...doc, docNo, status: "issued" as const, issuedAt: Date.now(), project: snap };
-    const hash = await contentHash({ kind: frozen.kind, v: frozen.v, body: frozen.body, profile: frozen.profile, project: snap || null, docNo, rev: frozen.rev, engine: mod.engine });
+    const who = (role: string) => snap?.signatories.find((x) => x.role === role)?.name;
+    // the revision table's row for this issue: its code, date and purpose, with the three names as they are today
+    const revs = withRevision(doc.revs, { rev: doc.rev, dateIso: today(), desc, prepared: who("prepared"), checked: who("checked"), approved: who("approved") });
+    const frozen = { ...doc, docNo, status: "issued" as const, issuedAt: Date.now(), project: snap, revs };
+    const hash = await contentHash({ kind: frozen.kind, v: frozen.v, body: frozen.body, profile: frozen.profile, project: snap || null, docNo, rev: frozen.rev, engine: mod.engine, controls: controlsForHash(frozen) });
     const next = { ...frozen, hash, log: [...doc.log, { at: Date.now(), what: "issue", note: `${docNo} Rev ${doc.rev}` }].slice(-50) };
     if (project && n) app.saveToolProject({ ...project, at: Date.now(), numbering: { ...project.numbering, counters: { ...project.numbering.counters, [mod.docType]: n } } });
     setDoc(next);
     await flush(next);
     app.toast(`صدر المستند ${docNo}`);
   };
+  // the next revision follows the document's own scheme (00 → 01 · A → B · P01 → P02); the issued history stays
   const revise = () => {
-    const r = String(Number(doc.rev || "0") + 1).padStart(2, "0");
+    const r = nextRev(doc.rev);
     update({ ...doc, rev: r, status: "draft", issuedAt: undefined, hash: undefined, project: undefined, log: [...doc.log, { at: Date.now(), what: "revise", note: `Rev ${r}` }].slice(-50) });
   };
 
@@ -556,6 +563,11 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
             ? <button type="button" onClick={() => setConfirmIssue(true)} className="press shrink-0 min-h-10 px-3.5 rounded-lg bg-accent text-on-accent text-[12.5px] font-medium">إصدار</button>
             : <button type="button" onClick={revise} className="press shrink-0 min-h-10 px-3.5 rounded-lg bg-surface border border-line-2 text-[12.5px]">مراجعة جديدة</button>}
         </div>
+        <DocSettings
+          doc={doc} readOnly={readOnly} referenceHint={project?.contractNo}
+          defaults={() => defaultSign(mod.build(doc, projectFor(doc, projects)))}
+          onChange={(patch) => update({ ...doc, ...patch })}
+        />
         {doc.v > mod.v && <p className="text-[12px] text-warn">هذا المستند من إصدار أحدث من التطبيق — يُعرض للقراءة فقط. حدّث التطبيق لتعديله.</p>}
         <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }), spawn }} />
         {!readOnly && <ToolTipCard app={app} kind={doc.kind} summary={mod.summary(doc)} />}
@@ -570,15 +582,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
         const ctx = c.getContext("2d");
         if (ctx) drawPage(ctx, p, s);
       }} />}
-      {confirmIssue && (
-        <ConfirmDialog
-          title="إصدار المستند"
-          body="يأخذ المستند رقمه ويُجمَّد بنصه وأرقامه وبيانات المشروع كما هي الآن. أي تعديل لاحق يكون مراجعة جديدة."
-          yes="أصدر"
-          onNo={() => setConfirmIssue(false)}
-          onYes={() => void issue()}
-        />
-      )}
+      {confirmIssue && <IssueDialog first={!(doc.revs && doc.revs.length)} rev={doc.rev} onCancel={() => setConfirmIssue(false)} onIssue={(desc) => void issue(desc)} />}
     </div>
   );
 }
@@ -587,15 +591,23 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
 //  Project profile
 // ---------------------------------------------------------------------
 const ISSUERS: [ToolProject["issuerRole"], string][] = [["contractor", "المقاول"], ["consultant", "الاستشاري"], ["client", "المالك"], ["subcontractor", "مقاول الباطن"]];
+// the three classic boxes are always on the form; the other roles the tools print (site engineer, consultant's engineer,
+// HSE officer, store keeper…) fold away — typed once here, they fill every document that carries that box
+const MAIN_SIGN: SignRole[] = ["prepared", "checked", "approved"];
+const MORE_SIGN: SignRole[] = ["siteEngineer", "contractorRep", "consultantRep", "hseOfficer", "supervisor", "storeKeeper", "requester", "issuer", "acceptor"];
+const signName = (r: SignRole) => SIGN_LABEL[r].split(" · ")[0];
 
 export function ProjectEditor({ app, project, onDone }: { app: any; project: ToolProject; onDone: () => void }) {
   const [p, setP] = useState<ToolProject>(project);
   const [askDel, setAskDel] = useState(false);
   const exists = (app.toolProjects || []).some((x: ToolProject) => x.id === project.id);
   const codeOk = PROJECT_CODE.test(p.code);
-  const sig = (role: "prepared" | "checked" | "approved") => p.signatories.find((s) => s.role === role) || { role, name: "" };
-  const setSig = (role: "prepared" | "checked" | "approved", patch: any) =>
+  const sig = (role: SignRole) => p.signatories.find((s) => s.role === role) || { role, name: "" };
+  const setSig = (role: SignRole, patch: { name?: string; title?: string }) =>
     setP({ ...p, signatories: [...p.signatories.filter((s) => s.role !== role), { ...sig(role), ...patch }] });
+  const pattern = p.numbering.pattern || "";
+  const patternProblem = docNoPatternProblem(pattern);
+  const setNumbering = (patch: Partial<ToolProject["numbering"]>) => setP({ ...p, numbering: { ...p.numbering, ...patch } });
   const party = (k: "client" | "consultant" | "contractor" | "subcontractor", label: string) => (
     <TextField label={label} value={(p as any)[k]?.name || ""} onChange={(v) => setP({ ...p, [k]: { ...((p as any)[k] || {}), name: v } })} />
   );
@@ -604,7 +616,13 @@ export function ProjectEditor({ app, project, onDone }: { app: any; project: Too
       app.toast(!p.name.trim() ? "اكتب اسم المشروع" : "رمز المشروع: من 2 إلى 8 حروف إنجليزية كبيرة أو أرقام");
       return;
     }
-    app.saveToolProject({ ...p, at: Date.now() });
+    if (patternProblem) {
+      app.toast(`نمط الترقيم: ${patternProblem}`);
+      return;
+    }
+    // signatories with no name are not stored (the box still prints, empty, for a wet signature)
+    const signatories = p.signatories.filter((x) => MAIN_SIGN.includes(x.role) || x.name.trim() || (x.title || "").trim());
+    app.saveToolProject({ ...p, signatories, numbering: { ...p.numbering, pattern: pattern.trim() || undefined }, at: Date.now() });
     app.setActiveProject(p.id);
     onDone();
   };
@@ -626,12 +644,34 @@ export function ProjectEditor({ app, project, onDone }: { app: any; project: Too
       <p className="text-[11.5px] text-ink-3 leading-relaxed">المناطق والمباني وأدوارها — تُقترح عند حفظ أي مستند في مكانه من المشروع.</p>
       <WbsEditor value={p.wbs?.zones || []} onChange={(zones) => setP({ ...p, wbs: { zones } })} />
       <h2 className="pt-2 text-[13.5px] font-medium">التوقيعات</h2>
-      {([["prepared", "أعدّ"], ["checked", "راجع"], ["approved", "اعتمد"]] as const).map(([r, l]) => (
+      {MAIN_SIGN.map((r) => (
         <div key={r} className="grid grid-cols-2 gap-2">
-          <TextField label={`${l} — الاسم`} value={sig(r).name} onChange={(v) => setSig(r, { name: v })} />
+          <TextField label={`${signName(r)} — الاسم`} value={sig(r).name} onChange={(v) => setSig(r, { name: v })} />
           <TextField label="الوظيفة" value={sig(r).title || ""} onChange={(v) => setSig(r, { title: v })} />
         </div>
       ))}
+      <Advanced title="توقيعات أخرى" hint="مهندس الموقع، الاستشاري، السلامة، المخزن…" changed={MORE_SIGN.filter((r) => sig(r).name.trim()).length} data-project-signs="">
+        <p className="text-[11.5px] text-ink-3 leading-relaxed">تُكتب مرة هنا فتملأ خانتها في كل مستند يحملها. الخانة الفارغة تُطبع للتوقيع اليدوي.</p>
+        {MORE_SIGN.map((r) => (
+          <div key={r} className="grid grid-cols-2 gap-2">
+            <TextField label={`${signName(r)} — الاسم`} value={sig(r).name} onChange={(v) => setSig(r, { name: v })} data-sign-role={r} />
+            <TextField label="الوظيفة" value={sig(r).title || ""} onChange={(v) => setSig(r, { title: v })} />
+          </div>
+        ))}
+      </Advanced>
+      <Advanced title="ترقيم المستندات" hint="نمط رقم المستند ورمز الجهة المُصدِرة" changed={(pattern.trim() ? 1 : 0) + (p.numbering.originator ? 1 : 0)} data-project-numbering="">
+        <TextField label="نمط رقم المستند" dir="ltr" value={pattern} onChange={(v) => setNumbering({ pattern: v })} placeholder={DOCNO_DEFAULT} data-docno-pattern />
+        <div className="-mx-1 px-1 flex gap-2 overflow-x-auto no-scrollbar">
+          {DOCNO_PRESETS.map(([pt, label]) => (
+            <FilterChip key={pt} on={(pattern.trim() || DOCNO_DEFAULT) === pt} onClick={() => setNumbering({ pattern: pt === DOCNO_DEFAULT ? "" : pt })}>{label}</FilterChip>
+          ))}
+        </div>
+        <TextField label="رمز الجهة المُصدِرة {orig}" dir="ltr" value={p.numbering.originator || ""} onChange={(v) => setNumbering({ originator: v.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6) || undefined })} placeholder="ABC" />
+        {patternProblem
+          ? <p className="text-[12px] text-bad" data-docno-problem>{patternProblem}</p>
+          : <p className="text-[12px] text-ink-2" data-docno-example>مثال: <Num>{formatDocNo(pattern, { code: p.code || "TWR", type: "RFI", n: 12, dateIso: today(), orig: p.numbering.originator })}</Num></p>}
+        <p className="text-[11.5px] text-ink-3 leading-relaxed" dir="auto">الرموز: <bdi dir="ltr" className="font-grotesk">{"{code} {type} {nnnn} {yy} {yyyy} {orig}"}</bdi> — عدد حروف n هو عدد خانات الرقم. المستندات الصادرة تحتفظ بأرقامها.</p>
+      </Advanced>
       <div className="flex gap-2 pt-2">
         <button type="button" onClick={onDone} className="press flex-1 min-h-12 rounded-xl bg-surface border border-line-2 text-[14px]">إلغاء</button>
         <button type="button" onClick={save} className="press flex-[1.4] min-h-12 rounded-xl btn-primary text-[14px] font-medium">حفظ المشروع</button>

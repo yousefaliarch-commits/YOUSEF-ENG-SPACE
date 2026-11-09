@@ -7,6 +7,7 @@
 //  · This file is pure: types, caps, merge, size guards, shard choice. See docs/TOOLS-BLUEPRINT.md §5c.
 // =====================================================================
 import type { PhotoRef } from "../doc/model";
+import type { DocRev, SignBox, TitleExtras } from "./doc-controls";
 import type { ProjectSnap } from "./tool-projects";
 
 export type ToolKind = string;   // the tool id, or a sub-kind: "inspection" | "qcTemplate" | "crew" | "rebarStock" | "materialRequest"
@@ -43,6 +44,11 @@ export type ToolDoc<B = unknown> = {
   // where the document belongs in the project — zone / building · level · element, kept by name so it stays readable even
   // when the project's list changes (the project only suggests names)
   wbs?: DocWbs;
+  // document controls (data/doc-controls.ts): custom signature boxes, the issued revisions, two title-block cells —
+  // all optional, so a document saved before they existed reads and prints exactly as it did
+  sign?: SignBox[];
+  revs?: DocRev[];
+  tb?: TitleExtras;
   profile: ProfileSnap;
   body: B;
   photos: Record<string, PhotoRef[]>;
