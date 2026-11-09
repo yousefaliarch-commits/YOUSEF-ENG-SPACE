@@ -4,11 +4,12 @@
 //    for "nothing typed". Results are big and LTR; every calculation can show its working.
 //  · The export bar is a `.foot` bar (pads for the home indicator itself); the preview draws the same pages as the PDF.
 // =====================================================================
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, Copy, Eye, FileDown, FileSpreadsheet, FileText, Plus, Share2, Trash2, X } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, Copy, Eye, FileDown, FileSpreadsheet, FileText, Plus, Share2, SlidersHorizontal, Trash2, X } from "lucide-react";
 import { numInputProblem, type NumInputRule } from "../lib/num-input";
 import { FilterChip, Num } from "./primitives";
+import { RollNumber } from "./roll";
 import type { DrawPage, TraceStep } from "../doc/model";
 
 // ---- inputs ----
@@ -142,6 +143,33 @@ export const Note = ({ children, tone = "quiet" }: { children: any; tone?: "quie
   <p className={`text-[11.5px] leading-relaxed ${tone === "warn" ? "p-3 rounded-xl bg-warn/10 text-warn border border-warn/25" : "text-ink-3"}`}>{children}</p>
 );
 
+// «إعدادات متقدمة»: the parameters most documents never touch stay folded away; `changed` says how many of them differ from
+// their defaults, so a folded card never hides the fact that the result depends on a tuned value
+export function Advanced({ title = "إعدادات متقدمة", hint, changed = 0, defaultOpen = false, children, ...p }: {
+  title?: string; hint?: string; changed?: number; defaultOpen?: boolean; children: ReactNode; [k: `data-${string}`]: string;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="rounded-2xl border border-line bg-surface" data-advanced={open ? "open" : "closed"} {...p}>
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className="press w-full min-h-12 flex items-center gap-2.5 px-3.5 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-2xl"
+      >
+        <SlidersHorizontal size={16} className="shrink-0 text-ink-3" />
+        <span className="min-w-0 flex-1">
+          <span className="block text-[13.5px] font-medium leading-snug">{title}</span>
+          {hint && <span className="block text-[11.5px] text-ink-3 leading-snug">{hint}</span>}
+        </span>
+        {changed > 0 && <span className="shrink-0 h-6 px-2 inline-flex items-center rounded-full bg-wash border border-accent/30 text-[11px] text-accent" data-advanced-changed><Num>{changed}</Num>&nbsp;معدّلة</span>}
+        <ChevronDown size={16} className={`chev shrink-0 text-ink-3 ${open ? "is-open" : ""}`} />
+      </button>
+      {open && <div className="unfold px-3.5 pb-3.5 space-y-2.5">{children}</div>}
+    </div>
+  );
+}
+
 // ---- results ----
 // a ring that fills to `value` (0…1, more than 1 shows full in the «bad» colour): utilisation, progress — once, on arrival
 export function ScoreRing({ value, size = 64, tone }: { value: number; size?: number; tone?: "accent" | "good" | "warn" | "bad" }) {
@@ -167,7 +195,7 @@ export function ResultHero({ label, value, unit, sub, tone = "accent", ring, rin
     <div className={`p-4 rounded-2xl border ${box} flex items-center gap-4`} data-tool-result="hero">
       <div className="min-w-0 flex-1">
         <p className="text-[12px] text-ink-2">{label}</p>
-        <p className="mt-1 leading-none"><Num className="text-[34px] font-semibold">{value}</Num>{unit && <span className="ms-1.5 text-[13px] text-ink-2">{unit}</span>}</p>
+        <p className="mt-1 leading-none"><Num className="text-[34px] font-semibold"><RollNumber value={value} /></Num>{unit && <span className="ms-1.5 text-[13px] text-ink-2">{unit}</span>}</p>
         {sub && <p className="mt-2 text-[12px] text-ink-2 leading-snug">{sub}</p>}
       </div>
       {ring != null && <ScoreRing value={ring} tone={ringTone} />}
@@ -241,12 +269,28 @@ export function Working({ steps }: { steps: TraceStep[] }) {
 }
 
 // ---- repeating rows (elements, bars, readings, workers…) as cards ----
-export function RowCards<R>({ rows, onChange, blank, render, summary, addLabel = "أضف بندًا", max = 400 }: {
-  rows: R[]; onChange: (rows: R[]) => void; blank: () => R; render: (r: R, set: (r: R) => void, i: number) => any;
-  summary: (r: R, i: number) => string; addLabel?: string; max?: number;
+// a row moved to another place in its list (out-of-range moves change nothing)
+export function moveRow<R>(rows: R[], from: number, to: number): R[] {
+  if (from === to || from < 0 || to < 0 || from >= rows.length || to >= rows.length) return rows;
+  const next = rows.slice();
+  const [x] = next.splice(from, 1);
+  next.splice(to, 0, x);
+  return next;
+}
+
+// Add · duplicate · delete · reorder: the open card carries «أعلى / أسفل», so a BOQ or a take-off prints in the order the
+// engineer wants without retyping a line (the header keeps its two 44 px actions on a 360 px phone).
+export function RowCards<R>({ rows, onChange, blank, render, summary, addLabel = "أضف بندًا", max = 400, reorder = true }: {
+  rows: R[]; onChange: (rows: R[]) => void; blank: () => R; render: (r: R, set: (r: R) => void, i: number) => ReactNode;
+  summary: (r: R, i: number) => string; addLabel?: string; max?: number; reorder?: boolean;
 }) {
   const [open, setOpen] = useState<number>(rows.length ? rows.length - 1 : -1);
   const set = (i: number, r: R) => onChange(rows.map((x, j) => (j === i ? r : x)));
+  const move = (i: number, to: number) => {
+    onChange(moveRow(rows, i, to));
+    setOpen(to);
+  };
+  const moveBtn = "press grid place-items-center w-11 h-11 rounded-xl border border-line-2 bg-canvas text-ink-2 disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
   return (
     <div className="space-y-2">
       {rows.map((r, i) => (
@@ -258,7 +302,18 @@ export function RowCards<R>({ rows, onChange, blank, render, summary, addLabel =
             <button type="button" aria-label="تكرار" onClick={() => { onChange([...rows.slice(0, i + 1), structuredClone(r), ...rows.slice(i + 1)]); setOpen(i + 1); }} className="press grid place-items-center w-11 h-11 text-ink-3"><Copy size={16} /></button>
             <button type="button" aria-label="حذف" onClick={() => { onChange(rows.filter((_, j) => j !== i)); setOpen(-1); }} className="press grid place-items-center w-11 h-11 text-ink-3 hover:text-bad"><Trash2 size={16} /></button>
           </div>
-          {open === i && <div className="unfold px-3.5 pb-3.5 space-y-2.5">{render(r, (x) => set(i, x), i)}</div>}
+          {open === i && (
+            <div className="unfold px-3.5 pb-3.5 space-y-2.5">
+              {render(r, (x) => set(i, x), i)}
+              {reorder && rows.length > 1 && (
+                <div className="flex items-center gap-1.5 pt-0.5" data-row-move>
+                  <span className="me-auto text-[11.5px] text-ink-3">ترتيب البند في القائمة</span>
+                  <button type="button" data-row-up aria-label="تحريك لأعلى" disabled={i === 0} onClick={() => move(i, i - 1)} className={moveBtn}><ArrowUp size={16} /></button>
+                  <button type="button" data-row-down aria-label="تحريك لأسفل" disabled={i === rows.length - 1} onClick={() => move(i, i + 1)} className={moveBtn}><ArrowDown size={16} /></button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
       {rows.length < max && (

@@ -378,3 +378,41 @@ html[data-desk-shell] .web-topbar { display: none !important; }
 [lang="ar"] :not(bdi)[class*="tracking-"] { letter-spacing: normal; }
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
+
+/* ---------------------------------------------------------------------
+   Drafting (v0.39, src/ui/drafting.tsx · roll.tsx): millimetre paper, dimensioned sketches, figures that roll to their
+   new value. Static rules cost nothing; the two animations are one-shot, transform / opacity (and a stroke, once).
+   --------------------------------------------------------------------- */
+:root, [data-mode="dark"] { --grid-minor: rgb(255 255 255 / 0.035); --grid-major: rgb(255 255 255 / 0.07); }
+[data-mode="light"] { --grid-minor: rgb(24 24 27 / 0.045); --grid-major: rgb(24 24 27 / 0.09); }
+/* real millimetres: a rule every 5 mm, a heavier one every 10 mm (CSS mm, 96 dpi) */
+.draft-grid, .draft-sheet {
+  background-color: rgb(var(--surface));
+  background-image: linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  background-size: 10mm 10mm, 10mm 10mm, 5mm 5mm, 5mm 5mm;
+  background-position: -1px -1px;
+}
+.draft-grid { background-color: transparent; }
+/* the sheet's corner ticks (top-start and bottom-end), as on a drawing frame */
+.draft-tick { position: absolute; width: 12px; height: 12px; border: 0 solid rgb(var(--ink-3)); opacity: .7; pointer-events: none; }
+.draft-tick-a { top: 6px; inset-inline-start: 6px; border-top-width: 1.5px; border-inline-start-width: 1.5px; }
+.draft-tick-b { bottom: 6px; inset-inline-end: 6px; border-bottom-width: 1.5px; border-inline-end-width: 1.5px; }
+.draft-face { stroke: rgb(var(--ink) / .78); stroke-width: 1.25; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.draft-face-top { fill: rgb(var(--accent) / .10); }
+.draft-face-left { fill: rgb(var(--accent) / .17); }
+.draft-face-right { fill: rgb(var(--accent) / .25); }
+.draft-mesh { stroke: rgb(var(--accent) / .75); stroke-width: .8; vector-effect: non-scaling-stroke; }
+.draft-dim { stroke: rgb(var(--ink-2)); stroke-width: .9; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.draft-label { fill: rgb(var(--ink)); font-family: "Space Grotesk", system-ui, sans-serif; font-size: 10.5px; font-weight: 500; font-variant-numeric: tabular-nums; paint-order: stroke; stroke: rgb(var(--surface)); stroke-width: 3px; stroke-linejoin: round; }
+.draft-iso.is-ghost .draft-face { stroke-dasharray: 4 3; stroke: rgb(var(--ink-3)); fill: transparent; }
+.draft-iso.is-ghost .draft-dim, .draft-iso.is-ghost .draft-label { opacity: .45; }
+/* a figure rolls to its new value: only the characters that changed slide in */
+.roll, .roll-d { display: inline-block; white-space: pre; }
+.roll-up { animation: roll-up .24s cubic-bezier(.2,.7,.2,1) backwards; }
+.roll-down { animation: roll-down .24s cubic-bezier(.2,.7,.2,1) backwards; }
+@keyframes roll-up { from { opacity: 0; transform: translate3d(0, .42em, 0); } }
+@keyframes roll-down { from { opacity: 0; transform: translate3d(0, -.42em, 0); } }
+@media (prefers-reduced-motion: reduce) {
+  .roll-up, .roll-down { animation: none !important; }
+}
