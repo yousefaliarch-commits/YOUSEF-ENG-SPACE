@@ -8,6 +8,7 @@
 // =====================================================================
 import type { PhotoRef } from "../doc/model";
 import type { ProjectSnap } from "./tool-projects";
+import type { DocExtra } from "../domain/tools/extra";
 
 export type ToolKind = string;   // the tool id, or a sub-kind: "inspection" | "qcTemplate" | "crew" | "rebarStock" | "materialRequest"
 
@@ -45,6 +46,8 @@ export type ToolDoc<B = unknown> = {
   wbs?: DocWbs;
   profile: ProfileSnap;
   body: B;
+  // «إضافات المهندس»: custom parameters and rows the engineer adds to any tool document (domain/tools/extra.ts)
+  extra?: DocExtra;
   photos: Record<string, PhotoRef[]>;
   hash?: string;
   log: ToolDocLogEntry[];        // ≤ 50 entries
@@ -117,7 +120,8 @@ export function mergeDoc(local: ToolDoc | null, remote: ToolDoc | null, base: nu
   if (!l && !r) return { keep: null, copy: null, tomb: tomb || null };
   if (!l) return { keep: r, copy: null, tomb: null };
   if (!r) return { keep: l, copy: null, tomb: null };
-  const same = l.title === r.title && l.status === r.status && JSON.stringify(l.body) === JSON.stringify(r.body);
+  const same = l.title === r.title && l.status === r.status && JSON.stringify(l.body) === JSON.stringify(r.body)
+    && JSON.stringify(l.extra || null) === JSON.stringify(r.extra || null);
   if (l.at === r.at && same) return { keep: r, copy: null, tomb: null };
   const lChanged = l.at > base, rChanged = r.at > base;
   if (lChanged && rChanged && !same) {

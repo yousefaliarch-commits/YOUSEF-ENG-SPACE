@@ -18,7 +18,7 @@ import type { ToolModule } from "../module";
 import { buildSpec } from "../spec";
 
 type Mode = "batch" | "masonry" | "plaster" | "tiles" | "paint" | "formwork" | "bars" | "falls" | "electric" | "plumbing" | "drywall" | "steel";
-type Field = { k: string; label: string; unit?: string; def: string; pick?: [string, string][]; int?: boolean };
+type Field = { k: string; label: string; unit?: string; def: string; pick?: [string, string][]; int?: boolean; hint?: string };
 type MatLine = { label: string; qty: number; unit: string; desc: string };
 type Out = { hero: [string, string, string]; rows: [string, string, string?][]; lines: MatLine[]; warn?: string[] };
 
@@ -47,17 +47,22 @@ const MODES: { id: Mode; name: string; emoji: string; fields: Field[]; calc: (v:
       { k: "leaves", label: "سمك الحائط", def: "0.5", pick: [["0.5", "نصف طوبة"], ["1", "طوبة"], ["1.5", "طوبة ونص"], ["2", "طوبتين"]] },
       { k: "L", label: "طول الحائط", unit: "m", def: "" }, { k: "H", label: "ارتفاع الحائط", unit: "m", def: "" },
       { k: "open", label: "مساحة الفتحات", unit: "m²", def: "0" }, { k: "mix", label: "أسمنت لكل م³ رمل", unit: "kg", def: "250" },
+      // the site's own figures: joint, unit waste (blank = the unit type's usual figure) and mortar waste
+      { k: "joint", label: "سمك العرموس", unit: "cm", def: "1" },
+      { k: "uw", label: "هالك الطوب", unit: "%", def: "", hint: "فارغ = المعتاد لنوع الطوب ⚑" },
+      { k: "mw", label: "هالك المونة", unit: "%", def: "25" },
     ],
     calc: (v) => {
       const p = UNIT_PRESETS.find((u) => u.id === v.unit) || UNIT_PRESETS[0];
       const area = Math.max(0, N(v.L) * N(v.H) - N(v.open));
-      const m = tradeMasonry({ unit: p.u, areaM2: area, leaves: Number(v.leaves) as any, jointCm: 1, unitWastePct: p.waste, mortarKgM3: N(v.mix), mortarWastePct: 25, thinBed: p.u.kind === "aac" });
+      const unitWaste = String(v.uw || "").trim() === "" ? p.waste : N(v.uw);
+      const m = tradeMasonry({ unit: p.u, areaM2: area, leaves: Number(v.leaves) as any, jointCm: N(v.joint), unitWastePct: unitWaste, mortarKgM3: N(v.mix), mortarWastePct: N(v.mw), thinBed: p.u.kind === "aac" });
       return {
-        hero: [String(m.units), p.u.kind === "solid" ? "طوبة" : "بلوكة", `${f2(area, 2)} م² صافي · هالك ${p.waste} %`],
+        hero: [String(m.units), p.u.kind === "solid" ? "طوبة" : "بلوكة", `${f2(area, 2)} م² صافي · هالك ${unitWaste} %`],
         rows: m.adhesiveKg != null ? [["لاصق", f2(m.adhesiveKg, 1), "kg"]] : [["أسمنت", String(m.cementBags), "شكارة"], ["رمل", f2(m.sandM3, 2), "m³"], ["عدد / م²", f2(m.unitsPerM2, 2)]],
         lines: [
           { label: p.name, qty: m.units, unit: p.u.kind === "solid" ? "طوبة" : "بلوكة", desc: `${f2(area, 2)} م²` },
-          ...(m.adhesiveKg != null ? [{ label: "لاصق خفاف", qty: Math.ceil(m.adhesiveKg), unit: "kg", desc: "" }] : [{ label: "أسمنت مونة", qty: m.cementBags, unit: "شكارة", desc: `${v.mix} كجم/م³ رمل` }, { label: "رمل مونة", qty: Number(m.sandM3.toFixed(2)), unit: "m³", desc: "هالك 25 % ⚑" }]),
+          ...(m.adhesiveKg != null ? [{ label: "لاصق خفاف", qty: Math.ceil(m.adhesiveKg), unit: "kg", desc: "" }] : [{ label: "أسمنت مونة", qty: m.cementBags, unit: "شكارة", desc: `${v.mix} كجم/م³ رمل` }, { label: "رمل مونة", qty: Number(m.sandM3.toFixed(2)), unit: "m³", desc: `هالك ${N(v.mw)} % ⚑` }]),
         ],
       };
     },
@@ -88,10 +93,10 @@ const MODES: { id: Mode; name: string; emoji: string; fields: Field[]; calc: (v:
   },
   {
     id: "paint", name: "الدهانات", emoji: "🎨",
-    fields: [{ k: "l", label: "طول الغرفة", unit: "m", def: "" }, { k: "w", label: "عرض الغرفة", unit: "m", def: "" }, { k: "h", label: "الارتفاع", unit: "m", def: "3" }, { k: "open", label: "الفتحات", unit: "m²", def: "0" }, { k: "ceil", label: "السقف", def: "yes", pick: [["yes", "مع السقف"], ["no", "بدون"]] }, { k: "coats", label: "عدد الأوجه", def: "2", int: true }, { k: "spread", label: "الفرد من نشرة المنتج", unit: "m²/L", def: "10" }, { k: "pack", label: "العبوة", unit: "L", def: "3.6" }],
+    fields: [{ k: "l", label: "طول الغرفة", unit: "m", def: "" }, { k: "w", label: "عرض الغرفة", unit: "m", def: "" }, { k: "h", label: "الارتفاع", unit: "m", def: "3" }, { k: "open", label: "الفتحات", unit: "m²", def: "0" }, { k: "ceil", label: "السقف", def: "yes", pick: [["yes", "مع السقف"], ["no", "بدون"]] }, { k: "coats", label: "عدد الأوجه", def: "2", int: true }, { k: "spread", label: "الفرد من نشرة المنتج", unit: "m²/L", def: "10" }, { k: "pack", label: "العبوة", unit: "L", def: "3.6" }, { k: "waste", label: "الهالك", unit: "%", def: "10" }],
     calc: (v) => {
       const a = tradeRoomArea({ l: N(v.l), w: N(v.w), h: N(v.h), openingsM2: N(v.open), ceiling: v.ceil === "yes" });
-      const p = tradePaint({ areaM2: a.areaM2, coats: N(v.coats), spreadM2L: N(v.spread), practical: 1, wastePct: 10, packL: N(v.pack) });
+      const p = tradePaint({ areaM2: a.areaM2, coats: N(v.coats), spreadM2L: N(v.spread), practical: 1, wastePct: N(v.waste), packL: N(v.pack) });
       return {
         hero: [String(p.packs), `عبوة ${v.pack} لتر`, `${f2(p.litres, 2)} لتر · ${f2(a.areaM2, 2)} م²`],
         rows: [["الحوائط", f2(a.wallsM2, 2), "m²"]],
@@ -132,19 +137,19 @@ const MODES: { id: Mode; name: string; emoji: string; fields: Field[]; calc: (v:
   },
   {
     id: "electric", name: "الكهربائي", emoji: "💡",
-    fields: [{ k: "rooms", label: "عدد الغرف", def: "", int: true }, { k: "pts", label: "مخارج لكل غرفة", def: "8", int: true }, { k: "runs", label: "مجموع أطوال المسارات", unit: "m", def: "" }],
+    fields: [{ k: "rooms", label: "عدد الغرف", def: "", int: true }, { k: "pts", label: "مخارج لكل غرفة", def: "8", int: true }, { k: "runs", label: "مجموع أطوال المسارات", unit: "m", def: "" }, { k: "x", label: "زيادة الأسلاك", unit: "%", def: "10" }],
     calc: (v) => {
-      const e = tradeElectric({ rooms: N(v.rooms), pointsPerRoom: N(v.pts), runsM: N(v.runs) });
-      return { hero: [f2(e.wireM, 0), "متر سلك / خرطوم", `${e.boxes} علبة`], rows: [], lines: [{ label: "سلك / خرطوم", qty: Math.ceil(e.wireM), unit: "m", desc: "+10 % ⚑" }, { label: "علب", qty: e.boxes, unit: "علبة", desc: "" }], warn: ["للتوريد فقط — مقاس الكابل من أداة الكابلات"] };
+      const e = tradeElectric({ rooms: N(v.rooms), pointsPerRoom: N(v.pts), runsM: N(v.runs), extraPct: N(v.x) });
+      return { hero: [f2(e.wireM, 0), "متر سلك / خرطوم", `${e.boxes} علبة`], rows: [], lines: [{ label: "سلك / خرطوم", qty: Math.ceil(e.wireM), unit: "m", desc: `+${N(v.x)} % ⚑` }, { label: "علب", qty: e.boxes, unit: "علبة", desc: "" }], warn: ["للتوريد فقط — مقاس الكابل من أداة الكابلات"] };
     },
   },
   {
     id: "plumbing", name: "السباك", emoji: "🔧",
-    fields: [{ k: "runs", label: "أطوال المسارات (افصل بـ +)", def: "" }, { k: "len", label: "طول الماسورة", unit: "m", def: "4" }],
+    fields: [{ k: "runs", label: "أطوال المسارات (افصل بـ +)", def: "" }, { k: "len", label: "طول الماسورة", unit: "m", def: "4" }, { k: "fit", label: "وصلة كل", unit: "m", def: "1.5" }],
     calc: (v) => {
       const runs = String(v.runs || "").split(/[+،,\s]+/).map((x) => numInputParse(x) ?? 0).filter((x) => x > 0);
-      const p = tradePlumbing({ runsM: runs, lengthM: N(v.len) || 4 });
-      return { hero: [String(p.lengths), `ماسورة ${v.len || 4} م`, `${f2(p.totalM, 1)} م · ${p.fittings} وصلة`], rows: [], lines: [{ label: "مواسير", qty: p.lengths, unit: "ماسورة", desc: `${f2(p.totalM, 1)} متر` }, { label: "قطع ووصلات", qty: p.fittings, unit: "قطعة", desc: "1 لكل 1.5 م ⚑" }] };
+      const p = tradePlumbing({ runsM: runs, lengthM: N(v.len) || 4, perFittingM: N(v.fit) || 1.5 });
+      return { hero: [String(p.lengths), `ماسورة ${v.len || 4} م`, `${f2(p.totalM, 1)} م · ${p.fittings} وصلة`], rows: [], lines: [{ label: "مواسير", qty: p.lengths, unit: "ماسورة", desc: `${f2(p.totalM, 1)} متر` }, { label: "قطع ووصلات", qty: p.fittings, unit: "قطعة", desc: `1 لكل ${N(v.fit) || 1.5} م ⚑` }] };
     },
   },
   {
@@ -203,7 +208,7 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
             : null}
           <Grid2>
             {m.fields.filter((f) => !f.pick && !(m.id === "plumbing" && f.k === "runs")).map((f) => (
-              <NumField key={f.k} label={f.label} unit={f.unit} value={v[f.k]} onChange={(x) => setV(f.k, x)} rule={{ min: 0, integer: f.int }} />
+              <NumField key={f.k} label={f.label} unit={f.unit} value={v[f.k]} onChange={(x) => setV(f.k, x)} rule={{ min: 0, integer: f.int }} hint={f.hint} />
             ))}
           </Grid2>
         </div>

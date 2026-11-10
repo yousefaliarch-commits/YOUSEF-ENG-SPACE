@@ -1,0 +1,20 @@
+# Editable workstation (v0.39.0): the engineer's additions on every tool document, the trade kit's own waste figures
+e8f691cc	Engineer's additions
+3057b21f	Waste (%)
+85de9e0d	Engineer's additions: custom parameters and rows
+f518661c	Your own parameters and rows, printed at the end of the document and exported to PDF, Word and Excel. Order quantity = quantity × (1 + waste %).
+d9103b01	Custom parameters
+eea31632	Custom parameter
+0f2ea94c	Parameter
+8e6048d4	Parameter name
+536209e0	Soil bearing pressure, concrete grade…
+3aba0521	Additional row
+52660d2c	Row {0}
+9c38eb8f	These quantities are your own entries — check them against the approved drawings and specifications before ordering.
+3eea9b7a	Unit waste
+c1526d4f	Blank = the usual figure for the unit type ⚑
+5e96d7a7	Mortar waste
+058430bb	Waste {0} % ⚑
+386df427	Extra wire
+01ba6992	One fitting every
+ce09169f	1 per {0} m ⚑

@@ -21,7 +21,9 @@ import { canvasMeasurer, loadDocFonts, renderDoc } from "../../doc/render";
 import type { DrawPage } from "../../doc/model";
 import { saveOrShare } from "../../lib/report-pdf";
 import { ToolTipCard } from "../ai/ToolTip";
-import { Card, ConfirmDialog, DocPreview, ExportBar, Grid2, Pick, RowCards, TextField } from "../../ui/kit";
+import { Card, ConfirmDialog, DocPreview, ExportBar, Grid2, Note, NumField, Pick, RowCards, TextField } from "../../ui/kit";
+import { EXTRA_MAX, blankExtra, blankParam, blankRow, extraCalc, extraSheet, hasExtra, withExtra, type DocExtra, type ExtraParam, type ExtraRow } from "../../domain/tools/extra";
+import { fmtNum } from "../../doc/text";
 import { Empty } from "../../ui/chrome";
 import { Num } from "../../ui/primitives";
 import { TOOL_ICONS } from "./icons";
@@ -310,6 +312,76 @@ function WbsEditor({ value, onChange }: { value: { name: string; levels: string[
 }
 
 // ---------------------------------------------------------------------
+//  «إضافات المهندس»: every tool document takes the engineer's own parameters and rows (with a waste % each) on top of the
+//  tool's form. They print at the end of the document and export through the triad; no prices (field tools carry none).
+// ---------------------------------------------------------------------
+function ExtraCard({ extra, readOnly, onChange }: { extra: DocExtra | undefined; readOnly: boolean; onChange: (e: DocExtra) => void }) {
+  const e = extra || blankExtra();
+  const calc = extraCalc(e);
+  const [open, setOpen] = useState(!calc.empty);
+  const set = (patch: Partial<DocExtra>) => !readOnly && onChange({ ...e, ...patch });
+  if (readOnly && calc.empty) return null;
+  if (!open) {
+    return (
+      <button type="button" data-extra-open onClick={() => setOpen(true)} className="press w-full min-h-12 inline-flex items-center justify-center gap-2 rounded-2xl border border-dashed border-line-3 text-[13.5px] text-accent">
+        <Plus size={17} /> إضافات المهندس: معاملات وبنود خاصة
+      </button>
+    );
+  }
+  return (
+    <div data-extra>
+      <Card title="إضافات المهندس">
+        <div className="space-y-2.5">
+          <p className="text-[12px] text-ink-2 leading-relaxed">معاملات وبنود من عندك تُطبع في آخر المستند وتخرج في PDF و Word و Excel. المطلوب = الكمية × (1 + الهالك ٪).</p>
+          <h3 className="text-[12.5px] text-ink-2">معاملات خاصة</h3>
+          <RowCards<ExtraParam>
+            rows={e.params}
+            onChange={(params) => set({ params })}
+            blank={blankParam}
+            addLabel="معامل خاص"
+            max={EXTRA_MAX.params}
+            summary={(p) => `${p.label || "معامل"} — ${p.value || "—"} ${p.unit}`}
+            render={(p, setP) => (
+              <>
+                <TextField label="اسم المعامل" value={p.label} onChange={(v) => setP({ ...p, label: v })} readOnly={readOnly} placeholder="إجهاد التربة، درجة الخرسانة…" data-extra-param="label" />
+                <Grid2>
+                  <TextField label="القيمة" dir="auto" value={p.value} onChange={(v) => setP({ ...p, value: v })} readOnly={readOnly} data-extra-param="value" />
+                  <TextField label="الوحدة" dir="auto" value={p.unit} onChange={(v) => setP({ ...p, unit: v })} readOnly={readOnly} data-extra-param="unit" />
+                </Grid2>
+              </>
+            )}
+          />
+          <h3 className="pt-1 text-[12.5px] text-ink-2">بنود إضافية</h3>
+          <RowCards<ExtraRow>
+            rows={e.rows}
+            onChange={(rows) => set({ rows })}
+            blank={blankRow}
+            addLabel="بند إضافي"
+            max={EXTRA_MAX.rows}
+            summary={(r, i) => {
+              const c = extraCalc({ params: [], rows: [r] }).rows[0];
+              return c ? `${c.desc || "بند"} — ${fmtNum(c.order, 2)} ${c.unit}` : `بند ${i + 1}`;
+            }}
+            render={(r, setR) => (
+              <>
+                <TextField label="البند" value={r.desc} onChange={(v) => setR({ ...r, desc: v })} readOnly={readOnly} data-extra-row="desc" />
+                <Grid2>
+                  <NumField label="الكمية" value={r.qty} onChange={(v) => setR({ ...r, qty: v })} readOnly={readOnly} rule={{ min: 0 }} data-extra-row="qty" />
+                  <TextField label="الوحدة" dir="auto" value={r.unit} onChange={(v) => setR({ ...r, unit: v })} readOnly={readOnly} data-extra-row="unit" />
+                  <NumField label="الهالك" unit="%" value={r.waste} onChange={(v) => setR({ ...r, waste: v })} readOnly={readOnly} rule={{ min: 0, max: 100 }} data-extra-row="waste" />
+                  <TextField label="ملاحظات" value={r.note} onChange={(v) => setR({ ...r, note: v })} readOnly={readOnly} data-extra-row="note" />
+                </Grid2>
+              </>
+            )}
+          />
+          {calc.rows.length > 0 && <Note>الكميات هنا من إدخالك أنت — تُراجع على اللوحات والمواصفات قبل الطلب.</Note>}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
 //  One document
 // ---------------------------------------------------------------------
 export function ToolDocScreen({ app, id }: { app: any; id: string }) {
@@ -421,7 +493,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
   const project = projects.find((p) => p.id === doc.projectId && !p.deleted) || null;
   const readOnly = doc.status !== "draft" || doc.v > mod.v;
   const setBody = (body: any) => !readOnly && update({ ...doc, body });
-  const spec = () => mod.build(doc, projectFor(doc, projects));
+  const spec = () => withExtra(mod.build(doc, projectFor(doc, projects)), doc.extra);
 
   const preview = async () => {
     setBusy("جارٍ التحضير…");
@@ -483,7 +555,13 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
     setBusy("جارٍ إنشاء ملف Excel…");
     try {
       const { specXlsx, workbookXlsx, XLSX_MIME } = await import("../../doc/xlsx");
-      const bytes = mod.workbook ? workbookXlsx(mod.workbook(doc, projectFor(doc, projects))) : specXlsx(spec());
+      // a tool's own workbook gets the engineer's additions as one more sheet; the generic one already has them in its spec
+      let bytes: Uint8Array;
+      if (mod.workbook) {
+        const wb = mod.workbook(doc, projectFor(doc, projects));
+        const more = extraSheet(doc.extra);
+        bytes = workbookXlsx(more ? { ...wb, sheets: [...wb.sheets, more] } : wb);
+      } else bytes = specXlsx(spec());
       const name = `${(doc.docNo || `${mod.docType}-draft`).replace(/[^\w.-]+/g, "_")}-Rev${doc.rev}.xlsx`;
       await saveOrShare(bytes, name, doc.title, XLSX_MIME);
     } catch {
@@ -516,7 +594,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
     const { docNo, n } = doc.docNo ? { docNo: doc.docNo, n: 0 } : nextDocNo(project, mod.docType);
     const snap = project ? snapOf(project) : undefined;
     const frozen = { ...doc, docNo, status: "issued" as const, issuedAt: Date.now(), project: snap };
-    const hash = await contentHash({ kind: frozen.kind, v: frozen.v, body: frozen.body, profile: frozen.profile, project: snap || null, docNo, rev: frozen.rev, engine: mod.engine });
+    const hash = await contentHash({ kind: frozen.kind, v: frozen.v, body: frozen.body, ...(hasExtra(frozen.extra) ? { extra: frozen.extra } : {}), profile: frozen.profile, project: snap || null, docNo, rev: frozen.rev, engine: mod.engine });
     const next = { ...frozen, hash, log: [...doc.log, { at: Date.now(), what: "issue", note: `${docNo} Rev ${doc.rev}` }].slice(-50) };
     if (project && n) app.saveToolProject({ ...project, at: Date.now(), numbering: { ...project.numbering, counters: { ...project.numbering.counters, [mod.docType]: n } } });
     setDoc(next);
@@ -558,6 +636,7 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
         </div>
         {doc.v > mod.v && <p className="text-[12px] text-warn">هذا المستند من إصدار أحدث من التطبيق — يُعرض للقراءة فقط. حدّث التطبيق لتعديله.</p>}
         <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }), spawn }} />
+        <ExtraCard extra={doc.extra} readOnly={readOnly} onChange={(extra) => update({ ...doc, extra })} />
         {!readOnly && <ToolTipCard app={app} kind={doc.kind} summary={mod.summary(doc)} />}
       </div>
       <aside className="doc-live">{wide && <LivePreview make={spec} dep={doc} project={project} />}</aside>

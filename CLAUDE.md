@@ -225,6 +225,16 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   الإعدادات → «أمان فريق الإدارة» flips the switch. Local `config.toml` enables TOTP; tests: pgTAP 22, `tests/staff-mfa.test.ts`, and
   the cloud suite enrols a real authenticator (RFC 6238 codes) and checks password-only sessions lose staff powers when on.
 
+- v0.39.0: **editable workstation** — every tool document takes «إضافات المهندس» (`ToolDoc.extra`, engine `domain/tools/extra.ts`, pure;
+  `ExtraCard` in host.tsx): custom parameters (label · value · unit) and custom rows (quantity · unit · waste % → order = quantity ×
+  (1 + waste / 100), `round2` = Excel's ROUND). `withExtra(spec, extra)` puts them before the basis / disclaimer / signatures of the
+  last section, so PDF, Word and the generic workbook carry them (order column = live formula); tools with their own `workbook()`
+  (qto, ipc) get one more sheet (`extraSheet`). No price fields (field tools carry no money). The issue hash covers `extra` only when
+  it is filled (older hashes unchanged); `mergeDoc` compares it (a difference is a conflict copy). Trade kit: brick waste, mortar
+  waste, joint, paint waste, wire allowance and fitting spacing are fields (the old constants are their defaults).
+  `tests/export-triad.test.ts` runs the triad on **every** module in `TOOL_MODULES` (title block, Word text, every Excel formula
+  re-evaluated) — a new tool is covered by adding it to `module.ts`.
+
 - **Website** (docs/WEB.md): **Deploy website** workflow → Cloudflare Pages (`engspace.pages.dev`; pull requests get
   `<branch>.engspace.pages.dev`). Secrets `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` (absent → a notice, never a failure); variables
   `PAGES_PROJECT`, `PUBLIC_URL`. Each deploy adds the site to Supabase Auth redirect URLs (merged, never replaced). `public/_headers` sets caching.

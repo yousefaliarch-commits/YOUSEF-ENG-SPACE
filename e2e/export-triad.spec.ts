@@ -56,3 +56,37 @@ test("the five export controls fit a 360 px phone", async ({ page }) => {
   await noOverflow(page, "export bar 360");
   await noClipped(page, "export bar 360");
 });
+
+// «إضافات المهندس»: a custom parameter and a custom row with its own waste % on a tool document reach the Word copy as text and
+// the workbook as a live formula (quantity × (1 + waste / 100)) — on the phones and on the desktop layout alike.
+test("the engineer's additions: custom parameter and row with waste % export to Word and to a live Excel formula", async ({ page }) => {
+  test.setTimeout(180_000);
+  const errs = watch(page);
+  await demoAs(page, "engineer", {}, "#app/tooldoc/levelBook:new");
+  await page.locator("[data-extra-open]").click();
+  const card = page.locator("[data-extra]");
+  await card.getByRole("button", { name: /معامل خاص|Custom parameter/ }).click();
+  await card.locator("[data-extra-param=label]").fill("إجهاد التربة");
+  await card.locator("[data-extra-param=value]").fill("1.5");
+  await card.getByRole("button", { name: /بند إضافي|Additional row/ }).click();
+  await card.locator("[data-extra-row=desc]").fill("أسمنت إضافي");
+  await card.locator("[data-extra-row=qty]").fill("120");
+  await card.locator("[data-extra-row=waste]").fill("5");
+  await settle(page, 700);
+  await expect(card).toContainText("126.00");
+  await noOverflow(page, "additions card");
+
+  const grab = async (sel: string) => {
+    const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 60_000 }), page.locator(sel).click()]);
+    return readFileSync((await dl.path())!);
+  };
+  const word = strFromU8(unzipSync(new Uint8Array(await grab("[data-tool-docx]")))["word/document.xml"]);
+  expect(word).toContain("أسمنت إضافي");
+  expect(word).toContain("إجهاد التربة");
+  const files = unzipSync(new Uint8Array(await grab("[data-tool-xlsx]")));
+  const sheetsXml = Object.keys(files).filter((k) => k.startsWith("xl/worksheets/")).map((k) => strFromU8(files[k])).join("");
+  expect(sheetsXml).toMatch(/<f>ROUND\([A-Z]+\d+\*\(1\+[A-Z]+\d+\/100\),2\)<\/f><v>126<\/v>/);
+  const pdf = await grab("[data-tool-export]");
+  expect(pdf.subarray(0, 5).toString("latin1")).toBe("%PDF-");
+  await noCrash(page, errs, "additions export");
+});
