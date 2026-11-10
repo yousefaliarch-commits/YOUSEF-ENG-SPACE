@@ -13,7 +13,7 @@ import { wbsPath, type ToolHeader } from "../data/tool-docs";
 import type { ToolProject } from "../data/tool-projects";
 import { haystack, normalise } from "./doc-search";
 import { toolsForRole } from "./gate";
-import { PACKS, toolById } from "./registry";
+import { GROUPS, toolById } from "./registry";
 import type { ToolRole } from "./types";
 
 export type PaletteAction =
@@ -55,7 +55,7 @@ export type PaletteContext = {
   screens?: { type: string; label: string; keywords?: string }[];
 };
 
-const packName = (id: string) => (PACKS.find((p) => p.id === id) || { name: "" }).name;
+const groupName = (id: string) => (GROUPS.find((g) => g.id === id) || { name: "" }).name;
 
 export function paletteItems(c: PaletteContext): PaletteItem[] {
   const out: PaletteItem[] = [];
@@ -63,7 +63,7 @@ export function paletteItems(c: PaletteContext): PaletteItem[] {
   for (const t of tools) {
     out.push({
       id: `tool:${t.id}`, group: "tools", title: t.name, sub: t.desc, icon: t.icon,
-      hay: normalise(`${t.name} ${t.desc} ${t.keywords} ${packName(t.pack)}`), run: { k: "tool", id: t.id },
+      hay: normalise(`${t.name} ${t.desc} ${t.keywords} ${groupName(t.group)}`), run: { k: "tool", id: t.id },
     });
   }
   for (const t of tools) {

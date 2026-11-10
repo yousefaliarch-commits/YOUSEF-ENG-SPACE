@@ -5,7 +5,7 @@
 //  · Old ids keep working through `aliases` (rebar → bbs, masonry → tradeKit). Old Arabic names stay in `keywords`.
 //  See docs/TOOLS-BLUEPRINT.md §2 and §5e.
 // =====================================================================
-import type { ToolDef, ToolPack, ToolRole } from "./types";
+import type { ToolDef, ToolGroup, ToolPack, ToolRole } from "./types";
 
 const FIELD: ToolRole[] = ["engineer", "owner", "supervisor"];
 const MONEY: ToolRole[] = ["engineer", "owner"];
@@ -26,7 +26,26 @@ export const PACKS: { id: ToolPack; name: string; desc: string }[] = [
   { id: "money", name: "الراتب والعروض", desc: "بالصافي دائمًا" },
 ];
 
-export const TOOL_REGISTRY: ToolDef[] = [
+// The disciplines the Tools tab (phone and desktop), the public page and the command palette group by. One place, explicit:
+// a tool is in exactly one group, and a test fails when a new tool has none.
+export const GROUPS: { id: ToolGroup; name: string; desc: string }[] = [
+  { id: "site", name: "الموقع والتنفيذ", desc: "الخرسانة والحديد والمساحة وتشطيبات الصنايعية وفحص التركيب" },
+  { id: "office", name: "المكتب الفني والمستخلصات", desc: "الحصر والمستخلصات وأوامر التغيير وطلبات الاستيضاح والاعتمادات" },
+  { id: "design", name: "مراجعة التصميم", desc: "قطاعات الخرسانة والدكت والكابلات والرشاشات — بالحساب الظاهر" },
+  { id: "hse", name: "السلامة والجودة", desc: "التصاريح والتوعية وقوائم الفحص والاستلام" },
+  { id: "management", name: "إدارة المكتب والموقع", desc: "اليومية ومحاضر العهدة والسجلات" },
+  { id: "money", name: "الراتب والعروض", desc: "بالصافي دائمًا" },
+];
+const GROUP_OF: Record<string, ToolGroup> = {
+  tradeKit: "site", concrete: "site", bbs: "site", levelBook: "site", units: "site", acInstall: "site", drainRun: "site",
+  qto: "office", ipc: "office", vo: "office", rfi: "office", submittal: "office",
+  rcSection: "design", ductSizer: "design", cableCheck: "design", sprinklerCheck: "design",
+  toolboxTalk: "hse", workPermit: "hse", checklists: "hse",
+  siteDiary: "management", custody: "management",
+};
+
+type ToolEntry = Omit<ToolDef, "group">;
+const ENTRIES: ToolEntry[] = [
   // ---- wave 1: the daily field tools ----
   {
     id: "tradeKit", pack: "workforce", name: "حاسبة الصنايعي", desc: "مباني، بياض، بلاط، دهان، جبس بورد، سباكة وكهرباء — بالشكارة والقطعة",
@@ -145,6 +164,9 @@ export const TOOL_REGISTRY: ToolDef[] = [
   { id: "move", pack: "money", name: "تكلفة الانتقال", desc: "القاهرة ↔ العاصمة ↔ العلمين", icon: "Map", keywords: "انتقال move relocation", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
   { id: "inflation", pack: "money", name: "الزيادة والتضخم", desc: "سجّل راتبك وقارنه بالتضخم الرسمي والسوق", icon: "Percent", keywords: "تضخم inflation", roles: MONEY, money: true, surface: "sheet", wave: 1, status: "live" },
 ];
+
+// every money tool (the salary and offer tools) is the «money» group; any other tool must be in GROUP_OF (a test says so)
+export const TOOL_REGISTRY: ToolDef[] = ENTRIES.map((t) => ({ ...t, group: t.money && t.pack === "money" ? "money" : GROUP_OF[t.id] || "management" }));
 
 const BY_ID = new Map<string, ToolDef>();
 TOOL_REGISTRY.forEach((t) => {
