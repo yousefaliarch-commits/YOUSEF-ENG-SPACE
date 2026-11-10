@@ -10,8 +10,8 @@ import { toolAllowed, toolKindsForRole, toolOfStack, toolRole } from "../tools/g
 import { toolById } from "../tools/registry";
 import { SupportScreen, TicketScreen } from "../features/support/support";
 import { loadDevice, storeDevice } from "../lib/device-store";
-import { ROOMS, company } from "../data/companies";
-import { TABS, govName } from "../data/geo";
+import { COMPANIES, ROOMS, company } from "../data/companies";
+import { TABS, cityName, govName } from "../data/geo";
 import { JOBS, NOTIFS0, POSTS0, R0 } from "../data/seed";
 import { TOOLS } from "../data/tools";
 import { accIdOf, authorAccId, authorKey, authorOf, cleanName, hasSession, loadAccount, memberAccId, normalizeSeedPosts, sameAuthor, saveAccount, setSession } from "../domain/identity";
@@ -671,6 +671,10 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
   const paletteContext = (): PaletteContext => ({
     role: toolRole(profile), tabs: tabs.map((t: { id: string; label: string }) => ({ id: t.id, label: t.label })), docs: toolIndex, projects: toolProjects, activeProject,
     docKinds: Object.keys(TOOL_MODULES),
+    // the community, as the member's own role may see it: the feed's visible posts, and jobs / companies only where those screens open
+    posts: visiblePosts.slice(0, 400).map((x: any) => ({ id: x.id, body: String(x.body || ""), room: (ROOMS.find((r: any) => r.id === x.room) || { name: "" }).name, when: x.when })),
+    jobs: blocked.stack.includes("job") ? [] : jobs.slice(0, 300).map((j: any) => ({ id: j.id, title: j.title, company: (company(j.co) || { name: j.coName || "" }).name, city: cityName(j.gov, j.city), discipline: j.disc, when: j.when })),
+    companies: blocked.stack.includes("company") ? [] : COMPANIES.map((c: any) => ({ id: c.id, name: c.name, en: c.en, sector: c.sector, city: cityName(c.hq, "") || govName(c.hq) })),
     screens: [
       { type: "notifications", label: "الإشعارات", keywords: "notifications" },
       { type: "settings", label: "الإعدادات", keywords: "settings preferences" },
@@ -682,7 +686,7 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     else if (a.k === "doc") app.push({ type: "tooldoc", id: `${a.kind}:${a.id}` });
     else if (a.k === "new") app.push({ type: "tooldoc", id: `${a.kind}:new` });
     else if (a.k === "tab") app.setTab(a.id);
-    else if (a.k === "push") app.push({ type: a.type });
+    else if (a.k === "push") app.push(a.id ? { type: a.type, id: a.id } : { type: a.type });
     else if (a.k === "project") {
       app.setActiveProject(a.id);
       app.toast(a.id ? "صار المشروع النشط — مستنداتك الجديدة تُحفظ فيه" : "كل المستندات — بدون مشروع نشط");
