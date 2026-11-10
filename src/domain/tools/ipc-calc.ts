@@ -9,11 +9,12 @@
 //    certified exceeds a threshold — 10 % of the contract by default — then a rate of each certificate — 25 % by default —
 //    until repaid; history-dependent, so the amount recovered before is carried from the previous certificate).
 //  · VAT on the current gross work (14 % since Law 157/2025; 5 % for contracts kept on the old schedule tax; 0 % exempt) or on
-//    the net after retention and advance — the contract decides. Other deductions: a % of the gross or a fixed amount.
+//    the net after retention and advance — the contract decides. Other lines: a % of the gross or a fixed amount, deducted
+//    (withholding tax, a penalty) or added (materials on site, an approved price adjustment) after the VAT.
 //  Rates and rules are the contract's: every one is an input, none is assumed silently.
 // =====================================================================
 
-export const IPC_ENGINE = "ipc@1.0.0";
+export const IPC_ENGINE = "ipc@1.1.0";
 
 export type IpcItem = {
   id: string;
@@ -27,7 +28,8 @@ export type IpcItem = {
   section?: string;     // BOQ section heading
 };
 
-export type IpcDeduction = { id: string; name: string; mode: "pct" | "fixed"; pct: number; prev: number; cur: number };
+// `add`: the line is paid to the contractor (materials on site, a price adjustment) instead of deducted
+export type IpcDeduction = { id: string; name: string; mode: "pct" | "fixed"; pct: number; prev: number; cur: number; add?: boolean };
 
 export type IpcTerms = {
   contractAmount: number;               // accepted contract amount, excluding VAT
@@ -53,8 +55,8 @@ export type IpcSummary = {
   advance: Triple;
   netBeforeVat: Triple;
   vat: Triple;
-  deductions: { id: string; name: string; t: Triple }[];
-  payable: Triple;            // what the employer pays: gross − retention − advance + VAT − other deductions
+  deductions: { id: string; name: string; t: Triple; add?: boolean }[];
+  payable: Triple;            // what the employer pays: gross − retention − advance + VAT − other deductions + other additions
   retentionCapped: boolean;
   advanceRepaid: boolean;
 };
@@ -132,16 +134,19 @@ export function computeIpc(items: IpcItem[], t: IpcTerms): IpcResult {
   trace.push({ label: "ضريبة القيمة المضافة", expr: `${(vp * 100).toFixed(0)}% × ${fmt(t.vatOn === "net" ? netBeforeVat.cur : gross.cur)} (${t.vatOn === "net" ? "الصافي بعد الاستقطاعات" : "إجمالي أعمال الفترة"})`, value: fmt(vat.cur), clause: vp === 0.14 ? "قانون 157 لسنة 2025" : undefined });
 
   const deductions = (t.deductions || []).map((d) => {
+    const add = d.add ? { add: true as const } : {};
     if (d.mode === "pct") {
       const p = Math.max(0, fin(d.pct)) / 100;
-      return { id: d.id, name: d.name, t: triple(gross.prev * p, gross.total * p) };
+      return { id: d.id, name: d.name, t: triple(gross.prev * p, gross.total * p), ...add };
     }
     const prev = fin(d.prev), cur = fin(d.cur);
-    return { id: d.id, name: d.name, t: triple(prev, prev + cur) };
+    return { id: d.id, name: d.name, t: triple(prev, prev + cur), ...add };
   });
-  const dSum = (k: "prev" | "total") => deductions.reduce((a, d) => a + d.t[k], 0);
+  // deducted lines count against the certificate, added lines for it
+  const dSum = (k: "prev" | "total") => deductions.reduce((a, d) => a + (d.add ? -d.t[k] : d.t[k]), 0);
   const payable = triple(netBeforeVat.prev + vat.prev - dSum("prev"), netBeforeVat.total + vat.total - dSum("total"));
-  trace.push({ label: "صافي المستحق للمستخلص", expr: `${fmt(gross.cur)} − ${fmt(retention.cur)} − ${fmt(advance.cur)} + ${fmt(vat.cur)} − ${fmt(dSum("total") - dSum("prev"))}`, value: fmt(payable.cur) });
+  const other = dSum("total") - dSum("prev");
+  trace.push({ label: "صافي المستحق للمستخلص", expr: `${fmt(gross.cur)} − ${fmt(retention.cur)} − ${fmt(advance.cur)} + ${fmt(vat.cur)} ${other < 0 ? "+" : "−"} ${fmt(Math.abs(other))}`, value: fmt(payable.cur) });
   if (payable.cur < -0.005) issues.push({ level: "warn", text: `صافي المستخلص سالب (${fmt(payable.cur)}) — الاستقطاعات تتجاوز أعمال الفترة.` });
 
   return { lines, s: { gross, retention, advance, netBeforeVat, vat, deductions, payable, retentionCapped, advanceRepaid }, issues, trace };

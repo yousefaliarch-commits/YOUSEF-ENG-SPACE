@@ -3,7 +3,8 @@
 //  · BOQ items with contract quantity and rate; the previous cumulative quantity and this period's quantity give every value
 //    as previous · current · total (السابق · الحالي · الإجمالي), as Egyptian certificates and FIDIC 14.3 statements read.
 //  · The contract's terms are inputs: retention % and its cap, the advance and how it is recovered (proportional or FIDIC 14.2),
-//    VAT (14 % since Law 157/2025 — or the contract's rate) and its base, and any other deduction.
+//    VAT (14 % since Law 157/2025 — or any rate the contract states) and its base, and any other line — deducted
+//    (withholding tax, a penalty) or added (materials on site, a price adjustment).
 //  · «المستخلص التالي» opens the next certificate with this one's totals as its previous column.
 //  · The Excel copy is a working certificate: terms in parameter cells, every value a formula, so changing the VAT or the
 //    retention cell recalculates the whole sheet.
@@ -24,7 +25,7 @@ import { paramsOnly } from "../../../data/tool-templates";
 import { buildSpec, issuerName } from "../spec";
 
 type Item = { id: string; section: string; ref: string; desc: string; unit: string; qc: string; rate: string; qp: string; qq: string };
-type Ded = { id: string; name: string; mode: "pct" | "fixed"; pct: string; prev: string; cur: string };
+type Ded = { id: string; name: string; mode: "pct" | "fixed"; pct: string; prev: string; cur: string; add?: boolean };
 type Body = {
   certNo: string; from: string; to: string; contractRef: string;
   contract: string; ret: string; retLimit: string;
@@ -64,7 +65,7 @@ const termsOf = (b: Body): IpcTerms => ({
   contractAmount: N(b.contract), retentionPct: N(b.ret), retentionLimitPct: b.retLimit.trim() ? N(b.retLimit) : null,
   advanceAmount: N(b.adv), advanceMethod: b.advMethod, fidicStartPct: N(b.fStart), fidicRatePct: N(b.fRate), advanceRecoveredPrev: N(b.advPrev),
   vatPct: N(b.vat), vatOn: b.vatOn,
-  deductions: b.deductions.map((d) => ({ id: d.id, name: d.name, mode: d.mode, pct: N(d.pct), prev: N(d.prev), cur: N(d.cur) })),
+  deductions: b.deductions.map((d) => ({ id: d.id, name: d.name, mode: d.mode, pct: N(d.pct), prev: N(d.prev), cur: N(d.cur), add: !!d.add })),
 });
 const compute = (b: Body): IpcResult => computeIpc(itemsOf(b), termsOf(b));
 
@@ -77,7 +78,7 @@ function summaryRows(r: IpcResult): [string, Triple, boolean?][] {
     ["يُخصم: استهلاك الدفعة المقدمة", s.advance],
     ["الصافي قبل الضريبة", s.netBeforeVat, true],
     ["يُضاف: ضريبة القيمة المضافة", s.vat],
-    ...s.deductions.map((d) => [`يُخصم: ${d.name || "استقطاع"}`, d.t] as [string, Triple]),
+    ...s.deductions.map((d) => [d.add ? `يُضاف: ${d.name || "إضافة"}` : `يُخصم: ${d.name || "استقطاع"}`, d.t] as [string, Triple]),
     ["صافي المستحق", s.payable, true],
   ];
 }
@@ -145,7 +146,8 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
               <NumField label="المستهلك حتى المستخلص السابق" unit="ج.م" value={b.advPrev} onChange={(v) => put({ advPrev: v })} />
             </Grid2>
           )}
-          <Pick label="ضريبة القيمة المضافة" items={[["14", "14% — قانون 157/2025"], ["5", "5% — عقد على ضريبة الجدول"], ["0", "معفى"]]} value={(["14", "5", "0"].includes(b.vat) ? b.vat : "14") as any} onChange={(vat) => put({ vat })} />
+          <Pick<VatChoice> label="ضريبة القيمة المضافة" items={VAT_CHOICES} value={vatChoice(b.vat)} onChange={(v) => put({ vat: v === "other" ? "" : v })} />
+          {vatChoice(b.vat) === "other" && <NumField label="نسبة الضريبة حسب العقد" unit="%" value={b.vat} onChange={(v) => put({ vat: v })} rule={{ min: 0, max: 100 }} data-ipc-vat />}
           <Pick label="وعاء الضريبة" items={[["gross", "إجمالي أعمال الفترة"], ["net", "الصافي بعد التأمين والدفعة"]]} value={b.vatOn} onChange={(vatOn) => put({ vatOn })} />
         </div>
       </Card>
@@ -187,25 +189,26 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
           }}
         />
       </Card>
-      <Card title="استقطاعات أخرى">
+      <Card title="استقطاعات وإضافات أخرى">
         <RowCards<Ded>
-          rows={b.deductions} onChange={(deductions) => put({ deductions })} max={20} addLabel="استقطاع"
-          blank={() => ({ id: uid(), name: "", mode: "pct", pct: "", prev: "0", cur: "" })}
-          summary={(d) => `${d.name || "استقطاع"} — ${d.mode === "pct" ? `${d.pct || 0}% من إجمالي الأعمال` : `${money(N(d.cur))} ج.م للفترة`}`}
+          rows={b.deductions} onChange={(deductions) => put({ deductions })} max={20} addLabel="استقطاع أو إضافة"
+          blank={() => ({ id: uid(), name: "", mode: "pct", pct: "", prev: "0", cur: "", add: false })}
+          summary={(d) => `${d.add ? "يُضاف" : "يُخصم"}: ${d.name || (d.add ? "إضافة" : "استقطاع")} — ${d.mode === "pct" ? `${d.pct || 0}% من إجمالي الأعمال` : `${money(N(d.cur))} ج.م للفترة`}`}
           render={(d, setD) => (
             <>
-              <TextField label="البيان" value={d.name} onChange={(v) => setD({ ...d, name: v })} placeholder="مثال: ضريبة الخصم من المنبع، غرامة، تشوينات" />
+              <Pick<"deduct" | "add"> items={[["deduct", "يُخصم من المستخلص"], ["add", "يُضاف للمستخلص"]]} value={d.add ? "add" : "deduct"} onChange={(v) => setD({ ...d, add: v === "add" })} />
+              <TextField label="البيان" value={d.name} onChange={(v) => setD({ ...d, name: v })} placeholder={d.add ? "مثال: تشوينات بالموقع، فروق أسعار معتمدة" : "مثال: ضريبة الخصم من المنبع، غرامة تأخير"} />
               <Pick items={[["pct", "نسبة من إجمالي الأعمال"], ["fixed", "مبلغ ثابت"]]} value={d.mode} onChange={(mode) => setD({ ...d, mode })} />
               {d.mode === "pct"
                 ? <NumField label="النسبة حسب العقد / القانون" unit="%" value={d.pct} onChange={(v) => setD({ ...d, pct: v })} />
                 : <Grid2>
                     <NumField label="السابق" unit="ج.م" value={d.prev} onChange={(v) => setD({ ...d, prev: v })} />
-                    <NumField label="الفترة" unit="ج.م" value={d.cur} onChange={(v) => setD({ ...d, cur: v })} />
+                    <NumField label="الفترة" unit="ج.م" value={d.cur} onChange={(v) => setD({ ...d, cur: v })} rule={{ allowNegative: true }} />
                   </Grid2>}
             </>
           )}
         />
-        <Note>النسب حسب العقد والقانون الساري — لا يفترض التطبيق أي نسبة استقطاع.</Note>
+        <Note>النسب حسب العقد والقانون الساري — لا يفترض التطبيق أي نسبة. هذه السطور تُحسب بعد الضريبة؛ ما يخضع للضريبة أدخله بندًا من بنود الأعمال. تشوينات سبق صرفها تُسترد بمبلغ سالب في الفترة.</Note>
       </Card>
       <Card title="ملخص المستخلص">
         <TripleTable rows={summaryRows(r)} />
@@ -225,6 +228,11 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
     </div>
   );
 }
+
+// the three rates certificates here carry, or the contract's own
+type VatChoice = "14" | "5" | "0" | "other";
+const VAT_CHOICES: [VatChoice, string][] = [["14", "14% — قانون 157/2025"], ["5", "5% — عقد على ضريبة الجدول"], ["0", "معفى"], ["other", "نسبة أخرى"]];
+const vatChoice = (vat: string): VatChoice => (vat === "14" || vat === "5" || vat === "0" ? vat : "other");
 
 const nextNo = (n: string) => (/^\d+$/.test(n.trim()) ? String(Number(n) + 1) : `${n}+1`);
 
@@ -439,15 +447,15 @@ function workbook(doc: ToolDoc<Body>, project: any): Workbook {
   const vb = b.vatOn === "net" ? net : g;
   const vat = line("يُضاف: ضريبة القيمة المضافة", { f: `C${vb}*${B("vat")}` }, { f: `E${vb}*${B("vat")}` });
   const deds = b.deductions.map((d) => {
-    const label = `يُخصم: ${d.name || "استقطاع"}`;
+    const label = d.add ? `يُضاف: ${d.name || "إضافة"}` : `يُخصم: ${d.name || "استقطاع"}`;
     if (d.mode === "pct") {
       const p = N(d.pct) / 100;
-      return line(`${label} (${d.pct || 0}%)`, { f: `C${g}*${p}` }, { f: `E${g}*${p}` });
+      return { n: line(`${label} (${d.pct || 0}%)`, { f: `C${g}*${p}` }, { f: `E${g}*${p}` }), add: !!d.add };
     }
-    return line(label, N(d.prev), N(d.prev) + N(d.cur));
+    return { n: line(label, N(d.prev), N(d.prev) + N(d.cur)), add: !!d.add };
   });
-  const minus = (col: string) => deds.map((n) => `-${col}${n}`).join("");
-  line("صافي المستحق", { f: `C${net}+C${vat}${minus("C")}` }, { f: `E${net}+E${vat}${minus("E")}` }, true);
+  const other = (col: string) => deds.map((d) => `${d.add ? "+" : "-"}${col}${d.n}`).join("");
+  line("صافي المستحق", { f: `C${net}+C${vat}${other("C")}` }, { f: `E${net}+E${vat}${other("E")}` }, true);
 
   resolve(rows);
   return {
