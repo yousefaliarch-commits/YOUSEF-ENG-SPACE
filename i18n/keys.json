@@ -1607,8 +1607,8 @@
  },
  "مهندس مكتب فني": {
   "k": "s",
-  "p": "data/companies.tsx,data/seed.ts,domain/taxonomy.ts,features/landing/samples.ts",
-  "n": 21
+  "p": "data/companies.tsx,data/seed.ts,domain/taxonomy.ts",
+  "n": 20
  },
  "مهندس تخطيط": {
   "k": "s",
@@ -5275,8 +5275,8 @@
  },
  "م. كريم عادل": {
   "k": "s",
-  "p": "data/seed.ts,features/landing/samples.ts",
-  "n": 2
+  "p": "data/seed.ts",
+  "n": 1
  },
  "عرض 21,000 + سكن ومواصلات في العلمين الجديدة، مقابل 17,000 في القاهرة قريب من البيت. متجوز وعندي طفل. أقبل؟": {
   "k": "s",
@@ -7633,8 +7633,8 @@
  },
  "م³": {
   "k": "s",
-  "p": "domain/site-calc.ts,domain/tools/qto-calc.ts,features/landing/MiniTool.tsx,features/landing/samples.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx",
-  "n": 41
+  "p": "domain/site-calc.ts,domain/tools/qto-calc.ts,features/landing/MiniTool.tsx,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx",
+  "n": 34
  },
  "لتر": {
   "k": "s",
@@ -16052,276 +16052,6 @@
   "p": "features/landing/estimator.ts",
   "n": 1
  },
- "برج النخيل السكني": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "شركة التطوير العقاري": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "المكتب الاستشاري الهندسي": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "شركتك هنا": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "قطعة 14 — القاهرة الجديدة": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "م. أحمد سامي": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 3
- },
- "م. منى خالد": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 3
- },
- "مدير المكتب الفني": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "م. هشام فؤاد": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 3
- },
- "مدير المشروع": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "خطة صب": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/concrete/concrete.tsx",
-  "n": 3
- },
- "خطة صب سقف الدور الثالث": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "برج A": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/host.tsx",
-  "n": 5
- },
- "الدور 03": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 2
- },
- "بلاطة S-301": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "إصدار أول": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/doc-settings.tsx",
-  "n": 3
- },
- "تعديل موعد الصب وإضافة الكمرات": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "سقف الدور الثالث": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/concrete/concrete.tsx",
-  "n": 3
- },
- "محطة الخرسانة الجاهزة": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "B1 — محاور A–D": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "B2 — محاور 1–5": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "مستخلص جاري": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "المستخلص رقم 5": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "أعمال ترابية": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 2
- },
- "حفر في تربة عادية": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "ردم على طبقات مع الدمك": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "خرسانات": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 4
- },
- "خرسانة عادية للنظافة": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "خرسانة مسلحة للقواعد والسملات": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "خرسانة مسلحة للأعمدة والحوائط": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "خرسانة مسلحة للأسقف والكمرات": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "مباني": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/office/qto.tsx",
-  "n": 2
- },
- "مباني طوب طفلي 25 سم": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "تشوينات حديد بالموقع": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "خصم تحت حساب الضريبة": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "حصر كميات": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/office/qto.tsx",
-  "n": 3
- },
- "حصر تشطيبات الدور الثاني": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "الدور 02": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/host.tsx",
-  "n": 3
- },
- "برج A / الدور 02 / شقة 3": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 4
- },
- "حوائط خارجية 25 سم": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "شباك W1": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "باب بلكونة D3": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "بياض داخلي للحوائط": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "باب D1": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "فتحة تكييف": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "بياض الأسقف": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "بورسلين 60×60 للاستقبال والغرف": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "عمود C4": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "برج A / الدور 02 / حمامات": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "عزل الحمامات مع الرفرف": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "جدول تفريد الحديد": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/rebar/bbs.tsx",
-  "n": 2
- },
- "تفريد كمرات سقف الدور الثالث": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "كمرات B1 · B2": {
-  "k": "s",
-  "p": "features/landing/samples.ts",
-  "n": 1
- },
- "كمرات سقف الدور 3": {
-  "k": "s",
-  "p": "features/landing/samples.ts,features/tools/rebar/bbs.tsx",
-  "n": 3
- },
  "تقرير": {
   "k": "x",
   "p": "features/market/live-salary.tsx,features/stack/stack.tsx,ui/feed.tsx",
@@ -22782,6 +22512,11 @@
   "n": 1,
   "x": "kindName(row.kind)"
  },
+ "خطة صب": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
  "حصر الدور / المبنى": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx",
@@ -22796,6 +22531,11 @@
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx",
   "n": 3
+ },
+ "سقف الدور الثالث": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
  },
  "المنسوب": {
   "k": "s",
@@ -23920,6 +23660,11 @@
   "p": "features/tools/doc-settings.tsx",
   "n": 1
  },
+ "إصدار أول": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
  "إصدار المستند": {
   "k": "s",
   "p": "features/tools/doc-settings.tsx",
@@ -24460,7 +24205,17 @@
   "p": "features/tools/host.tsx",
   "n": 2
  },
+ "برج A": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
  "الدور / المنسوب": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "الدور 02": {
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 2
@@ -26666,6 +26421,11 @@
   "p": "features/tools/office/qto.tsx",
   "n": 1
  },
+ "مباني": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 1
+ },
  "بياض / محارة": {
   "k": "s",
   "p": "features/tools/office/qto.tsx",
@@ -26945,6 +26705,11 @@
   "k": "s",
   "p": "features/tools/office/qto.tsx",
   "n": 1
+ },
+ "حصر كميات": {
+  "k": "s",
+  "p": "features/tools/office/qto.tsx",
+  "n": 2
  },
  "يوقف العمل": {
   "k": "s",
@@ -27520,6 +27285,11 @@
   "p": "features/tools/rebar/bbs.tsx",
   "n": 2
  },
+ "كمرات سقف الدور 3": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
  "اللوحة والمراجعة": {
   "k": "s",
   "p": "features/tools/rebar/bbs.tsx",
@@ -27873,6 +27643,11 @@
   "x": "fmtNum(c.sum.kg / 1000, 3)"
  },
  "جدول تفريد الحديد · Bar bending schedule": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 1
+ },
+ "جدول تفريد الحديد": {
   "k": "s",
   "p": "features/tools/rebar/bbs.tsx",
   "n": 1

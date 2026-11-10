@@ -1,0 +1,221 @@
+# The editable workstation (v0.39): document settings, firm templates, tool parameters, the command palette and the public page
+92918cdb	Now the active project — your new documents are saved to it
+c2215def	All documents — no active project
+bf3ba5aa	Search and commands
+d8aea1b8	Search for a tool, a document or a project…
+4b4f3b3d	Results
+8f233bc7	No results — try the tool's name, the document number or the building.
+8a9595b7	to move
+8653f03f	{0} to move
+0ba4d125	to open
+4ed0152a	{0} to open
+d77bb6a5	any time
+1e3c42f5	{0} any time
+df71ffad	Numeric: 00 · 01 · 02
+58ccc766	Letters: A · B · C
+d8e756b1	Preliminary: P01 · P02
+e1a28ce5	Contractual: C01 · C02
+96564196	Project-Type-Number
+8372903b	Project-Originator-Type-Number
+3f3a682e	Type/Year/Number
+c8c0a8ee	Project-Type-Year and number
+724226ef	The pattern is too long
+8a46d6c7	The pattern needs the counter {nnnn}, so that no number repeats
+f15a82e8	Unknown token: {0}
+af3cb271	English letters, digits and - _ . / only
+a33afe0d	The file is too large to be a template
+c9159db2	The file is not an EngSpace template
+6e851b5c	The file is not a valid EngSpace template
+fdda35d7	The template's content is not valid
+ef5ae44f	Template
+dc6b82a9	Sample ·
+93406b0e	Sample · {0}
+2f23a642	It shows its working
+0318ad95	Every result comes with its steps and the code clause behind it. What has not been verified carries a ⚑ and is never called “compliant”.
+79b1aa92	Every value is yours
+3c47e441	Grade, mix, waste, opening-deduction rules, VAT and retention rates — no figure is imposed on you, and your settings are saved as your firm's template.
+086b69d9	A document in your name
+c17fbf9a	A title block with your company's name, numbering and revisions in your own system, and signature boxes you define. The app's name is on no sheet.
+2d862229	It works on site
+96052f78	It saves on your phone first and works offline, then syncs with your account and the office computer in real time.
+66b149db	Page sections
+46cbfb07	Download
+44e400fe	Open the app
+22e9ec67	The engineer's workstation — for the site and the technical office
+ed187073	From take-off to payment certificate, with numbers that show their working.
+9dc84f88	engineering tools for Egypt's engineers: every figure comes with its working, every value is yours to change, and the document comes out as PDF, Word and Excel with live formulas — under your company's title block.
+07facf6f	{0} engineering tools for Egypt's engineers: every figure comes with its working, every value is yours to change, and the document comes out as PDF, Word and Excel with live formulas — under your company's title block.
+29b0fb2b	Open the app — free
+49efbff0	Android and iPhone
+a03e634e	The calculator beside this works now, with no account · your documents are saved on your device first
+cdac6863	These are real pages the app is drawing in front of you right now from sample data, with the same export engine: title block, revision table, signatures, and figures that match the live Excel file.
+5ddc2d7f	A sheet that leaves in your company's name — ready for the consultant.
+24d80e5b	Why engineers trust it
+1311d54a	A tool that respects your signature on the document.
+a0e2ea8d	For the site: concrete, rebar, levelling, the daily diary and permits. For the technical office: take-off, payment certificates, variation orders, RFIs and their registers. And with them the engineers' network: net salaries and company ratings, anonymously.
+c8812861	From the first pour to the last certificate.
+268750c3	In the browser, and on your phone on site.
+7d21bd91	Browser
+7ad9460e	No install. On an office screen: a sidebar, two panes, a live A4 preview beside what you type, and a command palette with
+42c4bd86	No install. On an office screen: a sidebar, two panes, a live A4 preview beside what you type, and a command palette with {0}.
+5277f07b	Android
+c19aeaa9	A preview build as an APK file: download it, open it and allow installing from this source. Its content updates itself with every release.
+fe8c05ea	Download for Android
+72db4b1d	A preview build installed from a computer as an IPA file until the store version is out. Or open the site in Safari and add it to the Home Screen.
+1ae66565	iPhone file
+c93ffef6	Made for Egypt's engineers — salaries always net, identity anonymous.
+17c5581a	Try it now: a concrete slab
+1b78ba5d	No sign-up
+ee1c3fdf	A concrete slab with its dimensions and reinforcement mesh
+337c73a8	Bar diameter
+74634bcf	Spacing (mm)
+35da8133	9 m³ trucks
+0e326006	truck
+b80907ab	Reinforcement steel
+24ee7f0c	m³ · waste
+00a7d899	bars ·
+b0760303	kg/m³
+e4a35f74	Net {0} m³ · waste {1} · {2} bars · {3} kg/m³
+0532f8cb	The full pour plan and bar schedule are in the app
+17ab7f52	A first estimate with the app's own engine: one layer both ways, no laps or top steel.
+9ccfde15	Order from the plant
+7e454035	Bars in both directions
+4358e6c5	Steel weight
+acb791b2	{0} — dimensioned sketch
+bf0097fe	Another grade
+3983e00d	The grade as in the specification
+8c9add8e	Truck loading at the plant
+3c19d446	Truck wash-out and return to the queue
+efa3a14f	Mixed on site (+{0} % ⚑)
+a7c6cf0b	Site mix
+174245cf	Cement, sand, gravel and water per m³ — as in the approved mix design
+cd94d2b8	— per m³
+7038ed4a	{0} — per m³
+7d44f76a	default {0} ⚑
+1f1e4744	Cement bag weight
+03bd3446	default {0}
+773f3365	Site-mixing allowance
+8bfc76df	{0} kg bag
+5a873921	Site mix — entered by the engineer
+b65fa0a1	Document settings
+58fbf21e	Revision · title block · signatures · firm templates
+09876353	Revision code
+1e40eeef	“New revision” continues in the same scheme: 00 → 01, A → B, P01 → P02.
+32c31508	Drawing scale
+57de548b	Reference (instead of the contract number)
+694f5755	Drawing or letter number
+5858d559	Signature boxes (
+f6067df5	Signature boxes ({0})
+cc417876	Project signatures
+f6968545	Customise
+fc6a4ee6	Signature box
+a403597e	Box title
+44271a2d	Project manager
+d3470fac	This document has no signature boxes.
+1364202a	Issued revisions
+3327f899	First issue
+a65e7003	Issue the document ·
+9c60b330	Issue the document · {0}
+5a2982ab	What this issue is for (printed in the revision table)
+00e4c68b	Quantities revised per the consultant's comments
+0143a273	Numbering pattern: {0}
+fe16bda4	Other signatures
+c2b43c3a	Site engineer, consultant, safety, store…
+f458606f	Typed once here, they fill their box in every document that carries it. An empty box prints for a wet signature.
+3d31cfc5	Document numbering
+f680cf7b	The document-number pattern and the originator's code
+be0ce8ab	Document-number pattern
+6442da02	Originator code {orig}
+8d78c86a	Example: {0}
+172e35f1	Tokens:
+c48e9583	— the number of n letters is the number of digits. Issued documents keep their numbers.
+f600cc10	Tokens: {0} — the number of n letters is the number of digits. Issued documents keep their numbers.
+fbf6b87b	Add: {0}
+fa4764d4	VAT rate per the contract
+b77e6e42	Other deductions and additions
+be687b3a	Deduction or addition
+5aec753d	Add
+9633a600	Deduct
+dea9b41f	Deducted from the certificate
+9ffa3e7f	Added to the certificate
+e91c6eff	e.g. materials on site, approved price adjustments
+7ed8e521	e.g. withholding tax, delay penalty
+f8a7ed39	Rates follow the contract and the law in force — the app assumes none. These lines are calculated after VAT; enter anything subject to VAT as a work item. Materials on site already paid are recovered with a negative amount in the period.
+78099e19	Another rate
+9576b2fa	Yield strength fy (from the mill certificate)
+e383e470	Deformed bars — used in development and lap lengths
+3a3d6418	The template is for another tool
+44507653	The template is from a newer version of the app — update the app, then import it
+f51c2f7d	The template does not fit this tool
+a050c9f6	Template not found
+131ec64f	The template is from a newer version of the app — update the app
+371262c3	Could not open the template
+c0710fe9	Could not share the template
+48a2efbf	This template is for a tool that is not available to your account
+2bcbfc66	Could not save the template
+f0be545a	Template added
+26c3b151	Template added to: {0}
+692b1320	Could not read the file
+8fa158eb	Firm templates
+e66bdd1b	Firm templates {0}
+2565646e	Import a template
+596b6eab	Save any document as a template from “Document settings”, and every new document starts with your firm's settings: rates, measurement rules, signatures and your usual items.
+b788a34d	New document from this template ·
+46bfa296	New document from this template · {0}
+5fe214f1	Share the template as a file
+d8d7e334	Delete the template
+0b7a91d8	The template is deleted from all your devices. Documents that started from it stay as they are.
+e5d74ac6	Template deleted
+52d3f08b	{0} template
+56d6cf3a	Give the template a name
+fca478b8	Template updated
+0d029486	Template saved — find it on the tool's page under “Firm templates”
+a0b6d50c	Firm template
+cc44189e	Saves this document's settings and signatures so every new document starts from them. Executed quantities, replies and approvals do not carry over.
+658266a2	Template name
+e316c2e3	With this document's rows
+e39a2887	Save as a firm template
+174dfd23	Bag weight
+c3579bb0	Joint thickness
+3eea9b7a	Brick waste
+6fc95caf	Blank = by brick type
+5e96d7a7	Mortar waste
+058430bb	waste {0} % ⚑
+c6a4027c	Backing coat thickness
+56b6a562	Blank = by type (20 internal · 25 external)
+fd923ea7	Backing coat cement per m³ of sand
+b6c065da	Blank = 300
+bc6742f4	Joint depth (tile thickness)
+7808ce1e	Grout waste
+4fe004ed	Practical coverage factor
+98176ab7	1 = the data sheet's coverage · 0.8 for a rough or absorbent surface
+c47f457a	Sheet length
+86190de4	Sheet width
+528ff679	{0} plywood sheet
+48196b61	Plywood {0}
+77666c08	Extra length (joints and waste)
+9d7bc001	One fitting per
+ce09169f	1 per {0} m ⚑
+e1215a95	Board layers per face
+51a9a635	Stud spacing
+e0821677	every {0} cm
+dd2f6947	Values that rarely change — set them for your site and materials
+ca9c7ff5	Go to
+6407c54f	Quick settings
+7aa0e78c	New: {0}
+46148c6b	new document {0} {1}
+2061d7a5	The active project now
+e4a0710f	Make it the active project
+ed9f643e	{0} {1} {2} project
+8f52fbe4	all documents no project
+387f71dd	Switch light / dark mode
+5407fc76	light dark mode theme appearance
+45b8732a	Switch language
+3f001c60	language english arabic
+68216969	Dimensioned sketch
+76f4368a	Advanced settings
+0f1a1511	changed
+37ebd003	{0} changed
+416248e7	Position in the list
+eb9080d3	Move up
+2ff0887f	Move down
