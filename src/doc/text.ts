@@ -114,3 +114,7 @@ export function longDate(iso: string, lang: "ar" | "en") {
   if (!y || !mo || !d) return iso;
   return `${d} ${(lang === "ar" ? AR_MONTHS : EN_MONTHS)[mo - 1]} ${y}`;
 }
+
+// the short fingerprint printed in the title block (first 16 hex characters of the issue hash, in groups of four) — the PDF, the
+// Word file and the Excel workbook print the same one
+export const fingerprint = (hash: string) => (hash || "").slice(0, 16).toUpperCase().replace(/(.{4})(?=.)/g, "$1 ");
