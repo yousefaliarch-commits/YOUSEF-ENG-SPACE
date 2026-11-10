@@ -80,6 +80,33 @@ tap «صورة» / «إضافة صورة» / «تغيير صورة الحساب�
 - Never `Camera.getPhoto` anywhere but `src/native/camera.ts` (pinned by `tests/native-camera-config.test.ts`); the plugin's logic is pinned by
   `tests/camera.test.ts`, the chooser by `e2e/media.spec.ts` through the development-only `window.__engspaceCamera` stand-in.
 
+## Files from outside, exports, and what sync delivers (v0.39)
+No new table, bucket or function came with the workstation release — firm templates are tool documents (`tpl.<kind>`) in the
+member's own `member_state` rows, behind the same row-level security and size caps as every tool document. What changed is the
+client's handling of text it did not write:
+
+- **A template file is untrusted input, and has one door** (`src/data/template-file.ts`, loaded only when a file is imported):
+  size → JSON → a zod envelope (known fields, bounded lengths, unknown fields stripped) → the free-form body bounded as plain
+  JSON (`safeJson`: depth, node count, string and list sizes, no `__proto__` / `constructor` / `prototype` keys) → the tool's
+  own blank document as the shape of every field and row (`conformBody`) → the tool must be one this role may open, of a body
+  version this build knows, and must build a document from the body (`templateFits`) before anything is saved.
+  `tests/tool-templates.test.ts` holds the refusals, including prototype-pollution attempts.
+- **Exports never turn member text into something that runs** (`tests/hardening.test.ts`): Excel stores it as inline strings —
+  a value starting with `=` `+` `-` `@` is a string cell, formula cells hold only references, numbers and functions the tool
+  wrote; Word has no field codes, hyperlinks or external relationships; both strip control characters and escape markup; sheet
+  names are cleaned to Excel's rules. A project's document-number pattern accepts only its tokens and `A–Z 0–9 . _ / -`.
+- **The account copy is read before it is trusted** (`isToolDoc` / `isToolTomb` in `src/data/tool-docs.ts`): a shard entry that
+  is not a document is passed over — never merged, never thrown on. The check is lenient about what a tool owns (the body, new
+  optional fields), so a real document is never hidden.
+- **No string becomes markup or code**: no `dangerouslySetInnerHTML`, `innerHTML =`, `eval` or `new Function` anywhere in `src`
+  (pinned). Dialogs mount inside the app's root (`src/ui/portal.ts`).
+- **The public page** (`src/features/landing`) runs without an account and stores nothing; its download links are build-time
+  values accepted only as plain `https://` addresses. A return from sign-in (`?code=`, `?error=`, `?reset=1`, tokens in the
+  fragment) always opens the app, never the page (`src/app/entry.ts`, `tests/landing.test.ts`).
+- **Typing ratchet** (`scripts/strict-check.mjs`, part of `npm run typecheck`): every file is compiled with full strict flags
+  and its explicit `any` counted; a file not listed in `scripts/strict-baseline.json` must have none of either, and a listed
+  file may never get worse. New code is strict and any-free from its first commit; the baseline only shrinks.
+
 ## Local development
 `npm run db:start` then `npm run db:functions` (serves `upload-media` with `supabase/functions/local.env` — a development-only secret).
 `npm run test:cloud` needs both. The function uses plain `fetch` against the REST endpoints (`_shared/rest.ts`) — no npm download

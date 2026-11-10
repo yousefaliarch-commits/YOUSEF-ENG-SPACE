@@ -10,7 +10,7 @@
 //  · Every public function resolves; none rejects (handlers always end in a toast, never an unhandled error).
 // =====================================================================
 import {
-  DOC_GUARD, LOG_CAP, SHARDS, SHARD_GUARD, headerOf, jsonbBytes, mergeDoc, newDocId, shardOf,
+  DOC_GUARD, LOG_CAP, SHARDS, SHARD_GUARD, headerOf, isToolDoc, isToolTomb, jsonbBytes, mergeDoc, newDocId, shardOf,
   type ToolDoc, type ToolHeader, type ToolTomb,
 } from "../data/tool-docs";
 
@@ -263,7 +263,8 @@ export class ToolStore {
     const index = rows.find((r) => r.key === "toolIndex");
     if (index && index.value && Array.isArray(index.value.tombs)) {
       const mine = new Map(this.meta.tombs.map((t) => [t.id, t]));
-      for (const t of index.value.tombs as ToolTomb[]) {
+      for (const t of index.value.tombs as unknown[]) {
+        if (!isToolTomb(t)) continue;
         const m = mine.get(t.id);
         if (!m || t.at > m.at) mine.set(t.id, t);
       }
@@ -275,7 +276,9 @@ export class ToolStore {
     const seen = new Set<string>();
     for (const r of rows) {
       if (r.key === "toolIndex" || !r.value || !Array.isArray(r.value.docs)) continue;
-      for (const rd of r.value.docs as ToolDoc[]) {
+      for (const rd of r.value.docs as unknown[]) {
+        // an entry that is not a document (a cut-off row, a hand-edited one) is passed over, never merged
+        if (!isToolDoc(rd)) continue;
         seen.add(rd.id);
         const local = this.docs.get(rd.id) || null;
         const base = this.meta.base[rd.id] || 0;

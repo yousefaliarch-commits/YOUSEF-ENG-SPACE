@@ -65,7 +65,7 @@ describe("the hero estimator is the app's own arithmetic", () => {
   const concreteDoc = (L: string, B: string, t: string): ToolDoc<ReturnType<typeof concrete.blank>> => ({
     id: "d", kind: "concrete", v: concrete.v, at: 1, createdAt: 1, projectId: null, title: "x", dateIso: "2026-11-10", docNo: null, rev: "00", status: "draft",
     profile: concrete.profile, photos: {}, log: [],
-    body: { ...(concrete.blank() as Record<string, unknown>), scope: "pour", rows: [{ kind: "slab", label: "", n: "1", dims: { L, B, t, open: "" }, waste: "" }] } as ReturnType<typeof concrete.blank>,
+    body: { ...concrete.blank(), scope: "pour", rows: [{ kind: "slab", label: "", n: "1", dims: { L, B, t, open: "" }, waste: "" }] },
   });
   it("order and trucks equal the pour tool's document for the same slab", () => {
     for (const [L, B, tCm] of [[6, 4, 15], [12, 8.5, 20], [14, 10, 40], [2, 2, 10], [7.25, 5.75, 18]] as [number, number, number][]) {

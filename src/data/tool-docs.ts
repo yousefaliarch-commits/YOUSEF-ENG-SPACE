@@ -110,6 +110,32 @@ export function headerOf(d: ToolDoc): ToolHeader {
 }
 
 // ---------------------------------------------------------------------
+//  What arrives from the account copy is read before it is trusted: a row may have been cut short, written by a broken
+//  build or edited by hand. An entry the store can file has an id, a kind, a time and the envelope's text fields; anything
+//  else is skipped — never merged, never thrown on (the store's promise is that every call resolves). Deliberately
+//  lenient about everything a tool owns (the body, new optional fields): refusing a real document would hide it.
+// ---------------------------------------------------------------------
+const plainText = (v: unknown, max: number) => typeof v === "string" && v.length > 0 && v.length <= max && !/[\u0000-\u001F]/.test(v);
+
+export function isToolDoc(d: unknown): d is ToolDoc {
+  if (!d || typeof d !== "object" || Array.isArray(d)) return false;
+  const x = d as Record<string, unknown>;
+  return (
+    plainText(x.id, 64) && plainText(x.kind, 64) &&
+    typeof x.at === "number" && Number.isFinite(x.at) && x.at >= 0 &&
+    typeof x.title === "string" && typeof x.dateIso === "string" && typeof x.rev === "string" && typeof x.status === "string" &&
+    (x.docNo === null || typeof x.docNo === "string") && (x.projectId === null || x.projectId === undefined || typeof x.projectId === "string") &&
+    x.body !== null && x.body !== undefined && Array.isArray(x.log)
+  );
+}
+
+export function isToolTomb(t: unknown): t is ToolTomb {
+  if (!t || typeof t !== "object" || Array.isArray(t)) return false;
+  const x = t as Record<string, unknown>;
+  return plainText(x.id, 64) && typeof x.at === "number" && Number.isFinite(x.at) && x.deleted === true;
+}
+
+// ---------------------------------------------------------------------
 //  Merge (one document at a time; nothing is sliced or overwritten silently)
 //  · base = the version both sides last agreed on (ToolSyncState.base, 0 for never synced).
 //  · Only one side changed → that side. Both changed → the remote keeps the id, the local edit becomes a conflict copy.

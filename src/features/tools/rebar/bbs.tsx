@@ -55,7 +55,7 @@ const toLine = (l: Line, i: number): BbsLine => {
 // the steel in use: a listed grade, or the engineer's own yield strength (400 MPa until a figure is typed)
 export const BBS_CUSTOM = "custom";
 const steelOf = (b: Pick<Body, "grade" | "fyCustom">): { id: string; fy: number; plain?: boolean } =>
-  b.grade === BBS_CUSTOM ? { id: BBS_CUSTOM, fy: N(b.fyCustom, { min: 1 }) ?? 400 } : gradeOf(b.grade);
+  b.grade === BBS_CUSTOM ? { id: BBS_CUSTOM, fy: N(b.fyCustom || "", { min: 1 }) ?? 400 } : gradeOf(b.grade);
 const steelLabel = (b: Pick<Body, "grade" | "fyCustom">) => (b.grade === BBS_CUSTOM ? `fy ${steelOf(b).fy} MPa` : `${b.grade} · fy ${steelOf(b).fy} MPa`);
 
 function compute(b: Body) {
