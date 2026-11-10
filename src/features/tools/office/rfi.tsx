@@ -10,6 +10,7 @@ import { AreaField, Card, Check, DateField, Grid2, Note, NumField, Pick, RowCard
 import { numInputParse } from "../../../lib/num-input";
 import { AiFillCard, str, strs } from "../../ai/AiFill";
 import type { ToolModule } from "../module";
+import { paramsOnly } from "../../../data/tool-templates";
 import { buildSpec } from "../spec";
 
 const DISCIPLINES: [string, string][] = [["civil", "إنشائي"], ["arch", "معماري"], ["mech", "ميكانيكا"], ["elec", "كهرباء"], ["infra", "بنية تحتية"], ["other", "أخرى"]];
@@ -136,6 +137,8 @@ export const module: ToolModule<Body> = {
   kind: "rfi", v: 1, docType: "RFI", docTypeName: "طلب استيضاح فني · Request for information", discipline: "مكتب فني", engine: "rfi@1.0.0",
   profile: { id: "office@1", edition: "Technical office practice", values: {}, overridden: [], unverified: [] },
   blank,
+  // the question's frame stays; the consultant's reply and the closed flag never start a new query
+  template: (b, rows) => ({ ...(rows ? b : paramsOnly(blank(), b)), answer: "", answeredBy: "", answeredOn: "", closed: false }),
   defaultTitle: () => "طلب استيضاح فني",
   Editor,
   build,

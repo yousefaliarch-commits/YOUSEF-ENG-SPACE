@@ -225,6 +225,18 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   الإعدادات → «أمان فريق الإدارة» flips the switch. Local `config.toml` enables TOTP; tests: pgTAP 22, `tests/staff-mfa.test.ts`, and
   the cloud suite enrols a real authenticator (RFC 6238 codes) and checks password-only sessions lose staff powers when on.
 
+- v0.39.0 (docs/WORKSTATION.md): **the editable workstation**. Document controls (`data/doc-controls.ts`, card `features/tools/doc-settings.tsx`):
+  revision scheme + issued history (`withRevision` → the title block's revision table), custom signature boxes, scale / reference, per-project
+  numbering pattern — applied by the host over any tool's DocSpec (`applyDocControls`), so no tool needs code for them; the fingerprint covers them
+  only when set. **Firm templates** = documents of kind `tpl.<tool>` (never in lists of real documents); a tool clears history in `module.template`;
+  files enter only through `data/template-file.ts` (zod, lazy) + `safeJson` + `conformBody` + a dry-run `templateFits`. Every constant a calculation
+  used is a field whose default is the old constant (`Advanced` card; blank → default) — keep that rule for new fields. Kit: `RowCards` reorders,
+  `RollNumber`, `IsoBox` / `DraftSheet` (`ui/drafting.tsx`). **Command palette** (Ctrl/⌘K, `tools/palette.ts`): index built from `toolsForRole` — it
+  inherits the money / HR gates. **Public page** at the bare address (`app/entry.ts` decides; **a sign-in return `?code=` / `?error=` / `?reset=` / tokens
+  must always open the app**; never native). Dialogs mount in `[data-app-root]` (`ui/portal.ts`), not `<body>`. **Typing ratchet**
+  (`scripts/strict-check.mjs`, in `npm run typecheck`): a file absent from `scripts/strict-baseline.json` must be strict and `any`-free; counts only go
+  down (`npm run strict:update` after fixing). Every tool table must sum to its page width (guard test in `tests/tools-parameters.test.ts`).
+
 - **Website** (docs/WEB.md): **Deploy website** workflow → Cloudflare Pages (`engspace.pages.dev`; pull requests get
   `<branch>.engspace.pages.dev`). Secrets `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` (absent → a notice, never a failure); variables
   `PAGES_PROJECT`, `PUBLIC_URL`. Each deploy adds the site to Supabase Auth redirect URLs (merged, never replaced). `public/_headers` sets caching.

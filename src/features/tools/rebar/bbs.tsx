@@ -24,6 +24,8 @@ type Line = {
 };
 type Body = {
   group: string; drawingRef: string; drawingRev: string; grade: string; fcu: string; rounding: "0" | "5" | "10" | "25"; stockM: string; minRem: string;
+  // grade «custom»: a mill certificate's own yield strength (deformed bars) — any steel the list does not name
+  fyCustom?: string;
   lines: Line[];
   plan?: Record<string, CutPlan>; planHash?: string;
 };
@@ -50,8 +52,14 @@ const toLine = (l: Line, i: number): BbsLine => {
   };
 };
 
+// the steel in use: a listed grade, or the engineer's own yield strength (400 MPa until a figure is typed)
+export const BBS_CUSTOM = "custom";
+const steelOf = (b: Pick<Body, "grade" | "fyCustom">): { id: string; fy: number; plain?: boolean } =>
+  b.grade === BBS_CUSTOM ? { id: BBS_CUSTOM, fy: N(b.fyCustom || "", { min: 1 }) ?? 400 } : gradeOf(b.grade);
+const steelLabel = (b: Pick<Body, "grade" | "fyCustom">) => (b.grade === BBS_CUSTOM ? `fy ${steelOf(b).fy} MPa` : `${b.grade} · fy ${steelOf(b).fy} MPa`);
+
 function compute(b: Body) {
-  const g = gradeOf(b.grade);
+  const g = steelOf(b);
   const o = { rounding: Number(b.rounding), fy: g.fy, fcu: N(b.fcu) ?? 25, grade: b.grade, stockMm: Math.round((N(b.stockM) ?? 12) * 1000) };
   const lines = b.lines.map(toLine);
   const out = lines.map((l) => bbsLine(l, o));
@@ -136,7 +144,10 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
             <NumField label="fcu الخرسانة" unit="MPa" value={b.fcu} onChange={(v) => put({ fcu: v })} />
             <NumField label="طول السيخ" unit="m" value={b.stockM} onChange={(v) => put({ stockM: v })} rule={{ min: 6, max: 24 }} />
           </Grid2>
-          <Pick label="رتبة الحديد" items={BBS_GRADES.map((g) => [g.id, g.id] as [string, string])} value={b.grade} onChange={(v) => put({ grade: v })} />
+          <Pick label="رتبة الحديد" items={[...BBS_GRADES.map((g) => [g.id, g.id] as [string, string]), [BBS_CUSTOM, "رتبة أخرى"]]} value={b.grade} onChange={(v) => put({ grade: v })} />
+          {b.grade === BBS_CUSTOM && (
+            <NumField label="إجهاد الخضوع fy (من شهادة المصنع)" unit="MPa" value={b.fyCustom || ""} onChange={(v) => put({ fyCustom: v })} rule={{ min: 200, max: 800 }} hint="حديد مشرشر — يدخل في طول التماسك والوصلات" data-bbs-fy />
+          )}
           <Pick label="تقريب طول القص لأعلى" items={[["25", "25 مم"], ["10", "10 مم"], ["5", "5 مم"], ["0", "بدون"]]} value={b.rounding} onChange={(v) => put({ rounding: v })} />
         </div>
       </Card>
@@ -195,7 +206,7 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
                 {x && x.splices > 0 && (
                   <>
                     <Pick label="الوصلات" items={[["auto", "في قطاع واحد (1.3 Ld)"], ["staggered", "متخالفة ≤ 50 % (Ld)"], ["typed", "طول مُدخل"]]} value={l.lap} onChange={(v) => setL({ ...l, lap: v })} />
-                    {(l.lap === "typed" || gradeOf(b.grade).plain) && <NumField label="طول الوصلة (من اللوحة)" unit="mm" value={l.lapMm} onChange={(v) => setL({ ...l, lapMm: v })} />}
+                    {(l.lap === "typed" || steelOf(b).plain) && <NumField label="طول الوصلة (من اللوحة)" unit="mm" value={l.lapMm} onChange={(v) => setL({ ...l, lapMm: v })} />}
                   </>
                 )}
                 {x && <Rows rows={[
@@ -293,7 +304,7 @@ function build(doc: ToolDoc<Body>, project: any) {
   });
   const blocks: DocBlock[] = [
     { k: "kv", cols: 3, rows: [
-      { label: "العنصر", value: b.group || "—" }, { label: "اللوحة", value: iso(b.drawingRef || "—") }, { label: "رتبة الحديد", value: iso(`${b.grade} · fy ${c.o.fy} MPa`) },
+      { label: "العنصر", value: b.group || "—" }, { label: "اللوحة", value: iso(b.drawingRef || "—") }, { label: "رتبة الحديد", value: iso(steelLabel(b)) },
       { label: "fcu", value: iso(`${c.o.fcu} MPa`) }, { label: "التقريب", value: iso(`${b.rounding} mm ↑`) }, { label: "طول السيخ", value: iso(`${c.o.stockMm} mm`) },
     ] },
     {

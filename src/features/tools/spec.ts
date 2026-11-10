@@ -6,6 +6,7 @@
 // =====================================================================
 import type { BasisRow, DocBlock, DocSection, DocSpec, SignParty, TitleParty, TraceStep } from "../../doc/model";
 import { wbsPath, type ToolDoc } from "../../data/tool-docs";
+import { formatDocNo } from "../../data/doc-controls";
 import type { ProjectSnap, SignRole, ToolProject } from "../../data/tool-projects";
 
 declare const __BUILD__: { version: string };
@@ -19,7 +20,7 @@ export type ToolModuleMeta = {
   engine: string;           // "concrete@1.0.0"
 };
 
-const SIGN_LABEL: Record<SignRole, string> = {
+export const SIGN_LABEL: Record<SignRole, string> = {
   prepared: "أعدّ · Prepared by",
   checked: "راجع · Checked by",
   approved: "اعتمد · Approved by",
@@ -126,9 +127,10 @@ export function buildSpec(o: {
   };
 }
 
-// «7F3A…» numbering: <code>-<TYPE>-<NNNN> (GEN when the document has no project)
-export function nextDocNo(project: ToolProject | null, docType: string) {
+// the next document number of a type in a project: the project's own pattern (default <code>-<TYPE>-<NNNN>; GEN when the
+// document has no project). `dateIso` feeds the {yy} / {yyyy} tokens.
+export function nextDocNo(project: ToolProject | null, docType: string, dateIso?: string) {
   const code = project ? project.code : "GEN";
   const n = (project?.numbering.counters[docType] || 0) + 1;
-  return { docNo: `${code}-${docType}-${String(n).padStart(4, "0")}`, n };
+  return { docNo: formatDocNo(project?.numbering.pattern, { code, type: docType, n, dateIso, orig: project?.numbering.originator }), n };
 }

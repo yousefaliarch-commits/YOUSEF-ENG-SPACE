@@ -28,7 +28,8 @@ export type ToolProject = {
   contractNo?: string;
   discipline?: string;
   signatories: { role: SignRole; name: string; title?: string; syndicateNo?: string }[];
-  numbering: { scheme: "simple" | "iso19650"; originator?: string; counters: Record<string, number> };
+  // `pattern`: the firm's own document-number pattern (data/doc-controls.ts formatDocNo); absent → {code}-{type}-{nnnn}
+  numbering: { scheme: "simple" | "iso19650"; originator?: string; pattern?: string; counters: Record<string, number> };
   profiles: Record<string, string>;   // family → default profile id
   overrides: { key: string; value: number | string; reason: string; at: number }[];
   crewId?: string;

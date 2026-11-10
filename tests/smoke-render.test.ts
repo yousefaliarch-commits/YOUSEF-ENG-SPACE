@@ -40,8 +40,11 @@ const el = (type: any, props = {}) => ({ $el: true, type, props: { ...props, chi
 // deep links, and the admin console
 // and the component each one must reach
 const setups: [string, string, () => void, string][] = [
-  ["first launch (language screen)", "", () => {}, "LanguageScreen"],
-  ["registration", "", () => { store["engspace.lang"] = "ar"; C.storeFor("app").set("authView", "signup"); }, "AuthScreen"],
+  // the bare address is the public page for a visitor (app/entry.ts); the app's own first launch is at #app
+  ["the public page", "", () => {}, "MiniTool"],
+  ["the public page (English)", "", () => { store["engspace.lang"] = "en"; }, "DocShowcase"],
+  ["first launch (language screen)", "#app", () => {}, "LanguageScreen"],
+  ["registration", "#app", () => { store["engspace.lang"] = "ar"; C.storeFor("app").set("authView", "signup"); }, "AuthScreen"],
   ["member home (Arabic)", "#app", () => signIn("ar"), "HomeScreen"],
   ["member home (English)", "#app", () => signIn("en"), "HomeScreen"],
   ["settings deep link", "#app/settings", () => signIn("ar"), "SettingsScreen"],

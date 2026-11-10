@@ -260,7 +260,7 @@
  "الإشعارات": {
   "k": "s",
   "p": "app/AppView.tsx,app/desk.tsx,ui/chrome.tsx",
-  "n": 3
+  "n": 4
  },
  "شارك راتبك": {
   "k": "s",
@@ -323,6 +323,26 @@
   "p": "app/AppView.tsx",
   "n": 1
  },
+ "الإعدادات": {
+  "k": "s",
+  "p": "app/AppView.tsx,app/desk.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
+  "n": 10
+ },
+ "حسابك": {
+  "k": "s",
+  "p": "app/AppView.tsx,app/desk.tsx,features/admin/AdminView.tsx,ui/chrome.tsx",
+  "n": 9
+ },
+ "صار المشروع النشط — مستنداتك الجديدة تُحفظ فيه": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "كل المستندات — بدون مشروع نشط": {
+  "k": "s",
+  "p": "app/AppView.tsx,tools/palette.ts",
+  "n": 2
+ },
  "معاينة تفاعلية كاملة · أنشئ حسابك (يُحفظ على جهازك فقط)، واختر في كل مشاركة: علنًا باسمك أو مجهولًا. اسحب من حافة البداية للرجوع.": {
   "k": "x",
   "p": "app/AppView.tsx",
@@ -365,8 +385,8 @@
  },
  "التبديل إلى العربية": {
   "k": "s",
-  "p": "app/TopBar.tsx,app/desk.tsx",
-  "n": 2
+  "p": "app/TopBar.tsx,app/desk.tsx,features/landing/Landing.tsx",
+  "n": 3
  },
  "العربية": {
   "k": "s",
@@ -385,20 +405,15 @@
   "n": 1,
   "x": "tLabel"
  },
+ "بحث وأوامر": {
+  "k": "x",
+  "p": "app/desk.tsx,app/palette-panel.tsx",
+  "n": 3
+ },
  "التنقل الرئيسي": {
   "k": "s",
   "p": "app/desk.tsx,ui/chrome.tsx",
   "n": 4
- },
- "الإعدادات": {
-  "k": "x",
-  "p": "app/desk.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
-  "n": 9
- },
- "حسابك": {
-  "k": "s",
-  "p": "app/desk.tsx,features/admin/AdminView.tsx,ui/chrome.tsx",
-  "n": 8
  },
  "إظهار القائمة": {
   "k": "s",
@@ -409,6 +424,54 @@
   "k": "s",
   "p": "app/desk.tsx",
   "n": 2
+ },
+ "ابحث عن أداة أو مستند أو مشروع…": {
+  "k": "s",
+  "p": "app/palette-panel.tsx",
+  "n": 2
+ },
+ "النتائج": {
+  "k": "s",
+  "p": "app/palette-panel.tsx",
+  "n": 2
+ },
+ "لا نتيجة — جرّب اسم الأداة أو رقم المستند أو المبنى.": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "للتنقل": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "{0} للتنقل": {
+  "k": "r",
+  "p": "app/palette-panel.tsx",
+  "n": 1,
+  "x": "EL <kbd className=\"font-grotesk\" dir=\"ltr\">↑ ↓</kbd>"
+ },
+ "للفتح": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "{0} للفتح": {
+  "k": "r",
+  "p": "app/palette-panel.tsx",
+  "n": 1,
+  "x": "EL <kbd className=\"font-grotesk\" dir=\"ltr\">Enter</kbd>"
+ },
+ "في أي وقت": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "{0} في أي وقت": {
+  "k": "r",
+  "p": "app/palette-panel.tsx",
+  "n": 1,
+  "x": "EL <kbd className=\"font-grotesk\" dir=\"ltr\">{keys}</kbd>"
  },
  "البريد أو كلمة المرور غير صحيحة": {
   "k": "s",
@@ -687,8 +750,8 @@
  },
  "المستندات": {
   "k": "s",
-  "p": "data/checklists.ts,features/tools/host.tsx",
-  "n": 2
+  "p": "data/checklists.ts,features/landing/Landing.tsx,features/tools/host.tsx",
+  "n": 5
  },
  "شهادات المصنع ونتائج اختبار عينات الحديد متوفرة ومقبولة": {
   "k": "s",
@@ -2368,7 +2431,7 @@
  "أسمنت": {
   "k": "s",
   "p": "data/companies.tsx,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
-  "n": 7
+  "n": 8
  },
  "شنايدر إلكتريك — مصر": {
   "k": "s",
@@ -2733,6 +2796,72 @@
   "n": 1,
   "x": "c.name"
  },
+ "رقمي: 00 · 01 · 02": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "حرفي: A · B · C": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "تمهيدي: P01 · P02": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "تعاقدي: C01 · C02": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "٠١٢٣٤٥٦٧٨٩": {
+  "k": "s",
+  "p": "data/doc-controls.ts,i18n/i18n.ts,lib/num-input.ts,lib/search.ts",
+  "n": 4
+ },
+ "المشروع-النوع-الرقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "المشروع-المُصدِر-النوع-الرقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "النوع/السنة/الرقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "المشروع-النوع-السنة والرقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "النمط طويل": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "النمط يحتاج العدّاد {nnnn} حتى لا يتكرر رقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "رمز غير معروف: {0}": {
+  "k": "t",
+  "p": "data/doc-controls.ts",
+  "n": 1,
+  "x": "unknown[0]"
+ },
+ "حروف إنجليزية وأرقام و - _ . / فقط": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
  "صافي شهري — ما يصل الحساب بعد ضريبة الدخل والتأمينات (أساسي + بدلات ثابتة، دون مكافآت سنوية). النموذج معايَر على مراجع إجمالية (الحد الأدنى للأجور وسقف التأمينات) ثم محوَّل للصافي بقانون الضريبة الساري · قطاع خاص · القاهرة الكبرى = 1.00": {
   "k": "s",
   "p": "data/geo.ts",
@@ -2890,8 +3019,8 @@
  },
  "الأدوات": {
   "k": "s",
-  "p": "data/geo.ts,features/cv/extract.ts,features/tabs/tabs.tsx",
-  "n": 3
+  "p": "data/geo.ts,features/cv/extract.ts,features/landing/Landing.tsx,features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 7
  },
  "الرسائل": {
   "k": "s",
@@ -5786,11 +5915,36 @@
   "p": "data/seed.ts",
   "n": 1
  },
+ "الملف أكبر من أن يكون قالبًا": {
+  "k": "s",
+  "p": "data/template-file.ts,features/tools/templates.tsx",
+  "n": 2
+ },
+ "الملف ليس قالب EngSpace": {
+  "k": "s",
+  "p": "data/template-file.ts",
+  "n": 1
+ },
+ "الملف ليس قالب EngSpace صالحًا": {
+  "k": "s",
+  "p": "data/template-file.ts",
+  "n": 1
+ },
+ "محتوى القالب غير صالح": {
+  "k": "s",
+  "p": "data/template-file.ts",
+  "n": 1
+ },
  "{0} (نسخة متعارضة)": {
   "k": "t",
   "p": "data/tool-docs.ts",
   "n": 1,
   "x": "l.title"
+ },
+ "قالب": {
+  "k": "s",
+  "p": "data/tool-templates.ts",
+  "n": 1
  },
  "حصر الخرسانة": {
   "k": "s",
@@ -7414,8 +7568,8 @@
  },
  "الطول": {
   "k": "s",
-  "p": "domain/site-calc.ts,domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/duct.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
-  "n": 26
+  "p": "domain/site-calc.ts,domain/tools/concrete-calc.ts,features/landing/MiniTool.tsx,features/sitetools/site-tools.tsx,features/tools/elec/cable.tsx,features/tools/mep/ac-install.tsx,features/tools/mep/drain-run.tsx,features/tools/mep/duct.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
+  "n": 28
  },
  "متر": {
   "k": "s",
@@ -7479,8 +7633,8 @@
  },
  "م³": {
   "k": "s",
-  "p": "domain/site-calc.ts,domain/tools/qto-calc.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx",
-  "n": 33
+  "p": "domain/site-calc.ts,domain/tools/qto-calc.ts,features/landing/MiniTool.tsx,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx,features/tools/site/diary.tsx",
+  "n": 34
  },
  "لتر": {
   "k": "s",
@@ -9691,13 +9845,13 @@
  },
  "العرض": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts,features/sheets/sheets.tsx,features/sitetools/site-tools.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx",
-  "n": 21
+  "p": "domain/tools/concrete-calc.ts,features/landing/MiniTool.tsx,features/sheets/sheets.tsx,features/sitetools/site-tools.tsx,features/tools/mep/sprinkler.tsx,features/tools/office/qto.tsx",
+  "n": 23
  },
  "السمك": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts,features/sitetools/site-tools.tsx,features/tools/office/qto.tsx",
-  "n": 9
+  "p": "domain/tools/concrete-calc.ts,features/landing/MiniTool.tsx,features/sitetools/site-tools.tsx,features/tools/office/qto.tsx",
+  "n": 11
  },
  "تُزاد 10 سم من كل جانب حول القاعدة": {
   "k": "s",
@@ -10011,8 +10165,8 @@
  },
  "عدد الخلاطات": {
   "k": "s",
-  "p": "domain/tools/concrete-calc.ts,features/tools/concrete/concrete.tsx",
-  "n": 2
+  "p": "domain/tools/concrete-calc.ts,features/landing/estimator.ts,features/tools/concrete/concrete.tsx",
+  "n": 3
  },
  "⌈V_order / حمولة⌉": {
   "k": "s",
@@ -11406,8 +11560,8 @@
  },
  "افتح التطبيق": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/landing/Landing.tsx",
+  "n": 3
  },
  "جارٍ تحميل بيانات المنصة…": {
   "k": "s",
@@ -12813,8 +12967,8 @@
  },
  "إلغاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/settings/two-factor.tsx,features/support/support.tsx,features/tools/host.tsx,features/tools/office/vo.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
-  "n": 13
+  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/settings/two-factor.tsx,features/support/support.tsx,features/tools/doc-settings.tsx,features/tools/host.tsx,features/tools/office/vo.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
+  "n": 14
  },
  "إظهار": {
   "k": "x",
@@ -14177,8 +14331,8 @@
  },
  "التالي": {
   "k": "x",
-  "p": "features/auth/auth.tsx,features/sheets/sheets.tsx",
-  "n": 2
+  "p": "features/auth/auth.tsx,features/landing/DocShowcase.tsx,features/sheets/sheets.tsx",
+  "n": 4
  },
  "اكتب كلمة المرور": {
   "k": "s",
@@ -14948,8 +15102,8 @@
  },
  "المشاريع": {
   "k": "s",
-  "p": "features/cv/extract.ts",
-  "n": 1
+  "p": "features/cv/extract.ts,tools/palette.ts",
+  "n": 2
  },
  "المشروعات": {
   "k": "s",
@@ -15594,6 +15748,310 @@
   "p": "features/cv/hr.ts",
   "n": 1
  },
+ "نموذج ·": {
+  "k": "x",
+  "p": "features/landing/DocShowcase.tsx",
+  "n": 1
+ },
+ "نموذج · {0}": {
+  "k": "r",
+  "p": "features/landing/DocShowcase.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">PDF · Word · Excel</"
+ },
+ "السابق": {
+  "k": "s",
+  "p": "features/landing/DocShowcase.tsx,features/tools/office/ipc.tsx",
+  "n": 7
+ },
+ "يُريك الحساب": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "كل ناتج معه خطواته وبند الكود الذي استند إليه. وما لم يُتحقق منه يحمل علامة ⚑ ولا يُسمّى «مطابقًا».": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "كل قيمة بيدك": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "الرتبة والخلطة والهالك وقواعد خصم الفتحات ونسبة الضريبة والتأمين — لا رقم مفروض عليك، وإعداداتك تُحفظ قالبًا لمكتبك.": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "مستند بهويتك": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "خرطوشة باسم شركتك، ترقيم ومراجعات بنظامك، وخانات توقيع تحددها أنت. لا اسم للتطبيق على أي ورقة.": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "يعمل في الموقع": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "يحفظ على هاتفك أولًا ويعمل بلا إنترنت، ثم يتزامن مع حسابك ومع كمبيوتر المكتب لحظيًا.": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "أقسام الصفحة": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 2
+ },
+ "التحميل": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 3
+ },
+ "التبديل إلى الوضع الفاتح": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx,ui/chrome.tsx",
+  "n": 2
+ },
+ "التبديل إلى الوضع الداكن": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx,ui/chrome.tsx",
+  "n": 2
+ },
+ "ادخل التطبيق": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "محطة عمل المهندس — للموقع والمكتب الفني": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "من الحصر إلى المستخلص، بأرقام تُريك حسابها.": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "أداة هندسية لمهندسي مصر: كل رقم معه طريقة حسابه، وكل قيمة تعدّلها بنفسك، والمستند يخرج PDF و Word و Excel بمعادلات حية — بخرطوشة شركتك.": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "{0} أداة هندسية لمهندسي مصر: كل رقم معه طريقة حسابه، وكل قيمة تعدّلها بنفسك، والمستند يخرج PDF و Word و Excel بمعادلات حية — بخرطوشة شركتك.": {
+  "k": "r",
+  "p": "features/landing/Landing.tsx",
+  "n": 1,
+  "x": "EL <Num className=\"text-ink font-medium\">{all.length}</Num>"
+ },
+ "افتح التطبيق مجانًا": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "أندرويد و iPhone": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "الحاسبة المجاورة تعمل الآن بلا حساب · مستنداتك تُحفظ على جهازك أولًا": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "هذه صفحات حقيقية يرسمها التطبيق أمامك الآن من بيانات نموذجية، بنفس محرك التصدير: خرطوشة، جدول مراجعات، توقيعات، وأرقام تطابق ملف Excel الحي.": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "ورقة تخرج باسم شركتك — جاهزة للاستشاري.": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 2
+ },
+ "لماذا يثق به المهندس": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 2
+ },
+ "أداة تحترم توقيعك على المستند.": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 2
+ },
+ "للموقع: الخرسانة والحديد والميزانية واليومية والتصاريح. للمكتب الفني: الحصر والمستخلصات وأوامر التغيير وطلبات المعلومات وسجلاتها. ومعها شبكة المهندسين: رواتب بالصافي وتقييمات شركات، بهوية مجهولة.": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "من أول صبّة إلى آخر مستخلص.": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 2
+ },
+ "على المتصفح، وعلى هاتفك في الموقع.": {
+  "k": "s",
+  "p": "features/landing/Landing.tsx",
+  "n": 2
+ },
+ "المتصفح": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "بلا تثبيت. على شاشة المكتب: شريط جانبي، لوحتان، معاينة A4 حية بجوار ما تكتب، ولوحة أوامر بـ": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "بلا تثبيت. على شاشة المكتب: شريط جانبي، لوحتان، معاينة A4 حية بجوار ما تكتب، ولوحة أوامر بـ {0}.": {
+  "k": "r",
+  "p": "features/landing/Landing.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">Ctrl K</bdi>"
+ },
+ "أندرويد": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "نسخة تجريبية بملف APK: نزّله وافتحه واسمح بالتثبيت من هذا المصدر. يتحدّث محتواه تلقائيًا مع كل إصدار.": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "تحميل لأندرويد": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "نسخة تجريبية تُثبَّت من الكمبيوتر بملف IPA حتى صدور نسخة المتجر. أو افتح الموقع في Safari وأضِفه إلى الشاشة الرئيسية.": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "ملف iPhone": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "صُنع لمهندسي مصر — الرواتب بالصافي دائمًا، والهوية مجهولة.": {
+  "k": "x",
+  "p": "features/landing/Landing.tsx",
+  "n": 1
+ },
+ "جرّب الآن: بلاطة خرسانية": {
+  "k": "x",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "بدون تسجيل": {
+  "k": "x",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "بلاطة خرسانية بأبعادها وشبكة تسليحها": {
+  "k": "s",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 2
+ },
+ "قطر السيخ": {
+  "k": "s",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 2
+ },
+ "التقسيط (مم)": {
+  "k": "s",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 2
+ },
+ "اطلب من المحطة": {
+  "k": "s",
+  "p": "features/landing/MiniTool.tsx,features/tools/concrete/concrete.tsx",
+  "n": 3
+ },
+ "خلاطات 9 م³": {
+  "k": "s",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "خلاطة": {
+  "k": "s",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "حديد التسليح": {
+  "k": "s",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "كجم": {
+  "k": "s",
+  "p": "features/landing/MiniTool.tsx,features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
+  "n": 6
+ },
+ "صافي": {
+  "k": "x",
+  "p": "features/landing/MiniTool.tsx,features/sheets/sheets.tsx",
+  "n": 2
+ },
+ "م³ · هالك": {
+  "k": "x",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "سيخ ·": {
+  "k": "x",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "كجم/م³": {
+  "k": "x",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "صافي {0} م³ · هالك {1} · {2} سيخ · {3} كجم/م³": {
+  "k": "r",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1,
+  "x": "EL <Num>{fixed(e.netM3, 2)}</Num> | EL <Num>{e.wastePct}%</Num> | EL <Num>{e.bars.alongL + e.bars.alongB}</Num> | EL <Num>{fixed(e.kgPerM3, 0)}</Num>"
+ },
+ "خطة الصب وجدول التفريد كاملان في التطبيق": {
+  "k": "x",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "تقدير أولي بمحرك التطبيق نفسه: طبقة واحدة في الاتجاهين، بلا وصلات أو حديد علوي.": {
+  "k": "x",
+  "p": "features/landing/MiniTool.tsx",
+  "n": 1
+ },
+ "الحجم الصافي": {
+  "k": "s",
+  "p": "features/landing/estimator.ts,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
+  "n": 3
+ },
+ "الطلب من المحطة": {
+  "k": "s",
+  "p": "features/landing/estimator.ts",
+  "n": 1
+ },
+ "الأسياخ في الاتجاهين": {
+  "k": "s",
+  "p": "features/landing/estimator.ts",
+  "n": 1
+ },
+ "وزن الحديد": {
+  "k": "s",
+  "p": "features/landing/estimator.ts",
+  "n": 1
+ },
  "تقرير": {
   "k": "x",
   "p": "features/market/live-salary.tsx,features/stack/stack.tsx,ui/feed.tsx",
@@ -15808,8 +16266,8 @@
  },
  "إضافة": {
   "k": "x",
-  "p": "features/market/raise-tracker.tsx,features/tools/office/vo.tsx",
-  "n": 2
+  "p": "features/market/raise-tracker.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
+  "n": 5
  },
  "زيادة": {
   "k": "x",
@@ -18036,11 +18494,6 @@
   "p": "features/sheets/sheets.tsx",
   "n": 1
  },
- "صافي": {
-  "k": "s",
-  "p": "features/sheets/sheets.tsx",
-  "n": 1
- },
  "تأمينات": {
   "k": "s",
   "p": "features/sheets/sheets.tsx,lib/search.ts",
@@ -18249,7 +18702,7 @@
  "د": {
   "k": "s",
   "p": "features/sheets/sheets.tsx,features/tools/concrete/concrete.tsx,features/tools/site/toolbox.tsx",
-  "n": 10
+  "n": 14
  },
  "ساعات/أسبوع": {
   "k": "s",
@@ -18835,20 +19288,10 @@
   "p": "features/sitetools/site-tools.tsx",
   "n": 2
  },
- "كجم": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx,features/tools/trade/trade.tsx",
-  "n": 5
- },
  "حجم الخرسانة مع الهالك": {
   "k": "x",
   "p": "features/sitetools/site-tools.tsx",
   "n": 1
- },
- "الحجم الصافي": {
-  "k": "s",
-  "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx",
-  "n": 2
  },
  "شكائر أسمنت (50 كجم)": {
   "k": "s",
@@ -18863,7 +19306,7 @@
  "رمل": {
   "k": "s",
   "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
-  "n": 6
+  "n": 7
  },
  "زلط / سن": {
   "k": "s",
@@ -21998,8 +22441,8 @@
  },
  "بلا عنوان": {
   "k": "s",
-  "p": "features/tabs/tabs.tsx,features/tools/host.tsx",
-  "n": 2
+  "p": "features/tabs/tabs.tsx,features/tools/host.tsx,tools/palette.ts",
+  "n": 3
  },
  "أدوات الموقع والمكتب الفني": {
   "k": "x",
@@ -22013,18 +22456,28 @@
  },
  "الأخيرة": {
   "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
+  "p": "features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 2
  },
  "مستندات محفوظة": {
   "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
+  "p": "features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 2
  },
  "لا أداة بهذا الاسم.": {
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
+ },
+ "سن / زلط": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "ماء": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
+  "n": 4
  },
  "الوصلة الباردة: مساحة الشريحة": {
   "k": "s",
@@ -22052,6 +22505,12 @@
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1,
   "x": "m.mix.name"
+ },
+ "{0} — رسم توضيحي بالأبعاد": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "kindName(row.kind)"
  },
  "خطة صب": {
   "k": "s",
@@ -22097,6 +22556,16 @@
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx,features/tools/site/diary.tsx",
   "n": 6
+ },
+ "رتبة أخرى": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "الرتبة كما في المواصفات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
  },
  "المورد": {
   "k": "s",
@@ -22152,7 +22621,7 @@
  "الهالك": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
-  "n": 8
+  "n": 9
  },
  "افتراضي {0} % ⚑": {
   "k": "t",
@@ -22161,11 +22630,6 @@
   "x": "CONC_PROFILE.waste[x.kind]"
  },
  "تُصب ملاصقة للتربة (بدون شدة جانبية)": {
-  "k": "s",
-  "p": "features/tools/concrete/concrete.tsx",
-  "n": 2
- },
- "اطلب من المحطة": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx",
   "n": 2
@@ -22275,6 +22739,16 @@
   "n": 2
  },
  "التنظيف بعد الصب": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "تحميل الخلاطة في المحطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "غسيل الخلاطة والعودة للدور": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx",
   "n": 2
@@ -22397,10 +22871,11 @@
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
  },
- "خلط في الموقع (+4 % ⚑)": {
-  "k": "s",
+ "خلط في الموقع (+{0} % ⚑)": {
+  "k": "t",
   "p": "features/tools/concrete/concrete.tsx",
-  "n": 3
+  "n": 2,
+  "x": "siteExtraOf(b)"
  },
  "{0} — {1} م³": {
   "k": "e",
@@ -22413,15 +22888,48 @@
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
  },
- "سن / زلط": {
+ "خلطة الموقع": {
   "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "الأسمنت والرمل والسن والماء لكل م³ — حسب الخلطة التصميمية المعتمدة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "— لكل م³": {
+  "k": "x",
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
  },
- "ماء": {
+ "{0} — لكل م³": {
+  "k": "e",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "base.name"
+ },
+ "افتراضي {0} ⚑": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2,
+  "x": "base[field]"
+ },
+ "وزن شكارة الأسمنت": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
-  "n": 3
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "افتراضي {0}": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "CONC_PROFILE.bagKg"
+ },
+ "زيادة الخلط في الموقع": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
  },
  "المراجعات": {
   "k": "s",
@@ -22588,6 +23096,12 @@
   "p": "features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
   "n": 5
  },
+ "شكارة {0} كجم": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "bagOf(b)"
+ },
  "سن": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx",
@@ -22602,16 +23116,6 @@
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx",
   "n": 2
- },
- "خلطة المسلحة لكل م³": {
-  "k": "s",
-  "p": "features/tools/concrete/concrete.tsx",
-  "n": 1
- },
- "ممارسة مصرية": {
-  "k": "s",
-  "p": "features/tools/concrete/concrete.tsx",
-  "n": 1
  },
  "زمن تغطية الطبقة": {
   "k": "s",
@@ -22639,6 +23143,21 @@
   "n": 1
  },
  "ECP 203 / ممارسة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "خلطة المسلحة لكل م³": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "خلطة الموقع — أدخلها المهندس": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ممارسة مصرية": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
@@ -23050,6 +23569,138 @@
   "p": "features/tools/design/rc-section.tsx",
   "n": 1
  },
+ "إعدادات المستند": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "المراجعة · الخرطوشة · التوقيعات · قوالب المكتب": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "رمز المراجعة": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "«مراجعة جديدة» تكمل على نفس النمط: 00 ← 01، A ← B، P01 ← P02.": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "مقياس الرسم": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "المرجع (بدل رقم العقد)": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "رقم اللوحة أو الخطاب": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "خانات التوقيع (": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "خانات التوقيع ({0})": {
+  "k": "e",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1,
+  "x": "shown.length"
+ },
+ "توقيعات المشروع": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "تخصيص": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "خانة توقيع": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 3
+ },
+ "عنوان الخانة": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "مدير المشروع · Project manager": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "الاسم": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx,features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 8
+ },
+ "الوظيفة": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx,features/tools/host.tsx",
+  "n": 6
+ },
+ "هذا المستند بلا خانات توقيع.": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "سجل المراجعات الصادرة": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "إصدار أول": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "إصدار المستند": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "إصدار المستند ·": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "إصدار المستند · {0}": {
+  "k": "r",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1,
+  "x": "EL <Num>Rev {rev}</Num>"
+ },
+ "يأخذ المستند رقمه ويُجمَّد بنصه وأرقامه وبيانات المشروع كما هي الآن. أي تعديل لاحق يكون مراجعة جديدة.": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "وصف هذا الإصدار (يُطبع في جدول المراجعات)": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "تعديل الكميات حسب ملاحظات الاستشاري": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "أصدر": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
  "الدوائر": {
   "k": "s",
   "p": "features/tools/elec/cable.tsx",
@@ -23449,8 +24100,8 @@
  },
  "مستند جديد": {
   "k": "x",
-  "p": "features/tools/host.tsx",
-  "n": 1
+  "p": "features/tools/host.tsx,tools/palette.ts",
+  "n": 2
  },
  "السجل": {
   "k": "s",
@@ -23500,8 +24151,8 @@
  },
  "احذف": {
   "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
+  "p": "features/tools/host.tsx,features/tools/templates.tsx",
+  "n": 4
  },
  "حُذف المستند": {
   "k": "s",
@@ -23510,8 +24161,8 @@
  },
  "تعذّر الحذف — حاول مرة أخرى": {
   "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 1
+  "p": "features/tools/host.tsx,features/tools/templates.tsx",
+  "n": 2
  },
  "جارٍ التحميل": {
   "k": "s",
@@ -23612,8 +24263,8 @@
  },
  "تعذّر الحفظ على الجهاز — المساحة ممتلئة؟": {
   "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
+  "p": "features/tools/host.tsx,features/tools/templates.tsx",
+  "n": 3
  },
  "المستند كبير: محفوظ على هذا الجهاز فقط": {
   "k": "s",
@@ -23742,21 +24393,6 @@
   "p": "features/tools/host.tsx",
   "n": 1
  },
- "إصدار المستند": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
- },
- "يأخذ المستند رقمه ويُجمَّد بنصه وأرقامه وبيانات المشروع كما هي الآن. أي تعديل لاحق يكون مراجعة جديدة.": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
- },
- "أصدر": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
- },
  "الاستشاري": {
   "k": "s",
   "p": "features/tools/host.tsx",
@@ -23781,6 +24417,12 @@
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 1
+ },
+ "نمط الترقيم: {0}": {
+  "k": "t",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "patternProblem"
  },
  "تُكتب مرة واحدة وتظهر في خرطوشة كل تقرير. لا أسعار ولا مبالغ هنا.": {
   "k": "x",
@@ -23827,31 +24469,73 @@
   "p": "features/tools/host.tsx,features/tools/site/permit.tsx",
   "n": 3
  },
- "أعدّ": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 1
- },
- "راجع": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 1
- },
- "اعتمد": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 1
- },
  "{0} — الاسم": {
   "k": "t",
   "p": "features/tools/host.tsx",
-  "n": 1,
-  "x": "l"
+  "n": 2,
+  "x": "signName(r)"
  },
- "الوظيفة": {
+ "توقيعات أخرى": {
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 2
+ },
+ "مهندس الموقع، الاستشاري، السلامة، المخزن…": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "تُكتب مرة هنا فتملأ خانتها في كل مستند يحملها. الخانة الفارغة تُطبع للتوقيع اليدوي.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "ترقيم المستندات": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "نمط رقم المستند ورمز الجهة المُصدِرة": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "نمط رقم المستند": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "رمز الجهة المُصدِرة {orig}": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "مثال:": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "مثال: {0}": {
+  "k": "r",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "EL <Num>{formatDocNo(pattern, { code: p.code || \"TWR\", type: \"R"
+ },
+ "الرموز:": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "— عدد حروف n هو عدد خانات الرقم. المستندات الصادرة تحتفظ بأرقامها.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "الرموز: {0} — عدد حروف n هو عدد خانات الرقم. المستندات الصادرة تحتفظ بأرقامها.": {
+  "k": "r",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{\"{code} {type} {nnn"
  },
  "حفظ المشروع": {
   "k": "x",
@@ -25235,6 +25919,12 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 2
  },
+ "يُضاف: {0}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2,
+  "x": "d.name || \"إضافة\""
+ },
  "يُخصم: {0}": {
   "k": "t",
   "p": "features/tools/office/ipc.tsx",
@@ -25244,17 +25934,12 @@
  "استقطاع": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
-  "n": 5
+  "n": 3
  },
  "صافي المستحق": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
   "n": 2
- },
- "السابق": {
-  "k": "x",
-  "p": "features/tools/office/ipc.tsx",
-  "n": 5
  },
  "الحالي": {
   "k": "x",
@@ -25359,20 +26044,10 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 3
  },
- "14% — قانون 157/2025": {
+ "نسبة الضريبة حسب العقد": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
-  "n": 1
- },
- "5% — عقد على ضريبة الجدول": {
-  "k": "s",
-  "p": "features/tools/office/ipc.tsx",
-  "n": 1
- },
- "معفى": {
-  "k": "s",
-  "p": "features/tools/office/ipc.tsx",
-  "n": 1
+  "n": 2
  },
  "وعاء الضريبة": {
   "k": "s",
@@ -25453,10 +26128,25 @@
   "n": 1,
   "x": "EL <Num>{fmtNum(l.progress * 100, 1)}%</Num>"
  },
- "استقطاعات أخرى": {
+ "استقطاعات وإضافات أخرى": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
   "n": 2
+ },
+ "استقطاع أو إضافة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "يُضاف": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "يُخصم": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
  },
  "{0}% من إجمالي الأعمال": {
   "k": "t",
@@ -25470,10 +26160,25 @@
   "n": 1,
   "x": "money(N(d.cur))"
  },
- "مثال: ضريبة الخصم من المنبع، غرامة، تشوينات": {
+ "يُخصم من المستخلص": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
-  "n": 2
+  "n": 1
+ },
+ "يُضاف للمستخلص": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "مثال: تشوينات بالموقع، فروق أسعار معتمدة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "مثال: ضريبة الخصم من المنبع، غرامة تأخير": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
  },
  "نسبة من إجمالي الأعمال": {
   "k": "s",
@@ -25490,7 +26195,7 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 2
  },
- "النسب حسب العقد والقانون الساري — لا يفترض التطبيق أي نسبة استقطاع.": {
+ "النسب حسب العقد والقانون الساري — لا يفترض التطبيق أي نسبة. هذه السطور تُحسب بعد الضريبة؛ ما يخضع للضريبة أدخله بندًا من بنود الأعمال. تشوينات سبق صرفها تُسترد بمبلغ سالب في الفترة.": {
   "k": "x",
   "p": "features/tools/office/ipc.tsx",
   "n": 1
@@ -25516,6 +26221,26 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 2,
   "x": "nextNo(b.certNo)"
+ },
+ "14% — قانون 157/2025": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "5% — عقد على ضريبة الجدول": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "معفى": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "نسبة أخرى": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
  },
  "حتى {0}% من العقد": {
   "k": "t",
@@ -26580,6 +27305,16 @@
   "p": "features/tools/rebar/bbs.tsx",
   "n": 3
  },
+ "إجهاد الخضوع fy (من شهادة المصنع)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "حديد مشرشر — يدخل في طول التماسك والوصلات": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
  "تقريب طول القص لأعلى": {
   "k": "s",
   "p": "features/tools/rebar/bbs.tsx",
@@ -27350,11 +28085,6 @@
   "k": "s",
   "p": "features/tools/site/diary.tsx",
   "n": 3
- },
- "الاسم": {
-  "k": "s",
-  "p": "features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
-  "n": 6
  },
  "موضوع التوعية الصباحية": {
   "k": "s",
@@ -29014,6 +29744,170 @@
   "p": "features/tools/survey/level-book.tsx",
   "n": 1
  },
+ "القالب لأداة أخرى": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "القالب من إصدار أحدث من التطبيق — حدّث التطبيق ثم استورده": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "القالب غير متوافق مع هذه الأداة": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "القالب غير موجود": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "القالب من إصدار أحدث من التطبيق — حدّث التطبيق": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "تعذّر فتح القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "تعذّرت مشاركة القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "هذا القالب لأداة غير متاحة لحسابك": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "تعذّر حفظ القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 2
+ },
+ "أُضيف القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "أُضيف القالب إلى: {0}": {
+  "k": "t",
+  "p": "features/tools/templates.tsx",
+  "n": 1,
+  "x": "made.toolName"
+ },
+ "تعذّرت قراءة الملف": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "قوالب المكتب": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "قوالب المكتب {0}": {
+  "k": "e",
+  "p": "features/tools/templates.tsx",
+  "n": 1,
+  "x": "list.length > 0 && <Num>({list.length})</Num>"
+ },
+ "استيراد قالب": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "احفظ أي مستند كقالب من «إعدادات المستند»، فيبدأ كل مستند جديد بإعدادات مكتبك: النِّسب، قواعد القياس، التوقيعات، وبنودكم المعتادة.": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "مستند جديد من هذا القالب ·": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "مستند جديد من هذا القالب · {0}": {
+  "k": "r",
+  "p": "features/tools/templates.tsx",
+  "n": 1,
+  "x": "EL <Num>{h.dateIso}</Num>"
+ },
+ "مشاركة القالب كملف": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 4
+ },
+ "حذف القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 4
+ },
+ "يُحذف القالب من كل أجهزتك. المستندات التي بدأت منه تبقى كما هي.": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 2
+ },
+ "حُذف القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "قالب {0}": {
+  "k": "t",
+  "p": "features/tools/templates.tsx",
+  "n": 1,
+  "x": "toolName"
+ },
+ "اكتب اسمًا للقالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "حُدّث القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "حُفظ القالب — تجده في صفحة الأداة تحت «قوالب المكتب»": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "قالب المكتب": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "يحفظ إعدادات هذا المستند وتوقيعاته ليبدأ منها كل مستند جديد. الكميات المنفَّذة والردود والاعتمادات لا تنتقل.": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "اسم القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 2
+ },
+ "مع بنود هذا المستند": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 2
+ },
+ "حفظ كقالب للمكتب": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "وزن الشكارة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "خلطة الشكارة": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
@@ -29107,11 +30001,31 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
+ "سمك اللحام": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "هالك الطوب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "فارغ = حسب نوع الطوب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "هالك المونة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "{0} م² صافي · هالك {1} %": {
   "k": "t",
   "p": "features/tools/trade/trade.tsx",
   "n": 1,
-  "x": "f2(area, 2) | p.waste"
+  "x": "f2(area, 2) | waste"
  },
  "لاصق": {
   "k": "s",
@@ -29150,12 +30064,33 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "هالك 25 % ⚑": {
+ "هالك {0} % ⚑": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "mortarWaste"
+ },
+ "البياض": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "البياض": {
+ "سمك البطانة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "فارغ = حسب النوع (20 داخلي · 25 خارجي)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أسمنت البطانة لكل م³ رمل": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "فارغ = 300": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -29202,6 +30137,16 @@
   "n": 1
  },
  "م² في الكرتونة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عمق العرموس (سمك البلاطة)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "هالك الترويب": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -29265,6 +30210,16 @@
   "n": 1
  },
  "العبوة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "معامل الفرد العملي": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "1 = فرد النشرة · 0.8 لسطح خشن أو ماصّ": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -29343,10 +30298,21 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "لوح بلاكاش 1.22×2.44": {
+ "طول اللوح": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
+ },
+ "عرض اللوح": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "لوح بلاكاش {0}": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "sheet"
  },
  "مساحة التلامس {0} م²": {
   "k": "t",
@@ -29364,10 +30330,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 3
  },
- "بلاكاش 1.22×2.44": {
-  "k": "s",
+ "بلاكاش {0}": {
+  "k": "t",
   "p": "features/tools/trade/trade.tsx",
-  "n": 1
+  "n": 1,
+  "x": "sheet"
  },
  "{0} م² + {1} %": {
   "k": "t",
@@ -29475,6 +30442,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
+ "زيادة الأطوال (وصلات وهالك)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "متر سلك / خرطوم": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
@@ -29521,6 +30493,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
+ "قطعة أو وصلة لكل": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "ماسورة {0} م": {
   "k": "t",
   "p": "features/tools/trade/trade.tsx",
@@ -29559,10 +30536,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "1 لكل 1.5 م ⚑": {
-  "k": "s",
+ "1 لكل {0} م ⚑": {
+  "k": "t",
   "p": "features/tools/trade/trade.tsx",
-  "n": 1
+  "n": 1,
+  "x": "per"
  },
  "الجبس بورد": {
   "k": "s",
@@ -29585,6 +30563,16 @@
   "n": 1
  },
  "وجه": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طبقات الألواح لكل وجه": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "المسافة بين القوائم": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -29620,10 +30608,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "كل 60 سم": {
-  "k": "s",
+ "كل {0} سم": {
+  "k": "t",
   "p": "features/tools/trade/trade.tsx",
-  "n": 1
+  "n": 1,
+  "x": "stud"
  },
  "مجاري": {
   "k": "s",
@@ -29646,6 +30635,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1,
   "x": "v.n | v.len"
+ },
+ "قيم يندر تغييرها — عدّلها حسب موقعك وخاماتك": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 2
  },
  "+ أضِف لطلب الخامات": {
   "k": "x",
@@ -29713,11 +30707,6 @@
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
- },
- "٠١٢٣٤٥٦٧٨٩": {
-  "k": "s",
-  "p": "i18n/i18n.ts,lib/num-input.ts,lib/search.ts",
-  "n": 3
  },
  "([\\d٠-٩][\\d٠-٩.,٫٬]*)": {
   "k": "s",
@@ -30969,6 +31958,69 @@
   "p": "native/updater.ts",
   "n": 1
  },
+ "انتقال": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "إعدادات سريعة": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "جديد: {0}": {
+  "k": "t",
+  "p": "tools/palette.ts",
+  "n": 1,
+  "x": "t.name"
+ },
+ "جديد مستند new {0} {1}": {
+  "k": "t",
+  "p": "tools/palette.ts",
+  "n": 1,
+  "x": "t.name | t.keywords"
+ },
+ "المشروع النشط الآن": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "اجعله المشروع النشط": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "{0} {1} {2} مشروع project": {
+  "k": "t",
+  "p": "tools/palette.ts",
+  "n": 1,
+  "x": "p.code | p.name | p.nameEn || \"\""
+ },
+ "كل المستندات بدون مشروع all documents no project": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "تبديل الوضع الفاتح / الداكن": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "الوضع الفاتح الداكن المظهر theme dark light mode": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "تبديل اللغة · Switch language": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "اللغة العربية الانجليزية language english arabic": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
  "أدوات الصنايعية السريعة": {
   "k": "s",
   "p": "tools/registry.ts",
@@ -31657,14 +32709,9 @@
   "p": "ui/chrome.tsx",
   "n": 1
  },
- "التبديل إلى الوضع الفاتح": {
+ "رسم توضيحي بالأبعاد": {
   "k": "s",
-  "p": "ui/chrome.tsx",
-  "n": 1
- },
- "التبديل إلى الوضع الداكن": {
-  "k": "s",
-  "p": "ui/chrome.tsx",
+  "p": "ui/drafting.tsx",
   "n": 1
  },
  "أوافق — يلغي «لا أوافق» إن كان مختارًا": {
@@ -32138,6 +33185,22 @@
   "p": "ui/identity.tsx",
   "n": 1
  },
+ "إعدادات متقدمة": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "معدّلة": {
+  "k": "x",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "{0} معدّلة": {
+  "k": "r",
+  "p": "ui/kit.tsx",
+  "n": 1,
+  "x": "EL <Num>{changed}</Num>"
+ },
  "تنبيه ⚠": {
   "k": "s",
   "p": "ui/kit.tsx",
@@ -32170,6 +33233,21 @@
   "n": 1
  },
  "تكرار": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
+ "ترتيب البند في القائمة": {
+  "k": "x",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "تحريك لأعلى": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
+ "تحريك لأسفل": {
   "k": "s",
   "p": "ui/kit.tsx",
   "n": 2

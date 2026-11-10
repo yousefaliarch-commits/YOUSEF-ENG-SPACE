@@ -9,6 +9,7 @@ import type { ToolDoc } from "../../../data/tool-docs";
 import { AreaField, Card, Check, DateField, Grid2, Note, NumField, Pick, RowCards, TextField } from "../../../ui/kit";
 import { AiFillCard, str, strs } from "../../ai/AiFill";
 import type { ToolModule } from "../module";
+import { paramsOnly } from "../../../data/tool-templates";
 import { buildSpec } from "../spec";
 
 type Spec = { property: string; value: string };
@@ -126,6 +127,8 @@ export const module: ToolModule<Body> = {
   kind: "submittal", v: 1, docType: "MAS", docTypeName: "اعتماد خامة · Material approval submittal", discipline: "مكتب فني", engine: "submittal@1.0.0",
   profile: { id: "office@1", edition: "Technical office practice", values: {}, overridden: [], unverified: [] },
   blank,
+  // the consultant's code and its date belong to one submission only
+  template: (b, rows) => ({ ...(rows ? b : paramsOnly(blank(), b)), code: "", codeOn: "" }),
   defaultTitle: () => "اعتماد خامة",
   Editor,
   build,

@@ -14,6 +14,7 @@ import type { ToolDoc } from "../../../data/tool-docs";
 import { AreaField, Card, Check, Checks, Grid2, Note, NumField, Pick, RowCards, Rows, TextField } from "../../../ui/kit";
 import { AiFillCard, str, strs } from "../../ai/AiFill";
 import type { ToolModule } from "../module";
+import { paramsOnly } from "../../../data/tool-templates";
 import { buildSpec } from "../spec";
 
 type PType = "hot" | "height" | "confined" | "excavation" | "lifting" | "electrical";
@@ -270,6 +271,12 @@ export const module: ToolModule<Body> = {
   kind: "workPermit", v: 1, docType: "PTW", docTypeName: "تصريح عمل · Permit to work", discipline: "سلامة", engine: PTW_ENGINE,
   profile: { id: "hse-intl@1", edition: "OSHA 1926 · EN 355 · HSG250", values: { gasValidH: 2 }, overridden: [], unverified: ["gasValidH", "h2s"] },
   blank,
+  // a permit is authorised once, for one job: a template keeps the type, the place and the people — never a tick, a gas
+  // reading, an authorisation or a closing note
+  template: (b, rows) => ({
+    ...(rows ? b : paramsOnly(blank(), b)),
+    state: "draft", authorisedAt: undefined, paperSigned: false, cancelReason: "", closeNote: "", controls: {}, gas: [],
+  }),
   defaultTitle: () => "تصريح عمل",
   Editor,
   build,

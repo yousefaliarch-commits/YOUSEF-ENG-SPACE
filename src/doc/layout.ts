@@ -209,7 +209,10 @@ function titleBlock(p: Pager, spec: DocSpec, pageCount: { set: (n: number) => vo
   cell(55, 25, yC, hC, L2("الحالة · Status", "Status · الحالة"), st);
   cell(80, 25, yC, hC, L2("التاريخ · Date", "Date · التاريخ"), meta.dateIso.slice(0, 10), { ltr: true });
   cell(105, 20, yC, hC, L2("التخصص · Discipline", "Discipline · التخصص"), tb.discipline);
-  cell(125, 25, yC, hC, L2("الموقع · Location", "Location · الموقع"), tb.location);
+  // the location carries the WBS path (zone · level · element) before the site: when it does not fit the cell's one line
+  // it takes two smaller ones, so a printed sheet still says exactly where the work is
+  const locFits = m.width(tb.location || "—", TYPE.value) <= 25 * k - 2 * PAD;
+  cell(125, 25, yC, hC, L2("الموقع · Location", "Location · الموقع"), tb.location, locFits ? {} : { font: { w: 450, pt: 7.5 }, maxLines: 2 });
   cell(0, 50, yD, hD, L2("المرجع · Reference", "Reference · المرجع"), tb.reference);
   cell(50, 50, yD, hD, L2("ملف الكود · Code profile", "Code profile · ملف الكود"), meta.profileLabel, { ltr: true });
   cell(100, 20, yD, hD, L2("المقياس · Scale", "Scale · المقياس"), tb.scale || "—", { ltr: true });

@@ -40,6 +40,9 @@ import { NotificationPrefsScreen, PushPrimerSheet } from "../features/notificati
 import { fmt } from "../ui/theme";
 import { ScreenLoading } from "./ScreenLoading";
 import { DeskNav, DeskTabBar, FocusToggle, useDesk, useDeskFocus } from "./desk";
+import { PaletteHost } from "./palette";
+import type { PaletteAction, PaletteContext } from "../tools/palette";
+import { TOOL_MODULES } from "../features/tools/module";
 import { isCloud } from "../backend/config";
 import { profilePatch } from "../backend/map";
 import { NATIVE, setBackHandler, setPendingOpen, shareContent, takePendingAuth, takePendingOpen } from "../native/native";
@@ -664,8 +667,31 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     }
     if (pull.current > 70) { if (typeof window !== "undefined" && typeof window.__engspaceBuildChanged === "function" && window.__engspaceBuildChanged()) { try { location.reload(); } catch (x) {} } else setRefreshing(true); } if (pull.current) paintPull(0); touch.current = null;
   };
+  // the command palette (Ctrl / ⌘ K, ./palette.tsx): what this member can reach — built when it opens — and what each choice does
+  const paletteContext = (): PaletteContext => ({
+    role: toolRole(profile), tabs: tabs.map((t: { id: string; label: string }) => ({ id: t.id, label: t.label })), docs: toolIndex, projects: toolProjects, activeProject,
+    docKinds: Object.keys(TOOL_MODULES),
+    screens: [
+      { type: "notifications", label: "الإشعارات", keywords: "notifications" },
+      { type: "settings", label: "الإعدادات", keywords: "settings preferences" },
+      { type: "profile", label: "حسابك", keywords: "profile account" },
+    ],
+  });
+  const runPalette = (a: PaletteAction) => {
+    if (a.k === "tool") app.openTool(a.id);
+    else if (a.k === "doc") app.push({ type: "tooldoc", id: `${a.kind}:${a.id}` });
+    else if (a.k === "new") app.push({ type: "tooldoc", id: `${a.kind}:new` });
+    else if (a.k === "tab") app.setTab(a.id);
+    else if (a.k === "push") app.push({ type: a.type });
+    else if (a.k === "project") {
+      app.setActiveProject(a.id);
+      app.toast(a.id ? "صار المشروع النشط — مستنداتك الجديدة تُحفظ فيه" : "كل المستندات — بدون مشروع نشط");
+    } else if (a.k === "theme") setTheme(mode === "dark" ? "light" : "dark");
+    else if (a.k === "lang") setLang(lang === "en" ? "ar" : "en");
+  };
   const overlays = (
     <>
+      {!embed && <PaletteHost context={paletteContext} onRun={runPalette} />}
       {viewer && <ImageViewer image={viewer} onClose={() => setViewer(null)} />}
       {tourOn && !sheet && !viewer && <Tour app={app} onClose={() => setTourOn(false)} />}
       {sheet && sheets[sheet.type] && <Sheet title={sheets[sheet.type][0]} onClose={app.closeSheet} tall={["compose", "contract", "methodology", "move", "contribute", "verify", "inflation"].includes(sheet.type === "tool" ? sheet.payload.id : sheet.type)}>{sheets[sheet.type][1]}</Sheet>}

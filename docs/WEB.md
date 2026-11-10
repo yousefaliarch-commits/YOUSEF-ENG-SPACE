@@ -33,3 +33,9 @@ Without the two secrets the workflow ends with a notice, never a failure.
 
 Pages project → Custom domains → add `engspace.org`. Then set the repository **variable** `PUBLIC_URL=https://engspace.org`
 (shared links use it, and the next deploy adds it to the Auth redirects). Optional variable `PAGES_PROJECT` renames the project.
+
+## The public page
+The bare address (no `#…`) shows the public page to a visitor who is not signed in; `#landing` shows it to anyone; every app / admin
+route and every sign-in return (`?code=`, `?error=`, `?reset=`, tokens in the fragment) opens the app (`src/app/entry.ts`). Its download
+buttons use the newest release's `app-debug.apk` / `engspace.ipa`, resolved at deploy time; repository variables `APK_URL` / `IPA_URL`
+override them (store links later). No account, nothing stored.

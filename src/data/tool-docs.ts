@@ -7,6 +7,7 @@
 //  · This file is pure: types, caps, merge, size guards, shard choice. See docs/TOOLS-BLUEPRINT.md §5c.
 // =====================================================================
 import type { PhotoRef } from "../doc/model";
+import type { DocRev, SignBox, TitleExtras } from "./doc-controls";
 import type { ProjectSnap } from "./tool-projects";
 
 export type ToolKind = string;   // the tool id, or a sub-kind: "inspection" | "qcTemplate" | "crew" | "rebarStock" | "materialRequest"
@@ -43,6 +44,11 @@ export type ToolDoc<B = unknown> = {
   // where the document belongs in the project — zone / building · level · element, kept by name so it stays readable even
   // when the project's list changes (the project only suggests names)
   wbs?: DocWbs;
+  // document controls (data/doc-controls.ts): custom signature boxes, the issued revisions, two title-block cells —
+  // all optional, so a document saved before they existed reads and prints exactly as it did
+  sign?: SignBox[];
+  revs?: DocRev[];
+  tb?: TitleExtras;
   profile: ProfileSnap;
   body: B;
   photos: Record<string, PhotoRef[]>;
@@ -101,6 +107,32 @@ export function headerOf(d: ToolDoc): ToolHeader {
     id: d.id, kind: d.kind, projectId: d.projectId, title: d.title, dateIso: d.dateIso, docNo: d.docNo, rev: d.rev, status: d.status,
     at: d.at, until: d.until, ...(wbsPath(d.wbs) ? { wbs: d.wbs } : {}), shard: shardOf(d.id), bytes: jsonbBytes(d),
   };
+}
+
+// ---------------------------------------------------------------------
+//  What arrives from the account copy is read before it is trusted: a row may have been cut short, written by a broken
+//  build or edited by hand. An entry the store can file has an id, a kind, a time and the envelope's text fields; anything
+//  else is skipped — never merged, never thrown on (the store's promise is that every call resolves). Deliberately
+//  lenient about everything a tool owns (the body, new optional fields): refusing a real document would hide it.
+// ---------------------------------------------------------------------
+const plainText = (v: unknown, max: number) => typeof v === "string" && v.length > 0 && v.length <= max && !/[\u0000-\u001F]/.test(v);
+
+export function isToolDoc(d: unknown): d is ToolDoc {
+  if (!d || typeof d !== "object" || Array.isArray(d)) return false;
+  const x = d as Record<string, unknown>;
+  return (
+    plainText(x.id, 64) && plainText(x.kind, 64) &&
+    typeof x.at === "number" && Number.isFinite(x.at) && x.at >= 0 &&
+    typeof x.title === "string" && typeof x.dateIso === "string" && typeof x.rev === "string" && typeof x.status === "string" &&
+    (x.docNo === null || typeof x.docNo === "string") && (x.projectId === null || x.projectId === undefined || typeof x.projectId === "string") &&
+    x.body !== null && x.body !== undefined && Array.isArray(x.log)
+  );
+}
+
+export function isToolTomb(t: unknown): t is ToolTomb {
+  if (!t || typeof t !== "object" || Array.isArray(t)) return false;
+  const x = t as Record<string, unknown>;
+  return plainText(x.id, 64) && typeof x.at === "number" && Number.isFinite(x.at) && x.deleted === true;
 }
 
 // ---------------------------------------------------------------------

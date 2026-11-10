@@ -4,7 +4,8 @@
 #  · Run workflow      → deploys the chosen branch by hand
 # Needs two repository secrets: CLOUDFLARE_API_TOKEN (a token with "Cloudflare Pages: Edit") and CLOUDFLARE_ACCOUNT_ID.
 # Without them the run ends with a notice ("not set up yet"), never a red cross. Optional repository variables:
-# PAGES_PROJECT (default engspace) and PUBLIC_URL (e.g. https://engspace.org once the domain points here — share links use it).
+# PAGES_PROJECT (default engspace), PUBLIC_URL (e.g. https://engspace.org once the domain points here — share links use it)
+# and APK_URL / IPA_URL (the public page's download buttons; default: the newest release's files).
 # After a deploy, the site's address is added to Supabase Auth's redirect list (keeps every entry already there), so e-mail
 # links, password reset and Google / Apple sign-in come back to the site instead of being refused.
 name: Deploy website
@@ -49,6 +50,28 @@ jobs:
           cache: npm
       - run: npm ci
         if: steps.creds.outputs.ready == 'true'
+      # the public page's download buttons point at the newest release that carries each phone build (Release preview
+      # builds publishes them); none yet → the page links to the releases list. Repository variables APK_URL / IPA_URL
+      # override this (store links, once the apps are listed).
+      - name: Latest phone builds
+        id: builds
+        if: steps.creds.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=20" > releases.json 2>/dev/null || echo '[]' > releases.json
+          pick() {
+            node -e '
+              const list = JSON.parse(require("fs").readFileSync("releases.json", "utf8"));
+              for (const r of Array.isArray(list) ? list : []) {
+                const a = (r.assets || []).find((x) => x.name === process.argv[1]);
+                if (a) { process.stdout.write(a.browser_download_url); break; }
+              }
+            ' "$1"
+          }
+          echo "apk=$(pick app-debug.apk)" >> "$GITHUB_OUTPUT"
+          echo "ipa=$(pick engspace.ipa)" >> "$GITHUB_OUTPUT"
+          rm -f releases.json
       - name: Build
         if: steps.creds.outputs.ready == 'true'
         env:
@@ -56,6 +79,8 @@ jobs:
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_PUBLIC_URL: ${{ vars.PUBLIC_URL }}
+          VITE_APK_URL: ${{ vars.APK_URL || steps.builds.outputs.apk }}
+          VITE_IPA_URL: ${{ vars.IPA_URL || steps.builds.outputs.ipa }}
         run: |
           npm run build
           # the site must talk to the live backend, never fall back to the demo

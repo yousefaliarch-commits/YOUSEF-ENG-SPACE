@@ -3,17 +3,22 @@
 //  · Two scopes: «خطة صب» (one pour: order, trucks, arrival schedule, cold joints, cubes, calendar) and «حصر» (the whole
 //    building: net / order m³, formwork, site-mix materials).
 //  · Fields keep what the member typed (any digits); the engine reads numbers through numInputParse.
+//  · Nothing the calculation uses is fixed: the grade is any text (C45, C30/37, 350 كجم/سم²), the site mix (cement, sand,
+//    gravel, water per m³ — reinforced and lean), the bag weight and the site-mixing allowance are fields with the profile's
+//    values as defaults, folded under «إعدادات متقدمة». A document saved before they existed computes exactly as it did.
+//  · A box-shaped element (slab, footing, beam, column, wall…) draws itself with its dimensions as they are typed.
 // =====================================================================
 import { numInputParse } from "../../../lib/num-input";
 import {
   CONC_ENGINE, CONC_KINDS, CONC_PROFILE, CUBES_DEFAULT, concCalendar, concColdJoint, concCubes, concMaterials, concMixYield, concPour,
-  concTakeoff, concVolume, kindName, mixFor, type ConcElement, type ConcKind,
+  concTakeoff, concVolume, kindName, mixFor, type ConcElement, type ConcKind, type ConcMix,
 } from "../../../domain/tools/concrete-calc";
 import { r, type Check as EngineCheck } from "../../../domain/tools/common";
 import type { DocBlock, DocRow, TraceStep } from "../../../doc/model";
 import { fmtNum, iso } from "../../../doc/text";
 import type { ToolDoc } from "../../../data/tool-docs";
-import { Card, Check, Checks, Grid2, Note, NumField, Pick, ResultHero, RowCards, Rows, TextField, Working } from "../../../ui/kit";
+import { Advanced, Card, Check, Checks, Grid2, Note, NumField, Pick, ResultHero, RowCards, Rows, TextField, Working } from "../../../ui/kit";
+import { DraftSheet, IsoBox } from "../../../ui/drafting";
 import { Seg } from "../../../ui/chrome";
 import type { ToolModule } from "../module";
 import { buildSpec } from "../spec";
@@ -28,7 +33,13 @@ type Body = {
   cubeRule: "perVolume" | "first50then100"; spares: boolean;
   spans: { slab: string; beam: string };
   siteMixed: boolean;
+  // the site's own mix and allowances (all optional: blank or absent → the profile's value)
+  mix?: Partial<Record<MixId, MixText>>;
+  bagKg?: string;
+  siteExtra?: string;
 };
+type MixId = "rc" | "lean";
+type MixText = { c: string; s: string; g: string; w: string };
 
 const N = (s: string | undefined, rule = {}) => numInputParse(s || "", rule);
 const NN = (s: string | undefined) => N(s) ?? 0;
@@ -47,6 +58,52 @@ const blank = (): Body => ({
   cubeRule: "perVolume", spares: true, spans: { slab: "", beam: "" }, siteMixed: false,
 });
 
+// ---- the parameters a site may tune, each with the profile's value as its default ----
+export const GRADES = ["C20", "C25", "C30", "C35", "C40", "C50"];
+const SITE_EXTRA = 4;   // % more when mixing on site (spillage, measuring by the box)
+const MIX_FIELDS: [keyof MixText, "cementKg" | "sandM3" | "gravelM3" | "waterL", string, string][] = [["c", "cementKg", "أسمنت", "kg"], ["s", "sandM3", "رمل", "m³"], ["g", "gravelM3", "سن / زلط", "m³"], ["w", "waterL", "ماء", "L"]];
+const typed = (s: string | undefined) => !!s && s.trim() !== "" && N(s) != null;
+// the mix in use: the profile's, with every figure the engineer typed in its place
+export function mixOf(b: Pick<Body, "mix">, id: string): ConcMix {
+  const base: ConcMix = (CONC_PROFILE.mixes as Record<string, ConcMix>)[id] || CONC_PROFILE.mixes.rc;
+  const t = b.mix && (b.mix as Record<string, MixText | undefined>)[id];
+  if (!t) return base;
+  const out: ConcMix = { ...base };
+  for (const [k, field] of MIX_FIELDS) if (typed(t[k])) out[field] = N(t[k]) as number;
+  return out;
+}
+const mixChanged = (b: Pick<Body, "mix">, id: MixId) => MIX_FIELDS.filter(([k]) => typed(b.mix?.[id]?.[k])).length;
+const bagOf = (b: Pick<Body, "bagKg">) => (typed(b.bagKg) && (N(b.bagKg) as number) > 0 ? (N(b.bagKg) as number) : CONC_PROFILE.bagKg);
+const siteExtraOf = (b: Pick<Body, "siteExtra">) => (typed(b.siteExtra) ? Math.max(0, N(b.siteExtra) as number) : SITE_EXTRA);
+// how many of the advanced figures differ from the profile (shown on the folded card)
+export const concTuned = (b: Body) =>
+  mixChanged(b, "rc") + mixChanged(b, "lean") + (typed(b.bagKg) && bagOf(b) !== CONC_PROFILE.bagKg ? 1 : 0) + (typed(b.siteExtra) && siteExtraOf(b) !== SITE_EXTRA ? 1 : 0);
+
+// a box-shaped element as length × width × height (m) for the sketch; null for shapes a box cannot show
+export function boxOf(kind: ConcKind, d: Record<string, string>): { L: number; B: number; H: number } | null {
+  const v = (k: string) => N(d[k]) ?? 0;
+  switch (kind) {
+    case "slab":
+    case "blinding":
+      return { L: v("L"), B: v("B"), H: v("t") };
+    case "footing":
+      return { L: v("L"), B: v("B"), H: v("H") };
+    case "wall":
+      return { L: v("L"), B: v("t"), H: v("H") };
+    case "tieBeam":
+      return { L: v("L"), B: v("b"), H: v("h") };
+    case "beam":
+      return { L: v("L"), B: v("b"), H: v("h") };
+    case "neck":
+      return { L: v("b"), B: v("a"), H: v("h") };
+    case "column":
+      // to the slab's soffit, in whole millimetres (3.2 − 0.15 is not 3.0500000000000003 on a drawing)
+      return { L: v("b"), B: v("a"), H: Math.max(0, Math.round((v("hFF") - v("ts")) * 1000) / 1000) };
+    default:
+      return null;
+  }
+}
+
 const toEl = (x: Row, i: number): ConcElement => ({
   id: String(i + 1), kind: x.kind, label: x.label || kindName(x.kind), n: N(x.n, { integer: true }) ?? 0,
   dims: Object.fromEntries(Object.entries(x.dims).map(([k, v]) => [k, N(v)])), wastePct: N(x.waste), againstSoil: x.soil,
@@ -55,10 +112,11 @@ const toEl = (x: Row, i: number): ConcElement => ({
 function compute(b: Body) {
   const els = b.rows.map(toEl);
   const take = concTakeoff(els);
+  const site = b.siteMixed ? 1 + siteExtraOf(b) / 100 : 1;
   const airC = N(b.airC, { allowNegative: true }) ?? 25;
   const o = b.order;
   const pour = concPour({
-    orderM3: take.orderM3 * (b.siteMixed ? 1.04 : 1), primingM3: b.siteMixed ? 0 : NN(o.priming), loadM3: NN(o.load), pumpM3h: NN(o.pump), plantM3h: NN(o.plant),
+    orderM3: take.orderM3 * site, primingM3: b.siteMixed ? 0 : NN(o.priming), loadM3: NN(o.load), pumpM3h: NN(o.pump), plantM3h: NN(o.plant),
     crewM3h: NN(o.crew), travelMin: NN(o.travel), loadMin: NN(o.loadMin), washMin: NN(o.wash), setupMin: NN(o.setup), cleanupMin: NN(o.cleanup), start: b.start,
   });
   const tCover = CONC_PROFILE.tCover(airC);
@@ -68,11 +126,11 @@ function compute(b: Body) {
   const byMix = new Map<string, number>();
   els.forEach((e, i) => {
     const m = mixFor(e.kind);
-    byMix.set(m.id, (byMix.get(m.id) || 0) + take.rows[i].orderM3 * (b.siteMixed ? 1.04 : 1));
+    byMix.set(m.id, (byMix.get(m.id) || 0) + take.rows[i].orderM3 * site);
   });
   const mats = [...byMix].map(([id, v]) => {
-    const mix = (CONC_PROFILE.mixes as any)[id];
-    return { mix, orderM3: v, ...concMaterials(v, mix), yld: concMixYield(mix) };
+    const mix = mixOf(b, id);
+    return { mix, orderM3: v, ...concMaterials(v, mix, bagOf(b)), yld: concMixYield(mix) };
   });
   const checks: EngineCheck[] = [...take.checks];
   if (b.scope === "pour" && NN(b.cj.area) > 0)
@@ -91,6 +149,18 @@ const dimsText = (x: Row) => {
   const k = CONC_KINDS.find((c) => c.kind === x.kind)!;
   return k.fields.filter(([f]) => x.dims[f]).map(([f]) => x.dims[f]).join(" × ");
 };
+
+// the element as it is being typed: an isometric box with its three dimensions (not to scale — the labels are the truth)
+function ElementSketch({ row, level }: { row: Row; level: string }) {
+  const box = boxOf(row.kind, row.dims);
+  if (!box) return null;
+  const m = (x: number) => (x > 0 ? `${fmtNum(x, 2)} m` : "—");
+  return (
+    <DraftSheet label="N.T.S" className="mt-1">
+      <IsoBox L={box.L} B={box.B} H={box.H} labels={{ L: m(box.L), B: m(box.B), H: m(box.H) }} level={level.trim() || undefined} title={`${kindName(row.kind)} — رسم توضيحي بالأبعاد`} className="max-w-[420px] mx-auto" />
+    </DraftSheet>
+  );
+}
 
 function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx: any }) {
   const c = compute(b);
@@ -111,7 +181,8 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
                 <input type="time" dir="ltr" value={b.start} onChange={(e) => put({ start: e.target.value })} className="w-full h-12 px-3 rounded-xl bg-canvas border border-line-2 font-grotesk text-[15px]" /></label>
               <NumField label="حرارة الجو" unit="°C" value={b.airC} onChange={(v) => put({ airC: v })} rule={{ allowNegative: true }} />
             </Grid2>
-            <Pick label="الرتبة" items={[["C20", "C20"], ["C25", "C25"], ["C30", "C30"], ["C35", "C35"], ["C40", "C40"], ["C50", "C50"]]} value={b.grade as any} onChange={(v) => put({ grade: v })} />
+            <Pick label="الرتبة" items={[...GRADES.map((g) => [g, g] as [string, string]), ["other", "رتبة أخرى"]]} value={GRADES.includes(b.grade) ? b.grade : "other"} onChange={(v) => put({ grade: v === "other" ? "" : v })} />
+            {!GRADES.includes(b.grade) && <TextField label="الرتبة كما في المواصفات" dir="ltr" value={b.grade} onChange={(v) => put({ grade: v.slice(0, 24) })} placeholder="C45 · C30/37 · 350 kg/cm²" data-conc-grade />}
             <Grid2>
               <TextField label="المورد" value={b.supplier} onChange={(v) => put({ supplier: v })} />
               <NumField label="الهبوط المستهدف" unit="mm" value={b.slump} onChange={(v) => put({ slump: v })} hint="⚑ حسب المواصفات" />
@@ -143,6 +214,7 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
                   <NumField label="الهالك" unit="%" value={x.waste} onChange={(v) => setX({ ...x, waste: v })} hint={`افتراضي ${CONC_PROFILE.waste[x.kind]} % ⚑`} />
                 </Grid2>
                 {x.kind === "tieBeam" && <Check label="تُصب ملاصقة للتربة (بدون شدة جانبية)" on={!!x.soil} onChange={(soil) => setX({ ...x, soil })} />}
+                <ElementSketch row={x} level={pour ? b.level : ""} />
               </>
             );
           }}
@@ -177,6 +249,8 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
             <NumField label="فاقد تحضير المضخة" unit="م³" value={b.order.priming} onChange={o("priming")} />
             <NumField label="التجهيز قبل الصب" unit="د" value={b.order.setup} onChange={o("setup")} />
             <NumField label="التنظيف بعد الصب" unit="د" value={b.order.cleanup} onChange={o("cleanup")} />
+            <NumField label="تحميل الخلاطة في المحطة" unit="د" value={b.order.loadMin} onChange={o("loadMin")} />
+            <NumField label="غسيل الخلاطة والعودة للدور" unit="د" value={b.order.wash} onChange={o("wash")} />
           </Grid2>
           <div className="mt-3">
             <p className="text-[12px] text-ink-2 mb-1.5">مواعيد وصول الخلاطات</p>
@@ -217,7 +291,7 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
           </>
         ) : (
           <>
-            <Check label="خلط في الموقع (+4 % ⚑)" on={b.siteMixed} onChange={(v) => put({ siteMixed: v })} />
+            <Check label={`خلط في الموقع (+${siteExtraOf(b)} % ⚑)`} on={b.siteMixed} onChange={(v) => put({ siteMixed: v })} />
             <div className="mt-2 space-y-2">
               {c.mats.map((m) => (
                 <div key={m.mix.id}>
@@ -229,6 +303,29 @@ function Editor({ body: b, set, ctx }: { body: Body; set: (b: Body) => void; ctx
           </>
         )}
       </Card>
+
+      {!pour && (
+        <Advanced title="خلطة الموقع" hint="الأسمنت والرمل والسن والماء لكل م³ — حسب الخلطة التصميمية المعتمدة" changed={concTuned(b)} data-conc-mix="">
+          {(["rc", "lean"] as MixId[]).map((id) => {
+            const base = (CONC_PROFILE.mixes as Record<string, ConcMix>)[id];
+            const t: MixText = { c: "", s: "", g: "", w: "", ...(b.mix?.[id] || {}) };
+            return (
+              <div key={id}>
+                <p className="text-[12px] text-ink-2 mb-1.5">{base.name} — لكل م³</p>
+                <Grid2>
+                  {MIX_FIELDS.map(([k, field, label, unit]) => (
+                    <NumField key={k} label={label} unit={unit} value={t[k]} onChange={(v) => put({ mix: { ...b.mix, [id]: { ...t, [k]: v } } })} hint={`افتراضي ${base[field]} ⚑`} rule={{ min: 0 }} data-conc-mix-field={`${id}.${k}`} />
+                  ))}
+                </Grid2>
+              </div>
+            );
+          })}
+          <Grid2>
+            <NumField label="وزن شكارة الأسمنت" unit="kg" value={b.bagKg || ""} onChange={(v) => put({ bagKg: v })} hint={`افتراضي ${CONC_PROFILE.bagKg}`} rule={{ min: 1 }} />
+            <NumField label="زيادة الخلط في الموقع" unit="%" value={b.siteExtra || ""} onChange={(v) => put({ siteExtra: v })} hint={`افتراضي ${SITE_EXTRA} ⚑`} rule={{ min: 0, max: 50 }} />
+          </Grid2>
+        </Advanced>
+      )}
 
       {c.checks.length > 0 && <Card title="المراجعات"><Checks items={c.checks} /></Card>}
       <Working steps={c.trace} />
@@ -319,9 +416,9 @@ function build(doc: ToolDoc<Body>, project: any) {
   } else {
     blocks.push({ k: "heading", num: "2", text: "الخامات حسب الخلطة" });
     blocks.push({
-      k: "table", id: "mats", caption: b.siteMixed ? "خلط في الموقع (+4 % ⚑)" : "", cols: [
+      k: "table", id: "mats", caption: b.siteMixed ? `خلط في الموقع (+${siteExtraOf(b)} % ⚑)` : "", cols: [
         { key: "mix", label: "الخلطة", wMm: 44, align: "start" }, { key: "v", label: "الحجم", unit: "م³", wMm: 24, align: "end", num: { dp: 2 } },
-        { key: "bags", label: "أسمنت", unit: "شكارة", wMm: 26, align: "end", num: { dp: 0 } }, { key: "sand", label: "رمل", unit: "م³", wMm: 26, align: "end", num: { dp: 2 } },
+        { key: "bags", label: "أسمنت", unit: bagOf(b) === 50 ? "شكارة" : `شكارة ${bagOf(b)} كجم`, wMm: 26, align: "end", num: { dp: 0 } }, { key: "sand", label: "رمل", unit: "م³", wMm: 26, align: "end", num: { dp: 2 } },
         { key: "grav", label: "سن", unit: "م³", wMm: 26, align: "end", num: { dp: 2 } }, { key: "water", label: "ماء", unit: "م³", wMm: 28, align: "end", num: { dp: 2 } },
       ],
       rows: c.mats.map((m) => ({ cells: { mix: m.mix.name, v: m.orderM3, bags: m.bags, sand: m.sandM3, grav: m.gravelM3, water: m.waterM3 } })),
@@ -332,7 +429,7 @@ function build(doc: ToolDoc<Body>, project: any) {
   const basis = {
     rows: [
       { key: "waste", label: "الهالك حسب العنصر", value: "2–5", unit: "%", source: "ممارسة الموقع", conf: "M" as const, flagged: true },
-      { key: "mix.rc", label: "خلطة المسلحة لكل م³", value: "350 kg · 0.4 · 0.8", source: "ممارسة مصرية", conf: "M" as const, flagged: true },
+      mixBasis(b),
       ...(pour ? [
         { key: "tCover", label: "زمن تغطية الطبقة", value: String(c.tCover), unit: "min", source: "ACI 304 / ممارسة", conf: "M" as const, flagged: true },
         { key: "cubes", label: "قاعدة المكعبات", value: b.cubeRule === "perVolume" ? "1 / 50 m³" : "50 + 100", source: "مواصفات المشروع", conf: "L" as const, flagged: true },
@@ -347,6 +444,16 @@ function build(doc: ToolDoc<Body>, project: any) {
     basis,
     signRoles: pour ? ["siteEngineer", "consultantRep", "approved"] : ["prepared", "checked", "approved"],
   });
+}
+
+// the reinforced mix as printed in the basis: the profile's, or the engineer's own figures (said plainly, not flagged as a default)
+function mixBasis(b: Body) {
+  const m = mixOf(b, "rc");
+  const own = mixChanged(b, "rc") > 0;
+  return {
+    key: "mix.rc", label: "خلطة المسلحة لكل م³", value: `${m.cementKg} kg · ${m.sandM3} · ${m.gravelM3}`,
+    source: own ? "خلطة الموقع — أدخلها المهندس" : "ممارسة مصرية", conf: "M" as const, flagged: !own,
+  };
 }
 
 function summary(doc: ToolDoc<Body>) {
