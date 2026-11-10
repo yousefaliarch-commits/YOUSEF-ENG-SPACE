@@ -43,6 +43,18 @@ function hero(node: unknown): El | null {
   return hero(node.props.children);
 }
 
+describe("every tool's document fits its page", () => {
+  it("no table is wider than the text block (a wider one is scaled down on the sheet and its text shrinks)", async () => {
+    const { TOOL_MODULES } = await import("../src/features/tools/module");
+    const { docLayout, fixedMeasurer } = await import("../src/doc/layout");
+    for (const kind of Object.keys(TOOL_MODULES)) {
+      const mod = await TOOL_MODULES[kind]();
+      const warnings = docLayout(mod.build(docOf(mod, mod.blank()), null), fixedMeasurer).warnings;
+      expect(warnings.filter((w) => /scaled/.test(w)), kind).toEqual([]);
+    }
+  });
+});
+
 describe("concrete: the grade is whatever the specification calls it", () => {
   type B = ReturnType<typeof concrete.blank> & Record<string, unknown>;
   const body = (o: Record<string, unknown> = {}): B => ({

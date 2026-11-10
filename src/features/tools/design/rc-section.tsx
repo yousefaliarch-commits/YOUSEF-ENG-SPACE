@@ -251,14 +251,16 @@ function build(doc: ToolDoc<Body>, project: any) {
     {
       k: "table", id: "rc", caption: "ملخص العناصر", grid: true,
       cols: [
-        { key: "tag", label: "العنصر", wMm: 14, align: "center" }, { key: "kind", label: "النوع", wMm: 22, align: "start" },
-        { key: "size", label: "القطاع", unit: "mm", wMm: 20, align: "center" }, { key: "bars", label: "حديد الشد", wMm: 22, align: "center" },
-        { key: "st", label: "الكانات", wMm: 24, align: "center" },
-        { key: "mu", label: "Mu", unit: "kN·m", wMm: 15, align: "end", num: { dp: 1 } }, { key: "cap", label: capLabel, unit: "kN·m", wMm: 16, align: "end", num: { dp: 1 } },
-        { key: "um", label: "استغلال", unit: "%", wMm: 15, align: "end", num: { dp: 0 }, xl: { f: "{mu}/{cap}*100" } },
-        { key: "vu", label: "Vu", unit: "kN", wMm: 14, align: "end", num: { dp: 1 } }, { key: "vcap", label: vLabel, unit: "kN", wMm: 16, align: "end", num: { dp: 1 } },
-        { key: "uv", label: "استغلال", unit: "%", wMm: 15, align: "end", num: { dp: 0 }, xl: { f: "{vu}/{vcap}*100" } },
-        { key: "res", label: "النتيجة", wMm: 28, align: "center", mark: true },
+        // 174 mm in all — the portrait text block (the widths the sheet always printed: the declared ones were 221 mm and
+        // were scaled to fit)
+        { key: "tag", label: "العنصر", wMm: 11, align: "center" }, { key: "kind", label: "النوع", wMm: 16, align: "start" },
+        { key: "size", label: "القطاع", unit: "mm", wMm: 17, align: "center" }, { key: "bars", label: "حديد الشد", wMm: 18, align: "center" },
+        { key: "st", label: "الكانات", wMm: 19, align: "center" },
+        { key: "mu", label: "Mu", unit: "kN·m", wMm: 12, align: "end", num: { dp: 1 } }, { key: "cap", label: capLabel, unit: "kN·m", wMm: 13, align: "end", num: { dp: 1 } },
+        { key: "um", label: "استغلال", unit: "%", wMm: 12, align: "end", num: { dp: 0 }, xl: { f: "{mu}/{cap}*100" } },
+        { key: "vu", label: "Vu", unit: "kN", wMm: 12, align: "end", num: { dp: 1 } }, { key: "vcap", label: vLabel, unit: "kN", wMm: 13, align: "end", num: { dp: 1 } },
+        { key: "uv", label: "استغلال", unit: "%", wMm: 12, align: "end", num: { dp: 0 }, xl: { f: "{vu}/{vcap}*100" } },
+        { key: "res", label: "النتيجة", wMm: 19, align: "center", mark: true },
       ],
       rows,
     },
@@ -290,8 +292,8 @@ function build(doc: ToolDoc<Body>, project: any) {
     blocks.push({
       k: "table", id: `trace-${i}`, caption: `طريقة الحساب — ${tag}`, grid: true,
       cols: [
-        { key: "s", label: "الخطوة", wMm: 46, align: "start" }, { key: "e", label: "المعادلة والتعويض", wMm: 78, align: "start" },
-        { key: "v", label: "النتيجة", wMm: 28, align: "end" }, { key: "c", label: "المرجع", wMm: 30, align: "start" },
+        { key: "s", label: "الخطوة", wMm: 44, align: "start" }, { key: "e", label: "المعادلة والتعويض", wMm: 74, align: "start" },
+        { key: "v", label: "النتيجة", wMm: 27, align: "end" }, { key: "c", label: "المرجع", wMm: 29, align: "start" },
       ],
       rows: o.trace.map((t) => ({ cells: { s: t.label, e: iso(t.expr), v: iso(t.value), c: noFlag(t.clause) || "—" } })),
     });

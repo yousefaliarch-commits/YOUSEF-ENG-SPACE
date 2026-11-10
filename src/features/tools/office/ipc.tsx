@@ -307,8 +307,9 @@ function build(doc: ToolDoc<Body>, project: any) {
     {
       k: "table", id: "summary", caption: "", grid: true,
       cols: [
-        { key: "l", label: "البيان", wMm: 66, align: "start" }, { key: "p", label: "السابق", unit: "ج.م", wMm: 40, align: "end", num: { dp: 2 } },
-        { key: "c", label: "الحالي", unit: "ج.م", wMm: 40, align: "end", num: { dp: 2 }, xl: { f: "{t}-{p}" } }, { key: "t", label: "الإجمالي", unit: "ج.م", wMm: 40, align: "end", num: { dp: 2 } },
+        // 60 + 3 × 38 = 174 mm: the portrait text block exactly (wider columns were scaled down on the sheet)
+        { key: "l", label: "البيان", wMm: 60, align: "start" }, { key: "p", label: "السابق", unit: "ج.م", wMm: 38, align: "end", num: { dp: 2 } },
+        { key: "c", label: "الحالي", unit: "ج.م", wMm: 38, align: "end", num: { dp: 2 }, xl: { f: "{t}-{p}" } }, { key: "t", label: "الإجمالي", unit: "ج.م", wMm: 38, align: "end", num: { dp: 2 } },
       ],
       rows: summaryRows(r).map(([l, t, strong]) => ({ kind: strong ? "subtotal" : undefined, cells: { l, p: t.prev, c: t.cur, t: t.total } })),
     },

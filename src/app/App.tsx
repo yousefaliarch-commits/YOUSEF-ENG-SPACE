@@ -1,9 +1,10 @@
 // The root: theme (system / light / dark), language (Arabic / English) and the two views — the member app and, until Phase 3
 // moves it to its own web app, the admin console. Both views share the app's stores (lib/runtime).
-import React, { Suspense, lazy, useEffect, useLayoutEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { Bug, CircleCheck } from "lucide-react";
 import { AppView, parseHash } from "./AppView";
+import { entryView, signedInHere } from "./entry";
 import { ScreenLoading } from "./ScreenLoading";
 import { TopBar } from "./TopBar";
 import { I18N, LANGS, LangCtx, i18nApply, loadLang, saveLang } from "../i18n/i18n";
@@ -20,12 +21,42 @@ const AdminView = lazy(() => import("../features/admin/AdminView").then((m) => (
 // the console's second-factor step (Phase 3a): live backend only — the demo console opens as before
 const AdminGate = lazy(() => import("../features/settings/two-factor").then((m) => ({ default: m.AdminGate })));
 
+// the public page (engspace.org with nothing after it): its own chunk — a member opening the app never downloads it
+const Landing = lazy(() => import("../features/landing/Landing").then((m) => ({ default: m.Landing })));
+
 export const loadTheme = () => { try { return localStorage.getItem("engspace.theme") || "system"; } catch (e) { return "system"; } };
 
 export const systemMode = () => { try { const host = document.documentElement.dataset.theme; if (host === "light" || host === "dark") return host; return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } catch (e) { return "dark"; } };
 
 export function App() {
-  const [init] = useState<any>(parseHash); const [view, setView] = useState<any>(NATIVE ? "app" : init.view); const [accent, setAccent] = useState<any>("indigo"); const [toastMsg, setToastMsg] = useState<any>("");
+  const [init, setInit] = useState<any>(parseHash); const [accent, setAccent] = useState<any>("indigo"); const [toastMsg, setToastMsg] = useState<any>("");
+  // what the address opens (./entry.ts): the admin console, the app, or — for a visitor at the bare address — the public page
+  const [view, setView] = useState<any>(() => (NATIVE ? "app" : init.view === "admin" ? "admin" : entryView({ native: false, hash: location.hash, search: location.search, signedIn: signedInHere() })));
+  const viewNow = useRef(view);
+  viewNow.current = view;
+  // entering the app from the public page is a history step, so the browser's «back» returns to the page
+  const enterApp = () => {
+    try {
+      history.pushState(null, "", "#app/home");
+    } catch (e) {
+      /* a sandboxed frame: the view still changes */
+    }
+    setInit(parseHash());
+    setView("app");
+  };
+  useEffect(() => {
+    if (NATIVE) return;
+    const onHash = () => {
+      const want = entryView({ native: false, hash: location.hash, search: location.search, signedIn: signedInHere() });
+      if (viewNow.current === "landing" && want === "app") {
+        const next = parseHash();
+        setInit(next);
+        setView(next.view === "admin" ? "admin" : "app");
+      } else if (viewNow.current !== "landing" && want === "landing") setView("landing");
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
   const [theme, setThemeRaw] = useState<any>(loadTheme); const [sys, setSys] = useState<any>(systemMode);
   // Language: chosen on the app's first screen (before the e-mail / registration screen), saved, switchable any time from
   // Settings. The swap runs in a layout effect, so the first paint is already in the chosen language; a switch cross-fades as a
@@ -67,10 +98,11 @@ export function App() {
   return (
     <PlatformCtx.Provider value={PLATFORM}><ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} data-app-root="" className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
       {/* the preview's top bar (app ⇄ admin console, theme, language) — the native apps open straight into the member app */}
-      <div className={`web-topbar ${NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}`}><TopBar view={view} setView={setView} staff={staffOk} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
+      <div className={`web-topbar ${NATIVE || view === "landing" ? "hidden" : view === "app" ? "hidden sm:block" : ""}`}><TopBar view={view} setView={setView} staff={staffOk} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
       {/* the iOS app turns off page scrolling (ios.scrollEnabled: false — no rubber-band on the member app, which scrolls inside its own
           container); the console scrolls the page, so in the apps it gets a scroll container of its own */}
-      {view === "admin" && staffOk ? <div className={NATIVE ? "fixed inset-0 overflow-y-auto overflow-x-hidden overscroll-contain scroll-area" : ""}><Suspense fallback={<ScreenLoading />}>{isCloud() ? <AdminGate openApp={() => setView("app")}><AdminView init={init} openApp={() => setView("app")} /></AdminGate> : <AdminView init={init} openApp={() => setView("app")} />}</Suspense></div>
+      {view === "landing" ? <Suspense fallback={<ScreenLoading />}><Landing lang={L} setLang={setLang} mode={mode} setTheme={setTheme} onEnter={enterApp} /></Suspense>
+        : view === "admin" && staffOk ? <div className={NATIVE ? "fixed inset-0 overflow-y-auto overflow-x-hidden overscroll-contain scroll-area" : ""}><Suspense fallback={<ScreenLoading />}>{isCloud() ? <AdminGate openApp={() => setView("app")}><AdminView init={init} openApp={() => setView("app")} /></AdminGate> : <AdminView init={init} openApp={() => setView("app")} />}</Suspense></div>
         : <AppView onAdmin={staffOk ? () => setView("admin") : null} init={init} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} langChosen={lang != null} />}
       <div role="status" aria-live="polite" className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-elevated border border-line-2 text-[13px] shadow-float transition-all ${toastMsg ? "opacity-100" : "opacity-0 translate-y-3 pointer-events-none"}`}>{toastMsg && <><CircleCheck size={17} className="text-accent" /><span>{toastMsg}</span></>}</div>
     </div></LangCtx.Provider></ModeCtx.Provider></PlatformCtx.Provider>

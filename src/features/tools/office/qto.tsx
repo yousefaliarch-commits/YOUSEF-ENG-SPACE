@@ -188,6 +188,7 @@ function build(doc: ToolDoc<Body>, project: any) {
     return { cells: { boq: iso(l.boq || ""), wbs: l.wbs, desc: l.desc, kind: kindName(l.kind), unit: res.unit, n: N(l.n) || 1, L: N(l.L), W: N(l.W) || null, H: l.kind === "waterproof" ? N(l.upturn) : N(l.H) || null, x: third, g: res.gross, d: res.deduct, net: res.net }, mark: res.issues.length ? "fail" as const : undefined };
   });
   const dedRows = b.lines.flatMap((l, i) => r.lines[i].deductions.map((d) => ({ cells: { line: `${i + 1}. ${l.desc || kindName(l.kind)}`, op: d.label, n: d.n, a: d.area, f: d.faces, q: d.qty, rule: d.rule } })));
+  const hasBoq = b.lines.some((l) => (l.boq || "").trim());
   const blocks: DocBlock[] = [
     { k: "kv", cols: 2, rows: [{ label: "قواعد القياس", value: RULE_NAME[b.rules], wide: true }, { label: "عدد البنود", value: iso(String(b.lines.length)) }] },
     { k: "heading", num: "1", text: "بنود الحصر" },
@@ -195,8 +196,10 @@ function build(doc: ToolDoc<Body>, project: any) {
       k: "table", id: "lines", caption: "", grid: true,
       cols: [
         // the BOQ item a line measures, printed when any line names one (the sheet then cross-checks against the certificate)
-        ...(b.lines.some((l) => (l.boq || "").trim()) ? [{ key: "boq", label: "بند المقايسة", wMm: 15, align: "center" as const }] : []),
-        { key: "wbs", label: "الموقع", wMm: 34, align: "start" }, { key: "desc", label: "البيان", wMm: 46, align: "start" },
+        // (with it the description gives up 6 mm: the columns then fill the landscape block exactly — 261 mm — instead of
+        // overflowing it and being scaled down)
+        ...(hasBoq ? [{ key: "boq", label: "بند المقايسة", wMm: 15, align: "center" as const }] : []),
+        { key: "wbs", label: "الموقع", wMm: 34, align: "start" }, { key: "desc", label: "البيان", wMm: hasBoq ? 40 : 46, align: "start" },
         { key: "kind", label: "النوع", wMm: 22, align: "center" }, { key: "unit", label: "الوحدة", wMm: 12, align: "center" },
         { key: "n", label: "العدد", wMm: 12, align: "end", num: { dp: 0 } }, { key: "L", label: "الطول", wMm: 15, align: "end", num: { dp: 2 } },
         { key: "W", label: "العرض", wMm: 15, align: "end", num: { dp: 2 } }, { key: "H", label: "الارتفاع", wMm: 15, align: "end", num: { dp: 2 } },

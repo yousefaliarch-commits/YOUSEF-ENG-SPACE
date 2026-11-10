@@ -424,3 +424,27 @@ p { text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) {
   .palette-scrim, .palette-in { animation: none !important; }
 }
+
+/* ---------------------------------------------------------------------
+   The public page (v0.39, src/features/landing): millimetre paper behind the first screen, a thumb-sized slider, and a
+   native snap strip for the sample sheets. Static rules only — the page's motion is the app's (rise, the slab's spring).
+   --------------------------------------------------------------------- */
+.land-paper {
+  background-image: linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  background-size: 10mm 10mm, 10mm 10mm, 5mm 5mm, 5mm 5mm;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 100%);
+  opacity: .75;
+}
+/* the slider: a 44 px touch row, a 6 px track, a 24 px thumb; a vertical drag over it still scrolls the page */
+.land-range { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 44px; margin: 0; background: transparent; cursor: pointer; touch-action: pan-y; }
+.land-range::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: rgb(var(--track)); }
+.land-range::-moz-range-track { height: 6px; border-radius: 999px; background: rgb(var(--track)); }
+.land-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; margin-top: -9px; border-radius: 50%; background: rgb(var(--solid)); border: 3px solid rgb(var(--surface)); box-shadow: 0 2px 8px rgb(0 0 0 / .28); }
+.land-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: rgb(var(--solid)); border: 3px solid rgb(var(--surface)); box-shadow: 0 2px 8px rgb(0 0 0 / .28); }
+.land-range:focus-visible { outline: none; }
+.land-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgb(var(--accent) / .35); }
+.land-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px rgb(var(--accent) / .35); }
+.land-strip { scroll-snap-type: x mandatory; scroll-padding-inline: 1rem; overscroll-behavior-x: contain; }
+.land-snap { scroll-snap-align: start; }
