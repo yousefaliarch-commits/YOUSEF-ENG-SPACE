@@ -25,6 +25,9 @@ export type ToolModule<B = any> = ToolModuleMeta & {
   Editor: (p: { body: B; set: (b: B) => void; ctx: ToolCtx }) => any;
   build(doc: ToolDoc<B>, project: ProjectSnap | null): DocSpec;
   summary(doc: ToolDoc<B>): string;
+  // what a firm template keeps of a document (data/tool-templates.ts): `rows` false → parameters only. A tool defines this
+  // when part of its body is history that must never start a new document (certified quantities, a reply, an approval)
+  template?(body: B, rows: boolean): B;
   // a tool-specific Excel workbook (parameter cells, cross-row formulas); without it the export uses the generic specWorkbook
   workbook?(doc: ToolDoc<B>, project: ProjectSnap | null): Workbook;
 };

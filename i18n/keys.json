@@ -2733,6 +2733,72 @@
   "n": 1,
   "x": "c.name"
  },
+ "رقمي: 00 · 01 · 02": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "حرفي: A · B · C": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "تمهيدي: P01 · P02": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "تعاقدي: C01 · C02": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "٠١٢٣٤٥٦٧٨٩": {
+  "k": "s",
+  "p": "data/doc-controls.ts,i18n/i18n.ts,lib/num-input.ts,lib/search.ts",
+  "n": 4
+ },
+ "المشروع-النوع-الرقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "المشروع-المُصدِر-النوع-الرقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "النوع/السنة/الرقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "المشروع-النوع-السنة والرقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "النمط طويل": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "النمط يحتاج العدّاد {nnnn} حتى لا يتكرر رقم": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
+ "رمز غير معروف: {0}": {
+  "k": "t",
+  "p": "data/doc-controls.ts",
+  "n": 1,
+  "x": "unknown[0]"
+ },
+ "حروف إنجليزية وأرقام و - _ . / فقط": {
+  "k": "s",
+  "p": "data/doc-controls.ts",
+  "n": 1
+ },
  "صافي شهري — ما يصل الحساب بعد ضريبة الدخل والتأمينات (أساسي + بدلات ثابتة، دون مكافآت سنوية). النموذج معايَر على مراجع إجمالية (الحد الأدنى للأجور وسقف التأمينات) ثم محوَّل للصافي بقانون الضريبة الساري · قطاع خاص · القاهرة الكبرى = 1.00": {
   "k": "s",
   "p": "data/geo.ts",
@@ -5786,11 +5852,36 @@
   "p": "data/seed.ts",
   "n": 1
  },
+ "الملف أكبر من أن يكون قالبًا": {
+  "k": "s",
+  "p": "data/template-file.ts,features/tools/templates.tsx",
+  "n": 2
+ },
+ "الملف ليس قالب EngSpace": {
+  "k": "s",
+  "p": "data/template-file.ts",
+  "n": 1
+ },
+ "الملف ليس قالب EngSpace صالحًا": {
+  "k": "s",
+  "p": "data/template-file.ts",
+  "n": 1
+ },
+ "محتوى القالب غير صالح": {
+  "k": "s",
+  "p": "data/template-file.ts",
+  "n": 1
+ },
  "{0} (نسخة متعارضة)": {
   "k": "t",
   "p": "data/tool-docs.ts",
   "n": 1,
   "x": "l.title"
+ },
+ "قالب": {
+  "k": "s",
+  "p": "data/tool-templates.ts",
+  "n": 1
  },
  "حصر الخرسانة": {
   "k": "s",
@@ -12813,8 +12904,8 @@
  },
  "إلغاء": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/settings/two-factor.tsx,features/support/support.tsx,features/tools/host.tsx,features/tools/office/vo.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
-  "n": 13
+  "p": "features/admin/AdminView.tsx,features/auth/auth.tsx,features/qaqc/qaqc.tsx,features/settings/two-factor.tsx,features/support/support.tsx,features/tools/doc-settings.tsx,features/tools/host.tsx,features/tools/office/vo.tsx,features/tools/site/permit.tsx,ui/feed.tsx,ui/kit.tsx,ui/moderation.tsx",
+  "n": 14
  },
  "إظهار": {
   "k": "x",
@@ -23050,6 +23141,138 @@
   "p": "features/tools/design/rc-section.tsx",
   "n": 1
  },
+ "إعدادات المستند": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "المراجعة · الخرطوشة · التوقيعات · قوالب المكتب": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "رمز المراجعة": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "«مراجعة جديدة» تكمل على نفس النمط: 00 ← 01، A ← B، P01 ← P02.": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "مقياس الرسم": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "المرجع (بدل رقم العقد)": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "رقم اللوحة أو الخطاب": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "خانات التوقيع (": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "خانات التوقيع ({0})": {
+  "k": "e",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1,
+  "x": "shown.length"
+ },
+ "توقيعات المشروع": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "تخصيص": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "خانة توقيع": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 3
+ },
+ "عنوان الخانة": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "مدير المشروع · Project manager": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "الاسم": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx,features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
+  "n": 8
+ },
+ "الوظيفة": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx,features/tools/host.tsx",
+  "n": 6
+ },
+ "هذا المستند بلا خانات توقيع.": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "سجل المراجعات الصادرة": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "إصدار أول": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "إصدار المستند": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "إصدار المستند ·": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "إصدار المستند · {0}": {
+  "k": "r",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1,
+  "x": "EL <Num>Rev {rev}</Num>"
+ },
+ "يأخذ المستند رقمه ويُجمَّد بنصه وأرقامه وبيانات المشروع كما هي الآن. أي تعديل لاحق يكون مراجعة جديدة.": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "وصف هذا الإصدار (يُطبع في جدول المراجعات)": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 2
+ },
+ "تعديل الكميات حسب ملاحظات الاستشاري": {
+  "k": "s",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
+ "أصدر": {
+  "k": "x",
+  "p": "features/tools/doc-settings.tsx",
+  "n": 1
+ },
  "الدوائر": {
   "k": "s",
   "p": "features/tools/elec/cable.tsx",
@@ -23500,8 +23723,8 @@
  },
  "احذف": {
   "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
+  "p": "features/tools/host.tsx,features/tools/templates.tsx",
+  "n": 4
  },
  "حُذف المستند": {
   "k": "s",
@@ -23510,8 +23733,8 @@
  },
  "تعذّر الحذف — حاول مرة أخرى": {
   "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 1
+  "p": "features/tools/host.tsx,features/tools/templates.tsx",
+  "n": 2
  },
  "جارٍ التحميل": {
   "k": "s",
@@ -23612,8 +23835,8 @@
  },
  "تعذّر الحفظ على الجهاز — المساحة ممتلئة؟": {
   "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
+  "p": "features/tools/host.tsx,features/tools/templates.tsx",
+  "n": 3
  },
  "المستند كبير: محفوظ على هذا الجهاز فقط": {
   "k": "s",
@@ -23742,21 +23965,6 @@
   "p": "features/tools/host.tsx",
   "n": 1
  },
- "إصدار المستند": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
- },
- "يأخذ المستند رقمه ويُجمَّد بنصه وأرقامه وبيانات المشروع كما هي الآن. أي تعديل لاحق يكون مراجعة جديدة.": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
- },
- "أصدر": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 2
- },
  "الاستشاري": {
   "k": "s",
   "p": "features/tools/host.tsx",
@@ -23781,6 +23989,12 @@
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 1
+ },
+ "نمط الترقيم: {0}": {
+  "k": "t",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "patternProblem"
  },
  "تُكتب مرة واحدة وتظهر في خرطوشة كل تقرير. لا أسعار ولا مبالغ هنا.": {
   "k": "x",
@@ -23827,31 +24041,73 @@
   "p": "features/tools/host.tsx,features/tools/site/permit.tsx",
   "n": 3
  },
- "أعدّ": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 1
- },
- "راجع": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 1
- },
- "اعتمد": {
-  "k": "s",
-  "p": "features/tools/host.tsx",
-  "n": 1
- },
  "{0} — الاسم": {
   "k": "t",
   "p": "features/tools/host.tsx",
-  "n": 1,
-  "x": "l"
+  "n": 2,
+  "x": "signName(r)"
  },
- "الوظيفة": {
+ "توقيعات أخرى": {
   "k": "s",
   "p": "features/tools/host.tsx",
   "n": 2
+ },
+ "مهندس الموقع، الاستشاري، السلامة، المخزن…": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "تُكتب مرة هنا فتملأ خانتها في كل مستند يحملها. الخانة الفارغة تُطبع للتوقيع اليدوي.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "ترقيم المستندات": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "نمط رقم المستند ورمز الجهة المُصدِرة": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "نمط رقم المستند": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "رمز الجهة المُصدِرة {orig}": {
+  "k": "s",
+  "p": "features/tools/host.tsx",
+  "n": 2
+ },
+ "مثال:": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "مثال: {0}": {
+  "k": "r",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "EL <Num>{formatDocNo(pattern, { code: p.code || \"TWR\", type: \"R"
+ },
+ "الرموز:": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "— عدد حروف n هو عدد خانات الرقم. المستندات الصادرة تحتفظ بأرقامها.": {
+  "k": "x",
+  "p": "features/tools/host.tsx",
+  "n": 1
+ },
+ "الرموز: {0} — عدد حروف n هو عدد خانات الرقم. المستندات الصادرة تحتفظ بأرقامها.": {
+  "k": "r",
+  "p": "features/tools/host.tsx",
+  "n": 1,
+  "x": "EL <bdi dir=\"ltr\" className=\"font-grotesk\">{\"{code} {type} {nnn"
  },
  "حفظ المشروع": {
   "k": "x",
@@ -27351,11 +27607,6 @@
   "p": "features/tools/site/diary.tsx",
   "n": 3
  },
- "الاسم": {
-  "k": "s",
-  "p": "features/tools/site/diary.tsx,features/tools/site/toolbox.tsx",
-  "n": 6
- },
  "موضوع التوعية الصباحية": {
   "k": "s",
   "p": "features/tools/site/diary.tsx",
@@ -29014,6 +29265,165 @@
   "p": "features/tools/survey/level-book.tsx",
   "n": 1
  },
+ "القالب لأداة أخرى": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "القالب من إصدار أحدث من التطبيق — حدّث التطبيق ثم استورده": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "القالب غير متوافق مع هذه الأداة": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "القالب غير موجود": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "القالب من إصدار أحدث من التطبيق — حدّث التطبيق": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "تعذّر فتح القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "تعذّرت مشاركة القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "هذا القالب لأداة غير متاحة لحسابك": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "تعذّر حفظ القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 2
+ },
+ "أُضيف القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "أُضيف القالب إلى: {0}": {
+  "k": "t",
+  "p": "features/tools/templates.tsx",
+  "n": 1,
+  "x": "made.toolName"
+ },
+ "تعذّرت قراءة الملف": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "قوالب المكتب": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "قوالب المكتب {0}": {
+  "k": "e",
+  "p": "features/tools/templates.tsx",
+  "n": 1,
+  "x": "list.length > 0 && <Num>({list.length})</Num>"
+ },
+ "استيراد قالب": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "احفظ أي مستند كقالب من «إعدادات المستند»، فيبدأ كل مستند جديد بإعدادات مكتبك: النِّسب، قواعد القياس، التوقيعات، وبنودكم المعتادة.": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "مستند جديد من هذا القالب ·": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "مستند جديد من هذا القالب · {0}": {
+  "k": "r",
+  "p": "features/tools/templates.tsx",
+  "n": 1,
+  "x": "EL <Num>{h.dateIso}</Num>"
+ },
+ "مشاركة القالب كملف": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 4
+ },
+ "حذف القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 4
+ },
+ "يُحذف القالب من كل أجهزتك. المستندات التي بدأت منه تبقى كما هي.": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 2
+ },
+ "حُذف القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "قالب {0}": {
+  "k": "t",
+  "p": "features/tools/templates.tsx",
+  "n": 1,
+  "x": "toolName"
+ },
+ "اكتب اسمًا للقالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "حُدّث القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "حُفظ القالب — تجده في صفحة الأداة تحت «قوالب المكتب»": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "قالب المكتب": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "يحفظ إعدادات هذا المستند وتوقيعاته ليبدأ منها كل مستند جديد. الكميات المنفَّذة والردود والاعتمادات لا تنتقل.": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
+ "اسم القالب": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 2
+ },
+ "مع بنود هذا المستند": {
+  "k": "s",
+  "p": "features/tools/templates.tsx",
+  "n": 2
+ },
+ "حفظ كقالب للمكتب": {
+  "k": "x",
+  "p": "features/tools/templates.tsx",
+  "n": 1
+ },
  "خلطة الشكارة": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
@@ -29713,11 +30123,6 @@
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
- },
- "٠١٢٣٤٥٦٧٨٩": {
-  "k": "s",
-  "p": "i18n/i18n.ts,lib/num-input.ts,lib/search.ts",
-  "n": 3
  },
  "([\\d٠-٩][\\d٠-٩.,٫٬]*)": {
   "k": "s",
@@ -31667,6 +32072,11 @@
   "p": "ui/chrome.tsx",
   "n": 1
  },
+ "رسم توضيحي بالأبعاد": {
+  "k": "s",
+  "p": "ui/drafting.tsx",
+  "n": 1
+ },
  "أوافق — يلغي «لا أوافق» إن كان مختارًا": {
   "k": "s",
   "p": "ui/feed.tsx",
@@ -32138,6 +32548,22 @@
   "p": "ui/identity.tsx",
   "n": 1
  },
+ "إعدادات متقدمة": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "معدّلة": {
+  "k": "x",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "{0} معدّلة": {
+  "k": "r",
+  "p": "ui/kit.tsx",
+  "n": 1,
+  "x": "EL <Num>{changed}</Num>"
+ },
  "تنبيه ⚠": {
   "k": "s",
   "p": "ui/kit.tsx",
@@ -32170,6 +32596,21 @@
   "n": 1
  },
  "تكرار": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
+ "ترتيب البند في القائمة": {
+  "k": "x",
+  "p": "ui/kit.tsx",
+  "n": 1
+ },
+ "تحريك لأعلى": {
+  "k": "s",
+  "p": "ui/kit.tsx",
+  "n": 2
+ },
+ "تحريك لأسفل": {
   "k": "s",
   "p": "ui/kit.tsx",
   "n": 2

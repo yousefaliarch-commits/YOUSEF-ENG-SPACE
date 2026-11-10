@@ -28,6 +28,7 @@ import { TOOL_ICONS } from "./icons";
 import { TOOL_MODULES, type ToolModule } from "./module";
 import { REGISTER_OF, RegisterView } from "./register";
 import { DocSettings, IssueDialog } from "./doc-settings";
+import { SaveAsTemplate, TemplateShelf } from "./templates";
 import { DOCNO_DEFAULT, DOCNO_PRESETS, applyDocControls, controlsForHash, defaultSign, docNoPatternProblem, formatDocNo, nextRev, withRevision } from "../../data/doc-controls";
 import { SIGN_LABEL, nextDocNo, projectFor, snapOf } from "./spec";
 
@@ -103,6 +104,8 @@ export function ToolScreen({ app, id }: { app: any; id: string }) {
       <button type="button" data-tool-new onClick={() => app.push({ type: "tooldoc", id: `${(t.docKinds || [t.id])[0]}:new` })} className="press w-full min-h-14 inline-flex items-center justify-center gap-2 rounded-2xl btn-primary text-[15px] font-medium">
         <FilePlus2 size={19} /> مستند جديد
       </button>
+
+      <TemplateShelf app={app} kind={(t.docKinds || [t.id])[0]} projectId={active?.id || null} />
 
       {REGISTER_OF[t.id] && (
         <div data-register-switch>
@@ -567,7 +570,9 @@ export function ToolDocScreen({ app, id }: { app: any; id: string }) {
           doc={doc} readOnly={readOnly} referenceHint={project?.contractNo}
           defaults={() => defaultSign(mod.build(doc, projectFor(doc, projects)))}
           onChange={(patch) => update({ ...doc, ...patch })}
-        />
+        >
+          <SaveAsTemplate app={app} doc={doc} mod={mod} toolName={t.name} />
+        </DocSettings>
         {doc.v > mod.v && <p className="text-[12px] text-warn">هذا المستند من إصدار أحدث من التطبيق — يُعرض للقراءة فقط. حدّث التطبيق لتعديله.</p>}
         <Editor body={doc.body} set={setBody} ctx={{ app, project, role, readOnly, fill: (body: any, title?: string) => !readOnly && update({ ...doc, body, title: title || doc.title }), spawn }} />
         {!readOnly && <ToolTipCard app={app} kind={doc.kind} summary={mod.summary(doc)} />}

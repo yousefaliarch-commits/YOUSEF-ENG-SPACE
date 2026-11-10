@@ -20,6 +20,7 @@ import { Num } from "../../../ui/primitives";
 import type { ToolModule } from "../module";
 import type { BoqRow } from "../../../domain/tools/boq";
 import { BoqImportCard } from "./boq-ui";
+import { paramsOnly } from "../../../data/tool-templates";
 import { buildSpec, issuerName } from "../spec";
 
 type Item = { id: string; section: string; ref: string; desc: string; unit: string; qc: string; rate: string; qp: string; qq: string };
@@ -469,6 +470,13 @@ export const module: ToolModule<Body> = {
   kind: "ipc", v: 1, docType: "IPC", docTypeName: "مستخلص جاري · Interim payment certificate", discipline: "مكتب فني · تعاقدات", engine: IPC_ENGINE,
   profile: { id: "contract@1", edition: "Contract terms (FIDIC 1999 / Egyptian practice)", values: {}, overridden: [], unverified: [] },
   blank,
+  // a template is certificate no. 1 of a new contract: the terms and the deduction lines stay, what was certified does not
+  template: (b, rows) => ({
+    ...(rows ? b : paramsOnly(blank(), b)),
+    certNo: "1", from: "", to: "", advPrev: "0", contractRef: rows ? b.contractRef : "",
+    items: rows ? b.items.map((i) => ({ ...i, qp: "0", qq: "" })) : [blankItem()],
+    deductions: b.deductions.map((d) => ({ ...d, prev: "0", cur: "" })),
+  }),
   defaultTitle: (b) => `المستخلص رقم ${b.certNo || "1"}`,
   Editor,
   build,

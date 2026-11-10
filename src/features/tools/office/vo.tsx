@@ -11,6 +11,7 @@ import { fmtNum, iso } from "../../../doc/text";
 import type { ToolDoc } from "../../../data/tool-docs";
 import { AreaField, Card, Checks, DateField, Grid2, Note, NumField, Pick, ResultHero, RowCards, TextField } from "../../../ui/kit";
 import type { ToolModule } from "../module";
+import { paramsOnly } from "../../../data/tool-templates";
 import { buildSpec } from "../spec";
 
 type Item = { item: string; desc: string; unit: string; qty: string; rate: string; omit: boolean };
@@ -131,13 +132,17 @@ function build(doc: ToolDoc<Body>, project: any) {
   return buildSpec({ doc, meta: module, project, sections: [{ orientation: "portrait", blocks }], signRoles: ["contractorRep", "consultantRep", "approved"] });
 }
 
+const blank = (): Body => ({
+  contract: "", alertPct: "", origin: "client", instruction: "", reason: "", items: [blankItem()], daysReq: "0",
+  status: "draft", approvedValue: "", approvedDays: "", approvedOn: "", approvedRef: "",
+});
+
 export const module: ToolModule<Body> = {
   kind: "vo", v: 1, docType: "VO", docTypeName: "أمر تغيير · Variation order", discipline: "مكتب فني", engine: VO_ENGINE,
   profile: { id: "office@1", edition: "Technical office practice", values: {}, overridden: [], unverified: [] },
-  blank: () => ({
-    contract: "", alertPct: "", origin: "client", instruction: "", reason: "", items: [blankItem()], daysReq: "0",
-    status: "draft", approvedValue: "", approvedDays: "", approvedOn: "", approvedRef: "",
-  }),
+  blank,
+  // a template is a variation not yet decided: the engineer's decision and its reference never carry over
+  template: (b, rows) => ({ ...(rows ? b : paramsOnly(blank(), b)), status: "draft", approvedValue: "", approvedDays: "", approvedOn: "", approvedRef: "" }),
   defaultTitle: () => "أمر تغيير",
   Editor,
   build,
