@@ -11,6 +11,7 @@ import { REV_PRESETS, SIGN_MAX, cleanRev, type DocRev, type SignBox, type TitleE
 import type { ToolDoc } from "../../data/tool-docs";
 import { Advanced, Grid2, RowCards, TextField } from "../../ui/kit";
 import { FilterChip, Num } from "../../ui/primitives";
+import { portalHost } from "../../ui/portal";
 
 export type DocSettingsPatch = Partial<Pick<ToolDoc, "rev" | "sign" | "tb">>;
 
@@ -115,5 +116,6 @@ export function IssueDialog({ first, rev, onIssue, onCancel }: { first: boolean;
       </div>
     </div>
   );
-  return typeof document !== "undefined" ? createPortal(node, document.body) : node;
+  const host = portalHost();
+  return host ? createPortal(node, host) : node;
 }

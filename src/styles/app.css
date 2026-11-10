@@ -416,3 +416,11 @@ p { text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) {
   .roll-up, .roll-down { animation: none !important; }
 }
+/* the command palette (src/app/palette-panel.tsx): arrives once, on the app's own spring — opacity and transform only */
+.palette-scrim { animation: palette-scrim .16s ease-out backwards; }
+.palette-in { animation: palette-in var(--spring-snap-d) var(--spring-snap) backwards; transform-origin: top center; }
+@keyframes palette-scrim { from { opacity: 0; } }
+@keyframes palette-in { from { opacity: 0; transform: translate3d(0, -10px, 0) scale(.98); } }
+@media (prefers-reduced-motion: reduce) {
+  .palette-scrim, .palette-in { animation: none !important; }
+}

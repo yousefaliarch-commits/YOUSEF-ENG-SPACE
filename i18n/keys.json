@@ -260,7 +260,7 @@
  "الإشعارات": {
   "k": "s",
   "p": "app/AppView.tsx,app/desk.tsx,ui/chrome.tsx",
-  "n": 3
+  "n": 4
  },
  "شارك راتبك": {
   "k": "s",
@@ -322,6 +322,26 @@
   "k": "s",
   "p": "app/AppView.tsx",
   "n": 1
+ },
+ "الإعدادات": {
+  "k": "s",
+  "p": "app/AppView.tsx,app/desk.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
+  "n": 10
+ },
+ "حسابك": {
+  "k": "s",
+  "p": "app/AppView.tsx,app/desk.tsx,features/admin/AdminView.tsx,ui/chrome.tsx",
+  "n": 9
+ },
+ "صار المشروع النشط — مستنداتك الجديدة تُحفظ فيه": {
+  "k": "s",
+  "p": "app/AppView.tsx",
+  "n": 1
+ },
+ "كل المستندات — بدون مشروع نشط": {
+  "k": "s",
+  "p": "app/AppView.tsx,tools/palette.ts",
+  "n": 2
  },
  "معاينة تفاعلية كاملة · أنشئ حسابك (يُحفظ على جهازك فقط)، واختر في كل مشاركة: علنًا باسمك أو مجهولًا. اسحب من حافة البداية للرجوع.": {
   "k": "x",
@@ -385,20 +405,15 @@
   "n": 1,
   "x": "tLabel"
  },
+ "بحث وأوامر": {
+  "k": "x",
+  "p": "app/desk.tsx,app/palette-panel.tsx",
+  "n": 3
+ },
  "التنقل الرئيسي": {
   "k": "s",
   "p": "app/desk.tsx,ui/chrome.tsx",
   "n": 4
- },
- "الإعدادات": {
-  "k": "x",
-  "p": "app/desk.tsx,features/admin/AdminView.tsx,features/stack/stack.tsx,ui/chrome.tsx",
-  "n": 9
- },
- "حسابك": {
-  "k": "s",
-  "p": "app/desk.tsx,features/admin/AdminView.tsx,ui/chrome.tsx",
-  "n": 8
  },
  "إظهار القائمة": {
   "k": "s",
@@ -409,6 +424,54 @@
   "k": "s",
   "p": "app/desk.tsx",
   "n": 2
+ },
+ "ابحث عن أداة أو مستند أو مشروع…": {
+  "k": "s",
+  "p": "app/palette-panel.tsx",
+  "n": 2
+ },
+ "النتائج": {
+  "k": "s",
+  "p": "app/palette-panel.tsx",
+  "n": 2
+ },
+ "لا نتيجة — جرّب اسم الأداة أو رقم المستند أو المبنى.": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "للتنقل": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "{0} للتنقل": {
+  "k": "r",
+  "p": "app/palette-panel.tsx",
+  "n": 1,
+  "x": "EL <kbd className=\"font-grotesk\" dir=\"ltr\">↑ ↓</kbd>"
+ },
+ "للفتح": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "{0} للفتح": {
+  "k": "r",
+  "p": "app/palette-panel.tsx",
+  "n": 1,
+  "x": "EL <kbd className=\"font-grotesk\" dir=\"ltr\">Enter</kbd>"
+ },
+ "في أي وقت": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "{0} في أي وقت": {
+  "k": "r",
+  "p": "app/palette-panel.tsx",
+  "n": 1,
+  "x": "EL <kbd className=\"font-grotesk\" dir=\"ltr\">{keys}</kbd>"
  },
  "البريد أو كلمة المرور غير صحيحة": {
   "k": "s",
@@ -2368,7 +2431,7 @@
  "أسمنت": {
   "k": "s",
   "p": "data/companies.tsx,features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
-  "n": 7
+  "n": 8
  },
  "شنايدر إلكتريك — مصر": {
   "k": "s",
@@ -2956,8 +3019,8 @@
  },
  "الأدوات": {
   "k": "s",
-  "p": "data/geo.ts,features/cv/extract.ts,features/tabs/tabs.tsx",
-  "n": 3
+  "p": "data/geo.ts,features/cv/extract.ts,features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 4
  },
  "الرسائل": {
   "k": "s",
@@ -15039,8 +15102,8 @@
  },
  "المشاريع": {
   "k": "s",
-  "p": "features/cv/extract.ts",
-  "n": 1
+  "p": "features/cv/extract.ts,tools/palette.ts",
+  "n": 2
  },
  "المشروعات": {
   "k": "s",
@@ -15899,8 +15962,8 @@
  },
  "إضافة": {
   "k": "x",
-  "p": "features/market/raise-tracker.tsx,features/tools/office/vo.tsx",
-  "n": 2
+  "p": "features/market/raise-tracker.tsx,features/tools/office/ipc.tsx,features/tools/office/vo.tsx",
+  "n": 5
  },
  "زيادة": {
   "k": "x",
@@ -18340,7 +18403,7 @@
  "د": {
   "k": "s",
   "p": "features/sheets/sheets.tsx,features/tools/concrete/concrete.tsx,features/tools/site/toolbox.tsx",
-  "n": 10
+  "n": 14
  },
  "ساعات/أسبوع": {
   "k": "s",
@@ -18954,7 +19017,7 @@
  "رمل": {
   "k": "s",
   "p": "features/sitetools/site-tools.tsx,features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
-  "n": 6
+  "n": 7
  },
  "زلط / سن": {
   "k": "s",
@@ -22089,8 +22152,8 @@
  },
  "بلا عنوان": {
   "k": "s",
-  "p": "features/tabs/tabs.tsx,features/tools/host.tsx",
-  "n": 2
+  "p": "features/tabs/tabs.tsx,features/tools/host.tsx,tools/palette.ts",
+  "n": 3
  },
  "أدوات الموقع والمكتب الفني": {
   "k": "x",
@@ -22104,18 +22167,28 @@
  },
  "الأخيرة": {
   "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
+  "p": "features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 2
  },
  "مستندات محفوظة": {
   "k": "x",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
+  "p": "features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 2
  },
  "لا أداة بهذا الاسم.": {
   "k": "x",
   "p": "features/tabs/tabs.tsx",
   "n": 1
+ },
+ "سن / زلط": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "ماء": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
+  "n": 4
  },
  "الوصلة الباردة: مساحة الشريحة": {
   "k": "s",
@@ -22143,6 +22216,12 @@
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1,
   "x": "m.mix.name"
+ },
+ "{0} — رسم توضيحي بالأبعاد": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "kindName(row.kind)"
  },
  "خطة صب": {
   "k": "s",
@@ -22188,6 +22267,16 @@
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx,features/tools/site/diary.tsx",
   "n": 6
+ },
+ "رتبة أخرى": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "الرتبة كما في المواصفات": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
  },
  "المورد": {
   "k": "s",
@@ -22243,7 +22332,7 @@
  "الهالك": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx,features/tools/trade/trade.tsx",
-  "n": 8
+  "n": 9
  },
  "افتراضي {0} % ⚑": {
   "k": "t",
@@ -22370,6 +22459,16 @@
   "p": "features/tools/concrete/concrete.tsx",
   "n": 2
  },
+ "تحميل الخلاطة في المحطة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "غسيل الخلاطة والعودة للدور": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
  "مواعيد وصول الخلاطات": {
   "k": "x",
   "p": "features/tools/concrete/concrete.tsx",
@@ -22488,10 +22587,11 @@
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
  },
- "خلط في الموقع (+4 % ⚑)": {
-  "k": "s",
+ "خلط في الموقع (+{0} % ⚑)": {
+  "k": "t",
   "p": "features/tools/concrete/concrete.tsx",
-  "n": 3
+  "n": 2,
+  "x": "siteExtraOf(b)"
  },
  "{0} — {1} م³": {
   "k": "e",
@@ -22504,15 +22604,48 @@
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
  },
- "سن / زلط": {
+ "خلطة الموقع": {
   "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "الأسمنت والرمل والسن والماء لكل م³ — حسب الخلطة التصميمية المعتمدة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "— لكل م³": {
+  "k": "x",
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
  },
- "ماء": {
+ "{0} — لكل م³": {
+  "k": "e",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "base.name"
+ },
+ "افتراضي {0} ⚑": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2,
+  "x": "base[field]"
+ },
+ "وزن شكارة الأسمنت": {
   "k": "s",
-  "p": "features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
-  "n": 3
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
+ },
+ "افتراضي {0}": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "CONC_PROFILE.bagKg"
+ },
+ "زيادة الخلط في الموقع": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 2
  },
  "المراجعات": {
   "k": "s",
@@ -22679,6 +22812,12 @@
   "p": "features/tools/concrete/concrete.tsx,features/tools/trade/trade.tsx",
   "n": 5
  },
+ "شكارة {0} كجم": {
+  "k": "t",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1,
+  "x": "bagOf(b)"
+ },
  "سن": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx",
@@ -22693,16 +22832,6 @@
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx,features/tools/rebar/bbs.tsx",
   "n": 2
- },
- "خلطة المسلحة لكل م³": {
-  "k": "s",
-  "p": "features/tools/concrete/concrete.tsx",
-  "n": 1
- },
- "ممارسة مصرية": {
-  "k": "s",
-  "p": "features/tools/concrete/concrete.tsx",
-  "n": 1
  },
  "زمن تغطية الطبقة": {
   "k": "s",
@@ -22730,6 +22859,21 @@
   "n": 1
  },
  "ECP 203 / ممارسة": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "خلطة المسلحة لكل م³": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "خلطة الموقع — أدخلها المهندس": {
+  "k": "s",
+  "p": "features/tools/concrete/concrete.tsx",
+  "n": 1
+ },
+ "ممارسة مصرية": {
   "k": "s",
   "p": "features/tools/concrete/concrete.tsx",
   "n": 1
@@ -23672,8 +23816,8 @@
  },
  "مستند جديد": {
   "k": "x",
-  "p": "features/tools/host.tsx",
-  "n": 1
+  "p": "features/tools/host.tsx,tools/palette.ts",
+  "n": 2
  },
  "السجل": {
   "k": "s",
@@ -25491,6 +25635,12 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 2
  },
+ "يُضاف: {0}": {
+  "k": "t",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2,
+  "x": "d.name || \"إضافة\""
+ },
  "يُخصم: {0}": {
   "k": "t",
   "p": "features/tools/office/ipc.tsx",
@@ -25500,7 +25650,7 @@
  "استقطاع": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
-  "n": 5
+  "n": 3
  },
  "صافي المستحق": {
   "k": "s",
@@ -25615,20 +25765,10 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 3
  },
- "14% — قانون 157/2025": {
+ "نسبة الضريبة حسب العقد": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
-  "n": 1
- },
- "5% — عقد على ضريبة الجدول": {
-  "k": "s",
-  "p": "features/tools/office/ipc.tsx",
-  "n": 1
- },
- "معفى": {
-  "k": "s",
-  "p": "features/tools/office/ipc.tsx",
-  "n": 1
+  "n": 2
  },
  "وعاء الضريبة": {
   "k": "s",
@@ -25709,10 +25849,25 @@
   "n": 1,
   "x": "EL <Num>{fmtNum(l.progress * 100, 1)}%</Num>"
  },
- "استقطاعات أخرى": {
+ "استقطاعات وإضافات أخرى": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
   "n": 2
+ },
+ "استقطاع أو إضافة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 2
+ },
+ "يُضاف": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "يُخصم": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
  },
  "{0}% من إجمالي الأعمال": {
   "k": "t",
@@ -25726,10 +25881,25 @@
   "n": 1,
   "x": "money(N(d.cur))"
  },
- "مثال: ضريبة الخصم من المنبع، غرامة، تشوينات": {
+ "يُخصم من المستخلص": {
   "k": "s",
   "p": "features/tools/office/ipc.tsx",
-  "n": 2
+  "n": 1
+ },
+ "يُضاف للمستخلص": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "مثال: تشوينات بالموقع، فروق أسعار معتمدة": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "مثال: ضريبة الخصم من المنبع، غرامة تأخير": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
  },
  "نسبة من إجمالي الأعمال": {
   "k": "s",
@@ -25746,7 +25916,7 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 2
  },
- "النسب حسب العقد والقانون الساري — لا يفترض التطبيق أي نسبة استقطاع.": {
+ "النسب حسب العقد والقانون الساري — لا يفترض التطبيق أي نسبة. هذه السطور تُحسب بعد الضريبة؛ ما يخضع للضريبة أدخله بندًا من بنود الأعمال. تشوينات سبق صرفها تُسترد بمبلغ سالب في الفترة.": {
   "k": "x",
   "p": "features/tools/office/ipc.tsx",
   "n": 1
@@ -25772,6 +25942,26 @@
   "p": "features/tools/office/ipc.tsx",
   "n": 2,
   "x": "nextNo(b.certNo)"
+ },
+ "14% — قانون 157/2025": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "5% — عقد على ضريبة الجدول": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "معفى": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
+ },
+ "نسبة أخرى": {
+  "k": "s",
+  "p": "features/tools/office/ipc.tsx",
+  "n": 1
  },
  "حتى {0}% من العقد": {
   "k": "t",
@@ -26835,6 +27025,16 @@
   "k": "s",
   "p": "features/tools/rebar/bbs.tsx",
   "n": 3
+ },
+ "إجهاد الخضوع fy (من شهادة المصنع)": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
+ },
+ "حديد مشرشر — يدخل في طول التماسك والوصلات": {
+  "k": "s",
+  "p": "features/tools/rebar/bbs.tsx",
+  "n": 2
  },
  "تقريب طول القص لأعلى": {
   "k": "s",
@@ -29424,6 +29624,11 @@
   "p": "features/tools/templates.tsx",
   "n": 1
  },
+ "وزن الشكارة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "خلطة الشكارة": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
@@ -29517,11 +29722,31 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
+ "سمك اللحام": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "هالك الطوب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "فارغ = حسب نوع الطوب": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "هالك المونة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "{0} م² صافي · هالك {1} %": {
   "k": "t",
   "p": "features/tools/trade/trade.tsx",
   "n": 1,
-  "x": "f2(area, 2) | p.waste"
+  "x": "f2(area, 2) | waste"
  },
  "لاصق": {
   "k": "s",
@@ -29560,12 +29785,33 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "هالك 25 % ⚑": {
+ "هالك {0} % ⚑": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "mortarWaste"
+ },
+ "البياض": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "البياض": {
+ "سمك البطانة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "فارغ = حسب النوع (20 داخلي · 25 خارجي)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "أسمنت البطانة لكل م³ رمل": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "فارغ = 300": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -29612,6 +29858,16 @@
   "n": 1
  },
  "م² في الكرتونة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "عمق العرموس (سمك البلاطة)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "هالك الترويب": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -29675,6 +29931,16 @@
   "n": 1
  },
  "العبوة": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "معامل الفرد العملي": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "1 = فرد النشرة · 0.8 لسطح خشن أو ماصّ": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -29753,10 +30019,21 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "لوح بلاكاش 1.22×2.44": {
+ "طول اللوح": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
+ },
+ "عرض اللوح": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "لوح بلاكاش {0}": {
+  "k": "t",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1,
+  "x": "sheet"
  },
  "مساحة التلامس {0} م²": {
   "k": "t",
@@ -29774,10 +30051,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 3
  },
- "بلاكاش 1.22×2.44": {
-  "k": "s",
+ "بلاكاش {0}": {
+  "k": "t",
   "p": "features/tools/trade/trade.tsx",
-  "n": 1
+  "n": 1,
+  "x": "sheet"
  },
  "{0} م² + {1} %": {
   "k": "t",
@@ -29885,6 +30163,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
+ "زيادة الأطوال (وصلات وهالك)": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "متر سلك / خرطوم": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
@@ -29931,6 +30214,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
+ "قطعة أو وصلة لكل": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
  "ماسورة {0} م": {
   "k": "t",
   "p": "features/tools/trade/trade.tsx",
@@ -29969,10 +30257,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "1 لكل 1.5 م ⚑": {
-  "k": "s",
+ "1 لكل {0} م ⚑": {
+  "k": "t",
   "p": "features/tools/trade/trade.tsx",
-  "n": 1
+  "n": 1,
+  "x": "per"
  },
  "الجبس بورد": {
   "k": "s",
@@ -29995,6 +30284,16 @@
   "n": 1
  },
  "وجه": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "طبقات الألواح لكل وجه": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 1
+ },
+ "المسافة بين القوائم": {
   "k": "s",
   "p": "features/tools/trade/trade.tsx",
   "n": 1
@@ -30030,10 +30329,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1
  },
- "كل 60 سم": {
-  "k": "s",
+ "كل {0} سم": {
+  "k": "t",
   "p": "features/tools/trade/trade.tsx",
-  "n": 1
+  "n": 1,
+  "x": "stud"
  },
  "مجاري": {
   "k": "s",
@@ -30056,6 +30356,11 @@
   "p": "features/tools/trade/trade.tsx",
   "n": 1,
   "x": "v.n | v.len"
+ },
+ "قيم يندر تغييرها — عدّلها حسب موقعك وخاماتك": {
+  "k": "s",
+  "p": "features/tools/trade/trade.tsx",
+  "n": 2
  },
  "+ أضِف لطلب الخامات": {
   "k": "x",
@@ -31372,6 +31677,69 @@
  "تعذّر تطبيق التحديث الآن — سيُطبَّق عند الفتح التالي": {
   "k": "s",
   "p": "native/updater.ts",
+  "n": 1
+ },
+ "انتقال": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "إعدادات سريعة": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "جديد: {0}": {
+  "k": "t",
+  "p": "tools/palette.ts",
+  "n": 1,
+  "x": "t.name"
+ },
+ "جديد مستند new {0} {1}": {
+  "k": "t",
+  "p": "tools/palette.ts",
+  "n": 1,
+  "x": "t.name | t.keywords"
+ },
+ "المشروع النشط الآن": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "اجعله المشروع النشط": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "{0} {1} {2} مشروع project": {
+  "k": "t",
+  "p": "tools/palette.ts",
+  "n": 1,
+  "x": "p.code | p.name | p.nameEn || \"\""
+ },
+ "كل المستندات بدون مشروع all documents no project": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "تبديل الوضع الفاتح / الداكن": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "الوضع الفاتح الداكن المظهر theme dark light mode": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "تبديل اللغة · Switch language": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
+ "اللغة العربية الانجليزية language english arabic": {
+  "k": "s",
+  "p": "tools/palette.ts",
   "n": 1
  },
  "أدوات الصنايعية السريعة": {

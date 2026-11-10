@@ -166,6 +166,23 @@ describe("an element drawn as an isometric box", () => {
   });
 });
 
+describe("dialogs mount inside the app's root", () => {
+  const read = (f: string) => readFileSync(new URL(`../src/${f}`, import.meta.url), "utf8");
+  it("the root is marked, and carries the accent colours a dialog's primary button needs", () => {
+    const app = read("app/App.tsx");
+    expect(app).toMatch(/data-app-root=""[^>]*style=\{vars\}/);
+    expect(app).toContain('"--solid": a.solid');
+  });
+  it("the kit's dialogs, the issue dialog and the command palette ask ui/portal.ts — none goes to <body> on its own", () => {
+    for (const f of ["ui/kit.tsx", "features/tools/doc-settings.tsx", "app/palette-panel.tsx"]) {
+      const src = read(f);
+      expect(src, f).toContain("portalHost()");
+      expect(src, f).not.toMatch(/createPortal\([^)]*document\.body/);
+    }
+    expect(read("ui/portal.ts")).toContain('document.querySelector<HTMLElement>("[data-app-root]") || document.body');
+  });
+});
+
 describe("rules kept (drafting block)", () => {
   const block = css.slice(css.indexOf("Drafting (v0.39"));
   it("the rolling figure is switched off under prefers-reduced-motion", () => {

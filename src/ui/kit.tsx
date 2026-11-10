@@ -10,6 +10,7 @@ import { ArrowDown, ArrowUp, ChevronDown, Copy, Eye, FileDown, FileSpreadsheet, 
 import { numInputProblem, type NumInputRule } from "../lib/num-input";
 import { FilterChip, Num } from "./primitives";
 import { RollNumber } from "./roll";
+import { portalHost } from "./portal";
 import type { DrawPage, TraceStep } from "../doc/model";
 
 // ---- inputs ----
@@ -398,8 +399,12 @@ export function ExportBar({
   );
 }
 
-// dialogs live on <body>: a pushed screen is a transformed layer, which would trap position: fixed under the header
-const onBody = (node: any) => (typeof document !== "undefined" ? createPortal(node, document.body) : node);
+// dialogs leave the pushed screen (a transformed layer would trap position: fixed under the header) for the app's root,
+// which carries the accent colours and the language's direction (ui/portal.ts)
+const onBody = (node: any) => {
+  const host = portalHost();
+  return host ? createPortal(node, host) : node;
+};
 
 // ---- the preview: the PDF's own pages, drawn for the screen (only the visible page and its neighbours exist) ----
 export function DocPreview({ pages, onClose, draw }: { pages: DrawPage[]; onClose: () => void; draw: (c: HTMLCanvasElement, p: DrawPage, pxPerMm: number) => void }) {

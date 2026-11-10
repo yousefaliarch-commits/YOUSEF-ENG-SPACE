@@ -65,7 +65,7 @@ export function App() {
   useEffect(() => { if (!toastMsg) return; const t = setTimeout(() => setToastMsg(""), 2600); return () => clearTimeout(t); }, [toastMsg]);
   const vars: any = { "--accent": a.accent, "--solid": a.solid, "--solid-hi": a.solidHi, "--hover": a.hover, "--wash": a.wash };
   return (
-    <PlatformCtx.Provider value={PLATFORM}><ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
+    <PlatformCtx.Provider value={PLATFORM}><ModeCtx.Provider value={mode}><LangCtx.Provider value={L}><div dir={LANGS[L].dir} lang={L} data-mode={mode} data-app-root="" className="theme-fade min-h-dvh bg-canvas text-ink" style={vars}>
       {/* the preview's top bar (app ⇄ admin console, theme, language) — the native apps open straight into the member app */}
       <div className={`web-topbar ${NATIVE ? "hidden" : view === "app" ? "hidden sm:block" : ""}`}><TopBar view={view} setView={setView} staff={staffOk} accent={accent} setAccent={setAccent} theme={theme} setTheme={setTheme} mode={mode} lang={L} setLang={setLang} /></div>
       {/* the iOS app turns off page scrolling (ios.scrollEnabled: false — no rubber-band on the member app, which scrolls inside its own

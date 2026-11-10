@@ -7,7 +7,8 @@
 //  The phone apps (Capacitor) and the device-mockup preview never take this layout; sheets become centred dialogs ([data-desk]).
 // =====================================================================
 import { useEffect, useState } from "react";
-import { Bell, Languages, PanelLeftClose, PanelLeftOpen, Settings, ShieldCheck } from "lucide-react";
+import { Bell, Languages, PanelLeftClose, PanelLeftOpen, Search, Settings, ShieldCheck } from "lucide-react";
+import { openPalette, paletteHint } from "./palette";
 import { authorOf } from "../domain/identity";
 import { LevelRing } from "../lib/helpers";
 import { ThemeQuick } from "../ui/chrome";
@@ -70,6 +71,14 @@ export function DeskNav({ app, tabs, active, onChange, badge = {} }: { app: any;
       <div className="h-16 px-4 flex items-center gap-2 border-b border-line">
         <ArchMark size={22} />
         <Wordmark size="text-[17px]" />
+      </div>
+      {/* the command palette's door: looks like a search field, opens the same list Ctrl / ⌘ K does */}
+      <div className="px-3 pt-3">
+        <button type="button" data-palette-open onClick={openPalette} className="press w-full flex items-center gap-2.5 h-10 px-3 rounded-xl bg-surface border border-line-2 text-[13px] text-ink-3 hover:text-ink-2 hover:border-line-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+          <Search size={16} className="shrink-0" />
+          <span className="min-w-0 flex-1 truncate text-start">بحث وأوامر</span>
+          <kbd className="shrink-0 h-5 px-1.5 inline-flex items-center rounded-md border border-line-2 font-grotesk text-[10.5px]" dir="ltr">{paletteHint()}</kbd>
+        </button>
       </div>
       <nav aria-label="التنقل الرئيسي" data-tour="tabbar" className="flex-1 min-h-0 overflow-y-auto p-3 space-y-1">
         {tabs.map((t) => {
