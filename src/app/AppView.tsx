@@ -672,9 +672,9 @@ export function AppView({ onAdmin = null, init, theme, setTheme, mode, lang = "a
     role: toolRole(profile), tabs: tabs.map((t: { id: string; label: string }) => ({ id: t.id, label: t.label })), docs: toolIndex, projects: toolProjects, activeProject,
     docKinds: Object.keys(TOOL_MODULES),
     // the community, as the member's own role may see it: the feed's visible posts, and jobs / companies only where those screens open
-    posts: visiblePosts.slice(0, 400).map((x: any) => ({ id: x.id, body: String(x.body || ""), room: (ROOMS.find((r: any) => r.id === x.room) || { name: "" }).name, when: x.when })),
-    jobs: blocked.stack.includes("job") ? [] : jobs.slice(0, 300).map((j: any) => ({ id: j.id, title: j.title, company: (company(j.co) || { name: j.coName || "" }).name, city: cityName(j.gov, j.city), discipline: j.disc, when: j.when })),
-    companies: blocked.stack.includes("company") ? [] : COMPANIES.map((c: any) => ({ id: c.id, name: c.name, en: c.en, sector: c.sector, city: cityName(c.hq, "") || govName(c.hq) })),
+    posts: visiblePosts.slice(0, 400).map((x: { id: string; body?: string; room: string; when?: string }) => ({ id: x.id, body: String(x.body || ""), room: (ROOMS.find((r) => r.id === x.room) || { name: "" }).name, when: x.when })),
+    jobs: (blocked.stack as string[]).includes("job") ? [] : jobs.slice(0, 300).map((j: { id: string; title: string; co?: string; coName?: string; gov?: string; city?: string; disc?: string; when?: string }) => ({ id: j.id, title: j.title, company: (company(j.co) || { name: j.coName || "" }).name, city: cityName(j.gov, j.city), discipline: j.disc, when: j.when })),
+    companies: (blocked.stack as string[]).includes("company") ? [] : COMPANIES.map((c) => ({ id: c.id, name: c.name, en: c.en, sector: c.sector, city: cityName(c.hq, "") || govName(c.hq) })),
     screens: [
       { type: "notifications", label: "الإشعارات", keywords: "notifications" },
       { type: "settings", label: "الإعدادات", keywords: "settings preferences" },

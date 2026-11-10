@@ -38,8 +38,8 @@ export type AiCv = {
 
 // military service applies to male Egyptian engineers only; the on-device audit already decides it (gender from the CV or the
 // engineer's own profile, unknown gender → «maybe»), and the AI is told the same answer instead of guessing
-export function militaryRel(r: any): "yes" | "maybe" | "no" {
-  const m = ((r && r.regional) || []).find((x: any) => x && x.key === "military");
+export function militaryRel(r: { regional?: { key?: string; rel?: string }[] } | null | undefined): "yes" | "maybe" | "no" {
+  const m = ((r && r.regional) || []).find((x) => x && x.key === "military");
   return m && (m.rel === "yes" || m.rel === "maybe") ? m.rel : "no";
 }
 
@@ -166,7 +166,7 @@ export function sanitize(raw: any, r: any, red: Redaction): AiCv {
       id,
       verdict: (VERDICTS.includes(x.verdict) ? x.verdict : "maybe") as Verdict,
       score: Math.max(0, Math.min(100, Math.round(Number(x.score) || 0))),
-      findings: arr(x.findings, 12).filter((f: any) => !forbiddenFinding(`${f && f.issue} ${f && f.fix}`, milRel, !!r.syndicate)).map((f: any) => ({
+      findings: arr(x.findings, 12).filter((f: { issue?: unknown; fix?: unknown } | null) => !forbiddenFinding(`${f && f.issue} ${f && f.fix}`, milRel, !!r.syndicate)).map((f: any) => ({
         issue: str(f.issue, 240), severity: (SEV.includes(f.severity) ? f.severity : "rec") as (typeof SEV)[number],
         cvLine: str(restore(str(f.cvLine, 300), red.values), 300), fix: str(f.fix, 500),
       })).filter((f: any) => f.issue),
@@ -174,7 +174,7 @@ export function sanitize(raw: any, r: any, red: Redaction): AiCv {
   });
   const allowed = allowedNumbers(r.cv.text, r.years);
   const counter = { n: 0 };
-  const keep = (t: any) => !forbiddenFinding(`${t && t.issue} ${t && t.fix}`, milRel, !!r.syndicate);
+  const keep = (t: { issue?: unknown; fix?: unknown } | null) => !forbiddenFinding(`${t && t.issue} ${t && t.fix}`, milRel, !!r.syndicate);
   return {
     overall,
     projected: Math.max(overall, Math.min(100, Math.round(Number(raw.projectedScore) || overall))),
