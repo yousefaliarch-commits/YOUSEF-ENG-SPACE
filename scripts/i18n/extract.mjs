@@ -17,7 +17,7 @@ const OUT = join(ROOT, "i18n", "keys.json");
 const AR = /[؀-ۿ]/;
 // Files whose text never goes through the dictionary: the CV audit writes its report bilingually (L2) and its rewrites in the
 // CV's own language; verification copy is written in both languages side by side.
-const NO_DICT = new Set(["services/ai-service.ts", "services/ai-cache.ts", "services/ai-redact.ts", "features/ai/AssistantScreen.tsx", "features/ai/VoiceTool.tsx", "features/ai/quota.ts", "features/ai/AiFill.tsx", "features/ai/SalaryInsight.tsx", "features/ai/ToolTip.tsx", "features/cv/ai-review.ts", "features/cv/AiReviewViews.tsx", "ui/markdown.tsx", "features/cv/audit.ts", "features/cv/CVReviewScreen.tsx", "features/cv/panel.ts", "features/cv/rebuild.ts", "features/cv/translate.ts", "features/cv/docx.ts", "features/cv/PanelViews.tsx", "features/verify/verify.tsx", "features/admin/verify-admin.tsx",
+const NO_DICT = new Set(["services/ai-service.ts", "services/ai-cache.ts", "services/ai-redact.ts", "features/ai/AssistantScreen.tsx", "features/ai/VoiceTool.tsx", "domain/tools/voice-parse.ts", "features/ai/quota.ts", "features/ai/AiFill.tsx", "features/ai/SalaryInsight.tsx", "features/ai/ToolTip.tsx", "features/cv/ai-review.ts", "features/cv/AiReviewViews.tsx", "ui/markdown.tsx", "features/cv/audit.ts", "features/cv/CVReviewScreen.tsx", "features/cv/panel.ts", "features/cv/rebuild.ts", "features/cv/translate.ts", "features/cv/docx.ts", "features/cv/PanelViews.tsx", "features/verify/verify.tsx", "features/admin/verify-admin.tsx",
   // the public page's sample documents: rows of an Arabic sheet drawn on a canvas by the document kit, not interface text
   "features/landing/samples.ts"]);
 

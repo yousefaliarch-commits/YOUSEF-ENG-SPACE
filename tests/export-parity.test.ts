@@ -13,7 +13,7 @@ import { fingerprint, flatText, stripIsolates } from "../src/doc/text";
 import type { DocBlock, DocSpec, DocText } from "../src/doc/model";
 import type { ToolDoc } from "../src/data/tool-docs";
 
-const plain = (t: DocText | number | null | undefined): string => (t == null ? "" : typeof t === "number" ? "" : stripIsolates(typeof t === "string" ? t : flatText(t)));
+const plain = (t: DocText | number | null | undefined): string => (typeof t === "number" ? "" : stripIsolates(flatText(t).text));
 const norm = (s: string) => stripIsolates(s).replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/\s+/g, " ").trim();
 
 async function specOf(i: number): Promise<DocSpec> {
