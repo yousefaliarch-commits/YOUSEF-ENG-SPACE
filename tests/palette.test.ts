@@ -156,3 +156,74 @@ describe("the shortcut", () => {
     expect(block).not.toMatch(/infinite|backdrop-filter/);
   });
 });
+
+// v0.40 — the omnisearch: posts, jobs and companies beside the tools and documents, in tabs
+import { PALETTE_CATEGORIES, categoryCounts } from "../src/tools/palette";
+
+describe("omnisearch — community, jobs and companies", () => {
+  const rich = (role: ToolRole = "engineer") =>
+    paletteItems(ctx(role, {
+      posts: [
+        { id: "p1", body: "حد يعرف مرتبات المهندس المدني في أوراسكوم للإنشاءات عند 4–5 سنين خبرة؟", room: "المكتب الفني", when: "منذ ساعتين" },
+        { id: "p2", body: "تجربتي مع طلبات الاستيضاح RFI على مشروع إداري: الرد بيتأخر أسبوعين", room: "الموقع", when: "منذ يوم" },
+        { id: "p3", body: "   ", room: "الموقع" },
+      ],
+      jobs: [{ id: "j1", title: "مهندس مكتب فني", company: "حسن علام", city: "القاهرة الجديدة", discipline: "civil", when: "منذ يومين" }, { id: "j2", title: "مهندس BIM", company: "ECG", city: "نصر", when: "منذ 4 أيام" }],
+      companies: [{ id: "orascom", name: "أوراسكوم للإنشاءات", en: "Orascom Construction", sector: "مقاولات عامة", city: "القاهرة" }, { id: "dar", name: "دار الهندسة", en: "Dar Al-Handasah", sector: "استشارات" }],
+    }));
+  it("every kind is indexed; a blank post is skipped; each row knows where it opens", () => {
+    const items = rich();
+    expect(items.filter((i) => i.group === "posts")).toHaveLength(2);
+    expect(items.find((i) => i.id === "post:p1")).toMatchObject({ run: { k: "push", type: "post", id: "p1" }, ugc: true, when: "منذ ساعتين", sub: "المكتب الفني" });
+    expect(items.find((i) => i.id === "job:j1")).toMatchObject({ run: { k: "push", type: "job", id: "j1" }, badge: "وظيفة", sub: "حسن علام · القاهرة الجديدة" });
+    expect(items.find((i) => i.id === "company:orascom")).toMatchObject({ run: { k: "push", type: "company", id: "orascom" }, badge: "شركة" });
+    expect(items.find((i) => i.id === "doc:" + allDocs[0].id)?.when).toBe(allDocs[0].dateIso);
+  });
+  it("one query reaches all of them, each group ranked inside, the strongest group first", () => {
+    const items = rich();
+    const hits = searchPalette(items, "اوراسكوم");
+    expect(hits.map((i) => i.id)).toEqual(expect.arrayContaining(["company:orascom", "post:p1"]));
+    expect(hits[0].id).toBe("company:orascom");
+    expect(searchPalette(items, "مكتب فني").map((i) => i.group)).toEqual(expect.arrayContaining(["jobs", "posts", "tools"]));
+    expect(searchPalette(items, "bim").some((i) => i.id === "job:j2")).toBe(true);
+    expect(searchPalette(items, "orascom construction")[0].id).toBe("company:orascom");
+  });
+  it("tabs narrow the results to one kind, and say how many each holds", () => {
+    const items = rich();
+    expect(PALETTE_CATEGORIES.map((c) => c.id)).toEqual(["all", "tools", "docs", "community", "jobs", "companies"]);
+    expect(searchPalette(items, "مهندس", 40, "jobs").every((i) => i.group === "jobs")).toBe(true);
+    expect(searchPalette(items, "اوراسكوم", 40, "community").map((i) => i.id)).toEqual(["post:p1"]);
+    expect(searchPalette(items, "اوراسكوم", 40, "companies").map((i) => i.id)).toEqual(["company:orascom"]);
+    expect(searchPalette(items, "مستخلص", 40, "tools").every((i) => i.group === "tools" || i.group === "new")).toBe(true);
+    expect(searchPalette(items, "مستخلص", 40, "docs").every((i) => i.group === "docs")).toBe(true);
+    const n = categoryCounts(items, "مهندس");
+    expect(n.jobs).toBe(2);
+    expect(n.all).toBe(searchPalette(items, "مهندس", 100000).length);
+    expect(n.all).toBeGreaterThanOrEqual(n.jobs + n.community + n.companies);
+  });
+  it("with nothing typed a category shows the first of its kind (documents newest first); «all» keeps the usual start", () => {
+    const items = rich();
+    expect(searchPalette(items, "", 40, "jobs").map((i) => i.id)).toEqual(["job:j1", "job:j2"]);
+    expect(searchPalette(items, "", 40, "docs")[0].title).toBe("المستخلص رقم 4");
+    expect(searchPalette(items, "", 40, "community")).toHaveLength(2);
+    expect(searchPalette(items, "", 40).slice(0, 5).every((i) => i.group === "recent")).toBe(true);
+  });
+  it("a post's words match however Arabic is typed — hamza, taa marbuta, alef maksura", () => {
+    const items = rich();
+    expect(searchPalette(items, "الاستيضاح").some((i) => i.id === "post:p2")).toBe(true);
+    expect(searchPalette(items, "مشروع اداري").some((i) => i.id === "post:p2")).toBe(true);
+    expect(searchPalette(items, "سنين خبره").some((i) => i.id === "post:p1")).toBe(true);
+  });
+  it("a long post shows its first words, cut at a word, never a half word", () => {
+    const body = `${"كلمة ".repeat(60)}النهاية`;
+    const t = paletteItems(ctx("engineer", { posts: [{ id: "x", body }] })).find((i) => i.id === "post:x")!.title;
+    expect(t.endsWith("…")).toBe(true);
+    expect(t.length).toBeLessThanOrEqual(97);
+    expect(t.replace("…", "").trim().split(" ").every((w) => w === "كلمة")).toBe(true);
+  });
+  it("nothing is added for what the app did not hand over: no jobs or companies for a role that cannot open them, no posts it hides", () => {
+    const items = paletteItems(ctx("supervisor", { posts: [], jobs: [], companies: [] }));
+    expect(items.filter((i) => ["posts", "jobs", "companies"].includes(i.group))).toEqual([]);
+    expect(searchPalette(items, "اوراسكوم")).toEqual([]);
+  });
+});

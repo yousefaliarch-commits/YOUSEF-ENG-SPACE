@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { PACKS } from "../../tools/registry";
+import { GROUPS } from "../../tools/registry";
 import { toolAllowed, toolRole, toolsForRole } from "../../tools/gate";
 import { searchDocs } from "../../tools/doc-search";
 import { wbsPath } from "../../data/tool-docs";
@@ -351,8 +351,9 @@ function ToolPacks({ app, tools }: { app: any; tools: ToolDef[] }) {
   const disc = app.profile && app.profile.disc;
   const needle = q.trim().toLowerCase();
   const shown = needle ? tools.filter((t) => `${t.name} ${t.desc} ${t.keywords}`.toLowerCase().includes(needle)) : tools;
-  const packs = PACKS.filter((pk) => pk.id !== "money")
-    .map((pk) => ({ pk, list: shown.filter((t) => t.pack === pk.id) }))
+  // the professional disciplines (tools/registry.ts GROUPS), the member's own first
+  const packs = GROUPS.filter((g) => g.id !== "money")
+    .map((pk) => ({ pk, list: shown.filter((t) => t.group === pk.id) }))
     .filter((x) => x.list.length)
     .sort((a, b) => Number(b.list.some((t) => (t.disciplines || []).includes(disc))) - Number(a.list.some((t) => (t.disciplines || []).includes(disc))));
   const recent = (app.toolIndex || []).slice(0, 3);

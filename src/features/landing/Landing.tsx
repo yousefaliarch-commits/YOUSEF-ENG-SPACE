@@ -11,7 +11,7 @@ import { useRef, type ReactNode } from "react";
 import { ArrowLeft, Download, Globe, Languages, Moon, PenLine, Sigma, SlidersHorizontal, Smartphone, Sun, WifiOff } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { toolsForRole } from "../../tools/gate";
-import { PACKS } from "../../tools/registry";
+import { GROUPS } from "../../tools/registry";
 import { LevelMark } from "../../ui/drafting";
 import { ArchMark, Num, Wordmark } from "../../ui/primitives";
 import { TOOL_ICONS } from "../tools/icons";
@@ -62,7 +62,7 @@ export function Landing({ lang, setLang, mode, setTheme, onEnter }: {
   // in-page moves scroll; they never write a fragment (the address after # is the app's)
   const go = (ref: { current: HTMLElement | null }) => () => ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   const all = toolsForRole("engineer").filter((t) => t.status !== "soon");
-  const packs = PACKS.map((p) => ({ p, list: all.filter((t) => t.pack === p.id) })).filter((x) => x.list.length);
+  const packs = GROUPS.map((p) => ({ p, list: all.filter((t) => t.group === p.id) })).filter((x) => x.list.length);
   const links = downloadLinks();
   const dark = mode === "dark";
   return (

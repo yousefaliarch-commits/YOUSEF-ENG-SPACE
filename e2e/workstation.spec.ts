@@ -51,7 +51,8 @@ test("a supervisor's palette never offers a money tool", async ({ page }) => {
   await settle(page, 1500);
   await page.keyboard.press("Control+k");
   await page.keyboard.type("مستخلص");
-  await expect(page.locator("[data-palette-empty]")).toBeVisible();
+  // the omnisearch also reads the community, so a demo post may match the word — what must never appear is a money tool
+  await settle(page, 600);
   await expect(page.locator("[data-palette-item='tool:ipc']")).toHaveCount(0);
 });
 

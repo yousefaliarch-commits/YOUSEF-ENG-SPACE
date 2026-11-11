@@ -12,7 +12,7 @@
 // =====================================================================
 import { strToU8, zipSync } from "fflate";
 import type { BasisRow, DocBlock, DocCol, DocLang, DocRow, DocSection, DocSpec, DocText, TitleParty } from "./model";
-import { fmtNum } from "./text";
+import { fingerprint, fmtNum } from "./text";
 
 export const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
@@ -195,6 +195,17 @@ function labelled(x: Writer, label: string, value: string, o: RunOpt = {}) {
   ];
 }
 
+// the revision log under the title block: newest first, every issued revision (the PDF prints the latest four and the rest in its appendix)
+function revisionTable(x: Writer, spec: DocSpec, frame: number): string {
+  if (!spec.revisions.length) return "";
+  const ws = spread([12, 22, 80, 20, 20, 20], frame);
+  const head = [L2("Rev", "Rev"), L2("التاريخ", "Date"), L2("وصف التعديل", "Description"), L2("أعدّ", "Prepared"), L2("راجع", "Checked"), L2("اعتمد", "Approved")];
+  const cell = (t: string, i: number, fill?: string) => x.tc(x.p(t, { sz: 17, after: 0, b: !!fill }), ws[i], fill ? { fill } : {});
+  const rows = [{ cells: head.map((h, i) => cell(h, i, HEAD_FILL)) }];
+  for (const r of [...spec.revisions].reverse()) rows.push({ cells: [r.rev, r.dateIso.slice(0, 10), r.desc, r.prepared, r.checked, r.approved].map((t, i) => cell(t || "", i)) });
+  return x.p("", { after: 40 }) + x.tbl(ws, rows);
+}
+
 function titleBlock(x: Writer, spec: DocSpec, frame: number): string {
   const out: string[] = [];
   const { meta, title: tb } = spec;
@@ -221,8 +232,12 @@ function titleBlock(x: Writer, spec: DocSpec, frame: number): string {
     [L2("المرجع · Reference", "Reference · المرجع"), tb.reference],
   ];
   if (tb.scale) control.push([L2("المقياس · Scale", "Scale · المقياس"), tb.scale]);
+  // the PDF's title block also carries the code profile and — once issued — the document's fingerprint
+  control.push([L2("ملف الكود · Code profile", "Code profile · ملف الكود"), meta.profileLabel]);
+  if (meta.status !== "draft" && meta.hash) control.push([L2("بصمة المستند", "Fingerprint"), fingerprint(meta.hash)]);
   const ws = spread(control.map(([, v]) => Math.max(8, Math.min(24, clean(v).length + 4))), frame);
   out.push(x.tbl(ws, [{ cells: control.map(([l, v], i) => x.tc(labelled(x, l, v), ws[i])) }]));
+  out.push(revisionTable(x, spec, frame));
   return out.join("");
 }
 

@@ -12,7 +12,7 @@ import type {
   DocBlock, DocCol, DocFont, DocLang, DocLayoutResult, DocMeasurer, DocRow, DocSpec, DrawOp, DrawPage, Ink, RevRow, TitleParty,
 } from "./model";
 import { MM_PER_PT, TYPE, frame, lineMm } from "./theme";
-import { clampLines, flatText, fmtNum, hasArabic, iso, stripIsolates, wrapText } from "./text";
+import { clampLines, fingerprint, flatText, fmtNum, hasArabic, iso, stripIsolates, wrapText } from "./text";
 
 type O = "portrait" | "landscape";
 type Align = "start" | "end" | "center";
@@ -133,7 +133,10 @@ const PARTY_LABEL = (role: TitleParty["role"]) =>
   })[role];
 
 // the fingerprint as four groups of 4 hex («7F3A 91C2 0B5E 44D1»)
-export const fingerprint = (hash: string) => (hash || "").slice(0, 16).toUpperCase().replace(/(.{4})(?=.)/g, "$1 ");
+export { fingerprint } from "./text";
+
+// a runaway guard for wrapped text in tables and key-value rows (about a page of lines): real content never reaches it
+const RUNAWAY = 40;
 
 function titleBlock(p: Pager, spec: DocSpec, pageCount: { set: (n: number) => void }) {
   const { m, ops } = p;
@@ -435,8 +438,9 @@ function kv(p: Pager, b: Extract<DocBlock, { k: "kv" }>) {
     const pw = wide ? f.width : pairW;
     const prepared = g.map((r) => {
       const { text } = flatText(r.value);
-      const ls = clampLines(wrapText(text || "—", pw - labW - 2 * PAD, TYPE.value, m), wide ? 6 : 3, pw - labW - 2 * PAD, TYPE.value, m);
-      const ll = clampLines(wrapText(r.label, labW - 2 * PAD, TYPE.label, m), 2, labW - 2 * PAD, TYPE.label, m);
+      // a long value or label wraps and its row grows — it is never cut (the caps are only a runaway guard: 40 lines is a page)
+      const ls = clampLines(wrapText(text || "—", pw - labW - 2 * PAD, TYPE.value, m), RUNAWAY, pw - labW - 2 * PAD, TYPE.value, m);
+      const ll = clampLines(wrapText(r.label, labW - 2 * PAD, TYPE.label, m), RUNAWAY, labW - 2 * PAD, TYPE.label, m);
       return { r, ls, ll };
     });
     const h = Math.max(ROW_MIN, ...prepared.map((x) => Math.max(x.ls.length, x.ll.length) * lh + 2 * VPAD));
@@ -523,7 +527,7 @@ function table(p: Pager, b: TableBlock) {
   // header
   const headLines = cols.map((c) => {
     const label = c.unit ? `${c.label} (${c.unit})` : c.label;
-    return clampLines(wrapText(label, c.w - 2 * PAD, TYPE.head, m), 3, c.w - 2 * PAD, TYPE.head, m);
+    return clampLines(wrapText(label, c.w - 2 * PAD, TYPE.head, m), RUNAWAY, c.w - 2 * PAD, TYPE.head, m);
   });
   const headH = Math.max(ROW_MIN, Math.max(...headLines.map((l) => l.length)) * lhHead + 2 * VPAD);
 

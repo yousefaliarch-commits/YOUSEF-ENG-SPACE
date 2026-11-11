@@ -96,3 +96,52 @@ describe("a real Gemini answer, validated and laid over the audit", () => {
     expect(f.jobAd).toMatch(/Primavera/);
   });
 });
+
+// v0.40: the AI is told who military service applies to, and a finding the rules forbid never reaches the screen
+import { forbiddenFinding, militaryRel } from "../src/features/cv/ai-review";
+
+describe("military service and the Syndicate card — for the AI as for the on-device audit", () => {
+  // the app's own full Arabic sample (an Egyptian engineer's CV), with the gender the test wants stated on top of it
+  const EN_CV = (extra: string) => `${extra}\n${CV_SAMPLE_AR}`;
+  it("a woman's CV (gender from the CV or the engineer's own profile): relevance «no» — the AI is told never to mention it", () => {
+    expect(militaryRel(auditCV(EN_CV("Gender: Female\nSara Ahmed")))).toBe("no");
+    expect(militaryRel(auditCV(EN_CV("Sara Ahmed"), { profile: { role: "engineer", gender: "female" } }))).toBe("no");
+    expect(factsOf(auditCV(EN_CV("Gender: Female\nSara Ahmed")), "en").militaryRelevance).toBe("no");
+  });
+  it("a man's: «yes»; unknown gender: «maybe»; HR never borrows its own profile's gender", () => {
+    expect(militaryRel(auditCV(EN_CV("Gender: Male\nAhmed Hassan")))).toBe("yes");
+    expect(militaryRel(auditCV(EN_CV("Ahmed Hassan")))).toBe("maybe");
+    expect(militaryRel(auditCV(EN_CV("Sara Ahmed"), { profile: { role: "hr", gender: "female" } }))).toBe("maybe");
+    expect(militaryRel(undefined)).toBe("no");
+  });
+  it("a finding about military service for a woman is dropped from every panel and the top three; for a man it stays", () => {
+    const raw = {
+      reviewers: [{ id: "recruiter", verdict: "maybe", score: 60, findings: [{ issue: "موقف التجنيد غير مذكور", severity: "high", fix: "اكتب موقف التجنيد" }, { issue: "No figure in the summary", severity: "rec", fix: "Add one" }] }],
+      top3: [{ issue: "Military service status missing", severity: "high", fix: "state it" }, { issue: "Summary has no target track", severity: "high", fix: "name the track" }],
+    };
+    const woman = auditCV(EN_CV("Gender: Female\nSara Ahmed"));
+    const w = sanitize(raw, woman, redactCV(woman.cv.text, woman.cv.name));
+    expect(w.reviewers.find((x) => x.id === "recruiter")!.findings.map((f) => f.issue)).toEqual(["No figure in the summary"]);
+    expect(w.top3.map((t) => t.issue)).toEqual(["Summary has no target track"]);
+    const man = auditCV(EN_CV("Gender: Male\nAhmed Hassan"));
+    const m = sanitize(raw, man, redactCV(man.cv.text, man.cv.name));
+    expect(m.reviewers.find((x) => x.id === "recruiter")!.findings).toHaveLength(2);
+    expect(m.top3).toHaveLength(2);
+  });
+  it("the Syndicate card is neutral: a finding that it is missing is removed; mentioning it as a plus is kept", () => {
+    expect(forbiddenFinding("كارنيه النقابة غير مذكور", "yes", false)).toBe(true);
+    expect(forbiddenFinding("Add your Syndicate card number", "yes", false)).toBe(true);
+    expect(forbiddenFinding("Syndicate registration is listed — a plus", "yes", true)).toBe(false);
+    expect(forbiddenFinding("Summary lacks a target track", "yes", false)).toBe(false);
+    expect(forbiddenFinding("موقف التجنيد غير مذكور", "yes", false)).toBe(false);
+    expect(forbiddenFinding("موقف التجنيد غير مذكور", "maybe", false)).toBe(false);
+    expect(forbiddenFinding("موقف التجنيد غير مذكور", "no", false)).toBe(true);
+  });
+  it("the prompt says the same, and its version moved", () => {
+    const prompt = readFileSync(new URL("../supabase/functions/_shared/ai-prompts.ts", import.meta.url), "utf8");
+    expect(prompt).toContain("facts.militaryRelevance");
+    expect(prompt).toContain("NEVER mention military service at all");
+    expect(prompt).toContain("NEVER deduct for its absence");
+    expect(prompt).toMatch(/PROMPT_VERSION = "2026-11-10\.1"/);
+  });
+});

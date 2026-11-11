@@ -1,5 +1,5 @@
 // =====================================================================
-//  The command palette's host — always mounted with the member app, costs nothing until used:
+//  The omnisearch's host — always mounted with the member app, costs nothing until used:
 //  · Ctrl K / ⌘K anywhere toggles it; the sidebar's «بحث وأوامر» button and `openPalette()` open it (an event, so any
 //    screen can ask without a prop passed through the tree).
 //  · The index (tools/palette.ts) is built at the moment it opens, from the role, the tabs, the document index and the

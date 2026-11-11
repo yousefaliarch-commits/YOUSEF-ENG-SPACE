@@ -36,6 +36,24 @@ export type AiCv = {
   guarded: number;
 };
 
+// military service applies to male Egyptian engineers only; the on-device audit already decides it (gender from the CV or the
+// engineer's own profile, unknown gender → «maybe»), and the AI is told the same answer instead of guessing
+export function militaryRel(r: { regional?: { key?: string; rel?: string }[] } | null | undefined): "yes" | "maybe" | "no" {
+  const m = ((r && r.regional) || []).find((x) => x && x.key === "military");
+  return m && (m.rel === "yes" || m.rel === "maybe") ? m.rel : "no";
+}
+
+const MIL_WORDS = /military|conscript|draft status|التجنيد|التجند|تجنيد|الخدمة العسكرية|موقف عسكري/i;
+const SYN_WORDS = /syndicate|كارنيه|كارنية|النقابة|نقابة المهندسين/i;
+
+// a finding the rules say must never exist: military service for a woman (or a CV it does not apply to), or the Syndicate card
+// missing. The prompt already forbids both; this removes one that slips through, so a wrong line never reaches the screen.
+export function forbiddenFinding(text: string, milRel: "yes" | "maybe" | "no", syndicateStated: boolean): boolean {
+  const t = String(text || "");
+  if (milRel === "no" && MIL_WORDS.test(t)) return true;
+  return !syndicateStated && SYN_WORDS.test(t) && /missing|absent|not stated|لم يذكر|غير مذكور|غياب|بدون|ناقص|أضف|اضف|add|include/i.test(t);
+}
+
 // ---------------------------------------------------------------- what the model is told about the CV's structure
 export function factsOf(r: any, uiLang: "ar" | "en", jd?: string) {
   return {
@@ -54,6 +72,8 @@ export function factsOf(r: any, uiLang: "ar" | "en", jd?: string) {
     words: r.words,
     gaps: (r.cv.gaps || []).map((g: any) => `${g.months} months between «${g.after}» and «${g.before}»`),
     militaryStatus: r.cv.military || "not stated",
+    // who military service applies to (features/cv/hr.ts militaryRelevance): «no» = a woman or not an Egyptian CV — never a finding
+    militaryRelevance: militaryRel(r),
     syndicateStated: !!r.syndicate,
     onDeviceScore: r.overall,
     jobAd: jd ? String(jd).slice(0, 6000) : undefined,
@@ -132,6 +152,7 @@ function draftOf(doc: any, lang: "ar" | "en", r: any, red: Redaction, allowed: S
 }
 
 export function sanitize(raw: any, r: any, red: Redaction): AiCv {
+  const milRel = militaryRel(r);
   const maxOf = Object.fromEntries(r.pillars.map((p: any) => [p.id, p.max]));
   const pillars = PILLAR_IDS.map((id) => {
     const p = arr(raw.pillars).find((x: any) => x && x.id === id) || {};
@@ -145,7 +166,7 @@ export function sanitize(raw: any, r: any, red: Redaction): AiCv {
       id,
       verdict: (VERDICTS.includes(x.verdict) ? x.verdict : "maybe") as Verdict,
       score: Math.max(0, Math.min(100, Math.round(Number(x.score) || 0))),
-      findings: arr(x.findings, 12).map((f: any) => ({
+      findings: arr(x.findings, 12).filter((f: { issue?: unknown; fix?: unknown } | null) => !forbiddenFinding(`${f && f.issue} ${f && f.fix}`, milRel, !!r.syndicate)).map((f: any) => ({
         issue: str(f.issue, 240), severity: (SEV.includes(f.severity) ? f.severity : "rec") as (typeof SEV)[number],
         cvLine: str(restore(str(f.cvLine, 300), red.values), 300), fix: str(f.fix, 500),
       })).filter((f: any) => f.issue),
@@ -153,13 +174,14 @@ export function sanitize(raw: any, r: any, red: Redaction): AiCv {
   });
   const allowed = allowedNumbers(r.cv.text, r.years);
   const counter = { n: 0 };
+  const keep = (t: { issue?: unknown; fix?: unknown } | null) => !forbiddenFinding(`${t && t.issue} ${t && t.fix}`, milRel, !!r.syndicate);
   return {
     overall,
     projected: Math.max(overall, Math.min(100, Math.round(Number(raw.projectedScore) || overall))),
     verdict: str(raw.verdict, 160),
     pillars,
     reviewers,
-    top3: arr(raw.top3, 3).map((t: any) => ({ issue: str(t.issue, 240), severity: (SEV.includes(t.severity) ? t.severity : "high") as (typeof SEV)[number], fix: str(t.fix, 400), reviewer: (RIDS.includes(t.reviewer) ? t.reviewer : "manager") as ReviewerId })).filter((t: any) => t.issue),
+    top3: arr(raw.top3, 3).filter(keep).map((t: any) => ({ issue: str(t.issue, 240), severity: (SEV.includes(t.severity) ? t.severity : "high") as (typeof SEV)[number], fix: str(t.fix, 400), reviewer: (RIDS.includes(t.reviewer) ? t.reviewer : "manager") as ReviewerId })).filter((t: any) => t.issue),
     questions: arr(raw.interviewQuestions, 8).map((q: any) => ({ question: str(q.question, 300), why: str(q.why, 300), howToAnswer: str(q.howToAnswer, 400) })).filter((q: any) => q.question),
     honesty: str(raw.honestyLine, 400),
     inconsistencies: arr(raw.inconsistencies, 8).map((s: any) => str(s, 300)).filter(Boolean),

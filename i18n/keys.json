@@ -430,6 +430,11 @@
   "p": "app/palette-panel.tsx",
   "n": 2
  },
+ "أقسام النتائج": {
+  "k": "s",
+  "p": "app/palette-panel.tsx",
+  "n": 2
+ },
  "النتائج": {
   "k": "s",
   "p": "app/palette-panel.tsx",
@@ -461,6 +466,17 @@
   "p": "app/palette-panel.tsx",
   "n": 1,
   "x": "EL <kbd className=\"font-grotesk\" dir=\"ltr\">Enter</kbd>"
+ },
+ "للأقسام": {
+  "k": "x",
+  "p": "app/palette-panel.tsx",
+  "n": 1
+ },
+ "{0} للأقسام": {
+  "k": "r",
+  "p": "app/palette-panel.tsx",
+  "n": 1,
+  "x": "EL <kbd className=\"font-grotesk\" dir=\"ltr\">Tab</kbd>"
  },
  "في أي وقت": {
   "k": "x",
@@ -750,8 +766,8 @@
  },
  "المستندات": {
   "k": "s",
-  "p": "data/checklists.ts,features/landing/Landing.tsx,features/tools/host.tsx",
-  "n": 5
+  "p": "data/checklists.ts,features/landing/Landing.tsx,features/tools/host.tsx,tools/palette.ts",
+  "n": 6
  },
  "شهادات المصنع ونتائج اختبار عينات الحديد متوفرة ومقبولة": {
   "k": "s",
@@ -2999,13 +3015,13 @@
  },
  "المجتمع": {
   "k": "s",
-  "p": "data/geo.ts,domain/moderation.ts,domain/notifications.ts,features/tabs/tabs.tsx,native/push.ts",
-  "n": 5
+  "p": "data/geo.ts,domain/moderation.ts,domain/notifications.ts,features/tabs/tabs.tsx,native/push.ts,tools/palette.ts",
+  "n": 6
  },
  "الوظائف": {
   "k": "s",
-  "p": "data/geo.ts,domain/notifications.ts,features/admin/AdminView.tsx,features/tabs/tabs.tsx",
-  "n": 4
+  "p": "data/geo.ts,domain/notifications.ts,features/admin/AdminView.tsx,features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 5
  },
  "المساعد": {
   "k": "s",
@@ -3020,7 +3036,7 @@
  "الأدوات": {
   "k": "s",
   "p": "data/geo.ts,features/cv/extract.ts,features/landing/Landing.tsx,features/tabs/tabs.tsx,tools/palette.ts",
-  "n": 7
+  "n": 8
  },
  "الرسائل": {
   "k": "s",
@@ -6521,8 +6537,8 @@
  },
  "منشور": {
   "k": "s",
-  "p": "domain/moderation.ts,features/admin/directory-support.tsx",
-  "n": 2
+  "p": "domain/moderation.ts,features/admin/directory-support.tsx,tools/palette.ts",
+  "n": 3
  },
  "رد": {
   "k": "s",
@@ -6774,8 +6790,8 @@
  },
  "شركة": {
   "k": "s",
-  "p": "domain/moderation.ts,features/admin/AdminView.tsx,features/stack/stack.tsx,lib/helpers.tsx,ui/feed.tsx",
-  "n": 7
+  "p": "domain/moderation.ts,features/admin/AdminView.tsx,features/stack/stack.tsx,lib/helpers.tsx,tools/palette.ts,ui/feed.tsx",
+  "n": 8
  },
  "موارد بشرية · {0}": {
   "k": "t",
@@ -11852,8 +11868,8 @@
  },
  "الكل": {
   "k": "s",
-  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/tabs/tabs.tsx,features/tools/register.tsx,ui/notifications.tsx",
-  "n": 9
+  "p": "features/admin/AdminView.tsx,features/admin/directory-support.tsx,features/tabs/tabs.tsx,features/tools/register.tsx,tools/palette.ts,ui/notifications.tsx",
+  "n": 10
  },
  "كل الأنواع": {
   "k": "s",
@@ -12771,8 +12787,8 @@
  },
  "وظيفة": {
   "k": "x",
-  "p": "features/admin/AdminView.tsx,features/tabs/tabs.tsx",
-  "n": 2
+  "p": "features/admin/AdminView.tsx,features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 3
  },
  "نشاط {0} مقابل {1} في الفترة السابقة · {2} وظيفة": {
   "k": "r",
@@ -20650,8 +20666,8 @@
  },
  "وظائف": {
   "k": "s",
-  "p": "features/stack/stack.tsx",
-  "n": 1
+  "p": "features/stack/stack.tsx,tools/palette.ts",
+  "n": 2
  },
  "محفوظة": {
   "k": "s",
@@ -22069,8 +22085,8 @@
  },
  "الشركات": {
   "k": "s",
-  "p": "features/tabs/tabs.tsx",
-  "n": 1
+  "p": "features/tabs/tabs.tsx,tools/palette.ts",
+  "n": 2
  },
  "ابحث باسم الشركة أو القطاع أو المحافظة": {
   "k": "s",
@@ -22342,7 +22358,7 @@
  "الراتب والعروض": {
   "k": "x",
   "p": "features/tabs/tabs.tsx,tools/registry.ts",
-  "n": 2
+  "n": 3
  },
  "لهدفك": {
   "k": "x",
@@ -31725,8 +31741,8 @@
  },
  "شركات": {
   "k": "s",
-  "p": "lib/search.ts",
-  "n": 1
+  "p": "lib/search.ts,tools/palette.ts",
+  "n": 2
  },
  "الشركه": {
   "k": "s",
@@ -31958,6 +31974,11 @@
   "p": "native/updater.ts",
   "n": 1
  },
+ "نقاشات المجتمع": {
+  "k": "s",
+  "p": "tools/palette.ts",
+  "n": 1
+ },
  "انتقال": {
   "k": "s",
   "p": "tools/palette.ts",
@@ -31979,6 +32000,18 @@
   "p": "tools/palette.ts",
   "n": 1,
   "x": "t.name | t.keywords"
+ },
+ "{0} {1} {2} {3} وظيفة job": {
+  "k": "t",
+  "p": "tools/palette.ts",
+  "n": 1,
+  "x": "j.title | j.company || \"\" | j.city || \"\" | j.discipline || \"\""
+ },
+ "{0} {1} {2} {3} شركة company": {
+  "k": "t",
+  "p": "tools/palette.ts",
+  "n": 1,
+  "x": "co.name | co.en || \"\" | co.sector || \"\" | co.city || \"\""
  },
  "المشروع النشط الآن": {
   "k": "s",
@@ -32112,6 +32145,56 @@
   "n": 1
  },
  "بالصافي دائمًا": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 2
+ },
+ "الموقع والتنفيذ": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الخرسانة والحديد والمساحة وتشطيبات الصنايعية وفحص التركيب": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "المكتب الفني والمستخلصات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "الحصر والمستخلصات وأوامر التغيير وطلبات الاستيضاح والاعتمادات": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "مراجعة التصميم": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "قطاعات الخرسانة والدكت والكابلات والرشاشات — بالحساب الظاهر": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "السلامة والجودة": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "التصاريح والتوعية وقوائم الفحص والاستلام": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "إدارة المكتب والموقع": {
+  "k": "s",
+  "p": "tools/registry.ts",
+  "n": 1
+ },
+ "اليومية ومحاضر العهدة والسجلات": {
   "k": "s",
   "p": "tools/registry.ts",
   "n": 1

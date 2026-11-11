@@ -237,6 +237,12 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   (`scripts/strict-check.mjs`, in `npm run typecheck`): a file absent from `scripts/strict-baseline.json` must be strict and `any`-free; counts only go
   down (`npm run strict:update` after fixing). Every tool table must sum to its page width (guard test in `tests/tools-parameters.test.ts`).
 
+- v0.40.0 (docs/OMNISEARCH-VOICE.md): **omnisearch + disciplines + export parity + voice.** `GROUPS` / `GROUP_OF` in `tools/registry.ts` organise tools by discipline everywhere.
+  The palette indexes tools, documents, projects, screens **and posts / jobs / companies** (categories, badges, timestamps; context built in `AppView.paletteContext` from what the
+  role may already open). Word / Excel carry the PDF's revision table, code profile, fingerprint and status (`tests/export-parity.test.ts` guards it). CV AI: `facts.militaryRelevance`
+  + `forbiddenFinding` keep military talk off female CVs and never penalise the Syndicate card. **Voice take-off**: pure parser `domain/tools/voice-parse.ts` + `features/ai/VoiceTool.tsx`
+  (no AI call, no native plugin — native line stays 2; Web Speech where present, keyboard dictation elsewhere); a missing dimension is asked for, never guessed.
+
 - **Website** (docs/WEB.md): **Deploy website** workflow → Cloudflare Pages (`engspace.pages.dev`; pull requests get
   `<branch>.engspace.pages.dev`). Secrets `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` (absent → a notice, never a failure); variables
   `PAGES_PROJECT`, `PUBLIC_URL`. Each deploy adds the site to Supabase Auth redirect URLs (merged, never replaced). `public/_headers` sets caching.

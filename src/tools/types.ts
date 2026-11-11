@@ -8,11 +8,15 @@ export type ToolPack =
   | "structural" | "rebar" | "survey" | "quantities" | "office" | "mechanical" | "electrical"
   | "architecture" | "hse" | "workforce" | "money";
 
+// the professional discipline a tool belongs to — how the Tools tab, the public page and the palette group them (tools/registry.ts GROUPS)
+export type ToolGroup = "site" | "office" | "design" | "hse" | "management" | "money";
+
 export type ToolRole = "engineer" | "owner" | "supervisor" | "hr";
 
 export type ToolDef = {
   id: string;                  // camelCase letters only
   pack: ToolPack;
+  group: ToolGroup;
   name: string;                // Arabic (English comes from the dictionary)
   desc: string;
   icon: string;                // lucide icon name

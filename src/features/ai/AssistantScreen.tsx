@@ -12,7 +12,8 @@ import { Markdown } from "../../ui/markdown";
 import { L2, say, tr } from "../../i18n/i18n";
 import { aiAvailable, ask, rateAnswer, refreshQuota, type AiError, type AiMsg } from "../../services/ai-service";
 import { DAY, cached, remember } from "../../services/ai-cache";
-import { toolRole, toolsForRole } from "../../tools/gate";
+import { toolAllowed, toolRole, toolsForRole } from "../../tools/gate";
+import { VoiceTool } from "./VoiceTool";
 import { useQuota } from "./quota";
 
 export type ChatMsg = { id: string; role: "user" | "model"; text: string; at: number; cached?: boolean; error?: AiError; rated?: 1 | -1 };
@@ -266,6 +267,8 @@ export function AssistantScreen({ app }: any) {
           </button>
         )}
       </div>
+
+      {toolAllowed(role, "concrete") && <VoiceTool app={app} />}
 
       {!live && (
         <Panel className="mt-4 p-4" data-ai-demo>

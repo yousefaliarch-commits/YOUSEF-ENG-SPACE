@@ -12,6 +12,7 @@
 // =====================================================================
 import { strToU8, zipSync } from "fflate";
 import type { DocBlock, DocCol, DocLang, DocRow, DocSpec, DocText, TitleParty } from "./model";
+import { fingerprint } from "./text";
 
 export const XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
@@ -514,6 +515,7 @@ const S = {
 };
 
 const SUMMARY_COLS = 6;
+const STATUS_WORD = (s: DocSpec["meta"]["status"]) => ({ draft: L2("مسودة", "Draft"), issued: L2("صادر", "Issued"), superseded: L2("مُستبدَل", "Superseded"), void: L2("ملغى", "Void") })[s] || s;
 
 type TableBlock = Extract<DocBlock, { k: "table" }>;
 
@@ -549,7 +551,8 @@ function tableSheet(b: TableBlock, name: string, title: string, landscape: boole
         const cached = items.filter((n) => n >= lo).reduce((s, n) => s + (values.get(ref(ci, n)) || 0), 0);
         return { f: `${sumFn}${ref(ci, lo)}:${ref(ci, rowNo - 1)})`, v: cached, s: fmt };
       }
-      return { v, s: { ...fmt, center: c.align === "center" && typeof v !== "number" } };
+      // text wraps inside its cell (the row grows to show all of it, as the PDF's row does); numbers stay on one line
+      return { v, s: { ...fmt, center: c.align === "center" && typeof v !== "number", ...(typeof v === "number" ? {} : { wrap: true, top: true }) } };
     });
     // formula columns: the template's result must match the engine's value at the printed decimals, else the value stays
     if (kind === "item") {
@@ -628,7 +631,17 @@ function summarySheet(spec: DocSpec, tableNames: Map<TableBlock, string>): XShee
     [L2("المرجع", "Reference"), tb.reference],
   ];
   if (tb.scale) control.push([L2("المقياس", "Scale"), tb.scale]);
+  // the PDF's title block also states the status, the code profile and — once issued — the document's fingerprint
+  control.splice(2, 0, [L2("الحالة", "Status"), STATUS_WORD(meta.status)]);
+  control.push([L2("ملف الكود", "Code profile"), meta.profileLabel]);
+  if (meta.status !== "draft" && meta.hash) control.push([L2("بصمة المستند", "Fingerprint"), fingerprint(meta.hash)]);
   for (const [l, v] of control) put([{ v: l, s: S.label }, { v: clean(v) || "—", span: SUMMARY_COLS - 1 }]);
+  // the revision log, newest first: one header row, one row per issued revision
+  if (spec.revisions.length) {
+    gap();
+    put([L2("Rev", "Rev"), L2("التاريخ", "Date"), L2("وصف التعديل", "Description"), L2("أعدّ", "Prepared"), L2("راجع", "Checked"), L2("اعتمد", "Approved")].map((v) => ({ v, s: S.head })));
+    for (const r of [...spec.revisions].reverse()) put([r.rev, r.dateIso.slice(0, 10), r.desc, r.prepared, r.checked, r.approved].map((v) => ({ v: clean(v) || "", s: { ...S.cell, wrap: true } })));
+  }
 
   const sections = spec.sections.flatMap((s) => s.blocks);
   for (const b of sections) {
