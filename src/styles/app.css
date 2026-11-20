@@ -357,6 +357,11 @@ html[data-style="soft"] [role="radiogroup"].border [role="radio"][aria-checked="
 html[data-style="soft"] .glass { background: rgb(var(--canvas)); -webkit-backdrop-filter: none; backdrop-filter: none; border-color: transparent; box-shadow: var(--soft-raise); }
 html[data-style="soft"] .tab-ind { background: rgb(var(--canvas)); box-shadow: var(--soft-inset); }
 
+/* a solid danger / warning fill with white text (delete buttons, count badges): dark mode's light pink / yellow tones would leave white
+   at 1.5–1.9 : 1, so on these the tone itself is redefined (works for !bg-* too) to a deep red / amber where white reads ≥ 6.3 : 1 */
+html[data-style="soft"] [data-mode="dark"] :is(.bg-bad, [class~="!bg-bad"]):is(.text-white, [class~="!text-white"]) { --bad: 190 18 60; }
+html[data-style="soft"] [data-mode="dark"] :is(.bg-warn, [class~="!bg-warn"]):is(.text-white, [class~="!text-white"]) { --warn: 154 70 8; }
+
 /* FLAT — reading surfaces: feed posts are told apart by a hairline, not a shadow */
 html[data-style="soft"] article.post-card { background: rgb(var(--elevated) / .55); border-color: var(--line-2); box-shadow: none; }
 
