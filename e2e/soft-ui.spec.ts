@@ -77,7 +77,8 @@ test("soft states: switches, segmented choices, fields and the result well take 
   expect(await shadowOf(page, "[data-ui-style] [role=radiogroup]")).toContain("inset");
   expect(await shadowOf(page, '[data-ui-style-option="soft"]')).not.toContain("inset");
 
-  await page.goto("/?backend=demo#app/tooldoc/concrete:new");
+  // a hash-only goto is a same-document navigation the app does not route on: change the query so the page really loads
+  await page.goto("/?backend=demo&step=2#app/tooldoc/concrete:new");
   await page.locator("[data-seg]").first().waitFor();
   expect(await shadowOf(page, "[data-seg]")).toContain("inset");
   expect(await shadowOf(page, "[data-seg] .seg-ind")).not.toContain("inset");
@@ -90,8 +91,13 @@ test("soft states: switches, segmented choices, fields and the result well take 
 });
 
 test("soft states: a disabled primary button is pressed in and dimmed, never raised", async ({ page }) => {
-  await softAs(page, "#app/tooldoc/concrete:new");
+  // the new-post sheet: «نشر» stays disabled until something is written
+  await softAs(page, "#app/community");
+  await page.getByText(/اسأل، أو اعرض رقمك/).first().click();
   const disabled = page.locator(".btn-primary:disabled").first();
-  test.skip((await disabled.count()) === 0, "no disabled primary button on this screen");
-  expect(await disabled.evaluate((el) => getComputedStyle(el).boxShadow)).toContain("inset");
+  await disabled.waitFor();
+  // every shadow on it is inset (computed styles write «inset» at the end of each one)
+  const parts = (await disabled.evaluate((el) => getComputedStyle(el).boxShadow)).split(/,(?![^(]*\))/);
+  expect(parts.length).toBeGreaterThan(0);
+  for (const part of parts) expect(part.trim()).toMatch(/inset$/);
 });

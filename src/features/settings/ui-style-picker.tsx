@@ -27,7 +27,7 @@ export function UiStylePicker({ toast }: { toast: (m: string) => void }) {
                 setUiStyle(id);
                 toast(id === "soft" ? "الشكل الناعم: الأزرار بارزة والخانات محفورة" : "الشكل الكلاسيك");
               }}
-              className={`press flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-full text-[12.5px] transition-colors ${on ? "bg-elevated text-ink" : "text-ink-2"}`}
+              className={`press flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-full text-[12.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${on ? "bg-elevated text-ink" : "text-ink-2"}`}
             >
               <Icon size={14} className={on ? "text-accent" : ""} />
               {label}
