@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { BASE_COLOR, DEFAULT_STYLE, readStyle } from "../src/ui/ui-style";
+import { BASE_COLOR, DEFAULT_STYLE, earlyMode, readStyle } from "../src/ui/ui-style";
 
 // split a selector list on its top-level commas only (not the ones inside :is(…) / :has(…))
 function topLevel(list: string): string[] {
@@ -27,10 +27,29 @@ describe("interface style (classic | soft)", () => {
     expect(readStyle("neon")).toBe(DEFAULT_STYLE);
   });
 
+  it("opens on the mode the app will settle on (saved choice, then the host page, then the device)", () => {
+    expect(earlyMode("light", undefined, true)).toBe("light");
+    expect(earlyMode("dark", "light", false)).toBe("dark");
+    expect(earlyMode("system", "light", true)).toBe("light");
+    expect(earlyMode(null, undefined, true)).toBe("dark");
+    expect(earlyMode(null, undefined, false)).toBe("light");
+  });
+
   it("paints a base colour for each style and mode", () => {
     expect(BASE_COLOR.classic).toEqual({ light: "#fafafa", dark: "#09090b" });
     expect(BASE_COLOR.soft.light).toMatch(/^#[0-9a-f]{6}$/);
     expect(BASE_COLOR.soft.dark).toMatch(/^#[0-9a-f]{6}$/);
+  });
+
+  it("index.html's first-paint script uses the same default and base colours as ui-style.ts", () => {
+    const html = readFileSync("index.html", "utf8");
+    const script = html.slice(html.indexOf("first paint"), html.indexOf("</script>"));
+    expect(script).toContain(`: "${DEFAULT_STYLE}"`);
+    for (const st of ["classic", "soft"] as const) {
+      for (const m of ["light", "dark"] as const) expect(script).toContain(`${m}: "${BASE_COLOR[st][m]}"`);
+    }
+    expect(script).toContain('"engspace.style"');
+    expect(script).toContain('"engspace.theme"');
   });
 
   it("keeps every soft rule behind html[data-style=soft] and never animates a shadow", () => {

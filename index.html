@@ -8,6 +8,21 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="EngSpace">
     <meta name="theme-color" content="#09090b">
+    <!-- first paint: the saved interface style and the mode the app will settle on (the same rules as src/ui/ui-style.ts — a test keeps
+         them equal), so the page never opens on the dark default and then jumps; the app sets both again once it runs -->
+    <script>
+      (function () {
+        try {
+          var r = document.documentElement, s = null, t = null;
+          try { s = localStorage.getItem("engspace.style"); t = localStorage.getItem("engspace.theme"); } catch (e) {}
+          var style = s === "classic" || s === "soft" ? s : "soft";
+          var mode = t === "light" || t === "dark" ? t : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          var base = { classic: { light: "#fafafa", dark: "#09090b" }, soft: { light: "#e6e9f0", dark: "#23252d" } };
+          r.setAttribute("data-style", style); r.setAttribute("data-mode", mode); r.style.colorScheme = mode;
+          var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", base[style][mode]);
+        } catch (e) {}
+      })();
+    </script>
     <meta name="description" content="EngSpace — محطة عمل المهندس المصري: أدوات الموقع والمكتب الفني بمستندات PDF و Word و Excel بخرطوشة شركتك، وشبكة رواتب مجهولة. Site and technical-office tools with PDF, Word and live Excel documents, and an anonymous salary network for engineers in Egypt.">
     <meta property="og:type" content="website">
     <meta property="og:title" content="EngSpace — من الحصر إلى المستخلص، بأرقام تُريك حسابها">
