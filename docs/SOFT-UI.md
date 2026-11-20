@@ -56,11 +56,25 @@ a field is `bg-canvas border` (or a `bg-canvas` box around an `<input>`), a well
 
 ## How it was verified (v0.41)
 
-- **Classic is unchanged:** every route (82 per configuration: all tabs, screens, tool screens, every document tool, sheets, palette,
-  admin, landing, sign-in, three roles) captured on the previous release and on this one in «كلاسيك», light / dark, Arabic / English,
-  Android / iPhone / desktop, and compared pixel by pixel. The only difference is Settings, which gained the style picker.
-- **Soft, screen by screen:** the same routes reviewed in soft light and dark; every defect found was fixed in the CSS block.
-- **Contrast:** an automated audit measures every visible text against its real (composited) background on every route.
-- **States:** e2e tests read the computed styles for press, focus, switches, segmented choices, fields and disabled buttons
-  (`e2e/soft-ui.spec.ts`); unit tests guard the default, the first-paint script and the scoping of every rule (`tests/ui-style.test.ts`).
-- **Scroll smoothness:** classic vs soft measured on throttled Android emulation.
+- **Classic is unchanged.** Every route (82 per configuration: all tabs, every pushed screen, every tool screen and document tool,
+  sheets, the palette, admin, the public page, sign-in, three roles) was captured on the previous release and on this one in «كلاسيك» —
+  light / dark, Arabic / English, Android / iPhone / desktop (6 configurations, 1,554 screenshots) — and compared pixel by pixel. The
+  only difference is Settings, which gained the style picker; the remaining few-pixel specks were shown to be the renderer's own
+  run-to-run noise (the old build differs from itself at the same spots).
+- **Soft, screen by screen.** All 255 screens of soft light (Arabic, Android) were reviewed, then soft dark, English, iPhone and desktop
+  across every component type. Each defect found was fixed in the CSS block (clipped shadows in scrolling rows, the result's verdict
+  border, the voice field, poll answers, switches, focus rings, the floating-layer halo).
+- **Contrast.** An automated audit measures every visible text against its real, composited background on every route. Soft: **0
+  failures** of 7,207 text checks in light and in dark. For comparison, the classic look has 116 (light) and 595 (dark) — mostly the
+  grey `ink-3` on cards and status chips; soft fixes them by construction. Two button issues that classic still has are fixed in soft:
+  the primary button's label (≈ 4.4 : 1 on the gradient's top half for indigo → ≥ 4.89 : 1) and white text on danger / warning fills
+  in dark mode (1.5–1.9 : 1 → ≥ 6.3 : 1).
+- **States.** `e2e/soft-ui.spec.ts` reads computed styles for chips (raised / pressed / held), keyboard focus, switches, segmented
+  choices, fields at rest and while typing, and a disabled primary button. `tests/ui-style.test.ts` guards the default, the first-paint
+  script and that every rule is scoped to `html[data-style="soft"]` with no animated shadow.
+- **Scroll smoothness.** Classic vs soft, CPU throttled ×6, 5 runs each, the main scroller driven continuously for 4 s: same frame
+  rate (57.8–59.5 fps) and the same share of slow frames on the feed, the tools and the jobs; the main thread does slightly less work
+  in soft (feed 1,026 → 977 ms; jobs 1,092 → 1,037 ms) because the tab bar no longer blurs. Measured in headless Chromium (software
+  raster); real-device GPU raster is not part of this number, which is why weak Android phones still get the short-shadow path.
+- **First paint.** With the app's script blocked, the page already opens on the right style and base colour for every combination of
+  saved style, saved theme and device preference (5 cases).

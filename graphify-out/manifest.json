@@ -204,8 +204,8 @@
     "semantic_hash": "4a20fb2c0fba7c9eaa3612ddc8322e4c"
   },
   "i18n/keys.json": {
-    "mtime": 1795204113.7290454,
-    "seen": 1795204202.243754,
+    "mtime": 1795208347.733297,
+    "seen": 1795208378.4952443,
     "ast_hash": "271f526c519c35725a7f75de40bf3a38",
     "semantic_hash": ""
   },
@@ -990,8 +990,8 @@
     "semantic_hash": "4f364d49edd42808993a2ec60bb6ed76"
   },
   "src/i18n/en.generated.json": {
-    "mtime": 1795204113.8690455,
-    "seen": 1795204202.244033,
+    "mtime": 1795208347.881297,
+    "seen": 1795208378.495482,
     "ast_hash": "d6cbc41f5a4208c3c555ce735b7de289",
     "semantic_hash": ""
   },
@@ -2016,9 +2016,9 @@
     "semantic_hash": "526e07b26eceff8f9d17dce18317f352"
   },
   "CLAUDE.md": {
-    "mtime": 1795204190.8564348,
-    "seen": 1795204202.2442791,
-    "ast_hash": "6ba0f39400d71dfdc442202695afabf6",
+    "mtime": 1795208305.897786,
+    "seen": 1795208378.4957523,
+    "ast_hash": "a976f233dec94e5d109fbdad60917884",
     "semantic_hash": ""
   },
   "README.md": {
@@ -2070,9 +2070,9 @@
     "semantic_hash": "5825b06101452a3ce319b1087c08e796"
   },
   "index.html": {
-    "mtime": 1794348166.460673,
-    "seen": 1794349432.8378708,
-    "ast_hash": "88161a2e95c825c5d783f3c74bb8bde0",
+    "mtime": 1795204995.5533187,
+    "seen": 1795208378.4957705,
+    "ast_hash": "a8b717d87dc7afb407dbfad1ba6c6d63",
     "semantic_hash": ""
   },
   "ios/App/CapApp-SPM/README.md": {
@@ -2592,27 +2592,33 @@
     "semantic_hash": ""
   },
   "e2e/soft-ui.spec.ts": {
-    "mtime": 1795203930.4560409,
-    "seen": 1795204202.243745,
-    "ast_hash": "f4661f4a2bc7c491756bfec098872bd1",
+    "mtime": 1795207296.0034158,
+    "seen": 1795208378.4952333,
+    "ast_hash": "121d5e8cc24df063e863ce8ce090dd34",
     "semantic_hash": ""
   },
   "src/features/settings/ui-style-picker.tsx": {
-    "mtime": 1795203863.5850306,
-    "seen": 1795204202.243991,
-    "ast_hash": "88bb20eb5c85c97228c79a34cb398fa7",
+    "mtime": 1795206928.2421782,
+    "seen": 1795208378.4954345,
+    "ast_hash": "0962399f78a11d6712decac671b26ee4",
     "semantic_hash": ""
   },
   "src/ui/ui-style.ts": {
-    "mtime": 1795203816.0570278,
-    "seen": 1795204202.2440891,
-    "ast_hash": "73010756316c0b233843b72175e2dfae",
+    "mtime": 1795208313.9230626,
+    "seen": 1795208378.4955432,
+    "ast_hash": "9ec51ea3c202eb2e2b57339bcde1fddf",
     "semantic_hash": ""
   },
   "tests/ui-style.test.ts": {
-    "mtime": 1795204087.846424,
-    "seen": 1795204202.2442508,
-    "ast_hash": "5bc0ac2c4c674484b1b6d1f19d6709db",
+    "mtime": 1795204995.5537677,
+    "seen": 1795208378.4957223,
+    "ast_hash": "7011d30ccac22900149f1e6d36719ebe",
+    "semantic_hash": ""
+  },
+  "docs/SOFT-UI.md": {
+    "mtime": 1795208305.893078,
+    "seen": 1795208378.4957643,
+    "ast_hash": "7dc13fe3c4639db1a10d8be294a7ce61",
     "semantic_hash": ""
   },
   "package-lock.json": {

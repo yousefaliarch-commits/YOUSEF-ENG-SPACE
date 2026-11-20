@@ -2,8 +2,8 @@
 //  The interface style — «كلاسيك» (the flat look the app has always had) or «ناعم» (Soft UI: raised controls, inset fields).
 //  It is one attribute on <html> (data-style="soft"); every rule lives in app.css under html[data-style="soft"], built on the
 //  same theme tokens, so no screen needs code for it and «كلاسيك» stays byte-for-byte the old look.
-//  The choice is per device (like light / dark). The soft-ui preview build starts on «ناعم» so it can be judged on a phone;
-//  the default for everyone is decided before this ships.
+//  The choice is per device (like light / dark). «ناعم» is the default for everyone since v0.41 (docs/SOFT-UI.md); a member who
+//  prefers the old look picks «كلاسيك» in Settings → المظهر.
 // =====================================================================
 import { useSyncExternalStore } from "react";
 
