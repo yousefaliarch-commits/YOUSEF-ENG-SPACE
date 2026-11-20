@@ -308,6 +308,13 @@ html[data-style="soft"] :is(button, a).bg-canvas.border:not([role="radio"]) { bo
 /* pressed: a raised control swaps to inset at once while the finger is on it */
 html[data-style="soft"] :is(button, a, label, article):is(.bg-surface, .shadow-card, .hit44, .bg-elevated.border, .bg-canvas.border):active:not(:disabled) { box-shadow: var(--soft-inset-sm); transform: none; }
 
+/* a scrolling row clips the shadows of the raised things in it (chips, room / job cards) at its edge: give them room inside the row.
+   Padding only, never a negative margin — a row pulled over the line above it would take the taps meant for that line's links. */
+html[data-style="soft"] .overflow-x-auto:has(> :is(.hit44, .shadow-card, button.bg-surface, a.bg-surface)) { padding-block: 14px; }
+
+/* poll answers (ui/feed.tsx): raised until you vote; once voted they are a result bar, read flat */
+html[data-style="soft"] button.press.relative.overflow-hidden.rounded-xl.border:not(:disabled) { background: rgb(var(--canvas)); border-color: transparent; box-shadow: var(--soft-raise-sm); }
+
 /* chosen standalone options press in (chips, checks, option cards, language cards) */
 html[data-style="soft"] button.hit44[aria-pressed="true"],
 html[data-style="soft"] button[role="checkbox"][aria-checked="true"],
@@ -317,13 +324,13 @@ html[data-style="soft"] button[role="radio"]:not([aria-checked="true"]).border {
 html[data-style="soft"] button[role="checkbox"]:not([aria-checked="true"]).border { background: rgb(var(--canvas)); border-color: transparent; box-shadow: var(--soft-raise-sm); }
 
 /* INSET — fields (a field with an error keeps its red border; a focused field shows its focus ring instead) */
-html[data-style="soft"] :is(input, textarea, select):is(.bg-canvas, .bg-surface):not(:focus),
+html[data-style="soft"] :is(input, textarea, select):is(.bg-canvas, .bg-surface, .bg-wash):not(:focus),
 html[data-style="soft"] :is(.bg-canvas, .bg-surface):has(> input):not(:focus-within) { border-color: transparent; box-shadow: var(--soft-inset); }
 html[data-style="soft"] .bg-canvas.border-bad:has(> input) { border-color: rgb(var(--bad)); }
 
 /* INSET — wells inside a card (sub-blocks drawn as a translucent canvas) and the tool result (it holds the answer) */
 html[data-style="soft"] :is(.bg-canvas\/30, .bg-canvas\/40, .bg-canvas\/50, .bg-canvas\/60, .bg-canvas\/70):not(header):not(form):not(dl) { border-color: transparent; box-shadow: var(--soft-inset-sm); }
-html[data-style="soft"] [data-tool-result="hero"] { border-color: transparent; box-shadow: var(--soft-inset); }
+html[data-style="soft"] [data-tool-result="hero"] { box-shadow: var(--soft-inset); }  /* keeps its tone border: red / green is the verdict */
 
 /* switches: the track is pressed in; the thumb stands on it */
 html[data-style="soft"] button[role="switch"] { border-color: transparent; box-shadow: var(--soft-inset-sm); }
