@@ -251,6 +251,74 @@ html[data-glass="lite"] .glass { -webkit-backdrop-filter: none; backdrop-filter:
 .tab-ind { background: rgb(var(--accent) / .13); box-shadow: inset 0 0 0 1px rgb(var(--accent) / .16); transform: translate3d(calc(var(--i) * 100% * var(--dx, 1)), 0, 0);
   transition: transform .34s var(--spring); will-change: transform; }
 [dir="rtl"] .tab-ind { --dx: -1; }
+
+/* ---- «ناعم» — Soft UI (src/ui/ui-style.ts sets html[data-style="soft"]). One rule gives depth a meaning:
+   raised = you can press it (cards that open, buttons, chips, the tab bar) · inset = it holds a value (fields, the chosen tab,
+   a pressed chip) · flat = you read it (feed posts, long lists, documents). Surfaces take the canvas colour so depth, not a
+   border, separates them; the greys are darkened so small text keeps ≥ 4.5:1 on the lighter dark base. Shadows never animate
+   (a press swaps raised → inset at once), long lists stay flat, and Android without headroom (data-glass="lite") gets one short
+   shadow instead of two blurred ones. Exports (PDF / Word / Excel) never read these tokens. ---- */
+html[data-style="soft"] [data-mode="light"], html[data-style="soft"][data-mode="light"] {
+  --canvas: 230 233 240; --surface: 230 233 240; --elevated: 221 225 233; --track: 206 211 221;
+  --ink-3: 92 98 112; --ink-4: 132 138 151;
+  --soft-hi: 255 255 255; --soft-lo: 190 196 209;
+  --shadow-card: 9px 9px 20px rgb(var(--soft-lo)), -9px -9px 20px rgb(var(--soft-hi));
+  --shadow-float: 0 -12px 34px rgb(var(--soft-lo) / .9);
+}
+html[data-style="soft"] [data-mode="dark"], html[data-style="soft"][data-mode="dark"] {
+  --canvas: 35 37 45; --surface: 35 37 45; --elevated: 45 48 58; --track: 60 64 76;
+  --ink-2: 178 182 194; --ink-3: 146 151 164; --ink-4: 108 113 126;
+  --soft-hi: 50 53 64; --soft-lo: 20 21 26;
+  --shadow-card: 8px 8px 18px rgb(var(--soft-lo)), -8px -8px 18px rgb(var(--soft-hi));
+  --shadow-float: 0 -12px 34px rgb(0 0 0 / .55);
+}
+html[data-style="soft"] [data-mode] {
+  --soft-raise: 7px 7px 15px rgb(var(--soft-lo)), -7px -7px 15px rgb(var(--soft-hi));
+  --soft-raise-sm: 4px 4px 9px rgb(var(--soft-lo)), -4px -4px 9px rgb(var(--soft-hi));
+  --soft-inset: inset 3px 3px 7px rgb(var(--soft-lo)), inset -3px -3px 7px rgb(var(--soft-hi));
+  --soft-inset-sm: inset 2px 2px 4px rgb(var(--soft-lo)), inset -2px -2px 4px rgb(var(--soft-hi));
+}
+html[data-style="soft"][data-glass="lite"] [data-mode] {
+  --shadow-card: 4px 4px 8px rgb(var(--soft-lo)), -3px -3px 6px rgb(var(--soft-hi));
+  --soft-raise: 3px 3px 6px rgb(var(--soft-lo)), -3px -3px 6px rgb(var(--soft-hi));
+  --soft-raise-sm: 2px 2px 4px rgb(var(--soft-lo)), -2px -2px 4px rgb(var(--soft-hi));
+}
+
+/* cards: raised, no border */
+html[data-style="soft"] .shadow-card { border-color: transparent; }
+
+/* fields: inset (a field with an error keeps its red border; a focused field shows the focus ring instead) */
+html[data-style="soft"] :is(input, textarea, select):is(.bg-canvas, .bg-surface):not(:focus),
+html[data-style="soft"] :is(.bg-canvas, .bg-surface):has(> input):not(:focus-within) { border-color: transparent; box-shadow: var(--soft-inset); }
+html[data-style="soft"] .bg-canvas.border-bad:has(> input) { border-color: rgb(var(--bad)); }
+
+/* buttons */
+html[data-style="soft"] .btn-primary { box-shadow: inset 0 1px 0 rgb(255 255 255 / .22), var(--soft-raise-sm); }
+html[data-style="soft"] .btn-primary:active:not(:disabled) { box-shadow: inset 2px 2px 6px rgb(0 0 0 / .3); }
+html[data-style="soft"] .btn-primary:disabled { box-shadow: var(--soft-inset-sm); }
+html[data-style="soft"] button.bg-elevated.border:not(:disabled) { background: rgb(var(--canvas)); border-color: transparent; box-shadow: var(--soft-raise-sm); }
+html[data-style="soft"] button.bg-elevated.border:active:not(:disabled) { box-shadow: var(--soft-inset-sm); transform: none; }
+
+/* chips: raised; a chosen chip is pressed in */
+html[data-style="soft"] button.hit44 { background: rgb(var(--canvas)); border-color: transparent; box-shadow: var(--soft-raise-sm); }
+html[data-style="soft"] button.hit44[aria-pressed="true"] { box-shadow: var(--soft-inset-sm); color: rgb(var(--accent)); font-weight: 600; }
+
+/* segmented choice: the track is inset, the moving thumb is raised */
+html[data-style="soft"] [data-seg] { background: rgb(var(--canvas)); border-color: transparent; box-shadow: var(--soft-inset-sm); }
+html[data-style="soft"] [data-seg] .seg-ind { background: rgb(var(--canvas)); border-color: transparent; box-shadow: var(--soft-raise-sm); }
+html[data-style="soft"] [data-seg] .seg-btn[aria-pressed="true"] { color: rgb(var(--accent)); }
+
+/* radio groups (Settings: appearance, language, style): the chosen option is pressed in */
+html[data-style="soft"] [role="radiogroup"].border { background: rgb(var(--canvas)); border-color: transparent; box-shadow: var(--soft-inset-sm); }
+html[data-style="soft"] [role="radio"][aria-checked="true"].bg-elevated { background: rgb(var(--canvas)); box-shadow: var(--soft-raise-sm); color: rgb(var(--accent)); }
+
+/* the tab bar: a raised slab (no live blur — cheaper than the glass); the current tab is pressed in */
+html[data-style="soft"] .glass { background: rgb(var(--canvas)); -webkit-backdrop-filter: none; backdrop-filter: none; border-color: transparent; box-shadow: var(--soft-raise); }
+html[data-style="soft"] .tab-ind { background: rgb(var(--canvas)); box-shadow: var(--soft-inset); }
+
+/* the reading surfaces stay flat: feed posts are told apart by a hairline, not a shadow */
+html[data-style="soft"] article.post-card { background: rgb(var(--elevated) / .55); border-color: var(--line-2); box-shadow: none; }
+
 /* a pushed screen (post, chat, company, forms) hides the bar, like iOS detail screens: its own action bar takes the bottom.
    transform/opacity only — the bar keeps its layer, so showing it again is a composite, not a repaint */
 .tabbar { transition: transform .32s var(--spring), opacity .2s ease; }

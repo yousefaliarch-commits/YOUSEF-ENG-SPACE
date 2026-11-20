@@ -15,6 +15,7 @@ import { hasSession } from "../domain/identity";
 import { NATIVE, PLATFORM, setBackHandler, setNativeMode } from "../native/native";
 import { Primary } from "../ui/primitives";
 import { ACCENTS } from "../ui/theme";
+import { BASE_COLOR, useUiStyle } from "../ui/ui-style";
 
 // The admin console is its own chunk: members never download it (Phase 3 moves it to a separate web app)
 const AdminView = lazy(() => import("../features/admin/AdminView").then((m) => ({ default: m.AdminView })));
@@ -90,7 +91,16 @@ export function App() {
   useEffect(() => { if (NATIVE && view === "admin") setBackHandler(() => { setView("app"); return true; }); }, [view]);
   useEffect(() => { if (view === "admin" && !staffOk) { setView("app"); try { history.replaceState(null, "", "#app/home"); } catch (e) {} } }, [view, staffOk]);
   useEffect(() => { try { const mq = matchMedia("(prefers-color-scheme: dark)"); const on = () => setSys(systemMode()); mq.addEventListener("change", on); const mo = new MutationObserver(on); mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }); return () => { mq.removeEventListener("change", on); mo.disconnect(); }; } catch (e) {} }, []);
-  useEffect(() => { try { document.documentElement.dataset.mode = mode; document.documentElement.style.colorScheme = mode; const m = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null; if (m) m.content = mode === "light" ? "#fafafa" : "#09090b"; } catch (e) {} }, [mode]);
+  // the browser / status-bar colour follows the interface style too (src/ui/ui-style.ts: «ناعم» paints a lighter base)
+  const uiStyle = useUiStyle();
+  useEffect(() => {
+    try {
+      document.documentElement.dataset.mode = mode;
+      document.documentElement.style.colorScheme = mode;
+      const m = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null;
+      if (m) m.content = BASE_COLOR[uiStyle][mode === "light" ? "light" : "dark"];
+    } catch (e) {}
+  }, [mode, uiStyle]);
   useEffect(() => { setNativeMode(mode); }, [mode]);
   const a = mode === "light" ? ACCENTS[accent].light : ACCENTS[accent].rgb;
   useEffect(() => { if (!toastMsg) return; const t = setTimeout(() => setToastMsg(""), 2600); return () => clearTimeout(t); }, [toastMsg]);

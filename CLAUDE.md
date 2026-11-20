@@ -243,6 +243,12 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   + `forbiddenFinding` keep military talk off female CVs and never penalise the Syndicate card. **Voice take-off**: pure parser `domain/tools/voice-parse.ts` + `features/ai/VoiceTool.tsx`
   (no AI call, no native plugin — native line stays 2; Web Speech where present, keyboard dictation elsewhere); a missing dimension is asked for, never guessed.
 
+- v0.41.0 (preview, branch `feat/soft-ui`): **interface style** «كلاسيك / ناعم» (Settings → المظهر → شكل الواجهة; `src/ui/ui-style.ts`, per device,
+  `html[data-style="soft"]`). Soft UI is ONE CSS block in app.css (after the glass rules) on the same tokens: raised = pressable (cards, buttons,
+  chips, tab bar), inset = holds a value (fields, chosen tab / chip / segment), flat = reading (feed posts, long lists, exports). Shadows never animate,
+  no live blur, `data-glass="lite"` gets short shadows; greys darkened for ≥ 4.5:1 on the soft bases. Classic is unchanged. `DEFAULT_STYLE` is «soft»
+  only for the preview — decide the default before merging. Tests: `tests/ui-style.test.ts`, `e2e/soft-ui.spec.ts`.
+
 - **Website** (docs/WEB.md): **Deploy website** workflow → Cloudflare Pages (`engspace.pages.dev`; pull requests get
   `<branch>.engspace.pages.dev`). Secrets `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` (absent → a notice, never a failure); variables
   `PAGES_PROJECT`, `PUBLIC_URL`. Each deploy adds the site to Supabase Auth redirect URLs (merged, never replaced). `public/_headers` sets caching.

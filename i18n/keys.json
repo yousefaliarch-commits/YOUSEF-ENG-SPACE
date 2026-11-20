@@ -17736,6 +17736,36 @@
   "p": "features/settings/two-factor.tsx",
   "n": 1
  },
+ "كلاسيك": {
+  "k": "s",
+  "p": "features/settings/ui-style-picker.tsx",
+  "n": 1
+ },
+ "ناعم": {
+  "k": "s",
+  "p": "features/settings/ui-style-picker.tsx",
+  "n": 1
+ },
+ "شكل الواجهة": {
+  "k": "x",
+  "p": "features/settings/ui-style-picker.tsx",
+  "n": 3
+ },
+ "الشكل الناعم: الأزرار بارزة والخانات محفورة": {
+  "k": "s",
+  "p": "features/settings/ui-style-picker.tsx",
+  "n": 1
+ },
+ "الشكل الكلاسيك": {
+  "k": "s",
+  "p": "features/settings/ui-style-picker.tsx",
+  "n": 1
+ },
+ "الناعم: ما يُضغط بارز، وما يحمل قيمة محفور، والمنشورات والقوائم مسطحة لتبقى القراءة والتمرير سريعين.": {
+  "k": "x",
+  "p": "features/settings/ui-style-picker.tsx",
+  "n": 1
+ },
  "اكتب مسمّاك الوظيفي كما هو في عقدك.": {
   "k": "s",
   "p": "features/sheets/sheets.tsx",
