@@ -1,0 +1,7 @@
+# Soft UI preview (v0.41): the interface style switch in Settings
+5422ab31	Classic
+f4294a85	Soft
+ac12c997	Interface style
+8a897c8b	Soft style: buttons stand out, fields are pressed in
+a6f08ddc	Classic style
+060c03be	Soft: what you press stands out, what holds a value is pressed in, and posts and lists stay flat so reading and scrolling stay fast.

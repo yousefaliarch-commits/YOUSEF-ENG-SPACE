@@ -185,6 +185,9 @@ export type TraceStep = { key: string; label: string; formula: string; values: R
 - a **calculation-basis block** (`{ k: "basis" }`) on every calculation PDF, before the signatures: البند · القيمة · الوحدة · المصدر/البند · الثقة · ⚑ · «قيمة المشروع» (the override and its reason). It lists every profile key the document used and the formulas from `trace`. A test checks that every [L] key used appears in it with ⚑;
 - the discipline disclaimer at 8/12 **above the signature block** (§8.1), a signature and stamp row, and a photo appendix where photos exist;
 - a last-page colophon with technical data only: profiles, verified flags, app version, engine versions and the document fingerprint.
+  *(v0.41: reduced to one closing line on issued documents only — «أُصدر <Cairo day> · بصمة المستند <fingerprint>»; drafts close
+  with nothing. Profiles, engine and app versions and the unverified count stay in the app («طريقة الحساب»), not on the sheet a
+  client or consultant reads; ⚑ beside a clause still prints in the checks table.)*
 
 Every field PDF has **no money column**. The guard is a token test, not a substring regex (the old regex failed on the blueprint's own `costImpact` and on harmless keys such as `generatedAt`, `governorate`, `separate`, and missed `wage` or `fee`):
 - Each supervisor-allowed tool exports `<prefix>NewBody()` and a `FIELD_KEYS[kind]` list, and ships fixtures in `tests/doc/fixtures/`.
@@ -2806,7 +2809,7 @@ No PDF plugin is added (§5a).
 **Where they appear.**
 - A first-use banner for each tool, acknowledged once per account and stored in `toolPrefs.ack`.
 - One line under every `ResultCard`.
-- In every PDF: the colophon, plus the specific notes in the checks table.
+- In every PDF: the specific notes in the checks table (⚑ beside each unverified clause); an issued PDF closes with its issue day and fingerprint (v0.41).
 - The WhatsApp summary always ends with «تقدير — راجع المستند الكامل».
 
 | Family | Arabic (printed) | English |

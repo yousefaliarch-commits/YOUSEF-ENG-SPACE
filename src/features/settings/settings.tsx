@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TwoFactorPanel } from "./two-factor";
+import { UiStylePicker } from "./ui-style-picker";
 import {
   Award, Bell, BookOpen, Briefcase, Building2, Calculator, Check, ChevronDown, CircleHelp, Compass, Home, LifeBuoy, 
   Languages, Layers, LockKeyhole, MessageCircle, Moon, Settings, ShieldCheck, SlidersHorizontal, Sparkles, Sun, 
@@ -114,6 +115,7 @@ export function SettingsScreen({ app }: any) {
       <Panel className="p-4"><h2 className="text-[13px] font-medium mb-2 inline-flex items-center gap-1.5"><Sun size={15} className="text-accent" /> المظهر</h2>
         <div role="radiogroup" aria-label="المظهر" className="flex p-1 rounded-full bg-canvas border border-line-2">{THEMES.map(([id, l, I]: any) => <button key={id} type="button" role="radio" aria-checked={app.theme === id} onClick={() => { app.setTheme(id); app.toast(id === "system" ? "المظهر يتبع جهازك" : id === "light" ? "الوضع الفاتح" : "الوضع الداكن"); }} className={`press flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-full text-[12.5px] transition-colors ${app.theme === id ? "bg-elevated text-ink" : "text-ink-2"}`}><I size={14} className={app.theme === id ? "text-accent" : ""} />{l}</button>)}</div>
         <p className="mt-2 text-[10.5px] text-ink-3 leading-snug">الآن: {app.mode === "light" ? "فاتح" : "داكن"} · يُحفظ اختيارك على هذا الجهاز ويبقى بعد إعادة التحميل. تبديل سريع من زر الشمس والقمر أعلى الرئيسية.</p>
+        <UiStylePicker toast={(m: string) => app.toast(m)} />
       </Panel>
       <Panel className="p-4"><h2 className="text-[13px] font-medium mb-1 inline-flex items-center gap-1.5"><Bell size={15} className="text-accent" /> الإشعارات والخصوصية</h2>
         <SettingsLink icon={Bell} title="إعدادات الإشعارات" sub="الإشعارات الفورية، والوظائف المطابقة، والردود، والرواتب، والدعم" onClick={() => app.push({ type: "notifprefs" })} />

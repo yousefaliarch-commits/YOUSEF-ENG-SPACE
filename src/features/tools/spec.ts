@@ -121,10 +121,20 @@ export function buildSpec(o: {
     revisions: [],
     sections,
     colophon: {
+      issuedOn: doc.status !== "draft" && doc.issuedAt ? cairoDay(doc.issuedAt) : undefined,
       generatedAt: new Date().toISOString(), appVersion: APP_VERSION, backend: "raster", profiles: [doc.profile.id],
       unverified, overridden: doc.profile.overridden, hash: doc.hash || "", disclaimer: DISCLAIMER,
     },
   };
+}
+
+// a moment as the calendar day in Cairo (YYYY-MM-DD) — documents are dated where the work is, never in UTC
+export function cairoDay(ms: number): string {
+  try {
+    return new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Cairo", year: "numeric", month: "2-digit", day: "2-digit" }).format(ms);
+  } catch {
+    return new Date(ms).toISOString().slice(0, 10);
+  }
 }
 
 // the next document number of a type in a project: the project's own pattern (default <code>-<TYPE>-<NNNN>; GEN when the

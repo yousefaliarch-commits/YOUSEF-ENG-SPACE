@@ -243,6 +243,18 @@ Anonymous career and salary network for Egyptian engineers. **Arabic-first, RTL*
   + `forbiddenFinding` keep military talk off female CVs and never penalise the Syndicate card. **Voice take-off**: pure parser `domain/tools/voice-parse.ts` + `features/ai/VoiceTool.tsx`
   (no AI call, no native plugin — native line stays 2; Web Speech where present, keyboard dictation elsewhere); a missing dimension is asked for, never guessed.
 
+- v0.41.0 (docs/SOFT-UI.md): **«ناعم» Soft UI is the default interface style**; «كلاسيك» stays in Settings → المظهر → شكل الواجهة
+  (`src/ui/ui-style.ts`, per device, `html[data-style]`; `index.html` sets style + mode before first paint — a test keeps both equal).
+  ONE CSS block in app.css (after the glass rules), every rule scoped to `html[data-style="soft"]`: raised = pressable, inset = holds a
+  value, flat = reading; a choice takes the opposite depth to its container. Soft text / status tokens are COMPUTED to ≥ 4.5 : 1 (0 audit
+  failures; classic keeps its 116 / 595). Focus is an outline; shadows never animate; no live blur; `data-glass="lite"` → short shadows.
+  **PDF closing line**: an issued document ends with one line «أُصدر <Cairo day> · بصمة المستند <fingerprint>» (`colophon()` in
+  doc/layout.ts, `ColophonData.issuedOn` from `doc.issuedAt` via `cairoDay`); a draft or a register ends with nothing — no generation
+  time, app version, engines, code profiles or unverified count on paper (they stay in the app; ⚑ stays beside clauses).
+  **New screens: use the kit or the usual classes (card `rounded-2xl bg-surface border`, field `bg-canvas border`, well `bg-canvas/60`)
+  and soft follows.** Classic must stay pixel-identical — any soft change goes inside the block. Tests: `tests/ui-style.test.ts`,
+  `e2e/soft-ui.spec.ts`.
+
 - **Website** (docs/WEB.md): **Deploy website** workflow → Cloudflare Pages (`engspace.pages.dev`; pull requests get
   `<branch>.engspace.pages.dev`). Secrets `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` (absent → a notice, never a failure); variables
   `PAGES_PROJECT`, `PUBLIC_URL`. Each deploy adds the site to Supabase Auth redirect URLs (merged, never replaced). `public/_headers` sets caching.

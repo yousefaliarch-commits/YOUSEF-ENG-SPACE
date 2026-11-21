@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { headerOf, mergeDoc, newDocId, wbsPath, type ToolDoc, type ToolHeader } from "../src/data/tool-docs";
 import { haystack, normalise, searchDocs, zonesOf } from "../src/tools/doc-search";
 import { blankProject } from "../src/data/tool-projects";
-import { buildSpec } from "../src/features/tools/spec";
+import { buildSpec, cairoDay } from "../src/features/tools/spec";
 import { specXlsx } from "../src/doc/xlsx";
 import { strFromU8, unzipSync } from "fflate";
 
@@ -100,5 +100,24 @@ describe("the printed location", () => {
     const zip = unzipSync(specXlsx(s, new Date("2026-10-31T00:00:00Z")));
     const sheets = Object.keys(zip).filter((k) => k.startsWith("xl/worksheets/sheet")).map((k) => strFromU8(zip[k])).join("");
     expect(sheets).toContain("برج A · الدور 02 — قطعة 12");
+  });
+});
+
+// The closing line prints the day the document was issued, in Cairo — a sheet issued at 1:30 am Cairo time is dated that day,
+// not the UTC day before; a draft has no issue day at all.
+describe("the issue day", () => {
+  const meta = { docType: "POUR", docTypeName: "طلب صب / Pour Request", discipline: "إنشائي", engine: "concrete@1" } as any;
+  const late = Date.parse("2026-11-20T23:30:00Z"); // 01:30 on 21 Nov in Cairo
+
+  it("is the Cairo calendar day", () => {
+    expect(cairoDay(late)).toBe("2026-11-21");
+    expect(cairoDay(Date.parse("2026-11-21T08:00:00Z"))).toBe("2026-11-21");
+  });
+
+  it("travels with an issued document and never with a draft", () => {
+    const issued = buildSpec({ doc: doc("صب", { status: "issued", docNo: "TWR-POUR-0001", issuedAt: late, hash: "ab".repeat(32) }), meta, project: null, sections: [] });
+    expect(issued.colophon.issuedOn).toBe("2026-11-21");
+    const draft = buildSpec({ doc: doc("صب", { issuedAt: late }), meta, project: null, sections: [] });
+    expect(draft.colophon.issuedOn).toBeUndefined();
   });
 });

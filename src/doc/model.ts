@@ -25,7 +25,7 @@ export type DocMeta = {
   issuerRole: "client" | "consultant" | "contractor" | "subcontractor";
   appVersion: string;
   profileLabel: string;
-  engines: string[];        // "concrete@1.0.0", … printed in the colophon
+  engines: string[];        // "concrete@1.0.0", … — the app's record of what computed the figures (never printed since v0.41)
   hash: string;             // SHA-256 hex of the issued content ("" for a draft)
   qr?: string;
   // a personal document (a CV draft), not an engineering record: page 1 opens with the person's name and contact lines
@@ -113,7 +113,11 @@ export type TitleBlockData = {
 
 export type RevRow = { rev: string; dateIso: string; desc: string; prepared: string; checked: string; approved: string };
 
+// What closes the last page. Since v0.41 only `issuedOn` and `hash` are printed — one line on an issued document, nothing on a
+// draft; the rest is the technical record of how the sheet was made, kept in the spec and never printed for the reader.
 export type ColophonData = {
+  // the day the document was issued, in Cairo (YYYY-MM-DD) — the only date the closing line prints
+  issuedOn?: string;
   generatedAt: string;
   appVersion: string;
   backend: string;

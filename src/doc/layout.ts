@@ -2,7 +2,8 @@
 //  Document kit — layout: DocSpec → DrawPages (pure arithmetic, mm from each page's top-left)
 //  · The page count is known before anything is drawn, so a backend draws, encodes and releases each page in one pass.
 //  · Page 1 carries the issuer's title block (خرطوشة); pages 2+ a running header; every page a white-label footer line
-//    (document type · number · page — no app mark or credit). The colophon closes the last page.
+//    (document type · number · page — no app mark or credit). An issued document closes with one line: the issue day and
+//    its fingerprint (`colophon`); a draft closes with nothing.
 //  · Reading direction is decided here only: fromStart() places a box from the reading start (the right edge in Arabic).
 //  · Layout never throws on content: long words break, over-wide tables are scaled down and reported in `warnings`.
 //  · Tables repeat their header on every page and, with `carry`, print «يُرحّل» / «ما قبله» sums at each break.
@@ -846,24 +847,30 @@ function photos(p: Pager, b: Extract<DocBlock, { k: "photos" }>) {
   }
 }
 
+const LRM = "\u200E";
+
+// The closing line of an issued document: the day it was issued and its fingerprint — the same four groups as the title block,
+// so the two can be read against each other. A draft (or a register, which has no fingerprint) closes with nothing. The technical
+// record (engine and profile versions, renderer, unverified count) stays in the app: a document handed to a client or a consultant
+// carries the issuer's name and the work, not the tool's internals.
 function colophon(p: Pager, spec: DocSpec) {
   const c = spec.colophon;
+  if (spec.meta.status === "draft" || !c.hash) return;
   const dir = textDir(p.rtl);
   const lh = lineMm(TYPE.foot, 1.3);
-  const ls = [
-    L2(`أُنشئ ${iso(c.generatedAt)} · الإصدار ${iso(c.appVersion)} · ${iso(c.backend)}`, `Generated ${c.generatedAt} · version ${c.appVersion} · ${c.backend}`),
-    spec.meta.engines.length ? L2(`المحركات: ${iso(spec.meta.engines.join(", "))}`, `Engines: ${spec.meta.engines.join(", ")}`) : "",
-    c.profiles.length ? L2(`ملفات الكود: ${iso(c.profiles.join(", "))}`, `Code profiles: ${c.profiles.join(", ")}`) : "",
-    L2(`قيم غير متحقق منها ⚑: ${c.unverified}`, `Unverified values ⚑: ${c.unverified}`)
-      + (c.overridden.length ? L2(` · قيم معدّلة: ${iso(c.overridden.join(", "))}`, ` · changed values: ${c.overridden.join(", ")}`) : ""),
-    c.hash ? `SHA-256 ${iso(c.hash.slice(0, 16).toUpperCase())}…` : "",
-  ].filter(Boolean);
-  const h = ls.length * lh + 2;
+  const day = c.issuedOn || spec.meta.dateIso;
+  const fp = fingerprint(c.hash);
+  // The canvas drops LRI / PDI, and digits after Arabic letters become Arabic numbers: «2026-11-21» would print as 21-11-2026
+  // and a fingerprint whose first groups are all digits would print with those groups swapped («3871 8420» → «8420 3871»).
+  // An LRM (a real strong left-to-right character, which the canvas keeps) before each figure makes it one LTR run, so both
+  // read exactly as in the title block.
+  const line = L2(`أُصدر ${LRM}${day} · بصمة المستند ${LRM}${fp}`, `Issued ${day} · Document fingerprint ${fp}`);
+  const h = lh + 2;
   if (h > p.room()) p.open(p.o);
   const f = p.fr;
   const y = p.bottom - h;
   hline(p.ops, f.left, f.left + f.width / 3, y, HAIR, "hair");
-  lines(p.ops, p.m, ls, f.left, f.width, y + 1.5, TYPE.foot, "ink60", dir, "start", lh, 0);
+  lines(p.ops, p.m, [line], f.left, f.width, y + 1.5, TYPE.foot, "ink60", dir, "start", lh, 0);
 }
 
 // the smallest height the next block needs on the same page as a heading
