@@ -41,6 +41,40 @@ const bigTable = (n: number): DocBlock => ({
   carry: { sumCols: ["vol"] },
 });
 
+// The closing line (v0.41): an issued document ends with the day it was issued and its fingerprint — nothing about the tool.
+describe("layout: the closing line", () => {
+  const all = (s: DocSpec) => docLayout(s, fixedMeasurer).pages.flatMap(texts);
+  const withDay = (s: DocSpec, issuedOn?: string): DocSpec => ({ ...s, colophon: { ...s.colophon, issuedOn } });
+  const TECH = [/أُنشئ/, /المحركات/, /ملفات الكود/, /قيم غير متحقق/, /SHA-256/, /الإصدار 0\.28/, /raster/, /concrete@/, /Generated/, /Engines/];
+
+  it("an issued document closes with one line: the Cairo issue day and the full fingerprint", () => {
+    const t = all(withDay(spec([{ k: "heading", num: "1", text: "البيانات" }]), "2026-10-11"));
+    // an LRM before each figure keeps it left-to-right on the canvas (which ignores LRI / PDI)
+    expect(t.filter((s) => s.includes("أُصدر"))).toEqual(["أُصدر \u200E2026-10-11 · بصمة المستند \u200E7F3A 91C2 0B5E 44D1"]);
+    for (const re of TECH) expect(t.some((s) => re.test(s))).toBe(false);
+  });
+
+  it("English reads the same line; a missing issue day falls back to the document date", () => {
+    const t = all(spec([], { lang: "en" }));
+    expect(t).toContain("Issued 2026-10-10 · Document fingerprint 7F3A 91C2 0B5E 44D1");
+    for (const re of TECH) expect(t.some((s) => re.test(s))).toBe(false);
+  });
+
+  it("a draft, or an issued sheet with no fingerprint (a register), closes with nothing", () => {
+    for (const s of [spec([], { status: "draft", docNo: null, hash: "" }), { ...spec([], { hash: "" }), colophon: { ...spec([]).colophon, hash: "" } }]) {
+      const t = all(s);
+      // the title block's fingerprint cell keeps its label on a draft; the closing line is what must be absent
+      expect(t.some((x) => /^أُصدر |^Issued |بصمة المستند [0-9A-F]/.test(x))).toBe(false);
+      for (const re of TECH) expect(t.some((x) => re.test(x))).toBe(false);
+    }
+  });
+
+  it("a draft that still holds an old hash prints no closing line either", () => {
+    const t = all(spec([], { status: "draft" }));
+    expect(t.some((x) => x.includes("أُصدر"))).toBe(false);
+  });
+});
+
 describe("layout: pages, title block, footer", () => {
   it("a short document is one page with the title block, the issuer and «صفحة 1 من 1»", () => {
     const { pages, warnings } = docLayout(spec([{ k: "heading", num: "1", text: "البيانات" }, { k: "kv", cols: 2, rows: [{ label: "العنصر", value: "سقف" }] }]), fixedMeasurer);

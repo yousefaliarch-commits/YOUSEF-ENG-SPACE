@@ -204,8 +204,8 @@
     "semantic_hash": "4a20fb2c0fba7c9eaa3612ddc8322e4c"
   },
   "i18n/keys.json": {
-    "mtime": 1795208347.733297,
-    "seen": 1795208378.4952443,
+    "mtime": 1795291728.6177633,
+    "seen": 1795291886.859363,
     "ast_hash": "271f526c519c35725a7f75de40bf3a38",
     "semantic_hash": ""
   },
@@ -522,15 +522,15 @@
     "semantic_hash": "e126b63a3046a82c2cc14310de4f8423"
   },
   "src/doc/layout.ts": {
-    "mtime": 1794348440.9454653,
-    "seen": 1794349432.8374827,
-    "ast_hash": "66412b83cf041ec9c849b21b8479514b",
+    "mtime": 1795291648.5610366,
+    "seen": 1795291886.8594918,
+    "ast_hash": "d9cb75fb6209435fc9028c33981caa40",
     "semantic_hash": ""
   },
   "src/doc/model.ts": {
-    "mtime": 1793648570.2622159,
-    "seen": 1794345981.1230094,
-    "ast_hash": "c1802d0c16b191940c01d4a20a226a9f",
+    "mtime": 1795291452.0588872,
+    "seen": 1795291886.859494,
+    "ast_hash": "4db42844eadea56e2f9123a2d48bd201",
     "semantic_hash": ""
   },
   "src/doc/pdf-writer.ts": {
@@ -966,9 +966,9 @@
     "semantic_hash": "8d3a1abc01758a581bee7f65ac3ed1e7"
   },
   "src/features/tools/spec.ts": {
-    "mtime": 1794348166.4766731,
-    "seen": 1794349432.8376007,
-    "ast_hash": "22a91742ed7c529ab2b30657e0f38b55",
+    "mtime": 1795291313.68205,
+    "seen": 1795291886.8597054,
+    "ast_hash": "9d77bc8d39b7ded35c1239009f4aadf1",
     "semantic_hash": ""
   },
   "src/features/tools/survey/level-book.tsx": {
@@ -990,8 +990,8 @@
     "semantic_hash": "4f364d49edd42808993a2ec60bb6ed76"
   },
   "src/i18n/en.generated.json": {
-    "mtime": 1795208347.881297,
-    "seen": 1795208378.495482,
+    "mtime": 1795291728.7617633,
+    "seen": 1795291886.8597126,
     "ast_hash": "d6cbc41f5a4208c3c555ce735b7de289",
     "semantic_hash": ""
   },
@@ -1680,9 +1680,9 @@
     "semantic_hash": "1ab3c152e882a446e4022afeb62334ce"
   },
   "tests/doc-kit.test.ts": {
-    "mtime": 1793648570.3395984,
-    "seen": 1794345981.1232586,
-    "ast_hash": "72d701bd4504db6517cd76fe57c843dc",
+    "mtime": 1795291648.5615997,
+    "seen": 1795291886.8599887,
+    "ast_hash": "9859d76b5107858b5d9733d5a468befe",
     "semantic_hash": ""
   },
   "tests/feed-sync.test.ts": {
@@ -2016,9 +2016,9 @@
     "semantic_hash": "526e07b26eceff8f9d17dce18317f352"
   },
   "CLAUDE.md": {
-    "mtime": 1795208305.897786,
-    "seen": 1795208378.4957523,
-    "ast_hash": "a976f233dec94e5d109fbdad60917884",
+    "mtime": 1795291489.3773386,
+    "seen": 1795291886.860116,
+    "ast_hash": "73efbe91aa27db36a15757ed5fbf812a",
     "semantic_hash": ""
   },
   "README.md": {
@@ -2064,10 +2064,10 @@
     "semantic_hash": ""
   },
   "docs/TOOLS-BLUEPRINT.md": {
-    "mtime": 1793648570.0817792,
-    "seen": 1794345981.1233487,
-    "ast_hash": "5825b06101452a3ce319b1087c08e796",
-    "semantic_hash": "5825b06101452a3ce319b1087c08e796"
+    "mtime": 1795291489.376407,
+    "seen": 1795291886.8601294,
+    "ast_hash": "420293efa346fe4a814955ed8e2a3d8d",
+    "semantic_hash": ""
   },
   "index.html": {
     "mtime": 1795204995.5533187,
@@ -2520,9 +2520,9 @@
     "semantic_hash": ""
   },
   "tests/tools-wbs.test.ts": {
-    "mtime": 1793648570.3450656,
-    "seen": 1794345981.1233149,
-    "ast_hash": "45932f63c11ae5c9165d1b3eec4c331d",
+    "mtime": 1795291443.0239418,
+    "seen": 1795291886.8600821,
+    "ast_hash": "52e105d74d00dac5a908bcb4e775e911",
     "semantic_hash": ""
   },
   "tests/typing-ratchet.test.ts": {
